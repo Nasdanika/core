@@ -21,15 +21,15 @@ public class AnnotationSource<T extends EModelElement> {
 	}
 
 	/**
-	 * Source for Nasdanika HTML annotations.
+	 * Source for Nasdanika annotations.
 	 */
-	public static final String NASDANIKA_HTML_ANNOTATION_SOURCE = "org.nasdanika.html";	
+	public static final String NASDANIKA_ANNOTATION_SOURCE = "org.nasdanika";	
 	
 	/**
 	 * @return List of sources to use for loading annotations such as icon.
 	 */
 	protected List<String> getAnnotationSources() {
-		return Collections.singletonList(NASDANIKA_HTML_ANNOTATION_SOURCE);
+		return Collections.singletonList(NASDANIKA_ANNOTATION_SOURCE);
 	}
 	
 	protected String getAnnotation(String key) {

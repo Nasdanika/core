@@ -14,7 +14,7 @@
 	<description>Nasdanika core bundles.</description>
 	
 	<properties>
-		<siteDir>html/${project.version}/${env.CIRCLE_BRANCH}</siteDir>
+		<siteDir>core/${project.version}/${env.CIRCLE_BRANCH}</siteDir>
 	</properties>
 	
 	<build>
@@ -106,7 +106,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.tests/apidocs</outputDirectory>
+							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.core.tests/apidocs</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${basedir}/../tests/target/site/apidocs</directory>
