@@ -1,0 +1,85 @@
+<project>
+ 
+  <publishDate position="right"/>
+  <version position="right"/>
+  
+  <body>
+ 
+    <breadcrumbs>
+      <item name="Nasdanika" href="../../index.html"/>
+      <item name="HTML" href="index.html"/>
+    </breadcrumbs>
+ 
+   <menu name="Main">
+      <item name="Overview" href="index.html" />
+      <item name="Project information" href="project-info.html" />      
+   </menu>
+   
+   <menu name="Runtime bundles">
+      <item name="HTML" href="html.html" />
+      <item name="Bootstrap" href="bootstrap.html" />
+      <item name="Fontawesome" href="fontawesome.html" />
+      <item name="JsTree" href="jstree.html" />
+      <item name="Knockout" href="knockout.html" />
+      <item name="Application" href="app.html" />
+      <item name="EMF" href="emf.html" />
+      <item name="Web applications" href="web-applications.html" />      
+   </menu>
+   
+   <menu name="Models">
+      <item name="Overview" href="models.html"/>
+      <item name="Model Documentation" href="model-doc/index.html"/>      
+   </menu>
+
+   <menu name="Java API Documentation">
+      <item name="HTML" href="apidocs/org.nasdanika.html/apidocs/index.html" />
+      <item name="Bootstrap" href="apidocs/org.nasdanika.html.bootstrap/apidocs/index.html" />
+      <item name="Knockout" href="apidocs/org.nasdanika.html.knockout/apidocs/index.html" />
+      <item name="Fontawesome" href="apidocs/org.nasdanika.html.fontawesome/apidocs/index.html" />
+      <item name="JsTree" href="apidocs/org.nasdanika.html.jstree/apidocs/index.html" />
+      <item name="Application" href="apidocs/org.nasdanika.html.app/apidocs/index.html">
+      	<item name="Model" href="apidocs/org.nasdanika.html.app.model/apidocs/index.html"/>
+      	<item name="Edit" href="apidocs/org.nasdanika.html.app.model.edit/apidocs/index.html"/>
+      	<item name="Editor" href="apidocs/org.nasdanika.html.app.model.editor/apidocs/index.html"/>      
+      </item>
+      <item name="EMF" href="apidocs/org.nasdanika.html.emf/apidocs/index.html" />      
+      <item name="CDO" href="apidocs/org.nasdanika.cdo/apidocs/index.html" />      
+      <item name="CDO H2" href="apidocs/org.nasdanika.cdo.h2/apidocs/index.html" />      
+      <item name="CDO HTTP" href="apidocs/org.nasdanika.cdo.http/apidocs/index.html" />      
+      <item name="Tests" href="apidocs/org.nasdanika.html.tests/apidocs/index.html" />      
+   </menu>
+
+   <menu name="Issues">
+      <item name="Roadmap" href="../../../mantis/roadmap_page.php?project_id=3" />
+      <item name="All" href="../../../mantis/view_all_bug_page.php?project_id=3" />
+      <item name="Change Log" href="../../../mantis/changelog_page.php?project_id=3" />
+   </menu>
+ 
+   <footer>
+	Build ${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_BRANCH}.${env.CIRCLE_SHA1} 
+	&nbsp;&bull;&nbsp;
+	All rights reserved
+   </footer>
+ 
+  </body>    
+ 
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.7</version>
+  </skin>
+  
+  <custom>
+    <fluidoSkin>
+      <gitHub>
+        <projectId>nasdanika/html</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>
+      </gitHub>
+      <googleSearch>
+        <sitesearch>https://www.nasdanika.org/home/products/html</sitesearch>
+      </googleSearch>      
+    </fluidoSkin>
+  </custom>
+ 
+</project>

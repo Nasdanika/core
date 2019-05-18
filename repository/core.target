@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="Nasdanika Core">
+	<locations>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="json" version="20180130.0.0"/>
+			<repository location="https://www.nasdanika.org/products/maven-osgi/repository"/>
+			<unit id="org.apache.commons.lang3" version="3.7.0"/>
+			<unit id="org.apache.commons.text" version="1.4.0"/>
+		</location>
+		<location path="${eclipse_home}" type="Profile"/>
+	</locations>
+</target>

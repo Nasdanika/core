@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Repository
+Bundle-SymbolicName: org.nasdanika.repository
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Nasdanika LLC
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.nasdanika.repository,
+ org.nasdanika.repository.impl
+Bundle-ClassPath: .
+Automatic-Module-Name: org.nasdanika.repository
