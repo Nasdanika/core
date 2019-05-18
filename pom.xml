@@ -190,19 +190,13 @@
 		</plugins>
 	</build>
 	<modules>
-		<module>html</module>
-		<module>bootstrap</module>
-		<module>jstree</module>
-		<module>knockout</module>
-		<module>fontawesome</module>
-		<module>app</module>
+		<module>emf</module>		
+		<module>feature</module>
+		<!--
 		<module>http</module>
 		<module>repo</module>
-		
-		<module>emf</module>		
-
+		-->
 		<module>tests</module>
-		<module>feature</module>
 		<module>repository</module>
 
 	</modules>

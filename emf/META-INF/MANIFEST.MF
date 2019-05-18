@@ -2,20 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nasdanika EMF
 Bundle-SymbolicName: org.nasdanika.emf
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.nasdanika.html.emf
+Export-Package: org.nasdanika.emf
 Bundle-ClassPath: .
-Require-Bundle: org.nasdanika.html;bundle-version="2.0.0";visibility:=reexport,
- org.nasdanika.html.bootstrap;bundle-version="2.0.0";visibility:=reexport,
- org.nasdanika.html.fontawesome;bundle-version="2.0.0";visibility:=reexport,
- org.nasdanika.html.jstree;bundle-version="2.0.0";visibility:=reexport,
- org.nasdanika.html.knockout;bundle-version="2.0.0";visibility:=reexport,
- org.nasdanika.html.app;bundle-version="2.0.0";visibility:=reexport,
- org.eclipse.emf.cdo;bundle-version="4.6.100",
- org.apache.commons.text;bundle-version="1.4.0",
- org.apache.commons.lang3,
- org.jsoup
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0"
 Automatic-Module-Name: org.nasdanika.html.emf
 

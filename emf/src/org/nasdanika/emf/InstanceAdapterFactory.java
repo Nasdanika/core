@@ -1,4 +1,4 @@
-package org.nasdanika.html.emf;
+package org.nasdanika.emf;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;

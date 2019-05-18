@@ -1,4 +1,4 @@
-package org.nasdanika.html.emf;
+package org.nasdanika.emf;
 
 import java.util.function.Function;
 

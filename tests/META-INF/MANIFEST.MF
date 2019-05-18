@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
- org.nasdanika.html.app;bundle-version="2.0.0",
- org.nasdanika.bank;bundle-version="1.0.0",
- org.nasdanika.html.emf;bundle-version="2.0.0"
+ org.nasdanika.emf;bundle-version="1.0.0"
 Automatic-Module-Name: org.nasdanika.html.tests
+Export-Package: org.nasdanika.core.tests

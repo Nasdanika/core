@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="Nasdanika Core">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="json" version="20180130.0.0"/>
-			<repository location="https://www.nasdanika.org/products/maven-osgi/repository"/>
-			<unit id="org.apache.commons.lang3" version="3.7.0"/>
-			<unit id="org.apache.commons.text" version="1.4.0"/>
+			<unit id="json" version="20180813.0.0"/>
+			<repository location="https://www.nasdanika.org/home/products/maven-osgi/repository"/>
 		</location>
-		<location path="${eclipse_home}" type="Profile"/>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.nasdanika.equinox.feature.feature.group" version="1.0.0.201905152054"/>
+			<repository location="https://www.nasdanika.org/home/products/third-party/repository"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.17.0.v20190301-1325"/>
+			<repository location="http://download.eclipse.org/releases/2019-03"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<unit id="org.junit" version="4.12.0.v201504281640"/>
+			<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20181128170323/repository"/>
+		</location>
 	</locations>
 </target>

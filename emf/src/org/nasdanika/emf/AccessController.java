@@ -1,4 +1,4 @@
-package org.nasdanika.html.emf;
+package org.nasdanika.emf;
 
 import java.util.Collections;
 import java.util.Map;

@@ -33,7 +33,7 @@
 					<skipAssembly>false</skipAssembly>
 					<outputDirectory>${project.build.directory}/site</outputDirectory>
 					<formats>zip</formats>
-					<finalName>html</finalName>
+					<finalName>nasdanika-core</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptors>
 						<descriptor>src/assembly/workspace.xml</descriptor>
@@ -76,154 +76,10 @@
 									<directory>${basedir}/target</directory>
 									<includes>
 										<include>repository/**</include>
-										<include>org.nasdanika.html.repository-*.zip</include>
+										<include>org.nasdanika.core.repository-*.zip</include>
 									</includes>
 									<filtering>false</filtering>
 								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-html-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../html/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-bootstrap-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.bootstrap/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../bootstrap/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-fontawesome-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.fontawesome/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../fontawesome/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-knockout-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.knockout/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../knockout/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-jstree-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.jstree/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../jstree/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-app-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.app/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../app/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-app-model-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.app.model/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../app.model/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-app-model-edit-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.app.model.edit/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../app.model.edit/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-app-model-editor-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.app.model.editor/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../app.model.editor/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
 							</resources>
 						</configuration>
 					</execution>
@@ -234,7 +90,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.html.emf/apidocs</outputDirectory>
+							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.emf/apidocs</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${basedir}/../emf/target/site/apidocs</directory>
@@ -243,54 +99,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-cdo-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.cdo/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../cdo/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>					
-					<execution>
-						<id>copy-cdo-h2-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.cdo.h2/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../cdo.h2/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>					
-					<execution>
-						<id>copy-cdo-http-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.cdo.http/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../cdo.http/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>					
 					<execution>
 						<id>copy-tests-javadoc</id>
 						<phase>pre-site</phase>
@@ -341,23 +149,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-sample-model</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../app.model</directory>
-									<include>NasdanikaBank.app</include>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>					
 				</executions>
 			</plugin>
 			<plugin>

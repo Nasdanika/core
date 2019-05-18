@@ -1,4 +1,4 @@
-package org.nasdanika.html.emf;
+package org.nasdanika.emf;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
