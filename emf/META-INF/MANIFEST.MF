@@ -7,6 +7,6 @@ Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.emf
 Bundle-ClassPath: .
-Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0"
+Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0";visibility:=reexport
 Automatic-Module-Name: org.nasdanika.emf
 

@@ -19,7 +19,6 @@
 	</properties>
 
 	<repositories>
-		<!-- configure p2 repository to resolve against -->
 		<repository>
 			<id>eclipse</id>
 			<url>http://download.eclipse.org/releases/2019-03</url>
@@ -32,12 +31,12 @@
 		</repository>
 		<repository>
 			<id>third-party</id>
-			<url>http://www.nasdanika.org/home/products/third-party/repository</url>
+			<url>https://www.nasdanika.org/home/products/third-party/repository</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>maven-osgi</id>
-			<url>http://www.nasdanika.org/home/products/maven-osgi/repository</url>
+			<url>https://www.nasdanika.org/home/products/maven-osgi/repository</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
