@@ -22,13 +22,13 @@
 	      <extension>
 	        <groupId>org.apache.maven.wagon</groupId>
 	         <artifactId>wagon-ssh</artifactId>
-	         <version>3.2.0</version>
+	         <version>3.3.2</version>
 	      </extension>
 		</extensions>
 		<plugins>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.1.1</version>
 				<configuration>
 					<skipAssembly>false</skipAssembly>
 					<outputDirectory>${project.build.directory}/site</outputDirectory>
@@ -61,7 +61,7 @@
 			</plugin>		
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<id>copy-repository</id>
@@ -94,6 +94,22 @@
 							<resources>
 								<resource>
 									<directory>${basedir}/../emf/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-common-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.common/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../common/target/site/apidocs</directory>
 									<filtering>false</filtering>
 								</resource>								
 							</resources>

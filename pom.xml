@@ -82,7 +82,7 @@
 			</plugin>	
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.1.1</version>
 				<configuration>
 				    <skipAssembly>true</skipAssembly>
 				</configuration>
@@ -90,7 +90,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
+				<version>3.1.0</version>
 				<configuration>
 					<linksource>true</linksource>
 					<failOnError>false</failOnError>
@@ -190,6 +190,7 @@
 	</build>
 	<modules>
 		<module>emf</module>		
+		<module>common</module>		
 		<module>feature</module>
 		<!--
 		<module>http</module>

@@ -16,17 +16,13 @@
    </menu>
    
    <menu name="Runtime bundles">
+      <item name="Core" href="core.html" />
       <item name="EMF" href="emf.html" />
-   </menu>
-   
-   <menu name="Models">
-      <item name="Overview" href="models.html"/>
-      <item name="Model Documentation" href="model-doc/index.html"/>      
    </menu>
 
    <menu name="Java API Documentation">
-      <item name="EMF" href="apidocs/org.nasdanika.html.emf/apidocs/index.html" />      
-      <item name="Tests" href="apidocs/org.nasdanika.html.tests/apidocs/index.html" />      
+      <item name="EMF" href="apidocs/org.nasdanika.emf/apidocs/index.html" />      
+      <item name="Tests" href="apidocs/org.nasdanika.core.tests/apidocs/index.html" />      
    </menu>
 
    <menu name="Issues">
@@ -52,7 +48,7 @@
   <custom>
     <fluidoSkin>
       <gitHub>
-        <projectId>nasdanika/html</projectId>
+        <projectId>nasdanika/core</projectId>
         <ribbonOrientation>right</ribbonOrientation>
         <ribbonColor>gray</ribbonColor>
       </gitHub>

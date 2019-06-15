@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nasdanika Common
+Bundle-SymbolicName: org.nasdanika.common
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Nasdanika LLC
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.nasdanika.common
+Bundle-ClassPath: .
+Automatic-Module-Name: org.nasdanika.common
