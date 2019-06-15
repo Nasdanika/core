@@ -86,7 +86,7 @@ public interface Context {
 		if (type == null || type.isInstance(prop)) {
 			return (T) prop;
 		}
-		return get(Converter.class, ReflectiveConverter.INSTANCE).convert(prop, type);
+		return get(Converter.class, DefaultConverter.INSTANCE).convert(prop, type);
 	}
 	
 	/**
@@ -192,6 +192,56 @@ public interface Context {
 				return Context.this.get(prefix+key, type);
 			}
 			
+		};
+	}
+	
+	/**
+	 * Returns a context which look up values in the chain elements which are not null.
+	 * @param chain
+	 * @return Chained context, never null.
+	 */
+	static Context chain(Context... chain) {
+		return new Context() {
+			
+			@Override
+			public <T> T get(Class<T> type) {
+				for (Context ce: chain) {
+					if (ce != null) {
+						T ret = ce.get(type);
+						if (ret != null) {
+							return ret;
+						}
+					}
+				}
+				return null;
+			}
+			
+			@Override
+			public Object get(String key) {
+				for (Context ce: chain) {
+					if (ce != null) {
+						Object ret = ce.get(key);
+						if (ret != null) {
+							return ret;
+						}
+					}
+				}
+				return null;
+			}
+			
+			@Override
+			public <T> T get(String key, Class<T> type) {
+				for (Context ce: chain) {
+					if (ce != null) {
+						T ret = ce.get(key, type);
+						if (ret != null) {
+							return ret;
+						}
+					}
+				}
+				return null;
+			}
+						
 		};
 	}
 

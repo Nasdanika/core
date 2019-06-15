@@ -8,3 +8,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.common
 Bundle-ClassPath: .
 Automatic-Module-Name: org.nasdanika.common
+Require-Bundle: json;bundle-version="20180130.0.0";visibility:=reexport

@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class ReflectiveConverter implements Converter {
-	
-	public static Converter INSTANCE = new ReflectiveConverter();
 
 	@ConverterMethod
 	public String toString(Object value) {
@@ -18,7 +16,6 @@ public class ReflectiveConverter implements Converter {
 	/**
 	 * Performs conversion using methods annotated with {@link ConverterMethod} first. A method with a more specific compatible parameter type take precedence over a method with more general type.
 	 * If conversion cannot be done with converter methods then constructor conversion is attempted in a similar way - a constructor with a more specific compatible parameter types takes precedence over a less specific.
-	 * If not conversion can be performed using the aforementioned approached and the source object is an instance of {@link EObject} then conversion from adaptation is attempted using {@link EObjectAdaptable}.adaptTo() method.   
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -53,7 +50,7 @@ public class ReflectiveConverter implements Converter {
 				throw new NasdanikaException("Error converting "+source+" to "+type+" using constructor "+co.get()+": "+e, e);
 			}
 		}
-		
+						
 		return null;
 	}	
 	
