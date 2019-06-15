@@ -21,6 +21,7 @@
    </menu>
 
    <menu name="Java API Documentation">
+      <item name="Common" href="apidocs/org.nasdanika.common/apidocs/index.html" />      
       <item name="EMF" href="apidocs/org.nasdanika.emf/apidocs/index.html" />      
       <item name="Tests" href="apidocs/org.nasdanika.core.tests/apidocs/index.html" />      
    </menu>

@@ -2,6 +2,7 @@
 
 Nasdanika Core features several bundles used by other Nasdanika products: 
 
+* [Common](common.html) - classes and interfaces used in a number of other products. Dual build - Maven jar and OSGi bundle. 
 * [EMF](emf.html) - Features several flavors of adapter factories which use dynamic proxies and delegation to simplify creation of adapters. Also provides base classes for creating Ecore models with built-in access control.
 
 ## Resources
