@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A generic source of contextual information keyed by a {@link String} - property, a type - service, or a combination of thereof - a typed property or a named service. 
@@ -68,16 +69,52 @@ public interface Context {
 		T ret = get(type);
 		return ret == null ? computer.apply(type) : ret;		
 	}
+
+	/**
+	 * @param <T> Service type.
+	 * @param type Service type class.
+	 * @param predicate Service predicate (filter).
+	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * compatibility with both array and component types. 
+	 */
+	default <T> T get(Class<T> type, Predicate<? super T> predicate) {
+		T ret = get(type);
+		return predicate == null || predicate.test(ret) ? ret : null;
+	};
 	
 	/**
-	 * This method may have different semantics depending on situation. 
-	 * One option is property type conversion. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
-	 * Another option is named services or service selectors when there are multiple services of the same type and only one of them shall be selected (or some of them if the type is array).
-	 * The default implementation looks up {@link Converter} service to convert the value returned by <code>get(String)</code> to requested type and falls-back to {@link ReflectiveConverter}.INSTANCE
+	 * @param <T> Service type.
+	 * @param type Service type class.
+	 * @param predicate Service predicate (filter).
+	 * @param defaultService Default service implementation to return if no service is found. 
+	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * compatibility with both array and component types. 
+	 */
+	default <T> T get(Class<T> type, Predicate<? super T> predicate, T defaultService) {
+		T ret = get(type, predicate);
+		return ret == null ? defaultService : ret;		
+	}
+	
+	/**
+	 * @param <T> Service type.
+	 * @param type Service type class.
+	 * @param predicate Service predicate (filter).
+	 * @param computer Function to compute a service instance if none is found in the context.
+	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * compatibility with both array and component types. 
+	 */
+	default <T> T get(Class<T> type, Predicate<? super T> predicate, Function<Class<T>,T> computer) {
+		T ret = get(type, predicate);
+		return ret == null ? computer.apply(type) : ret;		
+	}
+	
+	/**
+	 * Returns a property converted to the requested type. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
+	 * The default implementation looks up {@link Converter} service to convert the value returned by <code>get(String)</code> to requested type and falls-back to {@link DefaultConverter}.INSTANCE
 	 * if the converter service is not present in the context.
-	 * @param <T> Property/service type.
+	 * @param <T> Property type.
 	 * @param key Object key (property/service name).
-	 * @param type Property/service type class.
+	 * @param type Property type class.
 	 * @return Context object by type and key. 
 	 */
 	@SuppressWarnings("unchecked")
@@ -215,6 +252,19 @@ public interface Context {
 				}
 				return null;
 			}
+						
+			@Override
+			public <T> T get(Class<T> type, Predicate<? super T> predicate) {
+				for (Context ce: chain) {
+					if (ce != null) {
+						T ret = ce.get(type, predicate);
+						if (ret != null) {
+							return ret;
+						}
+					}
+				}
+				return null;
+			}			
 			
 			@Override
 			public Object get(String key) {

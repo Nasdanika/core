@@ -11,8 +11,8 @@
 	<packaging>jar</packaging>
 	<name>Nasdanika Common</name>
 
-	<!--
 	<dependencies>
+		<!-- 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -23,11 +23,11 @@
 		    <artifactId>commons-text</artifactId>
 		    <version>1.4</version>
 		</dependency>
+ 		-->		
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180130</version>
 		</dependency>
 	</dependencies>
-	-->
 </project>
