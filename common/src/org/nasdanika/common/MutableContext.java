@@ -18,6 +18,16 @@ public class MutableContext implements Context {
 	private Map<String, Object> properties = new HashMap<>();
 	
 	private Map<Class<Object>, List<Object>> services = new HashMap<>();
+
+	private Context chain;
+	
+	/**
+	 * Constructs a new mutable context which falls-back to the chain {@link Context}'s.
+	 * @param chain
+	 */
+	public MutableContext(Context... chain) {
+		this.chain = Context.chain(chain);
+	}
 	
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> getServices(Class<T> type) {
@@ -29,7 +39,7 @@ public class MutableContext implements Context {
 	 */
 	@Override
 	public Object get(String key) {
-		return properties.get(key);
+		return properties.computeIfAbsent(key, chain::get);
 	}
 
 	/**
@@ -40,11 +50,12 @@ public class MutableContext implements Context {
 	public <T> T get(Class<T> type) {
 		if (type.isArray()) {
 			List<Object> svcs = (List<Object>) getServices(type.getComponentType());
+			// TODO - chained svcs.
 			return (T) svcs.toArray((T[]) Array.newInstance(type.getComponentType(), svcs.size()));
 		}
 		
 		List<T> svcs = getServices(type);
-		return svcs.isEmpty() ? null : svcs.get(0);
+		return svcs.isEmpty() ? chain.get(type) : svcs.get(0);
 	}
 	
 	/**
@@ -55,10 +66,11 @@ public class MutableContext implements Context {
 	public <T> T get(Class<T> type, Predicate<? super T> predicate) {
 		if (type.isArray()) {
 			List<Object> svcs = (List<Object>) getServices(type.getComponentType()).stream().filter((Predicate<Object>) predicate).collect(Collectors.toList());
+			// TODO - chained svcs.
 			return (T) svcs.toArray((T[]) Array.newInstance(type.getComponentType(), svcs.size()));
 		}
 		
-		return getServices(type).stream().filter(predicate).findFirst().orElse(null);
+		return getServices(type).stream().filter(predicate).findFirst().orElse(chain.get(type, predicate));
 	}
 	
 	/**
