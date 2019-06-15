@@ -1,4 +1,4 @@
-package org.nasdanika.http;
+package org.nasdanika.common;
 
 /**
  * Converts object to target type.
@@ -10,6 +10,6 @@ package org.nasdanika.http;
  */
 public interface Converter {
 	
-	<T> T convert(Object source, Class<T> type) throws Exception;
+	<T> T convert(Object source, Class<T> type);
 	
 }

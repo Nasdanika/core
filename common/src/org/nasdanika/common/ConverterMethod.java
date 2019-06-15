@@ -1,4 +1,4 @@
-package org.nasdanika.http;
+package org.nasdanika.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,28 +1,14 @@
-package org.nasdanika.http;
+package org.nasdanika.common;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
 
 public class ReflectiveConverter implements Converter {
 	
-	static Converter INSTANCE = new ReflectiveConverter();
-	
-//	@ConverterMethod
-//	public String convert(URL value) {
-//		return HTMLElementImpl.stringify(value);
-//	}	
-//
-//	@ConverterMethod
-//	public String convert(InputStream value) {
-//		return HTMLElementImpl.stringify(value);
-//	}	
-//
-//	@ConverterMethod
-//	public String convert(Reader value) {
-//		return HTMLElementImpl.stringify(value);
-//	}	
+	public static Converter INSTANCE = new ReflectiveConverter();
 
 	@ConverterMethod
 	public String toString(Object value) {
@@ -36,7 +22,7 @@ public class ReflectiveConverter implements Converter {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T convert(Object source, Class<T> type) throws Exception {
+	public <T> T convert(Object source, Class<T> type) {
 		// Converter methods conversion
 		Optional<Method> cm = Arrays.stream(getClass().getMethods())
 				.filter(m -> m.getAnnotation(ConverterMethod.class) != null 
@@ -47,7 +33,11 @@ public class ReflectiveConverter implements Converter {
 				.findFirst();
 		
 		if (cm.isPresent()) {
-			return (T) cm.get().invoke(this,source);
+			try {
+				return (T) cm.get().invoke(this,source);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new NasdanikaException("Error converting "+source+" to "+type+" using converter method "+cm.get()+": "+e, e);
+			}
 		}			
 		
 		// Constructor conversion
@@ -57,13 +47,12 @@ public class ReflectiveConverter implements Converter {
 			.findFirst();
 		
 		if (co.isPresent()) {
-			return (T) co.get().newInstance(source);
+			try {
+				return (T) co.get().newInstance(source);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException	| InvocationTargetException e) {
+				throw new NasdanikaException("Error converting "+source+" to "+type+" using constructor "+co.get()+": "+e, e);
+			}
 		}
-		
-//		// Adapter conversion		
-//		if (source instanceof EObject) {
-//			return EObjectAdaptable.adaptTo((EObject) source, type);
-//		}
 		
 		return null;
 	}	
