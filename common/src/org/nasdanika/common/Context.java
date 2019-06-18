@@ -3,7 +3,10 @@ package org.nasdanika.common;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +16,25 @@ import java.util.function.Predicate;
  * @author Pavel
  *
  */
-public interface Context {
+public interface Context extends Composeable<Context> {
+	
+	/**
+	 * Empty context which can be used as a starting point
+	 * for creating of composed/mounted contexts. 
+	 */
+	static final Context EMPTY_CONTEXT = new Context() {
+		
+		@Override
+		public <T> T get(Class<T> type) {
+			return null;
+		}
+		
+		@Override
+		public Object get(String key) {
+			return null;
+		}
+		
+	};
 	
 	/**
 	 * @param key Object key (property name).
@@ -204,11 +225,11 @@ public interface Context {
 	}
 	
 	/**
-	 * @param prefix
+	 * @param prefix Sub-context prefix. Returns this context if prefix is null or a blank string.
 	 * @return A context which adds prefix before the key in <code>get(String></code> and <code>get(String,Class)</code> methods.
 	 */
 	default Context subContext(String prefix) {
-		if (prefix == null) {
+		if (prefix == null || prefix.length() == 0) {
 			return this;
 		}
 		
@@ -233,11 +254,16 @@ public interface Context {
 	}
 	
 	/**
-	 * Returns a context which look up values in the chain elements which are not null.
+	 * Returns this context if other is null, or a new context which delegates to this context and falls back to the other if property/service is not found in this context.
 	 * @param chain
-	 * @return Chained context, never null.
 	 */
-	static Context chain(Context... chain) {
+	default Context compose(Context other) {
+		if (other == null) {
+			return this;
+		}
+		
+		Context[] chain = {this, other};
+		
 		return new Context() {
 			
 			@Override
@@ -293,6 +319,56 @@ public interface Context {
 			}
 						
 		};
+	}
+	
+	/**
+	 * Creates a new mutable context backed by this context.
+	 * This call is equivalent to ``fork(null,null)``.
+	 * @return
+	 */
+	default MutableContext fork() {
+		return fork(null,null);
+	}
+	
+	/**
+	 * Creates a new mutable context with a given prefix and service predicate. 
+	 * @param prefix Context prefix, the same as in subContext().
+	 * @param servicePredicate Predicate to use during look up of parent services. One possible scenario is to filter-out {@link Composeable} services from the parent.
+	 * @return
+	 */
+	default MutableContext fork(String prefix, Predicate<Object> servicePredicate) {
+		Context prefixed = subContext(prefix);
+		if (servicePredicate == null) {
+			return new SimpleMutableContext(prefixed);
+		}
+		Context predicated = new Context() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T get(Class<T> type) {
+				T ret = prefixed.get(type);
+				if (ret == null) {
+					return null;
+				}
+				if (ret.getClass().isArray()) {
+					List<Object> filtered = new ArrayList<Object>(); 
+					for (int i = 0; i < Array.getLength(ret); ++i) {
+						Object service = Array.get(ret, i);
+						if (servicePredicate.test(service)) {
+							filtered.add(service);
+						}
+					}
+					ret = (T) filtered.toArray((Object[]) Array.newInstance(ret.getClass().getComponentType(), filtered.size()));
+				}
+				return servicePredicate.test(ret) ? null : ret;
+			}
+			
+			@Override
+			public Object get(String key) {
+				return prefixed.get(key);
+			}
+		};
+		return new SimpleMutableContext(predicated);
 	}
 
 }

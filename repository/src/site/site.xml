@@ -16,7 +16,7 @@
    </menu>
    
    <menu name="Runtime bundles">
-      <item name="Core" href="core.html" />
+      <item name="Commond" href="common.html" />
       <item name="EMF" href="emf.html" />
    </menu>
 

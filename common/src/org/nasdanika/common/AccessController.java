@@ -5,7 +5,7 @@ package org.nasdanika.common;
  * @author Pavel Vlasov
  *
  */
-public interface AccessController {
+public interface AccessController extends Composeable<AccessController> {
 	
 	public static final String PERMISSION_READ = "read";
 
@@ -143,26 +143,25 @@ public interface AccessController {
 	 * @return Access controller which chains the context passed to the <code>hasPermission(action, qualifier, context)</code> with the enclosing context passed to this method. 
 	 */
 	default AccessController contextify(Context enclosingContext) {
-		return enclosingContext == null ? this : (action,qualifier,context) -> hasPermission(action, qualifier, Context.chain(context, enclosingContext)); 
+		return enclosingContext == null ? this : (action,qualifier,context) -> hasPermission(action, qualifier, context == null ? enclosingContext : context.compose(enclosingContext)); 
+	}
+	
+	@Override
+	default AccessController compose(AccessController other) {
+		return and(other);
 	}
 	
 	/**
 	 * @param accessControllers
 	 * @return An "intersection" access controller which allows a permission only if all elements allow it. In the case of an empty list all permissions are denied.
 	 */
-	static AccessController and(AccessController...  accessControllers) {
-		if (accessControllers.length == 0) {
-			return DENY_ALL;
+	default AccessController and(AccessController other) {
+		if (other == null) {
+			return this;
 		}
 		
 		return (action, qualifier, context) -> {
-			for (AccessController ac: accessControllers) {
-				if (!ac.hasPermission(action, qualifier, context)) {
-					return false;
-				}
-			}
-			
-			return true; 
+			return AccessController.this.hasPermission(action, qualifier, context) && other.hasPermission(action, qualifier, context); 
 		}; 
 	}
 		
@@ -170,16 +169,13 @@ public interface AccessController {
 	 * @param accessControllers
 	 * @return A "union" access controller which allows a permission if any of elements allows. In the case of an empty list all permissions are denied.
 	 */
-	static AccessController or(AccessController...  accessControllers) {
+	default AccessController or(AccessController other) {
+		if (other == null) {
+			return this;
+		}
 		
 		return (action, qualifier, context) -> {
-			for (AccessController ac: accessControllers) {
-				if (ac.hasPermission(action, qualifier, context)) {
-					return true;
-				}
-			}
-			
-			return false; 
+			return AccessController.this.hasPermission(action, qualifier, context) || other.hasPermission(action, qualifier, context); 
 		}; 
 	}
 	
