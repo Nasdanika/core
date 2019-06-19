@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A generic source of contextual information keyed by a {@link String} - property, a type - service, or a combination of thereof - a typed property or a named service. 
@@ -370,5 +372,47 @@ public interface Context extends Composeable<Context> {
 		};
 		return new SimpleMutableContext(predicated);
 	}
-
+		
+	static Pattern EXPANDER_PATTERN = Pattern.compile("\\$\\{(.+?)\\}");	
+	
+	/**
+	 * Expands tokens in the form of ``${token name|default value}`` to their values.
+	 * If a token is not found the default value after the pipe is used for expansion.
+	 * If there is no default value then the expansion is not processed. Token names shall not contain pipes.
+	 * If replacement is not null and there is a {@link Converter} service then the converter is used 
+	 * to convert the replacement to {@link String}. If no such conversion can be done then toString() is used 
+	 * as default conversion.
+	 * @param input
+	 * @return
+	 */
+	default String interpolate(String input) {
+		Matcher matcher = EXPANDER_PATTERN.matcher(input);
+		StringBuilder output = new StringBuilder();
+		int i = 0;
+		while (matcher.find()) {
+		    String token = matcher.group();
+		    String peeledToken = token.substring(2, token.length()-1); // Peeling of ${ and } 
+		    int pipeIdx = peeledToken.indexOf('|');
+		    String defaultValue = pipeIdx == -1 ? null : peeledToken.substring(pipeIdx + 1);
+		    if (pipeIdx != -1) {
+		    	peeledToken = peeledToken.substring(0, pipeIdx);
+		    }
+		    
+			Object replacement = get(peeledToken, defaultValue);
+		    if (replacement != null) {
+		    	Converter converter = get(Converter.class);
+		    	if (converter != null) {
+		    		String str = converter.convert(replacement, String.class);
+		    		if (str != null) {
+		    			replacement = str;
+		    		}
+		    	}
+			    output.append(input.substring(i, matcher.start())).append(replacement);			    
+			    i = matcher.end();
+		    }
+		}
+		output.append(input.substring(i, input.length()));
+		return output.toString();
+	}
+	
 }

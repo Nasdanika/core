@@ -16,7 +16,7 @@ package org.nasdanika.common;
  * @author Pavel
  *
  */
-public interface ProgressMonitor extends AutoCloseable {
+public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMonitor> {
 	
 	/**
 	 * Closes this monitor.
@@ -38,10 +38,12 @@ public interface ProgressMonitor extends AutoCloseable {
 	
 	/**
 	 * Creates a sub-monitor of this monitor which will consume a given number of ticks from the receiver.
-	 * @param ticks
+	 * @param Task name
+	 * @param ticks Amount of work
+	 * @param details optional additional information.
 	 * @return
 	 */
-	ProgressMonitor split(String taskName, int ticks);
+	ProgressMonitor split(String taskName, int ticks, Object details);
 	
 	/**
 	 * Reports progress.
@@ -49,5 +51,46 @@ public interface ProgressMonitor extends AutoCloseable {
 	 * @param progressMessage Progress message. 
 	 */
 	void worked(int work, String progressMessage);
+
+	/**
+	 * Composes two monitors. The resulting monitor reports isCancelled() as OR, composes splits, 
+	 * and invokes other methods on both monitors.
+	 */
+	@Override
+	default ProgressMonitor compose(ProgressMonitor other) {
+		if (other == null) {
+			return this;
+		}
+		return new ProgressMonitor() {
+			
+			@Override
+			public void worked(int work, String progressMessage) {
+				ProgressMonitor.this.worked(work, progressMessage);
+				other.worked(work, progressMessage);
+			}
+			
+			@Override
+			public ProgressMonitor split(String taskName, int ticks, Object details) {
+				return	ProgressMonitor.this.split(taskName, ticks, details).compose(other.split(taskName, ticks, details));
+			}
+			
+			@Override
+			public boolean isCancelled() {
+				return ProgressMonitor.this.isCancelled() || other.isCancelled();
+			}
+			
+			@Override
+			public void close() {
+				ProgressMonitor.this.close();
+				other.close();
+			}
+			
+			@Override
+			public void cancel() {
+				ProgressMonitor.this.cancel();
+				other.cancel();
+			}
+		};
+	}
 		
 }

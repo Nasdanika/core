@@ -146,6 +146,9 @@ public interface AccessController extends Composeable<AccessController> {
 		return enclosingContext == null ? this : (action,qualifier,context) -> hasPermission(action, qualifier, context == null ? enclosingContext : context.compose(enclosingContext)); 
 	}
 	
+	/**
+	 * Composes with ``and()``.
+	 */
 	@Override
 	default AccessController compose(AccessController other) {
 		return and(other);
