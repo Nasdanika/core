@@ -17,7 +17,7 @@ package org.nasdanika.common;
  *
  */
 public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMonitor> {
-	
+		
 	/**
 	 * Closes this monitor.
 	 */
@@ -43,7 +43,7 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param details optional additional information.
 	 * @return
 	 */
-	ProgressMonitor split(String taskName, int ticks, Object details);
+	ProgressMonitor split(String taskName, int ticks, Object... details);
 	
 	/**
 	 * Reports progress.
@@ -51,6 +51,12 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param progressMessage Progress message. 
 	 */
 	void worked(int work, String progressMessage);
+	
+	/**
+	 * Resizes the remaining amount of work.
+	 * @param ticks
+	 */
+	void setWorkRemained(int ticks);
 
 	/**
 	 * Composes two monitors. The resulting monitor reports isCancelled() as OR, composes splits, 
@@ -70,7 +76,7 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 			}
 			
 			@Override
-			public ProgressMonitor split(String taskName, int ticks, Object details) {
+			public ProgressMonitor split(String taskName, int ticks, Object... details) {
 				return	ProgressMonitor.this.split(taskName, ticks, details).compose(other.split(taskName, ticks, details));
 			}
 			
@@ -89,6 +95,12 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 			public void cancel() {
 				ProgressMonitor.this.cancel();
 				other.cancel();
+			}
+			
+			@Override
+			public void setWorkRemained(int ticks) {
+				ProgressMonitor.this.setWorkRemained(ticks);
+				other.setWorkRemained(ticks);
 			}
 		};
 	}

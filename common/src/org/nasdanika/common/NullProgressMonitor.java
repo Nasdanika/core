@@ -25,12 +25,17 @@ public class NullProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public ProgressMonitor split(String taskName, int ticks, Object details) {
+	public ProgressMonitor split(String taskName, int ticks, Object... details) {
 		return new NullProgressMonitor();
 	}
 
 	@Override
 	public void worked(int work, String progressMessage) {
+		// NOP
+	}
+
+	@Override
+	public void setWorkRemained(int ticks) {
 		// NOP
 	}
 
