@@ -57,6 +57,9 @@ public interface Container<T> extends Resource<T> {
 		}
 	}
 	
+	/**
+	 * Recursively moves children
+	 */
 	@Override
 	default void move(Container<? super T> container, String path, ProgressMonitor monitor) {
 		if (exists()) {			

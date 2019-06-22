@@ -64,6 +64,12 @@ public interface File<T> extends Resource<T> {
 	 */
 	boolean canWrite();
 	
+	/**
+	 * Copies file content
+	 * @param container target container, may be the same container.
+	 * @param path Path in the target container.
+	 * @param monitor Progress monitor.
+	 */
 	@Override
 	default void copy(Container<? super T> container, String path, ProgressMonitor monitor) {	
 		if (exists()) {
@@ -73,6 +79,12 @@ public interface File<T> extends Resource<T> {
 		}
 	}
 	
+	/**
+	 * Moves contents. This implementation implements move as copy and delete.
+	 * @param container target container, may be the same container.
+	 * @param path Path in the target container.
+	 * @param monitor Progress monitor.
+	 */
 	@Override
 	default void move(Container<? super T> container, String path, ProgressMonitor monitor) {
 		if (exists()) {

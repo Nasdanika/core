@@ -3,7 +3,7 @@ package org.nasdanika.common.resources;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * Base class for {@link MemoryContainer} and {@link MemoryFile}.
+ * File with the contents stored in memory.
  * @author Pavel
  *
  * @param <T>

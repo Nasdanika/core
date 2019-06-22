@@ -11,6 +11,11 @@ import java.io.InputStream;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
+/**
+ * Wrapper for a file system file.
+ * @author Pavel
+ *
+ */
 public class FileSystemFile extends FileSystemResource implements File<InputStream> {
 
 	public FileSystemFile(java.io.File file) {

@@ -4,6 +4,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Wrapper for a file system directory.
+ * @author Pavel
+ *
+ */
 public class FileSystemContainer extends FileSystemResource implements Container<InputStream> {
 
 	public FileSystemContainer(java.io.File file) {
