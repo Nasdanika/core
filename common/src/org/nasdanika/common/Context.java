@@ -6,7 +6,10 @@ import java.io.Reader;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -413,6 +416,61 @@ public interface Context extends Composeable<Context> {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+	
+	/**
+	 * @return A context backed by this context which caches values of propeties by key and of services by type.
+	 */	
+	default Context cachingContext() {
+		
+		return new Context() {
+			
+			private Map<String, Optional<Object>> properties = new HashMap<>();
+			private Map<Class<?>, Optional<Object>> services = new HashMap<>();
+			
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T get(Class<T> type) {
+				Optional<Object> sopt = services.computeIfAbsent(type, (theType) -> Optional.ofNullable(Context.this.get(theType)));
+				return sopt.isPresent() ? (T) sopt.get() : null;
+			}
+			
+			@Override
+			public Object get(String key) {
+				Optional<Object> popt = properties.computeIfAbsent(key, (theKey) -> Optional.ofNullable(Context.this.get(theKey)));
+				return popt.isPresent() ? popt.get() : null;
+			}
+			
+		};
+				
+	}
+	
+	/**
+	 * @return Context backed by this context which computes final property values by invoking {@link PropertyComputer}.compute() for properties of that type.
+	 */
+	default Context computingContext() {
+		
+		return new Context() {
+
+			@Override
+			public Object get(String key) {
+				Object ret = Context.this.get(key);
+				return ret instanceof PropertyComputer ? ((PropertyComputer) ret).compute(this, key, Object.class) : ret;
+			}
+
+			@Override
+			public <T> T get(String key, Class<T> type) {
+				T ret = Context.this.get(key, type);
+				return ret instanceof PropertyComputer ? ((PropertyComputer) ret).compute(this, key, type) : ret;
+			}
+
+			@Override
+			public <T> T get(Class<T> type) {
+				return Context.this.get(type);
+			}
+			
+		};
 	}
 	
 }
