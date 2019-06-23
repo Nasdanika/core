@@ -2,12 +2,15 @@ package org.nasdanika.common;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -156,6 +159,26 @@ public class DefaultConverter extends ReflectiveConverter {
 	@ConverterMethod
 	public JSONObject toJSONObject(URL url) throws IOException {
 		return new JSONObject(toReader(url));
-	}	
+	}
+		
+	@ConverterMethod
+	public InputStream toInputStream(byte[] bytes) throws IOException {
+		return new ByteArrayInputStream(bytes);
+	}
+	
+	@ConverterMethod
+	public InputStream toInputStream(CharSequence charSequence) throws IOException {
+		return toInputStream(toByteArray(charSequence));
+	}
+	
+	@ConverterMethod
+	public byte[] toByteArray(CharSequence charSequence) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (Writer writer = new OutputStreamWriter(baos)) {
+			writer.write(charSequence.toString());
+		}
+		baos.close();
+		return baos.toByteArray();				
+	}
 
 }
