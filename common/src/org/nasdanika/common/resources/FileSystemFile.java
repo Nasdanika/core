@@ -39,6 +39,10 @@ public class FileSystemFile extends FileSystemResource implements File<InputStre
 
 	@Override
 	public void setContents(InputStream contents, ProgressMonitor monitor) {
+		java.io.File parent = file.getParentFile();
+		if (!parent.exists() && !parent.mkdirs()) {
+			throw new NasdanikaException("Directory does not exist and could not be created: "+parent.getAbsolutePath());
+		}
 		long total = 0;
 		try (BufferedInputStream bin = new BufferedInputStream(contents); BufferedOutputStream bout = new BufferedOutputStream(new FileOutputStream(file))) {
 			int b;

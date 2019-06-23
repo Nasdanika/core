@@ -78,11 +78,14 @@ public class FileSystemContainer extends FileSystemResource implements Container
 	@Override
 	public Collection<Resource<InputStream>> getChildren() {
 		Collection<Resource<InputStream>> ret = new ArrayList<>();
-		for (java.io.File child: file.listFiles()) {
-			if (child.isFile()) {
-				ret.add(new FileSystemFile(child));
-			} else if (child.isDirectory()) {
-				ret.add(new FileSystemContainer(child));
+		java.io.File[] children = file.listFiles();
+		if (children != null) {
+			for (java.io.File child: children) {
+				if (child.isFile()) {
+					ret.add(new FileSystemFile(child));
+				} else if (child.isDirectory()) {
+					ret.add(new FileSystemContainer(child));
+				}
 			}
 		}
 		return ret;
