@@ -1,7 +1,6 @@
 package org.nasdanika.common;
 
 import java.io.PrintStream;
-import java.util.Arrays;
 
 /**
  * Progress monitor reporting to a {@link PrintStream}, e.g. ``System.out``.
@@ -60,7 +59,10 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public ProgressMonitor split(String taskName, int ticks, Object... details) {
-		out.println(indent+"  "+taskName+"("+ticks+") "+Arrays.toString(details));
+		out.println(indent+"  "+taskName+"("+ticks+")");
+		for (Object d: details) {
+			out.println(formatDetail(d, indent + "    "));			
+		}
 		return new PrintStreamProgressMonitor(out, indent.length()+indentIncrement, indentIncrement, false) {
 			
 			@Override
@@ -74,6 +76,16 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 			}
 			
 		};
+	}
+	
+	/**
+	 * Formats detail element for output. This implementation concatenates the indent with the detail.
+	 * @param detail
+	 * @param indent
+	 * @return
+	 */
+	protected String formatDetail(Object detail, String indent) {
+		return indent + detail;
 	}
 
 	@Override
