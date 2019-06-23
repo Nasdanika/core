@@ -2,11 +2,12 @@ package org.nasdanika.common;
 
 /**
  * @author Pavel Vlasov
- *
+ * @param C context type.
+ * @param T result type.
  */
-public interface Work<T> {
+public interface Work<C,T> {
 	
-	Work<Object> NO_WORK = new Work<Object>() {
+	Work<Object,Object> NO_WORK = new Work<Object,Object>() {
 
 		@Override
 		public int size() {
@@ -14,7 +15,7 @@ public interface Work<T> {
 		}
 
 		@Override
-		public Object execute(Context context, ProgressMonitor monitor) throws Exception {
+		public Object execute(Object context, ProgressMonitor monitor) throws Exception {
 			return null;
 		}
 		
@@ -26,8 +27,8 @@ public interface Work<T> {
 	};
 	
 	@SuppressWarnings("unchecked")
-	static <T> Work<T> noWork() {
-		return (Work<T>) NO_WORK;
+	static <C,T> Work<C,T> noWork() {
+		return (Work<C,T>) NO_WORK;
 	}
 	
 	/**
@@ -42,7 +43,7 @@ public interface Work<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	T execute(Context context, ProgressMonitor progressMonitor) throws Exception;
+	T execute(C context, ProgressMonitor progressMonitor) throws Exception;
 	
 	/**
 	 * Rolls back all the changes done by this instance of Work. The method can be called when a composite work was
