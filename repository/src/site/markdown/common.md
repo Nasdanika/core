@@ -1,10 +1,10 @@
 # Common
 
-[org.nasdanika.common](apidocs/org.nasdanika.emf/apidocs/index.html?org/nasdanika/common/package-summary.html) provides classes leveraged by many other bundles/products. In particular:
+[org.nasdanika.common](apidocs/org.nasdanika.common/apidocs/index.html) provides classes leveraged by many other bundles/products. In particular:
 
-* [Context](apidocs/org.nasdanika.emf/apidocs/index.html?org/nasdanika/common/Context.html) and its flavors to pass contextual information along the execution path.
-* [Converter](apidocs/org.nasdanika.emf/apidocs/index.html?org/nasdanika/common/Converter.html) and its implementations to conveniently perform conversions between different types.
-* [Resource](apidocs/org.nasdanika.emf/apidocs/index.html?org/nasdanika/common/resources/Resource.html) and its flavors to simplify working with a hierarchy of resources by abstracting lower-level API's, e.g. ``java.io.File``. Support of ``ZipInputStream`` and ``ZipFile`` containers will be added in upcoming releases.
+* [Context](apidocs/org.nasdanika.common/apidocs/index.html?org/nasdanika/common/Context.html) and its flavors to pass contextual information along the execution path.
+* [Converter](apidocs/org.nasdanika.common/apidocs/index.html?org/nasdanika/common/Converter.html) and its implementations to conveniently perform conversions between different types.
+* [Resource](apidocs/org.nasdanika.common/apidocs/index.html?org/nasdanika/common/resources/Resource.html) and its flavors to simplify working with a hierarchy of resources by abstracting lower-level API's, e.g. ``java.io.File``. Support of ``ZipInputStream`` and ``ZipFile`` containers will be added in upcoming releases.
 
 ## Use in Maven projects
 
