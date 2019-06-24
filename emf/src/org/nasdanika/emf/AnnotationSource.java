@@ -23,7 +23,7 @@ public class AnnotationSource<T extends EModelElement> {
 	/**
 	 * Source for Nasdanika annotations.
 	 */
-	public static final String NASDANIKA_ANNOTATION_SOURCE = "org.nasdanika";	
+	public static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";	
 	
 	/**
 	 * @return List of sources to use for loading annotations such as icon.
@@ -32,7 +32,7 @@ public class AnnotationSource<T extends EModelElement> {
 		return Collections.singletonList(NASDANIKA_ANNOTATION_SOURCE);
 	}
 	
-	protected String getAnnotation(String key) {
+	public String getAnnotation(String key) {
 		for (String annotationSource: getAnnotationSources()) {
 			EAnnotation annotation = modelElement.getEAnnotation(annotationSource);
 			if (annotation != null) {

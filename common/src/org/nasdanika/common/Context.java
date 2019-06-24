@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * A generic source of contextual information keyed by a {@link String} - property, a type - service, or a combination of thereof - a typed property or a named service. 
+ * A generic source of contextual information keyed by a {@link String} - property, or a {@link Class} (type) - service. 
  * @author Pavel
  *
  */
@@ -39,18 +39,46 @@ public interface Context extends Composeable<Context> {
 			return null;
 		}
 		
+		/**
+		 * Returns this context if other is null or other context otherwise because there is no
+		 * reason to compose the empty context. A convenient method to get a non-null context.
+		 */
+		@Override
+		public Context compose(Context other) {
+			return other == null ? this : other;
+		}
+		
 	};
 	
 	/**
 	 * @param key Object key (property name).
-	 * @return Context object (property) by a key.
+	 * @return Property by a key.
 	 */
 	Object get(String key);
 	
 	/**
+	 * Convenience method for retrieving string properties.
+	 * @param key
+	 * @return
+	 */
+	default String getString(String key) {
+		return get(key, String.class);
+	}
+	
+	/**
+	 * Convenience method for retrieving string properties.
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	default String getString(String key, String defaultValue) {
+		return get(key, String.class, defaultValue);
+	}
+	
+	/**
 	 * @param key Object key (property name).
 	 * @param defaultValue value to return if key is not present.
-	 * @return Context object (property) by a key.
+	 * @return Property by key or default value if property is not present.
 	 */
 	default Object get(String key, Object defaultValue) {
 		Object ret = get(key);
@@ -60,7 +88,7 @@ public interface Context extends Composeable<Context> {
 	/**
 	 * @param key Object key (property name).
 	 * @param computer Function to compute value if key is not present.
-	 * @return Context object (property) by a key.
+	 * @return Property by key of a value returned by the computer if property is not present.
 	 */
 	default Object get(String key, Function<String,Object> computer) {
 		Object ret = get(key);
@@ -70,7 +98,7 @@ public interface Context extends Composeable<Context> {
 	/**
 	 * @param <T> Service type.
 	 * @param type Service type class.
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type.
+	 * @return Service of a particular type. Multiple service instances maybe obtained by passing an array type.
 	 */
 	<T> T get(Class<T> type);
 	
@@ -78,7 +106,7 @@ public interface Context extends Composeable<Context> {
 	 * @param <T> Service type.
 	 * @param type Service type class.
 	 * @param defaultService Default service implementation to return if no service is found. 
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type.
+	 * @return Service of a particular type or default service if no service of requested type is found in the context. Multiple service instances maybe obtained by passing an array type.
 	 */
 	default <T> T get(Class<T> type, T defaultService) {
 		T ret = get(type);
@@ -89,18 +117,18 @@ public interface Context extends Composeable<Context> {
 	 * @param <T> Service type.
 	 * @param type Service type class.
 	 * @param computer Function to compute a service instance if none is found in the context.
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type.
+	 * @return Service of a particular type or a service returned by the computer if not service of requested type is found in the context. Multiple service instances maybe obtained by passing an array type.
 	 */
 	default <T> T get(Class<T> type, Function<Class<T>,T> computer) {
 		T ret = get(type);
 		return ret == null ? computer.apply(type) : ret;		
 	}
-
+	
 	/**
 	 * @param <T> Service type.
 	 * @param type Service type class.
 	 * @param predicate Service predicate (filter).
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * @return Service of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
 	 * compatibility with both array and component types. 
 	 */
 	default <T> T get(Class<T> type, Predicate<? super T> predicate) {
@@ -113,7 +141,7 @@ public interface Context extends Composeable<Context> {
 	 * @param type Service type class.
 	 * @param predicate Service predicate (filter).
 	 * @param defaultService Default service implementation to return if no service is found. 
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * @return Service of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
 	 * compatibility with both array and component types. 
 	 */
 	default <T> T get(Class<T> type, Predicate<? super T> predicate, T defaultService) {
@@ -126,7 +154,7 @@ public interface Context extends Composeable<Context> {
 	 * @param type Service type class.
 	 * @param predicate Service predicate (filter).
 	 * @param computer Function to compute a service instance if none is found in the context.
-	 * @return Context object (service) of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
+	 * @return Service of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
 	 * compatibility with both array and component types. 
 	 */
 	default <T> T get(Class<T> type, Predicate<? super T> predicate, Function<Class<T>,T> computer) {
@@ -141,7 +169,7 @@ public interface Context extends Composeable<Context> {
 	 * @param <T> Property type.
 	 * @param key Object key (property/service name).
 	 * @param type Property type class.
-	 * @return Context object by type and key. 
+	 * @return Property by key converted to requested type. 
 	 */
 	@SuppressWarnings("unchecked")
 	default <T> T get(String key, Class<T> type) {
@@ -153,29 +181,29 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
-	 * This method may have different semantics depending on situation. 
-	 * One option is property type conversion. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
-	 * Another option is named services or service selectors when there are multiple services of the same type and only one of them shall be selected (or some of them if the type is array).
+	 * Returns a property converted to the requested type. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
+	 * The default implementation looks up {@link Converter} service to convert the value returned by <code>get(String)</code> to requested type and falls-back to {@link DefaultConverter}.INSTANCE
+	 * if the converter service is not present in the context.
 	 * @param <T> Property/service type.
 	 * @param key Object key (property/service name).
 	 * @param type Property/service type class.
-	 * @param defaultService Default service implementation to return if no service is found. 
-	 * @return Context object by type and key. 
+	 * @param defaultValue Default property value. 
+	 * @return Property by key converted to requested type or default value if property is not found. 
 	 */
-	default <T> T get(String key, Class<T> type, T defaultService) {
+	default <T> T get(String key, Class<T> type, T defaultValue) {
 		T ret = get(key, type);
-		return ret == null ? defaultService : ret;		
+		return ret == null ? defaultValue : ret;		
 	}
 	
 	/**
-	 * This method may have different semantics depending on situation. 
-	 * One option is property type conversion. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
-	 * Another option is named services or service selectors when there are multiple services of the same type and only one of them shall be selected (or some of them if the type is array).
+	 * Returns a property converted to the requested type. E.g. property which is a {@link File} or {@link URL} may be converted to {@link InputStream}, {@link Reader} or {@link String}.
+	 * The default implementation looks up {@link Converter} service to convert the value returned by <code>get(String)</code> to requested type and falls-back to {@link DefaultConverter}.INSTANCE
+	 * if the converter service is not present in the context.
 	 * @param <T> Property/service type.
 	 * @param key Object key (property/service name).
 	 * @param type Property/service type class.
-	 * @param computer Function to compute a service instance if none is found in the context.
-	 * @return Context object by type and key. 
+	 * @param computer Function to compute property value if none is found in the context.
+	 * @return Property by key converted to requested type or computed value if property is not present. 
 	 */
 	default <T> T get(String key, Class<T> type, BiFunction<String,Class<T>,T> computer)  {
 		T ret = get(key, type);
