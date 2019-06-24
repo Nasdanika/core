@@ -24,6 +24,7 @@ public class EModelElementAnnotationResourceLocator implements ResourceLocator {
 	 * @param target {@link EModelElement} to get annotations from.
 	 * @param source Source of annotations.
 	 * @param keyMapper Key mapping function, can be null. E.g. to load Russian element descriptions the key mapper may replace ``description`` with ``description_ru``.
+	 * Key mapper is not applied to the chained context, 
 	 * @param chain Chain context to load resource from.
 	 */
 	public EModelElementAnnotationResourceLocator(EModelElement target, String source, Function<String,String> keyMapper, Context chain) {
@@ -36,8 +37,8 @@ public class EModelElementAnnotationResourceLocator implements ResourceLocator {
 	@Override
 	public Object get(String key) {
 		EAnnotation ann = target.getEAnnotation(source);
-		String effectiveKey = keyMapper == null ? key : keyMapper.apply(key);
-		return ann == null ? chain.get(effectiveKey) : ann.getDetails().get(effectiveKey);
+		Object ret = ann == null ? null : ann.getDetails().get(keyMapper == null ? key : keyMapper.apply(key));
+		return ret == null ? chain.get(key) : ret;
 	}
 
 	@Override
