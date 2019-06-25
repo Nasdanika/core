@@ -85,4 +85,9 @@ public class FileSystemFile extends FileSystemResource implements File<InputStre
 		return file.canWrite();
 	}
 
+	@Override
+	public long size() {
+		return file.isFile() ? file.length() : 0;
+	}
+
 }

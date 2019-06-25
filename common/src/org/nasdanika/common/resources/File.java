@@ -103,9 +103,10 @@ public interface File<T> extends Resource<T> {
 	 * @param <V>
 	 * @param decoder Decodes T to V.
 	 * @param encoder Encodes V to T.
+	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
 	 * @return
 	 */
-	default <V> File<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder) {
+	default <V> File<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter) {
 		return new File<V>() {
 
 			@Override
@@ -121,7 +122,7 @@ public interface File<T> extends Resource<T> {
 			@Override
 			public Container<V> getParent() {
 				Container<T> parent = File.this.getParent();
-				return parent == null ? null : parent.adapt(decoder, encoder);
+				return parent == null ? null : parent.adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
@@ -157,6 +158,11 @@ public interface File<T> extends Resource<T> {
 			@Override
 			public boolean canWrite() {
 				return encoder != null && File.this.canWrite();
+			}
+
+			@Override
+			public long size() {
+				return sizeConverter == null ? File.this.size() : sizeConverter.apply(File.this, File.this.size());
 			}
 			
 		};

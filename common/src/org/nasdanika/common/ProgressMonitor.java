@@ -43,20 +43,20 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param details optional additional information.
 	 * @return
 	 */
-	ProgressMonitor split(String taskName, int ticks, Object... details);
+	ProgressMonitor split(String taskName, long ticks, Object... details);
 	
 	/**
 	 * Reports progress.
 	 * @param work Work installment - how much work was done since the last report, not the total work.
 	 * @param progressMessage Progress message. 
 	 */
-	void worked(int work, String progressMessage);
+	void worked(long work, String progressMessage);
 	
-	/**
-	 * Resizes the remaining amount of work.
-	 * @param ticks
-	 */
-	void setWorkRemained(int ticks);
+//	/**
+//	 * Resizes the remaining amount of work.
+//	 * @param ticks
+//	 */
+//	void setWorkRemaining(int ticks);
 
 	/**
 	 * Composes two monitors. The resulting monitor reports isCancelled() as OR, composes splits, 
@@ -70,13 +70,13 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 		return new ProgressMonitor() {
 			
 			@Override
-			public void worked(int work, String progressMessage) {
+			public void worked(long work, String progressMessage) {
 				ProgressMonitor.this.worked(work, progressMessage);
 				other.worked(work, progressMessage);
 			}
 			
 			@Override
-			public ProgressMonitor split(String taskName, int ticks, Object... details) {
+			public ProgressMonitor split(String taskName, long ticks, Object... details) {
 				return	ProgressMonitor.this.split(taskName, ticks, details).compose(other.split(taskName, ticks, details));
 			}
 			
@@ -97,11 +97,11 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 				other.cancel();
 			}
 			
-			@Override
-			public void setWorkRemained(int ticks) {
-				ProgressMonitor.this.setWorkRemained(ticks);
-				other.setWorkRemained(ticks);
-			}
+//			@Override
+//			public void setWorkRemaining(int ticks) {
+//				ProgressMonitor.this.setWorkRemaining(ticks);
+//				other.setWorkRemaining(ticks);
+//			}
 		};
 	}
 		

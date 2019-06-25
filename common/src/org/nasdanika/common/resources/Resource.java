@@ -31,6 +31,12 @@ public interface Resource<T> {
 	Container<T> getParent();
 	
 	/**
+	 * Resource size. -1 for unknown.
+	 * @return
+	 */
+	long size();
+	
+	/**
 	 * @return The root container.
 	 */
 	default Container<T> getRoot() {
@@ -44,7 +50,7 @@ public interface Resource<T> {
 	
 	/**
 	 * Deletes the resource if it exists.
-	 * @param monitor
+	 * @param monitor Parent monitor, the resource splits the monitor and takes 1 tick.
 	 */
 	void delete(ProgressMonitor monitor);
 	
@@ -65,7 +71,7 @@ public interface Resource<T> {
 	 * Copies the resource to the target container under a given path.
 	 * @param container Target container, may be the same container.
 	 * @param path Path to copy the resource to.
-	 * @param monitor Progress monitor.
+	 * @param monitor Parent progress monitor, the resource splits the monitor and takes size() ticks.
 	 */
 	void copy(Container<? super T> container, String path, ProgressMonitor monitor);
 	
@@ -73,7 +79,7 @@ public interface Resource<T> {
 	 * Moves the resource to the target container under a given path. Equivalent to copying and then deleting.
 	 * @param container Target container.
 	 * @param path Path to move the resource to.
-	 * @param monitor Progress monitor.
+	 * @param monitor Parent progress monitor, the resource splits the monitor and takes 2*size() ticks - one size for reading and one for writing.
 	 */
 	void move(Container<? super T> container, String path, ProgressMonitor monitor);
 	
@@ -82,11 +88,12 @@ public interface Resource<T> {
 	 * @param <V> New content type. Can be the same as T in case of filtering - token substitution, encryption/decryption, compression/decompression.
 	 * Either encoder or decoder can be null, it will make the adapted files read-only and write-only respectively. Decoder and encoder take the file as 
 	 * the first argument to allow implement file-specific operations, e.g. extension-based encoding/decoding such as parsing JSON for files with ``.json`` extension.
-	 * @param decoder
-	 * @param encoder
+	 * @param decoder Decodes T to V.
+	 * @param encoder Encodes V to T.
+	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
 	 * @return
 	 */
-	<V> Resource<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder);
+	<V> Resource<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter);
 	
 
 }

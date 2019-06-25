@@ -58,8 +58,8 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public ProgressMonitor split(String taskName, int ticks, Object... details) {
-		out.println(indent+"  "+taskName+"("+ticks+")");
+	public ProgressMonitor split(String taskName, long ticks, Object... details) {
+		out.println(indent+"  "+taskName+" ("+ticks+")");
 		for (Object d: details) {
 			out.println(formatDetail(d, indent + "    "));			
 		}
@@ -89,13 +89,13 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void worked(int work, String progressMessage) {
+	public void worked(long work, String progressMessage) {
 		out.println(indent+"  ["+work+"] "+progressMessage);
 	}
 
-	@Override
-	public void setWorkRemained(int ticks) {
-		// NOP
-	}
+//	@Override
+//	public void setWorkRemaining(int ticks) {
+//		// NOP
+//	}
 
 }

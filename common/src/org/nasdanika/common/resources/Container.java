@@ -41,6 +41,16 @@ public interface Container<T> extends Resource<T> {
 	 * @return A list of existing children. May return null for containers where children can't be retrieved, e.g. write-only containers.
 	 */
 	Collection<Resource<T>> getChildren();
+	
+	default long size() {
+		long ret = 0;
+		for (Resource<T> child: getChildren()) {
+			if (child.exists()) {
+				ret += child.size();
+			}
+		}
+		return ret;
+	}
 		
 	/**
 	 * Recursively copies children.
@@ -48,11 +58,12 @@ public interface Container<T> extends Resource<T> {
 	@Override
 	default void copy(Container<? super T> container, String path, ProgressMonitor monitor) {
 		if (exists()) {			
-			Container<? super T> target = container.getContainer(path);
-			Collection<Resource<T>> children = getChildren();
-			if (children != null) {
-				monitor.setWorkRemained(200 * children.size()); // Pre-resizing so there is enough for copying.
-				children.forEach(child -> child.copy(target, child.getName(), monitor));
+			try (ProgressMonitor subMonitor = monitor.split("Copying "+getName(), size(), this)) {
+				Container<? super T> target = container.getContainer(path);
+				Collection<Resource<T>> children = getChildren();
+				if (children != null) {				
+					children.forEach(child -> child.copy(target, child.getName(), subMonitor));
+				}
 			}
 		}
 	}
@@ -63,15 +74,14 @@ public interface Container<T> extends Resource<T> {
 	@Override
 	default void move(Container<? super T> container, String path, ProgressMonitor monitor) {
 		if (exists()) {			
-			Container<? super T> target = container.getContainer(path);
-			Collection<Resource<T>> children = getChildren();
-			if (children != null) {
-				monitor.setWorkRemained(300 * children.size() + 100); // Pre-resizing so there is enough for moving.
-				children.forEach(child -> child.move(target, child.getName(), monitor));
+			try (ProgressMonitor subMonitor = monitor.split("Moving "+getName(), size()*2 + 1, this)) {
+				Container<? super T> target = container.getContainer(path);
+				Collection<Resource<T>> children = getChildren();
+				if (children != null) {
+					children.forEach(child -> child.move(target, child.getName(), subMonitor));
+				}
+				delete(subMonitor);
 			}
-			try (ProgressMonitor deleteMonitor = monitor.split("Delete "+getPath(), 100, this)) {
-				delete(deleteMonitor);
-			}		
 		}		
 	}	
 	
@@ -80,10 +90,11 @@ public interface Container<T> extends Resource<T> {
 	 * @param <V>
 	 * @param decoder Decodes T to V.
 	 * @param encoder Encodes V to T.
+	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
 	 * @return
 	 */
 	@Override
-	default <V> Container<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder) {
+	default <V> Container<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter) {
 		return new Container<V>() {
 
 			@Override
@@ -99,7 +110,7 @@ public interface Container<T> extends Resource<T> {
 			@Override
 			public Container<V> getParent() {
 				Container<T> parent = Container.this.getParent();
-				return parent == null ? null : parent.adapt(decoder, encoder);
+				return parent == null ? null : parent.adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
@@ -119,17 +130,17 @@ public interface Container<T> extends Resource<T> {
 					return null;
 				}
 				
-				return res.adapt(decoder, encoder);
+				return res.adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
 			public File<V> getFile(String path) {
-				return Container.this.getFile(path).adapt(decoder, encoder);
+				return Container.this.getFile(path).adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
 			public Container<V> getContainer(String path) {
-				return Container.this.getContainer(path).adapt(decoder, encoder);
+				return Container.this.getContainer(path).adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
@@ -140,7 +151,7 @@ public interface Container<T> extends Resource<T> {
 					return null;
 				}
 				
-				return ch.stream().map(r -> r.adapt(decoder, encoder)).collect(Collectors.toList());
+				return ch.stream().map(r -> r.adapt(decoder, encoder, sizeConverter)).collect(Collectors.toList());
 			}
 			
 		};

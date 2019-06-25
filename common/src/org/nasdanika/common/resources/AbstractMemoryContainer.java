@@ -85,6 +85,11 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 					super.delete(monitor);
 					children.remove(getName());					
 				}
+
+				@Override
+				public long size() {
+					return AbstractMemoryContainer.this.size(contents);
+				}
 				
 			};
 			children.put(path, ret);
@@ -131,6 +136,11 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 					super.delete(monitor);
 					children.remove(getName());					
 				}
+
+				@Override
+				protected long size(T contents) {
+					return AbstractMemoryContainer.this.size(contents);
+				}
 				
 			};
 			children.put(path, ret);
@@ -150,5 +160,13 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 	public void delete(ProgressMonitor monitor) {
 		getChildren().forEach(child -> child.delete(monitor));
 	}
+
+	/**
+	 * Computes content size.
+	 * @param contents
+	 * @return
+	 */
+	protected abstract long size(T contents);
+	
 
 }
