@@ -417,6 +417,9 @@ public interface Context extends Composeable<Context> {
 	 * @return
 	 */
 	default String interpolate(String input) {
+		if (input == null) {
+			return input;
+		}
 		Matcher matcher = EXPANDER_PATTERN.matcher(input);
 		StringBuilder output = new StringBuilder();
 		int i = 0;
