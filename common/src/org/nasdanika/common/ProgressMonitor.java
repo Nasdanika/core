@@ -23,12 +23,6 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 */
 	@Override
 	void close(); 
-
-	/**
-	 * Sets this monitor state to cancelled. Clients shall periodically 
-	 * call ``isCancelled()`` and cancel operations if it returns true.  
-	 */
-	void cancel();
 	
 	/**
 	 * Indicates that this monitor was cancelled and further operations shall not be performed.
@@ -91,17 +85,6 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 				other.close();
 			}
 			
-			@Override
-			public void cancel() {
-				ProgressMonitor.this.cancel();
-				other.cancel();
-			}
-			
-//			@Override
-//			public void setWorkRemaining(int ticks) {
-//				ProgressMonitor.this.setWorkRemaining(ticks);
-//				other.setWorkRemaining(ticks);
-//			}
 		};
 	}
 		

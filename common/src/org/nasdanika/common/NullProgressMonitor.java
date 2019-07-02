@@ -7,21 +7,14 @@ package org.nasdanika.common;
  */
 public class NullProgressMonitor implements ProgressMonitor {
 	
-	private volatile boolean cancelled;
-
 	public NullProgressMonitor() {}
 
 	@Override
 	public void close() {}
 
 	@Override
-	public void cancel() {
-		cancelled = true;
-	}
-
-	@Override
 	public boolean isCancelled() {
-		return cancelled;
+		return false;
 	}
 
 	@Override
@@ -33,10 +26,5 @@ public class NullProgressMonitor implements ProgressMonitor {
 	public void worked(long work, String progressMessage) {
 		// NOP
 	}
-
-//	@Override
-//	public void setWorkRemaining(int ticks) {
-//		// NOP
-//	}
 
 }

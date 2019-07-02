@@ -95,4 +95,35 @@ public interface Work<C,T> {
 		return parent.split(getName(), size(), this);
 	}
 	
+	/**
+	 * Binds context to {@link Work}Work making it a {@link Command}. 
+	 * @param context
+	 * @return
+	 */
+	default Command<T> bindContext(C context) {
+		return new Command<T>() {
+
+			@Override
+			public long size() {
+				return Work.this.size();
+			}
+
+			@Override
+			public String getName() {
+				return Work.this.getName();
+			}
+
+			@Override
+			public T execute(ProgressMonitor progressMonitor) throws Exception {
+				return Work.this.execute(context, progressMonitor);
+			}
+
+			@Override
+			public boolean undo(ProgressMonitor progressMonitor) throws Exception {
+				return Work.this.undo(progressMonitor);
+			}
+			
+		};
+	}
+	
 }
