@@ -1,11 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="Nasdanika Core">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="Nasdanika Core">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<unit id="json" version="20180813.0.0"/>
 			<repository location="https://www.nasdanika.org/home/products/maven-osgi/repository"/>
+			<unit id="org.yaml.snakeyaml" version="1.24.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<unit id="org.nasdanika.equinox.feature.feature.group" version="1.0.0.201905152054"/>
+			<unit id="org.nasdanika.equinox.feature.feature.group" version="1.0.0.201906301725"/>
 			<repository location="https://www.nasdanika.org/home/products/third-party/repository"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
