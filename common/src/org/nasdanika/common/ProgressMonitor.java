@@ -17,6 +17,19 @@ package org.nasdanika.common;
  *
  */
 public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMonitor> {
+	
+	/**
+	 * Progress status reported by worked(). For example, CANCEL status may be reported
+	 * if the work was cancelled, or WARNING may be reported if, say the work has to perform re-tries due to poor network connectivity.
+	 * @author Pavel
+	 */
+	enum Status {
+		INFO,
+		SUCCESS,
+		WARNING,
+		ERROR,
+		CANCEL
+	}
 		
 	/**
 	 * Closes this monitor.
@@ -44,7 +57,16 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param work Work installment - how much work was done since the last report, not the total work.
 	 * @param progressMessage Progress message. 
 	 */
-	void worked(long work, String progressMessage);
+	void worked(Status status, long work, String progressMessage);
+	
+	/**
+	 * Shortcut for ``worked(SUCCESS, work, progressMessage)``.
+	 * @param work
+	 * @param progressMessage
+	 */
+	default void worked(long work, String progressMessage) {
+		worked(Status.SUCCESS, work, progressMessage);
+	}
 	
 //	/**
 //	 * Resizes the remaining amount of work.
@@ -64,9 +86,9 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 		return new ProgressMonitor() {
 			
 			@Override
-			public void worked(long work, String progressMessage) {
-				ProgressMonitor.this.worked(work, progressMessage);
-				other.worked(work, progressMessage);
+			public void worked(Status status, long work, String progressMessage) {
+				ProgressMonitor.this.worked(status, work, progressMessage);
+				other.worked(status, work, progressMessage);
 			}
 			
 			@Override

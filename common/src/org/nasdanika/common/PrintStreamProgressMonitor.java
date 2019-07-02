@@ -78,8 +78,8 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void worked(long work, String progressMessage) {
-		out.println(indent+"  ["+work+"] "+progressMessage);
+	public void worked(Status status, long work, String progressMessage) {
+		out.println(indent+"  ["+status+" "+work+"] "+progressMessage);
 	}
 
 //	@Override
