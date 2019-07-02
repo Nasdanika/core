@@ -33,7 +33,12 @@ public class ProgressEntry implements ProgressMonitor {
 		return name;
 	}
 
-	public interface WorkedEntry {
+	/**
+	 * Work step reported by worked() methods.
+	 * @author Pavel
+	 *
+	 */
+	public interface Step {
 		
 		long getTime();
 		
@@ -71,11 +76,11 @@ public class ProgressEntry implements ProgressMonitor {
 		return children;
 	}
 	
-	public List<WorkedEntry> getWorked() {
-		return worked;
+	public List<Step> getSteps() {
+		return steps;
 	}
 
-	private List<WorkedEntry> worked = new ArrayList<>();
+	private List<Step> steps = new ArrayList<>();
 	
 	private long start;
 	
@@ -123,7 +128,7 @@ public class ProgressEntry implements ProgressMonitor {
 		if (closed) {
 			throw new IllegalStateException("Monitor is closed");
 		}
-		worked.add(new WorkedEntry() {
+		steps.add(new Step() {
 
 			long now = System.currentTimeMillis();			
 			
@@ -160,20 +165,24 @@ public class ProgressEntry implements ProgressMonitor {
 		ret.put("start", start);
 		ret.put("finish", finish);
 
-		JSONArray jChildren = new JSONArray();
-		children.forEach(child -> jChildren.put(child.toJSON()));
-		ret.put("children", jChildren);
+		if (!children.isEmpty()) {
+			JSONArray jChildren = new JSONArray();
+			children.forEach(child -> jChildren.put(child.toJSON()));
+			ret.put("children", jChildren);
+		}
 		
-		JSONArray jWorked = new JSONArray();
-		worked.forEach(we -> {
-			JSONObject jwe = new JSONObject();
-			jwe.put("status", we.getStatus().name());
-			jwe.put("worked", we.getWorked());
-			jwe.put("time", we.getTime());
-			jwe.put("message", we.getMessage());
-			
-		});
-		ret.put("worked", jWorked);		
+		if (!steps.isEmpty()) {
+			JSONArray jSteps = new JSONArray();
+			steps.forEach(we -> {
+				JSONObject jwe = new JSONObject();
+				jwe.put("status", we.getStatus().name());
+				jwe.put("worked", we.getWorked());
+				jwe.put("time", we.getTime());
+				jwe.put("message", we.getMessage());
+				
+			});
+			ret.put("steps", jSteps);		
+		}
 		
 		return ret;
 	}
@@ -194,20 +203,24 @@ public class ProgressEntry implements ProgressMonitor {
 		ret.put("start", start);
 		ret.put("finish", finish);
 
-		List<Map<String, Object>> mChildren = new ArrayList<>();
-		children.forEach(child -> mChildren.add(child.toMap()));
-		ret.put("children", mChildren);
+		if (!children.isEmpty()) {
+			List<Map<String, Object>> mChildren = new ArrayList<>();
+			children.forEach(child -> mChildren.add(child.toMap()));
+			ret.put("children", mChildren);
+		}
 		
-		List<Map<String, Object>> mWorked = new ArrayList<>();
-		worked.forEach(we -> {
-			Map<String, Object> mwe = new LinkedHashMap<>();
-			mwe.put("status", we.getStatus().name());
-			mwe.put("worked", we.getWorked());
-			mwe.put("time", we.getTime());
-			mwe.put("message", we.getMessage());
+		if (!steps.isEmpty()) {
+			List<Map<String, Object>> mSteps = new ArrayList<>();
+			steps.forEach(we -> {
+				Map<String, Object> mwe = new LinkedHashMap<>();
+				mwe.put("status", we.getStatus().name());
+				mwe.put("worked", we.getWorked());
+				mwe.put("time", we.getTime());
+				mwe.put("message", we.getMessage());
 			
-		});
-		ret.put("worked", mWorked);		
+			});
+			ret.put("steps", mSteps);		
+		}
 		
 		
 		return ret;
