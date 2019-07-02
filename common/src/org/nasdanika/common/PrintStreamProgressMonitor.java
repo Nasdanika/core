@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.PrintStream;
+import java.util.concurrent.CancellationException;
 
 /**
  * Progress monitor reporting to a {@link PrintStream}, e.g. ``System.out``.
@@ -53,6 +54,9 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public ProgressMonitor split(String taskName, long ticks, Object... details) {
+		if (isCancelled()) {
+			throw new CancellationException();
+		}
 		out.println(indent+"  "+taskName+" ("+ticks+")");
 		for (Object d: details) {
 			out.println(formatDetail(d, indent + "    "));			
