@@ -162,8 +162,12 @@ public class ProgressEntry implements ProgressMonitor {
 		JSONObject ret = new JSONObject();
 		ret.put("name", getName());
 		ret.put("totalWork", totalWork);
-		ret.put("start", start);
-		ret.put("finish", finish);
+		if (start > 0) {
+			ret.put("start", start);
+		}
+		if (finish > 0) {
+			ret.put("finish", finish);
+		}
 
 		if (!children.isEmpty()) {
 			JSONArray jChildren = new JSONArray();
@@ -200,8 +204,12 @@ public class ProgressEntry implements ProgressMonitor {
 		Map<String,Object> ret = new LinkedHashMap<>();
 		ret.put("name", getName());
 		ret.put("totalWork", totalWork);
-		ret.put("start", start);
-		ret.put("finish", finish);
+		if (start > 0) {
+			ret.put("start", start);
+		}
+		if (finish > 0) {
+			ret.put("finish", finish);
+		}
 
 		if (!children.isEmpty()) {
 			List<Map<String, Object>> mChildren = new ArrayList<>();
@@ -221,7 +229,6 @@ public class ProgressEntry implements ProgressMonitor {
 			});
 			ret.put("steps", mSteps);		
 		}
-		
 		
 		return ret;
 	}
