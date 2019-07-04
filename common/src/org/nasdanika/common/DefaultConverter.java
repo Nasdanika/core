@@ -191,28 +191,28 @@ public class DefaultConverter extends ReflectiveConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public Map<String, Object> stringToYamlMap(String string) {
+	public Map<String, Object> toYamlMap(String string) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(string);
 		return data instanceof Map ? (Map<String, Object>) data : null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public Map<String, Object> stringToYamlMap(Reader reader) {
+	public Map<String, Object> toYamlMap(Reader reader) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(reader);
 		return data instanceof Map ? (Map<String, Object>) data : null;		
 	}
 		
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public Map<String, Object> stringToYamlMap(InputStream inputStream) {
+	public Map<String, Object> toYamlMap(InputStream inputStream) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(inputStream);
 		return data instanceof Map ? (Map<String, Object>) data : null;		
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public Map<String, Object> stringToYamlMap(URL url) throws IOException {
+	public Map<String, Object> toYamlMap(URL url) throws IOException {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(url.openStream());
 		return data instanceof Map ? (Map<String, Object>) data : null;		
 	}
@@ -224,28 +224,28 @@ public class DefaultConverter extends ReflectiveConverter {
 	 */
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public List<Object> stringToYamlList(String string) {
+	public List<Object> toYamlList(String string) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(string);
 		return data instanceof List ? (List<Object>) data : null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public List<Object> stringToYamlList(Reader reader) {
+	public List<Object> toYamlList(Reader reader) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(reader);
 		return data instanceof List ? (List<Object>) data : null;
 	}
 		
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public List<Object> stringToYamlList(InputStream inputStream) {
+	public List<Object> toYamlList(InputStream inputStream) {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(inputStream);
 		return data instanceof List ? (List<Object>) data : null;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@ConverterMethod
-	public List<Object> stringToYamlList(URL url) throws IOException {
+	public List<Object> toYamlList(URL url) throws IOException {
 		Object data = MarkingYamlConstructor.createMarkingYaml().load(url.openStream());
 		return data instanceof List ? (List<Object>) data : null;
 	}
