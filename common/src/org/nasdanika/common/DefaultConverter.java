@@ -13,10 +13,13 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.persistence.MarkingYamlConstructor;
 
 /**
  * Reflective converter providing some common conversions, some of them chained
@@ -181,4 +184,69 @@ public class DefaultConverter extends ReflectiveConverter {
 		return baos.toByteArray();				
 	}
 
+	/**
+	 * Parses string as YAML.
+	 * @param string
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public Map<String, Object> stringToYamlMap(String string) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(string);
+		return data instanceof Map ? (Map<String, Object>) data : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public Map<String, Object> stringToYamlMap(Reader reader) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(reader);
+		return data instanceof Map ? (Map<String, Object>) data : null;		
+	}
+		
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public Map<String, Object> stringToYamlMap(InputStream inputStream) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(inputStream);
+		return data instanceof Map ? (Map<String, Object>) data : null;		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public Map<String, Object> stringToYamlMap(URL url) throws IOException {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(url.openStream());
+		return data instanceof Map ? (Map<String, Object>) data : null;		
+	}
+
+	/**
+	 * Parses string as YAML.
+	 * @param string
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public List<Object> stringToYamlList(String string) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(string);
+		return data instanceof List ? (List<Object>) data : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public List<Object> stringToYamlList(Reader reader) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(reader);
+		return data instanceof List ? (List<Object>) data : null;
+	}
+		
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public List<Object> stringToYamlList(InputStream inputStream) {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(inputStream);
+		return data instanceof List ? (List<Object>) data : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public List<Object> stringToYamlList(URL url) throws IOException {
+		Object data = MarkingYamlConstructor.createMarkingYaml().load(url.openStream());
+		return data instanceof List ? (List<Object>) data : null;
+	}
 }

@@ -6,7 +6,9 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.common,
+ org.nasdanika.common.persistence,
  org.nasdanika.common.resources
 Bundle-ClassPath: .
 Automatic-Module-Name: org.nasdanika.common
-Require-Bundle: json;bundle-version="20180130.0.0";visibility:=reexport
+Require-Bundle: json;bundle-version="20180130.0.0";visibility:=reexport,
+ org.yaml.snakeyaml;bundle-version="1.24.0";visibility:=reexport

@@ -503,5 +503,26 @@ public interface Context extends Composeable<Context> {
 			
 		};
 	}
+
+	/**
+	 * Wraps a source function, e.g. Map<String,Object>::get into a context.
+	 * @param source Source function.
+	 * @return
+	 */
+	static Context wrap(Function<String,Object> source) {
+		return new Context() {
+
+			@Override
+			public Object get(String key) {
+				return source.apply(key);
+			}
+
+			@Override
+			public <T> T get(Class<T> type) {
+				return null;
+			}
+			
+		};
+	}
 	
 }
