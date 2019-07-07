@@ -505,7 +505,7 @@ public interface Context extends Composeable<Context> {
 	}
 
 	/**
-	 * Wraps a source function, e.g. Map<String,Object>::get into a context.
+	 * Wraps a source function, e.g. Map<String,Object>::get into a context. Performs resolution of hierarchical properties.
 	 * @param source Source function.
 	 * @return
 	 */
@@ -514,7 +514,36 @@ public interface Context extends Composeable<Context> {
 
 			@Override
 			public Object get(String key) {
-				return source.apply(key);
+				Object ret = source.apply(key);
+				if (ret != null) {
+					return ret;
+				}
+				
+				int lastSlash = key.lastIndexOf('/');
+				if (lastSlash == -1) {
+					return null;
+				}
+				
+				Object parentProperty = get(key.substring(0, lastSlash));
+				String subKey = key.substring(lastSlash + 1);
+				if (parentProperty instanceof Context) {
+					return ((Context) parentProperty).get(subKey);	
+				}
+				if (parentProperty instanceof Map) {
+					return ((Map<?,?>) parentProperty).get(subKey);
+				}
+				if (parentProperty instanceof List) {
+					try {
+						int idx = Integer.parseInt(subKey);
+						if (idx >= 0 && idx < ((List<?>) parentProperty).size()) {
+							return ((List<?>) parentProperty).get(idx);
+						}
+					} catch (NumberFormatException e) {
+						// NOP
+					}
+				}
+
+				return null;
 			}
 
 			@Override
