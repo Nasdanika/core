@@ -47,25 +47,45 @@ public class SimpleMutableContext implements MutableContext {
 	}
 
 	/**
-	 * Returns property by key.
+	 * Returns property by key. If a property at a given key is not found, the property key is split by the last slash (``/``)
+	 * and the tail is looked up in the property at the head if the property is {@link Context}, {@link Map}, or {@link List} and the tail can be parsed to an integer.
+	 * For example, if ``my/property`` is not present in properties then ``my`` property will be retrieved and if it is of type Context or Map its ``property`` key will be retrieved.
+	 * Similarly, ``my/property/list/0`` will retrieve ``my/property/list`` and if it is a list then it will return its first element. 
 	 */
 	@Override
-	public Object get(String key) {
-		int lastSlash;
-		String prefix = key;
-		while ((lastSlash = prefix.lastIndexOf('/')) != -1) {
-			String suffix = key.substring(lastSlash +1);
-			prefix = prefix.substring(0, lastSlash);
-			Object subCtx = get(prefix);
-			if (subCtx instanceof Context) {
-				Object ret = ((Context) subCtx).get(suffix);
-				if (ret != null) {
-					return ret;
+	public Object get(String key) {		
+		return properties.computeIfAbsent(key, k -> {
+			Object ret = chain.get(k);
+			if (ret != null) {
+				return ret;
+			}
+			
+			int lastSlash = k.lastIndexOf('/');
+			if (lastSlash == -1) {
+				return null;
+			}
+			
+			Object parentProperty = get(k.substring(0, lastSlash));
+			String subKey = k.substring(lastSlash + 1);
+			if (parentProperty instanceof Context) {
+				return ((Context) parentProperty).get(subKey);	
+			}
+			if (parentProperty instanceof Map) {
+				return ((Map<?,?>) parentProperty).get(subKey);
+			}
+			if (parentProperty instanceof List) {
+				try {
+					int idx = Integer.parseInt(subKey);
+					if (idx >= 0 && idx < ((List<?>) parentProperty).size()) {
+						return ((List<?>) parentProperty).get(idx);
+					}
+				} catch (NumberFormatException e) {
+					// NOP
 				}
 			}
-		}
-		
-		return properties.computeIfAbsent(key, chain::get);
+			
+			return null;
+		});		
 	}
 
 	/**
