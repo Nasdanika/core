@@ -16,15 +16,25 @@ import org.json.JSONObject;
  */
 public class ProgressEntry implements ProgressMonitor {
 	
+	private ProgressEntry parent;
+
+	/**
+	 * 
+	 * @param totalWork
+	 */
+	protected ProgressEntry(String name, long totalWork, ProgressEntry parent, Object... details) {
+		this.name = name;		
+		this.totalWork = totalWork;
+		this.parent = parent;
+		this.details = details;
+		this.start = System.currentTimeMillis();
+	}
 	/**
 	 * 
 	 * @param totalWork
 	 */
 	public ProgressEntry(String name, long totalWork, Object... details) {
-		this.name = name;		
-		this.totalWork = totalWork;
-		this.details = details;
-		this.start = System.currentTimeMillis();
+		this(name, totalWork, null, details);
 	}
 	
 	private String name;
@@ -47,6 +57,8 @@ public class ProgressEntry implements ProgressMonitor {
 		long getWorked();
 		
 		String getMessage();
+		
+		Object[] getDetails();
 		
 	}
 	
@@ -118,13 +130,13 @@ public class ProgressEntry implements ProgressMonitor {
 		if (closed) {
 			throw new IllegalStateException("Monitor is closed");
 		}
-		ProgressEntry child = new ProgressEntry(taskName, ticks, details);
+		ProgressEntry child = new ProgressEntry(taskName, ticks, this, details);
 		children.add(child);
 		return child;
 	}
 
 	@Override
-	public void worked(Status status, long work, String progressMessage) {
+	public void worked(Status status, long work, String progressMessage, Object... details) {
 		if (closed) {
 			throw new IllegalStateException("Monitor is closed");
 		}
@@ -151,6 +163,12 @@ public class ProgressEntry implements ProgressMonitor {
 			public String getMessage() {
 				return progressMessage;
 			}
+			
+			@Override
+			public Object[] getDetails() {
+				return details;
+			}
+			
 		});
 	}
 	
@@ -168,6 +186,14 @@ public class ProgressEntry implements ProgressMonitor {
 		if (finish > 0) {
 			ret.put("finish", finish);
 		}
+		
+		if (getDetails().length > 0) {
+			JSONArray jd = new JSONArray();
+			for (Object d: getDetails()) {
+				jd.put(detailToJSON(d));
+			}
+			ret.put("details", jd); 					
+		}						
 
 		if (!children.isEmpty()) {
 			JSONArray jChildren = new JSONArray();
@@ -183,7 +209,13 @@ public class ProgressEntry implements ProgressMonitor {
 				jwe.put("worked", we.getWorked());
 				jwe.put("time", we.getTime());
 				jwe.put("message", we.getMessage());
-				
+				if (we.getDetails().length > 0) {
+					JSONArray jd = new JSONArray();
+					for (Object d: we.getDetails()) {
+						jd.put(detailToJSON(d));
+					}
+					jwe.put("details", jd); 					
+				}				
 			});
 			ret.put("steps", jSteps);		
 		}
@@ -191,6 +223,15 @@ public class ProgressEntry implements ProgressMonitor {
 		return ret;
 	}
 	
+	/**
+	 * Converts detail to JSON.
+	 * @param detail
+	 * @return
+	 */
+	protected JSONObject detailToJSON(Object detail) {
+		return parent == null ? DefaultConverter.INSTANCE.convert(detail, JSONObject.class) : parent.detailToJSON(detail);
+	}
+
 	@Override
 	public String toString() {
 		return toJSON().toString(4);
@@ -225,10 +266,12 @@ public class ProgressEntry implements ProgressMonitor {
 				mwe.put("worked", we.getWorked());
 				mwe.put("time", we.getTime());
 				mwe.put("message", we.getMessage());
-			
+				if (we.getDetails().length > 0) {
+					mwe.put("details", we.getDetails());					
+				}
 			});
 			ret.put("steps", mSteps);		
-		}
+		}			
 		
 		return ret;
 	}

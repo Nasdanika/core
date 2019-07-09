@@ -23,7 +23,7 @@ public class NullProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void worked(Status status, long work, String progressMessage) {
+	public void worked(Status status, long work, String progressMessage, Object... details) {
 		// NOP
 	}
 

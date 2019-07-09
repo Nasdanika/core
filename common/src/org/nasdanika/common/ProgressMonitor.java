@@ -57,15 +57,15 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param work Work installment - how much work was done since the last report, not the total work.
 	 * @param progressMessage Progress message. 
 	 */
-	void worked(Status status, long work, String progressMessage);
+	void worked(Status status, long work, String progressMessage, Object... details);
 	
 	/**
 	 * Shortcut for ``worked(SUCCESS, work, progressMessage)``.
 	 * @param work
 	 * @param progressMessage
 	 */
-	default void worked(long work, String progressMessage) {
-		worked(Status.SUCCESS, work, progressMessage);
+	default void worked(long work, String progressMessage, Object... details) {
+		worked(Status.SUCCESS, work, progressMessage, details);
 	}
 	
 //	/**
@@ -86,9 +86,9 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 		return new ProgressMonitor() {
 			
 			@Override
-			public void worked(Status status, long work, String progressMessage) {
-				ProgressMonitor.this.worked(status, work, progressMessage);
-				other.worked(status, work, progressMessage);
+			public void worked(Status status, long work, String progressMessage, Object... details) {
+				ProgressMonitor.this.worked(status, work, progressMessage, details);
+				other.worked(status, work, progressMessage, details);
 			}
 			
 			@Override

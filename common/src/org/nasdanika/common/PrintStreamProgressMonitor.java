@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.concurrent.CancellationException;
 
 /**
@@ -82,8 +83,8 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void worked(Status status, long work, String progressMessage) {
-		out.println(indent+"  ["+status+" "+work+"] "+progressMessage);
+	public void worked(Status status, long work, String progressMessage, Object... details) {
+		out.println(indent+"  ["+status+" "+work+"] "+progressMessage+": "+Arrays.deepToString(details));
 	}
 
 //	@Override

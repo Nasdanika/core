@@ -258,11 +258,11 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
-	 * @param prefix Sub-context prefix. Returns this context if prefix is null or a blank string.
-	 * @return A context which adds prefix before the key in <code>get(String></code> and <code>get(String,Class)</code> methods.
+	 * @param mapper Key mapping function. 
+	 * @return A context which maps the key using the mapper function in <code>get(String></code> and <code>get(String,Class)</code> methods. Returns this context if mapper is null.
 	 */
-	default Context subContext(String prefix) {
-		if (prefix == null || prefix.length() == 0) {
+	default Context map(Function<String,String> mapper) {
+		if (mapper == null) {
 			return this;
 		}
 		
@@ -270,7 +270,7 @@ public interface Context extends Composeable<Context> {
 
 			@Override
 			public Object get(String key) {
-				return Context.this.get(prefix+key);
+				return Context.this.get(mapper.apply(key));
 			}
 
 			@Override
@@ -280,7 +280,7 @@ public interface Context extends Composeable<Context> {
 
 			@Override
 			public <T> T get(String key, Class<T> type) {
-				return Context.this.get(prefix+key, type);
+				return Context.this.get(mapper.apply(key), type);
 			}
 			
 		};
@@ -365,21 +365,21 @@ public interface Context extends Composeable<Context> {
 	
 	/**
 	 * Creates a new mutable context with a given prefix and service predicate. 
-	 * @param prefix Context prefix, the same as in subContext().
+	 * @param mapper Mapper functions, the same as in map();
 	 * @param servicePredicate Predicate to use during look up of parent services. One possible scenario is to filter-out {@link Composeable} services from the parent.
 	 * @return
 	 */
-	default MutableContext fork(String prefix, Predicate<Object> servicePredicate) {
-		Context prefixed = subContext(prefix);
+	default MutableContext fork(Function<String,String> mapper, Predicate<Object> servicePredicate) {
+		Context mapped = map(mapper);
 		if (servicePredicate == null) {
-			return new SimpleMutableContext(prefixed);
+			return new SimpleMutableContext(mapped);
 		}
 		Context predicated = new Context() {
 			
 			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(Class<T> type) {
-				T ret = prefixed.get(type);
+				T ret = mapped.get(type);
 				if (ret == null) {
 					return null;
 				}
@@ -398,7 +398,7 @@ public interface Context extends Composeable<Context> {
 			
 			@Override
 			public Object get(String key) {
-				return prefixed.get(key);
+				return mapped.get(key);
 			}
 		};
 		return new SimpleMutableContext(predicated);
