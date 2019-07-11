@@ -24,7 +24,7 @@ import org.nasdanika.common.ProgressMonitor.Status;
  */
 public class CommandCallable<T> implements Callable<T> {
 	
-	Lock lock = new ReentrantLock();
+	protected Lock lock = new ReentrantLock();
 
 	private T result;
 	private Exception exception;
@@ -32,12 +32,37 @@ public class CommandCallable<T> implements Callable<T> {
 	private ProgressMonitor monitor;
 
 	private Command<T> command;
+
+	/**
+	 * Creates a callable with a {@link ProgressRecorder}. If ``call()`` is invoked before ``setMonitor()`` then the recorded progress is replayed to the monitor. 
+	 * @param command
+	 */
+	public CommandCallable(Command<T> command) {
+		this(command, new ProgressRecorder());		
+	}	
 	
 	public CommandCallable(Command<T> command, ProgressMonitor monitor) {
 		this.command = command;		
 		this.monitor = monitor;
 	}
-
+	
+	/**
+	 * Sets the monitor to the new value within a locked block, i.e. if the call() is in progress in another thread this 
+	 * method will block and update the monitor after the call. If the current monitor is {@link ProgressRecorder} it replays the recorded progress to the new monitor.
+	 * @param monitor
+	 */
+	public void setMonitor(ProgressMonitor monitor) {
+		lock.lock();
+		try {		
+			if (this.monitor instanceof ProgressRecorder) {
+				((ProgressRecorder) this.monitor).replay(monitor);
+			}
+			this.monitor = monitor;
+		} finally {
+			lock.unlock();
+		}
+	}
+	
 	@Override
 	public T call() throws Exception {
 		lock.lock();

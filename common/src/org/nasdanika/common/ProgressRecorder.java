@@ -1,0 +1,241 @@
+package org.nasdanika.common;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CancellationException;
+import java.util.stream.Collectors;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/**
+ * Progress recorder storing progress information for subsequent processing or replaying.
+ * @author Pavel
+ *
+ */
+public class ProgressRecorder implements ProgressMonitor {
+	
+	private ProgressRecorder parent;
+
+	/**
+	 * 
+	 * @param totalWork
+	 */
+	protected ProgressRecorder(ProgressRecorder parent) {
+		this.parent = parent;
+	}
+	/**
+	 * 
+	 * @param totalWork
+	 */
+	public ProgressRecorder() {
+		this(null);
+	}
+
+	/**
+	 * Work step reported by worked() methods.
+	 * @author Pavel
+	 *
+	 */
+	public interface Step {
+		
+		long getTime();
+		
+		Status getStatus();
+		
+		long getWorked();
+		
+		String getMessage();
+		
+		Object[] getDetails();
+		
+	}
+	
+	private boolean closed;
+	
+	private List<Object> entries = new ArrayList<>();
+	
+	/**
+	 * @return Steps and child entries created by split().
+	 */
+	public List<Object> getEntries() {
+		return entries;
+	}
+	
+	/**
+	 * @return Child entries created by split().
+	 */
+	public List<ProgressEntry> getChildren() {
+		return entries.stream().filter(e -> e instanceof ProgressEntry).map(e -> (ProgressEntry) e).collect(Collectors.toList());
+	}	
+	
+	public List<Step> getSteps() {
+		return entries.stream().filter(e -> e instanceof Step).map(e -> (Step) e).collect(Collectors.toList());
+	}
+	
+	@Override
+	public void close() {
+		closed = true;
+	}
+
+	@Override
+	public boolean isCancelled() {
+		return false;
+	}
+
+	@Override
+	public ProgressMonitor split(String taskName, long ticks, Object... details) {
+		if (isCancelled()) {
+			throw new CancellationException();
+		}
+		if (closed) {
+			throw new IllegalStateException("Monitor is closed");
+		}
+		ProgressRecorder child = new ProgressEntry(taskName, ticks, this, details);
+		entries.add(child);
+		return child;
+	}
+
+	@Override
+	public void worked(Status status, long work, String progressMessage, Object... details) {
+		if (closed) {
+			throw new IllegalStateException("Monitor is closed");
+		}
+		entries.add(new Step() {
+
+			long now = System.currentTimeMillis();			
+			
+			@Override
+			public long getWorked() {
+				return work;
+			}
+			
+			@Override
+			public long getTime() {
+				return now;
+			}
+			
+			@Override
+			public Status getStatus() {
+				return status;
+			}
+			
+			@Override
+			public String getMessage() {
+				return progressMessage;
+			}
+			
+			@Override
+			public Object[] getDetails() {
+				return details;
+			}
+			
+		});
+	}
+	
+	/**
+	 * Outputs to JSON.
+	 * @return
+	 */
+	public JSONObject toJSON() {
+		JSONObject ret = new JSONObject();
+
+		List<ProgressEntry> children = getChildren();
+		if (!children.isEmpty()) {
+			JSONArray jChildren = new JSONArray();
+			children.forEach(child -> jChildren.put(child.toJSON()));
+			ret.put("children", jChildren);
+		}
+		
+		List<Step> steps = getSteps();
+		if (!steps.isEmpty()) {
+			JSONArray jSteps = new JSONArray();
+			steps.forEach(we -> {
+				JSONObject jwe = new JSONObject();
+				jwe.put("status", we.getStatus().name());
+				jwe.put("worked", we.getWorked());
+				jwe.put("time", we.getTime());
+				jwe.put("message", we.getMessage());
+				if (we.getDetails().length > 0) {
+					JSONArray jd = new JSONArray();
+					for (Object d: we.getDetails()) {
+						jd.put(detailToJSON(d));
+					}
+					jwe.put("details", jd); 					
+				}				
+			});
+			ret.put("steps", jSteps);		
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Converts detail to JSON.
+	 * @param detail
+	 * @return
+	 */
+	protected JSONObject detailToJSON(Object detail) {
+		return parent == null ? DefaultConverter.INSTANCE.convert(detail, JSONObject.class) : parent.detailToJSON(detail);
+	}
+
+	@Override
+	public String toString() {
+		return toJSON().toString(4);
+	}
+	
+	/**
+	 * Outputs to Map, which can be then used to output to YAML.
+	 * @return
+	 */
+	public Map<String, Object> toMap() {
+		Map<String,Object> ret = new LinkedHashMap<>();
+
+		List<ProgressEntry> children = getChildren();
+		if (!children.isEmpty()) {
+			List<Map<String, Object>> mChildren = new ArrayList<>();
+			children.forEach(child -> mChildren.add(child.toMap()));
+			ret.put("children", mChildren);
+		}
+		
+		List<Step> steps = getSteps();
+		if (!steps.isEmpty()) {
+			List<Map<String, Object>> mSteps = new ArrayList<>();
+			steps.forEach(we -> {
+				Map<String, Object> mwe = new LinkedHashMap<>();
+				mwe.put("status", we.getStatus().name());
+				mwe.put("worked", we.getWorked());
+				mwe.put("time", we.getTime());
+				mwe.put("message", we.getMessage());
+				if (we.getDetails().length > 0) {
+					mwe.put("details", we.getDetails());					
+				}
+			});
+			ret.put("steps", mSteps);		
+		}			
+		
+		return ret;
+	}
+	
+	/**
+	 * Replays recorded progress to the target monitor.  
+	 * @param target
+	 */
+	public void replay(ProgressMonitor monitor) {
+		for (Object entry: entries) {
+			if (entry instanceof Step) {
+				Step step = (Step) entry;
+				monitor.worked(step.getStatus(),  step.getWorked(),  step.getMessage(), step.getDetails());
+			} else {
+				@SuppressWarnings("resource")
+				ProgressEntry child = (ProgressEntry) entry;
+				try (ProgressMonitor subMonitor = monitor.split(child.getName(), child.getTotalWork(), child.getDetails())) {
+					child.replay(subMonitor);
+				}
+			}
+		}
+	}
+
+}

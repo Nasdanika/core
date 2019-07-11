@@ -74,5 +74,5 @@ public interface Work<T> {
 	 * @throws Exception
 	 */
 	boolean undo(ProgressMonitor progressMonitor) throws Exception;
-		
+			
 }
