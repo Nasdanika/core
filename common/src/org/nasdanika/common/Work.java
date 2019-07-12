@@ -15,7 +15,7 @@ package org.nasdanika.common;
  * @param C context type.
  * @param T result type.
  */
-public interface Work<T> {
+public interface Work<T> extends WorkInfo {
 	
 	Work<Object> NO_WORK = new Work<Object>() {
 
@@ -45,16 +45,6 @@ public interface Work<T> {
 	static <T> Work<T> noWork() {
 		return (Work<T>) NO_WORK;
 	}
-	
-	/**
-	 * @return Total number of work units. The same size is used for both ``execute()`` and ``undo()``.
-	 */
-	long size();
-	
-	/**
-	 * @return Display name of the work.
-	 */
-	String getName();
 	
 	/**
 	 * Executes work.
