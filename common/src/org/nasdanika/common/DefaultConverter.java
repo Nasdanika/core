@@ -42,6 +42,19 @@ public class DefaultConverter extends ReflectiveConverter {
 		return new JSONObject(new JSONTokener(str));
 	}
 	
+	/**
+	 * Constructor conversion is not working well, using just type and toString value.
+	 * @param obj
+	 * @return
+	 */
+	@ConverterMethod
+	public JSONObject toJSONObject(Object obj) {
+		JSONObject ret = new JSONObject();
+		ret.put("type", obj.getClass().getName());
+		ret.put("value", obj.toString());
+		return ret;
+	}
+	
 	// Reader to String, and JSONObject and JSONArray.
 	
 	@ConverterMethod
