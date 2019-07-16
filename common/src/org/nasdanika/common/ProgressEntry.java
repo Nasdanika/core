@@ -16,7 +16,7 @@ public class ProgressEntry extends ProgressRecorder {
 	 * 
 	 * @param totalWork
 	 */
-	protected ProgressEntry(String name, long totalWork, ProgressEntry parent, Object... details) {
+	ProgressEntry(ProgressRecorder parent, String name, long totalWork, Object[] details) {
 		super(parent);
 		this.name = name;		
 		this.totalWork = totalWork;
@@ -28,7 +28,7 @@ public class ProgressEntry extends ProgressRecorder {
 	 * @param totalWork
 	 */
 	public ProgressEntry(String name, long totalWork, Object... details) {
-		this(name, totalWork, null, details);
+		this(null, name, totalWork, details);
 	}
 	
 	private String name;

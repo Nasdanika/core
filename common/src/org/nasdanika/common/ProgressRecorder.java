@@ -93,7 +93,7 @@ public class ProgressRecorder implements ProgressMonitor {
 		if (closed) {
 			throw new IllegalStateException("Monitor is closed");
 		}
-		ProgressRecorder child = new ProgressEntry(taskName, ticks, this, details);
+		ProgressRecorder child = new ProgressEntry(this, taskName, ticks, details);
 		entries.add(child);
 		return child;
 	}
@@ -173,7 +173,8 @@ public class ProgressRecorder implements ProgressMonitor {
 	}
 	
 	/**
-	 * Converts detail to JSON.
+	 * Converts detail to JSON. This implementation delegates to the parent or calls {@link DefaultConverter#}.INSTANCE.convert
+	 * if parent is null.
 	 * @param detail
 	 * @return
 	 */

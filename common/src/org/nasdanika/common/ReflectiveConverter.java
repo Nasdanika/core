@@ -6,6 +6,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ReflectiveConverter implements Converter {
 
 	@ConverterMethod
@@ -37,22 +40,35 @@ public class ReflectiveConverter implements Converter {
 			}
 		}			
 		
-		// Constructor conversion
-		Optional<Constructor<?>> co = Arrays.stream(type.getConstructors())
-			.filter(c -> c.getParameterCount() == 1 && c.getParameterTypes()[0].isInstance(source))
-			.sorted((c1, c2) -> compare(c1.getParameterTypes()[0], c2.getParameterTypes()[0]))
-			.findFirst();
-		
-		if (co.isPresent()) {
-			try {
-				return (T) co.get().newInstance(source);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException	| InvocationTargetException e) {
-				throw new NasdanikaException("Error converting "+source+" to "+type+" using constructor "+co.get()+": "+e, e);
+		if(acceptConstructorConversionTargetType(type)) {
+			// Constructor conversion
+			Optional<Constructor<?>> co = Arrays.stream(type.getConstructors())
+				.filter(c -> c.getParameterCount() == 1 && c.getParameterTypes()[0].isInstance(source))
+				.sorted((c1, c2) -> compare(c1.getParameterTypes()[0], c2.getParameterTypes()[0]))
+				.findFirst();
+			
+			if (co.isPresent()) {
+				try {
+					return (T) co.get().newInstance(source);
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException	| InvocationTargetException e) {
+					throw new NasdanikaException("Error converting "+source+" to "+type+" using constructor "+co.get()+": "+e, e);
+				}
 			}
-		}
-						
+		}						
 		return null;
 	}	
+	
+	/**
+	 * Allows to filter out constructor conversions. This implementation filters out {@link JSONObject} and {@link JSONArray}.
+	 * @param type
+	 * @return
+	 */
+	protected boolean acceptConstructorConversionTargetType(Class<?> type) {
+		if (JSONObject.class.equals(type) || JSONArray.class.equals(type)) {
+			return false;
+		}
+		return true;
+	}
 	
 	// Compares two classes for specificity, more specific (subclass) is "less", e.g. if t1 is a superclass of t2 this method returns 1.
 	protected int compare(Class<?> t1, Class<?> t2) {
