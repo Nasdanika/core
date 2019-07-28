@@ -192,6 +192,7 @@
 		<module>emf</module>		
 		<module>common</module>		
 		<module>feature</module>
+		<module>ui</module>
 		<!--
 		<module>http</module>
 		<module>repo</module>

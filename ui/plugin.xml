@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
+      <descriptor
+            class="org.nasdanika.eef.ext.widgets.reference.ReferenceLifecycleManagerProvider"
+            description="Reference provider customizing object selection dialogs"
+            id="org.nasdanika.eef.ext.widgets.reference.ReferenceWidgetLifecycleManager"
+            label="Nasdanika Reference Widget Lifecycle Manager Provider">
+      </descriptor>
+   </extension>
+</plugin>
