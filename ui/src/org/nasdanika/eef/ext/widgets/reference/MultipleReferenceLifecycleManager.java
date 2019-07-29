@@ -17,7 +17,9 @@ package org.nasdanika.eef.ext.widgets.reference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.eef.EEFCustomWidgetDescription;
@@ -331,7 +333,26 @@ public class MultipleReferenceLifecycleManager extends AbstractNasdanikaExtRefer
 				dialog.addFilter(filter);
 								
 				dialog.setInput(commonAncestor(choiceOfValues));
-				dialog.setInitialElementSelections((List<?>) this.target.eGet(this.eReference));
+				List<?> currentValues = (List<?>) this.target.eGet(this.eReference);
+				dialog.setInitialElementSelections(currentValues);
+				Set<Object> toExpand = new HashSet<>();
+				for (Object value: currentValues) {
+					if (value instanceof EObject) {
+						EObject ev = (EObject) value;
+						Resource eResource = ev.eResource();
+						if (eResource != null) {
+							toExpand.add(eResource);
+						}
+						if (eResource.getResourceSet() != null) {
+							toExpand.add(eResource.getResourceSet());
+						}
+						for (EObject container = ev.eContainer(); container != null; container = container.eContainer()) {
+							toExpand.add(container);
+						}
+					}
+				}
+				
+				dialog.setExpandedElements(new ArrayList<Object>(toExpand).toArray());
 				dialog.open();
 				
 				Object[] result = dialog.getResult();
