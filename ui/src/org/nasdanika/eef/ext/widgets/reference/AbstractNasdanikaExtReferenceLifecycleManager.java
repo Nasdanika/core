@@ -407,8 +407,8 @@ public abstract class AbstractNasdanikaExtReferenceLifecycleManager extends Abst
 		if (!choiceOfValues.isEmpty() && choiceOfValues.get(0) instanceof EObject) {
 			Z: for (Object candidate = ((EObject) choiceOfValues.get(0)).eContainer(); candidate instanceof EObject; candidate = ((EObject) candidate).eContainer()) {
 				for (Object value: choiceOfValues) {
-					if (value != candidate && value instanceof EObject) {
-						if (!EcoreUtil.isAncestor((EObject) candidate, (EObject) value)) {
+					if (value != candidate && value instanceof EObject)  {
+						if (((EObject) value).eContainer() == null || !EcoreUtil.isAncestor((EObject) candidate, ((EObject) value).eContainer())) {
 							continue Z;
 						}
 					}					
