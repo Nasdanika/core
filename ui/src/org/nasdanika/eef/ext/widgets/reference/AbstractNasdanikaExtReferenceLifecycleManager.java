@@ -15,6 +15,8 @@
  *******************************************************************************/
 package org.nasdanika.eef.ext.widgets.reference;
 
+import java.util.List;
+
 import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.EEFWidgetDescription;
 import org.eclipse.eef.common.ui.api.EEFWidgetFactory;
@@ -27,6 +29,7 @@ import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.Messages;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
@@ -399,4 +402,21 @@ public abstract class AbstractNasdanikaExtReferenceLifecycleManager extends Abst
 	protected EEFStyleHelper getEEFStyleHelper() {
 		return new EEFExtStyleHelper(this.interpreter, this.variableManager);
 	}
+	
+	protected Object commonAncestor(List<Object> choiceOfValues) {
+		if (!choiceOfValues.isEmpty() && choiceOfValues.get(0) instanceof EObject) {
+			Z: for (Object candidate = ((EObject) choiceOfValues.get(0)).eContainer(); candidate instanceof EObject; candidate = ((EObject) candidate).eContainer()) {
+				for (Object value: choiceOfValues) {
+					if (value != candidate && value instanceof EObject) {
+						if (!EcoreUtil.isAncestor((EObject) candidate, (EObject) value)) {
+							continue Z;
+						}
+					}					
+				}
+				return candidate;
+			}
+		}
+		return target.eResource().getResourceSet();
+	}
+	
 }

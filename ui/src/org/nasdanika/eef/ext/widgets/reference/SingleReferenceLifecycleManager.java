@@ -251,12 +251,12 @@ public class SingleReferenceLifecycleManager extends AbstractNasdanikaExtReferen
 				};
 				dialog.addFilter(filter);
 				dialog.setAllowMultiple(false);
-				dialog.setInput(this.target.eResource().getResourceSet());
+				dialog.setInput(commonAncestor(choiceOfValues));
 				dialog.setInitialSelection(this.target.eGet(this.eReference));
 				dialog.open();
 				
 				Object[] result = dialog.getResult();
-				if (result != null && result.length == 1) {
+				if (result != null && result.length == 1 && eReference.getEType().isInstance(result[0])) {
 					this.target.eSet(this.eReference, result[0]);
 				}
 

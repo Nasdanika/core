@@ -18,6 +18,7 @@ package org.nasdanika.eef.ext.widgets.reference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
@@ -328,15 +329,14 @@ public class MultipleReferenceLifecycleManager extends AbstractNasdanikaExtRefer
 					
 				};
 				dialog.addFilter(filter);
-				dialog.setInput(this.target.eResource().getResourceSet());
+								
+				dialog.setInput(commonAncestor(choiceOfValues));
 				dialog.setInitialElementSelections((List<?>) this.target.eGet(this.eReference));
-//				FeatureEditorDialog dialog = new FeatureEditorDialog(this.tableViewer.getTable().getShell(), labelProvider, this.target,
-//						this.eReference, propertyDescriptor.getDisplayName(this.target), choiceOfValues);
 				dialog.open();
 				
 				Object[] result = dialog.getResult();
-				if (result != null) {
-					this.target.eSet(this.eReference, Arrays.asList(result));
+				if (result != null) {					
+					this.target.eSet(this.eReference, Arrays.stream(result).filter(this.eReference.getEType()::isInstance).collect(Collectors.toList()));
 				}
 
 			}
