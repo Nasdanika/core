@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EModelElement;
+import org.nasdanika.common.MarkdownHelper;
 
 /**
  * Class loading annotations from model elements.
@@ -12,7 +13,7 @@ import org.eclipse.emf.ecore.EModelElement;
  *
  * @param <T>
  */
-public class AnnotationSource<T extends EModelElement> {
+public class AnnotationSource<T extends EModelElement> extends MarkdownHelper {
 
 	protected T modelElement;
 

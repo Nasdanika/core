@@ -286,7 +286,7 @@ public class MultipleReferenceLifecycleManager extends AbstractNasdanikaExtRefer
 				
 				Object[] result = dialog.getResult();
 				if (result != null) {					
-					this.target.eSet(this.eReference, Arrays.stream(result).filter(this.eReference.getEType()::isInstance).collect(Collectors.toList()));
+					this.target.eSet(this.eReference, Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList()));
 				}
 
 			}

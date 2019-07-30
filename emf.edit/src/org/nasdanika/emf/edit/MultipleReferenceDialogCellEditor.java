@@ -1,6 +1,8 @@
 package org.nasdanika.emf.edit;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.celleditor.ExtendedDialogCellEditor;
@@ -42,7 +44,8 @@ public class MultipleReferenceDialogCellEditor extends ExtendedDialogCellEditor 
 		dialog.setTitle(title);
 		
 		dialog.open();		
-		return dialog.getResult();
+		Object[] result = dialog.getResult();		
+		return result == null ? null : Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList());
 	}
 	
 };
