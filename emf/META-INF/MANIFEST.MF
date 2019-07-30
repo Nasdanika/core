@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.nasdanika.emf
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.nasdanika.emf
+Export-Package: org.nasdanika.emf,
+ org.nasdanika.emf.localization
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0";visibility:=reexport,
  org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport

@@ -7,8 +7,7 @@ Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.emf.edit
 Bundle-ClassPath: .
-Require-Bundle: org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.core.databinding;bundle-version="1.7.400",
+Require-Bundle: org.eclipse.core.databinding;bundle-version="1.7.400",
  org.eclipse.jface.databinding;bundle-version="1.9.0",
  org.eclipse.core.databinding.property;bundle-version="1.7.0",
  org.eclipse.swt;bundle-version="3.111.0",
@@ -16,6 +15,7 @@ Require-Bundle: org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport
  org.eclipse.ui;bundle-version="3.113.0",
  org.eclipse.emf.edit.ui;bundle-version="2.16.0";visibility:=reexport,
  org.jsoup;bundle-version="1.11.3",
- com.vladsch.flexmark;bundle-version="0.42.6"
+ com.vladsch.flexmark;bundle-version="0.42.6",
+ org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
 Automatic-Module-Name: org.nasdanika.emf.edit
 

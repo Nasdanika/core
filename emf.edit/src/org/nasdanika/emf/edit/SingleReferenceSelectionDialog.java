@@ -1,5 +1,6 @@
 package org.nasdanika.emf.edit;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -160,5 +162,23 @@ public class SingleReferenceSelectionDialog extends ElementTreeSelectionDialog {
 		
 		return candidate;
 	}
+	
+	@Override
+	protected void buttonPressed(int buttonId) {
+		if (IDialogConstants.DESELECT_ALL_ID == buttonId) {
+			setResult(Collections.emptyList());
+			setReturnCode(OK);
+			close();
+		} else {
+			super.buttonPressed(buttonId);
+		}
+	}
+	
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		super.createButtonsForButtonBar(parent);
+		createButton(parent, IDialogConstants.DESELECT_ALL_ID, "Clear", false);
+	}
+	
 	
 }

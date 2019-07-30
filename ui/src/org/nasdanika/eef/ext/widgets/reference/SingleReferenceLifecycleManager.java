@@ -227,7 +227,7 @@ public class SingleReferenceLifecycleManager extends AbstractNasdanikaExtReferen
 				dialog.open();
 				
 				Object[] result = dialog.getResult();
-				if (result != null && result.length == 1 && eReference.getEType().isInstance(result[0])) {
+				if (result != null && result.length == 1 && choiceOfValues.contains(result[0])) {
 					this.target.eSet(this.eReference, result[0]);
 				}
 

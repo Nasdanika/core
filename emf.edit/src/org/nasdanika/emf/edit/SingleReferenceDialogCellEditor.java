@@ -1,5 +1,6 @@
 package org.nasdanika.emf.edit;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -42,7 +43,16 @@ public class SingleReferenceDialogCellEditor extends ExtendedDialogCellEditor {
 		dialog.setTitle(title);
 		
 		dialog.open();		
-		return dialog.getResult();
+		Object[] result = dialog.getResult();
+		if (result == null) {
+			return null;
+		}
+		if (result.length == 0) {
+			markDirty();
+			doSetValue(null);
+			return null;
+		}
+		return Arrays.stream(result).filter(choiceOfValues::contains).findFirst().orElse(null);
 	}
 	
 };
