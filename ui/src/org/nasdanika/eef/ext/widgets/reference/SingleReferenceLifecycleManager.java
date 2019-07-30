@@ -24,10 +24,8 @@ import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.EEFExtEObjectCreati
 import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.EEFExtReferenceUIPlugin;
 import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.Messages;
 import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -38,8 +36,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
@@ -54,6 +50,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.nasdanika.emf.edit.SingleReferenceSelectionDialog;
 
 /**
  * This lifecycle manager is used to handle the EEF Extension reference widget for mono-valued EReferences.
@@ -217,42 +214,16 @@ public class SingleReferenceLifecycleManager extends AbstractNasdanikaExtReferen
 				};
 				
 				ITreeContentProvider contentProvider = new AdapterFactoryContentProvider(composedAdapterFactory);
-				ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(this.text.getShell(), labelProvider, contentProvider);
+				Object value = this.target.eGet(this.eReference);
+				ElementTreeSelectionDialog dialog = new SingleReferenceSelectionDialog(
+						this.text.getShell(), 
+						labelProvider, 
+						contentProvider, 
+						choiceOfValues, 
+						value);				
 				
-				
-				ViewerFilter filter = new ViewerFilter() {
-					
-					@Override
-					public boolean select(Viewer viewer, Object parentElement, Object element) {
-						if (element instanceof Resource) {
-							TreeIterator<EObject> tit = ((Resource) element).getAllContents();
-							while (tit.hasNext()) {
-								if (choiceOfValues.contains(tit.next())) {
-									return true;
-								}
-							}
-							return false;
-						}
-						
-						if (element instanceof EObject) {
-							if (eReference.getEType().isInstance(element)) {
-								return true;
-							}
-							TreeIterator<EObject> tit = ((EObject) element).eAllContents();
-							while (tit.hasNext()) {
-								if (choiceOfValues.contains(tit.next())) {
-									return true;
-								}
-							}
-						}
-						return false;
-					}
-					
-				};
-				dialog.addFilter(filter);
-				dialog.setAllowMultiple(false);
-				dialog.setInput(commonAncestor(choiceOfValues));
-				dialog.setInitialSelection(this.target.eGet(this.eReference));
+				dialog.setTitle(propertyDescriptor.getDisplayName(value));
+				// TODO icon for the reference type
 				dialog.open();
 				
 				Object[] result = dialog.getResult();

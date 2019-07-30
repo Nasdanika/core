@@ -17,9 +17,7 @@ package org.nasdanika.eef.ext.widgets.reference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.eef.EEFCustomWidgetDescription;
@@ -32,10 +30,8 @@ import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.EReferenceContentPr
 import org.eclipse.eef.ide.ui.ext.widgets.reference.internal.Messages;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -44,16 +40,12 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
-import org.eclipse.jface.viewers.ICheckStateProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
@@ -69,6 +61,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.dialogs.CheckedTreeSelectionDialog;
+import org.nasdanika.emf.edit.MultipleReferenceSelectionDialog;
 
 /**
  * This lifecycle manager is used to handle the EEF Extension reference widget for multi-valued EReferences.
@@ -277,82 +270,18 @@ public class MultipleReferenceLifecycleManager extends AbstractNasdanikaExtRefer
 				};
 				
 				ITreeContentProvider contentProvider = new AdapterFactoryContentProvider(composedAdapterFactory);
-				CheckedTreeSelectionDialog dialog = new CheckedTreeSelectionDialog(this.tableViewer.getTable().getShell(), labelProvider, contentProvider) {
+				@SuppressWarnings("unchecked")
+				List<Object> currentValues = (List<Object>) this.target.eGet(this.eReference);
+				CheckedTreeSelectionDialog dialog = new MultipleReferenceSelectionDialog(
+						this.tableViewer.getTable().getShell(), 
+						labelProvider, 
+						contentProvider,
+						choiceOfValues,
+						currentValues);
 				
-					@Override
-					protected CheckboxTreeViewer createTreeViewer(Composite parent) {
-						CheckboxTreeViewer treeViewer = super.createTreeViewer(parent);
-						ICheckStateProvider checkStateProvider = new ICheckStateProvider() {
-							
-							@Override
-							public boolean isGrayed(Object element) {
-								return element instanceof EObject ? !MultipleReferenceLifecycleManager.this.eReference.getEType().isInstance(element) : true;
-							}
-							
-							@Override
-							public boolean isChecked(Object element) {
-								return ((List<?>) MultipleReferenceLifecycleManager.this.target.eGet(MultipleReferenceLifecycleManager.this.eReference)).contains(element);
-							}
-							
-						};
-						treeViewer.setCheckStateProvider(checkStateProvider);
-						return treeViewer;
-					}
-					
-				};
+				// TODO icon for the reference type
+				dialog.setTitle(propertyDescriptor.getDisplayName(null));
 				
-				ViewerFilter filter = new ViewerFilter() {
-					
-					@Override
-					public boolean select(Viewer viewer, Object parentElement, Object element) {
-						if (element instanceof Resource) {
-							TreeIterator<EObject> tit = ((Resource) element).getAllContents();
-							while (tit.hasNext()) {
-								if (choiceOfValues.contains(tit.next())) {
-									return true;
-								}
-							}
-							return false;
-						}
-						
-						if (element instanceof EObject) {
-							if (eReference.getEType().isInstance(element)) {
-								return true;
-							}
-							TreeIterator<EObject> tit = ((EObject) element).eAllContents();
-							while (tit.hasNext()) {
-								if (choiceOfValues.contains(tit.next())) {
-									return true;
-								}
-							}
-						}
-						return false;
-					}
-					
-				};
-				dialog.addFilter(filter);
-								
-				dialog.setInput(commonAncestor(choiceOfValues));
-				List<?> currentValues = (List<?>) this.target.eGet(this.eReference);
-				dialog.setInitialElementSelections(currentValues);
-				Set<Object> toExpand = new HashSet<>();
-				for (Object value: currentValues) {
-					if (value instanceof EObject) {
-						EObject ev = (EObject) value;
-						Resource eResource = ev.eResource();
-						if (eResource != null) {
-							toExpand.add(eResource);
-						}
-						if (eResource.getResourceSet() != null) {
-							toExpand.add(eResource.getResourceSet());
-						}
-						for (EObject container = ev.eContainer(); container != null; container = container.eContainer()) {
-							toExpand.add(container);
-						}
-					}
-				}
-				
-				dialog.setExpandedElements(new ArrayList<Object>(toExpand).toArray());
 				dialog.open();
 				
 				Object[] result = dialog.getResult();

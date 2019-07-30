@@ -190,6 +190,7 @@
 	</build>
 	<modules>
 		<module>emf</module>		
+		<module>emf.edit</module>		
 		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>
