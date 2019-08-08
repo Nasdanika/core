@@ -91,7 +91,7 @@ public class ProgressRecorder implements ProgressMonitor {
 			throw new CancellationException();
 		}
 		if (closed) {
-			throw new IllegalStateException("Monitor is closed");
+			throw new IllegalStateException("Monitor is closed: "+hashCode());
 		}
 		ProgressRecorder child = new ProgressEntry(this, taskName, ticks, details);
 		entries.add(child);
@@ -101,8 +101,10 @@ public class ProgressRecorder implements ProgressMonitor {
 	@Override
 	public void worked(Status status, long work, String progressMessage, Object... details) {
 		if (closed) {
-			throw new IllegalStateException("Monitor is closed");
+//			throw new IllegalStateException("Monitor is closed");
+			progressMessage += " (Warning - Reporting progress to a closed monitor)";
 		}
+		String theProgressMessage = progressMessage;
 		entries.add(new Step() {
 
 			long now = System.currentTimeMillis();			
@@ -124,7 +126,7 @@ public class ProgressRecorder implements ProgressMonitor {
 			
 			@Override
 			public String getMessage() {
-				return progressMessage;
+				return theProgressMessage;
 			}
 			
 			@Override
@@ -164,7 +166,8 @@ public class ProgressRecorder implements ProgressMonitor {
 						jd.put(detailToJSON(d));
 					}
 					jwe.put("details", jd); 					
-				}				
+				}
+				jSteps.put(jwe);
 			});
 			ret.put("steps", jSteps);		
 		}
@@ -178,8 +181,8 @@ public class ProgressRecorder implements ProgressMonitor {
 	 * @param detail
 	 * @return
 	 */
-	protected JSONObject detailToJSON(Object detail) {
-		return parent == null ? DefaultConverter.INSTANCE.convert(detail, JSONObject.class) : parent.detailToJSON(detail);
+	protected Object detailToJSON(Object detail) {
+		return parent == null ? null /* DefaultConverter.INSTANCE.convert(detail, JSONObject.class) */ : parent.detailToJSON(detail);
 	}
 
 	@Override

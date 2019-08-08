@@ -59,8 +59,10 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 			throw new CancellationException();
 		}
 		out.println(indent+"  "+taskName+" ("+ticks+")");
-		for (Object d: details) {
-			out.println(formatDetail(d, indent + "    "));			
+		if (details != null) {
+			for (Object d: details) {
+				out.println(formatDetail(d, indent + "    "));			
+			}
 		}
 		return new PrintStreamProgressMonitor(out, indent.length()+indentIncrement, indentIncrement, false) {
 			

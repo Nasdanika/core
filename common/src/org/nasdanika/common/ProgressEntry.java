@@ -85,7 +85,7 @@ public class ProgressEntry extends ProgressRecorder {
 			ret.put("finish", finish);
 		}
 		
-		if (getDetails().length > 0) {
+		if (getDetails() != null && getDetails().length > 0) {
 			JSONArray jd = new JSONArray();
 			for (Object d: getDetails()) {
 				jd.put(detailToJSON(d));
