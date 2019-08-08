@@ -25,8 +25,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 		this.executeCommand = new CompoundCommand<T, E>(executor, false) {
 
 			@Override
-			protected T combine(List<E> results) {
-				return CompoundWork.this.combine(results);
+			protected T combine(List<E> results, ProgressMonitor progressMonitor) {
+				return CompoundWork.this.combine(results, progressMonitor);
 			}
 			
 			@SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 		this.undoCommand = new CompoundCommand<Boolean,Boolean>(executor, true) {
 
 			@Override
-			protected Boolean combine(List<Boolean> results) {
+			protected Boolean combine(List<Boolean> results, ProgressMonitor progressMonitor) {
 				return results.stream().reduce(true, (a,b) -> a && b);
 			}
 			
@@ -117,6 +117,6 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 * @param results
 	 * @return
 	 */
-	protected abstract T combine(List<E> results);
+	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor);
 
 }

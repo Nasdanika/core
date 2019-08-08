@@ -127,7 +127,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 			for (CommandEntry<E> ce: theChildren) {
 				results.add(ce.callable.call());
 			}
-			return combine(results);
+			return combine(results, progressMonitor.split("Combining execution results", results.size(), results));
 		} finally {
 			progressMonitor.close();
 		}
@@ -149,6 +149,6 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param results
 	 * @return
 	 */
-	protected abstract T combine(List<E> results);
+	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor);
 
 }
