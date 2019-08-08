@@ -25,7 +25,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 		this.executeCommand = new CompoundCommand<T, E>(executor, false) {
 
 			@Override
-			protected T combine(List<E> results, ProgressMonitor progressMonitor) {
+			protected T combine(List<E> results, ProgressMonitor progressMonitor) throws Exception {
 				return CompoundWork.this.combine(results, progressMonitor);
 			}
 			
@@ -117,6 +117,6 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 * @param results
 	 * @return
 	 */
-	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor);
+	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor) throws Exception;
 
 }

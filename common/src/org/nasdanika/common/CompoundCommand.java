@@ -149,6 +149,6 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param results
 	 * @return
 	 */
-	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor);
+	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor) throws Exception;
 
 }
