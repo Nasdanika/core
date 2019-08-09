@@ -64,7 +64,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
 	public Callable<E> add(Command<E> child, String name, long size, Object... details) {
-		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child), name, size, details);
+		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child, size), name, size, details);
 		children.add(childEntry);
 		return childEntry.callable;
 	}
@@ -78,7 +78,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
 	public <R> Callable<R> addNoExec(Command<R> child, String name, long size, Object... details) {
-		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child), name, size, details);
+		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child, size), name, size, details);
 		noExecChildren.add(childEntry);
 		return childEntry.callable;
 	}	
