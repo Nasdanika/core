@@ -182,7 +182,7 @@ public class ProgressRecorder implements ProgressMonitor {
 	 * @return
 	 */
 	protected Object detailToJSON(Object detail) {
-		return parent == null ? null /* DefaultConverter.INSTANCE.convert(detail, JSONObject.class) */ : parent.detailToJSON(detail);
+		return parent == null ? String.valueOf(detail) /* DefaultConverter.INSTANCE.convert(detail, JSONObject.class) */ : parent.detailToJSON(detail);
 	}
 
 	@Override
