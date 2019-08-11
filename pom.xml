@@ -194,6 +194,8 @@
 		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>
+		<module>help</module>
+
 		<!--
 		<module>http</module>
 		<module>repo</module>

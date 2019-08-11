@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="extensions" name="Help Extensions" schema="schema/extensions.exsd"/>
+   <extension
+         id="org.nasdanika.help.MarkdownContentProducer"
+         name="Markdown Content Producer"
+         point="org.eclipse.help.contentProducer">
+      <contentProducer
+            producer="org.nasdanika.help.markdown.MarkdownContentProducer">
+      </contentProducer>
+   </extension>
+
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+   </extension>
+   <extension
+         point="org.nasdanika.help.extensions">
+      <markdown-pre-processor
+            class="org.nasdanika.help.markdown.extensions.FencedBlockMarkdownPreProcessor">
+      </markdown-pre-processor>
+      <markdown-pre-processor
+            class="org.nasdanika.help.markdown.extensions.PlantUmlMarkdownPreProcessor">
+      </markdown-pre-processor>
+   </extension>
+
+</plugin>
