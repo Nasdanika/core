@@ -503,6 +503,16 @@ public interface Context extends Composeable<Context> {
 			
 		};
 	}
+	
+	/**
+	 * Creates a context with a single property entry.
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	static Context singleton(String key, Object value) {
+		return wrap(k -> key.equals(k) ? value : null);
+	}
 
 	/**
 	 * Wraps a source function, e.g. Map<String,Object>::get into a context. Performs resolution of hierarchical properties.
