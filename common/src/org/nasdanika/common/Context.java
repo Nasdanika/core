@@ -505,12 +505,36 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
+	 * Creates a context with a single service entry.
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	static <T> Context singleton(Class<T> type, T service) {
+		return new Context() {
+
+			@Override
+			public Object get(String key) {
+				return null;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <ST> ST get(Class<ST> sType) {
+				Object ret = sType == type ? service : null;
+				return (ST) ret;
+			}
+			
+		};
+	}	
+	
+	/**
 	 * Creates a context with a single property entry.
 	 * @param key
 	 * @param value
 	 * @return
 	 */
-	static Context singleton(String key, Object value) {
+	static Context singleton(String key, Object value) {		
 		return wrap(k -> key.equals(k) ? value : null);
 	}
 
