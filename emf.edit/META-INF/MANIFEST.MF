@@ -16,6 +16,7 @@ Require-Bundle: org.eclipse.core.databinding;bundle-version="1.7.400",
  org.eclipse.emf.edit.ui;bundle-version="2.16.0";visibility:=reexport,
  org.jsoup;bundle-version="1.11.3",
  com.vladsch.flexmark;bundle-version="0.42.6",
- org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
+ org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport,
+ org.eclipse.core.runtime;bundle-version="3.15.300"
 Automatic-Module-Name: org.nasdanika.emf.edit
 
