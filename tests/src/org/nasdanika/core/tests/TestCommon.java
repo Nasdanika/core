@@ -1,12 +1,16 @@
 package org.nasdanika.core.tests;
 
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.nasdanika.common.CompoundWork;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.MutableContext;
@@ -21,7 +25,10 @@ public class TestCommon {
 		
 	@Test
 	public void testContext() throws Exception {
-		// TODO
+		Function<String, Object> f = key -> "** " + key;		
+		Map<String, Object> m = Collections.singletonMap("f", f);
+		Context c = Context.wrap(m::get);
+		Assert.assertEquals("** mom", c.get("f/mom"));
 	}
 
 	@Test

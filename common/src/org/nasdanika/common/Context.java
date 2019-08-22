@@ -546,6 +546,7 @@ public interface Context extends Composeable<Context> {
 	static Context wrap(Function<String,Object> source) {
 		return new Context() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object get(String key) {
 				Object ret = source.apply(key);
@@ -575,6 +576,9 @@ public interface Context extends Composeable<Context> {
 					} catch (NumberFormatException e) {
 						// NOP
 					}
+				}
+				if (parentProperty instanceof Function) {
+					return ((Function<String, Object>) parentProperty).apply(subKey);
 				}
 
 				return null;

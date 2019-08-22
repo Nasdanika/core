@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -52,6 +53,7 @@ public class SimpleMutableContext implements MutableContext {
 	 * For example, if ``my/property`` is not present in properties then ``my`` property will be retrieved and if it is of type Context or Map its ``property`` key will be retrieved.
 	 * Similarly, ``my/property/list/0`` will retrieve ``my/property/list`` and if it is a list then it will return its first element. 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object get(String key) {		
 		return properties.computeIfAbsent(key, k -> {
@@ -82,6 +84,9 @@ public class SimpleMutableContext implements MutableContext {
 				} catch (NumberFormatException e) {
 					// NOP
 				}
+			}
+			if (parentProperty instanceof Function) {
+				return ((Function<String, Object>) parentProperty).apply(subKey);
 			}
 			
 			return null;
