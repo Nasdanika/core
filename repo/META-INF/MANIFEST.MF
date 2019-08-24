@@ -9,3 +9,4 @@ Export-Package: org.nasdanika.repository,
  org.nasdanika.repository.impl
 Bundle-ClassPath: .
 Automatic-Module-Name: org.nasdanika.repository
+Require-Bundle: org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport

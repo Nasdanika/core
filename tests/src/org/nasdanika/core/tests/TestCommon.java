@@ -1,10 +1,20 @@
 package org.nasdanika.core.tests;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -19,6 +29,8 @@ import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Work;
+import org.nasdanika.common.resources.File;
+import org.nasdanika.common.resources.MemoryContainer;
 
 
 public class TestCommon {
@@ -137,5 +149,26 @@ public class TestCommon {
 		System.out.println(pe.toJSON().toString(4));
 	}
 	
+	@Test
+	public void testContainerZipping() throws Exception {		
+		ProgressMonitor pm = new PrintStreamProgressMonitor();
+		
+		MemoryContainer<byte[]> memoryContainer = new MemoryContainer<byte[]>();
+		memoryContainer.getFile("test/myfile.bin").setContents("Hello".getBytes(), pm);
+
+		java.io.File testsDir = new java.io.File("target/tests/container-zipping");
+		testsDir.mkdirs();
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(new java.io.File(testsDir, "myarchive.zip")))) {
+			memoryContainer.store(zipOutputStream, null, (path, content) -> new ByteArrayInputStream(content), pm);
+		}
+		
+		MemoryContainer<String> smc = new MemoryContainer<String>();
+		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
+			smc.load(zipInputStream, null, (path, content) -> DefaultConverter.INSTANCE.convert(new FilterInputStream(content) { public void close() {} }, String.class), pm);
+		}
+		File<String> sf = smc.getFile("test/myfile.bin");
+		assertTrue(sf.exists());
+		assertEquals("Hello", sf.getContents(pm));
+	}	
 	
 }

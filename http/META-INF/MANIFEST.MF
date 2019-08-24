@@ -7,7 +7,7 @@ Bundle-Vendor: Nasdanika
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.osgi;bundle-version="3.13.300",
  org.eclipse.core.runtime;bundle-version="3.15.200",
- org.nasdanika.repository;bundle-version="2.0.0";visibility:=reexport,
+ org.nasdanika.repository;visibility:=reexport,
  json;bundle-version="20180130.0.0";visibility:=reexport,
  org.apache.commons.lang3;bundle-version="3.7.0"
 Export-Package: org.nasdanika.http

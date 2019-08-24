@@ -1,8 +1,14 @@
 package org.nasdanika.common.resources;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import org.nasdanika.common.ProgressMonitor;
 
@@ -15,7 +21,7 @@ import org.nasdanika.common.ProgressMonitor;
 public interface Container<T> extends Resource<T> {
 	
 	/**
-	 * Finds an existing resources with a given path.
+	 * Finds an existing resource with a given path.
 	 * @param path
 	 * @return
 	 */
@@ -155,6 +161,127 @@ public interface Container<T> extends Resource<T> {
 			}
 			
 		};
+	}
+	
+	/**
+	 * Filters this container to return null for getParent() so this container is considered to the a root container.
+	 * @return
+	 */
+	default Container<T> asRoot() {
+		return new ContainerFilter<T>(this) {
+
+			@Override
+			public Container<T> getParent() {
+				return null;
+			}
+			
+		};
+	}
+	
+	/**
+	 * Filters this container. 
+	 * @param filter Child path filter. 
+	 * @return
+	 */
+	default Container<T> filter(Predicate<String> filter) {
+		return new ContainerFilter<T>(this) {
+			
+			@Override
+			public Collection<Resource<T>> getChildren() {
+				return super.getChildren()
+						.stream()
+						.filter(c -> filter.test(c.getPath()))
+						.map(c -> c instanceof Container ? ((Container<T>) c).filter(filter) : c)
+						.collect(Collectors.toList());
+			}
+			
+			@Override
+			public Resource<T> find(String path) {
+				return filter.test(path) ? super.find(path) : null;
+			}
+			
+			@Override
+			public Container<T> getContainer(String path) {
+				return filter.test(path) ? super.getContainer(path).filter(filter) : null;
+			}
+			
+			@Override
+			public File<T> getFile(String path) {
+				return filter.test(path) ? super.getFile(path) : null;
+			}
+			
+		};
+	}
+	
+	/**
+	 * Loads entries from a {@link ZipInputStream} into this container. This method used getXXX() methods to obtain container children.
+	 * If getXXX() method returns null of if {@link File} entry is not null and canWrite() returns false then an exception is thrown.
+	 * @param zipInputStream ZipInputStream.
+	 * @param filter Entry name filter. Can be null.
+	 * @param contentLoader Converts input stream to the file content type. The first argument is file path.
+	 * @param progressMonitor Progress monitor.
+	 * @throws IOException
+	 */
+	default void load(
+			ZipInputStream zipInputStream, 
+			Predicate<String> filter, 
+			BiFunction<String,InputStream,T> contentLoader, 
+			ProgressMonitor progressMonitor) throws IOException {
+		ZipEntry zipEntry;
+		while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+			String entryName = zipEntry.getName();
+			if (filter == null || filter.test(entryName)) {
+				if (entryName.endsWith("/")) {
+					if (getContainer(entryName.substring(0, entryName.length() - 1)) == null) {
+						throw new IOException("Container with path "+entryName+" cannot be created");
+					}
+				} else {
+					File<T> file = getFile(entryName);
+					if (file == null || !file.canWrite()) {
+						throw new IOException("File with path "+entryName+" cannot be written");						
+					}
+					file.setContents(contentLoader.apply(entryName, zipInputStream), progressMonitor.split("Loading "+entryName, 1, zipEntry));
+				}
+			}
+			zipInputStream.closeEntry();
+		}				
+		zipInputStream.close();
+	}
+	
+	/**
+	 * Stores readable children of this container to a {@link ZipOutputStream}. 
+	 * @param zipOutputStream Zip output stream. This method does not close the stream.
+	 * @param prefix Optional path prefix.
+	 * @param contentWriter Converts file contents into the input stream.
+	 * @param progressMonitor Progress monitor.
+	 * @throws IOException
+	 */
+	default void store(
+		ZipOutputStream zipOutputStream, 
+		String prefix,
+		BiFunction<String,T,InputStream> contentSerializer, 
+		ProgressMonitor progressMonitor) throws IOException {
+		
+		if (prefix == null) {
+			prefix = "";
+		}
+		for (Resource<T> child: getChildren()) {
+			if (child instanceof Container) {
+				zipOutputStream.putNextEntry(new ZipEntry(prefix+child.getPath()+"/"));
+				zipOutputStream.closeEntry();
+				((Container<T>) child).store(zipOutputStream, prefix, contentSerializer, progressMonitor);
+			} else if (child instanceof File && ((File<T>) child).canRead()) {
+				zipOutputStream.putNextEntry(new ZipEntry(prefix+child.getPath()));
+				File<T> file = (File<T>) child;
+				try (InputStream contents = contentSerializer.apply(child.getPath(), file.getContents(progressMonitor.split("Reading "+file.getPath(), 1, file)))) {
+					int b;
+					while ((b = contents.read()) != -1) {
+						zipOutputStream.write(b);
+					}
+				}
+				zipOutputStream.closeEntry();				
+			}
+		}		
 	}
 	
 }

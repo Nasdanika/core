@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.repository.ResourceRequirement;
 import org.osgi.framework.BundleContext;
 
@@ -92,7 +93,7 @@ public abstract class ReflectiveRouter extends Router {
 		if (obj == null || type.isInstance(obj)) {
 			return (T) obj;
 		}
-		return ReflectiveConverter.INSTANCE.convert(obj, type);
+		return DefaultConverter.INSTANCE.convert(obj, type);
 	}
 	
 }
