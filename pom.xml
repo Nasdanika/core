@@ -196,10 +196,9 @@
 		<module>ui</module>
 		<module>help</module>
 
-		<!--
 		<module>http</module>
 		<module>repo</module>
-		-->
+
 		<module>tests</module>
 		<module>repository</module>
 
