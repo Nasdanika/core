@@ -90,4 +90,6 @@ public class FileSystemEntity extends FileSystemResource implements Entity<Input
 		return file.isFile() ? file.length() : 0;
 	}
 
+	// TODO - digest.
+	
 }

@@ -42,5 +42,10 @@ public abstract class FileSystemResource implements Resource<InputStream> {
 			}
 		}
 	}
+		
+	@Override
+	public long getTimestamp() {
+		return file.lastModified();
+	}	
 
 }
