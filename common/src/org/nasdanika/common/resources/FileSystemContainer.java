@@ -38,22 +38,22 @@ public class FileSystemContainer extends FileSystemResource implements Container
 	}
 
 	@Override
-	public Entity<InputStream> getFile(String path) {
+	public Entity<InputStream> getEntity(String path) {
 		Resource<InputStream> existing = find(path);
 		if (existing instanceof Entity) {
 			return (Entity<InputStream>) existing;
 		}
 		if (existing instanceof Container) {
-			// container - can't have a file with the same name.
+			// container - can't have an entity with the same name.
 			return null;
 		}
 		int sPos = path.indexOf(SEPARATOR);
 		if (sPos == -1) {
-			return new FileSystemFile(new java.io.File(file, path));
+			return new FileSystemEntity(new java.io.File(file, path));
 		}
 		
 		Container<InputStream> container = getContainer(path.substring(0, sPos));
-		return container == null ? null : container.getFile(path.substring(sPos + 1));
+		return container == null ? null : container.getEntity(path.substring(sPos + 1));
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class FileSystemContainer extends FileSystemResource implements Container
 			return (Container<InputStream>) existing;
 		}
 		if (existing instanceof Entity) {
-			// file - can't have a container with the same name.
+			// entity - can't have a container with the same name.
 			return null;
 		}
 		int sPos = path.indexOf(SEPARATOR);
@@ -82,7 +82,7 @@ public class FileSystemContainer extends FileSystemResource implements Container
 		if (children != null) {
 			for (java.io.File child: children) {
 				if (child.isFile()) {
-					ret.add(new FileSystemFile(child));
+					ret.add(new FileSystemEntity(child));
 				} else if (child.isDirectory()) {
 					ret.add(new FileSystemContainer(child));
 				}

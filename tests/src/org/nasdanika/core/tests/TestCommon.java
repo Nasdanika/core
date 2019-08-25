@@ -154,7 +154,7 @@ public class TestCommon {
 		ProgressMonitor pm = new PrintStreamProgressMonitor();
 		
 		MemoryContainer<byte[]> memoryContainer = new MemoryContainer<byte[]>();
-		memoryContainer.getFile("test/myfile.bin").setContents("Hello".getBytes(), pm);
+		memoryContainer.getEntity("test/myfile.bin").setState("Hello".getBytes(), pm);
 
 		java.io.File testsDir = new java.io.File("target/tests/container-zipping");
 		testsDir.mkdirs();
@@ -166,9 +166,9 @@ public class TestCommon {
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
 			smc.load(zipInputStream, null, (path, content) -> DefaultConverter.INSTANCE.convert(new FilterInputStream(content) { public void close() {} }, String.class), pm);
 		}
-		Entity<String> sf = smc.getFile("test/myfile.bin");
+		Entity<String> sf = smc.getEntity("test/myfile.bin");
 		assertTrue(sf.exists());
-		assertEquals("Hello", sf.getContents(pm));
+		assertEquals("Hello", sf.getState(pm));
 	}	
 	
 }

@@ -5,8 +5,8 @@ import java.util.function.BiFunction;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * An abstraction of a resource - file, zip entry, directory, ...
- * The path separator is always ``/`` regardless of the OS. 
+ * Resource is something uniquily identified by its name within its container and its path within the root container.
+ * The resource path separator is ``/``. 
  * @author Pavel
  *
  * @param <T> Content type.
@@ -84,13 +84,13 @@ public interface Resource<T> {
 	void move(Container<? super T> container, String path, ProgressMonitor monitor);
 	
 	/**
-	 * Adapts to a different content type through encoding/decoding. 
-	 * @param <V> New content type. Can be the same as T in case of filtering - token substitution, encryption/decryption, compression/decompression.
-	 * Either encoder or decoder can be null, it will make the adapted files read-only and write-only respectively. Decoder and encoder take the file as 
-	 * the first argument to allow implement file-specific operations, e.g. extension-based encoding/decoding such as parsing JSON for files with ``.json`` extension.
+	 * Adapts to a different state type through encoding/decoding. 
+	 * @param <V> New state type. Can be the same as T in case of filtering - token substitution, encryption/decryption, compression/decompression.
+	 * Either encoder or decoder can be null, it will make the adapted entities read-only and write-only respectively. Decoder and encoder take the entity as 
+	 * the first argument to allow implement entity-specific operations, e.g. extension-based encoding/decoding such as parsing JSON for entities with ``.json`` extension.
 	 * @param decoder Decodes T to V.
 	 * @param encoder Encodes V to T.
-	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
+	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
 	 * @return
 	 */
 	<V> Resource<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);

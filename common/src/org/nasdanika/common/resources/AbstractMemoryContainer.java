@@ -52,22 +52,22 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 	}
 
 	@Override
-	public Entity<T> getFile(String path) {
+	public Entity<T> getEntity(String path) {
 		Resource<T> existing = find(path);
 		if (existing instanceof Entity) {
 			return (Entity<T>) existing;
 		}
 		if (existing instanceof Container) {
-			// container - can't have a file with the same name.
+			// container but not a composite - can't have another resource with the same name.
 			return null;
 		}
 		int sPos = path.indexOf(SEPARATOR);
 		if (sPos == -1) {
-			Entity<T> ret = new MemoryFile<T>() {
+			Entity<T> ret = new MemoryEntity<T>() {
 
 				@Override
-				public void appendContents(T contents, ProgressMonitor monitor) {
-					setContents(getContentAppender().apply(getContents(monitor), contents), monitor);					
+				public void appendState(T contents, ProgressMonitor monitor) {
+					setState(getContentAppender().apply(getState(monitor), contents), monitor);					
 				}
 
 				@Override
@@ -97,7 +97,7 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 		}
 		
 		Container<T> container = getContainer(path.substring(0, sPos));
-		return container == null ? null : container.getFile(path.substring(sPos + 1));
+		return container == null ? null : container.getEntity(path.substring(sPos + 1));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 			return (Container<T>) existing;
 		}
 		if (existing instanceof Entity) {
-			// file - can't have a container with the same name.
+			// entity but not a composite - can't have another resource with the same name.
 			return null;
 		}
 		int sPos = path.indexOf(SEPARATOR);

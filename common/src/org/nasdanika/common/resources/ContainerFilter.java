@@ -20,8 +20,8 @@ public class ContainerFilter<T> implements Container<T> {
 		return target.getName();
 	}
 
-	public Entity<T> getFile(String path) {
-		return target.getFile(path);
+	public Entity<T> getEntity(String path) {
+		return target.getEntity(path);
 	}
 
 	public boolean exists() {

@@ -16,14 +16,14 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public class FileSystemFile extends FileSystemResource implements Entity<InputStream> {
+public class FileSystemEntity extends FileSystemResource implements Entity<InputStream> {
 
-	public FileSystemFile(java.io.File file) {
+	public FileSystemEntity(java.io.File file) {
 		super(file);
 	}
 
 	@Override
-	public InputStream getContents(ProgressMonitor monitor) {
+	public InputStream getState(ProgressMonitor monitor) {
 		if (!file.isFile()) {
 			throw new UnsupportedOperationException("Not a file: "+file.getAbsolutePath());
 		}
@@ -38,7 +38,7 @@ public class FileSystemFile extends FileSystemResource implements Entity<InputSt
 	}
 
 	@Override
-	public void setContents(InputStream contents, ProgressMonitor monitor) {
+	public void setState(InputStream contents, ProgressMonitor monitor) {
 		java.io.File parent = file.getParentFile();
 		if (!parent.exists() && !parent.mkdirs()) {
 			throw new NasdanikaException("Directory does not exist and could not be created: "+parent.getAbsolutePath());
@@ -59,7 +59,7 @@ public class FileSystemFile extends FileSystemResource implements Entity<InputSt
 	}
 
 	@Override
-	public void appendContents(InputStream contents, ProgressMonitor monitor) {
+	public void appendState(InputStream contents, ProgressMonitor monitor) {
 		long total = 0;
 		try (BufferedInputStream bin = new BufferedInputStream(contents); BufferedOutputStream bout = new BufferedOutputStream(new FileOutputStream(file, true))) {
 			int b;

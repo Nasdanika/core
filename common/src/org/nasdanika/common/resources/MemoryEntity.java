@@ -3,22 +3,22 @@ package org.nasdanika.common.resources;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * File with the contents stored in memory.
+ * Entity with the state stored in memory.
  * @author Pavel
  *
  * @param <T>
  */
-public abstract class MemoryFile<T> implements Entity<T> {
+public abstract class MemoryEntity<T> implements Entity<T> {
 
 	protected T contents;
 
 	@Override
-	public T getContents(ProgressMonitor monitor) {
+	public T getState(ProgressMonitor monitor) {
 		return contents;
 	}
 
 	@Override
-	public void setContents(T contents, ProgressMonitor monitor) {
+	public void setState(T contents, ProgressMonitor monitor) {
 		this.contents = contents;
 	}
 
@@ -39,7 +39,7 @@ public abstract class MemoryFile<T> implements Entity<T> {
 	
 	@Override
 	public void delete(ProgressMonitor monitor) {
-		setContents(null, monitor);	
+		setState(null, monitor);	
 	}	
 
 }

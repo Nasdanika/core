@@ -2,36 +2,35 @@ package org.nasdanika.common.resources;
 
 import java.util.function.BiFunction;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * File is a storage of contents.
+ * Entity is something which has state. E.g. file is an entity with binary contents - a sequence of bytes.
  * @author Pavel
  *
- * @param <T> Content type
+ * @param <T> Entity state type
  */
 public interface Entity<T> extends Resource<T> {
 	
 	/**
 	 * @param monitor
-	 * @return File contents. 
-	 * @throws IllegalStateException if a file does not exist or cannot be read.
+	 * @return Entity state. 
+	 * @throws IllegalStateException if the entity's underlying state storage does not exist or cannot be read.
 	 */
-	T getContents(ProgressMonitor monitor);
+	T getState(ProgressMonitor monitor);
 		
 	/**
 	 * 
-	 * @param type Content type
+	 * @param type State type
 	 * @param monitor
-	 * @return File contents converted to the the requested content type. This implementation does not perform any conversion and
+	 * @return Entity state converted to the the requested content type. E.g. file contents converted to String. This implementation does not perform any conversion and
 	 * returns contents AS-IS if it is already of the requested type or throws an {@link UnsupportedOperationException} otherwise.
-	 * @throws IllegalStateException if a file does not exist, cannot be read, or conversion from T to V is not supported.
+	 * @throws IllegalStateException if the entity state storage does not exist, cannot be read, or conversion from T to V is not supported.
 	 */
 	@SuppressWarnings("unchecked")
-	default <V> V getContents(Class<V> type, ProgressMonitor monitor) {
-		T contents = getContents(monitor);
+	default <V> V getState(Class<V> type, ProgressMonitor monitor) {
+		T contents = getState(monitor);
 		if (type.isInstance(contents)) {
 			return (V) contents;
 		}
@@ -39,33 +38,33 @@ public interface Entity<T> extends Resource<T> {
 	}	
 	
 	/**
-	 * Sets file contents. If the file does not exist this call creates a file and intermediary containers as needed.
-	 * @param contents File contents. 
+	 * Sets entity state, e.g. file contents. If the entity storage does not exist this call creates the storage and intermediary containers as needed.
+	 * @param state Entity state. 
 	 * @param monitor
 	 * @throws IllegalStateException if canWrite() returns false.
 	 */
-	void setContents(T contents, ProgressMonitor monitor);
+	void setState(T contents, ProgressMonitor monitor);
 	
 	/**
-	 * Appends contents if the file exists and calls setContents if it doesn't.
-	 * @param contents
+	 * Appends state if the entity state exists and calls setState if it doesn't.
+	 * @param Entity state.
 	 * @param monitor
 	 * @throws IllegalStateException if canWrite() returns false.
 	 */
-	void appendContents(T contents, ProgressMonitor monitor);
+	void appendState(T contents, ProgressMonitor monitor);
 
 	/**
-	 * @return true if file can be read. Some containers may be write-only, e.g. a container backed by a {@link ZipOutputStream} would only support writing resource to it, but not reading them.
+	 * @return true if entity state can be read. Some containers may be write-only.
 	 */
 	boolean canRead();
 	
 	/**
-	 * @return true if file contents can be changed. Some containers may be read-only, e.g. a container backed by a {@link ZipFile} would only support reading resources from it.
+	 * @return true if entity state can be changed. Some containers may be read-only, e.g. a container backed by a {@link ZipFile} would only support reading resources from it.
 	 */
 	boolean canWrite();
 	
 	/**
-	 * Copies file content
+	 * Copies entity. 
 	 * @param container target container, may be the same container.
 	 * @param path Path in the target container.
 	 * @param monitor Progress monitor.
@@ -74,13 +73,13 @@ public interface Entity<T> extends Resource<T> {
 	default void copy(Container<? super T> container, String path, ProgressMonitor monitor) {	
 		if (exists()) {
 			try (ProgressMonitor readMonitor = monitor.split("Reading "+getPath(), 100, this); ProgressMonitor writeMonitor = monitor.split("Writing "+path, 100, container, path)) {
-				container.getFile(path).setContents(getContents(readMonitor), monitor);			
+				container.getEntity(path).setState(getState(readMonitor), monitor);			
 			}
 		}
 	}
 	
 	/**
-	 * Moves contents. This implementation implements move as copy and delete.
+	 * Moves entity. This implementation implements move as copy and delete.
 	 * @param container target container, may be the same container.
 	 * @param path Path in the target container.
 	 * @param monitor Progress monitor.
@@ -92,18 +91,18 @@ public interface Entity<T> extends Resource<T> {
 					ProgressMonitor readMonitor = monitor.split("Reading "+getPath(), 100, this); 
 					ProgressMonitor writeMonitor = monitor.split("Writing "+getPath(), 100, container, path);
 					ProgressMonitor deleteMonitor = monitor.split("Delete "+getPath(), 100, this)) {
-				container.getFile(path).setContents(getContents(readMonitor), monitor);			
+				container.getEntity(path).setState(getState(readMonitor), monitor);			
 				delete(deleteMonitor);
 			}
 		}
 	}
 	
 	/**
-	 * Adapts to a different content type.
+	 * Adapts to a different state type.
 	 * @param <V>
 	 * @param decoder Decodes T to V.
 	 * @param encoder Encodes V to T.
-	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
+	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
 	 * @return
 	 */
 	default <V> Entity<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter) {
@@ -136,18 +135,18 @@ public interface Entity<T> extends Resource<T> {
 			}
 
 			@Override
-			public V getContents(ProgressMonitor monitor) {
-				return decoder.apply(Entity.this, Entity.this.getContents(monitor));
+			public V getState(ProgressMonitor monitor) {
+				return decoder.apply(Entity.this, Entity.this.getState(monitor));
 			}
 
 			@Override
-			public void setContents(V contents, ProgressMonitor monitor) {
-				Entity.this.setContents(encoder.apply(Entity.this, contents), monitor);
+			public void setState(V contents, ProgressMonitor monitor) {
+				Entity.this.setState(encoder.apply(Entity.this, contents), monitor);
 			}
 
 			@Override
-			public void appendContents(V contents, ProgressMonitor monitor) {
-				Entity.this.appendContents(encoder.apply(Entity.this, contents), monitor);
+			public void appendState(V contents, ProgressMonitor monitor) {
+				Entity.this.appendState(encoder.apply(Entity.this, contents), monitor);
 			}
 
 			@Override

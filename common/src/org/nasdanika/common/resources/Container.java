@@ -28,17 +28,16 @@ public interface Container<T> extends Resource<T> {
 	Resource<T> find(String path);
 	
 	/**
-	 * Returns a file for a given path. It is a logical operation - the file doesn't have to 
-	 * exist.
+	 * Returns an entity for a given path. It is a logical operation - the entity state doesn't have to exist in the underlying storage.
 	 * @param path
-	 * @return File instance or null if it would not be possible to create such a file, e.g. a resource with this path already exists and is a container or one of path elements is a file.
+	 * @return Entity instance or null if it would not be possible to create such an entity, e.g. a resource with this path already exists and is a container but not a {@link Composite}, or one of path elements is an entity.
 	 */
-	Entity<T> getFile(String path);
+	Entity<T> getEntity(String path);
 	
 	/**
 	 * Returns a container for a given path. It is a logical operation - the container doesn't have to exist.
 	 * @param path
-	 * @return Container instance or null if it would not be possible to create such a container, e.g. a resource with this path already exists and is a file or one of path elements is a file.
+	 * @return Container instance or null if it would not be possible to create such a container, e.g. a resource with this path already exists and is an entity or one of path elements is an entity.
 	 */
 	Container<T> getContainer(String path);
 	
@@ -96,7 +95,7 @@ public interface Container<T> extends Resource<T> {
 	 * @param <V>
 	 * @param decoder Decodes T to V.
 	 * @param encoder Encodes V to T.
-	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
+	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
 	 * @return
 	 */
 	@Override
@@ -140,8 +139,8 @@ public interface Container<T> extends Resource<T> {
 			}
 
 			@Override
-			public Entity<V> getFile(String path) {
-				return Container.this.getFile(path).adapt(decoder, encoder, sizeConverter);
+			public Entity<V> getEntity(String path) {
+				return Container.this.getEntity(path).adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
@@ -206,8 +205,8 @@ public interface Container<T> extends Resource<T> {
 			}
 			
 			@Override
-			public Entity<T> getFile(String path) {
-				return filter.test(path) ? super.getFile(path) : null;
+			public Entity<T> getEntity(String path) {
+				return filter.test(path) ? super.getEntity(path) : null;
 			}
 			
 		};
@@ -218,7 +217,7 @@ public interface Container<T> extends Resource<T> {
 	 * If getXXX() method returns null of if {@link Entity} entry is not null and canWrite() returns false then an exception is thrown.
 	 * @param zipInputStream ZipInputStream.
 	 * @param filter Entry name filter. Can be null.
-	 * @param contentLoader Converts input stream to the file content type. The first argument is file path.
+	 * @param contentLoader Converts input stream to the entity state type. The first argument is the resource (entity) path.
 	 * @param progressMonitor Progress monitor.
 	 * @throws IOException
 	 */
@@ -236,11 +235,11 @@ public interface Container<T> extends Resource<T> {
 						throw new IOException("Container with path "+entryName+" cannot be created");
 					}
 				} else {
-					Entity<T> file = getFile(entryName);
-					if (file == null || !file.canWrite()) {
-						throw new IOException("File with path "+entryName+" cannot be written");						
+					Entity<T> entity = getEntity(entryName);
+					if (entity == null || !entity.canWrite()) {
+						throw new IOException("Entity with path "+entryName+" cannot be written");						
 					}
-					file.setContents(contentLoader.apply(entryName, zipInputStream), progressMonitor.split("Loading "+entryName, 1, zipEntry));
+					entity.setState(contentLoader.apply(entryName, zipInputStream), progressMonitor.split("Loading "+entryName, 1, zipEntry));
 				}
 			}
 			zipInputStream.closeEntry();
@@ -252,7 +251,7 @@ public interface Container<T> extends Resource<T> {
 	 * Stores readable children of this container to a {@link ZipOutputStream}. 
 	 * @param zipOutputStream Zip output stream. This method does not close the stream.
 	 * @param prefix Optional path prefix.
-	 * @param contentWriter Converts file contents into the input stream.
+	 * @param contentWriter Converts entity state to the input stream.
 	 * @param progressMonitor Progress monitor.
 	 * @throws IOException
 	 */
@@ -272,8 +271,8 @@ public interface Container<T> extends Resource<T> {
 				((Container<T>) child).store(zipOutputStream, prefix, contentSerializer, progressMonitor);
 			} else if (child instanceof Entity && ((Entity<T>) child).canRead()) {
 				zipOutputStream.putNextEntry(new ZipEntry(prefix+child.getPath()));
-				Entity<T> file = (Entity<T>) child;
-				try (InputStream contents = contentSerializer.apply(child.getPath(), file.getContents(progressMonitor.split("Reading "+file.getPath(), 1, file)))) {
+				Entity<T> entity = (Entity<T>) child;
+				try (InputStream contents = contentSerializer.apply(child.getPath(), entity.getState(progressMonitor.split("Reading "+entity.getPath(), 1, entity)))) {
 					int b;
 					while ((b = contents.read()) != -1) {
 						zipOutputStream.write(b);
