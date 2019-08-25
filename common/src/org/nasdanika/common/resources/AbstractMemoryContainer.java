@@ -52,10 +52,10 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 	}
 
 	@Override
-	public File<T> getFile(String path) {
+	public Entity<T> getFile(String path) {
 		Resource<T> existing = find(path);
-		if (existing instanceof File) {
-			return (File<T>) existing;
+		if (existing instanceof Entity) {
+			return (Entity<T>) existing;
 		}
 		if (existing instanceof Container) {
 			// container - can't have a file with the same name.
@@ -63,7 +63,7 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 		}
 		int sPos = path.indexOf(SEPARATOR);
 		if (sPos == -1) {
-			File<T> ret = new MemoryFile<T>() {
+			Entity<T> ret = new MemoryFile<T>() {
 
 				@Override
 				public void appendContents(T contents, ProgressMonitor monitor) {
@@ -113,7 +113,7 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 		if (existing instanceof Container) {
 			return (Container<T>) existing;
 		}
-		if (existing instanceof File) {
+		if (existing instanceof Entity) {
 			// file - can't have a container with the same name.
 			return null;
 		}

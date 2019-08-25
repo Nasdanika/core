@@ -16,7 +16,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public class FileSystemFile extends FileSystemResource implements File<InputStream> {
+public class FileSystemFile extends FileSystemResource implements Entity<InputStream> {
 
 	public FileSystemFile(java.io.File file) {
 		super(file);

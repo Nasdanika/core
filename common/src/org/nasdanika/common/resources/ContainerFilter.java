@@ -20,7 +20,7 @@ public class ContainerFilter<T> implements Container<T> {
 		return target.getName();
 	}
 
-	public File<T> getFile(String path) {
+	public Entity<T> getFile(String path) {
 		return target.getFile(path);
 	}
 

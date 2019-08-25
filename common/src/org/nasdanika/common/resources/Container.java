@@ -33,7 +33,7 @@ public interface Container<T> extends Resource<T> {
 	 * @param path
 	 * @return File instance or null if it would not be possible to create such a file, e.g. a resource with this path already exists and is a container or one of path elements is a file.
 	 */
-	File<T> getFile(String path);
+	Entity<T> getFile(String path);
 	
 	/**
 	 * Returns a container for a given path. It is a logical operation - the container doesn't have to exist.
@@ -100,7 +100,7 @@ public interface Container<T> extends Resource<T> {
 	 * @return
 	 */
 	@Override
-	default <V> Container<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter) {
+	default <V> Container<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter) {
 		return new Container<V>() {
 
 			@Override
@@ -140,7 +140,7 @@ public interface Container<T> extends Resource<T> {
 			}
 
 			@Override
-			public File<V> getFile(String path) {
+			public Entity<V> getFile(String path) {
 				return Container.this.getFile(path).adapt(decoder, encoder, sizeConverter);
 			}
 
@@ -206,7 +206,7 @@ public interface Container<T> extends Resource<T> {
 			}
 			
 			@Override
-			public File<T> getFile(String path) {
+			public Entity<T> getFile(String path) {
 				return filter.test(path) ? super.getFile(path) : null;
 			}
 			
@@ -215,7 +215,7 @@ public interface Container<T> extends Resource<T> {
 	
 	/**
 	 * Loads entries from a {@link ZipInputStream} into this container. This method used getXXX() methods to obtain container children.
-	 * If getXXX() method returns null of if {@link File} entry is not null and canWrite() returns false then an exception is thrown.
+	 * If getXXX() method returns null of if {@link Entity} entry is not null and canWrite() returns false then an exception is thrown.
 	 * @param zipInputStream ZipInputStream.
 	 * @param filter Entry name filter. Can be null.
 	 * @param contentLoader Converts input stream to the file content type. The first argument is file path.
@@ -236,7 +236,7 @@ public interface Container<T> extends Resource<T> {
 						throw new IOException("Container with path "+entryName+" cannot be created");
 					}
 				} else {
-					File<T> file = getFile(entryName);
+					Entity<T> file = getFile(entryName);
 					if (file == null || !file.canWrite()) {
 						throw new IOException("File with path "+entryName+" cannot be written");						
 					}
@@ -270,9 +270,9 @@ public interface Container<T> extends Resource<T> {
 				zipOutputStream.putNextEntry(new ZipEntry(prefix+child.getPath()+"/"));
 				zipOutputStream.closeEntry();
 				((Container<T>) child).store(zipOutputStream, prefix, contentSerializer, progressMonitor);
-			} else if (child instanceof File && ((File<T>) child).canRead()) {
+			} else if (child instanceof Entity && ((Entity<T>) child).canRead()) {
 				zipOutputStream.putNextEntry(new ZipEntry(prefix+child.getPath()));
-				File<T> file = (File<T>) child;
+				Entity<T> file = (Entity<T>) child;
 				try (InputStream contents = contentSerializer.apply(child.getPath(), file.getContents(progressMonitor.split("Reading "+file.getPath(), 1, file)))) {
 					int b;
 					while ((b = contents.read()) != -1) {

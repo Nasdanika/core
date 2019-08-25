@@ -93,7 +93,21 @@ public interface Resource<T> {
 	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
 	 * @return
 	 */
-	<V> Resource<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter);
+	<V> Resource<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);
 	
-
+	/**
+	 * @return Resource digest. Entities compute state digest, e.g. SHA256 digest of file contents. Containers derive digest value from their children digests. 
+	 */
+	default String getDigest() {
+		return null;
+	}
+	
+	/**
+	 * @return Time when this resource was last modified, -1 if unknown. For containers modification means a change in the list of children, not necessarily change in the
+	 * children's state.
+	 */
+	default long getTimestamp() {
+		return -1;
+	}
+	
 }

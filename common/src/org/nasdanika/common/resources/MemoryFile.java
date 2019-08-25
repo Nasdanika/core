@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T>
  */
-public abstract class MemoryFile<T> implements File<T> {
+public abstract class MemoryFile<T> implements Entity<T> {
 
 	protected T contents;
 

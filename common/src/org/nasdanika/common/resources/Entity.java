@@ -12,7 +12,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T> Content type
  */
-public interface File<T> extends Resource<T> {
+public interface Entity<T> extends Resource<T> {
 	
 	/**
 	 * @param monitor
@@ -106,63 +106,63 @@ public interface File<T> extends Resource<T> {
 	 * @param sizeConverter converts size of a file. Size is passed as-is if null.
 	 * @return
 	 */
-	default <V> File<V> adapt(BiFunction<File<T>, T, V> decoder, BiFunction<File<T>, V, T> encoder, BiFunction<File<T>, Long, Long> sizeConverter) {
-		return new File<V>() {
+	default <V> Entity<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter) {
+		return new Entity<V>() {
 
 			@Override
 			public String getName() {
-				return File.this.getName();
+				return Entity.this.getName();
 			}
 
 			@Override
 			public boolean exists() {
-				return File.this.exists();
+				return Entity.this.exists();
 			}
 
 			@Override
 			public Container<V> getParent() {
-				Container<T> parent = File.this.getParent();
+				Container<T> parent = Entity.this.getParent();
 				return parent == null ? null : parent.adapt(decoder, encoder, sizeConverter);
 			}
 
 			@Override
 			public void delete(ProgressMonitor monitor) {
-				File.this.delete(monitor);
+				Entity.this.delete(monitor);
 			}
 
 			@Override
 			public String getPath() {
-				return File.this.getPath();
+				return Entity.this.getPath();
 			}
 
 			@Override
 			public V getContents(ProgressMonitor monitor) {
-				return decoder.apply(File.this, File.this.getContents(monitor));
+				return decoder.apply(Entity.this, Entity.this.getContents(monitor));
 			}
 
 			@Override
 			public void setContents(V contents, ProgressMonitor monitor) {
-				File.this.setContents(encoder.apply(File.this, contents), monitor);
+				Entity.this.setContents(encoder.apply(Entity.this, contents), monitor);
 			}
 
 			@Override
 			public void appendContents(V contents, ProgressMonitor monitor) {
-				File.this.appendContents(encoder.apply(File.this, contents), monitor);
+				Entity.this.appendContents(encoder.apply(Entity.this, contents), monitor);
 			}
 
 			@Override
 			public boolean canRead() {
-				return decoder != null && File.this.canRead();
+				return decoder != null && Entity.this.canRead();
 			}
 
 			@Override
 			public boolean canWrite() {
-				return encoder != null && File.this.canWrite();
+				return encoder != null && Entity.this.canWrite();
 			}
 
 			@Override
 			public long size() {
-				return sizeConverter == null ? File.this.size() : sizeConverter.apply(File.this, File.this.size());
+				return sizeConverter == null ? Entity.this.size() : sizeConverter.apply(Entity.this, Entity.this.size());
 			}
 			
 		};

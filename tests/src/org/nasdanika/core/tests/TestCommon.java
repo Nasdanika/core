@@ -29,7 +29,7 @@ import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Work;
-import org.nasdanika.common.resources.File;
+import org.nasdanika.common.resources.Entity;
 import org.nasdanika.common.resources.MemoryContainer;
 
 
@@ -166,7 +166,7 @@ public class TestCommon {
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
 			smc.load(zipInputStream, null, (path, content) -> DefaultConverter.INSTANCE.convert(new FilterInputStream(content) { public void close() {} }, String.class), pm);
 		}
-		File<String> sf = smc.getFile("test/myfile.bin");
+		Entity<String> sf = smc.getFile("test/myfile.bin");
 		assertTrue(sf.exists());
 		assertEquals("Hello", sf.getContents(pm));
 	}	

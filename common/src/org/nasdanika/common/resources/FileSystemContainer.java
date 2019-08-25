@@ -38,10 +38,10 @@ public class FileSystemContainer extends FileSystemResource implements Container
 	}
 
 	@Override
-	public File<InputStream> getFile(String path) {
+	public Entity<InputStream> getFile(String path) {
 		Resource<InputStream> existing = find(path);
-		if (existing instanceof File) {
-			return (File<InputStream>) existing;
+		if (existing instanceof Entity) {
+			return (Entity<InputStream>) existing;
 		}
 		if (existing instanceof Container) {
 			// container - can't have a file with the same name.
@@ -62,7 +62,7 @@ public class FileSystemContainer extends FileSystemResource implements Container
 		if (existing instanceof Container) {
 			return (Container<InputStream>) existing;
 		}
-		if (existing instanceof File) {
+		if (existing instanceof Entity) {
 			// file - can't have a container with the same name.
 			return null;
 		}
