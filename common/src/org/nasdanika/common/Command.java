@@ -2,7 +2,7 @@ package org.nasdanika.common;
 
 /**
  * Something which can be executed with reporting progress to a {@link ProgressMonitor}.
- * The command doesn't split the monitor for itself, i.e. it expects the calling code splitting the monitor.
+ * The command doesn't split the monitor for itself, i.e. it expects the calling code to split the monitor.
  * However, it may split it further for sub-tasks.
  * 
  * @author Pavel Vlasov
