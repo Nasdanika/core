@@ -18,7 +18,7 @@ public interface Repository {
 	 * @param password
 	 * @return Creates an executor authenticated by user name and password.
 	 */
-	Executor createExecutors(String login, String password) throws AuthenticationException;
+	Executor createExecutor(String login, String password) throws AuthenticationException;
 
 	/**
 	 * @param identity Login for pre-authenticated user or an authorization token if <code>jsonWebToken</code> is <code>true</code>.

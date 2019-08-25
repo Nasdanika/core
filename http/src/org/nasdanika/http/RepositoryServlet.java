@@ -256,7 +256,7 @@ public abstract class RepositoryServlet extends HttpServlet {
 				if (idx == -1) {
 					throw new AuthenticationException("Invalid credentials format: "+decoded);
 				}
-				return getRepository(req).createExecutors(decoded.substring(0, idx), decoded.substring(idx+1));
+				return getRepository(req).createExecutor(decoded.substring(0, idx), decoded.substring(idx+1));
 			}
 		}
 		
