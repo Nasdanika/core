@@ -10,6 +10,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -178,6 +179,7 @@ public interface Container<T> extends Resource<T> {
 	}
 	
 	/**
+	 * TODO - filter -> read predicate, write predicate
 	 * Filters this container. 
 	 * @param filter Child path filter. 
 	 * @return
@@ -251,7 +253,7 @@ public interface Container<T> extends Resource<T> {
 	 * Stores readable children of this container to a {@link ZipOutputStream}. 
 	 * @param zipOutputStream Zip output stream. This method does not close the stream.
 	 * @param prefix Optional path prefix.
-	 * @param contentWriter Converts entity state to the input stream.
+	 * @param contentWriter Converts entity state to the input stream. If null then {@link DefaultConverter}.INSTANCE is used to convert content to {@link InputStream}
 	 * @param progressMonitor Progress monitor.
 	 * @throws IOException
 	 */
@@ -260,6 +262,10 @@ public interface Container<T> extends Resource<T> {
 		String prefix,
 		BiFunction<String,T,InputStream> contentSerializer, 
 		ProgressMonitor progressMonitor) throws IOException {
+		
+		if (contentSerializer == null) {
+			contentSerializer = (path, content) -> DefaultConverter.INSTANCE.convert(content, InputStream.class);
+		}
 		
 		if (prefix == null) {
 			prefix = "";
