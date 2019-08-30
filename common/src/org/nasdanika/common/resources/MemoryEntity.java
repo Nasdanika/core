@@ -42,4 +42,9 @@ public abstract class MemoryEntity<T> implements Entity<T> {
 		setState(null, monitor);	
 	}	
 
+	@Override
+	public String toString() {
+		return getClass().getName()+"("+getPath()+")";
+	}
+
 }

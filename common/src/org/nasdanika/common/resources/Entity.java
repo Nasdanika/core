@@ -163,6 +163,11 @@ public interface Entity<T> extends Resource<T> {
 			public long size() {
 				return sizeConverter == null ? Entity.this.size() : sizeConverter.apply(Entity.this, Entity.this.size());
 			}
+
+			@Override
+			public String toString() {
+				return getClass().getName()+"("+getPath()+")";
+			}
 			
 		};
 	}

@@ -167,6 +167,10 @@ public abstract class AbstractMemoryContainer<T> implements Container<T> {
 	 * @return
 	 */
 	protected abstract long size(T contents);
-	
+
+	@Override
+	public String toString() {
+		return getClass().getName()+"("+getPath()+")";
+	}
 
 }

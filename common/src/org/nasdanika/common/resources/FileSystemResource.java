@@ -48,4 +48,9 @@ public abstract class FileSystemResource implements Resource<InputStream> {
 		return file.lastModified();
 	}	
 
+	@Override
+	public String toString() {
+		return getClass().getName()+"("+getPath()+")";
+	}
+	
 }
