@@ -6,12 +6,13 @@ import java.util.zip.ZipFile;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * Entity is something which has state. E.g. file is an entity with binary contents - a sequence of bytes.
+ * Entity is something which has externalizable state. E.g. file is an entity with binary contents - a sequence of bytes.
  * @author Pavel
  *
  * @param <T> Entity state type
+ * @param <E> Container element type.
  */
-public interface Entity<T> extends Resource<T> {
+public interface Entity<T,E> extends Resource<E> {
 	
 	/**
 	 * @param monitor
@@ -43,7 +44,7 @@ public interface Entity<T> extends Resource<T> {
 	 * @param monitor
 	 * @throws IllegalStateException if canWrite() returns false.
 	 */
-	void setState(T contents, ProgressMonitor monitor);
+	void setState(T state, ProgressMonitor monitor);
 	
 	/**
 	 * Appends state if the entity state exists and calls setState if it doesn't.
@@ -51,7 +52,7 @@ public interface Entity<T> extends Resource<T> {
 	 * @param monitor
 	 * @throws IllegalStateException if canWrite() returns false.
 	 */
-	void appendState(T contents, ProgressMonitor monitor);
+	void appendState(T state, ProgressMonitor monitor);
 
 	/**
 	 * @return true if entity state can be read. Some containers may be write-only.
@@ -69,11 +70,20 @@ public interface Entity<T> extends Resource<T> {
 	 * @param path Path in the target container.
 	 * @param monitor Progress monitor.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	default void copy(Container<? super T> container, String path, ProgressMonitor monitor) {	
-		if (exists()) {
-			try (ProgressMonitor readMonitor = monitor.split("Reading "+getPath(), 100, this); ProgressMonitor writeMonitor = monitor.split("Writing "+path, 100, container, path)) {
-				container.getEntity(path).setState(getState(readMonitor), monitor);			
+	default void copy(Container<? super E> container, String path, ProgressMonitor monitor) {	
+		if (exists(monitor.split("Checking existence", 1, this))) {
+			try (
+					ProgressMonitor getCopyTargetMonitor = monitor.split("Getting copy target"+getPath(), 1, this); 
+					ProgressMonitor readMonitor = monitor.split("Copying "+getPath(), 1, this); 
+					ProgressMonitor writeMonitor = monitor.split("Writing "+path, 1, container, path)) {
+				Object copyTarget = container.get(path, getCopyTargetMonitor);
+				if (copyTarget instanceof Entity) {
+					((Entity<T,E>) copyTarget).setState(getState(readMonitor), writeMonitor);
+				} else {
+					throw new IllegalArgumentException("Copy target is not an entity: "+copyTarget);
+				}
 			}
 		}
 	}
@@ -84,15 +94,22 @@ public interface Entity<T> extends Resource<T> {
 	 * @param path Path in the target container.
 	 * @param monitor Progress monitor.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	default void move(Container<? super T> container, String path, ProgressMonitor monitor) {
-		if (exists()) {
+	default void move(Container<? super E> container, String path, ProgressMonitor monitor) {
+		if (exists(monitor.split("Checking existence", 1, this))) {
 			try (
-					ProgressMonitor readMonitor = monitor.split("Reading "+getPath(), 100, this); 
-					ProgressMonitor writeMonitor = monitor.split("Writing "+getPath(), 100, container, path);
-					ProgressMonitor deleteMonitor = monitor.split("Delete "+getPath(), 100, this)) {
-				container.getEntity(path).setState(getState(readMonitor), monitor);			
-				delete(deleteMonitor);
+					ProgressMonitor getCopyTargetMonitor = monitor.split("Getting copy target"+getPath(), 1, this); 
+					ProgressMonitor readMonitor = monitor.split("Copying "+getPath(), 1, this); 
+					ProgressMonitor writeMonitor = monitor.split("Writing "+path, 1, container, path);
+					ProgressMonitor deleteMonitor = monitor.split("Deleting"+path, 1, this, path)) {
+				Object moveTarget = container.get(path, getCopyTargetMonitor);
+				if (moveTarget instanceof Entity) {
+					((Entity<T,E>) moveTarget).setState(getState(readMonitor), writeMonitor);
+					delete(deleteMonitor);
+				} else {
+					throw new IllegalArgumentException("Copy target is not an entity: "+moveTarget);
+				}
 			}
 		}
 	}
@@ -105,8 +122,8 @@ public interface Entity<T> extends Resource<T> {
 	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
 	 * @return
 	 */
-	default <V> Entity<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter) {
-		return new Entity<V>() {
+	default <V> Entity<V,E> adapt(BiFunction<Entity<T,E>, T, V> decoder, BiFunction<Entity<T,E>, V, T> encoder, BiFunction<Entity<T,E>, Long, Long> sizeConverter) {
+		return new Entity<V,E>() {
 
 			@Override
 			public String getName() {
@@ -114,14 +131,22 @@ public interface Entity<T> extends Resource<T> {
 			}
 
 			@Override
-			public boolean exists() {
-				return Entity.this.exists();
+			public boolean exists(ProgressMonitor monitor) {
+				return Entity.this.exists(monitor);
 			}
 
 			@Override
-			public Container<V> getParent() {
-				Container<T> parent = Entity.this.getParent();
-				return parent == null ? null : parent.adapt(decoder, encoder, sizeConverter);
+			public Container<E> getParent() {
+				Container<E> parent = Entity.this.getParent();
+				@SuppressWarnings("unchecked")
+				BiFunction<String, E, E> adapter = (path, source) -> {
+					return (E) ((Entity<T,E>) source).adapt(decoder, encoder, sizeConverter);
+				};
+				
+				BiFunction<String, E, E> converter = (path, adapted) -> {
+					throw new UnsupportedOperationException("Entity put is not supported");
+				};
+				return parent == null ? null : parent.adapt(adapter, converter);
 			}
 
 			@Override
@@ -160,8 +185,8 @@ public interface Entity<T> extends Resource<T> {
 			}
 
 			@Override
-			public long size() {
-				return sizeConverter == null ? Entity.this.size() : sizeConverter.apply(Entity.this, Entity.this.size());
+			public long size(ProgressMonitor monitor) {
+				return sizeConverter == null ? Entity.this.size(monitor) : sizeConverter.apply(Entity.this, Entity.this.size(monitor));
 			}
 
 			@Override

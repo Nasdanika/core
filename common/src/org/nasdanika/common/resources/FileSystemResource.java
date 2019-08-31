@@ -1,7 +1,5 @@
 package org.nasdanika.common.resources;
 
-import java.io.InputStream;
-
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -10,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public abstract class FileSystemResource implements Resource<InputStream> {
+public abstract class FileSystemResource implements Resource<FileSystemResource> {
 
 	protected java.io.File file;
 
@@ -24,12 +22,12 @@ public abstract class FileSystemResource implements Resource<InputStream> {
 	}
 
 	@Override
-	public boolean exists() {
+	public boolean exists(ProgressMonitor monitor) {
 		return file.exists();
 	}
 
 	@Override
-	public Container<InputStream> getParent() {
+	public FileSystemContainer getParent() {
 		java.io.File parent = file.getParentFile();
 		return parent == null ? null : new FileSystemContainer(parent);
 	}

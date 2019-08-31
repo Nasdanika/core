@@ -1,49 +1,57 @@
 package org.nasdanika.common.resources;
 
-import java.util.Collection;
+import java.util.Map;
 
 import org.nasdanika.common.ProgressMonitor;
 
-public class ContainerFilter<T> implements Container<T> {
+public class ContainerFilter<E> implements Container<E> {
 
-	private Container<T> target;
-
-	public ContainerFilter(Container<T> target) {
+	protected Container<E> target;
+	
+	public ContainerFilter(Container<E> target) {
 		this.target = target;
 	}
 
-	public Resource<T> find(String path) {
-		return target.find(path);
+	public Object find(String path, ProgressMonitor monitor) {
+		return target.find(path, monitor);
+	}
+
+	public E get(String path, ProgressMonitor monitor) {
+		return target.get(path, monitor);
+	}
+
+	public void put(String path, E element, ProgressMonitor monitor) throws IllegalArgumentException {
+		target.put(path, element, monitor);
+	}
+
+	public Object delete(String path, ProgressMonitor monitor) {
+		return target.delete(path, monitor);
+	}
+
+	public Container<E> getContainer(String path, ProgressMonitor monitor) {
+		return target.getContainer(path, monitor);
+	}
+
+	public Map<String, Object> getChildren(ProgressMonitor monitor) {
+		return target.getChildren(monitor);
+	}
+
+	public Container<E> getParent() {
+		return target.getParent();
 	}
 
 	public String getName() {
 		return target.getName();
 	}
 
-	public Entity<T> getEntity(String path) {
-		return target.getEntity(path);
+	@Override
+	public void copy(Container<? super E> container, String path, ProgressMonitor monitor) {
+		target.copy(container, path, monitor);		
 	}
 
-	public boolean exists() {
-		return target.exists();
-	}
-
-	public Container<T> getParent() {
-		return target.getParent();
-	}
-
-	public Container<T> getContainer(String path) {
-		return target.getContainer(path);
-	}
-
-	public void delete(ProgressMonitor monitor) {
-		target.delete(monitor);
-	}
-
-	public Collection<Resource<T>> getChildren() {
-		return target.getChildren();
+	@Override
+	public void move(Container<? super E> container, String path, ProgressMonitor monitor) {
+		target.move(container, path, monitor);		
 	}
 	
-	
-
 }

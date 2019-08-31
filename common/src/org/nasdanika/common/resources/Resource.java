@@ -1,17 +1,15 @@
 package org.nasdanika.common.resources;
 
-import java.util.function.BiFunction;
-
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * Resource is something uniquily identified by its name within its container and its path within the root container.
+ * Resource typically represents something with a lifespan longer than the JVM. It is  uniquely identified by its name within its container and its path within the root container.
  * The resource path separator is ``/``. 
  * @author Pavel
  *
- * @param <T> Content type.
+ * @param <E> Element type for the parent container.
  */
-public interface Resource<T> {
+public interface Resource<E> {
 	
 	public static final String SEPARATOR = "/";
 
@@ -23,34 +21,34 @@ public interface Resource<T> {
 	/**
 	 * @return true if resource exists.
 	 */
-	boolean exists();
+	boolean exists(ProgressMonitor monitor);
 	
 	/**
 	 * @return Parent container.
 	 */
-	Container<T> getParent();
+	Container<E> getParent();
 	
 	/**
 	 * Resource size. -1 for unknown.
 	 * @return
 	 */
-	long size();
+	long size(ProgressMonitor monitor);
 	
 	/**
 	 * @return The root container.
 	 */
-	default Container<T> getRoot() {
-		Container<T> parent = getParent();
+	default Container<E> getRoot() {
+		Container<E> parent = getParent();
 		if (parent != null) {
 			return parent.getRoot();
 		}
 		
-		return this instanceof Container ? (Container<T>) this : null;
+		return this instanceof Container ? (Container<E>) this : null;
 	}
 	
 	/**
 	 * Deletes the resource if it exists.
-	 * @param monitor Parent monitor, the resource splits the monitor and takes 1 tick.
+	 * @param monitor Progress monitor.
 	 */
 	void delete(ProgressMonitor monitor);
 	
@@ -59,12 +57,12 @@ public interface Resource<T> {
 	 * @return
 	 */
 	default String getPath() {
-		Container<T> parent = getParent();
+		Container<E> parent = getParent();
 		if (parent == null) {
 			return getName();
 		}
 		String parentPath = parent.getPath();
-		return parentPath == null || parentPath.isEmpty() ? getName() : parentPath + SEPARATOR + getName();
+		return parentPath == null || parentPath.isEmpty() ? getName() : parentPath + Container.SEPARATOR + getName();
 	};
 	
 	/**
@@ -73,7 +71,7 @@ public interface Resource<T> {
 	 * @param path Path to copy the resource to.
 	 * @param monitor Parent progress monitor, the resource splits the monitor and takes size() ticks.
 	 */
-	void copy(Container<? super T> container, String path, ProgressMonitor monitor);
+	void copy(Container<? super E> container, String path, ProgressMonitor monitor);
 	
 	/**
 	 * Moves the resource to the target container under a given path. Equivalent to copying and then deleting.
@@ -81,19 +79,19 @@ public interface Resource<T> {
 	 * @param path Path to move the resource to.
 	 * @param monitor Parent progress monitor, the resource splits the monitor and takes 2*size() ticks - one size for reading and one for writing.
 	 */
-	void move(Container<? super T> container, String path, ProgressMonitor monitor);
+	void move(Container<? super E> container, String path, ProgressMonitor monitor);
 	
-	/**
-	 * Adapts to a different state type through encoding/decoding. 
-	 * @param <V> New state type. Can be the same as T in case of filtering - token substitution, encryption/decryption, compression/decompression.
-	 * Either encoder or decoder can be null, it will make the adapted entities read-only and write-only respectively. Decoder and encoder take the entity as 
-	 * the first argument to allow implement entity-specific operations, e.g. extension-based encoding/decoding such as parsing JSON for entities with ``.json`` extension.
-	 * @param decoder Decodes T to V.
-	 * @param encoder Encodes V to T.
-	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
-	 * @return
-	 */
-	<V> Resource<V> adapt(BiFunction<Entity<T>, T, V> decoder, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);
+//	/**
+//	 * Adapts to a different resource type. 
+//	 * @param <V> New resource type. 
+//	 * Either encoder or decoder can be null, it will make the adapted entities read-only and write-only respectively. Decoder and encoder take the entity as 
+//	 * the first argument to allow implement entity-specific operations, e.g. extension-based encoding/decoding such as parsing JSON for entities with ``.json`` extension.
+//	 * @param decoder Decodes T to V.
+//	 * @param encoder Encodes V to T.
+//	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
+//	 * @return
+//	 */
+//	<V extends Resource<?>> Resource<V> adapt(Function<T,V> adapter, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);
 	
 	/**
 	 * @return Resource digest. Entities compute state digest, e.g. SHA256 digest of file contents. Containers derive digest value from their children digests. 

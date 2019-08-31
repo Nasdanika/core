@@ -16,7 +16,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public class FileSystemEntity extends FileSystemResource implements Entity<InputStream> {
+public class FileSystemEntity extends FileSystemResource implements Entity<InputStream,FileSystemResource> {
 
 	public FileSystemEntity(java.io.File file) {
 		super(file);
@@ -86,7 +86,7 @@ public class FileSystemEntity extends FileSystemResource implements Entity<Input
 	}
 
 	@Override
-	public long size() {
+	public long size(ProgressMonitor monitor) {
 		return file.isFile() ? file.length() : 0;
 	}
 

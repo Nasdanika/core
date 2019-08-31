@@ -8,18 +8,18 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T>
  */
-public abstract class MemoryEntity<T> implements Entity<T> {
+public abstract class EphemeralEntity<T> implements Entity<T,EphemeralEntity<T>> {
 
-	protected T contents;
+	protected T state;
 
 	@Override
 	public T getState(ProgressMonitor monitor) {
-		return contents;
+		return state;
 	}
 
 	@Override
 	public void setState(T contents, ProgressMonitor monitor) {
-		this.contents = contents;
+		this.state = contents;
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public abstract class MemoryEntity<T> implements Entity<T> {
 	}
 	
 	@Override
-	public boolean exists() {
-		return contents != null;
+	public boolean exists(ProgressMonitor monitor) {
+		return state != null;
 	}
 	
 	@Override
