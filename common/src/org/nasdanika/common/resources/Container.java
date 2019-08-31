@@ -355,8 +355,10 @@ public interface Container<E> extends Resource<E> {
 								throw new IOException("Container with path "+entryName+" cannot be created");
 							}
 						} else {
-							E element = contentLoader.copy(entryName, zipInputStream, find(entryName, entryMonitor.split("Finiding", 1, entryName)), entryMonitor.split("Loading "+entryName, 1));
-							put(entryName, element, entryMonitor.split("Putting copied element", 1, entryName, element)); 
+							E element = contentLoader.copy(entryName, zipInputStream, get(entryName, entryMonitor.split("Getting existing", 1, entryName)), entryMonitor.split("Loading "+entryName, 1));
+							if (element != null) {
+								put(entryName, element, entryMonitor.split("Putting copied element", 1, entryName, element));
+							}
 						}
 					}
 					zipInputStream.closeEntry();
@@ -397,7 +399,7 @@ public interface Container<E> extends Resource<E> {
 					if (childEntry.getValue() instanceof Container) {
 						zipOutputStream.putNextEntry(new ZipEntry(prefix+"/"+childEntry.getKey()+"/"));
 						zipOutputStream.closeEntry();
-						((Container<E>) childEntry.getValue()).store(zipOutputStream, prefix+getPath()+"/", contentSerializer, progressMonitor);
+						((Container<E>) childEntry.getValue()).store(zipOutputStream, prefix+childEntry.getKey()+"/", contentSerializer, progressMonitor);
 					} else {
 						zipOutputStream.putNextEntry(new ZipEntry(prefix+childEntry.getKey()));
 						try (InputStream contents = contentSerializer.copy(childEntry.getKey(), (E) childEntry.getValue(), null, childMonitor.split("Storing"+childEntry.getKey(), 1, childEntry.getValue()))) {

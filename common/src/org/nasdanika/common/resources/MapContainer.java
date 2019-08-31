@@ -65,12 +65,16 @@ public class MapContainer<E> implements Container<E> {
 	}
 	
 	/**
-	 * Override to create elements on access.
+	 * Override to create elements on access. This method delegates to the parent if the parent is an instance of MapContainer.
 	 * @param path
 	 * @param monitor
 	 * @return
 	 */
 	protected E createElement(String path, ProgressMonitor monitor) {
+		Container<E> parent = getParent();
+		if (parent instanceof MapContainer) {
+			return ((MapContainer<E>) parent).createElement(path, monitor);
+		}
 		return null;
 	}
 
@@ -126,19 +130,7 @@ public class MapContainer<E> implements Container<E> {
 		}
 		int sPos = path.indexOf(SEPARATOR);
 		if (sPos == -1) {
-			Container<E> ret = new MapContainer<E>() {
-
-				@Override
-				public String getName() {
-					return path;
-				}
-
-				@Override
-				public Container<E> getParent() {
-					return MapContainer.this;
-				}
-				
-			};
+			Container<E> ret = createSubContainer(path);
 			children.put(path, ret);
 			return ret;
 		}
@@ -147,6 +139,27 @@ public class MapContainer<E> implements Container<E> {
 		Container<E> container = getContainer(firstSegment, monitor.split("Getting container at "+firstSegment, 1, this));
 		String pathTail = path.substring(sPos + 1);
 		return container == null ? null : container.getContainer(pathTail, monitor.split("Getting container for "+pathTail, 1, container));
+	}
+
+	/**
+	 * Creates a sub-container, override to specialize returned container.
+	 * @param path
+	 * @return
+	 */
+	protected MapContainer<E> createSubContainer(String path) {
+		return new MapContainer<E>() {
+
+			@Override
+			public String getName() {
+				return path;
+			}
+
+			@Override
+			public Container<E> getParent() {
+				return MapContainer.this;
+			}
+			
+		};
 	}
 
 	@Override

@@ -2,13 +2,14 @@ package org.nasdanika.core.tests;
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,9 @@ import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Work;
-import org.nasdanika.common.resources.Entity;
-import org.nasdanika.common.resources.MemoryContainer;
+import org.nasdanika.common.resources.Container.Copier;
+import org.nasdanika.common.resources.EphemeralContainer;
+import org.nasdanika.common.resources.EphemeralEntity;
 
 
 public class TestCommon {
@@ -153,21 +155,32 @@ public class TestCommon {
 	public void testContainerZipping() throws Exception {		
 		ProgressMonitor pm = new PrintStreamProgressMonitor();
 		
-		MemoryContainer<byte[]> memoryContainer = new MemoryContainer<byte[]>();
-		memoryContainer.getEntity("test/myfile.bin").setState("Hello".getBytes(), pm);
+		EphemeralContainer<byte[]> ephemeralContainer = new EphemeralContainer<byte[]>();
+		EphemeralEntity<byte[]> ephemeralEntity = ephemeralContainer.get("test/myfile.bin", pm.split("Getting myfile.bin", 1));
+		assertNotNull(ephemeralEntity);
+		ephemeralEntity.setState("Hello".getBytes(), pm.split("Setting state", 1));
 
 		java.io.File testsDir = new java.io.File("target/tests/container-zipping");
 		testsDir.mkdirs();
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(new FileOutputStream(new java.io.File(testsDir, "myarchive.zip")))) {
-			memoryContainer.store(zipOutputStream, null, (path, content) -> new ByteArrayInputStream(content), pm);
+			Copier<EphemeralEntity<byte[]>, InputStream> copier = (path, entity, existing, monitor) -> new ByteArrayInputStream(entity.getState(monitor));				
+			ephemeralContainer.store(zipOutputStream, null, copier, pm.split("Storing", 1));
 		}
 		
-		MemoryContainer<String> smc = new MemoryContainer<String>();
+		EphemeralContainer<String> sec = new EphemeralContainer<String>();
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
-			smc.load(zipInputStream, null, (path, content) -> DefaultConverter.INSTANCE.convert(new FilterInputStream(content) { public void close() {} }, String.class), pm);
+			@SuppressWarnings("unchecked")
+			Copier<InputStream, EphemeralEntity<String>> contentLoader = (path, source, existing, monitor) -> {
+				String value = DefaultConverter.INSTANCE.convert(new FilterInputStream(source) { public void close() {} }, String.class);
+				EphemeralEntity<String> existingEntity = (EphemeralEntity<String>) existing;
+				assertNotNull(existingEntity);
+				existingEntity.setState(value, monitor);		
+				return null;
+			};
+			sec.load(zipInputStream, null, contentLoader, pm.split("Loading", 1));
 		}
-		Entity<String> sf = smc.getEntity("test/myfile.bin");
-		assertTrue(sf.exists());
+		EphemeralEntity<String> sf = sec.get("test/myfile.bin", pm.split("Getting loaded", 1));
+		assertTrue(sf.exists(pm.split("Checking existens", 1, sf)));
 		assertEquals("Hello", sf.getState(pm));
 	}	
 	
