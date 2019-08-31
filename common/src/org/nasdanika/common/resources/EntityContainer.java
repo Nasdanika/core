@@ -5,6 +5,6 @@ package org.nasdanika.common.resources;
  * @author Pavel
  *
  */
-public interface EntityContainer<C,E> extends Container<Entity<C,E>> {
+public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 
 }

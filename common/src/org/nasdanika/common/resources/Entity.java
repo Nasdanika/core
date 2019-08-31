@@ -196,5 +196,10 @@ public interface Entity<T,E> extends Resource<E> {
 			
 		};
 	}
+	
+//	/**
+//	 * @return true if the entity has state modifications which are not synchronized with its external storage.
+//	 */
+//	boolean isDirty();
 
 }

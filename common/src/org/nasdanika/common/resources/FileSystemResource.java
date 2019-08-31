@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public abstract class FileSystemResource implements Resource<FileSystemResource> {
+public abstract class FileSystemResource implements Resource<FileSystemEntity> {
 
 	protected java.io.File file;
 
