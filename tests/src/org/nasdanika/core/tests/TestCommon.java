@@ -8,9 +8,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -30,6 +32,7 @@ import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Work;
 import org.nasdanika.common.resources.EphemeralBinaryEntity;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
+import org.nasdanika.common.resources.EphemeralEntityContainer;
 
 
 public class TestCommon {
@@ -163,13 +166,22 @@ public class TestCommon {
 			ephemeralContainer.store(zipOutputStream, null, pm.split("Storing", 1));
 		}
 		
-		EphemeralBinaryEntityContainer sec = new EphemeralBinaryEntityContainer();
+		EphemeralBinaryEntityContainer bec = new EphemeralBinaryEntityContainer();
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
-			sec.load(zipInputStream, null, pm.split("Loading", 1));
+			bec.load(zipInputStream, null, pm.split("Loading", 1));
 		}
-		EphemeralBinaryEntity sf = sec.get("test/myfile.bin", pm.split("Getting loaded", 1));
-		assertTrue(sf.exists(pm.split("Checking existens", 1, sf)));
-		assertEquals("Hello", DefaultConverter.INSTANCE.convert(sf.getState(pm), String.class));
+		EphemeralBinaryEntity ebe = bec.get("test/myfile.bin", pm.split("Getting loaded", 1));
+		assertTrue(ebe.exists(pm.split("Checking existens", 1, ebe)));
+		assertEquals("Hello", DefaultConverter.INSTANCE.convert(ebe.getState(pm), String.class));
+		
+		EphemeralEntityContainer<String> sec = new EphemeralEntityContainer<String>();
+		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
+			BiFunction<String,InputStream,String> decoder = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
+			sec.load(zipInputStream, null, decoder, pm.split("Loading", 1));
+		}
+		
+		String data = sec.stateAdapter().get("test/myfile.bin", pm.split("Getting loaded", 1));
+		assertEquals("Hello", data);
 	}	
 	
 }

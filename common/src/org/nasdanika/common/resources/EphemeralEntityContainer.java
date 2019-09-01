@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T>
  */
-public class EphemeralContainer<T> extends MapContainer<EphemeralEntity<T>> {
+public class EphemeralEntityContainer<T> extends MapContainer<EphemeralEntity<T>> implements EntityContainer<T,EphemeralEntity<T>> {
 
 	@Override
 	protected EphemeralEntity<T> createElement(String path, ProgressMonitor monitor) {
@@ -17,7 +17,7 @@ public class EphemeralContainer<T> extends MapContainer<EphemeralEntity<T>> {
 			@Override
 			public void appendState(T state, ProgressMonitor monitor) {
 				T existingState = getState(monitor.split("Getting existing state", 1, this));
-				EphemeralContainer.this.appendState(existingState, state, monitor.split("Appending state", 1, this, existingState, state));				
+				EphemeralEntityContainer.this.appendState(existingState, state, monitor.split("Appending state", 1, this, existingState, state));				
 			}
 
 			@Override
@@ -27,12 +27,12 @@ public class EphemeralContainer<T> extends MapContainer<EphemeralEntity<T>> {
 
 			@Override
 			public Container<EphemeralEntity<T>> getParent() {
-				return EphemeralContainer.this;
+				return EphemeralEntityContainer.this;
 			}
 
 			@Override
 			public long size(ProgressMonitor monitor) {
-				return EphemeralContainer.this.stateSize(getState(monitor));
+				return EphemeralEntityContainer.this.stateSize(getState(monitor));
 			}
 			
 		};

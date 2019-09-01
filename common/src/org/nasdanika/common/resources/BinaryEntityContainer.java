@@ -1,6 +1,5 @@
 package org.nasdanika.common.resources;
 
-import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.Predicate;
@@ -27,27 +26,8 @@ public interface BinaryEntityContainer<E extends BinaryEntity<E>> extends Entity
 	default void load(
 			ZipInputStream zipInputStream, 
 			Predicate<String> filter,
-			ProgressMonitor progressMonitor) throws IOException {
-		Copier<InputStream, E> contentLoader = (path, source, existingElement, monitor) -> {
-			
-			// Overriding close because set state closes the source stream when it is drained.
-			InputStream value = new FilterInputStream(source) { 
-
-				public void close() {
-					
-				}
-				
-			};
-			
-			// Must be created by the container on access.
-			((BinaryEntity<?>) existingElement).setState(value, monitor);
-			
-			// Returning null because entity containers do not support put().
-			return null;
-			
-		};
-				
-		load(zipInputStream, filter, contentLoader, progressMonitor);
+			ProgressMonitor progressMonitor) throws IOException {				
+		load(zipInputStream, filter, (path, state) -> state, progressMonitor);
 	}
 	
 	/**
@@ -60,10 +40,8 @@ public interface BinaryEntityContainer<E extends BinaryEntity<E>> extends Entity
 	default void store(
 			ZipOutputStream zipOutputStream, 
 			String prefix, 
-			ProgressMonitor progressMonitor) throws IOException {
-		
-		Copier<E, InputStream> contentSerializer = (path, source, existingElement, monitor) -> source.getState(monitor);
-		store(zipOutputStream, prefix, contentSerializer, progressMonitor);
+			ProgressMonitor progressMonitor) throws IOException {		
+		store(zipOutputStream, prefix, (path, state) -> state, progressMonitor);
 	}
 
 }
