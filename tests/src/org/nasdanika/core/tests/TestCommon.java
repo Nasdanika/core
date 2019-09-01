@@ -30,9 +30,11 @@ import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Work;
-import org.nasdanika.common.resources.EphemeralBinaryEntity;
+import org.nasdanika.common.resources.BinaryEntity;
+import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralEntityContainer;
+import org.nasdanika.common.resources.TypedEntityContainer;
 
 
 public class TestCommon {
@@ -155,8 +157,8 @@ public class TestCommon {
 	public void testContainerZipping() throws Exception {		
 		ProgressMonitor pm = new PrintStreamProgressMonitor();
 		
-		EphemeralBinaryEntityContainer ephemeralContainer = new EphemeralBinaryEntityContainer();
-		EphemeralBinaryEntity binaryEntity = ephemeralContainer.get("test/myfile.bin", pm.split("Getting myfile.bin", 1));
+		BinaryEntityContainer ephemeralContainer = new EphemeralBinaryEntityContainer();
+		BinaryEntity binaryEntity = ephemeralContainer.get("test/myfile.bin", pm.split("Getting myfile.bin", 1));
 		assertNotNull(binaryEntity);
 		binaryEntity.setState(new ByteArrayInputStream("Hello".getBytes()), pm.split("Setting state", 1));
 
@@ -166,11 +168,11 @@ public class TestCommon {
 			ephemeralContainer.store(zipOutputStream, null, pm.split("Storing", 1));
 		}
 		
-		EphemeralBinaryEntityContainer bec = new EphemeralBinaryEntityContainer();
+		BinaryEntityContainer bec = new EphemeralBinaryEntityContainer();
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
 			bec.load(zipInputStream, null, pm.split("Loading", 1));
 		}
-		EphemeralBinaryEntity ebe = bec.get("test/myfile.bin", pm.split("Getting loaded", 1));
+		BinaryEntity ebe = bec.get("test/myfile.bin", pm.split("Getting loaded", 1));
 		assertTrue(ebe.exists(pm.split("Checking existens", 1, ebe)));
 		assertEquals("Hello", DefaultConverter.INSTANCE.convert(ebe.getState(pm), String.class));
 		
@@ -178,7 +180,7 @@ public class TestCommon {
 		String sd = bec.stateAdapter().adapt(decoder, null).get("test/myfile.bin", pm.split("Getting loaded", 1));
 		assertEquals("Hello", sd);
 		
-		EphemeralEntityContainer<String> sec = new EphemeralEntityContainer<String>();
+		TypedEntityContainer<String> sec = new EphemeralEntityContainer<String>();
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
 			sec.load(zipInputStream, null, decoder, pm.split("Loading", 1));
 		}

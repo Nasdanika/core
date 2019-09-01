@@ -11,7 +11,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public class FileSystemContainer extends FileSystemResource implements BinaryEntityContainer<FileSystemEntity> {
+public class FileSystemContainer extends FileSystemResource implements BinaryEntityContainer {
 
 	public FileSystemContainer(java.io.File file) {
 		super(file);
@@ -98,17 +98,17 @@ public class FileSystemContainer extends FileSystemResource implements BinaryEnt
 	}
 
 	@Override
-	public void copy(Container<? super FileSystemEntity> container, String path, ProgressMonitor monitor) {
+	public void copy(Container<? super BinaryEntity> container, String path, ProgressMonitor monitor) {
 		throw new UnsupportedOperationException("Implement when needed");		
 	}
 
 	@Override
-	public void move(Container<? super FileSystemEntity> container, String path, ProgressMonitor monitor) {
+	public void move(Container<? super BinaryEntity> container, String path, ProgressMonitor monitor) {
 		throw new UnsupportedOperationException("Implement when needed");		
 	}
 
 	@Override
-	public void put(String path, FileSystemEntity element, ProgressMonitor monitor) throws IllegalArgumentException {
+	public void put(String path, BinaryEntity element, ProgressMonitor monitor) throws IllegalArgumentException {
 		throw new UnsupportedOperationException("Use get() and getContainer() to operate with file system resources");		
 	}
 

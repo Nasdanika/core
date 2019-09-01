@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T>
  */
-public class EphemeralBinaryEntityContainer extends MapContainer<EphemeralBinaryEntity> implements BinaryEntityContainer<EphemeralBinaryEntity> {
+public class EphemeralBinaryEntityContainer extends MapContainer<BinaryEntity> implements BinaryEntityContainer {
 
 	@Override
 	protected EphemeralBinaryEntity createElement(String path, ProgressMonitor monitor) {
@@ -25,6 +25,35 @@ public class EphemeralBinaryEntityContainer extends MapContainer<EphemeralBinary
 			}
 			
 		};
+	}
+
+	@Override
+	protected MapContainer<BinaryEntity> createSubContainer(String path) {
+		return new EphemeralBinaryEntityContainer() {
+
+			@Override
+			public String getName() {
+				return path;
+			}
+
+			@Override
+			public EphemeralBinaryEntityContainer getParent() {
+				return EphemeralBinaryEntityContainer.this;
+			}
+			
+		};
+
+	}
+	
+	
+	@Override
+	public BinaryEntityContainer getParent() {
+		return (BinaryEntityContainer) super.getParent();
+	}
+	
+	@Override
+	public BinaryEntityContainer getContainer(String path, ProgressMonitor monitor) {
+		return (BinaryEntityContainer) super.getContainer(path, monitor);
 	}
 	
 }

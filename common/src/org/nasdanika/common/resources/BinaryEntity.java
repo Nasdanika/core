@@ -8,6 +8,6 @@ import java.io.InputStream;
  *
  * @param <E>
  */
-public interface BinaryEntity<E> extends Entity<InputStream, E> {
+public interface BinaryEntity extends Entity<InputStream,BinaryEntity> {
 
 }

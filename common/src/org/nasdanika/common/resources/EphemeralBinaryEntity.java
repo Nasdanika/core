@@ -9,7 +9,7 @@ import java.io.InputStream;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 
-public abstract class EphemeralBinaryEntity implements BinaryEntity<EphemeralBinaryEntity> {
+public abstract class EphemeralBinaryEntity implements BinaryEntity {
 
 	protected byte[] state;
 

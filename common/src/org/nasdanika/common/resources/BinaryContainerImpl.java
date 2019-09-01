@@ -5,6 +5,11 @@ import java.util.Map;
 
 import org.nasdanika.common.ProgressMonitor;
 
+/**
+ * Delegates all calls to the target. Wraps return types of getContainer() and getParent() into {@link BinaryContainerImpl}.
+ * @author Pavel
+ *
+ */
 public class BinaryContainerImpl implements BinaryContainer {
 
 	private Container<InputStream> target;
@@ -46,8 +51,9 @@ public class BinaryContainerImpl implements BinaryContainer {
 		return target.getChildren(monitor);
 	}
 
-	public Container<InputStream> getParent() {
-		return target.getParent();
+	public BinaryContainer getParent() {
+		Container<InputStream> parent = target.getParent();
+		return parent == null ? null : new BinaryContainerImpl(parent);
 	}
 
 	public String getName() {

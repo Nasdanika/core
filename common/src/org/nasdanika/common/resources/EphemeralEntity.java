@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T>
  */
-public abstract class EphemeralEntity<T> implements Entity<T,EphemeralEntity<T>> {
+public abstract class EphemeralEntity<T> implements TypedEntity<T> {
 
 	protected T state;
 

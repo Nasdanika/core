@@ -12,9 +12,8 @@ import org.nasdanika.common.ProgressMonitor;
  * Binds EntityContainer to {@link InputStream} and {@link BinaryEntity}.
  * @author Pavel
  *
- * @param <E>
  */
-public interface BinaryEntityContainer<E extends BinaryEntity<E>> extends EntityContainer<InputStream,E> {
+public interface BinaryEntityContainer extends EntityContainer<InputStream,BinaryEntity> {
 	
 	/**
 	 * Loads entities from {@link ZipInputStream}
@@ -51,5 +50,17 @@ public interface BinaryEntityContainer<E extends BinaryEntity<E>> extends Entity
 	default BinaryContainer stateAdapter() {
 		return new BinaryContainerImpl(EntityContainer.super.stateAdapter());
 	}
+	
+	/**
+	 * Narrows return type.
+	 */
+	@Override
+	BinaryEntityContainer getContainer(String path, ProgressMonitor monitor);
+	
+	/**
+	 * Narrows return type.
+	 */
+	@Override
+	BinaryEntityContainer getParent();
 
 }

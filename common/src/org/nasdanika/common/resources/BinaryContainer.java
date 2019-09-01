@@ -13,5 +13,8 @@ public interface BinaryContainer extends Container<InputStream> {
 	
 	@Override
 	BinaryContainer getContainer(String path, ProgressMonitor monitor);
+	
+	@Override
+	BinaryContainer getParent();
 
 }

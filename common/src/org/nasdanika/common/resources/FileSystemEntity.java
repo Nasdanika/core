@@ -16,7 +16,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public class FileSystemEntity extends FileSystemResource implements BinaryEntity<FileSystemEntity> {
+public class FileSystemEntity extends FileSystemResource implements BinaryEntity {
 
 	public FileSystemEntity(java.io.File file) {
 		super(file);
