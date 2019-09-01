@@ -259,6 +259,11 @@ public interface Container<E> extends Resource<E> {
 				throw new UnsupportedOperationException("Implement when this one is thrown");
 			}
 			
+			@Override
+			public String toString() {
+				return getClass().getName()+"("+getPath()+")";
+			}
+			
 		};
 	}
 	

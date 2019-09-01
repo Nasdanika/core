@@ -97,42 +97,28 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 	 * @return
 	 */
 	default Container<C> stateAdapter() {
-		return stateAdapter((path,state) -> state, (path,state) -> state);
-	}
-	
-	/**
-	 * Adapts to a container with a different element type by adapting/converting entity state to the adapter element type.
-	 * @param <F> Element type to adapt to
-	 * @param adapter Adapts entity state C to target type F. Takes entity path and state.
-	 * @param converter Converts element F to state on put and get with a factory. Takes element path and the element itself. Put is performed as get().setState()
-	 * because entity containers may not support put(). 
-	 * @return
-	 */
-	default <F> Container<F> stateAdapter(BiFunction<String,C,F> stateAdapter, BiFunction<String,F,C> stateConverter) {
-		return new Container<F>() {
+		return new Container<C>() {
 
 			@SuppressWarnings("unchecked")
 			@Override
 			public Object find(String path, ProgressMonitor monitor) {
 				Object ret = EntityContainer.this.find(path, monitor.split("Finiding", 1, this));
 				if (ret instanceof EntityContainer) {
-					return ((EntityContainer<C,E>) ret).stateAdapter(stateAdapter, stateConverter);
+					return ((EntityContainer<C,E>) ret).stateAdapter();
 				}
-				return stateAdapter.apply(path, ((E) ret).getState(monitor.split("Getting state", 1, this)));
+				return ((E) ret).getState(monitor.split("Getting state", 1, this));
 			}
 
 			@Override
-			public F get(String path, ProgressMonitor monitor) {
+			public C get(String path, ProgressMonitor monitor) {
 				E entity = EntityContainer.this.get(path, monitor.split("Getting enitity "+path, 1, this));
-				C state = entity.getState(monitor.split("Getting state of "+path, 1, this));
-				return stateAdapter.apply(path, state);
+				return entity == null ? null : entity.getState(monitor.split("Getting state of "+path, 1, this));
 			}
 
 			@Override
-			public void put(String path, F element, ProgressMonitor monitor) throws IllegalArgumentException {
+			public void put(String path, C element, ProgressMonitor monitor) throws IllegalArgumentException {
 				E entity = EntityContainer.this.get(path, monitor.split("Getting enitity "+path, 1, this));
-				C state = stateConverter.apply(path, element);
-				entity.setState(state, monitor.split("Setting state of "+path, 1, this));
+				entity.setState(element, monitor.split("Setting state of "+path, 1, this));
 			}
 
 			@SuppressWarnings("unchecked")
@@ -140,16 +126,16 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 			public Object delete(String path, ProgressMonitor monitor) {
 				Object deleted = EntityContainer.this.delete(path, monitor.split("Deleting "+path, 1, this));
 				if (deleted instanceof Container) {
-					return ((EntityContainer<C,E>) deleted).stateAdapter(stateAdapter, stateConverter);
+					return ((EntityContainer<C,E>) deleted).stateAdapter();
 				}
-				return stateAdapter.apply(path, deleted == null ? null : ((E) deleted).getState(monitor.split("Getting state of "+path, 1, this)));
+				return deleted == null ? null : ((E) deleted).getState(monitor.split("Getting state of "+path, 1, this));
 			}
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public Container<F> getContainer(String path, ProgressMonitor monitor) {
+			public Container<C> getContainer(String path, ProgressMonitor monitor) {
 				Container<E> ret = EntityContainer.this.getContainer(path, monitor);
-				return ret instanceof EntityContainer ? ((EntityContainer<C,E>) ret).stateAdapter(stateAdapter, stateConverter) : null;
+				return ret instanceof EntityContainer ? ((EntityContainer<C,E>) ret).stateAdapter() : null;
 			}
 
 			@SuppressWarnings("unchecked")
@@ -158,9 +144,9 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 				Map<String, Object> ret = new HashMap<>();
 				EntityContainer.this.getChildren(monitor.split("Getting children", 1, this)).forEach((path, child) -> {
 					if (child instanceof EntityContainer) {
-						ret.put(path, ((EntityContainer<C,E>) ret).stateAdapter(stateAdapter, stateConverter));
+						ret.put(path, ((EntityContainer<C,E>) ret).stateAdapter());
 					} else {
-						ret.put(path, stateAdapter.apply(path, ((E) child).getState(monitor.split("Getting state", 1, child))));
+						ret.put(path, ((E) child).getState(monitor.split("Getting state", 1, child)));
 					}					
 				}); 
 				return Collections.unmodifiableMap(ret);
@@ -168,9 +154,9 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public Container<F> getParent() {
+			public Container<C> getParent() {
 				Container<E> parent = EntityContainer.this.getParent();
-				return parent instanceof EntityContainer ? ((EntityContainer<C,E>) parent).stateAdapter(stateAdapter, stateConverter) : null;
+				return parent instanceof EntityContainer ? ((EntityContainer<C,E>) parent).stateAdapter() : null;
 			}
 
 			@Override
@@ -179,17 +165,21 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 			}
 
 			@Override
-			public void copy(Container<? super F> container, String path, ProgressMonitor monitor) {
+			public void copy(Container<? super C> container, String path, ProgressMonitor monitor) {
 				throw new UnsupportedOperationException("Implement when this one is thrown");
 			}
 
 			@Override
-			public void move(Container<? super F> container, String path, ProgressMonitor monitor) {
+			public void move(Container<? super C> container, String path, ProgressMonitor monitor) {
 				throw new UnsupportedOperationException("Implement when this one is thrown");
 			}
 			
+			@Override
+			public String toString() {
+				return getClass().getName()+"("+getPath()+")";
+			}
+			
 		};
-	}
-	
+	}	
 
 }
