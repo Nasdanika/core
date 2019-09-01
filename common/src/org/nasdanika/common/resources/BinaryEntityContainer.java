@@ -13,7 +13,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public interface BinaryEntityContainer extends EntityContainer<InputStream,BinaryEntity> {
+public interface BinaryEntityContainer extends EntityContainer<InputStream,BinaryEntity>, BinaryResource {
 	
 	/**
 	 * Loads entities from {@link ZipInputStream}
@@ -62,5 +62,11 @@ public interface BinaryEntityContainer extends EntityContainer<InputStream,Binar
 	 */
 	@Override
 	BinaryEntityContainer getParent();
+	
+	/**
+	 * Narrows return type.
+	 */
+	@Override
+	BinaryResource find(String path, ProgressMonitor monitor);
 
 }

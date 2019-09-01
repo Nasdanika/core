@@ -56,4 +56,9 @@ public class EphemeralBinaryEntityContainer extends MapContainer<BinaryEntity> i
 		return (BinaryEntityContainer) super.getContainer(path, monitor);
 	}
 	
+	@Override
+	public BinaryResource find(String path, ProgressMonitor monitor) {
+		return (BinaryResource) super.find(path, monitor);
+	}
+	
 }

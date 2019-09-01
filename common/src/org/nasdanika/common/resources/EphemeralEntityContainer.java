@@ -79,4 +79,10 @@ public class EphemeralEntityContainer<T> extends MapContainer<TypedEntity<T>> im
 		return (TypedEntityContainer<T>) super.getParent();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public TypedResource<T> find(String path, ProgressMonitor monitor) {
+		return (TypedResource<T>) super.find(path, monitor);
+	}
+	
 }

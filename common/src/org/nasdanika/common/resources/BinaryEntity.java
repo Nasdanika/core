@@ -8,6 +8,12 @@ import java.io.InputStream;
  *
  * @param <E>
  */
-public interface BinaryEntity extends Entity<InputStream,BinaryEntity> {
+public interface BinaryEntity extends Entity<InputStream,BinaryEntity>, BinaryResource {
+
+	/**
+	 * Narrowing return type.
+	 */
+	@Override
+	BinaryEntityContainer getParent();
 
 }

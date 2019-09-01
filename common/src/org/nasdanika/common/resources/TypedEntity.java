@@ -7,6 +7,12 @@ package org.nasdanika.common.resources;
  *
  * @param <E>
  */
-public interface TypedEntity<T> extends Entity<T,TypedEntity<T>> {
+public interface TypedEntity<T> extends Entity<T,TypedEntity<T>>, TypedResource<T> {
+	
+	/**
+	 * Narrowing the return type.
+	 */
+	@Override
+	TypedEntityContainer<T> getParent();
 
 }

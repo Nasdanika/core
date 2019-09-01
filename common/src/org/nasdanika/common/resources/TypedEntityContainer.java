@@ -9,7 +9,7 @@ import org.nasdanika.common.ProgressMonitor;
  *
  * @param <T> State type.
  */
-public interface TypedEntityContainer<T> extends EntityContainer<T,TypedEntity<T>> {
+public interface TypedEntityContainer<T> extends EntityContainer<T,TypedEntity<T>>, TypedResource<T> {
 		
 	/**
 	 * Narrows return type.
@@ -22,5 +22,11 @@ public interface TypedEntityContainer<T> extends EntityContainer<T,TypedEntity<T
 	 */
 	@Override
 	TypedEntityContainer<T> getParent();
+	
+	/**
+	 * Narrows return type.
+	 */
+	@Override
+	TypedResource<T> find(String path, ProgressMonitor monitor);
 
 }
