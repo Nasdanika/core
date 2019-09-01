@@ -1,7 +1,5 @@
 package org.nasdanika.common.resources;
 
-import java.io.InputStream;
-
 import org.nasdanika.common.ProgressMonitor;
 
 /**
