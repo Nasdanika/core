@@ -174,9 +174,12 @@ public class TestCommon {
 		assertTrue(ebe.exists(pm.split("Checking existens", 1, ebe)));
 		assertEquals("Hello", DefaultConverter.INSTANCE.convert(ebe.getState(pm), String.class));
 		
+		BiFunction<String,InputStream,String> decoder = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
+		String sd = bec.stateAdapter().adapt(decoder, null).get("test/myfile.bin", pm.split("Getting loaded", 1));
+		assertEquals("Hello", sd);
+		
 		EphemeralEntityContainer<String> sec = new EphemeralEntityContainer<String>();
 		try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(new java.io.File(testsDir, "myarchive.zip")))) {
-			BiFunction<String,InputStream,String> decoder = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
 			sec.load(zipInputStream, null, decoder, pm.split("Loading", 1));
 		}
 		

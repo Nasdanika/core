@@ -43,5 +43,13 @@ public interface BinaryEntityContainer<E extends BinaryEntity<E>> extends Entity
 			ProgressMonitor progressMonitor) throws IOException {		
 		store(zipOutputStream, prefix, (path, state) -> state, progressMonitor);
 	}
+	
+	/**
+	 * Narrowing down return type for convenience.
+	 */
+	@Override
+	default BinaryContainer stateAdapter() {
+		return new BinaryContainerImpl(EntityContainer.super.stateAdapter());
+	}
 
 }
