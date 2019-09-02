@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -188,5 +189,31 @@ public class TestCommon {
 		String data = sec.stateAdapter().get("test/myfile.bin", pm.split("Getting loaded", 1));
 		assertEquals("Hello", data);
 	}	
+	
+	@Test
+	public void testJSONObjectAsMap() {
+		JSONObject jo = new JSONObject();
+		jo.put("k1", "String");
+		jo.put("k2",  33);
+		
+		JSONObject sjo = new JSONObject();
+		sjo.put("sk1", "Text");
+		jo.put("k3", sjo);
+		
+		JSONArray ja = new JSONArray();
+		ja.put(1);
+		ja.put("2");
+		
+		JSONObject ssjo = new JSONObject();
+		ssjo.put("ssk1", 88);
+		ja.put(ssjo);
+				
+		jo.put("k4", ja);
+		
+		Map<String, Object> jMap = jo.toMap();
+		System.out.println(jMap);
+		System.out.println(jMap.get("k3"));
+		System.out.println(jMap.get("k4"));
+	}
 	
 }
