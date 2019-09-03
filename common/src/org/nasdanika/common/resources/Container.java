@@ -404,10 +404,10 @@ public interface Container<E> extends Resource<E> {
 					if (childEntry.getValue() instanceof Container) {
 						zipOutputStream.putNextEntry(new ZipEntry(prefix+"/"+childEntry.getKey()+"/"));
 						zipOutputStream.closeEntry();
-						((Container<E>) childEntry.getValue()).store(zipOutputStream, prefix+childEntry.getKey()+"/", contentSerializer, progressMonitor);
+						((Container<E>) childEntry.getValue()).store(zipOutputStream, prefix+childEntry.getKey()+"/", contentSerializer, childMonitor);
 					} else {
 						zipOutputStream.putNextEntry(new ZipEntry(prefix+childEntry.getKey()));
-						try (InputStream contents = contentSerializer.copy(childEntry.getKey(), (E) childEntry.getValue(), null, childMonitor.split("Storing"+childEntry.getKey(), 1, childEntry.getValue()))) {
+						try (InputStream contents = contentSerializer.copy(childEntry.getKey(), (E) childEntry.getValue(), null, childMonitor)) {
 							int b;
 							while ((b = contents.read()) != -1) {
 								zipOutputStream.write(b);
