@@ -231,4 +231,11 @@ public class TestCommon {
 		assertEquals("Hello World", context.computingContext().get("eval/\"Hello \"+context.get(\"name\")"));		
 	}
 	
+	@Test
+	public void testJavaExpressionPropertyComputerInterpolation() {
+		MutableContext context = new SimpleMutableContext();
+		context.put("eval", new JavaExpressionPropertyComputer());
+		context.put("name", "World");
+		assertEquals("Hello World!!!", context.computingContext().interpolate("${eval/\"Hello \"+context.get(\"name\")}!!!"));		
+	}
 }

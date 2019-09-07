@@ -420,6 +420,10 @@ public interface Context extends Composeable<Context> {
 		if (input == null) {
 			return input;
 		}
+		
+		// Computing properties.
+		Context tokenComputer = computingContext();
+		
 		Matcher matcher = EXPANDER_PATTERN.matcher(input);
 		StringBuilder output = new StringBuilder();
 		int i = 0;
@@ -432,7 +436,7 @@ public interface Context extends Composeable<Context> {
 		    	peeledToken = peeledToken.substring(0, pipeIdx);
 		    }
 		    
-			Object replacement = get(peeledToken, defaultValue);
+			Object replacement = tokenComputer.get(peeledToken, defaultValue);
 		    if (replacement != null) {
 		    	Converter converter = get(Converter.class);
 		    	if (converter != null) {
