@@ -484,16 +484,98 @@ public interface Context extends Composeable<Context> {
 		
 		return new Context() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public Object get(String key) {
 				Object ret = Context.this.get(key);
-				return ret instanceof PropertyComputer ? ((PropertyComputer) ret).compute(this, key, Object.class) : ret;
+				if (ret instanceof PropertyComputer) {
+					return ((PropertyComputer) ret).compute(this, key, Object.class);
+				}
+				
+				if (ret != null) {
+					return ret;
+				}
+				
+				int lastSlash = key.lastIndexOf('/');
+				if (lastSlash == -1) {
+					return null;
+				}
+				
+				String parentKey = key.substring(0, lastSlash);
+				Object parentProperty = get(parentKey);
+				if (parentProperty instanceof PropertyComputer) {
+					return ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
+				}				
+				String subKey = key.substring(lastSlash + 1);
+				if (parentProperty instanceof Context) {
+					return ((Context) parentProperty).get(subKey);	
+				}
+				if (parentProperty instanceof Map) {
+					return ((Map<?,?>) parentProperty).get(subKey);
+				}
+				if (parentProperty instanceof List) {
+					try {
+						int idx = Integer.parseInt(subKey);
+						if (idx >= 0 && idx < ((List<?>) parentProperty).size()) {
+							return ((List<?>) parentProperty).get(idx);
+						}
+					} catch (NumberFormatException e) {
+						// NOP
+					}
+				}
+				if (parentProperty instanceof Function) {
+					return ((Function<String, Object>) parentProperty).apply(subKey);
+				}
+
+				return null;				
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(String key, Class<T> type) {
-				T ret = Context.this.get(key, type);
-				return ret instanceof PropertyComputer ? ((PropertyComputer) ret).compute(this, key, type) : ret;
+				Object ret = Context.this.get(key, type);
+				if (ret instanceof PropertyComputer) {
+					return ((PropertyComputer) ret).compute(this, key, type);
+				}
+				
+				Converter converter = get(Converter.class, DefaultConverter.INSTANCE);
+				
+				if (ret != null) {
+					return converter.convert(ret,  type);
+				}
+				
+				int lastSlash = key.lastIndexOf('/');
+				if (lastSlash == -1) {
+					return null;
+				}
+				
+				String parentKey = key.substring(0, lastSlash);
+				Object parentProperty = get(parentKey);
+				if (parentProperty instanceof PropertyComputer) {
+					return ((PropertyComputer) parentProperty).compute(this, parentKey, type);
+				}				
+				String subKey = key.substring(lastSlash + 1);
+				if (parentProperty instanceof Context) {
+					return ((Context) parentProperty).get(subKey, type);	
+				}
+				if (parentProperty instanceof Map) {
+					return converter.convert(((Map<?,?>) parentProperty).get(subKey), type);
+				}
+				if (parentProperty instanceof List) {
+					try {
+						int idx = Integer.parseInt(subKey);
+						if (idx >= 0 && idx < ((List<?>) parentProperty).size()) {
+							return converter.convert(((List<?>) parentProperty).get(idx), type);
+						}
+					} catch (NumberFormatException e) {
+						// NOP
+					}
+				}
+				if (parentProperty instanceof Function) {
+					return converter.convert(((Function<String, Object>) parentProperty).apply(subKey), type);
+				}
+
+				return null;
 			}
 
 			@Override
@@ -559,11 +641,7 @@ public interface Context extends Composeable<Context> {
 					return null;
 				}
 				
-				String parentKey = key.substring(0, lastSlash);
-				Object parentProperty = get(parentKey);
-				if (parentProperty instanceof PropertyComputer) {
-					parentProperty = ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
-				}
+				Object parentProperty = get(key.substring(0, lastSlash));
 				String subKey = key.substring(lastSlash + 1);
 				if (parentProperty instanceof Context) {
 					return ((Context) parentProperty).get(subKey);	

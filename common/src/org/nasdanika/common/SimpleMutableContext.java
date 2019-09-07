@@ -68,11 +68,7 @@ public class SimpleMutableContext implements MutableContext {
 				return null;
 			}
 			
-			String parentKey = key.substring(0, lastSlash);
-			Object parentProperty = get(parentKey);
-			if (parentProperty instanceof PropertyComputer) {
-				parentProperty = ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
-			}			
+			Object parentProperty = get(key.substring(0, lastSlash));
 			String subKey = key.substring(lastSlash + 1);
 			if (parentProperty instanceof Context) {
 				return ((Context) parentProperty).get(subKey);	

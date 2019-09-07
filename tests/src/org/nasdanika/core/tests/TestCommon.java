@@ -219,9 +219,8 @@ public class TestCommon {
 	
 	@Test
 	public void testJavaExpressionPropertyComputer() {		
-		MutableContext context = Context.singleton("name", "World").fork();
-		context.put("eval", new JavaExpressionPropertyComputer());
-		assertEquals("Hello World", context.get("eval/\"Hello \"+context.get(\"name\")"));		
+		Context context = Context.singleton("name", "World").compose(Context.singleton("eval", new JavaExpressionPropertyComputer()));
+		assertEquals("Hello World", context.computingContext().get("eval/\"Hello \"+context.get(\"name\")"));		
 	}
 
 	@Test
@@ -229,7 +228,7 @@ public class TestCommon {
 		MutableContext context = new SimpleMutableContext();
 		context.put("eval", new JavaExpressionPropertyComputer());
 		context.put("name", "World");
-		assertEquals("Hello World", context.get("eval/\"Hello \"+context.get(\"name\")"));		
-	}	
+		assertEquals("Hello World", context.computingContext().get("eval/\"Hello \"+context.get(\"name\")"));		
+	}
 	
 }
