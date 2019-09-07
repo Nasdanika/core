@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.databinding;bundle-version="1.7.400",
  org.eclipse.emf.edit;bundle-version="2.15.0";visibility:=reexport,
  org.eclipse.ui;bundle-version="3.113.0",
  org.eclipse.emf.edit.ui;bundle-version="2.16.0";visibility:=reexport,
- org.jsoup;bundle-version="1.11.3",
+ org.jsoup;bundle-version="1.12.1",
  com.vladsch.flexmark;bundle-version="0.42.6",
  org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.15.300"
