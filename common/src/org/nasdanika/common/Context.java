@@ -534,7 +534,7 @@ public interface Context extends Composeable<Context> {
 	 * @param value
 	 * @return
 	 */
-	static Context singleton(String key, Object value) {		
+	static Context singleton(String key, Object value) {	
 		return wrap(k -> key.equals(k) ? value : null);
 	}
 
@@ -559,7 +559,11 @@ public interface Context extends Composeable<Context> {
 					return null;
 				}
 				
-				Object parentProperty = get(key.substring(0, lastSlash));
+				String parentKey = key.substring(0, lastSlash);
+				Object parentProperty = get(parentKey);
+				if (parentProperty instanceof PropertyComputer) {
+					parentProperty = ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
+				}
 				String subKey = key.substring(lastSlash + 1);
 				if (parentProperty instanceof Context) {
 					return ((Context) parentProperty).get(subKey);	

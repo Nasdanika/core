@@ -27,24 +27,30 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20180130</version>
+			<version>20190722</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.yaml</groupId>
 		    <artifactId>snakeyaml</artifactId>
-		    <version>1.24</version>
+		    <version>1.25</version>
 		</dependency>		
 
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
-		    <version>1.11.3</version>
+		    <version>1.12.1</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>com.vladsch.flexmark</groupId>
 		    <artifactId>flexmark-all</artifactId>
-		    <version>0.42.6</version>
+		    <version>0.50.36</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.codehaus.janino</groupId>
+		    <artifactId>janino</artifactId>
+		    <version>3.1.0</version>
 		</dependency>
 
 	</dependencies>

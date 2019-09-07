@@ -25,6 +25,7 @@ import org.nasdanika.common.CompoundWork;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.JavaExpressionPropertyComputer;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
@@ -215,5 +216,20 @@ public class TestCommon {
 		System.out.println(jMap.get("k3"));
 		System.out.println(jMap.get("k4"));
 	}
+	
+	@Test
+	public void testJavaExpressionPropertyComputer() {		
+		MutableContext context = Context.singleton("name", "World").fork();
+		context.put("eval", new JavaExpressionPropertyComputer());
+		assertEquals("Hello World", context.get("eval/\"Hello \"+context.get(\"name\")"));		
+	}
+
+	@Test
+	public void testJavaExpressionPropertyComputerInSimpleMutableContext() {
+		MutableContext context = new SimpleMutableContext();
+		context.put("eval", new JavaExpressionPropertyComputer());
+		context.put("name", "World");
+		assertEquals("Hello World", context.get("eval/\"Hello \"+context.get(\"name\")"));		
+	}	
 	
 }

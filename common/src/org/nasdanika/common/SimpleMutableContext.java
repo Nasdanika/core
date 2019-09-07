@@ -56,19 +56,24 @@ public class SimpleMutableContext implements MutableContext {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object get(String key) {		
-		return properties.computeIfAbsent(key, k -> {
-			Object ret = chain.get(k);
+		Object ret = properties.get(key);
+		if (ret == null) {
+			ret = chain.get(key);
 			if (ret != null) {
 				return ret;
 			}
 			
-			int lastSlash = k.lastIndexOf('/');
+			int lastSlash = key.lastIndexOf('/');
 			if (lastSlash == -1) {
 				return null;
 			}
 			
-			Object parentProperty = get(k.substring(0, lastSlash));
-			String subKey = k.substring(lastSlash + 1);
+			String parentKey = key.substring(0, lastSlash);
+			Object parentProperty = get(parentKey);
+			if (parentProperty instanceof PropertyComputer) {
+				parentProperty = ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
+			}			
+			String subKey = key.substring(lastSlash + 1);
 			if (parentProperty instanceof Context) {
 				return ((Context) parentProperty).get(subKey);	
 			}
@@ -90,7 +95,10 @@ public class SimpleMutableContext implements MutableContext {
 			}
 			
 			return null;
-		});		
+			
+		}
+		
+		return ret;
 	}
 
 	/**
