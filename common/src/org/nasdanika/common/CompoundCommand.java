@@ -82,6 +82,19 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		noExecChildren.add(childEntry);
 		return childEntry.callable;
 	}	
+	
+	/**
+	 * Failing fast - returns false on the first child which returns false. 
+	 */
+	@Override
+	public boolean canExecute(ProgressMonitor progressMonitor) {				
+		for (CommandEntry<?> ce: noExecChildren) {
+			if (!ce.command.canExecute(progressMonitor.split(ce.name, ce.size, ce.details))) {
+				return false;
+			}
+		}
+		return Command.super.canExecute(progressMonitor);
+	}
 
 	/**
 	 * Splits the monitor between the children and then executes them in the executor or the current thread. Returns a combined result upon completion of all executions.

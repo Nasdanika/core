@@ -15,7 +15,7 @@ package org.nasdanika.common;
  * @param C context type.
  * @param T result type.
  */
-public interface Work<T> extends WorkInfo {
+public interface Work<T> extends Command<T>, WorkInfo {
 	
 	Work<Object> NO_WORK = new Work<Object>() {
 
@@ -45,16 +45,7 @@ public interface Work<T> extends WorkInfo {
 	static <T> Work<T> noWork() {
 		return (Work<T>) NO_WORK;
 	}
-	
-	/**
-	 * Executes work.
-	 * @param context
-	 * @param monitor Monitor to use.
-	 * @return
-	 * @throws Exception
-	 */
-	T execute(ProgressMonitor progressMonitor) throws Exception;
-	
+			
 	/**
 	 * Rolls back all the changes done by this instance of Work. The method can be called when a composite work was
 	 * cancelled and result of the entire work shall be rolled back. 

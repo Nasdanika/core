@@ -61,7 +61,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	public Callable<E> add(Work<E> child) {
 		children.add(child);
 		undoCommand.add(child::undo, child.getName(), child.size(), child);
-		return executeCommand.add(child::execute, child.getName(), child.size(), child);
+		return executeCommand.add(child, child.getName(), child.size(), child);
 	}
 	
 	/**
@@ -94,6 +94,11 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	@Override
 	public T execute(ProgressMonitor progressMonitor) throws Exception {
 		return executeCommand.execute(progressMonitor);
+	}
+	
+	@Override
+	public boolean canExecute(ProgressMonitor progressMonitor) {
+		return executeCommand.canExecute(progressMonitor);
 	}
 
 	@Override
