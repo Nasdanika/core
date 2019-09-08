@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
 
 /**
@@ -102,6 +103,9 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 */
 	@Override
 	public T execute(ProgressMonitor progressMonitor) throws Exception {
+		if (progressMonitor.isCancelled()) {
+			throw new CancellationException("Execution has been cancelled");
+		}
 		try {
 			// Split the monitor
 			for (CommandEntry<?> ce: noExecChildren) {
