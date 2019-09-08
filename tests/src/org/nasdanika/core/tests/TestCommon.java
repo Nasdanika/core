@@ -176,7 +176,7 @@ public class TestCommon {
 		}
 		BinaryEntity ebe = bec.get("test/myfile.bin", pm.split("Getting loaded", 1));
 		assertTrue(ebe.exists(pm.split("Checking existens", 1, ebe)));
-		assertEquals("Hello", DefaultConverter.INSTANCE.convert(ebe.getState(pm), String.class));
+		assertEquals("Hello", DefaultConverter.INSTANCE.convert(ebe.getState(pm.split("Getting stte", 1, ebe)), String.class));
 		
 		BiFunction<String,InputStream,String> decoder = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
 		String sd = bec.stateAdapter().adapt(decoder, null).get("test/myfile.bin", pm.split("Getting loaded", 1));
