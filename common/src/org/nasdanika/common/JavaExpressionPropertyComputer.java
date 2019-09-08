@@ -8,6 +8,7 @@ import org.codehaus.janino.ExpressionEvaluator;
 
 /**
  * Evaluates java expressions passed as sub-keys for this property key. E.g. <code>2+2</code> in <code>eval/2+2</code> if the property key is eval.
+ * Uses the {@link ClassLoader} context service defaulting to the classloader passed to the constructor, which in turn defaults to this class classloader.
  * @author Pavel
  *
  */
@@ -32,7 +33,7 @@ public class JavaExpressionPropertyComputer implements PropertyComputer {
 			@Override
 			public Object apply(String expression) {
 				ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
-				expressionEvaluator.setParentClassLoader(classLoader);
+				expressionEvaluator.setParentClassLoader(context.get(ClassLoader.class, classLoader));
 				expressionEvaluator.setExpressionType(type);
 				expressionEvaluator.setParameters(new String[] { "context" }, new Class[] { Context.class });
 				try {
