@@ -11,6 +11,11 @@ import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.data.DataHolder;
 
 public class MarkdownHelper {
+	
+	/**
+	 * CDN URL of the Github Markdown CSS (https://github.com/sindresorhus/github-markdown-css)
+	 */
+	public static final String GITHUB_MARKDOWN_CSS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css";
 		
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 	public static final int MIN_FIRST_SENTENCE_LENGTH = 20;
