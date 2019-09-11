@@ -88,7 +88,11 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * Failing fast - returns false on the first child which returns false. 
 	 */
 	@Override
-	public boolean canExecute(ProgressMonitor progressMonitor) {				
+	public boolean canExecute(ProgressMonitor progressMonitor) {		
+		if (progressMonitor.isCancelled()) {
+			progressMonitor.worked(1, "Cancelled");
+			return false;
+		}
 		for (CommandEntry<?> ce: noExecChildren) {
 			if (!ce.command.canExecute(progressMonitor.split(ce.name, ce.size, ce.details))) {
 				return false;
