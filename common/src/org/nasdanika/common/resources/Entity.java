@@ -6,7 +6,7 @@ import java.util.zip.ZipFile;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * Entity is something which has externalizable state. E.g. file is an entity with binary contents - a sequence of bytes.
+ * Entity is something which has externalizable state. E.g. file is an entity with binary contents/state - a sequence of bytes.
  * @author Pavel
  *
  * @param <T> Entity state type

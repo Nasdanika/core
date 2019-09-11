@@ -379,7 +379,7 @@ public interface Container<E> extends Resource<E> {
 	 * Stores children of this container to a {@link ZipOutputStream}. 
 	 * @param zipOutputStream Zip output stream. This method does not close the stream.
 	 * @param prefix Optional path prefix.
-	 * @param contentWriter Converts entity state to the input stream. If null then {@link DefaultConverter}.INSTANCE is used to convert content to {@link InputStream}
+	 * @param contentSerializer Converts entity state to the input stream. If null then {@link DefaultConverter}.INSTANCE is used to convert content to {@link InputStream}
 	 * @param progressMonitor Progress monitor.
 	 * @throws IOException
 	 */
@@ -437,7 +437,7 @@ public interface Container<E> extends Resource<E> {
 	default long size(ProgressMonitor monitor) {
 		long[] ret = {0};
 		getChildren(monitor.split("Getting children", 1, this)).forEach((path, child) -> {;
-			if (child instanceof Resource && ((Resource<?>) child).exists(monitor.split("Checking child existense", 1, child))) {
+			if (child instanceof Resource && ((Resource<?>) child).exists(monitor.split("Checking child existence", 1, child))) {
 				ret[0] += ((Resource<?>) child).size(monitor.split("Getting child size "+path, 1, child));
 			}
 		});
@@ -450,7 +450,7 @@ public interface Container<E> extends Resource<E> {
 	default boolean exists(ProgressMonitor monitor) {
 		Map<String, Object> children = getChildren(monitor.split("Getting children", 1, this));
 		for (Object child: children.values()) {
-			if (child instanceof Resource && ((Resource<?>) child).exists(monitor.split("Checking child existense", 1, child))) {
+			if (child instanceof Resource && ((Resource<?>) child).exists(monitor.split("Checking child existence", 1, child))) {
 				return true;
 			}
 		};
