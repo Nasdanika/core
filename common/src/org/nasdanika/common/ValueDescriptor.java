@@ -12,6 +12,10 @@ public interface ValueDescriptor<T> extends Descriptor {
 	
 	void set(T value);
 	
+	default boolean isPresent() {
+		return get() != null;
+	}
+	
 	T get();
 	
 	T getType();
