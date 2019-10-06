@@ -99,7 +99,7 @@ public class TestCommon {
 			cw.add(new Work<String>() {
 
 				@Override
-				public long size() {
+				public double size() {
 					return 1;
 				}
 
@@ -115,7 +115,7 @@ public class TestCommon {
 				}
 
 				@Override
-				public boolean undo(ProgressMonitor progressMonitor) throws Exception {
+				public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
 					// TODO Auto-generated method stub
 					return true;
 				}
@@ -125,7 +125,7 @@ public class TestCommon {
 			cw.add(new Work<String>() {
 
 				@Override
-				public long size() {
+				public double size() {
 					return 1;
 				}
 
@@ -141,7 +141,7 @@ public class TestCommon {
 				}
 
 				@Override
-				public boolean undo(ProgressMonitor progressMonitor) throws Exception {
+				public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
 					// TODO Auto-generated method stub
 					return true;
 				}

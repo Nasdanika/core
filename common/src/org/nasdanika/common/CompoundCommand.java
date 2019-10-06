@@ -25,14 +25,14 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		Command<E> command;
 		CommandCallable<E> callable;
 		String name;
-		long size;
+		double size;
 		List<Object> data = new ArrayList<>();
 		
 		CommandEntry(
 				Command<E> command, 
 				CommandCallable<E> callable, 
 				String name, 
-				long size,
+				double size,
 				List<Object> data) {
 			this.command = command;
 			this.callable = callable;
@@ -68,7 +68,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param size
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
-	public Callable<E> add(Command<E> child, String name, long size, Object... data) {
+	public Callable<E> add(Command<E> child, String name, double size, Object... data) {
 		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child, size), name, size, Arrays.asList(data));
 		children.add(childEntry);
 		return childEntry.callable;
@@ -82,7 +82,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param size
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
-	public <R> Callable<R> addNoExec(Command<R> child, String name, long size, Object... data) {
+	public <R> Callable<R> addNoExec(Command<R> child, String name, double size, Object... data) {
 		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child, size), name, size, Arrays.asList(data));
 		noExecChildren.add(childEntry);
 		return childEntry.callable;

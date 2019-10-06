@@ -31,17 +31,17 @@ public class CommandCallable<T> implements Callable<T> {
 
 	private Command<T> command;
 
-	private long size;
+	private double size;
 
 	/**
 	 * Creates a callable with a {@link ProgressRecorder}. If ``call()`` is invoked before ``setMonitor()`` then the recorded progress is replayed to the monitor. 
 	 * @param command
 	 */
-	public CommandCallable(Command<T> command, long size) {
+	public CommandCallable(Command<T> command, double size) {
 		this(command, size, new ProgressRecorder());		
 	}	
 	
-	public CommandCallable(Command<T> command, long size, ProgressMonitor monitor) {
+	public CommandCallable(Command<T> command, double size, ProgressMonitor monitor) {
 		this.command = command;
 		this.size = size;
 		this.monitor = monitor;		

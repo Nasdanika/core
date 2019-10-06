@@ -15,7 +15,8 @@ import java.util.concurrent.Executor;
  */
 public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	
-	private CompoundCommand<Boolean, Boolean> undoCommand;
+	private CompoundCommand<Void, Void> commitCommand;
+	private CompoundCommand<Boolean, Boolean> rollbackCommand;
 	private CompoundCommand<T, E> executeCommand;
 	private String name;
 	private List<WorkInfo> children = new ArrayList<>(); 
@@ -37,7 +38,22 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 			
 		};
 		
-		this.undoCommand = new CompoundCommand<Boolean,Boolean>(executor, true) {
+		this.commitCommand = new CompoundCommand<Void,Void>(executor, true) {
+
+			@Override
+			protected Void combine(List<Void> results, ProgressMonitor progressMonitor) {
+				return null;
+			}
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void handleException(String name, Command<Void> command, Exception e, List<Object> data) {
+				CompoundWork.this.handleException((Work<E>) data.get(0), e, true);
+			}
+			
+		};
+		
+		this.rollbackCommand = new CompoundCommand<Boolean,Boolean>(executor, true) {
 
 			@Override
 			protected Boolean combine(List<Boolean> results, ProgressMonitor progressMonitor) {
@@ -60,7 +76,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 */
 	public Callable<E> add(Work<E> child) {
 		children.add(child);
-		undoCommand.add(child::undo, child.getName(), child.size(), child);
+		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
 		return executeCommand.add(child, child.getName(), child.size(), child);
 	}
 	
@@ -72,13 +88,13 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 */
 	public <R> Callable<R> addNoExec(Work<R> child) {
 		children.add(child);
-		undoCommand.add(child::undo, child.getName(), child.size(), child);
+		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
 		return executeCommand.addNoExec(child::execute, child.getName(), child.size(), child);
 	}	
 
 	@Override
-	public long size() {
-		return children.stream().mapToLong(WorkInfo::size).sum();
+	public double size() {
+		return children.stream().mapToDouble(WorkInfo::size).sum();
 	}
 
 	@Override
@@ -102,8 +118,13 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	}
 
 	@Override
-	public boolean undo(ProgressMonitor progressMonitor) throws Exception {
-		return undoCommand.execute(progressMonitor);
+	public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+		return rollbackCommand.execute(progressMonitor);
+	}
+	
+	@Override
+	public void commit(ProgressMonitor progressMonitor) throws Exception {
+		commitCommand.execute(progressMonitor);
 	}
 	
 	/**
@@ -123,5 +144,14 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 * @return
 	 */
 	protected abstract T combine(List<E> results, ProgressMonitor progressMonitor) throws Exception;
+	
+	@Override
+	public void close() throws Exception {
+		for (WorkInfo child: children) {
+			if (child instanceof AutoCloseable) {
+				((AutoCloseable) child).close();
+			}
+		}
+	}
 
 }

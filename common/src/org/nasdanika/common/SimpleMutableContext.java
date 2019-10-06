@@ -124,7 +124,14 @@ public class SimpleMutableContext implements MutableContext {
 		}
 		
 		List<T> svcs = getServices(type);
-		return svcs.isEmpty() ? chain.get(type) : svcs.get(0);
+		if (svcs.isEmpty()) {
+			if (type.isInstance(this)) {
+				return (T) this;
+			}
+			return chain.get(type);
+		}
+		
+		return svcs.get(0);
 	}
 	
 	/**
