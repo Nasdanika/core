@@ -1,5 +1,8 @@
 package org.nasdanika.common;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -16,19 +19,21 @@ public class ProgressEntry extends ProgressRecorder {
 	 * 
 	 * @param totalWork
 	 */
-	ProgressEntry(ProgressRecorder parent, String name, long totalWork, Object[] details) {
+	ProgressEntry(ProgressRecorder parent, String name, double totalWork, List<Object> data) {
 		super(parent);
 		this.name = name;		
 		this.totalWork = totalWork;
-		this.details = details;
+		if (data != null) {
+			this.data.addAll(data);
+		}
 		this.start = System.currentTimeMillis();
 	}
 	/**
 	 * 
 	 * @param totalWork
 	 */
-	public ProgressEntry(String name, long totalWork, Object... details) {
-		this(null, name, totalWork, details);
+	public ProgressEntry(String name, long totalWork, Object... data) {
+		this(null, name, totalWork, Arrays.asList(data));
 	}
 	
 	private String name;
@@ -37,18 +42,18 @@ public class ProgressEntry extends ProgressRecorder {
 		return name;
 	}
 	
-	private Object[] details;
+	private List<Object> data = new ArrayList<>();
 	
-	public Object[] getDetails() {
-		return details;
+	public List<Object> getData() {
+		return data;
 	}
 	
-	private long totalWork;
+	private double totalWork;
 			
 	/**
 	 * @return Entry size passed to split() or constructor, not total work reported by worked() calls.
 	 */
-	public long getTotalWork() {
+	public double getTotalWork() {
 		return totalWork;
 	}
 	
@@ -85,12 +90,12 @@ public class ProgressEntry extends ProgressRecorder {
 			ret.put("finish", finish);
 		}
 		
-		if (getDetails() != null && getDetails().length > 0) {
+		if (getData() != null && getData().size() > 0) {
 			JSONArray jd = new JSONArray();
-			for (Object d: getDetails()) {
+			for (Object d: getData()) {
 				jd.put(detailToJSON(d));
 			}
-			ret.put("details", jd); 					
+			ret.put("data", jd); 					
 		}						
 		
 		return ret;
@@ -116,7 +121,7 @@ public class ProgressEntry extends ProgressRecorder {
 			ret.put("finish", finish);
 		}
 		
-		ret.put("details", getDetails()); 					
+		ret.put("data", getData()); 					
 		
 		return ret;
 	}

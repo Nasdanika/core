@@ -17,20 +17,7 @@ package org.nasdanika.common;
  *
  */
 public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMonitor> {
-	
-	/**
-	 * Progress status reported by worked(). For example, CANCEL status may be reported
-	 * if the work was cancelled, or WARNING may be reported if, say the work has to perform re-tries due to poor network connectivity.
-	 * @author Pavel
-	 */
-	enum Status {
-		INFO,
-		SUCCESS,
-		WARNING,
-		ERROR,
-		CANCEL
-	}
-		
+			
 	/**
 	 * Closes this monitor.
 	 */
@@ -50,29 +37,29 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	 * @param details optional additional information.
 	 * @return
 	 */
-	ProgressMonitor split(String taskName, long ticks, Object... details);
+	ProgressMonitor split(String taskName, double size, Object... data);
 	
 	/**
 	 * Reports progress.
 	 * @param work Work installment - how much work was done since the last report, not the total work.
 	 * @param progressMessage Progress message. 
 	 */
-	void worked(Status status, long work, String progressMessage, Object... details);
+	void worked(Status status, double work, String progressMessage, Object... data);
 	
 	/**
 	 * Shortcut for ``worked(SUCCESS, work, progressMessage)``.
 	 * @param work
 	 * @param progressMessage
 	 */
-	default void worked(long work, String progressMessage, Object... details) {
-		worked(Status.SUCCESS, work, progressMessage, details);
+	default void worked(double work, String progressMessage, Object... data) {
+		worked(Status.SUCCESS, work, progressMessage, data);
 	}
 	
-//	/**
-//	 * Resizes the remaining amount of work.
-//	 * @param ticks
-//	 */
-//	void setWorkRemaining(int ticks);
+	/**
+	 * Resizes the remaining amount of work.
+	 * @param ticks
+	 */
+	void setWorkRemaining(double size);
 
 	/**
 	 * Composes two monitors. The resulting monitor reports isCancelled() as OR, composes splits, 
@@ -86,14 +73,14 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 		return new ProgressMonitor() {
 			
 			@Override
-			public void worked(Status status, long work, String progressMessage, Object... details) {
+			public void worked(Status status, double work, String progressMessage, Object... details) {
 				ProgressMonitor.this.worked(status, work, progressMessage, details);
 				other.worked(status, work, progressMessage, details);
 			}
 			
 			@Override
-			public ProgressMonitor split(String taskName, long ticks, Object... details) {
-				return	ProgressMonitor.this.split(taskName, ticks, details).compose(other.split(taskName, ticks, details));
+			public ProgressMonitor split(String taskName, double size, Object... details) {
+				return	ProgressMonitor.this.split(taskName, size, details).compose(other.split(taskName, size, details));
 			}
 			
 			@Override
@@ -105,6 +92,12 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 			public void close() {
 				ProgressMonitor.this.close();
 				other.close();
+			}
+
+			@Override
+			public void setWorkRemaining(double size) {
+				ProgressMonitor.this.setWorkRemaining(size);
+				other.setWorkRemaining(size);				
 			}
 			
 		};

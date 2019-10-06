@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +40,11 @@ public class ProgressRecorder implements ProgressMonitor {
 	 * @author Pavel
 	 *
 	 */
-	public interface Step {
+	public interface Step extends Diagnostic {
 		
 		long getTime();
 		
-		Status getStatus();
-		
-		long getWorked();
-		
-		String getMessage();
-		
-		Object[] getDetails();
+		double getWorked();
 		
 	}
 	
@@ -86,55 +81,47 @@ public class ProgressRecorder implements ProgressMonitor {
 	}
 
 	@Override
-	public ProgressMonitor split(String taskName, long ticks, Object... details) {
+	public ProgressMonitor split(String taskName, double size, Object... data) {
 		if (isCancelled()) {
 			throw new CancellationException();
 		}
 		if (closed) {
 			throw new IllegalStateException("Monitor is closed: "+hashCode());
 		}
-		ProgressRecorder child = new ProgressEntry(this, taskName, ticks, details);
+		ProgressRecorder child = new ProgressEntry(this, taskName, size, Arrays.asList(data));
 		entries.add(child);
 		return child;
 	}
 
 	@Override
-	public void worked(Status status, long work, String progressMessage, Object... details) {
+	public void worked(Status status, double work, String progressMessage, Object... data) {
 		if (closed) {
 //			throw new IllegalStateException("Monitor is closed");
 			progressMessage += " (Warning - Reporting progress to a closed monitor)";
 		}
 		String theProgressMessage = progressMessage;
-		entries.add(new Step() {
+		
+		class BasicStep extends BasicDiagnostic implements Step {
+
+			public BasicStep() {
+				super(status, theProgressMessage, data);
+			}
 
 			long now = System.currentTimeMillis();			
-			
-			@Override
-			public long getWorked() {
-				return work;
-			}
-			
+
 			@Override
 			public long getTime() {
 				return now;
 			}
-			
+
 			@Override
-			public Status getStatus() {
-				return status;
+			public double getWorked() {
+				return work;
 			}
 			
-			@Override
-			public String getMessage() {
-				return theProgressMessage;
-			}
-			
-			@Override
-			public Object[] getDetails() {
-				return details;
-			}
-			
-		});
+		}
+		
+		entries.add(new BasicStep());
 	}
 	
 	/**
@@ -160,12 +147,12 @@ public class ProgressRecorder implements ProgressMonitor {
 				jwe.put("worked", we.getWorked());
 				jwe.put("time", we.getTime());
 				jwe.put("message", we.getMessage());
-				if (we.getDetails().length > 0) {
+				if (we.getData().size() > 0) {
 					JSONArray jd = new JSONArray();
-					for (Object d: we.getDetails()) {
+					for (Object d: we.getData()) {
 						jd.put(detailToJSON(d));
 					}
-					jwe.put("details", jd); 					
+					jwe.put("data", jd); 					
 				}
 				jSteps.put(jwe);
 			});
@@ -213,8 +200,8 @@ public class ProgressRecorder implements ProgressMonitor {
 				mwe.put("worked", we.getWorked());
 				mwe.put("time", we.getTime());
 				mwe.put("message", we.getMessage());
-				if (we.getDetails().length > 0) {
-					mwe.put("details", we.getDetails());					
+				if (we.getData().size() > 0) {
+					mwe.put("data", we.getData());					
 				}
 			});
 			ret.put("steps", mSteps);		
@@ -231,15 +218,19 @@ public class ProgressRecorder implements ProgressMonitor {
 		for (Object entry: entries) {
 			if (entry instanceof Step) {
 				Step step = (Step) entry;
-				monitor.worked(step.getStatus(),  step.getWorked(),  step.getMessage(), step.getDetails());
+				monitor.worked(step.getStatus(),  step.getWorked(),  step.getMessage(), step.getData());
 			} else {
 				@SuppressWarnings("resource")
 				ProgressEntry child = (ProgressEntry) entry;
-				try (ProgressMonitor subMonitor = monitor.split(child.getName(), child.getTotalWork(), child.getDetails())) {
+				try (ProgressMonitor subMonitor = monitor.split(child.getName(), child.getTotalWork(), child.getData())) {
 					child.replay(subMonitor);
 				}
 			}
 		}
+	}
+	@Override
+	public void setWorkRemaining(double size) {
+		// TODO - record too?		
 	}
 
 }

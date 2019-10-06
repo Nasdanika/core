@@ -6,8 +6,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.nasdanika.common.ProgressMonitor.Status;
-
 /**
  * Wraps a {@link Command} into a {@link Callable}. This class doesn't split the monitor for itself. The monitor is closed upon completion of the execution of the command. 
  * Executes the work only once inside a lock and caches the result. If the monitor is cancelled when ``call()`` is invoked then the command is not executed

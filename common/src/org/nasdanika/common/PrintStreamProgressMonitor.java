@@ -54,13 +54,13 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public ProgressMonitor split(String taskName, long ticks, Object... details) {
+	public ProgressMonitor split(String taskName, double size, Object... data) {
 		if (isCancelled()) {
 			throw new CancellationException();
 		}
-		out.println(indent+"  "+taskName+" ("+ticks+")");
-		if (details != null) {
-			for (Object d: details) {
+		out.println(indent+"  "+taskName+" ("+size+")");
+		if (data != null) {
+			for (Object d: data) {
 				out.println(formatDetail(d, indent + "    "));			
 			}
 		}
@@ -85,13 +85,13 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void worked(Status status, long work, String progressMessage, Object... details) {
-		out.println(indent+"  ["+status+" "+work+"] "+progressMessage+": "+Arrays.deepToString(details));
+	public void worked(Status status, double work, String progressMessage, Object... data) {
+		out.println(indent+"  ["+status+" "+work+"] "+progressMessage+": "+Arrays.deepToString(data));
 	}
 
-//	@Override
-//	public void setWorkRemaining(int ticks) {
-//		// NOP
-//	}
+	@Override
+	public void setWorkRemaining(double size) {
+		// NOP
+	}
 
 }
