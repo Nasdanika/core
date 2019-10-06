@@ -26,6 +26,8 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
+import org.nasdanika.emf.EReferenceSourcePredicate;
+import org.nasdanika.emf.EReferenceTargetPredicate;
 import org.nasdanika.emf.LocaleLanguageResourceLocator;
 import org.nasdanika.emf.localization.RussianResourceLocator;
 
@@ -181,11 +183,20 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter {
 		
 		/**
 		 * Collects child descriptors from registered ecore packages compatible with the ereference type.
+		 * @param object TODO
 		 * @param newChildDescriptors
 		 * @param eReference
 		 */
-		protected void collectEReferenceChildDescriptors(Collection<Object> newChildDescriptors, EReference eReference) {
+		protected void collectEReferenceChildDescriptors(Object object, Collection<Object> newChildDescriptors, EReference eReference) {
 			for (EObject child: collectTypes(eReference.getEReferenceType())) {
+				if (object instanceof EReferenceTargetPredicate && !((EReferenceTargetPredicate) object).acceptTarget(child, eReference)) {
+					continue;
+				}
+				if (child instanceof EReferenceSourcePredicate 
+						&& object instanceof EObject 
+						&& !((EReferenceSourcePredicate) child).acceptSource((EObject) object, eReference)) {
+					continue;
+				}
 				newChildDescriptors.add(createChildParameter(eReference, child));			
 			}		
 		}
