@@ -113,8 +113,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	}
 	
 	@Override
-	public boolean canExecute(ProgressMonitor progressMonitor) {
-		return executeCommand.canExecute(progressMonitor);
+	public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+		return executeCommand.diagnose(progressMonitor);
 	}
 
 	@Override

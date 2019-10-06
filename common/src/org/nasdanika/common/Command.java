@@ -8,18 +8,8 @@ package org.nasdanika.common;
  * @author Pavel Vlasov
  * @param T result type.
  */
-public interface Command<T> {
-	
-	/**
-	 * This method can be invoked before the actual command execution.
-	 * It may perform validations and initial setup to improve the chances of success of the execute(). 
-	 * @param progressMonitor Progress monitor to report validation/setup progress and any encountered problems.
-	 * @return true if all validations pass, false otherwise
-	 */
-	default boolean canExecute(ProgressMonitor progressMonitor) {
-		return true;
-	}
-		
+public interface Command<T>  extends Diagnosable {
+			
 	/**
 	 * Executes the command.
 	 * @param monitor Monitor to use.

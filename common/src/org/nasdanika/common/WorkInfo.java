@@ -16,5 +16,12 @@ public interface WorkInfo {
 	 * @return Display name of the work.
 	 */
 	String getName();
+	
+	/**
+	 * @return Work {@link Descriptor}. The descriptor can be used to auto-generate work input UI.
+	 */
+	default Descriptor getDescriptor() {
+		return null;
+	}
 
 }

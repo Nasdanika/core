@@ -88,21 +88,18 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		return childEntry.callable;
 	}	
 	
-	/**
-	 * Failing fast - returns false on the first child which returns false. 
-	 */
 	@Override
-	public boolean canExecute(ProgressMonitor progressMonitor) {		
+	public Diagnostic diagnose(ProgressMonitor progressMonitor) {
 		if (progressMonitor.isCancelled()) {
 			progressMonitor.worked(1, "Cancelled");
-			return false;
+			return new BasicDiagnostic(Status.CANCEL, "Progress monitor is cancelled", this);
 		}
+		Diagnostic ret = Command.super.diagnose(progressMonitor);
+		progressMonitor.setWorkRemaining(children.size() + noExecChildren.size());
 		for (CommandEntry<?> ce: noExecChildren) {
-			if (!ce.command.canExecute(progressMonitor.split(ce.name, ce.size, ce.data))) {
-				return false;
-			}
+			((DiagnosticChain) ret).add(ce.command.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
 		}
-		return Command.super.canExecute(progressMonitor);
+		return ret;
 	}
 
 	/**

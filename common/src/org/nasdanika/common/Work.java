@@ -76,5 +76,10 @@ public interface Work<T> extends Command<T>, WorkInfo, AutoCloseable {
 	default void close() throws Exception {		
 		
 	}
-	
+
+	@Override
+	default Diagnostic diagnose(ProgressMonitor progressMonitor) {
+		Descriptor descriptor = getDescriptor();
+		return descriptor == null ? Command.super.diagnose(progressMonitor) : descriptor.diagnose(progressMonitor);
+	}
 }

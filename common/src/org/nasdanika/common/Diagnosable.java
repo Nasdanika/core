@@ -9,9 +9,10 @@ public interface Diagnosable {
 	
 	/**
 	 * Performs self-diagnostic.
-	 * @param context Source of contextual information.
 	 * @return Diagnostic result.
 	 */
-	Diagnostic diagnose(Context context);
+	default Diagnostic diagnose(ProgressMonitor progressMonitor) {
+		return new BasicDiagnostic(Status.SUCCESS, "Diagnostic of "+this, this);
+	};
 
 }
