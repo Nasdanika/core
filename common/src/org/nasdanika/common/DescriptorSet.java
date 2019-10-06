@@ -11,21 +11,21 @@ import java.util.stream.Collectors;
  * @author Pavel
  *
  */
-public interface CompositeDescriptor extends Descriptor, Composeable<CompositeDescriptor> {
+public interface DescriptorSet extends Descriptor, Composeable<DescriptorSet> {
 	
-	List<Descriptor> getChildren();
+	List<Descriptor> getDescriptors();
 	
 	@Override
 	default Diagnostic diagnose(ProgressMonitor progressMonitor) {
 		BasicDiagnostic ret = new BasicDiagnostic(Status.INFO, "Diagnostic of "+this, this);
-		progressMonitor.setWorkRemaining(getChildren().size());
-		for (Descriptor child: getChildren()) {
+		progressMonitor.setWorkRemaining(getDescriptors().size());
+		for (Descriptor child: getDescriptors()) {
 			ret.add(child.diagnose(progressMonitor.split("Diagnosing " + child, 1, child)));
 		}
 		return ret;
 	}
 	
-	default CompositeDescriptor mapNames(Function<String,String> nameMapper) {		
+	default DescriptorSet mapNames(Function<String,String> nameMapper) {		
 		return map(descriptor -> {
 			if (descriptor instanceof NamedDescriptor) {
 				return ((NamedDescriptor) descriptor).mapName(nameMapper);
@@ -35,40 +35,40 @@ public interface CompositeDescriptor extends Descriptor, Composeable<CompositeDe
 		
 	}
 	
-	default CompositeDescriptor map(Function<Descriptor,Descriptor> mapper) {
+	default DescriptorSet map(Function<Descriptor,Descriptor> mapper) {
 
-		return new CompositeDescriptor() {
+		return new DescriptorSet() {
 			
 			@Override
 			public String getLabel() {
-				return CompositeDescriptor.this.getLabel();
+				return DescriptorSet.this.getLabel();
 			}
 			
 			@Override
 			public String getIcon() {
-				return CompositeDescriptor.this.getIcon();
+				return DescriptorSet.this.getIcon();
 			}
 			
 			@Override
 			public String getDescription() {
-				return CompositeDescriptor.this.getDescription();
+				return DescriptorSet.this.getDescription();
 			}
 			
 			@Override
-			public List<Descriptor> getChildren() {
-				return CompositeDescriptor.this.getChildren().stream().map(mapper).filter(Objects::nonNull).collect(Collectors.toList());
+			public List<Descriptor> getDescriptors() {
+				return DescriptorSet.this.getDescriptors().stream().map(mapper).filter(Objects::nonNull).collect(Collectors.toList());
 			}
 		};
 		
 		
 	}
 	
-	default CompositeDescriptor filter(Predicate<Descriptor> filter) {
+	default DescriptorSet filter(Predicate<Descriptor> filter) {
 		return map(d -> filter.test(d) ? d : null);
 	}
 	
 	@Override
-	default CompositeDescriptor compose(CompositeDescriptor other) {
+	default DescriptorSet compose(DescriptorSet other) {
 		// TODO - Names, services, diagnose incompatible named descriptors types - property and composite at the same name. Or maybe throw
 		// and exception right away - illegal argument
 		// set value to both - also diagnose type compatibility, e.g. String and Map (or rely on conversion?).
