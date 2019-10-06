@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -25,18 +26,21 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		CommandCallable<E> callable;
 		String name;
 		long size;
-		Object[] details;
+		List<Object> data = new ArrayList<>();
 		
 		CommandEntry(
 				Command<E> command, 
 				CommandCallable<E> callable, 
 				String name, 
 				long size,
-				Object[] details) {
+				List<Object> data) {
 			this.command = command;
 			this.callable = callable;
 			this.name = name;
 			this.size = size;
+			if (data != null) {
+				this.data.addAll(data);
+			}
 		}		
 		
 	}
@@ -64,8 +68,8 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param size
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
-	public Callable<E> add(Command<E> child, String name, long size, Object... details) {
-		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child, size), name, size, details);
+	public Callable<E> add(Command<E> child, String name, long size, Object... data) {
+		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child, size), name, size, Arrays.asList(data));
 		children.add(childEntry);
 		return childEntry.callable;
 	}
@@ -78,8 +82,8 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param size
 	 * @return {@link CommandCallable} wrapping the command.
 	 */
-	public <R> Callable<R> addNoExec(Command<R> child, String name, long size, Object... details) {
-		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child, size), name, size, details);
+	public <R> Callable<R> addNoExec(Command<R> child, String name, long size, Object... data) {
+		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child, size), name, size, Arrays.asList(data));
 		noExecChildren.add(childEntry);
 		return childEntry.callable;
 	}	
@@ -94,7 +98,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 			return false;
 		}
 		for (CommandEntry<?> ce: noExecChildren) {
-			if (!ce.command.canExecute(progressMonitor.split(ce.name, ce.size, ce.details))) {
+			if (!ce.command.canExecute(progressMonitor.split(ce.name, ce.size, ce.data))) {
 				return false;
 			}
 		}
@@ -113,10 +117,10 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		try {
 			// Split the monitor
 			for (CommandEntry<?> ce: noExecChildren) {
-				ce.callable.setMonitor(progressMonitor.split(ce.name, ce.size, ce.details));
+				ce.callable.setMonitor(progressMonitor.split(ce.name, ce.size, ce.data));
 			}
 			for (CommandEntry<E> ce: children) {
-				ce.callable.setMonitor(progressMonitor.split(ce.name, ce.size, ce.details));
+				ce.callable.setMonitor(progressMonitor.split(ce.name, ce.size, ce.data));
 			}
 	
 			List<CommandEntry<E>> theChildren = new ArrayList<>(children);
@@ -133,7 +137,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 							try {
 								ce.callable.call();
 							} catch (Exception e) {
-								handleException(ce.name, ce.command, e, ce.details);
+								handleException(ce.name, ce.command, e, ce.data);
 							}
 						});					
 					} else {
@@ -161,7 +165,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	 * @param command
 	 * @param e
 	 */
-	protected void handleException(String name, Command<E> command, Exception e, Object[] details) {
+	protected void handleException(String name, Command<E> command, Exception e, List<Object> data) {
 		
 	}
 

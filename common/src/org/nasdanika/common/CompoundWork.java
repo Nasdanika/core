@@ -31,8 +31,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void handleException(String name, Command<E> command, Exception e, Object[] details) {
-				CompoundWork.this.handleException((Work<E>) details[0], e, false);
+			protected void handleException(String name, Command<E> command, Exception e, List<Object> data) {
+				CompoundWork.this.handleException((Work<E>) data.get(0), e, false);
 			}
 			
 		};
@@ -46,8 +46,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void handleException(String name, Command<Boolean> command, Exception e, Object[] details) {
-				CompoundWork.this.handleException((Work<E>) details[0], e, true);
+			protected void handleException(String name, Command<Boolean> command, Exception e, List<Object> data) {
+				CompoundWork.this.handleException((Work<E>) data.get(0), e, true);
 			}
 			
 		};

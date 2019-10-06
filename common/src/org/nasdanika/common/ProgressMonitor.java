@@ -73,14 +73,14 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 		return new ProgressMonitor() {
 			
 			@Override
-			public void worked(Status status, double work, String progressMessage, Object... details) {
-				ProgressMonitor.this.worked(status, work, progressMessage, details);
-				other.worked(status, work, progressMessage, details);
+			public void worked(Status status, double work, String progressMessage, Object... data) {
+				ProgressMonitor.this.worked(status, work, progressMessage, data);
+				other.worked(status, work, progressMessage, data);
 			}
 			
 			@Override
-			public ProgressMonitor split(String taskName, double size, Object... details) {
-				return	ProgressMonitor.this.split(taskName, size, details).compose(other.split(taskName, size, details));
+			public ProgressMonitor split(String taskName, double size, Object... data) {
+				return	ProgressMonitor.this.split(taskName, size, data).compose(other.split(taskName, size, data));
 			}
 			
 			@Override
