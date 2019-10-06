@@ -5,7 +5,8 @@ public class DiagnosticException extends RuntimeException {
 
 	private Diagnostic diagnostic;
 
-	public DiagnosticException(Diagnostic diagnostic) {
+	public DiagnosticException(String message, Diagnostic diagnostic) {
+		super(message);
 		this.diagnostic = diagnostic;
 	}
 	
