@@ -5,7 +5,6 @@ package org.nasdanika.emf.presentation;
 import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.nasdanika.codegen.provider.CodegenEditPlugin;
 
 /**
  * This is the central singleton for the App editor plugin.
@@ -37,10 +36,7 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public NasdanikaEditorPlugin() {
-		super
-			(new ResourceLocator [] {
-				CodegenEditPlugin.INSTANCE,
-			});
+		super(new ResourceLocator [] { });
 	}
 
 	/**

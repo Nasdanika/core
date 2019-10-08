@@ -12,11 +12,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.emf.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
- org.nasdanika.vinci.app.edit;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport,
- org.nasdanika.codegen.edit;visibility:=reexport,
  org.eclipse.eef.properties.ui,
  org.eclipse.sirius.ui.properties;bundle-version="6.2.1",
  org.eclipse.sirius.ui;bundle-version="6.2.1",
