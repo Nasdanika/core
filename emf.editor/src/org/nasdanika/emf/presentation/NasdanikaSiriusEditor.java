@@ -1100,7 +1100,7 @@ public class NasdanikaSiriusEditor
 		try {
 			ModelingProject modelingProject = (ModelingProject) project.getNature(ModelingProject.NATURE_ID);
 			if (modelingProject == null) {
-				ErrorDialog.openError(site.getShell(), "Not a modeling project", "Model shall be contained in a modeling project", null);
+				ErrorDialog.openError(site.getShell(), "Not a modeling project", "The model shall be contained in a modeling project - add the modeling nature.", null);
 			} else {
 				Session session = modelingProject.getSession();
 				if (session == null) {
@@ -1422,7 +1422,7 @@ public class NasdanikaSiriusEditor
     
 	@Override
 	public String getContributorId() {
-		return "org.nasdanika.vinci.presentation.editor";
+		return "org.nasdanika.emf.presentation.editor";
 	}
 
 	@Override

@@ -407,7 +407,8 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		if (createActions != null) {
 			for (Iterator<IAction> actions = createActions.iterator(); actions.hasNext();) {
 				IAction action = actions.next();
-				StringTokenizer st = new StringTokenizer(action.getText(), "|");
+				String actionText = action.getText();
+				StringTokenizer st = new StringTokenizer(actionText, "|");
 				if (st.countTokens() == 2) {
 					String text = st.nextToken().trim();
 					Collection<IAction> submenuActions = createSubmenuActions.get(text);

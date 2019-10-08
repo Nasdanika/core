@@ -17,8 +17,11 @@ import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
@@ -167,70 +170,103 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 					}
 					
 				};
+	}	  
+		
+	@Override
+	protected boolean shouldComposeCreationImage() {
+		return true;
 	}
-	  
-		
-		@Override
-		protected boolean shouldComposeCreationImage() {
-			return true;
-		}
-		
-		public static boolean isBlank(String str) {
-			return str == null || str.trim().length() == 0;
-		}
-		
-		/**
-		 * Collects child descriptors from registered ecore packages compatible with the ereference type.
-		 * @param object TODO
-		 * @param newChildDescriptors
-		 * @param eReference
-		 */
-		protected void collectEReferenceChildDescriptors(Object object, Collection<Object> newChildDescriptors, EReference eReference) {
-			for (EObject child: collectTypes(eReference.getEReferenceType())) {
-				if (accept((EObject) object, eReference, child)) {					
-					EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
-					if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
-						newChildDescriptors.add(createChildParameter(eReference, child));			
-					}
-				}
-			}		
-		}
-		
-		/**
-		 * Iterates over registered ecore packages. Collects and instantiates concrete subclasses. 
-		 * @return
-		 */
-		public List<EObject> collectTypes(EClass type) {
-			AdapterFactory rootAdapterFactory = getRootAdapterFactory();
-			List<EObject> ret = new ArrayList<>();
-			IExtensionRegistry registry = RegistryFactory.getRegistry();
-			if (registry != null) {
-				IConfigurationElement[] configElems = registry.getConfigurationElementsFor("org.eclipse.emf.ecore.generated_package");
-				for (IConfigurationElement elem : configElems) {
-					String uri = elem.getAttribute("uri");
-					if (!isBlank(uri)) {
-						EPackage epkg = EPackage.Registry.INSTANCE.getEPackage(uri);
-						if (epkg != null) {
-							for (EClassifier eClassifier: epkg.getEClassifiers()) {
-								if (eClassifier instanceof EClass 
-										&& !((EClass) eClassifier).isAbstract() 
-										&& type.isSuperTypeOf((EClass) eClassifier)
-										&& rootAdapterFactory.isFactoryForType(eClassifier)) {
-									
-									EFactory eFactory = epkg.getEFactoryInstance();
-									ret.add(eFactory.create((EClass) eClassifier));						
-								}
-							}
-						}
-					}
+	
+	public static boolean isBlank(String str) {
+		return str == null || str.trim().length() == 0;
+	}
+	
+	/**
+	 * Collects child descriptors from registered ecore packages compatible with the ereference type.
+	 * @param object TODO
+	 * @param newChildDescriptors
+	 * @param eReference
+	 */
+	protected void collectEReferenceChildDescriptors(Object object, Collection<Object> newChildDescriptors, EReference eReference) {
+		for (EObject child: collectTypes((EObject) object, eReference.getEReferenceType())) {
+			if (accept((EObject) object, eReference, child)) {					
+				EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
+				if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
+					newChildDescriptors.add(createChildParameter(eReference, child));			
 				}
 			}
-			return ret;
-		}
+		}		
+	}
+	
+	/**
+	 * Iterates over registered ecore packages. Collects and instantiates concrete subclasses. 
+	 * @return
+	 */
+	public List<EObject> collectTypes(EObject object, EClass type) {
+		AdapterFactory rootAdapterFactory = getRootAdapterFactory();
+		Registry ePackageRegistry = EPackage.Registry.INSTANCE;
+		Resource resource = type.eResource();
+		if (resource != null) {
+			ResourceSet resourceSet = resource.getResourceSet();
+			if (resourceSet != null) {
+				ePackageRegistry = resourceSet.getPackageRegistry();
+			}
+		}		
+		List<EObject> ret = new ArrayList<>();
+		for (String nsUri: ePackageRegistry.keySet()) {
+			EPackage epkg = ePackageRegistry.getEPackage(nsUri);
+			for (EClassifier eClassifier: epkg.getEClassifiers()) {
+				if (eClassifier instanceof EClass 
+						&& !((EClass) eClassifier).isAbstract() 
+						&& type.isSuperTypeOf((EClass) eClassifier)) {
 
-		@Override
-		public boolean accept(EObject source, EReference eReference, EObject target) {
-			return true;
+					System.out.println(rootAdapterFactory+", "+eClassifier+": " + rootAdapterFactory.isFactoryForType(eClassifier));
+					
+					EFactory eFactory = epkg.getEFactoryInstance();
+					ret.add(eFactory.create((EClass) eClassifier));						
+				}
+			}
 		}
+//		IExtensionRegistry registry = RegistryFactory.getRegistry();
+//		if (registry != null) {
+//			IConfigurationElement[] configElems = registry.getConfigurationElementsFor("org.eclipse.emf.ecore.generated_package");
+//			for (IConfigurationElement elem : configElems) {
+//				String uri = elem.getAttribute("uri");
+//				if (!isBlank(uri)) {
+//					EPackage epkg = ePackageRegistry.getEPackage(uri);
+//					if (epkg != null) {
+//						for (EClassifier eClassifier: epkg.getEClassifiers()) {
+//							if (eClassifier instanceof EClass 
+//									&& !((EClass) eClassifier).isAbstract() 
+//									&& type.isSuperTypeOf((EClass) eClassifier)
+//									&& rootAdapterFactory.isFactoryForType(eClassifier)) {
+//
+//								
+//								EFactory eFactory = epkg.getEFactoryInstance();
+//								ret.add(eFactory.create((EClass) eClassifier));						
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+		return ret;
+	}
+
+	@Override
+	public boolean accept(EObject source, EReference eReference, EObject target) {
+		return true;
+	}
+	
+	/**
+	 * Always qualify containment references.
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		if (feature instanceof EReference && ((EReference) feature).isContainment()) {
+			return getString("_UI_CreateChild_text2", new Object[] { getTypeText(child), getFeatureText(feature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
+	}		
 	
 }
