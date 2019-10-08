@@ -26,8 +26,6 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
-import org.nasdanika.emf.EReferenceSourcePredicate;
-import org.nasdanika.emf.EReferenceTargetPredicate;
 import org.nasdanika.emf.LocaleLanguageResourceLocator;
 import org.nasdanika.emf.localization.RussianResourceLocator;
 
@@ -37,7 +35,7 @@ import org.nasdanika.emf.localization.RussianResourceLocator;
  * @author Pavel
  *
  */
-public class NasdanikaItemProviderAdapter extends ItemProviderAdapter {
+public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements EReferencePredicate {
 	
 	protected MarkdownHelper markdownHelper = new MarkdownHelper();
 
@@ -189,15 +187,12 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter {
 		 */
 		protected void collectEReferenceChildDescriptors(Object object, Collection<Object> newChildDescriptors, EReference eReference) {
 			for (EObject child: collectTypes(eReference.getEReferenceType())) {
-				if (object instanceof EReferenceTargetPredicate && !((EReferenceTargetPredicate) object).acceptTarget(child, eReference)) {
-					continue;
+				if (accept((EObject) object, eReference, child)) {					
+					EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
+					if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
+						newChildDescriptors.add(createChildParameter(eReference, child));			
+					}
 				}
-				if (child instanceof EReferenceSourcePredicate 
-						&& object instanceof EObject 
-						&& !((EReferenceSourcePredicate) child).acceptSource((EObject) object, eReference)) {
-					continue;
-				}
-				newChildDescriptors.add(createChildParameter(eReference, child));			
 			}		
 		}
 		
@@ -231,7 +226,11 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter {
 				}
 			}
 			return ret;
-		}	
-	  
+		}
+
+		@Override
+		public boolean accept(EObject source, EReference eReference, EObject target) {
+			return true;
+		}
 	
 }
