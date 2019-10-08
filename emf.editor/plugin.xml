@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+<!--
+   <extension point="org.eclipse.ui.editors">
+   
+      <editor
+            id="..."
+            name="%_UI_...SiriusEditor_label"
+            icon="..."
+            extensions="..."
+            class="org.nasdanika.emf.presentation.NasdanikaSiriusEditor"
+            contributorClass="org.nasdanika.emf.presentation.NasdanikaActionBarContributor">
+      </editor>
+      
+   </extension>
+-->
+      
+  <extension point="org.eclipse.sirius.ui.siriusPropertySheetPageProvider">
+     <siriusPropertySheetPageProvider
+           class="org.nasdanika.emf.presentation.NasdanikaPropertySheetPageProvider"
+           contributorId="org.nasdanika.emf.presentation.editor">
+     </siriusPropertySheetPageProvider>
+  </extension>
+   
+</plugin>

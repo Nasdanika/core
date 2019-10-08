@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common.descriptors;
 
 import java.util.function.Function;
 

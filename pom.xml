@@ -15,7 +15,7 @@
 	</prerequisites>
 
 	<properties>
-		<tycho-version>1.3.0</tycho-version>
+		<tycho-version>1.4.0</tycho-version>
 	</properties>
 
 	<repositories>
@@ -186,6 +186,7 @@
 	<modules>
 		<module>emf</module>		
 		<module>emf.edit</module>		
+		<module>emf.editor</module>		
 		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>

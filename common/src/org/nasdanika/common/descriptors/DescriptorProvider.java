@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common.descriptors;
 
 /**
  * Provider of a descriptor backed by a data source.

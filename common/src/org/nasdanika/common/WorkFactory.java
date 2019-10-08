@@ -7,7 +7,7 @@ package org.nasdanika.common;
  *
  * @param <T>
  */
-public interface WorkFactory<T> extends DescriptorProvider<DescriptorSet, Context> {
+public interface WorkFactory<T> {
 		
 	/**
 	 * Creates work for a given context.

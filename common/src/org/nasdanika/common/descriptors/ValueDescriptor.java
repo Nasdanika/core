@@ -1,6 +1,4 @@
-package org.nasdanika.common;
-
-import java.util.List;
+package org.nasdanika.common.descriptors;
 
 /**
  * Descriptor of a value which can be accessed and modified.
@@ -20,12 +18,15 @@ public interface ValueDescriptor<T> extends Descriptor {
 	
 	T getType();
 	
-	List<T> getChoices();
-	
 	/**
 	 * Indicates that get() method shall return non-null value.
 	 * @return
 	 */
 	boolean isRequired();
+	
+	/**
+	 * @return true if value can be set, false if it can only be read.
+	 */
+	boolean isEditable();
 
 }

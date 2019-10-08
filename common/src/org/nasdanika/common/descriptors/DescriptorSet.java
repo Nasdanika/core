@@ -1,10 +1,14 @@
-package org.nasdanika.common;
+package org.nasdanika.common.descriptors;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+
+import org.nasdanika.common.BasicDiagnostic;
+import org.nasdanika.common.Composeable;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 
 /**
  * Grouping of descriptors.
@@ -35,33 +39,7 @@ public interface DescriptorSet extends Descriptor, Composeable<DescriptorSet> {
 		
 	}
 	
-	default DescriptorSet map(Function<Descriptor,Descriptor> mapper) {
-
-		return new DescriptorSet() {
-			
-			@Override
-			public String getLabel() {
-				return DescriptorSet.this.getLabel();
-			}
-			
-			@Override
-			public String getIcon() {
-				return DescriptorSet.this.getIcon();
-			}
-			
-			@Override
-			public String getDescription() {
-				return DescriptorSet.this.getDescription();
-			}
-			
-			@Override
-			public List<Descriptor> getDescriptors() {
-				return DescriptorSet.this.getDescriptors().stream().map(mapper).filter(Objects::nonNull).collect(Collectors.toList());
-			}
-		};
-		
-		
-	}
+	DescriptorSet map(Function<Descriptor,Descriptor> mapper);
 	
 	default DescriptorSet filter(Predicate<Descriptor> filter) {
 		return map(d -> filter.test(d) ? d : null);
