@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EClass;
@@ -219,8 +216,6 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 				if (eClassifier instanceof EClass 
 						&& !((EClass) eClassifier).isAbstract() 
 						&& type.isSuperTypeOf((EClass) eClassifier)) {
-
-					System.out.println(rootAdapterFactory+", "+eClassifier+": " + rootAdapterFactory.isFactoryForType(eClassifier));
 					
 					EFactory eFactory = epkg.getEFactoryInstance();
 					ret.add(eFactory.create((EClass) eClassifier));						
