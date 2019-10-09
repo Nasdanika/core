@@ -200,7 +200,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	 * @return
 	 */
 	public List<EObject> collectTypes(EObject object, EClass type) {
-		AdapterFactory rootAdapterFactory = getRootAdapterFactory();
+//		AdapterFactory rootAdapterFactory = getRootAdapterFactory();
 		Registry ePackageRegistry = EPackage.Registry.INSTANCE;
 		Resource resource = type.eResource();
 		if (resource != null) {
@@ -210,7 +210,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			}
 		}		
 		List<EObject> ret = new ArrayList<>();
-		for (String nsUri: ePackageRegistry.keySet()) {
+		for (String nsUri: new ArrayList<String>(ePackageRegistry.keySet())) {
 			EPackage epkg = ePackageRegistry.getEPackage(nsUri);
 			for (EClassifier eClassifier: epkg.getEClassifiers()) {
 				if (eClassifier instanceof EClass 
