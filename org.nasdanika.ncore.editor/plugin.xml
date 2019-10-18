@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated ncore -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.nasdanika.ncore.presentation.NcoreModelWizardID"
+            name="%_UI_NcoreModelWizard_label"
+            class="org.nasdanika.ncore.presentation.NcoreModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/NcoreModelFile.gif">
+         <description>%_UI_NcoreModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated ncore -->
+      <editor
+            id="org.nasdanika.ncore.presentation.NcoreEditorID"
+            name="%_UI_NcoreEditor_label"
+            icon="icons/full/obj16/NcoreModelFile.gif"
+            extensions="ncore"
+            class="org.nasdanika.ncore.presentation.NcoreEditor"
+            contributorClass="org.nasdanika.ncore.presentation.NcoreActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
