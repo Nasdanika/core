@@ -187,6 +187,10 @@
 		<module>emf</module>		
 		<module>emf.edit</module>		
 		<module>emf.editor</module>		
+
+		<module>ncore</module>		
+		<module>ncore.edit</module>		
+
 		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>
