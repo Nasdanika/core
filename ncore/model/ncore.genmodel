@@ -6,7 +6,8 @@
     featureDelegation="Dynamic" complianceLevel="8.0" copyrightFields="false" providerRootExtendsClass="org.nasdanika.emf.edit.NasdanikaItemProviderAdapter"
     operationReflection="true" importOrganizing="true">
   <foreignModel>ncore.ecore</foreignModel>
-  <genPackages prefix="Ncore" disposableProviderFactory="true" ecorePackage="ncore.ecore#/">
+  <genPackages prefix="Ncore" basePackage="org.nasdanika" disposableProviderFactory="true"
+      ecorePackage="ncore.ecore#/">
     <genClasses ecoreClass="ncore.ecore#//ModelElement">
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>
     </genClasses>

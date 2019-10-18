@@ -16,4 +16,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.xmi;bundle-version="2.15.0";visibility:=reexport,
  org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
-Automatic-Module-Name: org.nasdanika.vinci.bootstrap
+Automatic-Module-Name: org.nasdanika.ncore
