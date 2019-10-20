@@ -17,12 +17,22 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getTitle <em>Title</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ModelElementImpl extends MinimalEObjectImpl.Container implements ModelElement {
+public abstract class ModelElementImpl extends MinimalEObjectImpl.Container implements ModelElement {
+	/**
+	 * The default value of the '{@link #getTitle() <em>Title</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTitle()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TITLE_EDEFAULT = null;
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -68,6 +78,26 @@ public class ModelElementImpl extends MinimalEObjectImpl.Container implements Mo
 	 * @generated
 	 */
 	@Override
+	public String getTitle() {
+		return (String)eDynamicGet(NcorePackage.MODEL_ELEMENT__TITLE, NcorePackage.Literals.MODEL_ELEMENT__TITLE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTitle(String newTitle) {
+		eDynamicSet(NcorePackage.MODEL_ELEMENT__TITLE, NcorePackage.Literals.MODEL_ELEMENT__TITLE, newTitle);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getDescription() {
 		return (String)eDynamicGet(NcorePackage.MODEL_ELEMENT__DESCRIPTION, NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION, true, true);
 	}
@@ -90,6 +120,8 @@ public class ModelElementImpl extends MinimalEObjectImpl.Container implements Mo
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.MODEL_ELEMENT__TITLE:
+				return getTitle();
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return getDescription();
 		}
@@ -104,6 +136,9 @@ public class ModelElementImpl extends MinimalEObjectImpl.Container implements Mo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.MODEL_ELEMENT__TITLE:
+				setTitle((String)newValue);
+				return;
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
@@ -119,6 +154,9 @@ public class ModelElementImpl extends MinimalEObjectImpl.Container implements Mo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MODEL_ELEMENT__TITLE:
+				setTitle(TITLE_EDEFAULT);
+				return;
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
@@ -134,6 +172,8 @@ public class ModelElementImpl extends MinimalEObjectImpl.Container implements Mo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MODEL_ELEMENT__TITLE:
+				return TITLE_EDEFAULT == null ? getTitle() != null : !TITLE_EDEFAULT.equals(getTitle());
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
 		}

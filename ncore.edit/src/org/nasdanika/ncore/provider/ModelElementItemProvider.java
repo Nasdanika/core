@@ -61,9 +61,32 @@ public class ModelElementItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addTitlePropertyDescriptor(object);
 			addDescriptionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Title feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTitlePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ModelElement_title_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ModelElement_title_feature", "_UI_ModelElement_type"),
+				 NcorePackage.Literals.MODEL_ELEMENT__TITLE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -117,7 +140,7 @@ public class ModelElementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = crop(((ModelElement)object).getDescription());
+		String label = ((ModelElement)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ModelElement_type") :
 			getString("_UI_ModelElement_type") + " " + label;
@@ -136,6 +159,7 @@ public class ModelElementItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ModelElement.class)) {
+			case NcorePackage.MODEL_ELEMENT__TITLE:
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

@@ -16,6 +16,11 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -28,6 +33,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
+import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSupport;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -46,6 +52,8 @@ import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.emf.edit.ui.dnd.ViewerDragAdapter;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
+import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
@@ -705,16 +713,19 @@ public class NasdanikaSiriusEditor
 		selectionViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		selectionViewer.setUseHashlookup(true);
 
-		selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
+		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
+
 		selectionViewer.setInput(getEditingDomain().getResourceSet());
 		ViewerFilter filter = new ViewerFilter() {
 			
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				if (parentElement instanceof ResourceSet && element instanceof Resource) {
-					// Should be OK for now, extend later as needed.
-					String uriString = ((Resource) element).getURI().toString();
-					return uriString.endsWith(".vinci") || uriString.endsWith(".codegen");
+					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+					URI inputURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+					URI resourceURI = ((Resource) element).getURI();
+					// Showing only the input. 
+					return inputURI.equals(resourceURI);
 				}
 				return true;
 			}
@@ -725,6 +736,7 @@ public class NasdanikaSiriusEditor
 		viewerPane.setTitle(getEditingDomain().getResourceSet());
 
 		new AdapterFactoryTreeEditor(selectionViewer.getTree(), getAdapterFactory());
+		new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(getEditingDomain(), selectionViewer));
 
 		createContextMenuFor(selectionViewer);
 		int pageIndex = addPage(viewerPane.getControl());
@@ -862,7 +874,11 @@ public class NasdanikaSiriusEditor
 					contentOutlineViewer.setUseHashlookup(true);
 					contentOutlineViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 					contentOutlineViewer.setLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()));
+					contentOutlineViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), new DiagnosticDecorator(getEditingDomain(), contentOutlineViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
 					contentOutlineViewer.setInput(getEditingDomain().getResourceSet());
+
+					new ColumnViewerInformationControlToolTipSupport(contentOutlineViewer, new DiagnosticDecorator.EditingDomainLocationListener(getEditingDomain(), contentOutlineViewer));
+
 
 					// Make sure our popups work.
 					//
@@ -915,7 +931,6 @@ public class NasdanikaSiriusEditor
 	 * @generated NOT
 	 */
 	public IPropertySheetPage getPropertySheetPage() {
-		@SuppressWarnings("restriction")
 		IEEFTabbedPropertySheetPageContributor contributor = new ContributorWrapper(this, getContributorId());
 		
 		contributedPage = new EEFTabbedPropertySheetPage(contributor) { 
@@ -929,7 +944,7 @@ public class NasdanikaSiriusEditor
 		};
 		
 //		PropertySheetPage propertySheetPage =
-//			new ExtendedPropertySheetPage(getEditingDomain(), ExtendedPropertySheetPage.Decoration.NONE, null, 0, false) {
+//		new ExtendedPropertySheetPage(editingDomain, ExtendedPropertySheetPage.Decoration.LIVE, NcoreEditorPlugin.getPlugin().getDialogSettings(), 0, false) {
 //				@Override
 //				public void setSelectionToViewer(List<?> selection) {
 //					VinciSiriusEditor.this.setSelectionToViewer(selection);
@@ -1084,6 +1099,44 @@ public class NasdanikaSiriusEditor
 			setSelectionToViewer(targetObjects);
 		}
 	}
+	
+	protected IResourceChangeListener resourceChangeListener =
+			new IResourceChangeListener() {
+				@Override
+				public void resourceChanged(IResourceChangeEvent event) {
+					IResourceDelta delta = event.getDelta();
+					try {
+						class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+							protected ResourceSet resourceSet = getEditingDomain().getResourceSet();
+
+							@Override
+							public boolean visit(final IResourceDelta delta) {
+								if (delta.getResource().getType() == IResource.FILE) {
+									if (delta.getKind() == IResourceDelta.CHANGED) {
+										final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(delta.getFullPath().toString(), true), false);
+										if (resource != null) {
+											if ((delta.getFlags() & (IResourceDelta.MARKERS | IResourceDelta.CONTENT)) != 0) {
+												DiagnosticDecorator.DiagnosticAdapter.update(resource, markerHelper.getMarkerDiagnostics(resource, (IFile)delta.getResource(), false));
+											}
+										}
+									}
+									return false;
+								}
+
+								return true;
+							}
+
+						}
+
+						delta.accept(new ResourceDeltaVisitor());
+
+					}
+					catch (CoreException exception) {
+						NasdanikaEditorPlugin.INSTANCE.log(exception);
+					}
+				}
+			};
+	
 
 	/**
 	 * This is called during startup.
@@ -1138,7 +1191,7 @@ public class NasdanikaSiriusEditor
 		setPartName(editorInput.getName());
 		site.setSelectionProvider(this);
 		site.getPage().addPartListener(partListener);
-		//ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 	}
 	
 	protected void setInput(IEditorInput editorInput, Session session) {
@@ -1320,7 +1373,7 @@ public class NasdanikaSiriusEditor
 	public void dispose() {
 		updateProblemIndication = false;
 
-		//ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
 
 		IWorkbenchPartSite site = getSite();
 		if (site != null) {

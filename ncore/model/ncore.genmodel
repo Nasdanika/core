@@ -4,12 +4,99 @@
     creationSubmenus="true" modelPluginID="org.nasdanika.ncore" modelName="Ncore"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     featureDelegation="Dynamic" complianceLevel="8.0" copyrightFields="false" providerRootExtendsClass="org.nasdanika.emf.edit.NasdanikaItemProviderAdapter"
-    operationReflection="true" importOrganizing="true">
+    operationReflection="true" importOrganizing="true" decoration="Live">
   <foreignModel>ncore.ecore</foreignModel>
   <genPackages prefix="Ncore" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="ncore.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="ncore.ecore#//HttpMethod">
+      <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/GET"/>
+      <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/POST"/>
+      <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/PUT"/>
+      <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/DELETE"/>
+      <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/PATCH"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="ncore.ecore#//IContext"/>
     <genClasses ecoreClass="ncore.ecore#//ModelElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/title"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Entity">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Entity/id"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="ncore.ecore#//Party">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Party/contactMethods"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//ContactMethod"/>
+    <genClasses ecoreClass="ncore.ecore#//EMail">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//EMail/eMailAddress"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Phone">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/countryCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/areaCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/phoneNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/extension"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//PostalAddress">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/country"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/stateProvince"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/city"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/postalCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/line1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/line2"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//WebAddress">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//WebAddress/url"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="ncore.ecore#//CommandFactory">
+      <genTypeParameters ecoreTypeParameter="ncore.ecore#//CommandFactory/T"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/required"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Provider">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Provider/implementation"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Value">
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/interpolate"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Null"/>
+    <genClasses ecoreClass="ncore.ecore#//Operation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Operation/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Array">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Array/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Context">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Context/elements"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="ncore.ecore#//Entry">
+      <genTypeParameters ecoreTypeParameter="ncore.ecore#//Entry/T"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//TypedEntry"/>
+    <genClasses ecoreClass="ncore.ecore#//ProviderEntry"/>
+    <genClasses ecoreClass="ncore.ecore#//Map">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Map/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Property"/>
+    <genClasses ecoreClass="ncore.ecore#//Function"/>
+    <genClasses ecoreClass="ncore.ecore#//List"/>
+    <genClasses ecoreClass="ncore.ecore#//Object"/>
+    <genClasses ecoreClass="ncore.ecore#//HttpCall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/method"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//HttpCall/headers"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/connectTimeout"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/readTimeout"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/successCode"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//RestOperation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//RestOperation/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//RestFunction"/>
   </genPackages>
 </genmodel:GenModel>

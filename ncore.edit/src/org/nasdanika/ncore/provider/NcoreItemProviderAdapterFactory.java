@@ -72,26 +72,509 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ModelElement} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ContactMethod} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ModelElementItemProvider modelElementItemProvider;
+	protected ContactMethodItemProvider contactMethodItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.ModelElement}.
+	 * This creates an adapter for a {@link org.nasdanika.ncore.ContactMethod}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createModelElementAdapter() {
-		if (modelElementItemProvider == null) {
-			modelElementItemProvider = new ModelElementItemProvider(this);
+	public Adapter createContactMethodAdapter() {
+		if (contactMethodItemProvider == null) {
+			contactMethodItemProvider = new ContactMethodItemProvider(this);
 		}
 
-		return modelElementItemProvider;
+		return contactMethodItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.EMail} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EMailItemProvider eMailItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.EMail}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEMailAdapter() {
+		if (eMailItemProvider == null) {
+			eMailItemProvider = new EMailItemProvider(this);
+		}
+
+		return eMailItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Phone} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PhoneItemProvider phoneItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Phone}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPhoneAdapter() {
+		if (phoneItemProvider == null) {
+			phoneItemProvider = new PhoneItemProvider(this);
+		}
+
+		return phoneItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.PostalAddress} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PostalAddressItemProvider postalAddressItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.PostalAddress}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPostalAddressAdapter() {
+		if (postalAddressItemProvider == null) {
+			postalAddressItemProvider = new PostalAddressItemProvider(this);
+		}
+
+		return postalAddressItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.WebAddress} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected WebAddressItemProvider webAddressItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.WebAddress}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createWebAddressAdapter() {
+		if (webAddressItemProvider == null) {
+			webAddressItemProvider = new WebAddressItemProvider(this);
+		}
+
+		return webAddressItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TypedElementItemProvider typedElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.TypedElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTypedElementAdapter() {
+		if (typedElementItemProvider == null) {
+			typedElementItemProvider = new TypedElementItemProvider(this);
+		}
+
+		return typedElementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Provider} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProviderItemProvider providerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Provider}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProviderAdapter() {
+		if (providerItemProvider == null) {
+			providerItemProvider = new ProviderItemProvider(this);
+		}
+
+		return providerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Value} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ValueItemProvider valueItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Value}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createValueAdapter() {
+		if (valueItemProvider == null) {
+			valueItemProvider = new ValueItemProvider(this);
+		}
+
+		return valueItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Null} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NullItemProvider nullItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Null}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNullAdapter() {
+		if (nullItemProvider == null) {
+			nullItemProvider = new NullItemProvider(this);
+		}
+
+		return nullItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Operation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OperationItemProvider operationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Operation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOperationAdapter() {
+		if (operationItemProvider == null) {
+			operationItemProvider = new OperationItemProvider(this);
+		}
+
+		return operationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Array} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ArrayItemProvider arrayItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Array}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createArrayAdapter() {
+		if (arrayItemProvider == null) {
+			arrayItemProvider = new ArrayItemProvider(this);
+		}
+
+		return arrayItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Context} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContextItemProvider contextItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Context}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContextAdapter() {
+		if (contextItemProvider == null) {
+			contextItemProvider = new ContextItemProvider(this);
+		}
+
+		return contextItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TypedEntryItemProvider typedEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.TypedEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTypedEntryAdapter() {
+		if (typedEntryItemProvider == null) {
+			typedEntryItemProvider = new TypedEntryItemProvider(this);
+		}
+
+		return typedEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ProviderEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProviderEntryItemProvider providerEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.ProviderEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProviderEntryAdapter() {
+		if (providerEntryItemProvider == null) {
+			providerEntryItemProvider = new ProviderEntryItemProvider(this);
+		}
+
+		return providerEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Map} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MapItemProvider mapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Map}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMapAdapter() {
+		if (mapItemProvider == null) {
+			mapItemProvider = new MapItemProvider(this);
+		}
+
+		return mapItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Property} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PropertyItemProvider propertyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Property}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPropertyAdapter() {
+		if (propertyItemProvider == null) {
+			propertyItemProvider = new PropertyItemProvider(this);
+		}
+
+		return propertyItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Function} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FunctionItemProvider functionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Function}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFunctionAdapter() {
+		if (functionItemProvider == null) {
+			functionItemProvider = new FunctionItemProvider(this);
+		}
+
+		return functionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.List} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ListItemProvider listItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.List}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createListAdapter() {
+		if (listItemProvider == null) {
+			listItemProvider = new ListItemProvider(this);
+		}
+
+		return listItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Object} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ObjectItemProvider objectItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Object}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createObjectAdapter() {
+		if (objectItemProvider == null) {
+			objectItemProvider = new ObjectItemProvider(this);
+		}
+
+		return objectItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.HttpCall} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HttpCallItemProvider httpCallItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.HttpCall}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHttpCallAdapter() {
+		if (httpCallItemProvider == null) {
+			httpCallItemProvider = new HttpCallItemProvider(this);
+		}
+
+		return httpCallItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.RestOperation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RestOperationItemProvider restOperationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.RestOperation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRestOperationAdapter() {
+		if (restOperationItemProvider == null) {
+			restOperationItemProvider = new RestOperationItemProvider(this);
+		}
+
+		return restOperationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.RestFunction} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RestFunctionItemProvider restFunctionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.RestFunction}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRestFunctionAdapter() {
+		if (restFunctionItemProvider == null) {
+			restFunctionItemProvider = new RestFunctionItemProvider(this);
+		}
+
+		return restFunctionItemProvider;
 	}
 
 	/**
@@ -199,7 +682,28 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	 */
 	@Override
 	public void dispose() {
-		if (modelElementItemProvider != null) modelElementItemProvider.dispose();
+		if (contactMethodItemProvider != null) contactMethodItemProvider.dispose();
+		if (eMailItemProvider != null) eMailItemProvider.dispose();
+		if (phoneItemProvider != null) phoneItemProvider.dispose();
+		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
+		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
+		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
+		if (providerItemProvider != null) providerItemProvider.dispose();
+		if (valueItemProvider != null) valueItemProvider.dispose();
+		if (nullItemProvider != null) nullItemProvider.dispose();
+		if (operationItemProvider != null) operationItemProvider.dispose();
+		if (arrayItemProvider != null) arrayItemProvider.dispose();
+		if (contextItemProvider != null) contextItemProvider.dispose();
+		if (typedEntryItemProvider != null) typedEntryItemProvider.dispose();
+		if (providerEntryItemProvider != null) providerEntryItemProvider.dispose();
+		if (mapItemProvider != null) mapItemProvider.dispose();
+		if (propertyItemProvider != null) propertyItemProvider.dispose();
+		if (functionItemProvider != null) functionItemProvider.dispose();
+		if (listItemProvider != null) listItemProvider.dispose();
+		if (objectItemProvider != null) objectItemProvider.dispose();
+		if (httpCallItemProvider != null) httpCallItemProvider.dispose();
+		if (restOperationItemProvider != null) restOperationItemProvider.dispose();
+		if (restFunctionItemProvider != null) restFunctionItemProvider.dispose();
 	}
 
 }
