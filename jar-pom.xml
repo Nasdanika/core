@@ -8,7 +8,7 @@
 	<name>Nasdanika Core Parent</name>
 	<description>Parent pom.</description>
 
-	<url>https://github.com/Nasdanika/html</url>
+	<url>https://github.com/Nasdanika/core</url>
 		
 	<properties>
 		<siteDir>html/${project.version}</siteDir>
@@ -36,6 +36,11 @@
 	    </extensions>
 	
 		<plugins>
+                        <plugin>
+                              <groupId>pl.project13.maven</groupId>
+                              <artifactId>git-commit-id-plugin</artifactId>
+                              <version>3.0.1</version>
+                        </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -121,7 +126,7 @@
 			<distributionManagement>
 				<snapshotRepository>
 					<id>nasdanika-org</id>
-					<url>sftp://${env.FTP_SERVER}/core/${project.version}/${env.CIRCLE_BRANCH}/maven-repository</url>
+					<url>sftp://${env.FTP_SERVER}/core/${project.version}/${git.branch}/maven-repository</url>
 				</snapshotRepository>
 			</distributionManagement>
 		</profile>
