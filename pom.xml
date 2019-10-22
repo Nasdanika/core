@@ -37,41 +37,7 @@
 	</repositories>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<!-- 
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.eclipse.tycho.extras</groupId>
-					<artifactId>tycho-document-bundle-plugin</artifactId>
-					<version>${tycho-version}</version>
-					<configuration>
-						<javadocOptions>
-							<ignoreError>true</ignoreError>
-							
-				        	<doclet>ch.raffael.doclets.pegdown.PegdownDoclet</doclet>
-				        	<docletArtifacts>
-					        	<docletArtifact>
-					         		<groupId>ch.raffael.pegdown-doclet</groupId>
-					         		<artifactId>pegdown-doclet</artifactId>
-					        		<version>1.1</version>
-					        	</docletArtifact>
-				        	</docletArtifacts>
-						    <includes>
-						       <include>org.nasdanika.*</include>
-						    </includes>				        	
-						</javadocOptions>					
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		-->
 		<plugins>
-                        <plugin>
-                              <groupId>pl.project13.maven</groupId>
-                              <artifactId>git-commit-id-plugin</artifactId>
-                              <version>3.0.1</version>
-                        </plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-site-plugin</artifactId>
@@ -210,7 +176,7 @@
 
 	</modules>
 	<!-- For resolution of JavaDoc between modules -->
-	<url>https://www.nasdanika.org/products/core/${project.version}/${git.branch}/apidocs/</url>
+	<url>https://www.nasdanika.org/products/core/${project.version}/${env.CIRCLE_BRANCH}/apidocs/</url>
 	<organization>
 		<name>Nasdanika LLC</name>
 		<url>https://www.nasdanika.org</url>
