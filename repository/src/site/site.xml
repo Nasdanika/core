@@ -33,7 +33,7 @@
    </menu>
  
    <footer>
-	Build ${env.CIRCLE_BUILD_NUM}.${env.CIRCLE_BRANCH}.${env.CIRCLE_SHA1} 
+	Build ${env.CIRCLE_BUILD_NUM}.${git.branch}.${git.commit} 
 	&nbsp;&bull;&nbsp;
 	All rights reserved
    </footer>

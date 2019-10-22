@@ -14,4 +14,5 @@ Require-Bundle: json;bundle-version="20180130.0.0";visibility:=reexport,
  org.yaml.snakeyaml;bundle-version="1.24.0";visibility:=reexport,
  org.jsoup;bundle-version="1.12.1",
  com.vladsch.flexmark;bundle-version="0.42.6",
- org.codehaus.janino;bundle-version="3.1.0"
+ org.codehaus.janino;bundle-version="3.1.0",
+ org.apache.commons.lang3;bundle-version="3.9.0"

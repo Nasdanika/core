@@ -2,9 +2,12 @@ package org.nasdanika.emf.edit;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandWrapper;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EClass;
@@ -20,7 +23,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.jsoup.Jsoup;
@@ -199,7 +204,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	 * Iterates over registered ecore packages. Collects and instantiates concrete subclasses. 
 	 * @return
 	 */
-	public List<EObject> collectTypes(EObject object, EClass type) {
+	public static List<EObject> collectTypes(EObject object, EClass type) {
 //		AdapterFactory rootAdapterFactory = getRootAdapterFactory();
 		Registry ePackageRegistry = EPackage.Registry.INSTANCE;
 		Resource resource = type.eResource();
@@ -262,6 +267,89 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			return getString("_UI_CreateChild_text2", new Object[] { getTypeText(child), getFeatureText(feature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
-	}		
+	}
+	
+	/**
+	 * @param eReference
+	 * @return EReferenceItemProvider if this item provider groups children by their containment references.
+	 */
+	protected EReferenceItemProvider getEReferenceItemProvider(EReference eReference) {
+		return null;
+	}
+	
+	@Override
+	public Object getParent(Object object) {
+		Object parent = super.getParent(object);
+		if (object instanceof EObject && ((EObject) object).eContainer() != null) {
+			Object provider = getAdapterFactory().adapt(parent, IEditingDomainItemProvider.class);
+			if (provider instanceof NasdanikaItemProviderAdapter) {
+			    EObject eObject = (EObject) object;
+			    EReference containmentFeature = eObject.eContainmentFeature();
+			    if (containmentFeature != null) {
+			    	EReferenceItemProvider containmentFeatureProvider = getEReferenceItemProvider(containmentFeature);
+			    	if (containmentFeatureProvider != null) {
+			    		return containmentFeatureProvider;
+			    	}
+			    }
+			}
+		}
+		return parent;
+	}
+	
+	@Override
+	protected Command createRemoveCommand(
+			EditingDomain domain, 
+			EObject owner, 
+			EStructuralFeature feature,
+			Collection<?> collection) {
+		Command removeCommand = super.createRemoveCommand(domain, owner, feature, collection);
+		if (feature instanceof EReference) {
+			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider((EReference) feature);
+			if (eReferenceItemProvider != null) {
+				return wrap(removeCommand, owner, eReferenceItemProvider);
+			}
+		}
+		return removeCommand;
+	}
+	
+	@Override
+	protected Command createAddCommand(
+			EditingDomain domain, 
+			EObject owner, 
+			EStructuralFeature feature,
+			Collection<?> collection, 
+			int index) {
+		Command addCommand = super.createAddCommand(domain, owner, feature, collection, index);
+		if (feature instanceof EReference) {
+			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider((EReference) feature);
+			if (eReferenceItemProvider != null) {
+				return wrap(addCommand, owner, eReferenceItemProvider);
+			}
+		}		
+		return addCommand;
+	}
+		
+	public static Command wrap(Command command, EObject owner, EReferenceItemProvider eReferenceItemProvider) {
+		return new CommandWrapper(command) {
+			
+			@Override
+			public Collection<?> getAffectedObjects() {
+				Collection<?> affected = super.getAffectedObjects();
+				if (affected.contains(owner)) {
+					return Collections.singleton(eReferenceItemProvider);
+				}
+				return affected;
+			}
+			
+		};
+	}
+	
+	protected List<EReferenceItemProvider> eReferenceItemProviders = new ArrayList<>();
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		eReferenceItemProviders.forEach(ItemProviderAdapter::dispose);
+	}
 	
 }

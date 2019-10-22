@@ -14,7 +14,7 @@
 	<description>Nasdanika core bundles.</description>
 	
 	<properties>
-		<siteDir>core/${project.version}/${git.branch}</siteDir>
+		<siteDir>core/${project.version}/${env.CIRCLE_BRANCH}</siteDir>
 	</properties>
 	
 	<build>
