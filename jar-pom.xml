@@ -10,10 +10,6 @@
 
 	<url>https://github.com/Nasdanika/core</url>
 		
-	<properties>
-		<siteDir>html/${project.version}</siteDir>
-	</properties>	
-
 	<licenses>
 		<license>
 			<name>Eclipse Public License 1.0</name>
