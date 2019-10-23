@@ -7,9 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EClass;
@@ -266,11 +268,36 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
 		if (feature instanceof EReference && ((EReference) feature).isContainment()) {
-			String typeText = getTypeText(child);
-			return getString("_UI_CreateChild_text2", new Object[] { typeText, getFeatureText(feature), getTypeText(owner) });
+			String childText = getTypeText(child);
+			String childCategoryText = getTypeCategoryText(child);
+			System.out.println(childText + " -> " + childCategoryText);
+			if (!isBlank(childCategoryText)) {
+				childText = childCategoryText + "|" + childText;
+			}
+			return getString("_UI_CreateChild_text2", new Object[] { childText, getFeatureText(feature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
 	}
+	
+	/**
+	 * This looks up the name of the type category of the specified object.
+	 */
+	protected String getTypeCategoryText(Object object) {
+		if (object instanceof EObject) {
+			EObject eObject = ((EObject) object);
+			String typeKey = eObject.eClass().getName();
+			List<Adapter> originalAdapters = new ArrayList<Adapter>(eObject.eAdapters());
+			try {
+				String category = getResourceLocator(object).getString("_UI_" + typeKey + "_typeCategory");
+				return category;
+			} catch (MissingResourceException e) {
+				return "";
+			} finally {
+				eObject.eAdapters().retainAll(originalAdapters);
+			}
+		}
+		return "";
+	}	
 	
 	/**
 	 * @param eReference

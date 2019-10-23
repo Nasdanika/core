@@ -1,6 +1,5 @@
 package org.nasdanika.emf.edit;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -65,7 +64,6 @@ public class EReferenceItemProvider
 		Collection<Object> ret = parent.getNewChildDescriptors(target, editingDomain, sibling).stream().filter(c -> c instanceof CommandParameter && ((CommandParameter) c).getFeature() == eReference).collect(Collectors.toList());
 		ret.forEach(c -> ((CommandParameter) c).setOwner(target));
 		return ret;
-//		return Collections.emptyList(); 
 	}		
 	
 	@Override
