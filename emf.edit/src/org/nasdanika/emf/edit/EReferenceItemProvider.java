@@ -6,6 +6,7 @@ import java.util.Collections;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
 import org.eclipse.emf.common.command.UnexecutableCommand;
+import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -57,6 +58,16 @@ public class EReferenceItemProvider
 	}
 	
 	@Override
+	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling) {
+		return Collections.emptyList(); // super.getNewChildDescriptors(target, editingDomain, sibling); - Create through parent for now.
+	}		
+	
+	@Override
+	protected ResourceLocator getResourceLocator() {
+		return parent.getResourceLocator();
+	}
+	
+	@Override
 	protected Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
@@ -68,6 +79,11 @@ public class EReferenceItemProvider
 	@Override
 	public String getText(Object object) {
 		return Util.nameToLabel(eReference.getName());
+	}
+	
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, EReferenceItemProvider.class.getResource("Folder.gif"));
 	}
 	
 	@Override
@@ -121,6 +137,9 @@ public class EReferenceItemProvider
 			int operation, 
 			Collection<?> collection) {
 		
+		if (owner instanceof EReferenceItemProvider) {
+			owner = ((EReferenceItemProvider) owner).target;
+		}
 		if (new AddCommand(domain, (EObject) owner, eReference, collection).canExecute()) {
 			return super.createDragAndDropCommand(domain, owner, location, operations, operation, collection);
 		}

@@ -3,8 +3,10 @@ package org.nasdanika.emf.edit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
@@ -345,12 +347,38 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		};
 	}
 	
-	protected List<EReferenceItemProvider> eReferenceItemProviders = new ArrayList<>();
+	protected Map<Object,List<EReferenceItemProvider>> eReferenceItemProviders = new HashMap<>();
 	
 	@Override
 	public void dispose() {
 		super.dispose();
-		eReferenceItemProviders.forEach(ItemProviderAdapter::dispose);
+		eReferenceItemProviders.values().forEach(p -> p.forEach(ItemProviderAdapter::dispose));
+	}
+	
+	/**
+	 * Returns last segment in a pipe-separated text.
+	 * @param str
+	 * @return
+	 */
+	protected static String lastSegment(String str) {
+		if (str == null) {
+			return str;
+		}
+		int idx = str.lastIndexOf("|");
+		return idx == -1 ? str : str.substring(idx + 1);
+	}
+	
+	@Override
+	protected ResourceLocator getResourceLocator() {
+		return super.getResourceLocator();
+	}
+	
+	@Override
+	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling) {
+		if (sibling instanceof EReferenceItemProvider) {
+			return Collections.emptyList(); // Suppressing children/siblings at the virtual elements.
+		}
+		return super.getNewChildDescriptors(object, editingDomain, sibling);
 	}
 	
 }

@@ -4,12 +4,12 @@ package org.nasdanika.emf.presentation;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
@@ -223,8 +223,6 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 * handling {@link org.eclipse.jface.viewers.SelectionChangedEvent}s by querying
 	 * for the children and siblings that can be added to the selected object and
 	 * updating the menus accordingly. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
 	 */
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
@@ -245,7 +243,6 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		ISelection selection = event.getSelection();
 		if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
 			Object object = ((IStructuredSelection) selection).getFirstElement();
-
 			EditingDomain domain = ((IEditingDomainProvider) activeEditorPart).getEditingDomain();
 
 			newChildDescriptors = domain.getNewChildDescriptors(object, null);
