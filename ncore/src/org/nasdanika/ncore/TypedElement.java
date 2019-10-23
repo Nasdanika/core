@@ -3,7 +3,7 @@
 package org.nasdanika.ncore;
 
 import java.lang.Object;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,10 +23,10 @@ import org.nasdanika.common.CommandFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getTypedElement()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.CommandFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
  * @generated
  */
-public interface TypedElement extends ModelElement, CommandFactory<Object> {
+public interface TypedElement extends ModelElement, WorkFactory<Object> {
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->

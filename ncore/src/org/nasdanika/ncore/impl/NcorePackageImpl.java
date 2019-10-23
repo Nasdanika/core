@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -117,7 +117,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass commandFactoryEClass = null;
+	private EClass workFactoryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -586,8 +586,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getCommandFactory() {
-		return commandFactoryEClass;
+	public EClass getWorkFactory() {
+		return workFactoryEClass;
 	}
 
 	/**
@@ -1014,7 +1014,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		webAddressEClass = createEClass(WEB_ADDRESS);
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
 
-		commandFactoryEClass = createEClass(COMMAND_FACTORY);
+		workFactoryEClass = createEClass(WORK_FACTORY);
 
 		typedElementEClass = createEClass(TYPED_ELEMENT);
 		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
@@ -1099,7 +1099,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		setNsURI(eNS_URI);
 
 		// Create type parameters
-		addETypeParameter(commandFactoryEClass, "T");
+		addETypeParameter(workFactoryEClass, "T");
 		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
 		// Set bounds for type parameters
@@ -1116,7 +1116,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		webAddressEClass.getESuperTypes().add(this.getContactMethod());
 		EGenericType g1 = createEGenericType(this.getModelElement());
 		typedElementEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getWorkFactory());
 		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		typedElementEClass.getEGenericSuperTypes().add(g1);
@@ -1124,19 +1124,23 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		valueEClass.getESuperTypes().add(this.getProvider());
 		nullEClass.getESuperTypes().add(this.getTypedElement());
 		operationEClass.getESuperTypes().add(this.getProvider());
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getModelElement());
+		arrayEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEEList());
 		g1.getETypeArguments().add(g2);
 		EGenericType g3 = createEGenericType(ecorePackage.getEJavaObject());
 		g2.getETypeArguments().add(g3);
 		arrayEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getModelElement());
+		contextEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(this.getIContext());
 		g1.getETypeArguments().add(g2);
 		contextEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getNamedElement());
 		entryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(entryEClass_T);
 		g1.getETypeArguments().add(g2);
 		entryEClass.getEGenericSuperTypes().add(g1);
@@ -1152,7 +1156,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		providerEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getModelElement());
+		mapEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEMap());
 		g1.getETypeArguments().add(g2);
 		g3 = createEGenericType(ecorePackage.getEString());
@@ -1190,7 +1196,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g3 = createEGenericType(ecorePackage.getEJavaObject());
 		g2.getETypeArguments().add(g3);
 		objectEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getModelElement());
+		httpCallEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		httpCallEClass.getEGenericSuperTypes().add(g1);
@@ -1238,7 +1246,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(commandFactoryEClass, CommandFactory.class, "CommandFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(workFactoryEClass, WorkFactory.class, "WorkFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1254,19 +1262,19 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(nullEClass, Null.class, "Null", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(operationEClass, Operation.class, "Operation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getOperation_Arguments(), g1, null, "arguments", null, 0, -1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(arrayEClass, Array.class, "Array", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getArray_Elements(), g1, null, "elements", null, 0, -1, Array.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contextEClass, Context.class, "Context", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getCommandFactory());
+		g1 = createEGenericType(this.getWorkFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getContext_Elements(), g1, null, "elements", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

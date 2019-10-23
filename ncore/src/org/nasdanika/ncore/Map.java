@@ -5,8 +5,7 @@ package org.nasdanika.ncore;
 import java.lang.Object;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,10 +24,10 @@ import org.nasdanika.common.CommandFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMap()
- * @model superTypes="org.nasdanika.ncore.CommandFactory&lt;org.eclipse.emf.ecore.EMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
  * @generated
  */
-public interface Map extends EObject, CommandFactory<java.util.Map<String, Object>> {
+public interface Map extends ModelElement, WorkFactory<java.util.Map<String, Object>> {
 	/**
 	 * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.ncore.Entry}<code>&lt;java.lang.Object&gt;</code>.

@@ -8,19 +8,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
-
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
@@ -31,7 +21,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MapItemProvider extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class MapItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -116,7 +106,10 @@ public class MapItemProvider extends NasdanikaItemProviderAdapter implements IEd
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Map_type");
+		String label = ((Map)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Map_type") :
+			getString("_UI_Map_type") + " " + label;
 	}
 
 
@@ -184,17 +177,6 @@ public class MapItemProvider extends NasdanikaItemProviderAdapter implements IEd
 			(createChildParameter
 				(NcorePackage.Literals.MAP__ENTRIES,
 				 NcoreFactory.eINSTANCE.createRestFunction()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return NcoreEditPlugin.INSTANCE;
 	}
 
 }

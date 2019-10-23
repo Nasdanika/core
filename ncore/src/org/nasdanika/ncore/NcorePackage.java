@@ -677,32 +677,32 @@ public interface NcorePackage extends EPackage {
 	int WEB_ADDRESS_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.common.CommandFactory <em>Command Factory</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.common.WorkFactory <em>Work Factory</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.common.CommandFactory
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getCommandFactory()
+	 * @see org.nasdanika.common.WorkFactory
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getWorkFactory()
 	 * @generated
 	 */
-	int COMMAND_FACTORY = 9;
+	int WORK_FACTORY = 9;
 
 	/**
-	 * The number of structural features of the '<em>Command Factory</em>' class.
+	 * The number of structural features of the '<em>Work Factory</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_FACTORY_FEATURE_COUNT = 0;
+	int WORK_FACTORY_FEATURE_COUNT = 0;
 
 	/**
-	 * The number of operations of the '<em>Command Factory</em>' class.
+	 * The number of operations of the '<em>Work Factory</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMAND_FACTORY_OPERATION_COUNT = 0;
+	int WORK_FACTORY_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedElementImpl <em>Typed Element</em>}' class.
@@ -1089,13 +1089,31 @@ public interface NcorePackage extends EPackage {
 	int ARRAY = 15;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARRAY__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY__ELEMENTS = COMMAND_FACTORY_FEATURE_COUNT + 0;
+	int ARRAY__ELEMENTS = MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Array</em>' class.
@@ -1104,7 +1122,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_FEATURE_COUNT = COMMAND_FACTORY_FEATURE_COUNT + 1;
+	int ARRAY_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Array</em>' class.
@@ -1113,7 +1131,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_OPERATION_COUNT = COMMAND_FACTORY_OPERATION_COUNT + 0;
+	int ARRAY_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ContextImpl <em>Context</em>}' class.
@@ -1126,13 +1144,31 @@ public interface NcorePackage extends EPackage {
 	int CONTEXT = 16;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTEXT__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTEXT__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTEXT__ELEMENTS = COMMAND_FACTORY_FEATURE_COUNT + 0;
+	int CONTEXT__ELEMENTS = MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Context</em>' class.
@@ -1141,7 +1177,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTEXT_FEATURE_COUNT = COMMAND_FACTORY_FEATURE_COUNT + 1;
+	int CONTEXT_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Context</em>' class.
@@ -1150,7 +1186,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTEXT_OPERATION_COUNT = COMMAND_FACTORY_OPERATION_COUNT + 0;
+	int CONTEXT_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
@@ -1373,13 +1409,31 @@ public interface NcorePackage extends EPackage {
 	int MAP = 20;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__ENTRIES = COMMAND_FACTORY_FEATURE_COUNT + 0;
+	int MAP__ENTRIES = MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Map</em>' class.
@@ -1388,7 +1442,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_FEATURE_COUNT = COMMAND_FACTORY_FEATURE_COUNT + 1;
+	int MAP_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Map</em>' class.
@@ -1397,7 +1451,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_OPERATION_COUNT = COMMAND_FACTORY_OPERATION_COUNT + 0;
+	int MAP_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
@@ -1601,6 +1655,24 @@ public interface NcorePackage extends EPackage {
 	int LIST = 23;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__TITLE = ARRAY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__DESCRIPTION = ARRAY__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1610,31 +1682,13 @@ public interface NcorePackage extends EPackage {
 	int LIST__ELEMENTS = ARRAY__ELEMENTS;
 
 	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST__TITLE = ARRAY_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST__DESCRIPTION = ARRAY_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__NAME = ARRAY_FEATURE_COUNT + 2;
+	int LIST__NAME = ARRAY_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>List</em>' class.
@@ -1643,7 +1697,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_FEATURE_COUNT = ARRAY_FEATURE_COUNT + 3;
+	int LIST_FEATURE_COUNT = ARRAY_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>List</em>' class.
@@ -1665,6 +1719,24 @@ public interface NcorePackage extends EPackage {
 	int OBJECT = 24;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT__TITLE = MAP__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT__DESCRIPTION = MAP__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Entries</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1674,31 +1746,13 @@ public interface NcorePackage extends EPackage {
 	int OBJECT__ENTRIES = MAP__ENTRIES;
 
 	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OBJECT__TITLE = MAP_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OBJECT__DESCRIPTION = MAP_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT__NAME = MAP_FEATURE_COUNT + 2;
+	int OBJECT__NAME = MAP_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Object</em>' class.
@@ -1707,7 +1761,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_FEATURE_COUNT = MAP_FEATURE_COUNT + 3;
+	int OBJECT_FEATURE_COUNT = MAP_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Object</em>' class.
@@ -1730,13 +1784,31 @@ public interface NcorePackage extends EPackage {
 	int HTTP_CALL = 25;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTTP_CALL__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTTP_CALL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__URL = COMMAND_FACTORY_FEATURE_COUNT + 0;
+	int HTTP_CALL__URL = MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Method</b></em>' attribute.
@@ -1745,7 +1817,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__METHOD = COMMAND_FACTORY_FEATURE_COUNT + 1;
+	int HTTP_CALL__METHOD = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Headers</b></em>' containment reference list.
@@ -1754,7 +1826,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__HEADERS = COMMAND_FACTORY_FEATURE_COUNT + 2;
+	int HTTP_CALL__HEADERS = MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Connect Timeout</b></em>' attribute.
@@ -1763,7 +1835,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__CONNECT_TIMEOUT = COMMAND_FACTORY_FEATURE_COUNT + 3;
+	int HTTP_CALL__CONNECT_TIMEOUT = MODEL_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Read Timeout</b></em>' attribute.
@@ -1772,7 +1844,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__READ_TIMEOUT = COMMAND_FACTORY_FEATURE_COUNT + 4;
+	int HTTP_CALL__READ_TIMEOUT = MODEL_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Success Code</b></em>' attribute.
@@ -1781,7 +1853,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL__SUCCESS_CODE = COMMAND_FACTORY_FEATURE_COUNT + 5;
+	int HTTP_CALL__SUCCESS_CODE = MODEL_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Http Call</em>' class.
@@ -1790,7 +1862,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL_FEATURE_COUNT = COMMAND_FACTORY_FEATURE_COUNT + 6;
+	int HTTP_CALL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Http Call</em>' class.
@@ -1799,7 +1871,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int HTTP_CALL_OPERATION_COUNT = COMMAND_FACTORY_OPERATION_COUNT + 0;
+	int HTTP_CALL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
@@ -1810,6 +1882,24 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	int REST_OPERATION = 26;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REST_OPERATION__TITLE = HTTP_CALL__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REST_OPERATION__DESCRIPTION = HTTP_CALL__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Url</b></em>' attribute.
@@ -1903,6 +1993,24 @@ public interface NcorePackage extends EPackage {
 	int REST_FUNCTION = 27;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REST_FUNCTION__TITLE = REST_OPERATION__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REST_FUNCTION__DESCRIPTION = REST_OPERATION__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1966,31 +2074,13 @@ public interface NcorePackage extends EPackage {
 	int REST_FUNCTION__ARGUMENTS = REST_OPERATION__ARGUMENTS;
 
 	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__TITLE = REST_OPERATION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__DESCRIPTION = REST_OPERATION_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REST_FUNCTION__NAME = REST_OPERATION_FEATURE_COUNT + 2;
+	int REST_FUNCTION__NAME = REST_OPERATION_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Rest Function</em>' class.
@@ -1999,7 +2089,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REST_FUNCTION_FEATURE_COUNT = REST_OPERATION_FEATURE_COUNT + 3;
+	int REST_FUNCTION_FEATURE_COUNT = REST_OPERATION_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Rest Function</em>' class.
@@ -2309,15 +2399,15 @@ public interface NcorePackage extends EPackage {
 	EAttribute getWebAddress_Url();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.common.CommandFactory <em>Command Factory</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.common.WorkFactory <em>Work Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Command Factory</em>'.
-	 * @see org.nasdanika.common.CommandFactory
-	 * @model instanceClass="org.nasdanika.common.CommandFactory" typeParameters="T"
+	 * @return the meta object for class '<em>Work Factory</em>'.
+	 * @see org.nasdanika.common.WorkFactory
+	 * @model instanceClass="org.nasdanika.common.WorkFactory" typeParameters="T"
 	 * @generated
 	 */
-	EClass getCommandFactory();
+	EClass getWorkFactory();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.TypedElement <em>Typed Element</em>}'.
@@ -2946,14 +3036,14 @@ public interface NcorePackage extends EPackage {
 		EAttribute WEB_ADDRESS__URL = eINSTANCE.getWebAddress_Url();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.common.CommandFactory <em>Command Factory</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.common.WorkFactory <em>Work Factory</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.common.CommandFactory
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getCommandFactory()
+		 * @see org.nasdanika.common.WorkFactory
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getWorkFactory()
 		 * @generated
 		 */
-		EClass COMMAND_FACTORY = eINSTANCE.getCommandFactory();
+		EClass WORK_FACTORY = eINSTANCE.getWorkFactory();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TypedElementImpl <em>Typed Element</em>}' class.

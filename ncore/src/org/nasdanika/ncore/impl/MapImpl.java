@@ -2,7 +2,6 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,12 +12,11 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Command;
-import org.nasdanika.common.CompoundCommand;
+import org.nasdanika.common.CompoundWork;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Work;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -35,7 +33,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @generated
  */
-public class MapImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.Map {
+public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -53,16 +51,6 @@ public class MapImpl extends MinimalEObjectImpl.Container implements org.nasdani
 	@Override
 	protected EClass eStaticClass() {
 		return NcorePackage.Literals.MAP;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**
@@ -151,8 +139,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements org.nasdani
 	}
 
 	@Override
-	public Command<Map<String, Object>> create(Context context) throws Exception {
-		CompoundCommand<Map<String, Object>, Map.Entry<String, Object>> ret = new CompoundCommand<Map<String, Object>, Map.Entry<String, Object>>(context.get(Executor.class), false) {
+	public Work<Map<String, Object>> create(Context context) throws Exception {
+		CompoundWork<Map<String, Object>, Map.Entry<String, Object>> ret = new CompoundWork<Map<String, Object>, Map.Entry<String, Object>>(getTitle(), context.get(Executor.class)) {
 						
 			@Override
 			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {
@@ -166,13 +154,7 @@ public class MapImpl extends MinimalEObjectImpl.Container implements org.nasdani
 			
 		};
 		for (Entry<Object> e: getEntries()) {
-			Command<Object> child = e.create(context);
-			ret.add(new Command<Map.Entry<String,Object>>() {
-				
-				@Override
-				public Map.Entry<String, Object> execute(ProgressMonitor progressMonitor) throws Exception {
-					Object val = child.execute(progressMonitor);
-					return new Map.Entry<String, Object>() {
+			ret.add(e.create(context).adapt(val -> new Map.Entry<String, Object>() {
 
 						@Override
 						public String getKey() {
@@ -189,10 +171,7 @@ public class MapImpl extends MinimalEObjectImpl.Container implements org.nasdani
 							// TODO Auto-generated method stub
 							return null;
 						}
-					};
-				}
-				
-			}, "Entry "+e.getName(), 1);
+					}));
 		}
 		return ret;
 	}

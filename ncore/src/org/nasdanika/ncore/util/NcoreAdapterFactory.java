@@ -6,7 +6,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -70,10 +70,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
 	 * <!-- end-user-doc -->
 	 * @return whether this factory is applicable for the type of the object.
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
-	public boolean isFactoryForType(java.lang.Object object) {
+	public boolean isFactoryForType(Object object) {
 		if (object == modelPackage) {
 			return true;
 		}
@@ -128,8 +128,8 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createWebAddressAdapter();
 			}
 			@Override
-			public <T> Adapter caseCommandFactory(CommandFactory<T> object) {
-				return createCommandFactoryAdapter();
+			public <T> Adapter caseWorkFactory(WorkFactory<T> object) {
+				return createWorkFactoryAdapter();
 			}
 			@Override
 			public Adapter caseTypedElement(TypedElement object) {
@@ -350,16 +350,16 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.CommandFactory <em>Command Factory</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.WorkFactory <em>Work Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.CommandFactory
+	 * @see org.nasdanika.common.WorkFactory
 	 * @generated
 	 */
-	public Adapter createCommandFactoryAdapter() {
+	public Adapter createWorkFactoryAdapter() {
 		return null;
 	}
 

@@ -5,10 +5,7 @@ package org.nasdanika.ncore;
 import java.lang.Object;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
-
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,10 +29,10 @@ import org.nasdanika.common.CommandFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getHttpCall()
- * @model superTypes="org.nasdanika.ncore.CommandFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
  * @generated
  */
-public interface HttpCall extends EObject, CommandFactory<Object> {
+public interface HttpCall extends ModelElement, WorkFactory<Object> {
 	/**
 	 * Returns the value of the '<em><b>Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->

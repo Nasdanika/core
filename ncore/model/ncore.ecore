@@ -68,7 +68,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="WebAddress" eSuperTypes="#//ContactMethod">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CommandFactory" instanceClassName="org.nasdanika.common.CommandFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="WorkFactory" instanceClassName="org.nasdanika.common.WorkFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Command factory creates a command for a given context. When the command is executed with a progress monitor it returns a result of specific type."/>
@@ -90,7 +90,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -134,7 +134,7 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Operation arguments."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//CommandFactory">
+      <eGenericType eClassifier="#//WorkFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
@@ -148,11 +148,12 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Array elements."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//CommandFactory">
+      <eGenericType eClassifier="#//WorkFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//ModelElement"/>
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eTypeArguments>
@@ -168,11 +169,12 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Context elements. Elements which extend Entry are treated as context properties and unnamed typed elments are treated as services."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//CommandFactory">
+      <eGenericType eClassifier="#//WorkFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//ModelElement"/>
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eClassifier="#//IContext"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -182,7 +184,7 @@
     </eAnnotations>
     <eTypeParameters name="T"/>
     <eGenericSuperTypes eClassifier="#//NamedElement"/>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eTypeParameter="#//Entry/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -217,7 +219,8 @@
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//ModelElement"/>
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
@@ -307,7 +310,8 @@
         <details key="documentation" value="HTTP response code indicating success."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//CommandFactory">
+    <eGenericSuperTypes eClassifier="#//ModelElement"/>
+    <eGenericSuperTypes eClassifier="#//WorkFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>

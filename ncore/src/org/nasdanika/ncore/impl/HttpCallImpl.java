@@ -6,7 +6,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Object;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -17,22 +16,17 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Command;
-import org.nasdanika.common.CompoundCommand;
+import org.nasdanika.common.CompoundWork;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Work;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
@@ -56,7 +50,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @generated
  */
-public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCall {
+public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 	/**
 	 * The default value of the '{@link #getUrl() <em>Url</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -124,16 +118,6 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 	@Override
 	protected EClass eStaticClass() {
 		return NcorePackage.Literals.HTTP_CALL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**
@@ -375,17 +359,17 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 	 * Override to provide request body.
 	 * @return
 	 */
-	protected Command<InputStream> createBodyCommand(Context context) throws Exception {
+	protected Work<InputStream> createBodyWork(Context context) throws Exception {
 		return null;
 	}
 	
-	protected Command<Map<String,Object>> createHeadersCommand(Context context) throws Exception {
+	protected Work<Map<String,Object>> createHeadersWork(Context context) throws Exception {
 		EList<Entry<Object>> headers = getHeaders();
 		if (headers.isEmpty()) {
 			return null;
 		}
 		
-		CompoundCommand<Map<String, Object>, Map.Entry<String, Object>> headersCommand = new CompoundCommand<Map<String, Object>, Map.Entry<String, Object>>(context.get(Executor.class), false) {
+		CompoundWork<Map<String, Object>, Map.Entry<String, Object>> headersWork = new CompoundWork<Map<String, Object>, Map.Entry<String, Object>>("Headers",context.get(Executor.class)) {
 			
 			@Override
 			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {
@@ -399,13 +383,7 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 			
 		};
 		for (Entry<Object> e: headers) {
-			Command<Object> child = e.create(context);
-			headersCommand.add(new Command<Map.Entry<String,Object>>() {
-				
-				@Override
-				public Map.Entry<String, Object> execute(ProgressMonitor progressMonitor) throws Exception {
-					Object val = child.execute(progressMonitor);
-					return new Map.Entry<String, Object>() {
+			headersWork.add(e.create(context).adapt(val -> new Map.Entry<String, Object>() {
 
 						@Override
 						public String getKey() {
@@ -418,37 +396,22 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 						}
 
 						@Override
-						public Object setValue(Object arg0) {
-							// TODO Auto-generated method stub
-							return null;
+						public Object setValue(Object val) {
+							throw new UnsupportedOperationException();
 						}
-					};
-				}
-				
-			}, "Entry "+e.getName(), 1);
+					}));
 		}
 
-		return headersCommand;
+		return headersWork;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Command<Object> create(Context context) throws Exception {
-				
-		return new Command<Object>() {
-
+	public Work<Object> create(Context context) throws Exception {
+		CompoundWork<Object, Object> ret = new CompoundWork<Object, Object>(getTitle(), context.get(Executor.class)) {
+			
 			@Override
-			public Object execute(ProgressMonitor progressMonitor) throws Exception {
-				long size = 1;
-				Command<Map<String, Object>> headersCommand = createHeadersCommand(context);
-				if (headersCommand != null) {
-					++size;
-				}
-				Command<InputStream> bodyCommand = createBodyCommand(context);
-				if (bodyCommand != null) {
-					++size;
-				}
-				progressMonitor.setWorkRemaining(size);
-				
+			protected Object combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {				
 				URL url = new URL(context.interpolate(getUrl()));
 				URLConnection connection = url.openConnection();
 				if (!(connection instanceof HttpURLConnection)) {
@@ -457,21 +420,19 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 				
 				HttpURLConnection httpConnection = (HttpURLConnection) connection;
 				httpConnection.setRequestMethod(getMethod().getLiteral());
-				httpConnection.setDoOutput(bodyCommand != null);
-				if (headersCommand != null) {
-					Converter converter = context.get(Converter.class);
-					if (converter == null) {
-						converter = DefaultConverter.INSTANCE;
-					}
-					for (Map.Entry<String, Object> header: headersCommand.execute(progressMonitor.split("Headers", 1)).entrySet()) {						
-						httpConnection.setRequestProperty(header.getKey(), converter.convert(header.getValue(), String.class));
-					}
+				httpConnection.setDoOutput(results.size() == 2);
+				Converter converter = context.get(Converter.class);
+				if (converter == null) {
+					converter = DefaultConverter.INSTANCE;
+				}
+				for (Map.Entry<String, Object> header: ((Map<String,Object>) results.get(0)).entrySet()) {						
+					httpConnection.setRequestProperty(header.getKey(), converter.convert(header.getValue(), String.class));
 				}
 				httpConnection.setConnectTimeout(getConnectTimeout() * 1000); 
 				httpConnection.setReadTimeout(getReadTimeout() * 1000); 
 				
-				if (bodyCommand != null) {
-					try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream()); InputStream bin = new BufferedInputStream(bodyCommand.execute(progressMonitor.split("Request body", 1)))) {
+				if (results.size() == 2 && results.get(1) instanceof InputStream) {
+					try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream()); InputStream bin = new BufferedInputStream((InputStream) results.get(1))) {
 						int b;
 						while ((b = bin.read()) != -1) {
 							bout.write(b);
@@ -487,7 +448,21 @@ public class HttpCallImpl extends MinimalEObjectImpl.Container implements HttpCa
 				throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage()); // TODO - body to message if message is empty, e.g. JSON details. Also TODO - to common.
 			}
 			
+			@Override
+			public double size() {
+				return super.size() + 1;
+			}
 		};
+		
+		ret.add((Work) createHeadersWork(context));
+		
+		Work<InputStream> bodyWork = createBodyWork(context);
+		if (bodyWork != null) {
+			ret.add((Work) bodyWork);
+		}
+		
+		
+		return ret;
 	}
 
 } //HttpCallImpl

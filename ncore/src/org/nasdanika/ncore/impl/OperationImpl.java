@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Operation;
 
@@ -58,8 +58,8 @@ public class OperationImpl extends ProviderImpl implements Operation {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<CommandFactory<Object>> getArguments() {
-		return (EList<CommandFactory<Object>>)eDynamicGet(NcorePackage.OPERATION__ARGUMENTS, NcorePackage.Literals.OPERATION__ARGUMENTS, true, true);
+	public EList<WorkFactory<Object>> getArguments() {
+		return (EList<WorkFactory<Object>>)eDynamicGet(NcorePackage.OPERATION__ARGUMENTS, NcorePackage.Literals.OPERATION__ARGUMENTS, true, true);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class OperationImpl extends ProviderImpl implements Operation {
 		switch (featureID) {
 			case NcorePackage.OPERATION__ARGUMENTS:
 				getArguments().clear();
-				getArguments().addAll((Collection<? extends CommandFactory<Object>>)newValue);
+				getArguments().addAll((Collection<? extends WorkFactory<Object>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

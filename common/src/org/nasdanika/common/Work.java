@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.util.function.Function;
+
 /**
  * By convention Work does not split the monitor for itself - this is the responsibility of the caller.
  * 
@@ -22,7 +24,7 @@ package org.nasdanika.common;
  * @param C context type.
  * @param T result type.
  */
-public interface Work<T> extends Command<T>, WorkInfo, AutoCloseable {
+public interface Work<T> extends Command<T>, WorkInfo {
 	
 	Work<Object> NO_WORK = new Work<Object>() {
 
@@ -68,13 +70,46 @@ public interface Work<T> extends Command<T>, WorkInfo, AutoCloseable {
 	default boolean rollback(ProgressMonitor progressMonitor) throws Exception {
 		return true;
 	};
-
-	/**
-	 * Releases any resources held by this work.
-	 */
-	@Override
-	default void close() throws Exception {		
-		
+	
+	default <R> Work<R> adapt(Function<T,R> adapter) {
+		return new Work<R>() {
+			
+			@Override
+			public R execute(ProgressMonitor progressMonitor) throws Exception {
+				return adapter.apply(Work.this.execute(progressMonitor));
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Work.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() throws Exception {
+				Work.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) throws Exception {
+				Work.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+				return Work.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Work.this.size();
+			}
+			
+			@Override
+			public String getName() {
+				return Work.this.getName();
+			}
+			
+		};
 	}
 	
 }

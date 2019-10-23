@@ -2,8 +2,6 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -11,17 +9,14 @@ import java.util.concurrent.Executor;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Command;
-import org.nasdanika.common.CommandFactory;
-import org.nasdanika.common.CompoundCommand;
+import org.nasdanika.common.CompoundWork;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Work;
+import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -38,7 +33,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @generated
  */
-public class ArrayImpl extends MinimalEObjectImpl.Container implements Array {
+public class ArrayImpl extends ModelElementImpl implements Array {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -63,20 +58,10 @@ public class ArrayImpl extends MinimalEObjectImpl.Container implements Array {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<CommandFactory<Object>> getElements() {
-		return (EList<CommandFactory<Object>>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
+	public EList<WorkFactory<Object>> getElements() {
+		return (EList<WorkFactory<Object>>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
 	}
 
 	/**
@@ -118,7 +103,7 @@ public class ArrayImpl extends MinimalEObjectImpl.Container implements Array {
 		switch (featureID) {
 			case NcorePackage.ARRAY__ELEMENTS:
 				getElements().clear();
-				getElements().addAll((Collection<? extends CommandFactory<Object>>)newValue);
+				getElements().addAll((Collection<? extends WorkFactory<Object>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -154,8 +139,8 @@ public class ArrayImpl extends MinimalEObjectImpl.Container implements Array {
 	}
 
 	@Override
-	public Command<EList<Object>> create(Context context) throws Exception {
-		CompoundCommand<EList<Object>, Object> ret = new CompoundCommand<EList<Object>, Object>(context.get(Executor.class), false) {
+	public Work<EList<Object>> create(Context context) throws Exception {
+		CompoundWork<EList<Object>, Object> ret = new CompoundWork<EList<Object>, Object>(getTitle(), context.get(Executor.class)) {
 						
 			@Override
 			protected EList<Object> combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {
@@ -164,9 +149,9 @@ public class ArrayImpl extends MinimalEObjectImpl.Container implements Array {
 
 			
 		};
-		for (CommandFactory<Object> e: getElements()) {
-			Command<Object> child = e.create(context);
-			ret.add(child, "Element", 1);
+		for (WorkFactory<Object> e: getElements()) {
+			Work<Object> child = e.create(context);
+			ret.add(child);
 		}
 		return ret;
 	}

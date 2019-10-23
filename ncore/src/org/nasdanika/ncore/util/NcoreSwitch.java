@@ -6,7 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -165,9 +165,9 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.COMMAND_FACTORY: {
-				CommandFactory<?> commandFactory = (CommandFactory<?>)theEObject;
-				T1 result = caseCommandFactory(commandFactory);
+			case NcorePackage.WORK_FACTORY: {
+				WorkFactory<?> workFactory = (WorkFactory<?>)theEObject;
+				T1 result = caseWorkFactory(workFactory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -175,7 +175,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				TypedElement typedElement = (TypedElement)theEObject;
 				T1 result = caseTypedElement(typedElement);
 				if (result == null) result = caseModelElement(typedElement);
-				if (result == null) result = caseCommandFactory(typedElement);
+				if (result == null) result = caseWorkFactory(typedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,7 +184,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseProvider(provider);
 				if (result == null) result = caseTypedElement(provider);
 				if (result == null) result = caseModelElement(provider);
-				if (result == null) result = caseCommandFactory(provider);
+				if (result == null) result = caseWorkFactory(provider);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -194,7 +194,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseProvider(value);
 				if (result == null) result = caseTypedElement(value);
 				if (result == null) result = caseModelElement(value);
-				if (result == null) result = caseCommandFactory(value);
+				if (result == null) result = caseWorkFactory(value);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -203,7 +203,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseNull(null_);
 				if (result == null) result = caseTypedElement(null_);
 				if (result == null) result = caseModelElement(null_);
-				if (result == null) result = caseCommandFactory(null_);
+				if (result == null) result = caseWorkFactory(null_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -213,21 +213,23 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseProvider(operation);
 				if (result == null) result = caseTypedElement(operation);
 				if (result == null) result = caseModelElement(operation);
-				if (result == null) result = caseCommandFactory(operation);
+				if (result == null) result = caseWorkFactory(operation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.ARRAY: {
 				Array array = (Array)theEObject;
 				T1 result = caseArray(array);
-				if (result == null) result = caseCommandFactory(array);
+				if (result == null) result = caseModelElement(array);
+				if (result == null) result = caseWorkFactory(array);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.CONTEXT: {
 				Context context = (Context)theEObject;
 				T1 result = caseContext(context);
-				if (result == null) result = caseCommandFactory(context);
+				if (result == null) result = caseModelElement(context);
+				if (result == null) result = caseWorkFactory(context);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -235,7 +237,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				Entry<?> entry = (Entry<?>)theEObject;
 				T1 result = caseEntry(entry);
 				if (result == null) result = caseNamedElement(entry);
-				if (result == null) result = caseCommandFactory(entry);
+				if (result == null) result = caseWorkFactory(entry);
 				if (result == null) result = caseModelElement(entry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -245,7 +247,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseTypedEntry(typedEntry);
 				if (result == null) result = caseTypedElement(typedEntry);
 				if (result == null) result = caseEntry(typedEntry);
-				if (result == null) result = caseCommandFactory(typedEntry);
+				if (result == null) result = caseWorkFactory(typedEntry);
 				if (result == null) result = caseNamedElement(typedEntry);
 				if (result == null) result = caseModelElement(typedEntry);
 				if (result == null) result = defaultCase(theEObject);
@@ -259,14 +261,15 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseTypedElement(providerEntry);
 				if (result == null) result = caseNamedElement(providerEntry);
 				if (result == null) result = caseModelElement(providerEntry);
-				if (result == null) result = caseCommandFactory(providerEntry);
+				if (result == null) result = caseWorkFactory(providerEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.MAP: {
 				Map map = (Map)theEObject;
 				T1 result = caseMap(map);
-				if (result == null) result = caseCommandFactory(map);
+				if (result == null) result = caseModelElement(map);
+				if (result == null) result = caseWorkFactory(map);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -279,7 +282,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(property);
 				if (result == null) result = caseTypedElement(property);
 				if (result == null) result = caseModelElement(property);
-				if (result == null) result = caseCommandFactory(property);
+				if (result == null) result = caseWorkFactory(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -292,7 +295,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(function);
 				if (result == null) result = caseTypedElement(function);
 				if (result == null) result = caseModelElement(function);
-				if (result == null) result = caseCommandFactory(function);
+				if (result == null) result = caseWorkFactory(function);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -301,7 +304,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseList(list);
 				if (result == null) result = caseArray(list);
 				if (result == null) result = caseEntry(list);
-				if (result == null) result = caseCommandFactory(list);
+				if (result == null) result = caseWorkFactory(list);
 				if (result == null) result = caseNamedElement(list);
 				if (result == null) result = caseModelElement(list);
 				if (result == null) result = defaultCase(theEObject);
@@ -312,7 +315,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseObject(object);
 				if (result == null) result = caseMap(object);
 				if (result == null) result = caseEntry(object);
-				if (result == null) result = caseCommandFactory(object);
+				if (result == null) result = caseWorkFactory(object);
 				if (result == null) result = caseNamedElement(object);
 				if (result == null) result = caseModelElement(object);
 				if (result == null) result = defaultCase(theEObject);
@@ -321,7 +324,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.HTTP_CALL: {
 				HttpCall httpCall = (HttpCall)theEObject;
 				T1 result = caseHttpCall(httpCall);
-				if (result == null) result = caseCommandFactory(httpCall);
+				if (result == null) result = caseModelElement(httpCall);
+				if (result == null) result = caseWorkFactory(httpCall);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -329,7 +333,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				RestOperation restOperation = (RestOperation)theEObject;
 				T1 result = caseRestOperation(restOperation);
 				if (result == null) result = caseHttpCall(restOperation);
-				if (result == null) result = caseCommandFactory(restOperation);
+				if (result == null) result = caseModelElement(restOperation);
+				if (result == null) result = caseWorkFactory(restOperation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -340,8 +345,8 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseEntry(restFunction);
 				if (result == null) result = caseHttpCall(restFunction);
 				if (result == null) result = caseNamedElement(restFunction);
-				if (result == null) result = caseCommandFactory(restFunction);
 				if (result == null) result = caseModelElement(restFunction);
+				if (result == null) result = caseWorkFactory(restFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -485,17 +490,17 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Command Factory</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Work Factory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Command Factory</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Work Factory</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T> T1 caseCommandFactory(CommandFactory<T> object) {
+	public <T> T1 caseWorkFactory(WorkFactory<T> object) {
 		return null;
 	}
 

@@ -195,9 +195,9 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	 */
 	protected void collectEReferenceChildDescriptors(Object object, Collection<Object> newChildDescriptors, EReference eReference) {
 		for (EObject child: collectTypes((EObject) object, eReference.getEReferenceType())) {
-			if (accept((EObject) object, eReference, child)) {					
+			if (accept((EObject) object, eReference, child, true)) {					
 				EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
-				if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
+				if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child, true)) {
 					newChildDescriptors.add(createChildParameter(eReference, child));			
 				}
 			}
@@ -258,7 +258,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	}
 
 	@Override
-	public boolean accept(EObject source, EReference eReference, EObject target) {
+	public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
 		return true;
 	}
 	

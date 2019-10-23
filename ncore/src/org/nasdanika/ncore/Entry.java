@@ -2,7 +2,7 @@
  */
 package org.nasdanika.ncore;
 
-import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.WorkFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,8 +15,8 @@ import org.nasdanika.common.CommandFactory;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getEntry()
- * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.CommandFactory&lt;T&gt;"
+ * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.WorkFactory&lt;T&gt;"
  * @generated
  */
-public interface Entry<T> extends NamedElement, CommandFactory<T> {
+public interface Entry<T> extends NamedElement, WorkFactory<T> {
 } // Entry

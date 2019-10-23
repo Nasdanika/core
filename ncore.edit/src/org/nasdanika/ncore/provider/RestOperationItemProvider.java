@@ -109,7 +109,7 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((RestOperation)object).getUrl();
+		String label = ((RestOperation)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_RestOperation_type") :
 			getString("_UI_RestOperation_type") + " " + label;

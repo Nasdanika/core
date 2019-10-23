@@ -96,6 +96,9 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 		}
 		Diagnostic ret = Command.super.diagnose(progressMonitor);
 		progressMonitor.setWorkRemaining(children.size() + noExecChildren.size());
+		for (CommandEntry<?> ce: children) {
+			((DiagnosticChain) ret).add(ce.command.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
+		}
 		for (CommandEntry<?> ce: noExecChildren) {
 			((DiagnosticChain) ret).add(ce.command.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
 		}

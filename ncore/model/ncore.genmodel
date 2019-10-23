@@ -50,8 +50,8 @@
     <genClasses ecoreClass="ncore.ecore#//WebAddress">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//WebAddress/url"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//CommandFactory">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//CommandFactory/T"/>
+    <genClasses image="false" ecoreClass="ncore.ecore#//WorkFactory">
+      <genTypeParameters ecoreTypeParameter="ncore.ecore#//WorkFactory/T"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/type"/>

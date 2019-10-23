@@ -2,10 +2,13 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.util.concurrent.Executor;
+
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.common.Command;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Work;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.TypedElement;
 
@@ -172,8 +175,8 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	}
 
 	@Override
-	public Command<Object> create(Context context) throws Exception {
-		return new Command<Object>() {
+	public Work<Object> create(Context context) throws Exception {
+		return new Work<Object>() {
 
 			@Override
 			public Object execute(ProgressMonitor progressMonitor) throws Exception {
@@ -182,6 +185,16 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 					classLoader = getClass().getClassLoader();
 				}
 				return context.get(classLoader.loadClass(getType()));
+			}
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String getName() {
+				return getTitle();
 			}
 			
 		};
