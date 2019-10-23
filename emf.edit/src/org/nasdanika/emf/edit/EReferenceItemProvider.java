@@ -1,7 +1,9 @@
 package org.nasdanika.emf.edit;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
@@ -11,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -44,22 +47,25 @@ public class EReferenceItemProvider
 		target.eAdapters().add(this);
 		this.eReference = eReference;
 	}
-	
-	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
-		for (EObject child: NasdanikaItemProviderAdapter.collectTypes((EObject) object, eReference.getEReferenceType())) {
-			if (parent.accept((EObject) object, eReference, child)) {					
-				EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
-				if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
-					newChildDescriptors.add(createChildParameter(eReference, child));			
-				}
-			}
-		}		
-	}
+//	
+//	@Override
+//	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+//		for (EObject child: NasdanikaItemProviderAdapter.collectTypes((EObject) object, eReference.getEReferenceType())) {
+//			if (parent.accept((EObject) object, eReference, child)) {					
+//				EReferencePredicate eReferencePredicate = (EReferencePredicate) getRootAdapterFactory().adapt(child, EReferencePredicate.class);
+//				if (eReferencePredicate == null || eReferencePredicate.accept((EObject) object, eReference, child)) {
+//					newChildDescriptors.add(createChildParameter(eReference, child));			
+//				}
+//			}
+//		}		
+//	}
 	
 	@Override
 	public Collection<?> getNewChildDescriptors(Object object, EditingDomain editingDomain, Object sibling) {
-		return Collections.emptyList(); // super.getNewChildDescriptors(target, editingDomain, sibling); - Create through parent for now.
+		Collection<Object> ret = parent.getNewChildDescriptors(target, editingDomain, sibling).stream().filter(c -> c instanceof CommandParameter && ((CommandParameter) c).getFeature() == eReference).collect(Collectors.toList());
+		ret.forEach(c -> ((CommandParameter) c).setOwner(target));
+		return ret;
+//		return Collections.emptyList(); 
 	}		
 	
 	@Override

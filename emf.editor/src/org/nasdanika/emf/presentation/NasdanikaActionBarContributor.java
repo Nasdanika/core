@@ -4,12 +4,14 @@ package org.nasdanika.emf.presentation;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
@@ -38,6 +40,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
 
 /**
  * Action bar contributor which groups create children actions by feature.
@@ -269,13 +272,20 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 * each object in <code>descriptors</code>, and returns the collection of these
 	 * actions. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
-	 * @generated
 	 */
 	protected Collection<IAction> generateCreateChildActions(Collection<?> descriptors, ISelection selection) {
 		Collection<IAction> actions = new ArrayList<IAction>();
 		if (descriptors != null) {
 			for (Object descriptor : descriptors) {
-				actions.add(new CreateChildAction(activeEditorPart, selection, descriptor));
+				actions.add(new CreateChildAction(activeEditorPart, selection, descriptor) {
+					
+					@Override
+					protected Command createActionCommand(EditingDomain editingDomain, Collection<?> collection) {
+						List<Object> mapped = collection.stream().map(e -> e instanceof EReferenceItemProvider ? ((EReferenceItemProvider) e).getTarget() : e).collect(Collectors.toList());
+						return super.createActionCommand(editingDomain, mapped);
+					}
+					
+				});
 			}
 		}
 		return actions;
@@ -350,9 +360,9 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 					Object firstElement = subGroup.values().iterator().next();
 					if (subGroup.size() == 1 && firstElement instanceof IAction) {
 						// Renaming action and replacing subgroup with the action.
-						IAction action = (IAction) firstElement;
-						action.setToolTipText(action.getText());
-						action.setText(e.getKey());
+//						IAction action = (IAction) firstElement;
+//						action.setToolTipText(action.getText());
+//						action.setText(e.getKey());
 						e.setValue(firstElement);
 					} else {
 						e.setValue(collapseGroups(subGroup));
