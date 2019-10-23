@@ -4,9 +4,7 @@ package org.nasdanika.ncore.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.ncore.Array;
@@ -36,7 +34,6 @@ import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 import org.nasdanika.ncore.WebAddress;
-import org.nasdanika.ncore.*;
 
 /**
  * <!-- begin-user-doc -->
@@ -73,7 +70,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
 	 * <!-- end-user-doc -->
 	 * @return whether this factory is applicable for the type of the object.
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public boolean isFactoryForType(java.lang.Object object) {

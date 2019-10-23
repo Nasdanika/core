@@ -264,7 +264,8 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	@Override
 	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
 		if (feature instanceof EReference && ((EReference) feature).isContainment()) {
-			return getString("_UI_CreateChild_text2", new Object[] { getTypeText(child), getFeatureText(feature), getTypeText(owner) });
+			String typeText = getTypeText(child);
+			return getString("_UI_CreateChild_text2", new Object[] { typeText, getFeatureText(feature), getTypeText(owner) });
 		}
 		return super.getCreateChildText(owner, feature, child, selection);
 	}

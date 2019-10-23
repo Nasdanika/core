@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-model-doc -->
  * @see org.nasdanika.ncore.NcoreFactory
  * @model kind="package"
+ *        annotation="urn:org.nasdanika category='General'"
  * @generated
  */
 public interface NcorePackage extends EPackage {

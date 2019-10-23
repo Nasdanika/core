@@ -4,10 +4,10 @@ package org.nasdanika.emf.presentation;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -103,24 +103,7 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		}
 	};
 
-	/**
-	 * This will contain one
-	 * {@link org.eclipse.emf.edit.ui.action.CreateChildAction} corresponding to
-	 * each descriptor generated for the current selection by the item provider.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected Collection<IAction> createChildActions;
-
-	/**
-	 * This will contain a map of
-	 * {@link org.eclipse.emf.edit.ui.action.CreateChildAction}s, keyed by sub-menu
-	 * text. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected Map<String, Collection<IAction>> createChildSubmenuActions;
+	protected Map<String, Object> createChildActions;
 
 	/**
 	 * This is the menu manager into which menu contribution items should be added
@@ -130,24 +113,7 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 */
 	protected IMenuManager createChildMenuManager;
 
-	/**
-	 * This will contain one
-	 * {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction} corresponding to
-	 * each descriptor generated for the current selection by the item provider.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected Collection<IAction> createSiblingActions;
-
-	/**
-	 * This will contain a map of
-	 * {@link org.eclipse.emf.edit.ui.action.CreateSiblingAction}s, keyed by submenu
-	 * text. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected Map<String, Collection<IAction>> createSiblingSubmenuActions;
+	protected Map<String, Object> createSiblingActions;
 
 	/**
 	 * This is the menu manager into which menu contribution items should be added
@@ -265,11 +231,9 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		// Remove any menu items for old selection.
 		//
 		if (createChildMenuManager != null) {
-			depopulateManager(createChildMenuManager, createChildSubmenuActions);
 			depopulateManager(createChildMenuManager, createChildActions);
 		}
 		if (createSiblingMenuManager != null) {
-			depopulateManager(createSiblingMenuManager, createSiblingSubmenuActions);
 			depopulateManager(createSiblingMenuManager, createSiblingActions);
 		}
 
@@ -290,18 +254,14 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 
 		// Generate actions for selection; populate and redraw the menus.
 		//
-		createChildActions = generateCreateChildActions(newChildDescriptors, selection);
-		createChildSubmenuActions = extractSubmenuActions(createChildActions);
-		createSiblingActions = generateCreateSiblingActions(newSiblingDescriptors, selection);
-		createSiblingSubmenuActions = extractSubmenuActions(createSiblingActions);
+		createChildActions = groupActions(generateCreateChildActions(newChildDescriptors, selection));
+		createSiblingActions = groupActions(generateCreateSiblingActions(newSiblingDescriptors, selection));
 
 		if (createChildMenuManager != null) {
-			populateManager(createChildMenuManager, createChildSubmenuActions, null);
 			populateManager(createChildMenuManager, createChildActions, null);
 			createChildMenuManager.update(true);
 		}
 		if (createSiblingMenuManager != null) {
-			populateManager(createSiblingMenuManager, createSiblingSubmenuActions, null);
 			populateManager(createSiblingMenuManager, createSiblingActions, null);
 			createSiblingMenuManager.update(true);
 		}
@@ -342,89 +302,76 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	}
 
 	/**
-	 * This populates the specified <code>manager</code> with
-	 * {@link org.eclipse.jface.action.ActionContributionItem}s based on the
-	 * {@link org.eclipse.jface.action.IAction}s contained in the
-	 * <code>actions</code> collection, by inserting them before the specified
-	 * contribution item <code>contributionID</code>. If <code>contributionID</code>
-	 * is <code>null</code>, they are simply added. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 * 
-	 * @generated
+	 * Organizes actions into groups using | separator in action name. 
+	 * Then "squashes" single-entry groups. For groups with a single leaf action actions get the name of the containing group and replace it in the parent. 
 	 */
-	protected void populateManager(IContributionManager manager, Collection<? extends IAction> actions,
-			String contributionID) {
-		if (actions != null) {
-			for (IAction action : actions) {
-				if (contributionID != null) {
-					manager.insertBefore(contributionID, action);
-				} else {
-					manager.add(action);
-				}
-			}
-		}
-	}
-
-	/**
-	 * This removes from the specified <code>manager</code> all
-	 * {@link org.eclipse.jface.action.ActionContributionItem}s based on the
-	 * {@link org.eclipse.jface.action.IAction}s contained in the
-	 * <code>actions</code> collection. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
-	 * @generated
-	 */
-	protected void depopulateManager(IContributionManager manager, Collection<? extends IAction> actions) {
-		if (actions != null) {
-			IContributionItem[] items = manager.getItems();
-			for (int i = 0; i < items.length; i++) {
-				// Look into SubContributionItems
-				//
-				IContributionItem contributionItem = items[i];
-				while (contributionItem instanceof SubContributionItem) {
-					contributionItem = ((SubContributionItem) contributionItem).getInnerItem();
-				}
-
-				// Delete the ActionContributionItems with matching action.
-				//
-				if (contributionItem instanceof ActionContributionItem) {
-					IAction action = ((ActionContributionItem) contributionItem).getAction();
-					if (actions.contains(action)) {
-						manager.remove(contributionItem);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * This extracts those actions in the <code>submenuActions</code> collection
-	 * whose text is qualified and returns a map of these actions, keyed by submenu
-	 * text. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
-	 */
-	protected Map<String, Collection<IAction>> extractSubmenuActions(Collection<IAction> createActions) {
-		Map<String, Collection<IAction>> createSubmenuActions = new LinkedHashMap<String, Collection<IAction>>();
+	protected Map<String, Object> groupActions(Collection<IAction> createActions) {
+		Map<String, Object> group = new TreeMap<>();
 		if (createActions != null) {
-			for (Iterator<IAction> actions = createActions.iterator(); actions.hasNext();) {
-				IAction action = actions.next();
-				String actionText = action.getText();
-				StringTokenizer st = new StringTokenizer(actionText, "|");
-				if (st.countTokens() == 2) {
-					String text = st.nextToken().trim();
-					Collection<IAction> submenuActions = createSubmenuActions.get(text);
-					if (submenuActions == null) {
-						createSubmenuActions.put(text, submenuActions = new ArrayList<IAction>());
+			for (IAction action: createActions) {
+				groupAction(action, group);
+			}
+		}
+		
+		return collapseGroups(group);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static void groupAction(IAction action, Map<String, Object> group) {
+		String actionText = action.getText();
+		int idx = actionText.indexOf("|");
+		if (idx == -1) {
+			if (group.containsKey(actionText)) {
+				//throw new IllegalStateException("Duplicate entry name: "+actionText);
+				System.err.println("Duplicate entry name: "+actionText);
+			} else {
+				group.put(actionText, action);
+			}
+		} else {
+			String subGroupName = actionText.substring(0, idx);
+			Object obj = group.get(subGroupName);			
+			if (obj == null) {
+				Map<String, Object> subGroup = new TreeMap<>();
+				group.put(subGroupName, subGroup);
+				action.setText(actionText.substring(idx + 1));
+				groupAction(action, subGroup);
+			} else if (obj instanceof Map) {
+				action.setText(actionText.substring(idx + 1));
+				groupAction(action, (Map<String, Object>) obj);				
+			} else {
+				throw new IllegalStateException("Duplicate entry name: "+subGroupName);				
+			}
+		}		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static Map<String, Object> collapseGroups(Map<String, Object> group) {
+		for (Entry<String, Object> e: group.entrySet()) {
+			if (e.getValue() instanceof Map) {				
+				Map<String,Object> subGroup = (Map<String,Object>) e.getValue();
+				if (!subGroup.isEmpty()) {
+					Object firstElement = subGroup.values().iterator().next();
+					if (subGroup.size() == 1 && firstElement instanceof IAction) {
+						// Renaming action and replacing subgroup with the action.
+						IAction action = (IAction) firstElement;
+						action.setToolTipText(action.getText());
+						action.setText(e.getKey());
+						e.setValue(firstElement);
+					} else {
+						e.setValue(collapseGroups(subGroup));
 					}
-					action.setText(st.nextToken().trim());
-					submenuActions.add(action);
-					actions.remove();
 				}
 			}
 		}
-		return createSubmenuActions;
+		if (group.size() == 1) {
+			Object value = group.values().iterator().next();
+			if (value instanceof Map) {
+				return (Map<String,Object>) value;
+			}
+		}
+		return group;
 	}
+	
 
 	/**
 	 * This populates the specified <code>manager</code> with
@@ -435,20 +382,31 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 * specified contribution item <code>contributionID</code>. If
 	 * <code>contributionID</code> is <code>null</code>, they are simply added. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated
 	 */
-	protected void populateManager(IContributionManager manager, Map<String, Collection<IAction>> submenuActions,
-			String contributionID) {
-		if (submenuActions != null) {
-			for (Map.Entry<String, Collection<IAction>> entry : submenuActions.entrySet()) {
-				MenuManager submenuManager = new MenuManager(entry.getKey());
-				if (contributionID != null) {
-					manager.insertBefore(contributionID, submenuManager);
+	@SuppressWarnings("unchecked")
+	protected void populateManager(IContributionManager manager, Map<String, Object> items, String contributionID) {
+		if (items != null) {
+			for (Map.Entry<String, Object> entry : items.entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				if (value instanceof Map) {
+					MenuManager submenuManager = new MenuManager(entry.getKey());
+					if (contributionID != null) {
+						manager.insertBefore(contributionID, submenuManager);
+					} else {
+						manager.add(submenuManager);
+					}
+					populateManager(submenuManager, (Map<String,Object>) value, null);					
+				} else if (value instanceof IAction) {
+					IAction action = (IAction) value;
+					if (contributionID != null) {
+						manager.insertBefore(contributionID, action);
+					} else {
+						manager.add(action);
+					}					
 				} else {
-					manager.add(submenuManager);
+					throw new IllegalArgumentException("Unexpected item type at "+key+": "+value);
 				}
-				populateManager(submenuManager, entry.getValue(), null);
 			}
 		}
 	}
@@ -460,30 +418,42 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 * {@link org.eclipse.jface.action.IAction}s contained in the
 	 * <code>submenuActions</code> map. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
-	 * @generated
 	 */
-	protected void depopulateManager(IContributionManager manager, Map<String, Collection<IAction>> submenuActions) {
-		if (submenuActions != null) {
-			IContributionItem[] items = manager.getItems();
-			for (int i = 0; i < items.length; i++) {
-				IContributionItem contributionItem = items[i];
+	@SuppressWarnings("unchecked")
+	protected void depopulateManager(IContributionManager manager, Map<String, Object> items) {
+		if (items != null) {
+			IContributionItem[] managerItems = manager.getItems();
+			for (int i = 0; i < managerItems.length; i++) {
+				IContributionItem contributionItem = managerItems[i];
 				if (contributionItem instanceof MenuManager) {
 					MenuManager submenuManager = (MenuManager) contributionItem;
-					if (submenuActions.containsKey(submenuManager.getMenuText())) {
-						depopulateManager(submenuManager, submenuActions.get(submenuManager.getMenuText()));
+					String menuText = submenuManager.getMenuText();
+					Object subItem = items.get(menuText);
+					if (subItem instanceof Map) {
+						depopulateManager(submenuManager, (Map<String,Object>) subItem);
 						manager.remove(contributionItem);
 					}
+				} else {
+					while (contributionItem instanceof SubContributionItem) {
+						contributionItem = ((SubContributionItem) contributionItem).getInnerItem();
+					}
+
+					// Delete the ActionContributionItems with matching action.
+					//
+					if (contributionItem instanceof ActionContributionItem) {
+						IAction action = ((ActionContributionItem) contributionItem).getAction();
+						if (items.containsKey(action.getText())) {
+							manager.remove(contributionItem);
+						}
+					}					
 				}
 			}
 		}
 	}
-
+	
 	/**
 	 * This populates the pop-up menu before it appears. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
-	 * @generated
 	 */
 	@Override
 	public void menuAboutToShow(IMenuManager menuManager) {
@@ -491,12 +461,10 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		MenuManager submenuManager = null;
 
 		submenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
-		populateManager(submenuManager, createChildSubmenuActions, null);
 		populateManager(submenuManager, createChildActions, null);
 		menuManager.insertBefore("edit", submenuManager);
 
 		submenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
-		populateManager(submenuManager, createSiblingSubmenuActions, null);
 		populateManager(submenuManager, createSiblingActions, null);
 		menuManager.insertBefore("edit", submenuManager);
 	}

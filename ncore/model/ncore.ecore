@@ -4,6 +4,9 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
     <details key="documentation" value="Nasdanika core model containing common classes"/>
   </eAnnotations>
+  <eAnnotations source="urn:org.nasdanika">
+    <details key="category" value="General"/>
+  </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Model element with a description."/>
