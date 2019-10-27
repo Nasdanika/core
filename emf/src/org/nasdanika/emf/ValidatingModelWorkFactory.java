@@ -1,4 +1,4 @@
-package org.nasdanika.ncore.util;
+package org.nasdanika.emf;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.Context;
@@ -25,12 +26,12 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 		super(resourceSet, modelUri);
 	}
 
-	public ValidatingModelWorkFactory(String platformPluginUri) throws Exception {
-		super(platformPluginUri);
+	public ValidatingModelWorkFactory(String platformPluginUri, EPackage... ePackages) throws Exception {
+		super(platformPluginUri, ePackages);
 	}
 
-	public ValidatingModelWorkFactory(URI modelUri) throws Exception {
-		super(modelUri);
+	public ValidatingModelWorkFactory(URI modelUri, EPackage... ePackages) throws Exception {
+		super(modelUri, ePackages);
 	}
 	
 	public ValidatingModelWorkFactory(ResourceSet resourceSet, String platformPluginUri) throws Exception {

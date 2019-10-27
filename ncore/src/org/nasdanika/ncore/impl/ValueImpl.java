@@ -5,7 +5,9 @@ package org.nasdanika.ncore.impl;
 import java.lang.Object;
 
 import org.eclipse.emf.ecore.EClass;
-
+import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Work;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Value;
 
@@ -169,6 +171,32 @@ public class ValueImpl extends ProviderImpl implements Value {
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	// TODO - proper implementation.
+	@Override
+	public Work<Object> create(Context context) throws Exception {
+		return new Work<Object>() {
+
+			@Override
+			public Object execute(ProgressMonitor progressMonitor) throws Exception {
+				// TODO Auto-generated method stub
+				return getValue();
+			}
+
+			@Override
+			public double size() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public String getName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		};
 	}
 
 } //ValueImpl

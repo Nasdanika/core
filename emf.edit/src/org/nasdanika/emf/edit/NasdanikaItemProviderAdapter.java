@@ -91,8 +91,11 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		return new SingleReferenceDialogCellEditorFactory(null, ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory());
 	}
 	
+	/**
+	 * Provides cell editor factory for references.
+	 */
 	@Override
-  protected ItemPropertyDescriptor createItemPropertyDescriptor(
+	protected ItemPropertyDescriptor createItemPropertyDescriptor(
 		    AdapterFactory adapterFactory,
 		    ResourceLocator resourceLocator,
 		    String displayName,

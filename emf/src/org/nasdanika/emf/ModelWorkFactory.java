@@ -1,4 +1,4 @@
-package org.nasdanika.ncore.util;
+package org.nasdanika.emf;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Work;
 import org.nasdanika.common.WorkFactory;
-import org.nasdanika.ncore.NcorePackage;
 
 /**
  * This class loads a model with the root element implementing {@link WorkFactory}, and delegates its methods to it. 
@@ -25,8 +24,8 @@ public class ModelWorkFactory<T> implements WorkFactory<T> {
 	 * @param platformPluginUri
 	 * @throws Exception 
 	 */
-	public ModelWorkFactory(String platformPluginUri) throws Exception {
-		this(URI.createPlatformPluginURI(platformPluginUri, false));
+	public ModelWorkFactory(String platformPluginUri, EPackage... ePackages) throws Exception {
+		this(URI.createPlatformPluginURI(platformPluginUri, false), ePackages);
 	}
 	
 	/**
@@ -34,8 +33,8 @@ public class ModelWorkFactory<T> implements WorkFactory<T> {
 	 * @param modelUri
 	 * @throws Exception 
 	 */
-	public ModelWorkFactory(URI modelUri) throws Exception {
-		this(createResourceSet(), modelUri);
+	public ModelWorkFactory(URI modelUri, EPackage... ePackages) throws Exception {
+		this(createResourceSet(ePackages), modelUri);
 	}	
 	
 	/**
@@ -56,10 +55,12 @@ public class ModelWorkFactory<T> implements WorkFactory<T> {
 	 * set to a constructor.   
 	 * @return
 	 */
-	public static ResourceSet createResourceSet() {
+	public static ResourceSet createResourceSet(EPackage... ePackages) {
 		ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-		resourceSet.getPackageRegistry().put(NcorePackage.eNS_URI, NcorePackage.eINSTANCE);
+		for (EPackage ePackage: ePackages) {
+			resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
+		}
 		return resourceSet;
 	}
 	

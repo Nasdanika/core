@@ -15,7 +15,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	private PrintStream out;
 	private boolean closeStream;
 	private String indent;
-	private int indentIncrement;
+	protected int indentIncrement = 2;
 	
 	/**
 	 * Constructs a progress monitor for a given print stream.

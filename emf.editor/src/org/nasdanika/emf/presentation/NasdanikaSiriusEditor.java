@@ -25,7 +25,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.eef.properties.ui.api.EEFTabbedPropertySheetPage;
 import org.eclipse.eef.properties.ui.api.IEEFTabbedPropertySheetPageContributor;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -1152,8 +1154,8 @@ public class NasdanikaSiriusEditor
 		IProject project = file.getProject();
 		try {
 			ModelingProject modelingProject = (ModelingProject) project.getNature(ModelingProject.NATURE_ID);
-			if (modelingProject == null) {
-				ErrorDialog.openError(site.getShell(), "Not a modeling project", "The model shall be contained in a modeling project - add the modeling nature.", null);
+			if (modelingProject == null) {				
+				MessageDialog.openError(site.getShell(), "Not a modeling project", "The model shall be contained in a modeling project - add the modeling nature.");
 			} else {
 				Session session = modelingProject.getSession();
 				if (session == null) {

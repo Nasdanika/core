@@ -107,7 +107,7 @@ public class EReferenceItemProvider
 			EStructuralFeature feature,
 			Collection<?> collection, 
 			int index) {
-		return wrap(super.createAddCommand(domain, owner, feature, collection, index), owner);
+		return wrap(super.createAddCommand(domain, owner == null ? (EObject) target : owner, feature, collection, index), owner);
 	}
 	
 	@Override
