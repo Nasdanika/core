@@ -1333,8 +1333,266 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createResource(eNS_URI);
 
 		// Create annotations
+		// http://www.eclipse.org/emf/2002/GenModel
+		createGenModelAnnotations();
 		// urn:org.nasdanika
 		createUrnorgAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/GenModel</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createGenModelAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/GenModel";
+		addAnnotation
+		  (this,
+		   source,
+		   new String[] {
+			   "documentation", "Nasdanika core model containing common classes"
+		   });
+		addAnnotation
+		  (modelElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Model element with a description."
+		   });
+		addAnnotation
+		  (getModelElement_Title(),
+		   source,
+		   new String[] {
+			   "documentation", "If title is set it is used by default as element text/label."
+		   });
+		addAnnotation
+		  (getModelElement_Description(),
+		   source,
+		   new String[] {
+			   "documentation", "Description in markdown."
+		   });
+		addAnnotation
+		  (namedElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Element with a name."
+		   });
+		addAnnotation
+		  (entityEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Element with a unique auto-generated identity."
+		   });
+		addAnnotation
+		  (getParty_ContactMethods(),
+		   source,
+		   new String[] {
+			   "documentation", "Party can have zero or more contact methods."
+		   });
+		addAnnotation
+		  (contactMethodEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Generic contact method."
+		   });
+		addAnnotation
+		  (workFactoryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Command factory creates a command for a given context. When the command is executed with a progress monitor it returns a result of specific type."
+		   });
+		addAnnotation
+		  (typedElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Typed element is a command factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context\'s service with the specified type. The primary pupose of of the typed element is to serve as a specification/description."
+		   });
+		addAnnotation
+		  (getTypedElement_Type(),
+		   source,
+		   new String[] {
+			   "documentation", "Fully qualified Java type name. "
+		   });
+		addAnnotation
+		  (getTypedElement_Required(),
+		   source,
+		   new String[] {
+			   "documentation", "Indicates that the element result can not be null."
+		   });
+		addAnnotation
+		  (providerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Provided is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."
+		   });
+		addAnnotation
+		  (getProvider_Implementation(),
+		   source,
+		   new String[] {
+			   "documentation", "Provider implementation. If empty, type\'s constructor is used as a provider.\n\nProvider implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. If both type and implementation as defined then the implementation must be a subclass/implementation of type or there should be a Converter service in the context which converts implementation into type. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then a method with a given name which taks a single Context argument or not arguments is used. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor and a no-argument method with a given name is used.\n"
+		   });
+		addAnnotation
+		  (valueEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Value computes its result from text. \n\nValue implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, just ``java.lang.String``.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then it shall take Context and String or just String. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.\n\nWhen implementation is specified, value is equivalent to an operation with a single String argument."
+		   });
+		addAnnotation
+		  (getValue_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Textual representation of the value. If interpolate is ``true`` then the value is interpolated in the context. If type and implementation are empty value is returned as is. \nIf type is specified and the result is not of that type, then the result is converted to the type using the context converter service.\n"
+		   });
+		addAnnotation
+		  (getValue_Interpolate(),
+		   source,
+		   new String[] {
+			   "documentation", "If ``true`` (default) the value is interpolated."
+		   });
+		addAnnotation
+		  (nullEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Typed null can be used as an operation argument."
+		   });
+		addAnnotation
+		  (operationEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Operation computes its result the operation arguments. \n\nOperation implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method not static then its parameters shall be compatible with Context and as the first argument and then operation arguments, or just with operation arguments without context. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments and the method shall not take any arguments.\n"
+		   });
+		addAnnotation
+		  (getOperation_Arguments(),
+		   source,
+		   new String[] {
+			   "documentation", "Operation arguments."
+		   });
+		addAnnotation
+		  (arrayEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A sequence of other elements."
+		   });
+		addAnnotation
+		  (getArray_Elements(),
+		   source,
+		   new String[] {
+			   "documentation", "Array elements."
+		   });
+		addAnnotation
+		  (contextEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Produces ``org.nasdanika.common.Context``. "
+		   });
+		addAnnotation
+		  (getContext_Elements(),
+		   source,
+		   new String[] {
+			   "documentation", "Context elements. Elements which extend Entry are treated as context properties and unnamed typed elments are treated as services."
+		   });
+		addAnnotation
+		  (entryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Command factory with an name."
+		   });
+		addAnnotation
+		  (typedEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Typed element with a name. Typed entry gets its result from the context\'s properti with the specified name converted to the specified type. The primary pupose of of the typed entry is to serve as a specification/description."
+		   });
+		addAnnotation
+		  (providerEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Provider with a name."
+		   });
+		addAnnotation
+		  (mapEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A collection of entries mapping names to results."
+		   });
+		addAnnotation
+		  (getMap_Entries(),
+		   source,
+		   new String[] {
+			   "documentation", "Map entries."
+		   });
+		addAnnotation
+		  (propertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Property is a named value."
+		   });
+		addAnnotation
+		  (functionEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Function is a named operation."
+		   });
+		addAnnotation
+		  (listEClass,
+		   source,
+		   new String[] {
+			   "documentation", "List is a named array."
+		   });
+		addAnnotation
+		  (objectEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Object is a named map."
+		   });
+		addAnnotation
+		  (httpCallEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Makes an HTTP Call. Converts result to Map/List for ``application/json`` content type, to text for ``text/...`` content types. Returns a byte array otherwise."
+		   });
+		addAnnotation
+		  (getHttpCall_Url(),
+		   source,
+		   new String[] {
+			   "documentation", "URL resolved relative to the model."
+		   });
+		addAnnotation
+		  (getHttpCall_ConnectTimeout(),
+		   source,
+		   new String[] {
+			   "documentation", "Connect timeout in seconds"
+		   });
+		addAnnotation
+		  (getHttpCall_ReadTimeout(),
+		   source,
+		   new String[] {
+			   "documentation", "Read timeout in seconds"
+		   });
+		addAnnotation
+		  (getHttpCall_SuccessCode(),
+		   source,
+		   new String[] {
+			   "documentation", "HTTP response code indicating success."
+		   });
+		addAnnotation
+		  (restOperationEClass,
+		   source,
+		   new String[] {
+			   "documentation", "HTTP Call with JSON payload constructed from arguments."
+		   });
+		addAnnotation
+		  (getRestOperation_Arguments(),
+		   source,
+		   new String[] {
+			   "documentation", "Operation arguments."
+		   });
+		addAnnotation
+		  (restFunctionEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Function is a named operation."
+		   });
 	}
 
 	/**
