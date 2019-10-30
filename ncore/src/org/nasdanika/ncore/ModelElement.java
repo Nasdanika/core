@@ -31,7 +31,7 @@ public interface ModelElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Title is used by default as element text/label.
+	 * If title is set it is used by default as element text/label.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Title</em>' attribute.
 	 * @see #setTitle(String)

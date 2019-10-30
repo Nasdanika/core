@@ -2,10 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.util.concurrent.Executor;
-
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Command;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Work;

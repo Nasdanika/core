@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.Object;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;

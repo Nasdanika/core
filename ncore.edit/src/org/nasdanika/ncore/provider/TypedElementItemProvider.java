@@ -13,7 +13,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
+import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.TypedElement;
 
@@ -99,11 +99,11 @@ public class TypedElementItemProvider extends ModelElementItemProvider {
 	 * This returns TypedElement.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/TypedElement"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/TypedElement.png"));
 	}
 
 	/**
@@ -120,14 +120,16 @@ public class TypedElementItemProvider extends ModelElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((TypedElement)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_TypedElement_type") :
-			getString("_UI_TypedElement_type") + " " + label;
+		TypedElement typedElement = (TypedElement)object;
+		String label = typedElement.getTitle();
+		if (Util.isBlank(label)) {
+			label = typedElement.getType();
+		}
+		return label == null || label.length() == 0 ? getString("_UI_TypedElement_type") : label;
 	}
 
 

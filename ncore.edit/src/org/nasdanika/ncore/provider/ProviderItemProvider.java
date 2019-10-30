@@ -13,7 +13,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
+import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Provider;
 
@@ -97,14 +97,25 @@ public class ProviderItemProvider extends TypedElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Provider)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Provider_type") :
-			getString("_UI_Provider_type") + " " + label;
+		Provider provider = (Provider)object;
+		String label = provider.getTitle();
+		if (Util.isBlank(label)) {
+			String type = provider.getType();			
+			StringBuilder labelBuilder = new StringBuilder();
+			if (!Util.isBlank(type)) {
+				labelBuilder.append("(").append(type).append(") ");
+			}
+			String implementation = provider.getImplementation();
+			if (!Util.isBlank(implementation)) {
+				labelBuilder.append(implementation);
+			}
+			label = labelBuilder.toString();
+		}
+		return label == null || label.length() == 0 ? getString("_UI_Provider_type") : label;
 	}
 
 

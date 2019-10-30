@@ -13,8 +13,9 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
+import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Provider;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -115,19 +116,37 @@ public class ValueItemProvider extends ProviderItemProvider {
 	protected boolean shouldComposeCreationImage() {
 		return true;
 	}
+	
+	private static final int TRUNCATE_LENGTH = 25;
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Value)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Value_type") :
-			getString("_UI_Value_type") + " " + label;
+		Value value = (Value) object;
+		String label = value.getTitle();
+		if (Util.isBlank(label)) {
+			String type = value.getType();			
+			StringBuilder labelBuilder = new StringBuilder();
+			if (!Util.isBlank(type)) {
+				labelBuilder.append("(").append(type).append(") ");
+			}
+			String implementation = value.getImplementation();
+			if (!Util.isBlank(implementation)) {
+				labelBuilder.append(implementation);
+			}
+			String strValue = value.getValue();
+			if (!Util.isBlank(strValue)) {
+				labelBuilder.append("(").append(strValue.length() > TRUNCATE_LENGTH ? strValue.substring(0, TRUNCATE_LENGTH) + " ..." : strValue).append(")");				
+			}
+			
+			label = labelBuilder.toString();
+		}
+		return label == null || label.length() == 0 ? getString("_UI_Value_type") :	label;
 	}
 
 
