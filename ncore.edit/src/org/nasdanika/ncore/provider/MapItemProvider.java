@@ -81,11 +81,11 @@ public class MapItemProvider extends ModelElementItemProvider {
 	 * This returns Map.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Map"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Map.png"));
 	}
 
 	/**
@@ -102,14 +102,12 @@ public class MapItemProvider extends ModelElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Map)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Map_type") :
-			getString("_UI_Map_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_Map_type") : label;
 	}
 
 
