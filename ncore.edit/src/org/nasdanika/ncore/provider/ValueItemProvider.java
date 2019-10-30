@@ -8,14 +8,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Provider;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -56,42 +53,40 @@ public class ValueItemProvider extends ProviderItemProvider {
 	 * This adds a property descriptor for the Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addValuePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Value_value_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Value_value_feature", "_UI_Value_type"),
-				 NcorePackage.Literals.VALUE__VALUE,
-				 true,
-				 true,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+			(createItemPropertyDescriptor(
+				getResourceLocator(),
+				getString("_UI_Value_value_feature"),
+				NcorePackage.Literals.VALUE__VALUE,
+				true,
+				true,
+				false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				null,
+				null,
+				null));
 	}
 
 	/**
 	 * This adds a property descriptor for the Interpolate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addInterpolatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Value_interpolate_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Value_interpolate_feature", "_UI_Value_type"),
 				 NcorePackage.Literals.VALUE__INTERPOLATE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -148,7 +143,6 @@ public class ValueItemProvider extends ProviderItemProvider {
 		}
 		return label == null || label.length() == 0 ? getString("_UI_Value_type") :	label;
 	}
-
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
