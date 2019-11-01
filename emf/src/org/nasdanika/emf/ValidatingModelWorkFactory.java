@@ -1,6 +1,5 @@
 package org.nasdanika.emf;
 
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.Diagnostic;
@@ -11,8 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Status;
 import org.nasdanika.common.Work;
 
 /**
