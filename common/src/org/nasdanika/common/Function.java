@@ -8,9 +8,7 @@ package org.nasdanika.common;
  *
  * @param <T>
  */
-public interface Function<T,R> {
-	
-	WorkFactory<R> createWork(T arg) throws Exception;
+public interface Function<T,R> extends Factory<T,WorkFactory<R>> {
 	
 	/**
      * Returns a composed function that first executes this function's work with its input, 

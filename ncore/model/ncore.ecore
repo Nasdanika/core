@@ -71,7 +71,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="WorkFactory" instanceClassName="org.nasdanika.common.WorkFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Command factory creates a command for a given context. When the command is executed with a progress monitor it returns a result of specific type."/>
+      <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
+    </eAnnotations>
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.Consumer"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
     </eAnnotations>
     <eTypeParameters name="T"/>
   </eClassifiers>

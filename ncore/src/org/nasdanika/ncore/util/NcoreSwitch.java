@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
+import org.nasdanika.common.Consumer;
 import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
@@ -168,6 +169,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.WORK_FACTORY: {
 				WorkFactory<?> workFactory = (WorkFactory<?>)theEObject;
 				T1 result = caseWorkFactory(workFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.CONSUMER: {
+				Consumer<?> consumer = (Consumer<?>)theEObject;
+				T1 result = caseConsumer(consumer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -771,6 +778,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseRestFunction(RestFunction object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseConsumer(Consumer<T> object) {
 		return null;
 	}
 

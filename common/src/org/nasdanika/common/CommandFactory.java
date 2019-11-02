@@ -6,7 +6,7 @@ package org.nasdanika.common;
  *
  * @param <T>
  */
-public interface CommandFactory<T> extends Factory<Command<T>> {
+public interface CommandFactory<T> extends Factory<Context,Command<T>> {
 		
 	
 }

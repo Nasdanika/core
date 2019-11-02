@@ -1,18 +1,18 @@
 package org.nasdanika.common;
 
 /**
- * Creates instance for a given context.
+ * Creates result from argument.
  * @author Pavel Vlasov
  *
  * @param <T>
  */
-public interface Factory<T> {
+public interface Factory<T,R> {
 		
 	/**
 	 * @param context
 	 * @return
 	 * @throws Exception
 	 */
-	T create(Context context) throws Exception;
+	R create(T arg) throws Exception;
 	
 }

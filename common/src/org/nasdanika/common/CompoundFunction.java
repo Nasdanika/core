@@ -31,10 +31,10 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 	}
 
 	@Override
-	public WorkFactory<R> createWork(T arg) throws Exception {
+	public WorkFactory<R> create(T arg) throws Exception {
 		List<WorkFactory<U>> cwfl = new ArrayList<>();
 		for (Function<T, U> child: children) {
-			cwfl.add(child.createWork(arg));
+			cwfl.add(child.create(arg));
 		}
 		return new WorkFactory<R>() {
 

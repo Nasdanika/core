@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.nasdanika.common.Consumer;
 import org.nasdanika.common.WorkFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
@@ -244,6 +245,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass restFunctionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass consumerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -936,6 +944,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getConsumer() {
+		return consumerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getHttpMethod() {
 		return httpMethodEEnum;
 	}
@@ -1015,6 +1033,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
 
 		workFactoryEClass = createEClass(WORK_FACTORY);
+
+		consumerEClass = createEClass(CONSUMER);
 
 		typedElementEClass = createEClass(TYPED_ELEMENT);
 		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
@@ -1100,6 +1120,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Create type parameters
 		addETypeParameter(workFactoryEClass, "T");
+		addETypeParameter(consumerEClass, "T");
 		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
 		// Set bounds for type parameters
@@ -1247,6 +1268,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(workFactoryEClass, WorkFactory.class, "WorkFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(consumerEClass, Consumer.class, "Consumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1399,7 +1422,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (workFactoryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Command factory creates a command for a given context. When the command is executed with a progress monitor it returns a result of specific type."
+			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
+		   });
+		addAnnotation
+		  (consumerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
 		   });
 		addAnnotation
 		  (typedElementEClass,
