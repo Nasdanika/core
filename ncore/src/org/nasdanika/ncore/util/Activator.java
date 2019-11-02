@@ -1,6 +1,5 @@
 package org.nasdanika.ncore.util;
 
-import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.emf.Palette;
 import org.nasdanika.ncore.NcorePackage;
 import org.osgi.framework.BundleActivator;
