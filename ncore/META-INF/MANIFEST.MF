@@ -16,3 +16,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.ncore
+Bundle-Activator: org.nasdanika.ncore.util.Activator

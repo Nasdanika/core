@@ -65,12 +65,23 @@ public interface Palette {
 					synchronized public void add(Contributor contributor) {
 						contributors.add(contributor);						
 					}
+
+					@Override
+					public String getId() {
+						return id;
+					}
 					
 				});
 			}
 		};
 		
 	}
+	
+	/**
+	 * Palette id.
+	 * @return
+	 */
+	String getId();
 	
 	interface Contributor extends Supplier<EObject> {
 		
@@ -123,20 +134,22 @@ public interface Palette {
 	 * Adds a contributor which instantiates given EClass and uses EClass name and EPackage namespace URI as ID.
 	 * @param eClass
 	 */
-	default void add(EClass eClass) {
-		add(new Contributor() {
-			
-			@Override
-			public EObject get() {
-				return eClass.getEPackage().getEFactoryInstance().create(eClass);
-			}
-			
-			@Override
-			public String getId() {
-				return eClass.getName()+"@"+eClass.getEPackage().getNsURI();
-			}
-			
-		});
+	default void add(EClass... eClass) {
+		for (EClass ec: eClass) {
+			add(new Contributor() {
+				
+				@Override
+				public EObject get() {
+					return ec.getEPackage().getEFactoryInstance().create(ec);
+				}
+				
+				@Override
+				public String getId() {
+					return ec.getName()+"@"+ec.getEPackage().getNsURI();
+				}
+				
+			});
+		}
 	};
 
 	/**
