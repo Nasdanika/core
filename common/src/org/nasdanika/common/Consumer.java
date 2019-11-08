@@ -9,5 +9,25 @@ package org.nasdanika.common;
  * @param <T>
  */
 public interface Consumer<T> extends Function<T,Void> {
+	
+	static <T> Consumer<T> from(java.util.function.Consumer<T> consumer) {
+		return new Consumer<T>() {
+
+			@Override
+			public WorkFactory<Void> create(WorkFactory<T> arg) throws Exception {
+				return new WorkFactory<Void>() {
+
+					@Override
+					public Work<Void> create(Context context) throws Exception {
+						return arg.create(context).adapt(r -> {
+							consumer.accept(r);
+							return null;
+						});
+					}
+				};
+			}
+			
+		};
+	}
 
 }

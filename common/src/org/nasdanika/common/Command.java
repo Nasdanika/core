@@ -45,6 +45,8 @@ public interface Command<T>  extends Diagnosable, AutoCloseable {
 	default void close() throws Exception {
 		
 	}
+	
+	// TODO - from and as similar to those in Work
 
 		
 }

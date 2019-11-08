@@ -21,6 +21,13 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	
 	private Executor executor;
 	
+	/**
+	 * @return Executor passed to the constructor. Override to return null to force sequential execution.
+	 */
+	protected Executor getExecutor() {
+		return executor;
+	}
+	
 	private static class CommandEntry<E> {
 		Command<E> command;
 		CommandCallable<E> callable;
@@ -128,12 +135,12 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 				Collections.reverse(theChildren);
 			}
 			// Submitting for asynchronous execution, leaving the last element for execution in the current thread.
-			if (executor != null) {
+			if (getExecutor() != null) {
 				Iterator<CommandEntry<E>> ceit = theChildren.iterator();
 				while (ceit.hasNext()) {
 					CommandEntry<E> ce = ceit.next();
 					if (ceit.hasNext()) {
-						executor.execute(() -> {
+						getExecutor().execute(() -> {
 							try {
 								ce.callable.call();
 							} catch (Exception e) {

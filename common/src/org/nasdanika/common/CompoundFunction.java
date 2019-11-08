@@ -22,7 +22,7 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 		children.add(child);
 	}
 	
-	protected String getName(Context context) {
+	protected String getName() {
 		return "Compound function";
 	}
 	
@@ -30,17 +30,22 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 		return context.get(Executor.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public WorkFactory<R> create(T arg) throws Exception {
+	public WorkFactory<R> create(WorkFactory<T> arg) throws Exception {
+		Object[] argResult = { null };
+		
 		List<WorkFactory<U>> cwfl = new ArrayList<>();
 		for (Function<T, U> child: children) {
-			cwfl.add(child.create(arg));
+			cwfl.add(child.create(WorkFactory.from((T) argResult[0], "Argument", 1)));
 		}
 		return new WorkFactory<R>() {
 
 			@Override
 			public Work<R> create(Context context) throws Exception {
-				CompoundWork<R, U> ret = new CompoundWork<R, U>(getName(context), getExecutor(context)) {
+				Work<T> argWork = arg.create(context);
+				
+				CompoundWork<R, U> childWork = new CompoundWork<R, U>("Child work", getExecutor(context)) {
 
 					@Override
 					protected R combine(List<U> results, ProgressMonitor progressMonitor) throws Exception {
@@ -49,10 +54,54 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 				};
 				
 				for (WorkFactory<U> cwf: cwfl) {
-					ret.add(cwf.create(context));
+					childWork.add(cwf.create(context));
 				}
 				
-				return ret;
+				return new Work<R>() {
+					
+					@Override
+					public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+						return Diagnostic.compose(
+								"Compound function",
+								argWork.diagnose(progressMonitor.split("Diagnosing arg work", argWork.size())),
+								childWork.diagnose(progressMonitor.split("Diagnosing child work", childWork.size())));
+					}
+					
+					@Override
+					public void commit(ProgressMonitor progressMonitor) throws Exception {
+						argWork.commit(progressMonitor.split("Committing arg work", argWork.size()));
+						childWork.commit(progressMonitor.split("Committing child work", childWork.size()));
+					}
+					
+					@Override
+					public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+						return argWork.rollback(progressMonitor.split("Rolling back arg work", argWork.size()))
+								&& childWork.rollback(progressMonitor.split("Rolling child work", childWork.size()));
+					}
+					
+					@Override
+					public void close() throws Exception {
+						argWork.close();
+						childWork.close();
+					}
+
+					@Override
+					public R execute(ProgressMonitor progressMonitor) throws Exception {
+						argResult[0] = argWork.execute(progressMonitor.split("Executing arg work", argWork.size()));
+						return childWork.execute(progressMonitor.split("Executing child work", childWork.size()));
+					}
+
+					@Override
+					public double size() {
+						return argWork.size() + childWork.size();
+					}
+
+					@Override
+					public String getName() {
+						return CompoundFunction.this.getName();
+					}
+					
+				};
 			}
 			
 		};

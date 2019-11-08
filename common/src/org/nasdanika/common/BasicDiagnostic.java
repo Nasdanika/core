@@ -75,5 +75,5 @@ public class BasicDiagnostic implements Diagnostic, DiagnosticChain, Composeable
 		}
 		return this;
 	}
-	
+		
 }
