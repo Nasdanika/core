@@ -37,7 +37,7 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 		
 		List<WorkFactory<U>> cwfl = new ArrayList<>();
 		for (Function<T, U> child: children) {
-			cwfl.add(child.create(WorkFactory.from((T) argResult[0], "Argument", 1)));
+			cwfl.add(child.create(WorkFactory.from((T) argResult[0], "Argument")));
 		}
 		return new WorkFactory<R>() {
 
@@ -75,8 +75,9 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 					
 					@Override
 					public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
-						return argWork.rollback(progressMonitor.split("Rolling back arg work", argWork.size()))
-								&& childWork.rollback(progressMonitor.split("Rolling child work", childWork.size()));
+						boolean childRollbackResult = childWork.rollback(progressMonitor.split("Rolling child work", childWork.size()));
+						boolean argRollbackResult = argWork.rollback(progressMonitor.split("Rolling back arg work", argWork.size()));
+						return childRollbackResult && argRollbackResult;
 					}
 					
 					@Override

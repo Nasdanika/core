@@ -65,8 +65,8 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		return from((c,p) -> supplier.get(), name, size);		
 	}
 	
-	static <T> WorkFactory<T> from(T value, String name, double size) {
-		return from((c,p) -> value, name, size);		
+	static <T> WorkFactory<T> from(T value, String name) {
+		return from((c,p) -> value, name, 0);		
 	}
 		
 	static <T> WorkFactory<T> from(Callable<T> callable, String name, double size) {
