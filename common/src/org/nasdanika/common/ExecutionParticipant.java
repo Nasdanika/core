@@ -1,7 +1,5 @@
 package org.nasdanika.common;
 
-import org.nasdanika.common._legacy._LegacyCommandToRemove;
-
 /**
  * Base interface for {@link Supplier}, {@link Function}, {@link Consumer}, and {@link _LegacyCommandToRemove}.
  * @author Pavel
@@ -42,9 +40,9 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		return true;
 	};
 	
-	default void splitAndRollback(ProgressMonitor progressMonitor) throws Exception {
+	default boolean splitAndRollback(ProgressMonitor progressMonitor) throws Exception {
 		try (ProgressMonitor subMonitor = split(progressMonitor)) {
-			rollback(subMonitor);
+			return rollback(subMonitor);
 		}
 	}	
 	
@@ -57,7 +55,7 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		return parent.split(name(), size(), this);
 	}
 		
-	default Diagnostic splitAndDiagnose(ProgressMonitor progressMonitor) throws Exception {
+	default Diagnostic splitAndDiagnose(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor)) {
 			return diagnose(subMonitor);
 		}

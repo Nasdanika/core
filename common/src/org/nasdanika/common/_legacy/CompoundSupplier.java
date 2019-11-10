@@ -6,7 +6,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 import org.nasdanika.common.CommandCallable;
-import org.nasdanika.common.CompoundCommand;
 import org.nasdanika.common.CompoundExecutionParticipantInfo;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipantInfo;
