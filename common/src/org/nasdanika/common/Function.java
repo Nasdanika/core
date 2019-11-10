@@ -42,5 +42,16 @@ public interface Function<T,R> extends Factory<WorkFactory<T>,WorkFactory<R>> {
 		};
 	}
 	
+	static <V> Function<V,V> nop() {
+		return new Function<V, V>() {
+
+			@Override
+			public WorkFactory<V> create(WorkFactory<V> arg) throws Exception {
+				return arg;
+			}
+			
+		};
+	};
+	
 	
 }
