@@ -1,33 +1,11 @@
 package org.nasdanika.common;
 
-import java.util.concurrent.Callable;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.BiConsumer;
 
 /**
- * By convention Supplier does not split the monitor for itself - this is the responsibility of the caller.
- * 
- * {@link ProgressMonitor} allocation pattern - the caller creates a monitor with work's size and name and passes it to work's execute:
- * 
- * ```
- * try (Supplier supplier = ...; ProgressMonitor workMonitor = monitor.split(work.getName(), work.getSize(), work)) {
- *     work.execute(workMonitor);
- *     
- *     // If success
- *     work.commit();
- *     
- *     // If something went wrong
- *     work.rollback();
- *     
- * }
- * ```
- * 
  * @author Pavel Vlasov
- * @param C context type.
- * @param T result type.
  */
-public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantInfo {
+public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantInfo, BiConsumer<T, ProgressMonitor> {
 		
 	/**
 	 * Executes the _LegacyCommandToRemove.
@@ -55,7 +33,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 
 		@Override
 		public void execute(Object arg, ProgressMonitor monitor) throws Exception {
-			// NOPT
+			// NOP
 		}
 		
 	};
@@ -65,206 +43,105 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		return (Consumer<T>) NOP;
 	}
 	
-	default <R> Supplier<R> adapt(Function<T,R> adapter) {
-		return new Supplier<R>() {
+	@Override
+	default void accept(T arg, ProgressMonitor progressMonitor) {
+		try {
+			progressMonitor.setWorkRemaining(size()*3); // diagnose, execute, commit or rollback
+			diagnose(progressMonitor.split("Diagnosing", size())).checkError("Diagnostic failed: "+name());
+			try {
+				execute(arg, progressMonitor.split("Executing", size()));
+				commit(progressMonitor.split("Committing", size()));
+			} catch (Exception e) {
+				try {
+					rollback(progressMonitor.split("Rolling back: "+e, size(), e));
+				} catch (Exception re) {
+					e.addSuppressed(re);
+				}
+				throw e;
+			}
+		} catch (DiagnosticException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new NasdanikaException(e);
+		} finally {
+			try {
+				close();
+			} catch (Exception e) {
+				throw new NasdanikaException(e);
+			}
+		}		
+	}
+	
+	default <V> Consumer<V> before(java.util.function.Function<V,T> before) {
+		return new Consumer<V>() {
 			
 			@Override
-			public R execute(ProgressMonitor progressMonitor) throws Exception {
-				return adapter.apply(Supplier.this.execute(progressMonitor));
+			public void execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+				Consumer.this.execute(before.apply(arg), progressMonitor);
 			}
 			
 			@Override
 			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
-				return Supplier.this.diagnose(progressMonitor);
+				return Consumer.this.diagnose(progressMonitor);
 			}
 			
 			@Override
 			public void close() throws Exception {
-				Supplier.this.close();
+				Consumer.this.close();
 			}
 			
 			@Override
 			public void commit(ProgressMonitor progressMonitor) throws Exception {
-				Supplier.this.commit(progressMonitor);
+				Consumer.this.commit(progressMonitor);
 			}
 			
 			@Override
 			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
-				return Supplier.this.rollback(progressMonitor);
+				return Consumer.this.rollback(progressMonitor);
 			}
 			
 			@Override
 			public double size() {
-				return Supplier.this.size();
+				return Consumer.this.size();
 			}
 			
 			@Override
 			public String name() {
-				return Supplier.this.name();
+				return Consumer.this.name();
 			}
 			
 		};
 	}
 	
-	/**
-	 * Returns a composed work factory that first executes this work factor work, 
-	 * and then executes the {@code then} function work with the result.
-	 *
-	 * @param <V> the type of work result of the {@code then} function, and of the composed function's work
-	 * @param then
-	 * @return
-	 * @throws Exception 
-	 */
-	default <V> Supplier<V> then(Function<T,V> after) throws Exception {
-		return after.create(this);
-	}
-	
-	static <T> SupplierFactory<T> fromBiFunction(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
-		return new SupplierFactory<T>() {
-	
+	static <T> Consumer<T> fromBiConsumer(BiConsumer<T,ProgressMonitor> biConsumer, String name, double size) {
+		return new Consumer<T>() {
+
 			@Override
-			public Supplier<T> create(Context context) throws Exception {
-				return new Supplier<T>() {
-	
-					@Override
-					public T execute(ProgressMonitor progressMonitor) throws Exception {
-						return biFunction.apply(context, progressMonitor);
-					}
-	
-					@Override
-					public double size() {
-						return size;
-					}
-	
-					@Override
-					public String name() {
-						return name;
-					}
-					
-				};
+			public double size() {
+				return size;
 			}
-			
-		};
-	}
-	
-	static <T> SupplierFactory<T> fromSupplier(Supplier<T> supplier, String name, double size) {
-		return fromBiFunction((c,p) -> supplier.get(), name, size);		
-	}
-	
-	static <T> SupplierFactory<T> from(T value, String name) {
-		return fromBiFunction((c,p) -> value, name, 0);		
-	}
-		
-	static <T> SupplierFactory<T> fromCallable(Callable<T> callable, String name, double size) {
-		return new SupplierFactory<T>() {
-	
+
 			@Override
-			public Supplier<T> create(Context context) throws Exception {
-				return new Supplier<T>() {
-	
-					@Override
-					public T execute(ProgressMonitor progressMonitor) throws Exception {
-						return callable.call();
-					}
-	
-					@Override
-					public double size() {
-						return size;
-					}
-	
-					@Override
-					public String name() {
-						return name;
-					}
-					
-				};
+			public String name() {
+				return name;
 			}
-			
-		};
-	}
-		
-	static SupplierFactory<Void> fromRunnable(Runnable runnable, String name, double size) {
-		return fromBiFunction((c,p) -> { runnable.run(); return null; }, name, size);		
-	}
-	
-	/**
-	 * Creates work, diagnoses it, executes, commits if there is no exception and rolls back if there is, closes, returns result.
-	 * @return
-	 */
-	default BiFunction<Context,ProgressMonitor,T> asBiFunction() {
-		return new BiFunction<Context, ProgressMonitor, T>() {
-	
+
 			@Override
-			public T apply(Context context, ProgressMonitor progressMonitor) {
-				try (Supplier<T> work = create(context)) {
-					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
-					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.name());
-					try {
-						T result = work.execute(progressMonitor.split("Executing", 1));
-						work.commit(progressMonitor.split("Committing", 1));
-						return result;
-					} catch (Exception e) {
-						try {
-							work.rollback(progressMonitor.split("Rolling back: "+e, 1, e));
-						} catch (Exception re) {
-							e.addSuppressed(re);
-						}
-						throw e;
-					}
-				} catch (DiagnosticException e) {
-					throw e;
-				} catch (Exception e) {
-					throw new NasdanikaException(e);
-				}
+			public void execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+				biConsumer.accept(arg, progressMonitor);				
 			}
 		};
 	}
 	
 	/**
-	 * Calls asBiFunction() with a {@link NullProgressMonitor}.
+	 * @param <T>
+	 * @param supplier
+	 * @param name
+	 * @param size
 	 * @return
 	 */
-	default java.util.function.Function<Context,T> asFunction() {
-		return context -> asBiFunction().apply(context, new NullProgressMonitor());
+	static <T> Consumer<T> fromConsumer(java.util.function.Consumer<T> consumer, String name, double size) {
+		return fromBiConsumer((arg,progressMonitor) -> consumer.accept(arg), name, size);		
 	}
-	
-	/**
-	 * Calls asFunction() with an empty context.
-	 * @return
-	 */
-	default Supplier<T> asSupplier() {
-		return () -> asFunction().apply(Context.EMPTY_CONTEXT);
-	}
-	
-	/**
-	 * Creates work, diagnoses it, executes, commits if there is no exception and rolls back if there is, closes, returns result.
-	 * Uses empty context and null progress monitor.
-	 * @return
-	 */
-	default Callable<T> asCallable() {
-		return new Callable<T>() {
-	
-			@Override
-			public T call() throws Exception {
-				try (Supplier<T> work = create(Context.EMPTY_CONTEXT); ProgressMonitor progressMonitor = new NullProgressMonitor()) {
-					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
-					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.name());
-					try {
-						T result = work.execute(progressMonitor.split("Executing", 1));
-						work.commit(progressMonitor.split("Committing", 1));
-						return result;
-					} catch (Exception e) {
-						try {
-							work.rollback(progressMonitor.split("Rolling back: "+e, 1, e));
-						} catch (Exception re) {
-							e.addSuppressed(re);
-						}
-						throw e;
-					}
-				}
-			}
-		};
-	}	
-	
 	
 }

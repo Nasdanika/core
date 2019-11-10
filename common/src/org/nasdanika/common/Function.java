@@ -41,6 +41,47 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		return (Function<V,V>) NOP;
 	}
 	
+	default <V> Function<V,R> before(java.util.function.Function<V,T> before) {
+		return new Function<V,R>() {
+			
+			@Override
+			public R execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+				return Function.this.execute(before.apply(arg), progressMonitor);
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Function.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() throws Exception {
+				Function.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) throws Exception {
+				Function.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+				return Function.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Function.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Function.this.name();
+			}
+			
+		};
+	}
+	
 	default <V> Function<T,V> then(java.util.function.Function<R,V> then) {
 		return new Function<T,V>() {
 			
@@ -82,9 +123,13 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		};
 	}
 	
-	default <V> Supplier<V> then(Function<R,V> then) throws Exception {
+	default <V> Function<T,V> then(Function<R,V> then) throws Exception {
 		throw new UnsupportedOperationException();
 	}
+		
+	default Consumer<T> then(Consumer<R> then) throws Exception {
+		throw new UnsupportedOperationException();
+	}	
 	
 	static <T,R> Function<T,R> fromBiFunction(BiFunction<T, ProgressMonitor, R> biFunction, String name, double size) {
 		return new Function<T,R>() {
