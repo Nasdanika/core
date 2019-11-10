@@ -27,7 +27,7 @@ import org.nasdanika.repository.Repository;
 
 @SuppressWarnings("serial")
 /**
- * Repository servlet wraps request/response into a command which is executed against a resource in the repository.
+ * Repository servlet wraps request/response into a _LegacyCommandToRemove which is executed against a resource in the repository.
  * @author Pavel
  *
  */
@@ -402,7 +402,7 @@ public abstract class RepositoryServlet extends HttpServlet {
 //			@Override
 //			public boolean hasPermission(String action, String qualifier, Map<?,?> context) {
 //				if (context.isEmpty()) {
-//					Function<? super CacheKey, ? extends Boolean> cf = key -> authorize(req, transaction, target, key.action, key.qualifier, context);
+//					FunctionFactory<? super CacheKey, ? extends Boolean> cf = key -> authorize(req, transaction, target, key.action, key.qualifier, context);
 //					return cache.computeIfAbsent(new CacheKey(action, qualifier), cf);
 //				}
 //				return authorize(req, transaction, target, action, qualifier, context);

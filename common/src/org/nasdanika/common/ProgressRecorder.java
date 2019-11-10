@@ -36,7 +36,7 @@ public class ProgressRecorder implements ProgressMonitor {
 	}
 
 	/**
-	 * Work step reported by worked() methods.
+	 * Supplier step reported by worked() methods.
 	 * @author Pavel
 	 *
 	 */

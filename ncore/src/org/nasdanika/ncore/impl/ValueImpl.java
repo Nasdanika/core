@@ -7,7 +7,7 @@ import java.lang.Object;
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Value;
 
@@ -175,8 +175,8 @@ public class ValueImpl extends ProviderImpl implements Value {
 	
 	// TODO - proper implementation.
 	@Override
-	public Work<Object> create(Context context) throws Exception {
-		return new Work<Object>() {
+	public Supplier<Object> create(Context context) throws Exception {
+		return new Supplier<Object>() {
 
 			@Override
 			public Object execute(ProgressMonitor progressMonitor) throws Exception {

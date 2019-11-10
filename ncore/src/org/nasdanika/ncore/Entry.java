@@ -2,7 +2,7 @@
  */
 package org.nasdanika.ncore;
 
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -10,7 +10,7 @@ import org.nasdanika.common.WorkFactory;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Command factory with an name.
+ * _LegacyCommandToRemove factory with an name.
  * <!-- end-model-doc -->
  *
  *
@@ -18,5 +18,5 @@ import org.nasdanika.common.WorkFactory;
  * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.WorkFactory&lt;T&gt;"
  * @generated
  */
-public interface Entry<T> extends NamedElement, WorkFactory<T> {
+public interface Entry<T> extends NamedElement, SupplierFactory<T> {
 } // Entry

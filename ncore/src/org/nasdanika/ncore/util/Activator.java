@@ -38,7 +38,7 @@ public class Activator implements BundleActivator {
 				NcorePackage.Literals.TYPED_ELEMENT,
 				NcorePackage.Literals.VALUE);	
 
-		// TODO -> Function
+		// TODO -> FunctionFactory
 		// TODO Resource
 		
 		NAMED_EXPRESSIONS_PALETTE.add(
@@ -48,7 +48,7 @@ public class Activator implements BundleActivator {
 			NcorePackage.Literals.PROPERTY,	
 			NcorePackage.Literals.REST_FUNCTION);	
 
-		// TODO HTTP Function
+		// TODO HTTP FunctionFactory
 		// TODO Link
 		
 	}

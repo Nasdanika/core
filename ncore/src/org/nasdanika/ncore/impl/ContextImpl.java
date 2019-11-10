@@ -10,8 +10,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Work;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -55,8 +55,8 @@ public class ContextImpl extends ModelElementImpl implements Context {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<WorkFactory<Object>> getElements() {
-		return (EList<WorkFactory<Object>>)eDynamicGet(NcorePackage.CONTEXT__ELEMENTS, NcorePackage.Literals.CONTEXT__ELEMENTS, true, true);
+	public EList<SupplierFactory<Object>> getElements() {
+		return (EList<SupplierFactory<Object>>)eDynamicGet(NcorePackage.CONTEXT__ELEMENTS, NcorePackage.Literals.CONTEXT__ELEMENTS, true, true);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ContextImpl extends ModelElementImpl implements Context {
 		switch (featureID) {
 			case NcorePackage.CONTEXT__ELEMENTS:
 				getElements().clear();
-				getElements().addAll((Collection<? extends WorkFactory<Object>>)newValue);
+				getElements().addAll((Collection<? extends SupplierFactory<Object>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -134,7 +134,7 @@ public class ContextImpl extends ModelElementImpl implements Context {
 	}
 
 	@Override
-	public Work<org.nasdanika.common.Context> create(org.nasdanika.common.Context context) throws Exception {
+	public Supplier<org.nasdanika.common.Context> create(org.nasdanika.common.Context context) throws Exception {
 		throw new UnsupportedOperationException();
 	}
 

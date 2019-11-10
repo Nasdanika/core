@@ -7,10 +7,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Wraps a {@link Command} into a {@link Callable}. This class doesn't split the monitor for itself. The monitor is closed upon completion of the execution of the command. 
- * Executes the work only once inside a lock and caches the result. If the monitor is cancelled when ``call()`` is invoked then the command is not executed
+ * Wraps a {@link _LegacyCommandToRemove} into a {@link Callable}. This class doesn't split the monitor for itself. The monitor is closed upon completion of the execution of the _LegacyCommandToRemove. 
+ * Executes the work only once inside a lock and caches the result. If the monitor is cancelled when ``call()`` is invoked then the _LegacyCommandToRemove is not executed
  * and ``call()`` throws {@link CancellationException}. 
- * If a thread attempts to acquire a lock while the command's ``execute()`` is being executed by another thread,
+ * If a thread attempts to acquire a lock while the _LegacyCommandToRemove's ``execute()`` is being executed by another thread,
  * the calling thread is blocked until the execution completes and both the threads receive the result or 
  * thrown exception. In the case of cached exception it is wrapped into {@link ExecutionException} in 
  * order to provide access to both the stack traces - the one of the current thread and the other of the thread
@@ -29,20 +29,20 @@ public class CommandCallable<T> implements Callable<T> {
 	volatile boolean done;
 	private ProgressMonitor monitor;
 
-	private Command<T> command;
+	private _LegacyCommandToRemove<T> _LegacyCommandToRemove;
 
 	private double size;
 
 	/**
 	 * Creates a callable with a {@link ProgressRecorder}. If ``call()`` is invoked before ``setMonitor()`` then the recorded progress is replayed to the monitor. 
-	 * @param command
+	 * @param _LegacyCommandToRemove
 	 */
-	public CommandCallable(Command<T> command, double size) {
+	public CommandCallable(_LegacyCommandToRemove<T> command, double size) {
 		this(command, size, new ProgressRecorder());		
 	}	
 	
-	public CommandCallable(Command<T> command, double size, ProgressMonitor monitor) {
-		this.command = command;
+	public CommandCallable(_LegacyCommandToRemove<T> command, double size, ProgressMonitor monitor) {
+		this._LegacyCommandToRemove = command;
 		this.size = size;
 		this.monitor = monitor;		
 	}
@@ -82,7 +82,7 @@ public class CommandCallable<T> implements Callable<T> {
 			}
 			
 			try {
-				result = command.execute(monitor.split("Executing command", size, command));
+				result = _LegacyCommandToRemove.execute(monitor.split("Executing _LegacyCommandToRemove", size, _LegacyCommandToRemove));
 				monitor.worked(0, "Completed", result);
 				return result;
 			} catch (Exception e) {

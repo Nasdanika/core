@@ -91,7 +91,7 @@ public interface Resource<E> {
 //	 * @param sizeConverter converts size of an entity. Size is passed as-is if null.
 //	 * @return
 //	 */
-//	<V extends Resource<?>> Resource<V> adapt(Function<T,V> adapter, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);
+//	<V extends Resource<?>> Resource<V> adapt(FunctionFactory<T,V> adapter, BiFunction<Entity<T>, V, T> encoder, BiFunction<Entity<T>, Long, Long> sizeConverter);
 	
 	/**
 	 * @return Resource digest. Entities compute state digest, e.g. SHA256 digest of file contents. Containers derive digest value from their children digests. 

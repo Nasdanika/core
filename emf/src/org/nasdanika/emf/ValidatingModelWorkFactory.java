@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 
 /**
  * This class loads a model, validates it and then returns work for executing generation. 
@@ -36,7 +36,7 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 	}
 	
 	@Override
-	public Work<T> create(Context context) throws Exception {
+	public Supplier<T> create(Context context) throws Exception {
 		Diagnostician diagnostician = new Diagnostician() {
 			
 			public Map<Object,Object> createDefaultContext() {
@@ -46,7 +46,7 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 			};
 			
 		};				
-		Diagnostic validationResult = diagnostician.validate((EObject) workFactory);
+		Diagnostic validationResult = diagnostician.validate((EObject) supplierFactory);
 		if (validationResult.getSeverity() == Diagnostic.ERROR) {
 			throw new DiagnosticException(validationResult);
 		}

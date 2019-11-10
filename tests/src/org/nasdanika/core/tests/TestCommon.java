@@ -21,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.nasdanika.common.CompoundWork;
+import org.nasdanika.common.CompoundSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
@@ -31,7 +31,7 @@ import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
@@ -82,7 +82,7 @@ public class TestCommon {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		ProgressEntry pe = new ProgressEntry("Test progress entry", 0);		
 		try (ProgressMonitor subMonitor = progressMonitor.compose(pe.split("Sub-entry", 1))) {
-			CompoundWork<String, String> cw = new CompoundWork<String, String>("Test work", null) {
+			CompoundSupplier<String, String> cw = new CompoundSupplier<String, String>("Test work", null) {
 				
 				@Override
 				protected String combine(List<String> results, ProgressMonitor progressMonitor) throws Exception {
@@ -96,7 +96,7 @@ public class TestCommon {
 				
 			};
 
-			cw.add(new Work<String>() {
+			cw.add(new Supplier<String>() {
 
 				@Override
 				public double size() {
@@ -122,7 +122,7 @@ public class TestCommon {
 				
 			});
 			
-			cw.add(new Work<String>() {
+			cw.add(new Supplier<String>() {
 
 				@Override
 				public double size() {

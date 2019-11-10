@@ -6,8 +6,8 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.Consumer;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.ConsumerFactory;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -129,15 +129,15 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createWebAddressAdapter();
 			}
 			@Override
-			public <T> Adapter caseWorkFactory(WorkFactory<T> object) {
+			public <T> Adapter caseWorkFactory(SupplierFactory<T> object) {
 				return createWorkFactoryAdapter();
 			}
 			@Override
-			public <T, R> Adapter caseIFunction(org.nasdanika.common.Function<T, R> object) {
+			public <T, R> Adapter caseIFunction(org.nasdanika.common.FunctionFactory<T, R> object) {
 				return createIFunctionAdapter();
 			}
 			@Override
-			public <T> Adapter caseConsumer(Consumer<T> object) {
+			public <T> Adapter caseConsumer(ConsumerFactory<T> object) {
 				return createConsumerAdapter();
 			}
 			@Override
@@ -359,13 +359,13 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.WorkFactory <em>Work Factory</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.SupplierFactory <em>Supplier Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.WorkFactory
+	 * @see org.nasdanika.common.SupplierFactory
 	 * @generated
 	 */
 	public Adapter createWorkFactoryAdapter() {
@@ -373,13 +373,13 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Function <em>IFunction</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.FunctionFactory <em>IFunction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.Function
+	 * @see org.nasdanika.common.FunctionFactory
 	 * @generated
 	 */
 	public Adapter createIFunctionAdapter() {
@@ -555,7 +555,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Function <em>Function</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Function <em>FunctionFactory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -625,7 +625,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.RestFunction <em>Rest Function</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.RestFunction <em>Rest FunctionFactory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -639,13 +639,13 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Consumer <em>Consumer</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.ConsumerFactory <em>ConsumerFactory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.Consumer
+	 * @see org.nasdanika.common.ConsumerFactory
 	 * @generated
 	 */
 	public Adapter createConsumerAdapter() {

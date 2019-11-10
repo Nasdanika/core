@@ -14,10 +14,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.CompoundWork;
+import org.nasdanika.common.CompoundSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -140,8 +140,8 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 	}
 
 	@Override
-	public Work<Map<String, Object>> create(Context context) throws Exception {
-		CompoundWork<Map<String, Object>, Map.Entry<String, Object>> ret = new CompoundWork<Map<String, Object>, Map.Entry<String, Object>>(getTitle(), context.get(Executor.class)) {
+	public Supplier<Map<String, Object>> create(Context context) throws Exception {
+		CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>> ret = new CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>>(getTitle(), context.get(Executor.class)) {
 						
 			@Override
 			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {

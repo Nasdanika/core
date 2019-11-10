@@ -87,7 +87,7 @@ public interface Context extends Composeable<Context> {
 	
 	/**
 	 * @param key Object key (property name).
-	 * @param computer Function to compute value if key is not present.
+	 * @param computer FunctionFactory to compute value if key is not present.
 	 * @return Property by key of a value returned by the computer if property is not present.
 	 */
 	default Object get(String key, Function<String,Object> computer) {
@@ -116,7 +116,7 @@ public interface Context extends Composeable<Context> {
 	/**
 	 * @param <T> Service type.
 	 * @param type Service type class.
-	 * @param computer Function to compute a service instance if none is found in the context.
+	 * @param computer FunctionFactory to compute a service instance if none is found in the context.
 	 * @return Service of a particular type or a service returned by the computer if not service of requested type is found in the context. Multiple service instances maybe obtained by passing an array type.
 	 */
 	default <T> T get(Class<T> type, Function<Class<T>,T> computer) {
@@ -153,7 +153,7 @@ public interface Context extends Composeable<Context> {
 	 * @param <T> Service type.
 	 * @param type Service type class.
 	 * @param predicate Service predicate (filter).
-	 * @param computer Function to compute a service instance if none is found in the context.
+	 * @param computer FunctionFactory to compute a service instance if none is found in the context.
 	 * @return Service of a particular type. Multiple service instances maybe obtained by passing an array type. To filter multiple instances use Predicate&lt;Object&gt; for
 	 * compatibility with both array and component types. 
 	 */
@@ -202,7 +202,7 @@ public interface Context extends Composeable<Context> {
 	 * @param <T> Property/service type.
 	 * @param key Object key (property/service name).
 	 * @param type Property/service type class.
-	 * @param computer Function to compute property value if none is found in the context.
+	 * @param computer FunctionFactory to compute property value if none is found in the context.
 	 * @return Property by key converted to requested type or computed value if property is not present. 
 	 */
 	default <T> T get(String key, Class<T> type, BiFunction<String,Class<T>,T> computer)  {

@@ -6,34 +6,34 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 
 /**
- * Work composed from other work and executing its children in the executor if one is passed to the constructor or in the caller thread otherwise. The last child is always
+ * Supplier composed from other work and executing its children in the executor if one is passed to the constructor or in the caller thread otherwise. The last child is always
  * executed in the caller thread. Execution order is reversed for undo().
  * @author Pavel
  *
- * @param <T> Work result type.
+ * @param <T> Supplier result type.
  * @param <E> Child result type.
  */
-public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
+public abstract class CompoundSupplier<T,E> implements Supplier<T>, CompoundExecutionParticipantInfo {
 	
 	private CompoundCommand<Void, Void> commitCommand;
 	private CompoundCommand<Boolean, Boolean> rollbackCommand;
 	private CompoundCommand<T, E> executeCommand;
 	private String name;
-	private List<WorkInfo> children = new ArrayList<>(); 
+	private List<ExecutionParticipantInfo> children = new ArrayList<>(); 
 
-	public CompoundWork(String name, Executor executor) {
+	public CompoundSupplier(String name, Executor executor) {
 		this.name = name;
 		this.executeCommand = new CompoundCommand<T, E>(executor, false) {
 
 			@Override
 			protected T combine(List<E> results, ProgressMonitor progressMonitor) throws Exception {
-				return CompoundWork.this.combine(results, progressMonitor);
+				return CompoundSupplier.this.combine(results, progressMonitor);
 			}
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void handleException(String name, Command<E> command, Exception e, List<Object> data) {
-				CompoundWork.this.handleException((Work<E>) data.get(0), e, false);
+			protected void handleException(String name, _LegacyCommandToRemove<E> command, Exception e, List<Object> data) {
+				CompoundSupplier.this.handleException((Supplier<E>) data.get(0), e, false);
 			}
 			
 		};
@@ -47,8 +47,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void handleException(String name, Command<Void> command, Exception e, List<Object> data) {
-				CompoundWork.this.handleException((Work<E>) data.get(0), e, true);
+			protected void handleException(String name, _LegacyCommandToRemove<Void> command, Exception e, List<Object> data) {
+				CompoundSupplier.this.handleException((Supplier<E>) data.get(0), e, true);
 			}
 			
 		};
@@ -62,8 +62,8 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			protected void handleException(String name, Command<Boolean> command, Exception e, List<Object> data) {
-				CompoundWork.this.handleException((Work<E>) data.get(0), e, true);
+			protected void handleException(String name, _LegacyCommandToRemove<Boolean> command, Exception e, List<Object> data) {
+				CompoundSupplier.this.handleException((Supplier<E>) data.get(0), e, true);
 			}
 			
 		};
@@ -74,7 +74,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 * @param child
 	 * @return {@link CommandCallable} wrapping the work's execute() method.
 	 */
-	public Callable<E> add(Work<E> child) {
+	public Callable<E> add(Supplier<E> child) {
 		children.add(child);
 		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
 		return executeCommand.add(child, child.getName(), child.size(), child);
@@ -84,9 +84,9 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	 * Adds a child work which is not executed as part of this workd execute(), it just obtains a monitor for reporting progress - this behavior may be used if the child execution is triggered by some other
 	 * code, but the child needs to report its progress under this compound work. Child's undo() method is invoked by this work undo().
 	 * @param child
-	 * @return {@link CommandCallable} wrapping the command.
+	 * @return {@link CommandCallable} wrapping the _LegacyCommandToRemove.
 	 */
-	public <R> Callable<R> addNoExec(Work<R> child) {
+	public <R> Callable<R> addNoExec(Supplier<R> child) {
 		children.add(child);
 		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
 		return executeCommand.addNoExec(child::execute, child.getName(), child.size(), child);
@@ -94,7 +94,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 
 	@Override
 	public double size() {
-		return children.stream().mapToDouble(WorkInfo::size).sum();
+		return children.stream().mapToDouble(ExecutionParticipantInfo::size).sum();
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	}
 
 	@Override
-	public List<WorkInfo> getChildren() {
+	public List<ExecutionParticipantInfo> getChildren() {
 		return children;
 	}
 
@@ -128,13 +128,13 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	}
 	
 	/**
-	 * Override to handle exception thrown from child command's execute() during asynchronous execution.
+	 * Override to handle exception thrown from child _LegacyCommandToRemove's execute() during asynchronous execution.
 	 * The default behavior implemented by {@link CommandCallable} is to record the thrown exception and re-throw when results are collected.
 	 * @param child Child work
 	 * @param e Exception thrown
 	 * @param undo to indicate whether the exception was thrown by undo() or execute().
 	 */
-	protected void handleException(Work<E> child, Exception e, boolean undo) {
+	protected void handleException(Supplier<E> child, Exception e, boolean undo) {
 		
 	}
 
@@ -147,7 +147,7 @@ public abstract class CompoundWork<T,E> implements Work<T>, CompoundWorkInfo {
 	
 	@Override
 	public void close() throws Exception {
-		for (WorkInfo child: children) {
+		for (ExecutionParticipantInfo child: children) {
 			if (child instanceof AutoCloseable) {
 				((AutoCloseable) child).close();
 			}

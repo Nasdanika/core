@@ -11,7 +11,7 @@ import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Function</b></em>'.
+ * An implementation of the model object '<em><b>FunctionFactory</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

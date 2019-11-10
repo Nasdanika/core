@@ -5,7 +5,7 @@ package org.nasdanika.common;
  * @author Pavel
  *
  */
-public interface WorkInfo {
+public interface ExecutionParticipantInfo {
 	
 	/**
 	 * @return Total number of work units. The same size is used for both ``execute()`` and ``undo()``.

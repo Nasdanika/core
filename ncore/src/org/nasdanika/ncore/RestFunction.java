@@ -6,11 +6,11 @@ import java.lang.Object;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Rest Function</b></em>'.
+ * A representation of the model object '<em><b>Rest FunctionFactory</b></em>'.
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Function is a named operation.
+ * FunctionFactory is a named operation.
  * <!-- end-model-doc -->
  *
  *

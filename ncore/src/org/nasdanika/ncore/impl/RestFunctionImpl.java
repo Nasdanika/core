@@ -11,7 +11,7 @@ import org.nasdanika.ncore.RestFunction;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Rest Function</b></em>'.
+ * An implementation of the model object '<em><b>Rest FunctionFactory</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

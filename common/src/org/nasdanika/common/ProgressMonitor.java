@@ -41,7 +41,7 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	
 	/**
 	 * Reports progress.
-	 * @param work Work installment - how much work was done since the last report, not the total work.
+	 * @param work Supplier installment - how much work was done since the last report, not the total work.
 	 * @param progressMessage Progress message. 
 	 */
 	void worked(Status status, double work, String progressMessage, Object... data);

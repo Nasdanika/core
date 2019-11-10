@@ -14,11 +14,11 @@ import java.util.concurrent.Executor;
  * @param <R> Result type
  * @param <U> Child result type
  */
-public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
+public abstract class CompoundFunction<T,R,U> implements FunctionFactory<T,R> {
 	
-	protected List<Function<T,U>> children = new ArrayList<>();
+	protected List<FunctionFactory<T,U>> children = new ArrayList<>();
 	
-	public void add(Function<T,U> child) {
+	public void add(FunctionFactory<T,U> child) {
 		children.add(child);
 	}
 	
@@ -31,20 +31,20 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 	}
 
 	@Override
-	public WorkFactory<R> create(WorkFactory<T> arg) throws Exception {
+	public SupplierFactory<R> create(SupplierFactory<T> arg) throws Exception {
 		Reference<T> argReference = new Reference<>();
 		
-		List<WorkFactory<U>> cwfl = new ArrayList<>();
-		for (Function<T, U> child: children) {
-			cwfl.add(child.create(WorkFactory.fromSupplier(argReference, "Argument", 1)));
+		List<SupplierFactory<U>> cwfl = new ArrayList<>();
+		for (FunctionFactory<T, U> child: children) {
+			cwfl.add(child.create(SupplierFactory.fromSupplier(argReference, "Argument", 1)));
 		}
-		return new WorkFactory<R>() {
+		return new SupplierFactory<R>() {
 
 			@Override
-			public Work<R> create(Context context) throws Exception {
-				Work<T> argWork = arg.create(context);
+			public Supplier<R> create(Context context) throws Exception {
+				Supplier<T> argWork = arg.create(context);
 				
-				CompoundWork<R, U> childWork = new CompoundWork<R, U>("Child work", getExecutor(context)) {
+				CompoundSupplier<R, U> childWork = new CompoundSupplier<R, U>("Child work", getExecutor(context)) {
 
 					@Override
 					protected R combine(List<U> results, ProgressMonitor progressMonitor) throws Exception {
@@ -52,11 +52,11 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 					}
 				};
 				
-				for (WorkFactory<U> cwf: cwfl) {
+				for (SupplierFactory<U> cwf: cwfl) {
 					childWork.add(cwf.create(context));
 				}
 				
-				return new Work<R>() {
+				return new Supplier<R>() {
 					
 					@Override
 					public Diagnostic diagnose(ProgressMonitor progressMonitor) {

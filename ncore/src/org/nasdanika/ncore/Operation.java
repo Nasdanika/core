@@ -5,7 +5,7 @@ package org.nasdanika.ncore;
 import java.lang.Object;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,7 +37,7 @@ import org.nasdanika.common.WorkFactory;
 public interface Operation extends Provider {
 	/**
 	 * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.common.WorkFactory}<code>&lt;java.lang.Object&gt;</code>.
+	 * The list contents are of type {@link org.nasdanika.common.SupplierFactory}<code>&lt;java.lang.Object&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -48,6 +48,6 @@ public interface Operation extends Provider {
 	 * @model type="org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
-	EList<WorkFactory<Object>> getArguments();
+	EList<SupplierFactory<Object>> getArguments();
 
 } // Operation

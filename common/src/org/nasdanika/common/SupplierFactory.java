@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  *
  * @param <T>
  */
-public interface WorkFactory<T> extends CommandFactory<T> {
+public interface SupplierFactory<T> extends CommandFactory<T> {
 		
 	/**
 	 * Creates work for a given context. Narrows CommandFactory return type.
@@ -18,7 +18,7 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	Work<T> create(Context context) throws Exception;
+	Supplier<T> create(Context context) throws Exception;
 		
 	/**
      * Returns a composed work factory that first executes this work factor work, 
@@ -29,16 +29,16 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 	 * @return
 	 * @throws Exception 
 	 */
-	default <V> WorkFactory<V> then(Function<T,V> after) throws Exception {
+	default <V> SupplierFactory<V> then(FunctionFactory<T,V> after) throws Exception {
 		return after.create(this);
 	}
 	
-	static <T> WorkFactory<T> fromBiFunction(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
-		return new WorkFactory<T>() {
+	static <T> SupplierFactory<T> fromBiFunction(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
+		return new SupplierFactory<T>() {
 
 			@Override
-			public Work<T> create(Context context) throws Exception {
-				return new Work<T>() {
+			public Supplier<T> create(Context context) throws Exception {
+				return new Supplier<T>() {
 
 					@Override
 					public T execute(ProgressMonitor progressMonitor) throws Exception {
@@ -61,20 +61,20 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		};
 	}
 	
-	static <T> WorkFactory<T> fromSupplier(Supplier<T> supplier, String name, double size) {
+	static <T> SupplierFactory<T> fromSupplier(Supplier<T> supplier, String name, double size) {
 		return fromBiFunction((c,p) -> supplier.get(), name, size);		
 	}
 	
-	static <T> WorkFactory<T> from(T value, String name) {
+	static <T> SupplierFactory<T> from(T value, String name) {
 		return fromBiFunction((c,p) -> value, name, 0);		
 	}
 		
-	static <T> WorkFactory<T> fromCallable(Callable<T> callable, String name, double size) {
-		return new WorkFactory<T>() {
+	static <T> SupplierFactory<T> fromCallable(Callable<T> callable, String name, double size) {
+		return new SupplierFactory<T>() {
 
 			@Override
-			public Work<T> create(Context context) throws Exception {
-				return new Work<T>() {
+			public Supplier<T> create(Context context) throws Exception {
+				return new Supplier<T>() {
 
 					@Override
 					public T execute(ProgressMonitor progressMonitor) throws Exception {
@@ -97,7 +97,7 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		};
 	}
 		
-	static WorkFactory<Void> fromRunnable(Runnable runnable, String name, double size) {
+	static SupplierFactory<Void> fromRunnable(Runnable runnable, String name, double size) {
 		return fromBiFunction((c,p) -> { runnable.run(); return null; }, name, size);		
 	}
 	
@@ -110,7 +110,7 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 
 			@Override
 			public T apply(Context context, ProgressMonitor progressMonitor) {
-				try (Work<T> work = create(context)) {
+				try (Supplier<T> work = create(context)) {
 					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
 					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.getName());
 					try {
@@ -160,7 +160,7 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 
 			@Override
 			public T call() throws Exception {
-				try (Work<T> work = create(Context.EMPTY_CONTEXT); ProgressMonitor progressMonitor = new NullProgressMonitor()) {
+				try (Supplier<T> work = create(Context.EMPTY_CONTEXT); ProgressMonitor progressMonitor = new NullProgressMonitor()) {
 					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
 					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.getName());
 					try {

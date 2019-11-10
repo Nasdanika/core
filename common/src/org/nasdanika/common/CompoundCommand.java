@@ -10,14 +10,14 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
 
 /**
- * Command containing other commands and executing them in the executor if one is passed to the constructor or in the caller thread otherwise. The last child command is always
+ * _LegacyCommandToRemove containing other commands and executing them in the executor if one is passed to the constructor or in the caller thread otherwise. The last child _LegacyCommandToRemove is always
  * executed in the caller thread.
  * @author Pavel
  *
- * @param <T> Command result type.
- * @param <E> Child command result type.
+ * @param <T> _LegacyCommandToRemove result type.
+ * @param <E> Child _LegacyCommandToRemove result type.
  */
-public abstract class CompoundCommand<T, E> implements Command<T> {
+public abstract class CompoundCommand<T, E> implements _LegacyCommandToRemove<T> {
 	
 	private Executor executor;
 	
@@ -29,19 +29,19 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	}
 	
 	private static class CommandEntry<E> {
-		Command<E> command;
+		_LegacyCommandToRemove<E> _LegacyCommandToRemove;
 		CommandCallable<E> callable;
 		String name;
 		double size;
 		List<Object> data = new ArrayList<>();
 		
 		CommandEntry(
-				Command<E> command, 
+				_LegacyCommandToRemove<E> command, 
 				CommandCallable<E> callable, 
 				String name, 
 				double size,
 				List<Object> data) {
-			this.command = command;
+			this._LegacyCommandToRemove = command;
 			this.callable = callable;
 			this.name = name;
 			this.size = size;
@@ -69,27 +69,27 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	}
 	
 	/**
-	 * Adds a child command
+	 * Adds a child _LegacyCommandToRemove
 	 * @param child
 	 * @param name
 	 * @param size
-	 * @return {@link CommandCallable} wrapping the command.
+	 * @return {@link CommandCallable} wrapping the _LegacyCommandToRemove.
 	 */
-	public Callable<E> add(Command<E> child, String name, double size, Object... data) {
+	public Callable<E> add(_LegacyCommandToRemove<E> child, String name, double size, Object... data) {
 		CommandEntry<E> childEntry = new CommandEntry<E>(child, new CommandCallable<E>(child, size), name, size, Arrays.asList(data));
 		children.add(childEntry);
 		return childEntry.callable;
 	}
 	
 	/**
-	 * Adds a child command which is not executed as part of this command execute(), it just obtains a monitor for reporting progress - this behavior may be used if the child execution is triggered by some other
-	 * code, but the child needs to report its progress under this compound command.
+	 * Adds a child _LegacyCommandToRemove which is not executed as part of this _LegacyCommandToRemove execute(), it just obtains a monitor for reporting progress - this behavior may be used if the child execution is triggered by some other
+	 * code, but the child needs to report its progress under this compound _LegacyCommandToRemove.
 	 * @param child
 	 * @param name
 	 * @param size
-	 * @return {@link CommandCallable} wrapping the command.
+	 * @return {@link CommandCallable} wrapping the _LegacyCommandToRemove.
 	 */
-	public <R> Callable<R> addNoExec(Command<R> child, String name, double size, Object... data) {
+	public <R> Callable<R> addNoExec(_LegacyCommandToRemove<R> child, String name, double size, Object... data) {
 		CommandEntry<R> childEntry = new CommandEntry<R>(child, new CommandCallable<R>(child, size), name, size, Arrays.asList(data));
 		noExecChildren.add(childEntry);
 		return childEntry.callable;
@@ -101,13 +101,13 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 			progressMonitor.worked(1, "Cancelled");
 			return new BasicDiagnostic(Status.CANCEL, "Progress monitor is cancelled", this);
 		}
-		Diagnostic ret = Command.super.diagnose(progressMonitor);
+		Diagnostic ret = _LegacyCommandToRemove.super.diagnose(progressMonitor);
 		progressMonitor.setWorkRemaining(children.size() + noExecChildren.size());
 		for (CommandEntry<?> ce: children) {
-			((DiagnosticChain) ret).add(ce.command.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
+			((DiagnosticChain) ret).add(ce._LegacyCommandToRemove.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
 		}
 		for (CommandEntry<?> ce: noExecChildren) {
-			((DiagnosticChain) ret).add(ce.command.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
+			((DiagnosticChain) ret).add(ce._LegacyCommandToRemove.diagnose(progressMonitor.split(ce.name, 1, ce.data)));
 		}
 		return ret;
 	}
@@ -144,7 +144,7 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 							try {
 								ce.callable.call();
 							} catch (Exception e) {
-								handleException(ce.name, ce.command, e, ce.data);
+								handleException(ce.name, ce._LegacyCommandToRemove, e, ce.data);
 							}
 						});					
 					} else {
@@ -166,13 +166,13 @@ public abstract class CompoundCommand<T, E> implements Command<T> {
 	}
 	
 	/**
-	 * Override to handle exception thrown from child command's execute() during asynchronous execution.
+	 * Override to handle exception thrown from child _LegacyCommandToRemove's execute() during asynchronous execution.
 	 * The default behavior implemented by {@link CommandCallable} is to record the thrown exception and re-throw when results are collected.
 	 * @param name
-	 * @param command
+	 * @param _LegacyCommandToRemove
 	 * @param e
 	 */
-	protected void handleException(String name, Command<E> command, Exception e, List<Object> data) {
+	protected void handleException(String name, _LegacyCommandToRemove<E> command, Exception e, List<Object> data) {
 		
 	}
 

@@ -2,11 +2,11 @@ package org.nasdanika.common;
 
 import java.util.function.Function;
 
-public class FilterCommand<T> implements Command<T> {
+public class FilterCommand<T> implements _LegacyCommandToRemove<T> {
 
-	protected Command<T> target;
+	protected _LegacyCommandToRemove<T> target;
 
-	public FilterCommand(Command<T> target) {
+	public FilterCommand(_LegacyCommandToRemove<T> target) {
 		this.target = target;
 	}
 
@@ -21,7 +21,7 @@ public class FilterCommand<T> implements Command<T> {
 	}
 
 	@Override
-	public <R> Command<R> adapt(Function<T, R> adapter) {
+	public <R> _LegacyCommandToRemove<R> adapt(Function<T, R> adapter) {
 		return target.adapt(adapter);
 	}
 

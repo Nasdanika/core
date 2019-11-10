@@ -21,13 +21,13 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.CompoundWork;
+import org.nasdanika.common.CompoundSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
@@ -360,17 +360,17 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 	 * Override to provide request body.
 	 * @return
 	 */
-	protected Work<InputStream> createBodyWork(Context context) throws Exception {
+	protected Supplier<InputStream> createBodyWork(Context context) throws Exception {
 		return null;
 	}
 	
-	protected Work<Map<String,Object>> createHeadersWork(Context context) throws Exception {
+	protected Supplier<Map<String,Object>> createHeadersWork(Context context) throws Exception {
 		EList<Entry<Object>> headers = getHeaders();
 		if (headers.isEmpty()) {
 			return null;
 		}
 		
-		CompoundWork<Map<String, Object>, Map.Entry<String, Object>> headersWork = new CompoundWork<Map<String, Object>, Map.Entry<String, Object>>("Headers",context.get(Executor.class)) {
+		CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>> headersWork = new CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>>("Headers",context.get(Executor.class)) {
 			
 			@Override
 			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {
@@ -408,8 +408,8 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Work<Object> create(Context context) throws Exception {
-		CompoundWork<Object, Object> ret = new CompoundWork<Object, Object>(getTitle(), context.get(Executor.class)) {
+	public Supplier<Object> create(Context context) throws Exception {
+		CompoundSupplier<Object, Object> ret = new CompoundSupplier<Object, Object>(getTitle(), context.get(Executor.class)) {
 			
 			@Override
 			protected Object combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {				
@@ -455,11 +455,11 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 			}
 		};
 		
-		ret.add((Work) createHeadersWork(context));
+		ret.add((Supplier) createHeadersWork(context));
 		
-		Work<InputStream> bodyWork = createBodyWork(context);
+		Supplier<InputStream> bodyWork = createBodyWork(context);
 		if (bodyWork != null) {
-			ret.add((Work) bodyWork);
+			ret.add((Supplier) bodyWork);
 		}
 		
 		

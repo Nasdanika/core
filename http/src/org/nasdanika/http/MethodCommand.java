@@ -28,7 +28,7 @@ import org.osgi.framework.Filter;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Wraps method for further wrapping into a command.
+ * Wraps method for further wrapping into a _LegacyCommandToRemove.
  * @author Pavel
  *
  * @param <C>

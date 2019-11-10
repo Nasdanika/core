@@ -1,6 +1,6 @@
 package org.nasdanika.common.descriptors;
 
-import org.nasdanika.common.Work;
+import org.nasdanika.common.Supplier;
 
 /**
  * This descriptor can be used to collect information needed to execute work.
@@ -8,6 +8,6 @@ import org.nasdanika.common.Work;
  *
  * @param <T>
  */
-public interface WorkDescriptor<T> extends Work<T>, CommandDescriptor<T> {
+public interface WorkDescriptor<T> extends Supplier<T>, CommandDescriptor<T> {
 
 }

@@ -7,17 +7,17 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.Work;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 
 /**
- * This class loads a model with the root element implementing {@link WorkFactory}, and delegates its methods to it. 
+ * This class loads a model with the root element implementing {@link SupplierFactory}, and delegates its methods to it. 
  * @author Pavel
  *
  */
-public class ModelWorkFactory<T> implements WorkFactory<T> { 
+public class ModelWorkFactory<T> implements SupplierFactory<T> { 
 
-	protected WorkFactory<T> workFactory;
+	protected SupplierFactory<T> supplierFactory;
 
 	/**
 	 * Creates a generator by loading a generator model specified by the platform URI, e.g. ``org.nasdanika.codegen.tests.models/models/static-text/basic.codegen``, into a new {@link ResourceSet}. 
@@ -72,12 +72,12 @@ public class ModelWorkFactory<T> implements WorkFactory<T> {
 	@SuppressWarnings("unchecked")
 	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
 		Resource modelResource = resourceSet.getResource(modelUri, true);
-		workFactory = (WorkFactory<T>) modelResource.getContents().iterator().next();
+		supplierFactory = (SupplierFactory<T>) modelResource.getContents().iterator().next();
 	}
 	
 	@Override
-	public Work<T> create(Context context) throws Exception {
-		return workFactory.create(context);
+	public Supplier<T> create(Context context) throws Exception {
+		return supplierFactory.create(context);
 	}
 
 }

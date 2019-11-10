@@ -18,7 +18,7 @@ import org.nasdanika.repository.ResourceRequirement;
 import org.osgi.framework.BundleContext;
 
 /**
- * Web method command for methods annotated with {@link RouteMethod}.
+ * Web method _LegacyCommandToRemove for methods annotated with {@link RouteMethod}.
  * @author Pavel Vlasov
  *
  * @param <C>
@@ -344,8 +344,8 @@ public abstract class RouteMethodTarget implements Target, Comparable<RouteMetho
 	}
 	
 	/**
-	 * Obtains (locks) required resources and executes the command. 
-	 * @param command
+	 * Obtains (locks) required resources and executes the _LegacyCommandToRemove. 
+	 * @param _LegacyCommandToRemove
 	 * @param resourceRequirements
 	 * @return
 	 */

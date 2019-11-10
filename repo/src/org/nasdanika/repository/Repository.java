@@ -9,7 +9,7 @@ package org.nasdanika.repository;
 public interface Repository {
 	
 	/**
-	 * @return Unauthenticated executor or null if such unauthenticated command execution is not supported.
+	 * @return Unauthenticated executor or null if such unauthenticated _LegacyCommandToRemove execution is not supported.
 	 */
 	Executor createExecutor();
 	

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Command method parameters with this annotation are provided values from extensions. 
+ * _LegacyCommandToRemove method parameters with this annotation are provided values from extensions. 
  * Parameter type can be of extension type or array. 
  * @author Pavel
  *

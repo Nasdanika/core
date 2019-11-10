@@ -1,7 +1,7 @@
 package org.nasdanika.repository;
 
 /**
- * Resource requirement for a command. 
+ * Resource requirement for a _LegacyCommandToRemove. 
  * @author Pavel Vlasov
  *
  */

@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * Finds a resource and executes a command. May delegate execution to another executor.
+ * Finds a resource and executes a _LegacyCommandToRemove. May delegate execution to another executor.
  * @author Pavel Vlasov
  *
  * @param <E>
@@ -14,9 +14,9 @@ import java.util.function.Function;
 public interface Executor extends AutoCloseable {
 	
 	/**
-	 * Submits command for execution. 
+	 * Submits _LegacyCommandToRemove for execution. 
 	 * @param <R>
-	 * @param command Command to be executed on a resource.
+	 * @param _LegacyCommandToRemove _LegacyCommandToRemove to be executed on a resource.
 	 * @param resourcePath Resource path. 
 	 * @return
 	 */

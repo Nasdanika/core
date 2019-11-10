@@ -50,7 +50,7 @@ public abstract class ReflectiveRouter extends Router {
 					@Override
 					protected Object execute(Callable<Object> command, Collection<ResourceRequirement> resourceRequirements) throws Exception {
 						throw new UnsupportedOperationException("Implement locking");
-//						return command.call();
+//						return _LegacyCommandToRemove.call();
 					}
 					
 				});

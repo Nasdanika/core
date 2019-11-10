@@ -12,8 +12,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-import org.nasdanika.common.Consumer;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.ConsumerFactory;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -1288,11 +1288,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(workFactoryEClass, WorkFactory.class, "WorkFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(workFactoryEClass, SupplierFactory.class, "SupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iFunctionEClass, org.nasdanika.common.FunctionFactory.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(consumerEClass, Consumer.class, "Consumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(consumerEClass, ConsumerFactory.class, "ConsumerFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1339,7 +1339,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(functionEClass, Function.class, "Function", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(functionEClass, Function.class, "FunctionFactory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1445,19 +1445,19 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (workFactoryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
+			   "documentation", "Supplier factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
 		   });
 		addAnnotation
 		  (consumerEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
+			   "documentation", "ConsumerFactory takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
 		   });
 		addAnnotation
 		  (typedElementEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Typed element is a command factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context\'s service with the specified type. The primary pupose of of the typed element is to serve as a specification/description."
+			   "documentation", "Typed element is a _LegacyCommandToRemove factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context\'s service with the specified type. The primary pupose of of the typed element is to serve as a specification/description."
 		   });
 		addAnnotation
 		  (getTypedElement_Type(),
@@ -1547,7 +1547,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (entryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Command factory with an name."
+			   "documentation", "_LegacyCommandToRemove factory with an name."
 		   });
 		addAnnotation
 		  (typedEntryEClass,
@@ -1583,7 +1583,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (functionEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Function is a named operation."
+			   "documentation", "FunctionFactory is a named operation."
 		   });
 		addAnnotation
 		  (listEClass,
@@ -1643,7 +1643,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (restFunctionEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Function is a named operation."
+			   "documentation", "FunctionFactory is a named operation."
 		   });
 	}
 

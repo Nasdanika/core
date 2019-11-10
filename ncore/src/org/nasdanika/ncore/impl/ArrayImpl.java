@@ -13,11 +13,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.CompoundWork;
+import org.nasdanika.common.CompoundSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Work;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -61,8 +61,8 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<WorkFactory<Object>> getElements() {
-		return (EList<WorkFactory<Object>>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
+	public EList<SupplierFactory<Object>> getElements() {
+		return (EList<SupplierFactory<Object>>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 		switch (featureID) {
 			case NcorePackage.ARRAY__ELEMENTS:
 				getElements().clear();
-				getElements().addAll((Collection<? extends WorkFactory<Object>>)newValue);
+				getElements().addAll((Collection<? extends SupplierFactory<Object>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -140,8 +140,8 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 	}
 
 	@Override
-	public Work<EList<Object>> create(Context context) throws Exception {
-		CompoundWork<EList<Object>, Object> ret = new CompoundWork<EList<Object>, Object>(getTitle(), context.get(Executor.class)) {
+	public Supplier<EList<Object>> create(Context context) throws Exception {
+		CompoundSupplier<EList<Object>, Object> ret = new CompoundSupplier<EList<Object>, Object>(getTitle(), context.get(Executor.class)) {
 						
 			@Override
 			protected EList<Object> combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {
@@ -150,8 +150,8 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 
 			
 		};
-		for (WorkFactory<Object> e: getElements()) {
-			Work<Object> child = e.create(context);
+		for (SupplierFactory<Object> e: getElements()) {
+			Supplier<Object> child = e.create(context);
 			ret.add(child);
 		}
 		return ret;

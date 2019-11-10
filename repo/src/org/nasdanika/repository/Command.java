@@ -11,19 +11,19 @@ import java.util.Collection;
 public interface Command<R> {
 	
 	/**
-	 * Executes a command in the context of a resource.
+	 * Executes a _LegacyCommandToRemove in the context of a resource.
 	 * @param resource Context resource.
 	 * @param resourcePath Resource path.
-	 * @param commandPath Command path - the tail of the full path passed to the executor after the resource path.
+	 * @param commandPath _LegacyCommandToRemove path - the tail of the full path passed to the executor after the resource path.
 	 * @return
 	 */
 	R execute(Object resource, String resourcePath, String commandPath) throws Exception;
 	
 	/**
-	 * Resource requirements for command execution.
-	 * Command is executed is the executing identity has permissions to execute requested 
-	 * actions and no other command being executed prevents requested resource access. E.g. if this command requests
-	 * read access to resource XYZ then no other command shall be writing to that resource while this command is executing.  
+	 * Resource requirements for _LegacyCommandToRemove execution.
+	 * _LegacyCommandToRemove is executed is the executing identity has permissions to execute requested 
+	 * actions and no other _LegacyCommandToRemove being executed prevents requested resource access. E.g. if this _LegacyCommandToRemove requests
+	 * read access to resource XYZ then no other _LegacyCommandToRemove shall be writing to that resource while this _LegacyCommandToRemove is executing.  
 	 * @return
 	 */
 	Collection<ResourceRequirement> getRequirements();	

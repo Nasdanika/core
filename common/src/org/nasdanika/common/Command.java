@@ -1,52 +1,57 @@
 package org.nasdanika.common;
 
-import java.util.function.Function;
-
 /**
- * Something which can be executed with reporting progress to a {@link ProgressMonitor}.
- * The command doesn't split the monitor for itself, i.e. it expects the calling code to split the monitor.
- * However, it may split it further for sub-tasks.
- * 
+ * Command executes with {@link ProgressMonitor} and returns no result.
  * @author Pavel Vlasov
+ * @param C context type.
  * @param T result type.
  */
-public interface Command<T>  extends Diagnosable, AutoCloseable {
-			
-	/**
-	 * Executes the command.
-	 * @param monitor Monitor to use.
-	 * @return
-	 * @throws Exception
-	 */
-	T execute(ProgressMonitor progressMonitor) throws Exception;	
+public interface Command extends ExecutionParticipant, ExecutionParticipantInfo {
 	
-	default <R> Command<R> adapt(Function<T,R> adapter) {
-		return new Command<R>() {
+	Command NOP = new Command() {
+
+		@Override
+		public double size() {
+			return 0;
+		}
+		
+		@Override
+		public String getName() {
+			return "NOP";
+		}
+
+		@Override
+		public void execute(ProgressMonitor monitor) throws Exception {
+			
+		}
+		
+	};
+			
+	void execute(ProgressMonitor progressMonitor) throws Exception;	
+	
+	default void splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
+		execute(split(progressMonitor));
+	}	
+		
+	static Command fromRunnable(Runnable runnable, String name, double size) {
+		return new Command() {
 			
 			@Override
-			public R execute(ProgressMonitor progressMonitor) throws Exception {
-				return adapter.apply(Command.this.execute(progressMonitor));
+			public double size() {
+				return size;
 			}
 			
 			@Override
-			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
-				return Command.this.diagnose(progressMonitor);
+			public String getName() {
+				return name;
 			}
 			
 			@Override
-			public void close() throws Exception {
-				Command.this.close();
+			public void execute(ProgressMonitor progressMonitor) throws Exception {
+				runnable.run();
 			}
-			
 		};
 	}
 	
-	@Override
-	default void close() throws Exception {
-		
-	}
 	
-	// TODO - from and as similar to those in Work
-
-		
 }

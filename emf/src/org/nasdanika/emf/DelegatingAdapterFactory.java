@@ -18,7 +18,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
 /**
- * Base class for adapter factories delegating to {@link Supplier} or {@link Function} to create an adapter and 
+ * Base class for adapter factories delegating to {@link Supplier} or {@link FunctionFactory} to create an adapter and 
  * wrapping adapter into a dynamic proxy if the adapter does not implement {@link Adapter}.
  * @author Pavel Vlasov
  *

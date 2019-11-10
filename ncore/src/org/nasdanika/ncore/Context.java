@@ -5,7 +5,7 @@ package org.nasdanika.ncore;
 import java.lang.Object;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,10 +27,10 @@ import org.nasdanika.common.WorkFactory;
  * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.nasdanika.ncore.IContext&gt;"
  * @generated
  */
-public interface Context extends ModelElement, WorkFactory<org.nasdanika.common.Context> {
+public interface Context extends ModelElement, SupplierFactory<org.nasdanika.common.Context> {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.common.WorkFactory}<code>&lt;java.lang.Object&gt;</code>.
+	 * The list contents are of type {@link org.nasdanika.common.SupplierFactory}<code>&lt;java.lang.Object&gt;</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -41,6 +41,6 @@ public interface Context extends ModelElement, WorkFactory<org.nasdanika.common.
 	 * @model type="org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
-	EList<WorkFactory<Object>> getElements();
+	EList<SupplierFactory<Object>> getElements();
 
 } // Context

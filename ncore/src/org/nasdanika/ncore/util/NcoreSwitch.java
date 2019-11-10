@@ -6,8 +6,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-import org.nasdanika.common.Consumer;
-import org.nasdanika.common.WorkFactory;
+import org.nasdanika.common.ConsumerFactory;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -167,19 +167,19 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				return result;
 			}
 			case NcorePackage.WORK_FACTORY: {
-				WorkFactory<?> workFactory = (WorkFactory<?>)theEObject;
+				SupplierFactory<?> workFactory = (SupplierFactory<?>)theEObject;
 				T1 result = caseWorkFactory(workFactory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.IFUNCTION: {
-				org.nasdanika.common.Function<?, ?> iFunction = (org.nasdanika.common.Function<?, ?>)theEObject;
+				org.nasdanika.common.FunctionFactory<?, ?> iFunction = (org.nasdanika.common.FunctionFactory<?, ?>)theEObject;
 				T1 result = caseIFunction(iFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.CONSUMER: {
-				Consumer<?> consumer = (Consumer<?>)theEObject;
+				ConsumerFactory<?> consumer = (ConsumerFactory<?>)theEObject;
 				T1 result = caseConsumer(consumer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -503,17 +503,17 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Work Factory</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Supplier Factory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Work Factory</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Supplier Factory</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T> T1 caseWorkFactory(WorkFactory<T> object) {
+	public <T> T1 caseWorkFactory(SupplierFactory<T> object) {
 		return null;
 	}
 
@@ -528,7 +528,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T, R> T1 caseIFunction(org.nasdanika.common.Function<T, R> object) {
+	public <T, R> T1 caseIFunction(org.nasdanika.common.FunctionFactory<T, R> object) {
 		return null;
 	}
 
@@ -713,13 +713,13 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Function</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>FunctionFactory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Function</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>FunctionFactory</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -788,13 +788,13 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Rest Function</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Rest FunctionFactory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Rest Function</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Rest FunctionFactory</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
@@ -803,17 +803,17 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ConsumerFactory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ConsumerFactory</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T> T1 caseConsumer(Consumer<T> object) {
+	public <T> T1 caseConsumer(ConsumerFactory<T> object) {
 		return null;
 	}
 

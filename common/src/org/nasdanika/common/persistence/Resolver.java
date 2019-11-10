@@ -15,7 +15,7 @@ public interface Resolver<T,R> {
 	 * Resolves the reference.
 	 * @param source Source object.
 	 * @param reference Reference.
-	 * @param targetConsumer Consumer of resolved target object. This consumer may be invoked as part of resolve() method
+	 * @param targetConsumer ConsumerFactory of resolved target object. This consumer may be invoked as part of resolve() method
 	 * or later, once all objects are loaded, in the case of a reference to a not yet loaded object.
 	 */
 	void resolve(T source, R reference, Consumer<T> targetConsumer);
