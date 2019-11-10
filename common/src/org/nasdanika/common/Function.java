@@ -1,6 +1,5 @@
 package org.nasdanika.common;
 
-import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 
 /**
@@ -14,7 +13,9 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 	R execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
 	
 	default R splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
-		return execute(arg, split(progressMonitor));
+		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+			return execute(arg, subMonitor);
+		}
 	}
 	
 	Function<Object,Object> NOP = new Function<Object,Object>() {

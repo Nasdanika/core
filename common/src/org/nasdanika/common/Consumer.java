@@ -16,7 +16,9 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 	void execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
 	
 	default void splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
-		execute(arg, split(progressMonitor));
+		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+			execute(arg, subMonitor);
+		}
 	}	
 	
 	Consumer<Object> NOP = new Consumer<Object>() {

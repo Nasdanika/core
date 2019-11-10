@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
 
 /**
  * Creates _LegacyCommandToRemove to be executed.

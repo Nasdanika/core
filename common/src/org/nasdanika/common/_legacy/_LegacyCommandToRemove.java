@@ -1,6 +1,10 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
 
 import java.util.function.Function;
+
+import org.nasdanika.common.Diagnosable;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.ProgressMonitor;
 
 /**
  * Something which can be executed with reporting progress to a {@link ProgressMonitor}.

@@ -1,6 +1,9 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
 
 import java.util.function.Function;
+
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
 
 public class FilterWork<T> extends FilterCommand<T> implements Supplier<T> {
 

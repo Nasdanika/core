@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
  * {@link ProgressMonitor} allocation pattern - the caller creates a monitor with work's size and name and passes it to work's execute:
  * 
  * ```
- * try (Supplier supplier = ...; ProgressMonitor workMonitor = monitor.split(work.getName(), work.getSize(), work)) {
+ * try (Supplier supplier = ...; ProgressMonitor workMonitor = monitor.split(supplier.getName(), supplier.getSize(), supplier)) {
  *     work.execute(workMonitor);
  *     
  *     // If success
@@ -35,7 +35,9 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 	T execute(ProgressMonitor progressMonitor) throws Exception;	
 	
 	default T splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
-		return execute(split(progressMonitor));
+		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+			return execute(subMonitor);
+		}
 	}
 	
 	Supplier<Object> EMPTY = new Supplier<Object>() {

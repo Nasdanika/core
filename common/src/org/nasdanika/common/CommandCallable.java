@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.nasdanika.common._legacy._LegacyCommandToRemove;
+
 /**
  * Wraps a {@link _LegacyCommandToRemove} into a {@link Callable}. This class doesn't split the monitor for itself. The monitor is closed upon completion of the execution of the _LegacyCommandToRemove. 
  * Executes the work only once inside a lock and caches the result. If the monitor is cancelled when ``call()`` is invoked then the _LegacyCommandToRemove is not executed

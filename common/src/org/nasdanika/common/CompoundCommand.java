@@ -9,6 +9,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executor;
 
+import org.nasdanika.common._legacy._LegacyCommandToRemove;
+
 /**
  * _LegacyCommandToRemove containing other commands and executing them in the executor if one is passed to the constructor or in the caller thread otherwise. The last child _LegacyCommandToRemove is always
  * executed in the caller thread.

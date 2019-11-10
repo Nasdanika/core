@@ -1,4 +1,11 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
+
+import org.nasdanika.common.ConsumerFactory;
+import org.nasdanika.common.Context;
+import org.nasdanika.common.FunctionFactory;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * ConsumerFactory creates a work factory which in turn creates work. The work may be applied to the argument and does not

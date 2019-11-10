@@ -1,9 +1,17 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
+
+import org.nasdanika.common.CommandCallable;
+import org.nasdanika.common.CompoundCommand;
+import org.nasdanika.common.CompoundExecutionParticipantInfo;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.ExecutionParticipantInfo;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
 
 /**
  * Supplier composed from other work and executing its children in the executor if one is passed to the constructor or in the caller thread otherwise. The last child is always

@@ -1,6 +1,6 @@
 package org.nasdanika.common.descriptors;
 
-import org.nasdanika.common._LegacyCommandToRemove;
+import org.nasdanika.common._legacy._LegacyCommandToRemove;
 
 /**
  * This descriptor can be used to collect input data needed for _LegacyCommandToRemove execution.

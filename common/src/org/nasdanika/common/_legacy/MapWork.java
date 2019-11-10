@@ -1,10 +1,14 @@
-package org.nasdanika.common;
+package org.nasdanika.common._legacy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.nasdanika.common.CommandCallable;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
 
 public abstract class MapWork<K,T,E> extends FilterWork<T> implements Supplier<T> {
 	

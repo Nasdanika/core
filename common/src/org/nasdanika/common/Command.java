@@ -30,7 +30,9 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 	void execute(ProgressMonitor progressMonitor) throws Exception;	
 	
 	default void splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
-		execute(split(progressMonitor));
+		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+			execute(subMonitor);
+		}
 	}	
 		
 	static Command fromRunnable(Runnable runnable, String name, double size) {
