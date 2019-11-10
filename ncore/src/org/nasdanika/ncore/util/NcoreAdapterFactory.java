@@ -133,6 +133,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createWorkFactoryAdapter();
 			}
 			@Override
+			public <T, R> Adapter caseIFunction(org.nasdanika.common.Function<T, R> object) {
+				return createIFunctionAdapter();
+			}
+			@Override
 			public <T> Adapter caseConsumer(Consumer<T> object) {
 				return createConsumerAdapter();
 			}
@@ -365,6 +369,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createWorkFactoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Function <em>IFunction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.common.Function
+	 * @generated
+	 */
+	public Adapter createIFunctionAdapter() {
 		return null;
 	}
 

@@ -125,6 +125,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass iFunctionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass typedElementEClass = null;
 
 	/**
@@ -604,6 +611,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getIFunction() {
+		return iFunctionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTypedElement() {
 		return typedElementEClass;
 	}
@@ -1034,6 +1051,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		workFactoryEClass = createEClass(WORK_FACTORY);
 
+		iFunctionEClass = createEClass(IFUNCTION);
+
 		consumerEClass = createEClass(CONSUMER);
 
 		typedElementEClass = createEClass(TYPED_ELEMENT);
@@ -1120,6 +1139,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Create type parameters
 		addETypeParameter(workFactoryEClass, "T");
+		addETypeParameter(iFunctionEClass, "T");
+		addETypeParameter(iFunctionEClass, "R");
 		addETypeParameter(consumerEClass, "T");
 		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
@@ -1268,6 +1289,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(workFactoryEClass, WorkFactory.class, "WorkFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(consumerEClass, Consumer.class, "Consumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 

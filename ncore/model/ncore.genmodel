@@ -54,6 +54,10 @@
     <genClasses image="false" ecoreClass="ncore.ecore#//WorkFactory">
       <genTypeParameters ecoreTypeParameter="ncore.ecore#//WorkFactory/T"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="ncore.ecore#//IFunction">
+      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunction/T"/>
+      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunction/R"/>
+    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Consumer">
       <genTypeParameters ecoreTypeParameter="ncore.ecore#//Consumer/T"/>
     </genClasses>

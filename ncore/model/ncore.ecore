@@ -75,6 +75,11 @@
     </eAnnotations>
     <eTypeParameters name="T"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IFunction" instanceClassName="org.nasdanika.common.Function"
+      abstract="true" interface="true">
+    <eTypeParameters name="T"/>
+    <eTypeParameters name="R"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.Consumer"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

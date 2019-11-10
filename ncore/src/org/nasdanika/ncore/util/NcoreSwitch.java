@@ -172,6 +172,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.IFUNCTION: {
+				org.nasdanika.common.Function<?, ?> iFunction = (org.nasdanika.common.Function<?, ?>)theEObject;
+				T1 result = caseIFunction(iFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.CONSUMER: {
 				Consumer<?> consumer = (Consumer<?>)theEObject;
 				T1 result = caseConsumer(consumer);
@@ -508,6 +514,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T> T1 caseWorkFactory(WorkFactory<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IFunction</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IFunction</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T, R> T1 caseIFunction(org.nasdanika.common.Function<T, R> object) {
 		return null;
 	}
 
