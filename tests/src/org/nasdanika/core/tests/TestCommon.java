@@ -104,7 +104,7 @@ public class TestCommon {
 				}
 
 				@Override
-				public String getName() {
+				public String name() {
 					return "W1";
 				}
 
@@ -130,7 +130,7 @@ public class TestCommon {
 				}
 
 				@Override
-				public String getName() {
+				public String name() {
 					return "W2";
 				}
 

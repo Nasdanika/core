@@ -159,7 +159,7 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 
 						@Override
 						public String getKey() {
-							return e.getName();
+							return e.name();
 						}
 
 						@Override

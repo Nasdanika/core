@@ -76,8 +76,8 @@ public abstract class CompoundSupplier<T,E> implements Supplier<T>, CompoundExec
 	 */
 	public Callable<E> add(Supplier<E> child) {
 		children.add(child);
-		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
-		return executeCommand.add(child, child.getName(), child.size(), child);
+		rollbackCommand.add(child::rollback, child.name(), child.size(), child);
+		return executeCommand.add(child, child.name(), child.size(), child);
 	}
 	
 	/**
@@ -88,8 +88,8 @@ public abstract class CompoundSupplier<T,E> implements Supplier<T>, CompoundExec
 	 */
 	public <R> Callable<R> addNoExec(Supplier<R> child) {
 		children.add(child);
-		rollbackCommand.add(child::rollback, child.getName(), child.size(), child);
-		return executeCommand.addNoExec(child::execute, child.getName(), child.size(), child);
+		rollbackCommand.add(child::rollback, child.name(), child.size(), child);
+		return executeCommand.addNoExec(child::execute, child.name(), child.size(), child);
 	}	
 
 	@Override
@@ -98,7 +98,7 @@ public abstract class CompoundSupplier<T,E> implements Supplier<T>, CompoundExec
 	}
 
 	@Override
-	public String getName() {
+	public String name() {
 		return name;
 	}
 

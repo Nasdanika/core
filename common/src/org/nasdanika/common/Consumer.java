@@ -49,7 +49,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 		
 		@Override
-		public String getName() {
+		public String name() {
 			return "No operation consumer";
 		}
 
@@ -99,8 +99,8 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public String getName() {
-				return Supplier.this.getName();
+			public String name() {
+				return Supplier.this.name();
 			}
 			
 		};
@@ -137,7 +137,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 					}
 	
 					@Override
-					public String getName() {
+					public String name() {
 						return name;
 					}
 					
@@ -173,7 +173,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 					}
 	
 					@Override
-					public String getName() {
+					public String name() {
 						return name;
 					}
 					
@@ -198,7 +198,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			public T apply(Context context, ProgressMonitor progressMonitor) {
 				try (Supplier<T> work = create(context)) {
 					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
-					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.getName());
+					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.name());
 					try {
 						T result = work.execute(progressMonitor.split("Executing", 1));
 						work.commit(progressMonitor.split("Committing", 1));
@@ -248,7 +248,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			public T call() throws Exception {
 				try (Supplier<T> work = create(Context.EMPTY_CONTEXT); ProgressMonitor progressMonitor = new NullProgressMonitor()) {
 					progressMonitor.setWorkRemaining(3); // diagnose, execute, commit or rollback
-					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.getName());
+					work.diagnose(progressMonitor.split("Diagnosing", 1)).checkError("Diagnostic failed: "+work.name());
 					try {
 						T result = work.execute(progressMonitor.split("Executing", 1));
 						work.commit(progressMonitor.split("Committing", 1));

@@ -388,7 +388,7 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 
 						@Override
 						public String getKey() {
-							return e.getName();
+							return e.name();
 						}
 
 						@Override

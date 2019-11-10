@@ -24,8 +24,8 @@ public class FilterWork<T> extends FilterCommand<T> implements Supplier<T> {
 	}
 
 	@Override
-	public String getName() {
-		return ((Supplier<T>) target).getName();
+	public String name() {
+		return ((Supplier<T>) target).name();
 	}
 
 	@Override

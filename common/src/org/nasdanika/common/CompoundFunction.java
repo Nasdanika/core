@@ -97,7 +97,7 @@ public abstract class CompoundFunction<T,R,U> implements FunctionFactory<T,R> {
 					}
 
 					@Override
-					public String getName() {
+					public String name() {
 						return CompoundFunction.this.getName();
 					}
 					

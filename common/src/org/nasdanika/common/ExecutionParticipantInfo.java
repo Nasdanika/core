@@ -15,6 +15,6 @@ public interface ExecutionParticipantInfo {
 	/**
 	 * @return Display name of the work.
 	 */
-	String getName();
+	String name();
 
 }

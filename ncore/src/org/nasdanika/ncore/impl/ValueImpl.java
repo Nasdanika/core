@@ -191,7 +191,7 @@ public class ValueImpl extends ProviderImpl implements Value {
 			}
 
 			@Override
-			public String getName() {
+			public String name() {
 				// TODO Auto-generated method stub
 				return null;
 			}

@@ -16,7 +16,7 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 		}
 		
 		@Override
-		public String getName() {
+		public String name() {
 			return "NOP";
 		}
 
@@ -42,7 +42,7 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 			}
 			
 			@Override
-			public String getName() {
+			public String name() {
 				return name;
 			}
 			

@@ -190,7 +190,7 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 			}
 
 			@Override
-			public String getName() {
+			public String name() {
 				return getTitle();
 			}
 			

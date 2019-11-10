@@ -48,7 +48,7 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	 * @return
 	 */
 	default ProgressMonitor split(ProgressMonitor parent) {
-		return parent.split(getName(), size(), this);
+		return parent.split(name(), size(), this);
 	}
 		
 	default Diagnostic splitAndDiagnose(ProgressMonitor progressMonitor) throws Exception {

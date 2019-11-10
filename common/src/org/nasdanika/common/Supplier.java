@@ -46,7 +46,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 		
 		@Override
-		public String getName() {
+		public String name() {
 			return "Empty supplier";
 		}
 
@@ -96,8 +96,8 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public String getName() {
-				return Supplier.this.getName();
+			public String name() {
+				return Supplier.this.name();
 			}
 			
 		};
@@ -120,7 +120,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public String getName() {
+			public String name() {
 				return name;
 			}
 			
@@ -148,7 +148,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public String getName() {
+			public String name() {
 				return name;
 			}
 			
@@ -168,7 +168,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 	default public T apply(ProgressMonitor progressMonitor) {
 		try {
 			progressMonitor.setWorkRemaining(size()*3); // diagnose, execute, commit or rollback
-			diagnose(progressMonitor.split("Diagnosing", size())).checkError("Diagnostic failed: "+getName());
+			diagnose(progressMonitor.split("Diagnosing", size())).checkError("Diagnostic failed: "+name());
 			try {
 				T result = execute(progressMonitor.split("Executing", size()));
 				commit(progressMonitor.split("Committing", size()));
@@ -214,7 +214,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			public T call() throws Exception {
 				try (ProgressMonitor progressMonitor = new NullProgressMonitor()) {
 					progressMonitor.setWorkRemaining(size()*3); // diagnose, execute, commit or rollback
-					diagnose(progressMonitor.split("Diagnosing", size())).checkError("Diagnostic failed: "+getName());
+					diagnose(progressMonitor.split("Diagnosing", size())).checkError("Diagnostic failed: "+name());
 					try {
 						T result = execute(progressMonitor.split("Executing", size()));
 						commit(progressMonitor.split("Committing", size()));
