@@ -30,14 +30,13 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 		return context.get(Executor.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public WorkFactory<R> create(WorkFactory<T> arg) throws Exception {
-		Object[] argResult = { null };
+		Reference<T> argReference = new Reference<>();
 		
 		List<WorkFactory<U>> cwfl = new ArrayList<>();
 		for (Function<T, U> child: children) {
-			cwfl.add(child.create(WorkFactory.from((T) argResult[0], "Argument")));
+			cwfl.add(child.create(WorkFactory.fromSupplier(argReference, "Argument", 1)));
 		}
 		return new WorkFactory<R>() {
 
@@ -88,7 +87,7 @@ public abstract class CompoundFunction<T,R,U> implements Function<T,R> {
 
 					@Override
 					public R execute(ProgressMonitor progressMonitor) throws Exception {
-						argResult[0] = argWork.execute(progressMonitor.split("Executing arg work", argWork.size()));
+						argReference.set(argWork.execute(progressMonitor.split("Executing arg work", argWork.size())));
 						return childWork.execute(progressMonitor.split("Executing child work", childWork.size()));
 					}
 

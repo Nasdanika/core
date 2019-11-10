@@ -33,7 +33,7 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		return after.create(this);
 	}
 	
-	static <T> WorkFactory<T> from(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
+	static <T> WorkFactory<T> fromBiFunction(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
 		return new WorkFactory<T>() {
 
 			@Override
@@ -61,15 +61,15 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		};
 	}
 	
-	static <T> WorkFactory<T> from(Supplier<T> supplier, String name, double size) {
-		return from((c,p) -> supplier.get(), name, size);		
+	static <T> WorkFactory<T> fromSupplier(Supplier<T> supplier, String name, double size) {
+		return fromBiFunction((c,p) -> supplier.get(), name, size);		
 	}
 	
 	static <T> WorkFactory<T> from(T value, String name) {
-		return from((c,p) -> value, name, 0);		
+		return fromBiFunction((c,p) -> value, name, 0);		
 	}
 		
-	static <T> WorkFactory<T> from(Callable<T> callable, String name, double size) {
+	static <T> WorkFactory<T> fromCallable(Callable<T> callable, String name, double size) {
 		return new WorkFactory<T>() {
 
 			@Override
@@ -97,8 +97,8 @@ public interface WorkFactory<T> extends CommandFactory<T> {
 		};
 	}
 		
-	static WorkFactory<Void> from(Runnable runnable, String name, double size) {
-		return from((c,p) -> { runnable.run(); return null; }, name, size);		
+	static WorkFactory<Void> fromRunnable(Runnable runnable, String name, double size) {
+		return fromBiFunction((c,p) -> { runnable.run(); return null; }, name, size);		
 	}
 	
 	/**
