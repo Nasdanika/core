@@ -114,7 +114,53 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			
 		};
 	}
-	
+		
+	/**
+	 * @return Function which executes this consumer and returns consumer's argument. 
+	 * This method can be used for chaining consumers.
+	 */
+	default Function<T,T> asFunction() {
+		return new Function<T,T>() {
+			
+			@Override
+			public T execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+				Consumer.this.execute(arg, progressMonitor);
+				return arg;
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Consumer.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() throws Exception {
+				Consumer.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) throws Exception {
+				Consumer.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+				return Consumer.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Consumer.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Consumer.this.name();
+			}
+			
+		};
+	}
+		
 	static <T> Consumer<T> fromBiConsumer(BiConsumer<T,ProgressMonitor> biConsumer, String name, double size) {
 		return new Consumer<T>() {
 

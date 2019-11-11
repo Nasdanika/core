@@ -85,7 +85,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		};
 	}
 	
-	default <V> Function<T,V> then(java.util.function.Function<R,V> then) {
+	default <V> Function<T,V> then(java.util.function.Function<? super R,V> then) {
 		return new Function<T,V>() {
 			
 			@Override
@@ -126,7 +126,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		};
 	}
 	
-	default <V> Function<T,V> then(Function<R,V> then) throws Exception {
+	default <V> Function<T,V> then(Function<? super R,V> then) {
 		List<ExecutionParticipant> elements = new ArrayList<>();
 		elements.add(this);
 		elements.add(then);
@@ -152,7 +152,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		return new Then(nameBuilder.toString());
 	}
 		
-	default Consumer<T> then(Consumer<R> then) throws Exception {
+	default Consumer<T> then(Consumer<? super R> then) {
 		List<ExecutionParticipant> elements = new ArrayList<>();
 		elements.add(this);
 		elements.add(then);

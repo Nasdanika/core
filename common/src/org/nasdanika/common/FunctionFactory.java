@@ -9,7 +9,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 			
 	Function<T,R> create(Context context) throws Exception;
 	
-	default <V> FunctionFactory<T,V> then(FunctionFactory<R,V> then) throws Exception {
+	default <V> FunctionFactory<T,V> then(FunctionFactory<? super R,V> then) {
 		return new FunctionFactory<T, V>() {
 			
 			@Override
@@ -20,7 +20,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		};
 	}
 		
-	default ConsumerFactory<T> then(ConsumerFactory<R> then) throws Exception {
+	default ConsumerFactory<T> then(ConsumerFactory<? super R> then) {
 		return new ConsumerFactory<T>() {
 			
 			@Override

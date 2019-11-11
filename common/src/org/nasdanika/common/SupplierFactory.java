@@ -9,7 +9,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		
 	Supplier<T> create(Context context) throws Exception;
 		
-	default <V> SupplierFactory<V> then(FunctionFactory<T,V> then) {
+	default <V> SupplierFactory<V> then(FunctionFactory<? super T,V> then) {
 		return new SupplierFactory<V>() {
 			
 			@Override
@@ -20,7 +20,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		};
 	}
 	
-	default CommandFactory then(ConsumerFactory<T> then) {
+	default CommandFactory then(ConsumerFactory<? super T> then) {
 		return new CommandFactory() {
 			
 			@Override

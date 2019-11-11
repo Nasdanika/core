@@ -66,7 +66,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		return (Supplier<T>) EMPTY;
 	}
 	
-	default <R> Supplier<R> then(java.util.function.Function<T,R> then) {
+	default <R> Supplier<R> then(java.util.function.Function<? super T,R> then) {
 		return new Supplier<R>() {
 			
 			@Override
@@ -107,7 +107,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		};
 	}
 	
-	default <V> Supplier<V> then(Function<T,V> then) {
+	default <V> Supplier<V> then(Function<? super T,V> then) {
 		List<ExecutionParticipant> elements = new ArrayList<>();
 		elements.add(this);
 		elements.add(then);
@@ -133,7 +133,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Then(nameBuilder.toString());
 	}
 	
-	default Command then(Consumer<T> then) {
+	default Command then(Consumer<? super T> then) {
 		List<ExecutionParticipant> elements = new ArrayList<>();
 		elements.add(this);
 		elements.add(then);
