@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
@@ -106,11 +108,55 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 	}
 	
 	default <V> Supplier<V> then(Function<T,V> then) {
-		throw new UnsupportedOperationException();
+		List<ExecutionParticipant> elements = new ArrayList<>();
+		elements.add(this);
+		elements.add(then);
+		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Supplier<V> {
+
+			protected Then(String name) {
+				super(name);
+			}
+			
+			@Override
+			public V execute(ProgressMonitor progressMonitor) throws Exception {
+				return then.splitAndExecute(Supplier.this.splitAndExecute(progressMonitor), progressMonitor);
+			}
+
+			@Override
+			protected List<ExecutionParticipant> getElements() {
+				return elements;
+			}			
+		}
+		
+		StringBuilder nameBuilder = new StringBuilder();
+		nameBuilder.append(Supplier.this.name()).append(" => ").append(then.name());
+		return new Then(nameBuilder.toString());
 	}
 	
 	default Command then(Consumer<T> then) {
-		throw new UnsupportedOperationException();
+		List<ExecutionParticipant> elements = new ArrayList<>();
+		elements.add(this);
+		elements.add(then);
+		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Command {
+
+			protected Then(String name) {
+				super(name);
+			}
+			
+			@Override
+			public void execute(ProgressMonitor progressMonitor) throws Exception {
+				then.splitAndExecute(Supplier.this.splitAndExecute(progressMonitor), progressMonitor);
+			}
+
+			@Override
+			protected List<ExecutionParticipant> getElements() {
+				return elements;
+			}			
+		}
+		
+		StringBuilder nameBuilder = new StringBuilder();
+		nameBuilder.append(Supplier.this.name()).append(" => ").append(then.name());
+		return new Then(nameBuilder.toString());
 	}
 	
 	static <T> Supplier<T> fromFunction(java.util.function.Function<ProgressMonitor, T> function, String name, double size) {

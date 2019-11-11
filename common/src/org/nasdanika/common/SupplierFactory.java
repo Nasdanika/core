@@ -10,11 +10,25 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 	Supplier<T> create(Context context) throws Exception;
 		
 	default <V> SupplierFactory<V> then(FunctionFactory<T,V> then) {
-		throw new UnsupportedOperationException();
+		return new SupplierFactory<V>() {
+			
+			@Override
+			public Supplier<V> create(Context context) throws Exception {
+				return SupplierFactory.this.create(context).then(then.create(context));
+			}
+			
+		};
 	}
 	
 	default CommandFactory then(ConsumerFactory<T> then) {
-		throw new UnsupportedOperationException();
+		return new CommandFactory() {
+			
+			@Override
+			public Command create(Context context) throws Exception {
+				return SupplierFactory.this.create(context).then(then.create(context));
+			}
+			
+		};
 	}
 	
 }

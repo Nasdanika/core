@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -125,11 +127,55 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 	}
 	
 	default <V> Function<T,V> then(Function<R,V> then) throws Exception {
-		throw new UnsupportedOperationException();
+		List<ExecutionParticipant> elements = new ArrayList<>();
+		elements.add(this);
+		elements.add(then);
+		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Function<T,V> {
+
+			protected Then(String name) {
+				super(name);
+			}
+			
+			@Override
+			public V execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+				return then.splitAndExecute(Function.this.splitAndExecute(arg, progressMonitor), progressMonitor);
+			}
+
+			@Override
+			protected List<ExecutionParticipant> getElements() {
+				return elements;
+			}			
+		}
+		
+		StringBuilder nameBuilder = new StringBuilder();
+		nameBuilder.append(Function.this.name()).append(" => ").append(then.name());
+		return new Then(nameBuilder.toString());
 	}
 		
 	default Consumer<T> then(Consumer<R> then) throws Exception {
-		throw new UnsupportedOperationException();
+		List<ExecutionParticipant> elements = new ArrayList<>();
+		elements.add(this);
+		elements.add(then);
+		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Consumer<T> {
+
+			protected Then(String name) {
+				super(name);
+			}
+			
+			@Override
+			public void execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+				then.splitAndExecute(Function.this.splitAndExecute(arg, progressMonitor), progressMonitor);
+			}
+
+			@Override
+			protected List<ExecutionParticipant> getElements() {
+				return elements;
+			}			
+		}
+		
+		StringBuilder nameBuilder = new StringBuilder();
+		nameBuilder.append(Function.this.name()).append(" => ").append(then.name());
+		return new Then(nameBuilder.toString());
 	}	
 	
 	static <T,R> Function<T,R> fromBiFunction(BiFunction<T, ProgressMonitor, R> biFunction, String name, double size) {
