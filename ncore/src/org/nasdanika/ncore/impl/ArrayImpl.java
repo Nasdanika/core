@@ -2,7 +2,6 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -14,10 +13,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.common._legacy.CompoundSupplier;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -141,20 +140,13 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 
 	@Override
 	public Supplier<EList<Object>> create(Context context) throws Exception {
-		CompoundSupplier<EList<Object>, Object> ret = new CompoundSupplier<EList<Object>, Object>(getTitle(), context.get(Executor.class)) {
-						
-			@Override
-			protected EList<Object> combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {
-				return new BasicEList<Object>(results);
-			}
-
-			
-		};
+		ListCompoundSupplier<Object> ret = new ListCompoundSupplier<Object>(getTitle());
 		for (SupplierFactory<Object> e: getElements()) {
 			Supplier<Object> child = e.create(context);
 			ret.add(child);
 		}
-		return ret;
+		
+		return ret.then(BasicEList::new);
 	}
 
 } //ArrayImpl

@@ -21,5 +21,5 @@ public abstract class MapCompoundExecutionParticipant<K, E extends ExecutionPart
 	public void put(K key, E element) {
 		elements.put(key, element);
 	}
-
+	
 }

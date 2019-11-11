@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -25,13 +24,13 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.JavaExpressionPropertyComputer;
+import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Supplier;
-import org.nasdanika.common._legacy.CompoundSupplier;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
@@ -78,81 +77,81 @@ public class TestCommon {
 	}
 		
 	@Test 
-	public void testCompoundWork() throws Exception {
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		ProgressEntry pe = new ProgressEntry("Test progress entry", 0);		
-		try (ProgressMonitor subMonitor = progressMonitor.compose(pe.split("Sub-entry", 1))) {
-			CompoundSupplier<String, String> cw = new CompoundSupplier<String, String>("Test work", null) {
-				
-				@Override
-				protected String combine(List<String> results, ProgressMonitor progressMonitor) throws Exception {
-					StringBuilder ret = new StringBuilder();
-					for (String result: results) {
-						progressMonitor.worked(1, "Combining "+result, result);
-						ret.append(result).append(" ");
-					}
-					return ret.toString();
-				}
-				
-			};
-
-			cw.add(new Supplier<String>() {
-
-				@Override
-				public double size() {
-					return 1;
-				}
-
-				@Override
-				public String name() {
-					return "W1";
-				}
-
-				@Override
-				public String execute(ProgressMonitor progressMonitor) throws Exception {
-					progressMonitor.worked(1, "Produced W1 result");
-					return "W1-result";
-				}
-
-				@Override
-				public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
-					// TODO Auto-generated method stub
-					return true;
-				}
-				
-			});
+	public void testCompoundSupplier() throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			try (ProgressEntry pe = new ProgressEntry("Test progress entry", 0)) {		
+				try (ProgressMonitor subMonitor = progressMonitor.compose(pe.split("Sub-entry", 1))) {
+					try (ListCompoundSupplier<String> cw = new ListCompoundSupplier<>("Test work")) {
 			
-			cw.add(new Supplier<String>() {
-
-				@Override
-				public double size() {
-					return 1;
-				}
-
-				@Override
-				public String name() {
-					return "W2";
-				}
-
-				@Override
-				public String execute(ProgressMonitor progressMonitor) throws Exception {
-					progressMonitor.worked(1, "Produced W2 result");
-					return "W2-result";
-				}
-
-				@Override
-				public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
-					// TODO Auto-generated method stub
-					return true;
+						cw.add(new Supplier<String>() {
+			
+							@Override
+							public double size() {
+								return 1;
+							}
+			
+							@Override
+							public String name() {
+								return "W1";
+							}
+			
+							@Override
+							public String execute(ProgressMonitor progressMonitor) throws Exception {
+								progressMonitor.worked(1, "Produced W1 result");
+								return "W1-result";
+							}
+			
+							@Override
+							public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+								// TODO Auto-generated method stub
+								return true;
+							}
+							
+						});
+						
+						cw.add(new Supplier<String>() {
+			
+							@Override
+							public double size() {
+								return 1;
+							}
+			
+							@Override
+							public String name() {
+								return "W2";
+							}
+			
+							@Override
+							public String execute(ProgressMonitor progressMonitor) throws Exception {
+								progressMonitor.worked(1, "Produced W2 result");
+								return "W2-result";
+							}
+			
+							@Override
+							public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+								// TODO Auto-generated method stub
+								return true;
+							}
+							
+						});
+						
+						System.out.println(cw.apply(subMonitor));
+						
+//						@Override
+//						protected String combine(List<String> results, ProgressMonitor progressMonitor) throws Exception {
+//							StringBuilder ret = new StringBuilder();
+//							for (String result: results) {
+//								progressMonitor.worked(1, "Combining "+result, result);
+//								ret.append(result).append(" ");
+//							}
+//							return ret.toString();
+//						}						
+					}					
 				}
 				
-			});
-			
-			System.out.println(cw.execute(subMonitor));
-			
+				System.out.println(pe.toJSON().toString(4));
+			}
 		}
-		
-		System.out.println(pe.toJSON().toString(4));
 	}
 	
 	@Test

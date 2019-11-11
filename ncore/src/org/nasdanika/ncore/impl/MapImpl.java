@@ -2,12 +2,8 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -15,9 +11,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.MapCompoundSupplier;
 import org.nasdanika.common.Supplier;
-import org.nasdanika.common._legacy.CompoundSupplier;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -141,38 +136,10 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 
 	@Override
 	public Supplier<Map<String, Object>> create(Context context) throws Exception {
-		CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>> ret = new CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>>(getTitle(), context.get(Executor.class)) {
-						
-			@Override
-			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {
-				Map<String, Object> ret = new LinkedHashMap<>();
-				for (Map.Entry<String, Object> e: results) {
-					ret.put(e.getKey(), e.getValue());
-				}
-				return ret;
-			}
-
-			
-		};
+		MapCompoundSupplier<String,Object> ret = new MapCompoundSupplier<>(getTitle());
+		
 		for (Entry<Object> e: getEntries()) {
-			ret.add(e.create(context).adapt(val -> new Map.Entry<String, Object>() {
-
-						@Override
-						public String getKey() {
-							return e.name();
-						}
-
-						@Override
-						public Object getValue() {
-							return val;
-						}
-
-						@Override
-						public Object setValue(Object arg0) {
-							// TODO Auto-generated method stub
-							return null;
-						}
-					}));
+			ret.put(e.getName(), e.create(context));
 		}
 		return ret;
 	}

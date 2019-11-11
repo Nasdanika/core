@@ -6,15 +6,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.Object;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -24,10 +20,11 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Function;
+import org.nasdanika.common.MapCompoundSupplier;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
-import org.nasdanika.common._legacy.CompoundSupplier;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
@@ -370,49 +367,41 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 			return null;
 		}
 		
-		CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>> headersWork = new CompoundSupplier<Map<String, Object>, Map.Entry<String, Object>>("Headers",context.get(Executor.class)) {
-			
-			@Override
-			protected Map<String, Object> combine(List<Map.Entry<String, Object>> results, ProgressMonitor progressMonitor) throws Exception {
-				Map<String, Object> ret = new LinkedHashMap<>();
-				for (Map.Entry<String, Object> e: results) {
-					ret.put(e.getKey(), e.getValue());
-				}
-				return ret;
-			}
-
-			
-		};
+		MapCompoundSupplier<String, Object> headersWork = new MapCompoundSupplier<>("Headers");
 		for (Entry<Object> e: headers) {
-			headersWork.add(e.create(context).adapt(val -> new Map.Entry<String, Object>() {
-
-						@Override
-						public String getKey() {
-							return e.name();
-						}
-
-						@Override
-						public Object getValue() {
-							return val;
-						}
-
-						@Override
-						public Object setValue(Object val) {
-							throw new UnsupportedOperationException();
-						}
-					}));
+			headersWork.put(e.getName(), e.create(context));
 		}
 
 		return headersWork;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Supplier<Object> create(Context context) throws Exception {
-		CompoundSupplier<Object, Object> ret = new CompoundSupplier<Object, Object>(getTitle(), context.get(Executor.class)) {
-			
+		MapCompoundSupplier<String,Object> ret = new MapCompoundSupplier<>(getTitle());
+		
+		// Ugly, but what to do?
+		ret.put("Headers", (Supplier) createHeadersWork(context));		
+		
+		Supplier<InputStream> bodyWork = createBodyWork(context);
+		if (bodyWork != null) {
+			ret.put("Body", (Supplier) bodyWork);
+		}
+				
+		return ret.then(new Function<Map<String,Object>,Object>() {
+
 			@Override
-			protected Object combine(List<Object> results, ProgressMonitor progressMonitor) throws Exception {				
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return HttpCallImpl.this.getTitle();
+			}
+
+			@Override
+			public Object execute(Map<String, Object> arg, ProgressMonitor progressMonitor) throws Exception {
 				URL url = new URL(context.interpolate(getUrl()));
 				URLConnection connection = url.openConnection();
 				if (!(connection instanceof HttpURLConnection)) {
@@ -421,19 +410,20 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				
 				HttpURLConnection httpConnection = (HttpURLConnection) connection;
 				httpConnection.setRequestMethod(getMethod().getLiteral());
-				httpConnection.setDoOutput(results.size() == 2);
+				Object body = arg.get("Body");
+				httpConnection.setDoOutput(body != null);
 				Converter converter = context.get(Converter.class);
 				if (converter == null) {
 					converter = DefaultConverter.INSTANCE;
 				}
-				for (Map.Entry<String, Object> header: ((Map<String,Object>) results.get(0)).entrySet()) {						
+				for (Map.Entry<String, Object> header: ((Map<String,Object>) arg.get("Headers")).entrySet()) {						
 					httpConnection.setRequestProperty(header.getKey(), converter.convert(header.getValue(), String.class));
 				}
 				httpConnection.setConnectTimeout(getConnectTimeout() * 1000); 
 				httpConnection.setReadTimeout(getReadTimeout() * 1000); 
 				
-				if (results.size() == 2 && results.get(1) instanceof InputStream) {
-					try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream()); InputStream bin = new BufferedInputStream((InputStream) results.get(1))) {
+				if (body != null) {
+					try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream()); InputStream bin = new BufferedInputStream(converter.convert(body, InputStream.class))) {
 						int b;
 						while ((b = bin.read()) != -1) {
 							bout.write(b);
@@ -449,21 +439,8 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage()); // TODO - body to message if message is empty, e.g. JSON details. Also TODO - to common.
 			}
 			
-			@Override
-			public double size() {
-				return super.size() + 1;
-			}
-		};
-		
-		ret.add((Supplier) createHeadersWork(context));
-		
-		Supplier<InputStream> bodyWork = createBodyWork(context);
-		if (bodyWork != null) {
-			ret.add((Supplier) bodyWork);
-		}
-		
-		
-		return ret;
+		});
 	}
 
 } //HttpCallImpl
+
