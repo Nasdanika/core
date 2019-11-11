@@ -29,7 +29,7 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getHttpCall()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
  * @generated
  */
 public interface HttpCall extends ModelElement, SupplierFactory<Object> {

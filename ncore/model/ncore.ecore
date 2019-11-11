@@ -68,19 +68,19 @@
   <eClassifiers xsi:type="ecore:EClass" name="WebAddress" eSuperTypes="#//ContactMethod">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WorkFactory" instanceClassName="org.nasdanika.common.SupplierFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="SupplierFactory" instanceClassName="org.nasdanika.common.SupplierFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
     </eAnnotations>
     <eTypeParameters name="T"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IFunction" instanceClassName="org.nasdanika.common.FunctionFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionFactory" instanceClassName="org.nasdanika.common.FunctionFactory"
       abstract="true" interface="true">
     <eTypeParameters name="T"/>
     <eTypeParameters name="R"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.ConsumerFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="ConsumerFactory" instanceClassName="org.nasdanika.common.ConsumerFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
@@ -102,7 +102,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -146,7 +146,7 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Operation arguments."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//WorkFactory">
+      <eGenericType eClassifier="#//SupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
@@ -160,12 +160,12 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Array elements."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//WorkFactory">
+      <eGenericType eClassifier="#//SupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eTypeArguments>
@@ -181,12 +181,12 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Context elements. Elements which extend Entry are treated as context properties and unnamed typed elments are treated as services."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//WorkFactory">
+      <eGenericType eClassifier="#//SupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eClassifier="#//IContext"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -196,7 +196,7 @@
     </eAnnotations>
     <eTypeParameters name="T"/>
     <eGenericSuperTypes eClassifier="#//NamedElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eTypeParameter="#//Entry/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -232,7 +232,7 @@
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
@@ -323,7 +323,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//WorkFactory">
+    <eGenericSuperTypes eClassifier="#//SupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>

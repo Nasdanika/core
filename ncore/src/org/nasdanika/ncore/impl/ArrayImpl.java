@@ -2,10 +2,8 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.Object;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.Executor;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
@@ -14,7 +12,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ListCompoundSupplier;
-import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;

@@ -166,10 +166,10 @@ public interface NcoreFactory extends EFactory {
 	Property createProperty();
 
 	/**
-	 * Returns a new object of class '<em>FunctionFactory</em>'.
+	 * Returns a new object of class '<em>Function</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>FunctionFactory</em>'.
+	 * @return a new object of class '<em>Function</em>'.
 	 * @generated
 	 */
 	Function createFunction();
@@ -211,10 +211,10 @@ public interface NcoreFactory extends EFactory {
 	RestOperation createRestOperation();
 
 	/**
-	 * Returns a new object of class '<em>Rest FunctionFactory</em>'.
+	 * Returns a new object of class '<em>Rest Function</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rest FunctionFactory</em>'.
+	 * @return a new object of class '<em>Rest Function</em>'.
 	 * @generated
 	 */
 	RestFunction createRestFunction();

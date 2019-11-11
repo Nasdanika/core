@@ -45,7 +45,7 @@ public interface Operation extends Provider {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Arguments</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getOperation_Arguments()
-	 * @model type="org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model type="org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
 	EList<SupplierFactory<Object>> getArguments();

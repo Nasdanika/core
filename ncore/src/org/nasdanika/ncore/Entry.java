@@ -10,12 +10,12 @@ import org.nasdanika.common.SupplierFactory;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * _LegacyCommandToRemove factory with an name.
+ * Command factory with an name.
  * <!-- end-model-doc -->
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getEntry()
- * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.WorkFactory&lt;T&gt;"
+ * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.SupplierFactory&lt;T&gt;"
  * @generated
  */
 public interface Entry<T> extends NamedElement, SupplierFactory<T> {

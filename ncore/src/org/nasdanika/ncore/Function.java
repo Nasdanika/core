@@ -10,7 +10,7 @@ import java.lang.Object;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * FunctionFactory is a named operation.
+ * Function is a named operation.
  * <!-- end-model-doc -->
  *
  *

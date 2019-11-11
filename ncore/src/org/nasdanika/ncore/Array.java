@@ -24,7 +24,7 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getArray()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EEList&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EEList&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
  * @generated
  */
 public interface Array extends ModelElement, SupplierFactory<EList<Object>> {
@@ -38,7 +38,7 @@ public interface Array extends ModelElement, SupplierFactory<EList<Object>> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getArray_Elements()
-	 * @model type="org.nasdanika.ncore.WorkFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model type="org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
 	EList<SupplierFactory<Object>> getElements();

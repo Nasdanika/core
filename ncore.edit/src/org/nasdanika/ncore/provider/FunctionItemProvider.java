@@ -73,14 +73,14 @@ public class FunctionItemProvider extends OperationItemProvider {
 	}
 
 	/**
-	 * This returns FunctionFactory.gif.
+	 * This returns Function.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/FunctionFactory"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Function"));
 	}
 
 	/**
