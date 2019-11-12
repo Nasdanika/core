@@ -299,6 +299,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	private EDataType iContextEDataType = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType exceptionEDataType = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -1045,6 +1052,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EDataType getException() {
+		return exceptionEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NcoreFactory getNcoreFactory() {
 		return (NcoreFactory)getEFactoryInstance();
 	}
@@ -1172,6 +1189,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Create data types
 		iContextEDataType = createEDataType(ICONTEXT);
+		exceptionEDataType = createEDataType(EXCEPTION);
 	}
 
 	/**
@@ -1444,6 +1462,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Initialize data types
 		initEDataType(iContextEDataType, org.nasdanika.common.Context.class, "IContext", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

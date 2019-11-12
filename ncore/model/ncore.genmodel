@@ -17,6 +17,7 @@
       <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/PATCH"/>
     </genEnums>
     <genDataTypes ecoreDataType="ncore.ecore#//IContext"/>
+    <genDataTypes ecoreDataType="ncore.ecore#//Exception"/>
     <genClasses ecoreClass="ncore.ecore#//ModelElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/title"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>

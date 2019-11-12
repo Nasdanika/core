@@ -118,6 +118,8 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 				return createHttpMethodFromString(eDataType, initialValue);
 			case NcorePackage.ICONTEXT:
 				return createIContextFromString(eDataType, initialValue);
+			case NcorePackage.EXCEPTION:
+				return createExceptionFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -135,6 +137,8 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 				return convertHttpMethodToString(eDataType, instanceValue);
 			case NcorePackage.ICONTEXT:
 				return convertIContextToString(eDataType, instanceValue);
+			case NcorePackage.EXCEPTION:
+				return convertExceptionToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -417,6 +421,24 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	public String convertIContextToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Exception createExceptionFromString(EDataType eDataType, String initialValue) {
+		return (Exception)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertExceptionToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
