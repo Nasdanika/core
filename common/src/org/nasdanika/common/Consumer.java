@@ -116,7 +116,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 	}
 		
 	/**
-	 * @return Function which executes this consumer and returns consumer's argument. 
+	 * @return Function which executes this consumer and returns the argument. 
 	 * This method can be used for chaining consumers.
 	 */
 	default Function<T,T> asFunction() {

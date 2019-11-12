@@ -290,5 +290,64 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		};
 	}	
 	
+	/**
+	 * @return Function which executes this supplier and returns the argument and the result as a {@link BiSupplier}.
+	 * This method can be used for embedding suppliers into function chains.
+	 */
+	default <V> Function<V,BiSupplier<V,T>> asFunction() {
+		return new Function<V,BiSupplier<V,T>>() {
+			
+			@Override
+			public BiSupplier<V,T> execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+				T result = Supplier.this.execute(progressMonitor);
+				return new BiSupplier<V, T>() {
+
+					@Override
+					public V getFirst() {
+						return arg;
+					}
+
+					@Override
+					public T getSecond() {
+						return result;
+					}
+				};
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Supplier.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() throws Exception {
+				Supplier.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) throws Exception {
+				Supplier.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+				return Supplier.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Supplier.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Supplier.this.name();
+			}
+			
+		};
+	}
+		
+	
+	
 	
 }
