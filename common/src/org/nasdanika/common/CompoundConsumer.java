@@ -2,8 +2,12 @@ package org.nasdanika.common;
 
 public class CompoundConsumer<E> extends ListCompoundExecutionParticipant<Consumer<E>> implements Consumer<E>  {
 	
-	public CompoundConsumer(String name) {
+	@SafeVarargs
+	public CompoundConsumer(String name, Consumer<E>... consumers) {
 		super(name);
+		for (Consumer<E> consumer: consumers) {
+			add(consumer);
+		}
 	}
 
 	@Override

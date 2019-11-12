@@ -5,8 +5,12 @@ import java.util.List;
 
 public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Supplier<E>> implements Supplier<List<E>>  {
 	
-	public ListCompoundSupplier(String name) {
+	@SafeVarargs
+	public ListCompoundSupplier(String name, Supplier<E>... suppliers) {
 		super(name);
+		for (Supplier<E> supplier: suppliers) {
+			add(supplier);
+		}
 	}
 
 	@Override

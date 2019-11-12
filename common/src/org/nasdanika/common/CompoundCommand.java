@@ -2,8 +2,11 @@ package org.nasdanika.common;
 
 public class CompoundCommand extends ListCompoundExecutionParticipant<Command> implements Command  {
 	
-	public CompoundCommand(String name) {
+	public CompoundCommand(String name, Command... commands) {
 		super(name);
+		for (Command command: commands) {
+			add(command);
+		}
 	}
 
 	@Override
