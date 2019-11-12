@@ -789,10 +789,10 @@ public interface NcorePackage extends EPackage {
 	int FUNCTION_FACTORY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.common.Consumer <em>Consumer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.common.ConsumerFactory
+	 * @see org.nasdanika.common.Consumer
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getConsumer()
 	 * @generated
 	 */
@@ -2582,12 +2582,12 @@ public interface NcorePackage extends EPackage {
 	EClass getFunctionFactory();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.common.Consumer <em>Consumer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Consumer</em>'.
-	 * @see org.nasdanika.common.ConsumerFactory
-	 * @model instanceClass="org.nasdanika.common.ConsumerFactory" typeParameters="T"
+	 * @see org.nasdanika.common.Consumer
+	 * @model instanceClass="org.nasdanika.common.Consumer" typeParameters="T"
 	 * @generated
 	 */
 	EClass getConsumer();
@@ -3270,10 +3270,10 @@ public interface NcorePackage extends EPackage {
 		EClass FUNCTION_FACTORY = eINSTANCE.getFunctionFactory();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.common.Consumer <em>Consumer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.common.ConsumerFactory
+		 * @see org.nasdanika.common.Consumer
 		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getConsumer()
 		 * @generated
 		 */

@@ -92,7 +92,7 @@
     <eTypeParameters name="T"/>
     <eTypeParameters name="R"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.ConsumerFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.Consumer"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>

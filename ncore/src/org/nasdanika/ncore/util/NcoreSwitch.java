@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
+import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.Supplier;
@@ -193,7 +194,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				return result;
 			}
 			case NcorePackage.CONSUMER: {
-				ConsumerFactory<?> consumer = (ConsumerFactory<?>)theEObject;
+				Consumer<?> consumer = (Consumer<?>)theEObject;
 				T1 result = caseConsumer(consumer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -593,7 +594,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public <T> T1 caseConsumer(ConsumerFactory<T> object) {
+	public <T> T1 caseConsumer(Consumer<T> object) {
 		return null;
 	}
 
