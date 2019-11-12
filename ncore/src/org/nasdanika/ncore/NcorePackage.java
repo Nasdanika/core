@@ -677,6 +677,34 @@ public interface NcorePackage extends EPackage {
 	int WEB_ADDRESS_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.common.Supplier <em>Supplier</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.common.Supplier
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplier()
+	 * @generated
+	 */
+	int SUPPLIER = 9;
+
+	/**
+	 * The number of structural features of the '<em>Supplier</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUPPLIER_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Supplier</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUPPLIER_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.common.SupplierFactory <em>Supplier Factory</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -684,7 +712,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplierFactory()
 	 * @generated
 	 */
-	int SUPPLIER_FACTORY = 9;
+	int SUPPLIER_FACTORY = 10;
 
 	/**
 	 * The number of structural features of the '<em>Supplier Factory</em>' class.
@@ -705,6 +733,34 @@ public interface NcorePackage extends EPackage {
 	int SUPPLIER_FACTORY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.common.Function <em>IFunction</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.common.Function
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIFunction()
+	 * @generated
+	 */
+	int IFUNCTION = 11;
+
+	/**
+	 * The number of structural features of the '<em>IFunction</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IFUNCTION_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>IFunction</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IFUNCTION_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.common.FunctionFactory <em>Function Factory</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -712,7 +768,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFunctionFactory()
 	 * @generated
 	 */
-	int FUNCTION_FACTORY = 10;
+	int FUNCTION_FACTORY = 12;
 
 	/**
 	 * The number of structural features of the '<em>Function Factory</em>' class.
@@ -733,6 +789,34 @@ public interface NcorePackage extends EPackage {
 	int FUNCTION_FACTORY_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.common.ConsumerFactory
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getConsumer()
+	 * @generated
+	 */
+	int CONSUMER = 13;
+
+	/**
+	 * The number of structural features of the '<em>Consumer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSUMER_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Consumer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONSUMER_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer Factory</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -740,7 +824,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getConsumerFactory()
 	 * @generated
 	 */
-	int CONSUMER_FACTORY = 11;
+	int CONSUMER_FACTORY = 14;
 
 	/**
 	 * The number of structural features of the '<em>Consumer Factory</em>' class.
@@ -768,7 +852,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedElement()
 	 * @generated
 	 */
-	int TYPED_ELEMENT = 12;
+	int TYPED_ELEMENT = 15;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ProviderImpl <em>Provider</em>}' class.
@@ -778,7 +862,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProvider()
 	 * @generated
 	 */
-	int PROVIDER = 13;
+	int PROVIDER = 16;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ValueImpl <em>Value</em>}' class.
@@ -788,7 +872,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 14;
+	int VALUE = 17;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.NullImpl <em>Null</em>}' class.
@@ -798,7 +882,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNull()
 	 * @generated
 	 */
-	int NULL = 15;
+	int NULL = 18;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.OperationImpl <em>Operation</em>}' class.
@@ -808,7 +892,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getOperation()
 	 * @generated
 	 */
-	int OPERATION = 16;
+	int OPERATION = 19;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ArrayImpl <em>Array</em>}' class.
@@ -818,7 +902,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getArray()
 	 * @generated
 	 */
-	int ARRAY = 17;
+	int ARRAY = 20;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ContextImpl <em>Context</em>}' class.
@@ -828,7 +912,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getContext()
 	 * @generated
 	 */
-	int CONTEXT = 18;
+	int CONTEXT = 21;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
@@ -838,7 +922,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
 	 * @generated
 	 */
-	int ENTRY = 19;
+	int ENTRY = 22;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.
@@ -848,7 +932,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedEntry()
 	 * @generated
 	 */
-	int TYPED_ENTRY = 20;
+	int TYPED_ENTRY = 23;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ProviderEntryImpl <em>Provider Entry</em>}' class.
@@ -858,7 +942,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProviderEntry()
 	 * @generated
 	 */
-	int PROVIDER_ENTRY = 21;
+	int PROVIDER_ENTRY = 24;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
@@ -868,7 +952,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 22;
+	int MAP = 25;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
@@ -878,7 +962,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 23;
+	int PROPERTY = 26;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.FunctionImpl <em>Function</em>}' class.
@@ -888,7 +972,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFunction()
 	 * @generated
 	 */
-	int FUNCTION = 24;
+	int FUNCTION = 27;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -898,7 +982,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 25;
+	int LIST = 28;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ObjectImpl <em>Object</em>}' class.
@@ -908,7 +992,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 26;
+	int OBJECT = 29;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HttpCallImpl <em>Http Call</em>}' class.
@@ -918,7 +1002,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpCall()
 	 * @generated
 	 */
-	int HTTP_CALL = 27;
+	int HTTP_CALL = 30;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
@@ -928,7 +1012,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestOperation()
 	 * @generated
 	 */
-	int REST_OPERATION = 28;
+	int REST_OPERATION = 31;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestFunctionImpl <em>Rest Function</em>}' class.
@@ -938,7 +1022,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestFunction()
 	 * @generated
 	 */
-	int REST_FUNCTION = 29;
+	int REST_FUNCTION = 32;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -2163,7 +2247,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 30;
+	int HTTP_METHOD = 33;
 
 	/**
 	 * The meta object id for the '<em>IContext</em>' data type.
@@ -2173,7 +2257,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIContext()
 	 * @generated
 	 */
-	int ICONTEXT = 31;
+	int ICONTEXT = 34;
 
 
 	/**
@@ -2454,6 +2538,17 @@ public interface NcorePackage extends EPackage {
 	EAttribute getWebAddress_Url();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.common.Supplier <em>Supplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Supplier</em>'.
+	 * @see org.nasdanika.common.Supplier
+	 * @model instanceClass="org.nasdanika.common.Supplier" typeParameters="T"
+	 * @generated
+	 */
+	EClass getSupplier();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.SupplierFactory <em>Supplier Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2465,6 +2560,17 @@ public interface NcorePackage extends EPackage {
 	EClass getSupplierFactory();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.common.Function <em>IFunction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>IFunction</em>'.
+	 * @see org.nasdanika.common.Function
+	 * @model instanceClass="org.nasdanika.common.Function" typeParameters="T R"
+	 * @generated
+	 */
+	EClass getIFunction();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.FunctionFactory <em>Function Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2474,6 +2580,17 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getFunctionFactory();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Consumer</em>'.
+	 * @see org.nasdanika.common.ConsumerFactory
+	 * @model instanceClass="org.nasdanika.common.ConsumerFactory" typeParameters="T"
+	 * @generated
+	 */
+	EClass getConsumer();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.ConsumerFactory <em>Consumer Factory</em>}'.
@@ -3113,6 +3230,16 @@ public interface NcorePackage extends EPackage {
 		EAttribute WEB_ADDRESS__URL = eINSTANCE.getWebAddress_Url();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.common.Supplier <em>Supplier</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.common.Supplier
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplier()
+		 * @generated
+		 */
+		EClass SUPPLIER = eINSTANCE.getSupplier();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.SupplierFactory <em>Supplier Factory</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3123,6 +3250,16 @@ public interface NcorePackage extends EPackage {
 		EClass SUPPLIER_FACTORY = eINSTANCE.getSupplierFactory();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.common.Function <em>IFunction</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.common.Function
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIFunction()
+		 * @generated
+		 */
+		EClass IFUNCTION = eINSTANCE.getIFunction();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.FunctionFactory <em>Function Factory</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3131,6 +3268,16 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass FUNCTION_FACTORY = eINSTANCE.getFunctionFactory();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.common.ConsumerFactory
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getConsumer()
+		 * @generated
+		 */
+		EClass CONSUMER = eINSTANCE.getConsumer();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.ConsumerFactory <em>Consumer Factory</em>}' class.

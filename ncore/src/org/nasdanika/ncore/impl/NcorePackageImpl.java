@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.FunctionFactory;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
@@ -119,6 +120,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass supplierEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass supplierFactoryEClass = null;
 
 	/**
@@ -126,7 +134,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass iFunctionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass functionFactoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass consumerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -602,6 +624,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSupplier() {
+		return supplierEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSupplierFactory() {
 		return supplierFactoryEClass;
 	}
@@ -612,8 +644,28 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getIFunction() {
+		return iFunctionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getFunctionFactory() {
 		return functionFactoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getConsumer() {
+		return consumerEClass;
 	}
 
 	/**
@@ -1050,9 +1102,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		webAddressEClass = createEClass(WEB_ADDRESS);
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
 
+		supplierEClass = createEClass(SUPPLIER);
+
 		supplierFactoryEClass = createEClass(SUPPLIER_FACTORY);
 
+		iFunctionEClass = createEClass(IFUNCTION);
+
 		functionFactoryEClass = createEClass(FUNCTION_FACTORY);
+
+		consumerEClass = createEClass(CONSUMER);
 
 		consumerFactoryEClass = createEClass(CONSUMER_FACTORY);
 
@@ -1139,9 +1197,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		setNsURI(eNS_URI);
 
 		// Create type parameters
+		addETypeParameter(supplierEClass, "T");
 		addETypeParameter(supplierFactoryEClass, "T");
+		addETypeParameter(iFunctionEClass, "T");
+		addETypeParameter(iFunctionEClass, "R");
 		addETypeParameter(functionFactoryEClass, "T");
 		addETypeParameter(functionFactoryEClass, "R");
+		addETypeParameter(consumerEClass, "T");
 		addETypeParameter(consumerFactoryEClass, "T");
 		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
@@ -1289,9 +1351,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(supplierEClass, Supplier.class, "Supplier", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(supplierFactoryEClass, SupplierFactory.class, "SupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(functionFactoryEClass, FunctionFactory.class, "FunctionFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(consumerEClass, ConsumerFactory.class, "Consumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(consumerFactoryEClass, ConsumerFactory.class, "ConsumerFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
@@ -1443,10 +1511,22 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Generic contact method."
 		   });
 		addAnnotation
+		  (supplierEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
+		   });
+		addAnnotation
 		  (supplierFactoryEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
+		   });
+		addAnnotation
+		  (consumerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
 		   });
 		addAnnotation
 		  (consumerFactoryEClass,

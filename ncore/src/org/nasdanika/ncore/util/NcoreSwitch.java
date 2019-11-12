@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.FunctionFactory;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
@@ -167,15 +168,33 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.SUPPLIER: {
+				Supplier<?> supplier = (Supplier<?>)theEObject;
+				T1 result = caseSupplier(supplier);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.SUPPLIER_FACTORY: {
 				SupplierFactory<?> supplierFactory = (SupplierFactory<?>)theEObject;
 				T1 result = caseSupplierFactory(supplierFactory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.IFUNCTION: {
+				org.nasdanika.common.Function<?, ?> iFunction = (org.nasdanika.common.Function<?, ?>)theEObject;
+				T1 result = caseIFunction(iFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.FUNCTION_FACTORY: {
 				FunctionFactory<?, ?> functionFactory = (FunctionFactory<?, ?>)theEObject;
 				T1 result = caseFunctionFactory(functionFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.CONSUMER: {
+				ConsumerFactory<?> consumer = (ConsumerFactory<?>)theEObject;
+				T1 result = caseConsumer(consumer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -504,6 +523,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Supplier</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Supplier</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseSupplier(Supplier<T> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Supplier Factory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -519,6 +553,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IFunction</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IFunction</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T, R> T1 caseIFunction(org.nasdanika.common.Function<T, R> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Function Factory</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -530,6 +579,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T, R> T1 caseFunctionFactory(FunctionFactory<T, R> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Consumer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseConsumer(ConsumerFactory<T> object) {
 		return null;
 	}
 
