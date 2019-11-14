@@ -6,7 +6,5 @@ package org.nasdanika.common;
  * @param <T>
  */
 public interface CommandFactory extends ExecutionParticipantFactory<Command> {
-		
-	Command create(Context context) throws Exception;
 	
 }

@@ -10,6 +10,11 @@ public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,
 		super(name);
 	}
 
+	public MapCompoundSupplier(String name, Map<K,Supplier<T>> suppliers) {
+		super(name);
+		suppliers.forEach(this::put);
+	}
+
 	@Override
 	public Map<K,T> execute(ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());

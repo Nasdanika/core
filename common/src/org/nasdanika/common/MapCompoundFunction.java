@@ -10,6 +10,11 @@ public class MapCompoundFunction<K,T,R> extends MapCompoundExecutionParticipant<
 		super(name);
 	}
 
+	public MapCompoundFunction(String name, Map<K,Function<T,R>> functions) {
+		super(name);
+		functions.forEach(this::put);
+	}
+
 	@Override
 	public Map<K,R> execute(T arg, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());

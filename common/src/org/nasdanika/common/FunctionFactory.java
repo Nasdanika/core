@@ -6,8 +6,6 @@ package org.nasdanika.common;
  * @param <T>
  */
 public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Function<T,R>> {
-			
-	Function<T,R> create(Context context) throws Exception;
 	
 	default <V> FunctionFactory<T,V> then(FunctionFactory<? super R,V> then) {
 		return new FunctionFactory<T, V>() {
