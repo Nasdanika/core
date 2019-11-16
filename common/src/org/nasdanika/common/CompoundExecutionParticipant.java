@@ -11,8 +11,7 @@ import java.util.concurrent.CancellationException;
  * @param <E>
  */
 public abstract class CompoundExecutionParticipant<E extends ExecutionParticipant> implements ExecutionParticipant {
-	
-	
+		
 	private String name;
 
 	protected CompoundExecutionParticipant(String name) {
@@ -78,6 +77,11 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 		for (E e: getElements()) {
 			e.close();
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + name() + " " + size();
 	}
 
 }

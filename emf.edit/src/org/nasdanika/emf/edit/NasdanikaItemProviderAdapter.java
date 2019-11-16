@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
@@ -409,6 +410,26 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			return Collections.emptyList(); // Suppressing children/siblings at the virtual elements.
 		}
 		return super.getNewChildDescriptors(object, editingDomain, sibling);
+	}
+	
+	/**
+	 * Returns a list of enum values to use as property choices  
+	 * @param enumType Enum type.
+	 * @param withNull If true, the first value is a blank string.
+	 * @param mapper If not null the mapper is used to convert enum literal to string.
+	 * @return
+	 */
+	public static <E extends Enum<?>> Collection<Object> enumChoices(Class<E> enumType, boolean withNull, Function<? super E,String> mapper) {
+		List<Object> ret = new ArrayList<>();
+		if (withNull) {
+			ret.add("");
+		}
+		for (Object c: enumType.getEnumConstants()) {
+			@SuppressWarnings("unchecked")
+			E e = (E) c;
+			ret.add(mapper == null ? e.name() : mapper.apply(e));
+		}		
+		return ret;
 	}
 	
 }
