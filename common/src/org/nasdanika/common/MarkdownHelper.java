@@ -16,6 +16,9 @@ public class MarkdownHelper {
 	 * CDN URL of the Github Markdown CSS (https://github.com/sindresorhus/github-markdown-css)
 	 */
 	public static final String GITHUB_MARKDOWN_CSS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css";
+	
+	public static final String HIGHLIGHT_JS_CSS_CDN = "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css";
+	public static final String HIGHLIGHT_JS_SCRIPT_CDN = "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js";
 		
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 	public static final int MIN_FIRST_SENTENCE_LENGTH = 20;
