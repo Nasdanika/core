@@ -6,7 +6,9 @@ import java.io.Reader;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -451,6 +453,63 @@ public interface Context extends Composeable<Context> {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+	
+	/**
+	 * Creates a copy of this map using {@link LinkedHashMap} with {@link String} values interpolated and
+	 * {@link Map} and {@link Collection} values passed through interpolate methods with respective parameter types.
+	 * @param input
+	 * @return A deep copy of the map with string values interpolated.
+	 */
+	@SuppressWarnings("unchecked")
+	default <K> Map<K,Object> interpolate(Map<K,Object> input) {
+		if (input == null) {
+			return null;
+		}
+		Map<K,Object> ret = new LinkedHashMap<>();
+		input.forEach((k,v) -> {
+			Object u;
+			if (v instanceof String) {
+				u = interpolate((String) v);
+			} else if (v instanceof Collection) {
+				u = interpolate((Collection<Object>) v);
+			} else if (v instanceof Map) {
+				u = interpolate((Map<K,Object>) v);
+			} else {
+				u = v;
+			}
+			ret.put(k,u);
+		});
+		return ret;
+	}
+	
+	/**
+	 * Creates a copy of this map using {@link ArrayList} with {@link String} values interpolated and
+	 * {@link Map} and {@link Collection} values passed through interpolate methods with respective parameter types.
+	 * @param input
+	 * @return A deep copy of the collection with string values interpolated.
+	 */
+	@SuppressWarnings("unchecked")
+	default List<Object> interpolate(Collection<Object> input) {
+		if (input == null) {
+			return null;
+		}
+		List<Object> ret = new ArrayList<>();
+		input.forEach(v -> {
+			Object u;
+			if (v instanceof String) {
+				u = interpolate((String) v);
+			} else if (v instanceof Collection) {
+				u = interpolate((Collection<Object>) v);
+			} else if (v instanceof Map) {
+				u = interpolate((Map<Object,Object>) v);
+			} else {
+				u = v;
+			}
+			ret.add(u);
+		});
+		return ret;
+		
 	}
 	
 	/**
