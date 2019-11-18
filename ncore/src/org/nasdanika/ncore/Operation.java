@@ -34,7 +34,7 @@ import org.nasdanika.common.SupplierFactory;
  * @model
  * @generated
  */
-public interface Operation extends Provider {
+public interface Operation extends Supplier {
 	/**
 	 * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.common.SupplierFactory}<code>&lt;java.lang.Object&gt;</code>.
@@ -45,7 +45,7 @@ public interface Operation extends Provider {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Arguments</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getOperation_Arguments()
-	 * @model type="org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model type="org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
 	EList<SupplierFactory<Object>> getArguments();

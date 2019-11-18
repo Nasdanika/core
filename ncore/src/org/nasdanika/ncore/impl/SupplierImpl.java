@@ -5,22 +5,22 @@ package org.nasdanika.ncore.impl;
 import org.eclipse.emf.ecore.EClass;
 
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Provider;
+import org.nasdanika.ncore.Supplier;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Provider</b></em>'.
+ * An implementation of the model object '<em><b>Supplier</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ProviderImpl#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.SupplierImpl#getImplementation <em>Implementation</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ProviderImpl extends TypedElementImpl implements Provider {
+public class SupplierImpl extends TypedElementImpl implements Supplier {
 	/**
 	 * The default value of the '{@link #getImplementation() <em>Implementation</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -36,7 +36,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProviderImpl() {
+	protected SupplierImpl() {
 		super();
 	}
 
@@ -47,7 +47,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.PROVIDER;
+		return NcorePackage.Literals.SUPPLIER;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	 */
 	@Override
 	public String getImplementation() {
-		return (String)eDynamicGet(NcorePackage.PROVIDER__IMPLEMENTATION, NcorePackage.Literals.PROVIDER__IMPLEMENTATION, true, true);
+		return (String)eDynamicGet(NcorePackage.SUPPLIER__IMPLEMENTATION, NcorePackage.Literals.SUPPLIER__IMPLEMENTATION, true, true);
 	}
 
 	/**
@@ -67,7 +67,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	 */
 	@Override
 	public void setImplementation(String newImplementation) {
-		eDynamicSet(NcorePackage.PROVIDER__IMPLEMENTATION, NcorePackage.Literals.PROVIDER__IMPLEMENTATION, newImplementation);
+		eDynamicSet(NcorePackage.SUPPLIER__IMPLEMENTATION, NcorePackage.Literals.SUPPLIER__IMPLEMENTATION, newImplementation);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER__IMPLEMENTATION:
+			case NcorePackage.SUPPLIER__IMPLEMENTATION:
 				return getImplementation();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -92,7 +92,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER__IMPLEMENTATION:
+			case NcorePackage.SUPPLIER__IMPLEMENTATION:
 				setImplementation((String)newValue);
 				return;
 		}
@@ -107,7 +107,7 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER__IMPLEMENTATION:
+			case NcorePackage.SUPPLIER__IMPLEMENTATION:
 				setImplementation(IMPLEMENTATION_EDEFAULT);
 				return;
 		}
@@ -122,10 +122,10 @@ public class ProviderImpl extends TypedElementImpl implements Provider {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER__IMPLEMENTATION:
+			case NcorePackage.SUPPLIER__IMPLEMENTATION:
 				return IMPLEMENTATION_EDEFAULT == null ? getImplementation() != null : !IMPLEMENTATION_EDEFAULT.equals(getImplementation());
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ProviderImpl
+} //SupplierImpl

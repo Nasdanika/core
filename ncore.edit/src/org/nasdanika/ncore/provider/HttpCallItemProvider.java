@@ -277,7 +277,7 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createProviderEntry()));
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -38,10 +38,9 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
-import org.nasdanika.ncore.Provider;
-import org.nasdanika.ncore.ProviderEntry;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -121,14 +120,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass supplierEClass = null;
+	private EClass iSupplierEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass supplierFactoryEClass = null;
+	private EClass iSupplierFactoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass supplierEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -142,21 +148,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass functionFactoryEClass = null;
+	private EClass iFunctionFactoryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass consumerEClass = null;
+	private EClass iConsumerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass consumerFactoryEClass = null;
+	private EClass iConsumerFactoryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -164,13 +170,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass typedElementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass providerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -226,7 +225,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass providerEntryEClass = null;
+	private EClass supplierEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -632,6 +631,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getISupplier() {
+		return iSupplierEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getISupplierFactory() {
+		return iSupplierFactoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSupplier() {
 		return supplierEClass;
 	}
@@ -642,8 +661,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getSupplierFactory() {
-		return supplierFactoryEClass;
+	public EAttribute getSupplier_Implementation() {
+		return (EAttribute)supplierEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -662,8 +681,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getFunctionFactory() {
-		return functionFactoryEClass;
+	public EClass getIFunctionFactory() {
+		return iFunctionFactoryEClass;
 	}
 
 	/**
@@ -672,8 +691,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getConsumer() {
-		return consumerEClass;
+	public EClass getIConsumer() {
+		return iConsumerEClass;
 	}
 
 	/**
@@ -682,8 +701,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getConsumerFactory() {
-		return consumerFactoryEClass;
+	public EClass getIConsumerFactory() {
+		return iConsumerFactoryEClass;
 	}
 
 	/**
@@ -714,26 +733,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EAttribute getTypedElement_Required() {
 		return (EAttribute)typedElementEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getProvider() {
-		return providerEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProvider_Implementation() {
-		return (EAttribute)providerEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -862,8 +861,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getProviderEntry() {
-		return providerEntryEClass;
+	public EClass getSupplierEntry() {
+		return supplierEntryEClass;
 	}
 
 	/**
@@ -1120,24 +1119,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		webAddressEClass = createEClass(WEB_ADDRESS);
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
 
-		supplierEClass = createEClass(SUPPLIER);
+		iSupplierEClass = createEClass(ISUPPLIER);
 
-		supplierFactoryEClass = createEClass(SUPPLIER_FACTORY);
+		iSupplierFactoryEClass = createEClass(ISUPPLIER_FACTORY);
 
 		iFunctionEClass = createEClass(IFUNCTION);
 
-		functionFactoryEClass = createEClass(FUNCTION_FACTORY);
+		iFunctionFactoryEClass = createEClass(IFUNCTION_FACTORY);
 
-		consumerEClass = createEClass(CONSUMER);
+		iConsumerEClass = createEClass(ICONSUMER);
 
-		consumerFactoryEClass = createEClass(CONSUMER_FACTORY);
+		iConsumerFactoryEClass = createEClass(ICONSUMER_FACTORY);
 
 		typedElementEClass = createEClass(TYPED_ELEMENT);
 		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
 		createEAttribute(typedElementEClass, TYPED_ELEMENT__REQUIRED);
 
-		providerEClass = createEClass(PROVIDER);
-		createEAttribute(providerEClass, PROVIDER__IMPLEMENTATION);
+		supplierEClass = createEClass(SUPPLIER);
+		createEAttribute(supplierEClass, SUPPLIER__IMPLEMENTATION);
 
 		valueEClass = createEClass(VALUE);
 		createEAttribute(valueEClass, VALUE__VALUE);
@@ -1158,7 +1157,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		typedEntryEClass = createEClass(TYPED_ENTRY);
 
-		providerEntryEClass = createEClass(PROVIDER_ENTRY);
+		supplierEntryEClass = createEClass(SUPPLIER_ENTRY);
 
 		mapEClass = createEClass(MAP);
 		createEReference(mapEClass, MAP__ENTRIES);
@@ -1216,14 +1215,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		setNsURI(eNS_URI);
 
 		// Create type parameters
-		addETypeParameter(supplierEClass, "T");
-		addETypeParameter(supplierFactoryEClass, "T");
+		addETypeParameter(iSupplierEClass, "T");
+		addETypeParameter(iSupplierFactoryEClass, "T");
 		addETypeParameter(iFunctionEClass, "T");
 		addETypeParameter(iFunctionEClass, "R");
-		addETypeParameter(functionFactoryEClass, "T");
-		addETypeParameter(functionFactoryEClass, "R");
-		addETypeParameter(consumerEClass, "T");
-		addETypeParameter(consumerFactoryEClass, "T");
+		addETypeParameter(iFunctionFactoryEClass, "T");
+		addETypeParameter(iFunctionFactoryEClass, "R");
+		addETypeParameter(iConsumerEClass, "T");
+		addETypeParameter(iConsumerFactoryEClass, "T");
 		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
 		// Set bounds for type parameters
@@ -1240,17 +1239,17 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		webAddressEClass.getESuperTypes().add(this.getContactMethod());
 		EGenericType g1 = createEGenericType(this.getModelElement());
 		typedElementEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		typedElementEClass.getEGenericSuperTypes().add(g1);
-		providerEClass.getESuperTypes().add(this.getTypedElement());
-		valueEClass.getESuperTypes().add(this.getProvider());
+		supplierEClass.getESuperTypes().add(this.getTypedElement());
+		valueEClass.getESuperTypes().add(this.getSupplier());
 		nullEClass.getESuperTypes().add(this.getTypedElement());
-		operationEClass.getESuperTypes().add(this.getProvider());
+		operationEClass.getESuperTypes().add(this.getSupplier());
 		g1 = createEGenericType(this.getModelElement());
 		arrayEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEEList());
 		g1.getETypeArguments().add(g2);
 		EGenericType g3 = createEGenericType(ecorePackage.getEJavaObject());
@@ -1258,13 +1257,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		arrayEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getModelElement());
 		contextEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(this.getIContext());
 		g1.getETypeArguments().add(g2);
 		contextEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getNamedElement());
 		entryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(entryEClass_T);
 		g1.getETypeArguments().add(g2);
 		entryEClass.getEGenericSuperTypes().add(g1);
@@ -1274,15 +1273,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		typedEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getProvider());
-		providerEntryEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getSupplier());
+		supplierEntryEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getEntry());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
-		providerEntryEClass.getEGenericSuperTypes().add(g1);
+		supplierEntryEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getModelElement());
 		mapEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEMap());
 		g1.getETypeArguments().add(g2);
 		g3 = createEGenericType(ecorePackage.getEString());
@@ -1322,7 +1321,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		objectEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getModelElement());
 		httpCallEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		httpCallEClass.getEGenericSuperTypes().add(g1);
@@ -1370,24 +1369,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(supplierEClass, Supplier.class, "Supplier", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iSupplierEClass, Supplier.class, "ISupplier", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(supplierFactoryEClass, SupplierFactory.class, "SupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iSupplierFactoryEClass, SupplierFactory.class, "ISupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(functionFactoryEClass, FunctionFactory.class, "FunctionFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iFunctionFactoryEClass, FunctionFactory.class, "IFunctionFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(consumerEClass, Consumer.class, "Consumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iConsumerEClass, Consumer.class, "IConsumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(consumerFactoryEClass, ConsumerFactory.class, "ConsumerFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEClass(iConsumerFactoryEClass, ConsumerFactory.class, "IConsumerFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTypedElement_Required(), ecorePackage.getEBoolean(), "required", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(providerEClass, Provider.class, "Provider", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProvider_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, Provider.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(supplierEClass, org.nasdanika.ncore.Supplier.class, "Supplier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSupplier_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, org.nasdanika.ncore.Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(valueEClass, Value.class, "Value", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1396,19 +1395,19 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(nullEClass, Null.class, "Null", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(operationEClass, Operation.class, "Operation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getOperation_Arguments(), g1, null, "arguments", null, 0, -1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(arrayEClass, Array.class, "Array", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getArray_Elements(), g1, null, "elements", null, 0, -1, Array.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contextEClass, Context.class, "Context", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getSupplierFactory());
+		g1 = createEGenericType(this.getISupplierFactory());
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getContext_Elements(), g1, null, "elements", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1417,7 +1416,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(typedEntryEClass, TypedEntry.class, "TypedEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(providerEntryEClass, ProviderEntry.class, "ProviderEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(supplierEntryEClass, SupplierEntry.class, "SupplierEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getEntry());
@@ -1531,25 +1530,25 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Generic contact method."
 		   });
 		addAnnotation
-		  (supplierEClass,
+		  (iSupplierEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
 		   });
 		addAnnotation
-		  (supplierFactoryEClass,
+		  (iSupplierFactoryEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
 		   });
 		addAnnotation
-		  (consumerEClass,
+		  (iConsumerEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
 		   });
 		addAnnotation
-		  (consumerFactoryEClass,
+		  (iConsumerFactoryEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
@@ -1573,13 +1572,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Indicates that the element result can not be null."
 		   });
 		addAnnotation
-		  (providerEClass,
+		  (supplierEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Provided is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."
+			   "documentation", "Supplier is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."
 		   });
 		addAnnotation
-		  (getProvider_Implementation(),
+		  (getSupplier_Implementation(),
 		   source,
 		   new String[] {
 			   "documentation", "Provider implementation. If empty, type\'s constructor is used as a provider.\n\nProvider implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. If both type and implementation as defined then the implementation must be a subclass/implementation of type or there should be a Converter service in the context which converts implementation into type. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then a method with a given name which taks a single Context argument or not arguments is used. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor and a no-argument method with a given name is used.\n"
@@ -1657,10 +1656,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Typed element with a name. Typed entry gets its result from the context\'s properti with the specified name converted to the specified type. The primary pupose of of the typed entry is to serve as a specification/description."
 		   });
 		addAnnotation
-		  (providerEntryEClass,
+		  (supplierEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Provider with a name."
+			   "documentation", "Supplier with a name."
 		   });
 		addAnnotation
 		  (mapEClass,

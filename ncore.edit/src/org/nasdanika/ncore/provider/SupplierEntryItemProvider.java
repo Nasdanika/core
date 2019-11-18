@@ -8,27 +8,29 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.common.Util;
+
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Provider;
+import org.nasdanika.ncore.SupplierEntry;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Provider} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.SupplierEntry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ProviderItemProvider extends TypedElementItemProvider {
+public class SupplierEntryItemProvider extends SupplierItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProviderItemProvider(AdapterFactory adapterFactory) {
+	public SupplierEntryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -43,41 +45,42 @@ public class ProviderItemProvider extends TypedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addImplementationPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Implementation feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
-	protected void addImplementationPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Provider_implementation_feature"),
-				 NcorePackage.Literals.PROVIDER__IMPLEMENTATION,
+				 getString("_UI_NamedElement_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedElement_name_feature", "_UI_NamedElement_type"),
+				 NcorePackage.Literals.NAMED_ELEMENT__NAME,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
-				 null,
 				 null));
 	}
 
 	/**
-	 * This returns Provider.gif.
+	 * This returns SupplierEntry.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Provider"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SupplierEntry"));
 	}
 
 	/**
@@ -94,25 +97,14 @@ public class ProviderItemProvider extends TypedElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		Provider provider = (Provider)object;
-		String label = provider.getTitle();
-		if (Util.isBlank(label)) {
-			String type = provider.getType();			
-			StringBuilder labelBuilder = new StringBuilder();
-			if (!Util.isBlank(type)) {
-				labelBuilder.append("(").append(type).append(") ");
-			}
-			String implementation = provider.getImplementation();
-			if (!Util.isBlank(implementation)) {
-				labelBuilder.append(implementation);
-			}
-			label = labelBuilder.toString();
-		}
-		return label == null || label.length() == 0 ? getString("_UI_Provider_type") : label;
+		String label = ((SupplierEntry)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SupplierEntry_type") :
+			getString("_UI_SupplierEntry_type") + " " + label;
 	}
 
 
@@ -127,8 +119,8 @@ public class ProviderItemProvider extends TypedElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Provider.class)) {
-			case NcorePackage.PROVIDER__IMPLEMENTATION:
+		switch (notification.getFeatureID(SupplierEntry.class)) {
+			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

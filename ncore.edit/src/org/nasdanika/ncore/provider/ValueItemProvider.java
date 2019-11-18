@@ -21,7 +21,7 @@ import org.nasdanika.ncore.Value;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ValueItemProvider extends ProviderItemProvider {
+public class ValueItemProvider extends SupplierItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

@@ -30,10 +30,9 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
-import org.nasdanika.ncore.Provider;
-import org.nasdanika.ncore.ProviderEntry;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -132,36 +131,36 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createWebAddressAdapter();
 			}
 			@Override
-			public <T> Adapter caseSupplier(Supplier<T> object) {
-				return createSupplierAdapter();
+			public <T> Adapter caseISupplier(Supplier<T> object) {
+				return createISupplierAdapter();
 			}
 			@Override
-			public <T> Adapter caseSupplierFactory(SupplierFactory<T> object) {
-				return createSupplierFactoryAdapter();
+			public <T> Adapter caseISupplierFactory(SupplierFactory<T> object) {
+				return createISupplierFactoryAdapter();
 			}
 			@Override
 			public <T, R> Adapter caseIFunction(org.nasdanika.common.Function<T, R> object) {
 				return createIFunctionAdapter();
 			}
 			@Override
-			public <T, R> Adapter caseFunctionFactory(FunctionFactory<T, R> object) {
-				return createFunctionFactoryAdapter();
+			public <T, R> Adapter caseIFunctionFactory(FunctionFactory<T, R> object) {
+				return createIFunctionFactoryAdapter();
 			}
 			@Override
-			public <T> Adapter caseConsumer(Consumer<T> object) {
-				return createConsumerAdapter();
+			public <T> Adapter caseIConsumer(Consumer<T> object) {
+				return createIConsumerAdapter();
 			}
 			@Override
-			public <T> Adapter caseConsumerFactory(ConsumerFactory<T> object) {
-				return createConsumerFactoryAdapter();
+			public <T> Adapter caseIConsumerFactory(ConsumerFactory<T> object) {
+				return createIConsumerFactoryAdapter();
 			}
 			@Override
 			public Adapter caseTypedElement(TypedElement object) {
 				return createTypedElementAdapter();
 			}
 			@Override
-			public Adapter caseProvider(Provider object) {
-				return createProviderAdapter();
+			public Adapter caseSupplier(org.nasdanika.ncore.Supplier object) {
+				return createSupplierAdapter();
 			}
 			@Override
 			public Adapter caseValue(Value object) {
@@ -192,8 +191,8 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createTypedEntryAdapter();
 			}
 			@Override
-			public Adapter caseProviderEntry(ProviderEntry object) {
-				return createProviderEntryAdapter();
+			public Adapter caseSupplierEntry(SupplierEntry object) {
+				return createSupplierEntryAdapter();
 			}
 			@Override
 			public Adapter caseMap(Map object) {
@@ -374,7 +373,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Supplier <em>Supplier</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Supplier <em>ISupplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -383,12 +382,12 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.nasdanika.common.Supplier
 	 * @generated
 	 */
-	public Adapter createSupplierAdapter() {
+	public Adapter createISupplierAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.SupplierFactory <em>Supplier Factory</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.SupplierFactory <em>ISupplier Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -397,7 +396,21 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.nasdanika.common.SupplierFactory
 	 * @generated
 	 */
-	public Adapter createSupplierFactoryAdapter() {
+	public Adapter createISupplierFactoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Supplier <em>Supplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Supplier
+	 * @generated
+	 */
+	public Adapter createSupplierAdapter() {
 		return null;
 	}
 
@@ -416,7 +429,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.FunctionFactory <em>Function Factory</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.FunctionFactory <em>IFunction Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -425,12 +438,12 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.nasdanika.common.FunctionFactory
 	 * @generated
 	 */
-	public Adapter createFunctionFactoryAdapter() {
+	public Adapter createIFunctionFactoryAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Consumer <em>Consumer</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Consumer <em>IConsumer</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -439,12 +452,12 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.nasdanika.common.Consumer
 	 * @generated
 	 */
-	public Adapter createConsumerAdapter() {
+	public Adapter createIConsumerAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.ConsumerFactory <em>Consumer Factory</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.ConsumerFactory <em>IConsumer Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
@@ -453,7 +466,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.nasdanika.common.ConsumerFactory
 	 * @generated
 	 */
-	public Adapter createConsumerFactoryAdapter() {
+	public Adapter createIConsumerFactoryAdapter() {
 		return null;
 	}
 
@@ -468,20 +481,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTypedElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Provider <em>Provider</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.Provider
-	 * @generated
-	 */
-	public Adapter createProviderAdapter() {
 		return null;
 	}
 
@@ -584,16 +583,16 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ProviderEntry <em>Provider Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.SupplierEntry <em>Supplier Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.ProviderEntry
+	 * @see org.nasdanika.ncore.SupplierEntry
 	 * @generated
 	 */
-	public Adapter createProviderEntryAdapter() {
+	public Adapter createSupplierEntryAdapter() {
 		return null;
 	}
 

@@ -149,7 +149,7 @@ public class MapItemProvider extends ModelElementItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.MAP__ENTRIES,
-				 NcoreFactory.eINSTANCE.createProviderEntry()));
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter

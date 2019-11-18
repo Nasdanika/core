@@ -26,8 +26,8 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
-import org.nasdanika.ncore.Provider;
-import org.nasdanika.ncore.ProviderEntry;
+import org.nasdanika.ncore.Supplier;
+import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.TypedElement;
@@ -85,14 +85,14 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.POSTAL_ADDRESS: return createPostalAddress();
 			case NcorePackage.WEB_ADDRESS: return createWebAddress();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
-			case NcorePackage.PROVIDER: return createProvider();
+			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.VALUE: return createValue();
 			case NcorePackage.NULL: return createNull();
 			case NcorePackage.OPERATION: return createOperation();
 			case NcorePackage.ARRAY: return createArray();
 			case NcorePackage.CONTEXT: return createContext();
 			case NcorePackage.TYPED_ENTRY: return createTypedEntry();
-			case NcorePackage.PROVIDER_ENTRY: return createProviderEntry();
+			case NcorePackage.SUPPLIER_ENTRY: return createSupplierEntry();
 			case NcorePackage.MAP: return createMap();
 			case NcorePackage.PROPERTY: return createProperty();
 			case NcorePackage.FUNCTION: return createFunction();
@@ -216,9 +216,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public Provider createProvider() {
-		ProviderImpl provider = new ProviderImpl();
-		return provider;
+	public Supplier createSupplier() {
+		SupplierImpl supplier = new SupplierImpl();
+		return supplier;
 	}
 
 	/**
@@ -293,9 +293,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public ProviderEntry createProviderEntry() {
-		ProviderEntryImpl providerEntry = new ProviderEntryImpl();
-		return providerEntry;
+	public SupplierEntry createSupplierEntry() {
+		SupplierEntryImpl supplierEntry = new SupplierEntryImpl();
+		return supplierEntry;
 	}
 
 	/**

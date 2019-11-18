@@ -24,7 +24,7 @@ import org.nasdanika.ncore.Operation;
  * <!-- end-user-doc -->
  * @generated
  */
-public class OperationItemProvider extends ProviderItemProvider {
+public class OperationItemProvider extends SupplierItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -154,7 +154,7 @@ public class OperationItemProvider extends ProviderItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createProvider()));
+				 NcoreFactory.eINSTANCE.createSupplier()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -189,7 +189,7 @@ public class OperationItemProvider extends ProviderItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createProviderEntry()));
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter

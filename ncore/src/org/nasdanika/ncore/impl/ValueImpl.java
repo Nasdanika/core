@@ -25,7 +25,7 @@ import org.nasdanika.ncore.Value;
  *
  * @generated
  */
-public class ValueImpl extends ProviderImpl implements Value {
+public class ValueImpl extends SupplierImpl implements Value {
 	/**
 	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

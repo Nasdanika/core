@@ -154,7 +154,7 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createProviderEntry()));
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter

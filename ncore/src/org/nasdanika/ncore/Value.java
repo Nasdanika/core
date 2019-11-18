@@ -31,7 +31,7 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Value extends Provider {
+public interface Value extends Supplier {
 	/**
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -15,7 +15,7 @@ import org.nasdanika.common.SupplierFactory;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getEntry()
- * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.SupplierFactory&lt;T&gt;"
+ * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.ISupplierFactory&lt;T&gt;"
  * @generated
  */
 public interface Entry<T> extends NamedElement, SupplierFactory<T> {

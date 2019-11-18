@@ -151,7 +151,7 @@ public class ArrayItemProvider extends ModelElementItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.ARRAY__ELEMENTS,
-				 NcoreFactory.eINSTANCE.createProvider()));
+				 NcoreFactory.eINSTANCE.createSupplier()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -186,7 +186,7 @@ public class ArrayItemProvider extends ModelElementItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.ARRAY__ELEMENTS,
-				 NcoreFactory.eINSTANCE.createProviderEntry()));
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter

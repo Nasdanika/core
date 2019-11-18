@@ -7,22 +7,22 @@ import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.ProviderEntry;
+import org.nasdanika.ncore.SupplierEntry;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Provider Entry</b></em>'.
+ * An implementation of the model object '<em><b>Supplier Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ProviderEntryImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.SupplierEntryImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
+public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -38,7 +38,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProviderEntryImpl() {
+	protected SupplierEntryImpl() {
 		super();
 	}
 
@@ -49,7 +49,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.PROVIDER_ENTRY;
+		return NcorePackage.Literals.SUPPLIER_ENTRY;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	 */
 	@Override
 	public String getName() {
-		return (String)eDynamicGet(NcorePackage.PROVIDER_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
+		return (String)eDynamicGet(NcorePackage.SUPPLIER_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	 */
 	@Override
 	public void setName(String newName) {
-		eDynamicSet(NcorePackage.PROVIDER_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
+		eDynamicSet(NcorePackage.SUPPLIER_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER_ENTRY__NAME:
+			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -94,7 +94,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER_ENTRY__NAME:
+			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				setName((String)newValue);
 				return;
 		}
@@ -109,7 +109,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER_ENTRY__NAME:
+			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
 		}
@@ -124,7 +124,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PROVIDER_ENTRY__NAME:
+			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 		}
 		return super.eIsSet(featureID);
@@ -139,7 +139,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedElement.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.PROVIDER_ENTRY__NAME: return NcorePackage.NAMED_ELEMENT__NAME;
+				case NcorePackage.SUPPLIER_ENTRY__NAME: return NcorePackage.NAMED_ELEMENT__NAME;
 				default: return -1;
 			}
 		}
@@ -160,7 +160,7 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedElement.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.NAMED_ELEMENT__NAME: return NcorePackage.PROVIDER_ENTRY__NAME;
+				case NcorePackage.NAMED_ELEMENT__NAME: return NcorePackage.SUPPLIER_ENTRY__NAME;
 				default: return -1;
 			}
 		}
@@ -172,4 +172,4 @@ public class ProviderEntryImpl extends ProviderImpl implements ProviderEntry {
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-} //ProviderEntryImpl
+} //SupplierEntryImpl

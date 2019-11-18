@@ -76,13 +76,13 @@ public interface NcoreFactory extends EFactory {
 	TypedElement createTypedElement();
 
 	/**
-	 * Returns a new object of class '<em>Provider</em>'.
+	 * Returns a new object of class '<em>Supplier</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Provider</em>'.
+	 * @return a new object of class '<em>Supplier</em>'.
 	 * @generated
 	 */
-	Provider createProvider();
+	Supplier createSupplier();
 
 	/**
 	 * Returns a new object of class '<em>Value</em>'.
@@ -139,13 +139,13 @@ public interface NcoreFactory extends EFactory {
 	TypedEntry createTypedEntry();
 
 	/**
-	 * Returns a new object of class '<em>Provider Entry</em>'.
+	 * Returns a new object of class '<em>Supplier Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Provider Entry</em>'.
+	 * @return a new object of class '<em>Supplier Entry</em>'.
 	 * @generated
 	 */
-	ProviderEntry createProviderEntry();
+	SupplierEntry createSupplierEntry();
 
 	/**
 	 * Returns a new object of class '<em>Map</em>'.

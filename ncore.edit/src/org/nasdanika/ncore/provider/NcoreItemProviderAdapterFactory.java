@@ -210,26 +210,26 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Provider} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Supplier} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProviderItemProvider providerItemProvider;
+	protected SupplierItemProvider supplierItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.Provider}.
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Supplier}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createProviderAdapter() {
-		if (providerItemProvider == null) {
-			providerItemProvider = new ProviderItemProvider(this);
+	public Adapter createSupplierAdapter() {
+		if (supplierItemProvider == null) {
+			supplierItemProvider = new SupplierItemProvider(this);
 		}
 
-		return providerItemProvider;
+		return supplierItemProvider;
 	}
 
 	/**
@@ -371,26 +371,26 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ProviderEntry} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.SupplierEntry} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ProviderEntryItemProvider providerEntryItemProvider;
+	protected SupplierEntryItemProvider supplierEntryItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.ProviderEntry}.
+	 * This creates an adapter for a {@link org.nasdanika.ncore.SupplierEntry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createProviderEntryAdapter() {
-		if (providerEntryItemProvider == null) {
-			providerEntryItemProvider = new ProviderEntryItemProvider(this);
+	public Adapter createSupplierEntryAdapter() {
+		if (supplierEntryItemProvider == null) {
+			supplierEntryItemProvider = new SupplierEntryItemProvider(this);
 		}
 
-		return providerEntryItemProvider;
+		return supplierEntryItemProvider;
 	}
 
 	/**
@@ -688,14 +688,14 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
 		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
-		if (providerItemProvider != null) providerItemProvider.dispose();
+		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (valueItemProvider != null) valueItemProvider.dispose();
 		if (nullItemProvider != null) nullItemProvider.dispose();
 		if (operationItemProvider != null) operationItemProvider.dispose();
 		if (arrayItemProvider != null) arrayItemProvider.dispose();
 		if (contextItemProvider != null) contextItemProvider.dispose();
 		if (typedEntryItemProvider != null) typedEntryItemProvider.dispose();
-		if (providerEntryItemProvider != null) providerEntryItemProvider.dispose();
+		if (supplierEntryItemProvider != null) supplierEntryItemProvider.dispose();
 		if (mapItemProvider != null) mapItemProvider.dispose();
 		if (propertyItemProvider != null) propertyItemProvider.dispose();
 		if (functionItemProvider != null) functionItemProvider.dispose();

@@ -5,25 +5,25 @@ package org.nasdanika.ncore;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Provider</b></em>'.
+ * A representation of the model object '<em><b>Supplier</b></em>'.
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Provided is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments.
+ * Supplier is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments.
  * <!-- end-model-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.Provider#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Supplier#getImplementation <em>Implementation</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getProvider()
+ * @see org.nasdanika.ncore.NcorePackage#getSupplier()
  * @model
  * @generated
  */
-public interface Provider extends TypedElement {
+public interface Supplier extends TypedElement {
 	/**
 	 * Returns the value of the '<em><b>Implementation</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -40,14 +40,14 @@ public interface Provider extends TypedElement {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Implementation</em>' attribute.
 	 * @see #setImplementation(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getProvider_Implementation()
+	 * @see org.nasdanika.ncore.NcorePackage#getSupplier_Implementation()
 	 * @model
 	 * @generated
 	 */
 	String getImplementation();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Provider#getImplementation <em>Implementation</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.ncore.Supplier#getImplementation <em>Implementation</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Implementation</em>' attribute.
@@ -56,4 +56,4 @@ public interface Provider extends TypedElement {
 	 */
 	void setImplementation(String value);
 
-} // Provider
+} // Supplier

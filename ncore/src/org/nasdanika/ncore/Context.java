@@ -24,7 +24,7 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getContext()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.SupplierFactory&lt;org.nasdanika.ncore.IContext&gt;"
+ * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.ISupplierFactory&lt;org.nasdanika.ncore.IContext&gt;"
  * @generated
  */
 public interface Context extends ModelElement, SupplierFactory<org.nasdanika.common.Context> {
@@ -38,7 +38,7 @@ public interface Context extends ModelElement, SupplierFactory<org.nasdanika.com
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getContext_Elements()
-	 * @model type="org.nasdanika.ncore.SupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model type="org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
 	 * @generated
 	 */
 	EList<SupplierFactory<Object>> getElements();

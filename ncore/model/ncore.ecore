@@ -68,14 +68,15 @@
   <eClassifiers xsi:type="ecore:EClass" name="WebAddress" eSuperTypes="#//ContactMethod">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Supplier" instanceClassName="org.nasdanika.common.Supplier"
+  <eClassifiers xsi:type="ecore:EDataType" name="IContext" instanceClassName="org.nasdanika.common.Context"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ISupplier" instanceClassName="org.nasdanika.common.Supplier"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
     </eAnnotations>
     <eTypeParameters name="T"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SupplierFactory" instanceClassName="org.nasdanika.common.SupplierFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="ISupplierFactory" instanceClassName="org.nasdanika.common.SupplierFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
@@ -87,19 +88,19 @@
     <eTypeParameters name="T"/>
     <eTypeParameters name="R"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FunctionFactory" instanceClassName="org.nasdanika.common.FunctionFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="IFunctionFactory" instanceClassName="org.nasdanika.common.FunctionFactory"
       abstract="true" interface="true">
     <eTypeParameters name="T"/>
     <eTypeParameters name="R"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Consumer" instanceClassName="org.nasdanika.common.Consumer"
+  <eClassifiers xsi:type="ecore:EClass" name="IConsumer" instanceClassName="org.nasdanika.common.Consumer"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
     </eAnnotations>
     <eTypeParameters name="T"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ConsumerFactory" instanceClassName="org.nasdanika.common.ConsumerFactory"
+  <eClassifiers xsi:type="ecore:EClass" name="IConsumerFactory" instanceClassName="org.nasdanika.common.ConsumerFactory"
       abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
@@ -121,13 +122,13 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Provider" eSuperTypes="#//TypedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Supplier" eSuperTypes="#//TypedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Provided is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."/>
+      <details key="documentation" value="Supplier is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -135,7 +136,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Provider">
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Supplier">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Value computes its result from text. &#xA;&#xA;Value implementation can be defined as follows:&#xA;&#xA;* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, just ``java.lang.String``.&#xA;* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.&#xA;* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then it shall take Context and String or just String. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.&#xA;&#xA;When implementation is specified, value is equivalent to an operation with a single String argument."/>
     </eAnnotations>
@@ -156,7 +157,7 @@
       <details key="documentation" value="Typed null can be used as an operation argument."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//Provider">
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//Supplier">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Operation computes its result the operation arguments. &#xA;&#xA;Operation implementation can be defined as follows:&#xA;&#xA;* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.&#xA;* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.&#xA;* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method not static then its parameters shall be compatible with Context and as the first argument and then operation arguments, or just with operation arguments without context. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments and the method shall not take any arguments.&#xA;"/>
     </eAnnotations>
@@ -165,7 +166,7 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Operation arguments."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//SupplierFactory">
+      <eGenericType eClassifier="#//ISupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
@@ -179,18 +180,17 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Array elements."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//SupplierFactory">
+      <eGenericType eClassifier="#//ISupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eTypeArguments>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="IContext" instanceClassName="org.nasdanika.common.Context"/>
   <eClassifiers xsi:type="ecore:EClass" name="Context">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Produces ``org.nasdanika.common.Context``. "/>
@@ -200,12 +200,12 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Context elements. Elements which extend Entry are treated as context properties and unnamed typed elments are treated as services."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//SupplierFactory">
+      <eGenericType eClassifier="#//ISupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eClassifier="#//IContext"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -215,7 +215,7 @@
     </eAnnotations>
     <eTypeParameters name="T"/>
     <eGenericSuperTypes eClassifier="#//NamedElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eTypeParameter="#//Entry/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -228,11 +228,11 @@
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProviderEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="SupplierEntry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Provider with a name."/>
+      <details key="documentation" value="Supplier with a name."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Provider"/>
+    <eGenericSuperTypes eClassifier="#//Supplier"/>
     <eGenericSuperTypes eClassifier="#//Entry">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
@@ -251,7 +251,7 @@
       </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
@@ -342,7 +342,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//SupplierFactory">
+    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     </eGenericSuperTypes>
   </eClassifiers>

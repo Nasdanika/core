@@ -31,7 +31,7 @@ import org.nasdanika.ncore.Operation;
  *
  * @generated
  */
-public class OperationImpl extends ProviderImpl implements Operation {
+public class OperationImpl extends SupplierImpl implements Operation {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
