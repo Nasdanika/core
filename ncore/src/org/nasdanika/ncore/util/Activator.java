@@ -28,25 +28,25 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		EXPRESSIONS_PALETTE.add(
-				NcorePackage.Literals.ARRAY,
-				NcorePackage.Literals.CONTEXT,
-				NcorePackage.Literals.HTTP_CALL,
-				NcorePackage.Literals.MAP,
-				NcorePackage.Literals.NULL,
-				NcorePackage.Literals.OPERATION,
-				NcorePackage.Literals.REST_OPERATION,
-				NcorePackage.Literals.TYPED_ELEMENT,
+//				NcorePackage.Literals.ARRAY,
+//				NcorePackage.Literals.CONTEXT,
+//				NcorePackage.Literals.HTTP_CALL,
+//				NcorePackage.Literals.MAP,
+//				NcorePackage.Literals.NULL,
+//				NcorePackage.Literals.OPERATION,
+//				NcorePackage.Literals.REST_OPERATION,
+//				NcorePackage.Literals.TYPED_ELEMENT,
 				NcorePackage.Literals.VALUE);	
 
 		// TODO -> FunctionFactory
 		// TODO Resource
 		
-		NAMED_EXPRESSIONS_PALETTE.add(
-			NcorePackage.Literals.FUNCTION,
-			NcorePackage.Literals.LIST,	
-			NcorePackage.Literals.OBJECT,	
-			NcorePackage.Literals.PROPERTY,	
-			NcorePackage.Literals.REST_FUNCTION);	
+//		NAMED_EXPRESSIONS_PALETTE.add(
+//			NcorePackage.Literals.FUNCTION,
+//			NcorePackage.Literals.LIST,	
+//			NcorePackage.Literals.OBJECT,	
+//			NcorePackage.Literals.PROPERTY,	
+//			NcorePackage.Literals.REST_FUNCTION);	
 
 		// TODO HTTP FunctionFactory
 		// TODO Link
