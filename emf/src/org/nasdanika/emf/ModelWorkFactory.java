@@ -17,7 +17,8 @@ import org.nasdanika.common.SupplierFactory;
  */
 public class ModelWorkFactory<T> implements SupplierFactory<T> { 
 
-	protected SupplierFactory<T> supplierFactory;
+	protected SupplierFactory<T> supplierFactory;	
+	protected Resource modelResource;
 
 	/**
 	 * Creates a generator by loading a generator model specified by the platform URI, e.g. ``org.nasdanika.codegen.tests.models/models/static-text/basic.codegen``, into a new {@link ResourceSet}. 
@@ -71,13 +72,17 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
-		Resource modelResource = resourceSet.getResource(modelUri, true);
+		modelResource = resourceSet.getResource(modelUri, true);
 		supplierFactory = (SupplierFactory<T>) modelResource.getContents().iterator().next();
 	}
 	
 	@Override
 	public Supplier<T> create(Context context) throws Exception {
 		return supplierFactory.create(context);
+	}
+	
+	public Resource getModelResource() {
+		return modelResource;
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.nasdanika.common;
 
+import java.io.PrintStream;
 import java.util.List;
 
 public interface Diagnostic {
@@ -33,5 +34,33 @@ public interface Diagnostic {
 		}
 		return ret;
 	}
+	
+	default void dump(PrintStream out, int indent) {
+		for (int i=0; i < indent; ++i) {
+			out.print("    ");
+		}
+		
+		Status status = getStatus();
+		if (status != null) {
+			out.print(status.name());
+			out.print(' ');
+		}
 
+		out.print(getMessage());
+
+		List<Object> data = getData();
+		if (data != null) {
+			out.print(" data=");
+			out.print(getData());
+		}		
+		
+		out.println();
+		
+	    List<Diagnostic> children = getChildren();
+		if (children != null) {
+	    	children.forEach(c -> c.dump(out, indent + 1));
+	    }
+		
+	}
+	
 }
