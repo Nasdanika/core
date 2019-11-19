@@ -274,7 +274,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		if (feature instanceof EReference && ((EReference) feature).isContainment()) {
 			String childText = getTypeText(child);
 			String childCategoryText = getTypeCategoryText(child);
-			System.out.println(childText + " -> " + childCategoryText);
+//			System.out.println(childText + " -> " + childCategoryText);
 			if (!isBlank(childCategoryText)) {
 				childText = childCategoryText + "|" + childText;
 			}
