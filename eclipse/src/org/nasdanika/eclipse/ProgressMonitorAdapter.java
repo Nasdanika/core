@@ -54,5 +54,13 @@ public class ProgressMonitorAdapter implements ProgressMonitor {
 	public void setWorkRemaining(double size) {
 		target.setWorkRemaining((int) (size * scale));
 	}
+	
+	/**
+	 * Provides access to target.
+	 * @return
+	 */
+	public SubMonitor getTarget() {
+		return target;
+	}
 
 }
