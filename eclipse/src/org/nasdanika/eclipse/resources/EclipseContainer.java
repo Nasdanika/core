@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -14,6 +15,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.Container;
+import org.nasdanika.common.resources.FileSystemResource;
+import org.nasdanika.eclipse.ProgressMonitorWrapper;
 
 /**
  * Wrapper for a file system directory.
@@ -92,15 +95,17 @@ public class EclipseContainer extends EclipseResource<IContainer> implements Bin
 	 */
 	@Override
 	public Map<String, Object> getChildren(ProgressMonitor monitor) {
-		Map<String, EclipseResource<?>> ret = new HashMap<>();
 		try {
-			IResource[] children = resource.members();
-			if (children != null) {
-				for (IResource child: children) {
-					if (child instanceof IFile) {
-						ret.put(child.getName(), new EclipseEntity((IFile) child));
-					} else if (child instanceof IContainer) {
-						ret.put(child.getName(), new EclipseContainer((IContainer) child));
+			Map<String, EclipseResource<?>> ret = new HashMap<>();
+			if (resource.exists()) {
+				IResource[] children = resource.members();
+				if (children != null) {
+					for (IResource child: children) {
+						if (child instanceof IFile) {
+							ret.put(child.getName(), new EclipseEntity((IFile) child));
+						} else if (child instanceof IContainer) {
+							ret.put(child.getName(), new EclipseContainer((IContainer) child));
+						}
 					}
 				}
 			}
@@ -143,6 +148,28 @@ public class EclipseContainer extends EclipseResource<IContainer> implements Bin
 			toDelete.delete(monitor.split("Deleting "+path, 1, toDelete));
 		}
 		return toDelete;
+	}
+
+	/**
+	 * Creates container if it does not exist.
+	 */
+	void create(ProgressMonitor monitor) {
+		if (!resource.exists()) {
+			if (resource instanceof IFolder) {
+				monitor.setWorkRemaining(2);
+				EclipseContainer parent = (EclipseContainer) getParent();
+				if (parent != null) {
+					parent.create(monitor.split("Creating parent "+parent.getName(), 1));
+				}
+				try {
+					((IFolder) resource).create(false, true, ProgressMonitorWrapper.wrap(monitor.split("Creating container "+resource.getName(), 1)));
+				} catch (CoreException e) {
+					throw new NasdanikaException(e);
+				}
+			} else {
+				throw new NasdanikaException("Cannot create container for the underlying IContainer "+resource);
+			}
+		}		
 	}
 
 }

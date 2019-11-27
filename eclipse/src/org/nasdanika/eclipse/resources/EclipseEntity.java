@@ -35,7 +35,16 @@ public class EclipseEntity extends EclipseResource<IFile> implements BinaryEntit
 	@Override
 	public void setState(InputStream contents, ProgressMonitor monitor) {
 		try {
-			resource.setContents(contents, false, true, ProgressMonitorWrapper.wrap(monitor));
+			if (resource.exists()) {
+				resource.setContents(contents, false, true, ProgressMonitorWrapper.wrap(monitor));
+			} else {
+				monitor.setWorkRemaining(2);
+				EclipseContainer parent = (EclipseContainer) getParent();
+				if (parent != null) {
+					parent.create(monitor.split("Creating parent container "+parent.getName(), 1));
+				}
+				resource.create(contents, false, ProgressMonitorWrapper.wrap(monitor.split("Creating file "+resource.getName(), 1)));
+			}
 		} catch (CoreException e) {
 			throw new NasdanikaException(e);
 		}
