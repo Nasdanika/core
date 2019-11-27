@@ -156,7 +156,6 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	 * well as the sub-menus for object creation items. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 * 
-	 * @generated
 	 */
 	@Override
 	public void contributeToMenu(IMenuManager menuManager) {
@@ -168,16 +167,8 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 		submenuManager.add(new Separator("actions"));
 		submenuManager.add(new Separator("additions"));
 		submenuManager.add(new Separator("additions-end"));
-
-		// Prepare for CreateChild item addition or removal.
-		//
-		createChildMenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
-		submenuManager.insertBefore("additions", createChildMenuManager);
-
-		// Prepare for CreateSibling item addition or removal.
-		//
-		createSiblingMenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
-		submenuManager.insertBefore("additions", createSiblingMenuManager);
+		
+		contributeToSubMenu(submenuManager);
 
 		// Force an update because Eclipse hides empty menus now.
 		//
@@ -190,6 +181,23 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 
 		addGlobalActions(submenuManager);
 	}
+
+	/**
+	 * Contribute to sub-menu manager after children and siblings.
+	 */
+	protected void contributeToSubMenu(IMenuManager submenuManager) {
+
+		// Prepare for CreateChild item addition or removal.
+		//
+		createChildMenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateChild_menu_item"));
+		submenuManager.insertBefore("additions", createChildMenuManager);
+
+		// Prepare for CreateSibling item addition or removal.
+		//
+		createSiblingMenuManager = new MenuManager(NasdanikaEditorPlugin.INSTANCE.getString("_UI_CreateSibling_menu_item"));
+		submenuManager.insertBefore("additions", createSiblingMenuManager);
+		
+	}	
 
 	/**
 	 * When the active editor changes, this remembers the change and registers with

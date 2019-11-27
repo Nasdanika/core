@@ -160,6 +160,8 @@
 		<module>emf.edit</module>		
 		<module>emf.editor</module>		
 
+		<module>eclipse</module>		
+
 		<module>ncore</module>		
 		<module>ncore.edit</module>		
 
