@@ -10,6 +10,8 @@ Export-Package: org.nasdanika.emf,
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0";visibility:=reexport,
  org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport,
- org.eclipse.emf.ecore.xmi;bundle-version="2.16.0";visibility:=reexport
+ org.eclipse.emf.ecore.xmi;bundle-version="2.16.0";visibility:=reexport,
+ org.eclipse.osgi;bundle-version="3.14.0",
+ org.eclipse.core.runtime;bundle-version="3.15.300"
 Automatic-Module-Name: org.nasdanika.emf
 
