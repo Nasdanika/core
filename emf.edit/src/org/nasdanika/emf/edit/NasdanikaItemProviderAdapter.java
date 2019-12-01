@@ -427,7 +427,10 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		for (Object c: enumType.getEnumConstants()) {
 			@SuppressWarnings("unchecked")
 			E e = (E) c;
-			ret.add(mapper == null ? e.name() : mapper.apply(e));
+			Object choice = mapper == null ? e.name() : mapper.apply(e);
+			if (!ret.contains(choice)) {
+				ret.add(choice);
+			}
 		}		
 		return ret;
 	}
