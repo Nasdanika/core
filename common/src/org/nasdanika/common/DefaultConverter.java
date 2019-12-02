@@ -187,10 +187,16 @@ public class DefaultConverter extends ReflectiveConverter {
 		return toInputStream(toByteArray(charSequence));
 	}
 	
+	/**
+	 * Converts character sequence to byte array with UTF_8 encoding.
+	 * @param charSequence
+	 * @return
+	 * @throws IOException
+	 */
 	@ConverterMethod
 	public byte[] toByteArray(CharSequence charSequence) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try (Writer writer = new OutputStreamWriter(baos)) {
+		try (Writer writer = new OutputStreamWriter(baos, StandardCharsets.UTF_8)) {
 			writer.write(charSequence.toString());
 		}
 		baos.close();
