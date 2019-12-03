@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -13,8 +12,6 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandWrapper;
-import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.UnexecutableCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.ResourceLocator;
@@ -31,11 +28,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edit.command.CommandParameter;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.jsoup.Jsoup;
@@ -312,7 +307,17 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	 * @param eReference
 	 * @return EReferenceItemProvider if this item provider groups children by their containment references.
 	 */
-	protected EReferenceItemProvider getEReferenceItemProvider(EReference eReference) {
+	protected EReferenceItemProvider getEReferenceItemProvider(Object object, EReference eReference) {
+		List<EReferenceItemProvider> ipl = eReferenceItemProviders.get(object);
+		if (ipl == null) {
+			return null;
+		}
+		for (EReferenceItemProvider ip: ipl) {
+			if (ip.getEReference() == eReference) {
+				return ip;
+			}
+		}
+		
 		return null;
 	}
 	
@@ -320,12 +325,12 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	public Object getParent(Object object) {
 		Object parent = super.getParent(object);
 		if (object instanceof EObject && ((EObject) object).eContainer() != null) {
-			Object provider = getAdapterFactory().adapt(parent, IEditingDomainItemProvider.class);
+			Object provider = getRootAdapterFactory().adapt(parent, ITreeItemContentProvider.class);
 			if (provider instanceof NasdanikaItemProviderAdapter) {
 			    EObject eObject = (EObject) object;
 			    EReference containmentFeature = eObject.eContainmentFeature();
 			    if (containmentFeature != null) {
-			    	EReferenceItemProvider containmentFeatureProvider = getEReferenceItemProvider(containmentFeature);
+			    	EReferenceItemProvider containmentFeatureProvider = ((NasdanikaItemProviderAdapter) provider).getEReferenceItemProvider(parent, containmentFeature);
 			    	if (containmentFeatureProvider != null) {
 			    		return containmentFeatureProvider;
 			    	}
@@ -343,7 +348,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			Collection<?> collection) {
 		Command removeCommand = super.createRemoveCommand(domain, owner, feature, collection);
 		if (feature instanceof EReference) {
-			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider((EReference) feature);
+			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider(owner, (EReference) feature);
 			if (eReferenceItemProvider != null) {
 				return wrap(removeCommand, owner, eReferenceItemProvider);
 			}
@@ -360,7 +365,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			int index) {
 		Command addCommand = super.createAddCommand(domain, owner, feature, collection, index);
 		if (feature instanceof EReference) {
-			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider((EReference) feature);
+			EReferenceItemProvider eReferenceItemProvider = getEReferenceItemProvider(owner, (EReference) feature);
 			if (eReferenceItemProvider != null) {
 				return wrap(addCommand, owner, eReferenceItemProvider);
 			}
@@ -439,126 +444,5 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		}		
 		return ret;
 	}
-
-	/**
-	 * For provider adapters
-	 * @param object
-	 * @return
-	 */
-	protected Collection<? extends EStructuralFeature> getAllChildrenFeatures(Object object) {
-		Collection<EStructuralFeature> ret = new ArrayList<>(getChildrenFeatures(object));
-		List<EReferenceItemProvider> ipl = eReferenceItemProviders.get(object);
-		if (ipl != null) {
-			for (EReferenceItemProvider ip: ipl) {
-				ret.add(ip.geteReference());
-			}
-		}
-		return ret;
-	}
-
-	/**
-	 * Copy of the super method calling getAllChildrenFeatures() instead of getAnyChilrenFeatures(), which is private and cannot be overridden.
-	 */
-	@Override
-	protected Command factorRemoveCommand(EditingDomain domain, CommandParameter commandParameter) {
-		if (commandParameter.getCollection() == null || commandParameter.getCollection().isEmpty()) {
-			return UnexecutableCommand.INSTANCE;
-		}
-
-		final EObject eObject = commandParameter.getEOwner();
-		final List<Object> list = new ArrayList<Object>(commandParameter.getCollection());
-
-		CompoundCommand removeCommand = new CompoundCommand(CompoundCommand.MERGE_COMMAND_ALL);
-
-		// Iterator over all the child references to factor each child to the right
-		// reference.
-		//
-		for (EStructuralFeature feature : getAllChildrenFeatures(eObject)) { // This line is the only difference with the super method
-			// If it is a list type value...
-			//
-			if (feature.isMany()) {
-				List<?> value = (List<?>) getFeatureValue(eObject, feature);
-
-				// These will be the children belonging to this feature.
-				//
-				Collection<Object> childrenOfThisFeature = new ArrayList<Object>();
-				for (ListIterator<Object> objects = list.listIterator(); objects.hasNext();) {
-					Object o = objects.next();
-
-					// Is this object in this feature...
-					//
-					if (value.contains(o)) {
-						// Add it to the list and remove it from the other list.
-						//
-						childrenOfThisFeature.add(o);
-						objects.remove();
-					}
-				}
-
-				// If we have children to remove for this feature, create a command for it.
-				//
-				if (!childrenOfThisFeature.isEmpty()) {
-					removeCommand.append(createRemoveCommand(domain, eObject, feature, childrenOfThisFeature));
-				}
-			} else {
-				// It's just a single value
-				//
-				final Object value = getFeatureValue(eObject, feature);
-				for (ListIterator<Object> objects = list.listIterator(); objects.hasNext();) {
-					Object o = objects.next();
-
-					// Is this object in this feature...
-					//
-					if (o == value) {
-						// Create a command to unset this and remove the object from the other list.
-						//
-						Command setCommand = createSetCommand(domain, eObject, feature, SetCommand.UNSET_VALUE);
-						removeCommand.append(new CommandWrapper(setCommand) {
-							protected Collection<?> affected;
-
-							@Override
-							public void execute() {
-								super.execute();
-								affected = Collections.singleton(eObject);
-							}
-
-							@Override
-							public void undo() {
-								super.undo();
-								affected = Collections.singleton(value);
-							}
-
-							@Override
-							public void redo() {
-								super.redo();
-								affected = Collections.singleton(eObject);
-							}
-
-							@Override
-							public Collection<?> getResult() {
-								return Collections.singleton(value);
-							}
-
-							@Override
-							public Collection<?> getAffectedObjects() {
-								return affected;
-							}
-						});
-						objects.remove();
-						break;
-					}
-				}
-			}
-		}
-
-		// If all the objects are used up by the above, then we can't do the command.
-		//
-		if (list.isEmpty()) {
-			return removeCommand.unwrap();
-		} else {
-			removeCommand.dispose();
-			return UnexecutableCommand.INSTANCE;
-		}
-	}
-	
+			
 }

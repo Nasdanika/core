@@ -151,8 +151,13 @@ public class EReferenceItemProvider
 		return UnexecutableCommand.INSTANCE;
 	}
 	
-	public EReference geteReference() {
+	public EReference getEReference() {
 		return eReference;
+	}
+	
+	@Override
+	protected Object getFeatureValue(EObject object, EStructuralFeature feature) {
+		return super.getFeatureValue(object == null && target instanceof EObject ? (EObject) target : object, feature);
 	}
 
 }
