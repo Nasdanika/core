@@ -116,7 +116,7 @@ public class EReferenceItemProvider
 			EObject owner, 
 			EStructuralFeature feature,
 			Collection<?> collection) {
-		return wrap(super.createRemoveCommand(domain, owner, feature, collection), owner);
+		return wrap(super.createRemoveCommand(domain, owner == null ? (EObject) target : owner, feature, collection), owner);
 	}
 
 	protected Command wrap(Command command, EObject owner) {	
