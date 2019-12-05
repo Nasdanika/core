@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import java.util.function.BiFunction;
+
 /**
  * @author Pavel Vlasov
  *
@@ -47,6 +49,17 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 			public Function<V, BiSupplier<V, T>> create(Context arg) throws Exception {				
 				return SupplierFactory.this.create(arg).asFunction();
 			}
+		};
+	}
+	
+	static <T> SupplierFactory<T> from(BiFunction<Context, ProgressMonitor, T> biFunction, String name, double size) {
+		return new SupplierFactory<T>() {
+
+			@Override
+			public Supplier<T> create(Context context) throws Exception {
+				return Supplier.fromFunction(pm -> biFunction.apply(context, pm), name, size);
+			}
+			
 		};
 	}
 	
