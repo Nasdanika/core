@@ -146,6 +146,11 @@ public class ArrayItemProvider extends ModelElementItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.ARRAY__ELEMENTS,
+				 NcoreFactory.eINSTANCE.createSupplierFactoryReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.ARRAY__ELEMENTS,
 				 NcoreFactory.eINSTANCE.createTypedElement()));
 
 		newChildDescriptors.add

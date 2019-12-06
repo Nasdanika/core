@@ -67,6 +67,15 @@ public interface NcoreFactory extends EFactory {
 	WebAddress createWebAddress();
 
 	/**
+	 * Returns a new object of class '<em>Supplier Factory Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Supplier Factory Reference</em>'.
+	 * @generated
+	 */
+	SupplierFactoryReference createSupplierFactoryReference();
+
+	/**
 	 * Returns a new object of class '<em>Typed Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

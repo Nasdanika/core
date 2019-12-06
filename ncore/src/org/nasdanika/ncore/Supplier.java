@@ -9,7 +9,7 @@ package org.nasdanika.ncore;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Supplier is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments.
+ * Supplier is a typed element which computes it result using an implementation operation - constructor or method. Supplier is equivalent to an operation without arguments.
  * <!-- end-model-doc -->
  *
  * <p>

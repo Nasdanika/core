@@ -147,6 +147,11 @@ public class ContextItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.CONTEXT__ELEMENTS,
+				 NcoreFactory.eINSTANCE.createSupplierFactoryReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.CONTEXT__ELEMENTS,
 				 NcoreFactory.eINSTANCE.createTypedElement()));
 
 		newChildDescriptors.add

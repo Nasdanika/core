@@ -33,6 +33,7 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
+import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -177,6 +178,14 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.ISUPPLIER_FACTORY: {
 				SupplierFactory<?> iSupplierFactory = (SupplierFactory<?>)theEObject;
 				T1 result = caseISupplierFactory(iSupplierFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: {
+				SupplierFactoryReference supplierFactoryReference = (SupplierFactoryReference)theEObject;
+				T1 result = caseSupplierFactoryReference(supplierFactoryReference);
+				if (result == null) result = caseModelElement(supplierFactoryReference);
+				if (result == null) result = caseISupplierFactory(supplierFactoryReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -549,6 +558,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T> T1 caseISupplierFactory(SupplierFactory<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Supplier Factory Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Supplier Factory Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseSupplierFactoryReference(SupplierFactoryReference object) {
 		return null;
 	}
 

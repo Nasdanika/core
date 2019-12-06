@@ -187,6 +187,29 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.SupplierFactoryReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SupplierFactoryReferenceItemProvider supplierFactoryReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.SupplierFactoryReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSupplierFactoryReferenceAdapter() {
+		if (supplierFactoryReferenceItemProvider == null) {
+			supplierFactoryReferenceItemProvider = new SupplierFactoryReferenceItemProvider(this);
+		}
+
+		return supplierFactoryReferenceItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedElement} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -687,6 +710,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (phoneItemProvider != null) phoneItemProvider.dispose();
 		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
 		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
+		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (valueItemProvider != null) valueItemProvider.dispose();

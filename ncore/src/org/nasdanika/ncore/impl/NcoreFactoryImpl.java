@@ -28,6 +28,7 @@ import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
+import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.TypedElement;
@@ -84,6 +85,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.PHONE: return createPhone();
 			case NcorePackage.POSTAL_ADDRESS: return createPostalAddress();
 			case NcorePackage.WEB_ADDRESS: return createWebAddress();
+			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
 			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.VALUE: return createValue();
@@ -197,6 +199,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public WebAddress createWebAddress() {
 		WebAddressImpl webAddress = new WebAddressImpl();
 		return webAddress;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SupplierFactoryReference createSupplierFactoryReference() {
+		SupplierFactoryReferenceImpl supplierFactoryReference = new SupplierFactoryReferenceImpl();
+		return supplierFactoryReference;
 	}
 
 	/**

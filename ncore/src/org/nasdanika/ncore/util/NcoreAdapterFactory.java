@@ -33,6 +33,7 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
+import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -137,6 +138,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public <T> Adapter caseISupplierFactory(SupplierFactory<T> object) {
 				return createISupplierFactoryAdapter();
+			}
+			@Override
+			public Adapter caseSupplierFactoryReference(SupplierFactoryReference object) {
+				return createSupplierFactoryReferenceAdapter();
 			}
 			@Override
 			public <T, R> Adapter caseIFunction(org.nasdanika.common.Function<T, R> object) {
@@ -397,6 +402,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createISupplierFactoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.SupplierFactoryReference <em>Supplier Factory Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.SupplierFactoryReference
+	 * @generated
+	 */
+	public Adapter createSupplierFactoryReferenceAdapter() {
 		return null;
 	}
 

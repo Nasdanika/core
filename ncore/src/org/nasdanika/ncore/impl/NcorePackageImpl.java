@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
@@ -41,10 +42,12 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
+import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 import org.nasdanika.ncore.WebAddress;
+import org.nasdanika.ncore.util.NcoreValidator;
 
 /**
  * <!-- begin-user-doc -->
@@ -128,6 +131,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass iSupplierFactoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass supplierFactoryReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -356,6 +366,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Initialize created meta-data
 		theNcorePackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theNcorePackage,
+			 new EValidator.Descriptor() {
+				 @Override
+				 public EValidator getEValidator() {
+					 return NcoreValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		theNcorePackage.freeze();
@@ -643,6 +663,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EClass getISupplierFactory() {
 		return iSupplierFactoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSupplierFactoryReference() {
+		return supplierFactoryReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSupplierFactoryReference_Target() {
+		return (EReference)supplierFactoryReferenceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1123,6 +1163,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		iSupplierFactoryEClass = createEClass(ISUPPLIER_FACTORY);
 
+		supplierFactoryReferenceEClass = createEClass(SUPPLIER_FACTORY_REFERENCE);
+		createEReference(supplierFactoryReferenceEClass, SUPPLIER_FACTORY_REFERENCE__TARGET);
+
 		iFunctionEClass = createEClass(IFUNCTION);
 
 		iFunctionFactoryEClass = createEClass(IFUNCTION_FACTORY);
@@ -1238,9 +1281,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		postalAddressEClass.getESuperTypes().add(this.getContactMethod());
 		webAddressEClass.getESuperTypes().add(this.getContactMethod());
 		EGenericType g1 = createEGenericType(this.getModelElement());
-		typedElementEClass.getEGenericSuperTypes().add(g1);
+		supplierFactoryReferenceEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getISupplierFactory());
 		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		supplierFactoryReferenceEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getModelElement());
+		typedElementEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getISupplierFactory());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		typedElementEClass.getEGenericSuperTypes().add(g1);
 		supplierEClass.getESuperTypes().add(this.getTypedElement());
@@ -1373,6 +1422,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(iSupplierFactoryEClass, SupplierFactory.class, "ISupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(supplierFactoryReferenceEClass, SupplierFactoryReference.class, "SupplierFactoryReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(this.getISupplierFactory());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSupplierFactoryReference_Target(), g1, null, "target", null, 1, 1, SupplierFactoryReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(iFunctionFactoryEClass, FunctionFactory.class, "IFunctionFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1471,6 +1526,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createGenModelAnnotations();
 		// urn:org.nasdanika
 		createUrnorgAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
 	}
 
 	/**
@@ -1542,6 +1599,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
 		   });
 		addAnnotation
+		  (supplierFactoryReferenceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "SupplierFactoryReference delegates its functionality to its target. It is primarily used to build multi-resource (file) models."
+		   });
+		addAnnotation
+		  (getSupplierFactoryReference_Target(),
+		   source,
+		   new String[] {
+			   "documentation", "Reference to the target supplier factory."
+		   });
+		addAnnotation
 		  (iConsumerEClass,
 		   source,
 		   new String[] {
@@ -1575,7 +1644,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (supplierEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Supplier is a typed element which computes it result using an implementation operation - constructor or method. Provider is equivalent to an operation without arguments."
+			   "documentation", "Supplier is a typed element which computes it result using an implementation operation - constructor or method. Supplier is equivalent to an operation without arguments."
 		   });
 		addAnnotation
 		  (getSupplier_Implementation(),
@@ -1760,6 +1829,22 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "category", "General"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore";
+		addAnnotation
+		  (supplierFactoryReferenceEClass,
+		   source,
+		   new String[] {
+			   "constraints", "target"
 		   });
 	}
 
