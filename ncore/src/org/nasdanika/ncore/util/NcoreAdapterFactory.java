@@ -30,6 +30,7 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
@@ -166,6 +167,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSupplier(org.nasdanika.ncore.Supplier object) {
 				return createSupplierAdapter();
+			}
+			@Override
+			public Adapter caseResource(Resource object) {
+				return createResourceAdapter();
 			}
 			@Override
 			public Adapter caseValue(Value object) {
@@ -430,6 +435,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSupplierAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Resource <em>Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Resource
+	 * @generated
+	 */
+	public Adapter createResourceAdapter() {
 		return null;
 	}
 

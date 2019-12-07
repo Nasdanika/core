@@ -37,6 +37,7 @@ public class Activator implements BundleActivator {
 //				NcorePackage.Literals.REST_OPERATION,
 //				NcorePackage.Literals.TYPED_ELEMENT,
 				NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE,
+				NcorePackage.Literals.RESOURCE,
 				NcorePackage.Literals.VALUE);	
 
 		// TODO -> FunctionFactory

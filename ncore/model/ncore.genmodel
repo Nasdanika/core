@@ -82,6 +82,10 @@
     <genClasses image="false" ecoreClass="ncore.ecore#//Supplier">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Supplier/implementation"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Resource/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Resource/interpolate"/>
+    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Value">
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/interpolate"/>

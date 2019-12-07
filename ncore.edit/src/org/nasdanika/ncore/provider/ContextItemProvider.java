@@ -162,6 +162,11 @@ public class ContextItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.CONTEXT__ELEMENTS,
+				 NcoreFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.CONTEXT__ELEMENTS,
 				 NcoreFactory.eINSTANCE.createValue()));
 
 		newChildDescriptors.add

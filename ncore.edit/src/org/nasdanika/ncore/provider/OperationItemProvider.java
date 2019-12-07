@@ -164,6 +164,11 @@ public class OperationItemProvider extends SupplierItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
+				 NcoreFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createValue()));
 
 		newChildDescriptors.add

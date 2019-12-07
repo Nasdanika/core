@@ -256,6 +256,29 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Resource} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResourceItemProvider resourceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Resource}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResourceAdapter() {
+		if (resourceItemProvider == null) {
+			resourceItemProvider = new ResourceItemProvider(this);
+		}
+
+		return resourceItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Value} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -713,6 +736,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
+		if (resourceItemProvider != null) resourceItemProvider.dispose();
 		if (valueItemProvider != null) valueItemProvider.dispose();
 		if (nullItemProvider != null) nullItemProvider.dispose();
 		if (operationItemProvider != null) operationItemProvider.dispose();

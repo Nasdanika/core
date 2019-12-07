@@ -39,6 +39,7 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
@@ -145,6 +146,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass supplierEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -711,6 +719,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getResource() {
+		return resourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getResource_Location() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getResource_Interpolate() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getIFunction() {
 		return iFunctionEClass;
 	}
@@ -1181,6 +1219,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		supplierEClass = createEClass(SUPPLIER);
 		createEAttribute(supplierEClass, SUPPLIER__IMPLEMENTATION);
 
+		resourceEClass = createEClass(RESOURCE);
+		createEAttribute(resourceEClass, RESOURCE__LOCATION);
+		createEAttribute(resourceEClass, RESOURCE__INTERPOLATE);
+
 		valueEClass = createEClass(VALUE);
 		createEAttribute(valueEClass, VALUE__VALUE);
 		createEAttribute(valueEClass, VALUE__INTERPOLATE);
@@ -1293,6 +1335,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g1.getETypeArguments().add(g2);
 		typedElementEClass.getEGenericSuperTypes().add(g1);
 		supplierEClass.getESuperTypes().add(this.getTypedElement());
+		resourceEClass.getESuperTypes().add(this.getTypedElement());
 		valueEClass.getESuperTypes().add(this.getSupplier());
 		nullEClass.getESuperTypes().add(this.getTypedElement());
 		operationEClass.getESuperTypes().add(this.getSupplier());
@@ -1442,6 +1485,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(supplierEClass, org.nasdanika.ncore.Supplier.class, "Supplier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSupplier_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, org.nasdanika.ncore.Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getResource_Interpolate(), ecorePackage.getEBoolean(), "interpolate", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(valueEClass, Value.class, "Value", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1651,6 +1698,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Provider implementation. If empty, type\'s constructor is used as a provider.\n\nProvider implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. If both type and implementation as defined then the implementation must be a subclass/implementation of type or there should be a Converter service in the context which converts implementation into type. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then a method with a given name which taks a single Context argument or not arguments is used. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor and a no-argument method with a given name is used.\n"
+		   });
+		addAnnotation
+		  (resourceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Resource loads content from URL and converts to the element type. If type is blank then it supplies the URL as is. "
+		   });
+		addAnnotation
+		  (getResource_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource location resolved relative to the containing model file (resource)."
+		   });
+		addAnnotation
+		  (getResource_Interpolate(),
+		   source,
+		   new String[] {
+			   "documentation", "If this flag is set to true and the type is ``java.lang.String`` then the string is interpolated. This flag is ignored otherwise."
 		   });
 		addAnnotation
 		  (valueEClass,

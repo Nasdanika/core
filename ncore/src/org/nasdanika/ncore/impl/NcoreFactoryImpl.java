@@ -26,6 +26,7 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.SupplierFactoryReference;
@@ -88,6 +89,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
 			case NcorePackage.SUPPLIER: return createSupplier();
+			case NcorePackage.RESOURCE: return createResource();
 			case NcorePackage.VALUE: return createValue();
 			case NcorePackage.NULL: return createNull();
 			case NcorePackage.OPERATION: return createOperation();
@@ -232,6 +234,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Supplier createSupplier() {
 		SupplierImpl supplier = new SupplierImpl();
 		return supplier;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Resource createResource() {
+		ResourceImpl resource = new ResourceImpl();
+		return resource;
 	}
 
 	/**

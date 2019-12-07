@@ -35,6 +35,7 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
@@ -152,6 +153,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateTypedElement((TypedElement)value, diagnostics, context);
 			case NcorePackage.SUPPLIER:
 				return validateSupplier((org.nasdanika.ncore.Supplier)value, diagnostics, context);
+			case NcorePackage.RESOURCE:
+				return validateResource((Resource)value, diagnostics, context);
 			case NcorePackage.VALUE:
 				return validateValue((Value)value, diagnostics, context);
 			case NcorePackage.NULL:
@@ -388,6 +391,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateSupplier(org.nasdanika.ncore.Supplier supplier, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(supplier, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateResource(Resource resource, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(resource, diagnostics, context);
 	}
 
 	/**

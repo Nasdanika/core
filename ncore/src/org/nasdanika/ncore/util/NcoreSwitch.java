@@ -30,6 +30,7 @@ import org.nasdanika.ncore.Party;
 import org.nasdanika.ncore.Phone;
 import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.SupplierEntry;
@@ -227,6 +228,15 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseTypedElement(supplier);
 				if (result == null) result = caseModelElement(supplier);
 				if (result == null) result = caseISupplierFactory(supplier);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.RESOURCE: {
+				Resource resource = (Resource)theEObject;
+				T1 result = caseResource(resource);
+				if (result == null) result = caseTypedElement(resource);
+				if (result == null) result = caseModelElement(resource);
+				if (result == null) result = caseISupplierFactory(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -663,6 +673,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseSupplier(org.nasdanika.ncore.Supplier object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseResource(Resource object) {
 		return null;
 	}
 

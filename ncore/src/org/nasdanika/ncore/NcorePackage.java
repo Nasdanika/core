@@ -927,7 +927,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 18;
+	int VALUE = 19;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.NullImpl <em>Null</em>}' class.
@@ -937,7 +937,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNull()
 	 * @generated
 	 */
-	int NULL = 19;
+	int NULL = 20;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.OperationImpl <em>Operation</em>}' class.
@@ -947,7 +947,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getOperation()
 	 * @generated
 	 */
-	int OPERATION = 20;
+	int OPERATION = 21;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ArrayImpl <em>Array</em>}' class.
@@ -957,7 +957,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getArray()
 	 * @generated
 	 */
-	int ARRAY = 21;
+	int ARRAY = 22;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ContextImpl <em>Context</em>}' class.
@@ -967,7 +967,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getContext()
 	 * @generated
 	 */
-	int CONTEXT = 22;
+	int CONTEXT = 23;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
@@ -977,7 +977,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
 	 * @generated
 	 */
-	int ENTRY = 23;
+	int ENTRY = 24;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.
@@ -987,7 +987,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedEntry()
 	 * @generated
 	 */
-	int TYPED_ENTRY = 24;
+	int TYPED_ENTRY = 25;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
@@ -997,7 +997,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 26;
+	int MAP = 27;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
@@ -1007,7 +1007,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 27;
+	int PROPERTY = 28;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.FunctionImpl <em>Function</em>}' class.
@@ -1017,7 +1017,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFunction()
 	 * @generated
 	 */
-	int FUNCTION = 28;
+	int FUNCTION = 29;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -1027,7 +1027,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 29;
+	int LIST = 30;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ObjectImpl <em>Object</em>}' class.
@@ -1037,7 +1037,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 30;
+	int OBJECT = 31;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HttpCallImpl <em>Http Call</em>}' class.
@@ -1047,7 +1047,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpCall()
 	 * @generated
 	 */
-	int HTTP_CALL = 31;
+	int HTTP_CALL = 32;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
@@ -1057,7 +1057,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestOperation()
 	 * @generated
 	 */
-	int REST_OPERATION = 32;
+	int REST_OPERATION = 33;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestFunctionImpl <em>Rest Function</em>}' class.
@@ -1067,7 +1067,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestFunction()
 	 * @generated
 	 */
-	int REST_FUNCTION = 33;
+	int REST_FUNCTION = 34;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1185,6 +1185,88 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int SUPPLIER_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ResourceImpl <em>Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ResourceImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getResource()
+	 * @generated
+	 */
+	int RESOURCE = 18;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__TITLE = TYPED_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__DESCRIPTION = TYPED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__TYPE = TYPED_ELEMENT__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Required</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__REQUIRED = TYPED_ELEMENT__REQUIRED;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__LOCATION = TYPED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Interpolate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__INTERPOLATE = TYPED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1599,7 +1681,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplierEntry()
 	 * @generated
 	 */
-	int SUPPLIER_ENTRY = 25;
+	int SUPPLIER_ENTRY = 26;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -2302,7 +2384,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 34;
+	int HTTP_METHOD = 35;
 
 	/**
 	 * The meta object id for the '<em>IContext</em>' data type.
@@ -2312,7 +2394,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIContext()
 	 * @generated
 	 */
-	int ICONTEXT = 35;
+	int ICONTEXT = 36;
 
 
 	/**
@@ -2323,7 +2405,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getException()
 	 * @generated
 	 */
-	int EXCEPTION = 36;
+	int EXCEPTION = 37;
 
 
 	/**
@@ -2666,6 +2748,38 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSupplier_Implementation();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Resource <em>Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource</em>'.
+	 * @see org.nasdanika.ncore.Resource
+	 * @generated
+	 */
+	EClass getResource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Resource#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.ncore.Resource#getLocation()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EAttribute getResource_Location();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Resource#isInterpolate <em>Interpolate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Interpolate</em>'.
+	 * @see org.nasdanika.ncore.Resource#isInterpolate()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EAttribute getResource_Interpolate();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Function <em>IFunction</em>}'.
@@ -3382,6 +3496,32 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SUPPLIER__IMPLEMENTATION = eINSTANCE.getSupplier_Implementation();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ResourceImpl <em>Resource</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ResourceImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getResource()
+		 * @generated
+		 */
+		EClass RESOURCE = eINSTANCE.getResource();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE__LOCATION = eINSTANCE.getResource_Location();
+
+		/**
+		 * The meta object literal for the '<em><b>Interpolate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE__INTERPOLATE = eINSTANCE.getResource_Interpolate();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.Function <em>IFunction</em>}' class.
