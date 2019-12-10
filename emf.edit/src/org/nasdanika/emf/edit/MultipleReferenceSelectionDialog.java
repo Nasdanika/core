@@ -83,6 +83,16 @@ public class MultipleReferenceSelectionDialog extends CheckedTreeSelectionDialog
 						}
 					}
 				}
+								
+				if (element instanceof EReferenceItemProvider) {
+					EReferenceItemProvider eReferenceItemProvider = (EReferenceItemProvider) element;
+					for (Object child: eReferenceItemProvider.getChildren(eReferenceItemProvider.getTarget())) {
+						if (select(viewer, element, child)) {
+							return true;
+						}
+					}
+				}
+				
 				return false;
 			}
 			
