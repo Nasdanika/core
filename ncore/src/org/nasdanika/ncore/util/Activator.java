@@ -16,12 +16,18 @@ public class Activator implements BundleActivator {
 	/**
 	 * Anonymous (unnamed) model elements which compute results.
 	 */
-	public static final Palette EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.get("org.nasdanika.ncore:expressions");
+	public static final Palette EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.create(
+			"org.nasdanika.ncore:expressions",
+			"General",
+			"General purpose elements");
 
 	/**
 	 * Named model elements which compute results. 
 	 */
-	public static final Palette NAMED_EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.get("org.nasdanika.ncore:named-expressions");
+	public static final Palette NAMED_EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.create(
+			"org.nasdanika.ncore:named-expressions",
+			"Named expressions",
+			"Named expressions can be members of maps and contexts");
 	
 	// TODO - Control flow
 

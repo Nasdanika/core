@@ -25,6 +25,8 @@ public interface Palette {
 		
 		Palette get(String id);
 		
+		Palette create(String id, String name, String description);		
+		
 		/**
 		 * Returns a de-dupped list of elements from requested palettes.
 		 * @param palettes
@@ -52,6 +54,11 @@ public interface Palette {
 			
 			@Override
 			public Palette get(String id) {
+				return create(id, null, null);
+			}
+			
+			@Override
+			public Palette create(String id, String name, String description) {
 				return palettes.computeIfAbsent(id, pid -> new Palette() {
 					
 					private List<Contributor> contributors = new ArrayList<>();
@@ -69,6 +76,16 @@ public interface Palette {
 					@Override
 					public String getId() {
 						return id;
+					}
+
+					@Override
+					public String getName() {
+						return name;
+					}
+
+					@Override
+					public String getDescription() {
+						return description;
 					}
 					
 				});
@@ -159,6 +176,11 @@ public interface Palette {
 	 */
 	default void add(String id, EObject eObject) {
 		add(id, EcoreUtil.copy(eObject));
-	};
+	}
+	
+	
+	String getName();
+	
+	String getDescription();
 	
 }
