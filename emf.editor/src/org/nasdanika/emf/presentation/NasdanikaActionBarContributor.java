@@ -11,9 +11,12 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.action.ControlAction;
 import org.eclipse.emf.edit.ui.action.CreateChildAction;
 import org.eclipse.emf.edit.ui.action.CreateSiblingAction;
@@ -513,6 +516,17 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	@Override
 	protected boolean removeAllReferencesOnDelete() {
 		return true;
+	}
+	
+	protected AdapterFactory getAdapterFactory() {
+		if (activeEditor instanceof IEditingDomainProvider) {
+			EditingDomain editingDomain = ((IEditingDomainProvider) activeEditor).getEditingDomain();
+			if (editingDomain instanceof AdapterFactoryEditingDomain) {
+				AdapterFactory adapterFactory = ((AdapterFactoryEditingDomain) editingDomain).getAdapterFactory();
+				return adapterFactory instanceof ComposedAdapterFactory ? ((ComposedAdapterFactory) adapterFactory).getRootAdapterFactory() : adapterFactory;
+			}
+		}
+		return null;
 	}
 
 }

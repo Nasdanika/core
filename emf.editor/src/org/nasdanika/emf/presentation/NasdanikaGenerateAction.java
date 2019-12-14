@@ -10,15 +10,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 //import org.eclipse.jdt.core.IJavaProject;
 //import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
@@ -34,11 +37,16 @@ import org.nasdanika.common.Util;
 public abstract class NasdanikaGenerateAction<T extends EObject> extends Action {
 	
 	protected T modelElement;					
-			
+	protected AdapterFactory adapterFactory;	
+	protected ILabelProvider labelProvider;
 	
-	protected NasdanikaGenerateAction(String name, T modelElement) {
+	protected NasdanikaGenerateAction(String name, T modelElement, AdapterFactory adapterFactory) {
 		super(name);
 		this.modelElement = modelElement;
+		this.adapterFactory = adapterFactory;
+		if (adapterFactory != null) {
+			labelProvider = new AdapterFactoryLabelProvider(adapterFactory);
+		}
 	}
 	
 	@Override
@@ -118,6 +126,12 @@ public abstract class NasdanikaGenerateAction<T extends EObject> extends Action 
 	}
 	
 	protected String getLabel(EObject eObject) {
+		if (eObject != null && labelProvider != null) {
+			String label = labelProvider.getText(eObject);
+			if (!Util.isBlank(label)) {
+				return label;
+			}
+		}
 		return null;
 	};
 
