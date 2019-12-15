@@ -68,7 +68,24 @@ public abstract class NasdanikaGenerateAction<T extends EObject> extends Action 
 		
 		IStatus validationStatus = BasicDiagnostic.toIStatus(diagnostic);
 		if (validationStatus.getSeverity() == IStatus.ERROR) {
-            ErrorDialog.openError(shell, "Model is invalid", "Model contains errors", validationStatus);
+			ErrorDialog dialog = new ErrorDialog(
+					shell, 
+					"Model diagnostic failed", 
+					"Model contains errors, see details for more information", 
+					validationStatus, 
+					IStatus.OK	| IStatus.INFO | IStatus.WARNING | IStatus.ERROR) {
+				
+				
+				@Override
+				public void create() {
+					super.create();
+					showDetailsArea();
+				}
+
+			};			
+			
+			dialog.open();
+			
 			getLog().log(validationStatus);
 			return;
 		}
