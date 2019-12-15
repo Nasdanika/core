@@ -596,7 +596,7 @@ public interface Context extends Composeable<Context> {
 			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(String key, Class<T> type) {
-				Object ret = Context.this.get(key, type);
+				Object ret = Context.this.get(key);
 				if (ret instanceof PropertyComputer) {
 					return ((PropertyComputer) ret).compute(this, key, type);
 				}
