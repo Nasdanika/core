@@ -438,7 +438,7 @@ public interface Context extends Composeable<Context> {
 		    	peeledToken = peeledToken.substring(0, pipeIdx);
 		    }
 		    
-			Object replacement = tokenComputer.get(peeledToken, defaultValue);
+			Object replacement = tokenComputer.getString(peeledToken, defaultValue);
 		    if (replacement != null) {
 		    	Converter converter = get(Converter.class);
 		    	if (converter != null) {
