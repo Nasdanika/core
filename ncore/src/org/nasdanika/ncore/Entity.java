@@ -34,7 +34,7 @@ public interface Entity extends ModelElement {
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getEntity_Id()
-	 * @model id="true" derived="true"
+	 * @model id="true"
 	 * @generated
 	 */
 	String getId();

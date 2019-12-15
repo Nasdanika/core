@@ -11,7 +11,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -48,7 +47,7 @@ public class EntityItemProvider extends ModelElementItemProvider {
 		return itemPropertyDescriptors;
 	}
 
-	/**
+/**
 	 * This adds a property descriptor for the Id feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -60,7 +59,7 @@ public class EntityItemProvider extends ModelElementItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_Entity_id_feature"),
 				 NcorePackage.Literals.ENTITY__ID,
-				 false,
+				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
@@ -68,6 +67,7 @@ public class EntityItemProvider extends ModelElementItemProvider {
 				 null,
 				 null));
 	}
+
 
 	/**
 	 * This returns Entity.gif.

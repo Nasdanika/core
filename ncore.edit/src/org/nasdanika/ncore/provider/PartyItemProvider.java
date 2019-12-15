@@ -67,7 +67,7 @@ public class PartyItemProvider extends NamedElementItemProvider {
 				 getString("_UI_Entity_id_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_id_feature", "_UI_Entity_type"),
 				 NcorePackage.Literals.ENTITY__ID,
-				 false,
+				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
