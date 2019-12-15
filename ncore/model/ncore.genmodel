@@ -4,7 +4,7 @@
     creationSubmenus="true" modelPluginID="org.nasdanika.ncore" modelName="Ncore"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     featureDelegation="Dynamic" complianceLevel="8.0" suppressGenModelAnnotations="false"
-    copyrightFields="false" providerRootExtendsClass="org.nasdanika.emf.edit.NasdanikaItemProviderAdapter"
+    copyrightFields="false" providerRootExtendsClass="org.nasdanika.ncore.provider.NcoreItemProviderAdapter"
     operationReflection="true" importOrganizing="true" decoration="Live">
   <foreignModel>ncore.ecore</foreignModel>
   <genPackages prefix="Ncore" basePackage="org.nasdanika" disposableProviderFactory="true"

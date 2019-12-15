@@ -1622,6 +1622,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Element with a unique auto-generated identity."
 		   });
 		addAnnotation
+		  (getEntity_Id(),
+		   source,
+		   new String[] {
+			   "documentation", "A unique auto-generated entity identifier."
+		   });
+		addAnnotation
 		  (getParty_ContactMethods(),
 		   source,
 		   new String[] {

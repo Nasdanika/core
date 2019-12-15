@@ -33,7 +33,11 @@
       <details key="documentation" value="Element with a unique auto-generated identity."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        derived="true" iD="true"/>
+        derived="true" iD="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A unique auto-generated entity identifier."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Party" abstract="true" eSuperTypes="#//NamedElement #//Entity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="contactMethods" upperBound="-1"

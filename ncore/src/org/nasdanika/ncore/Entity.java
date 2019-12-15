@@ -28,6 +28,9 @@ public interface Entity extends ModelElement {
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A unique auto-generated entity identifier.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getEntity_Id()

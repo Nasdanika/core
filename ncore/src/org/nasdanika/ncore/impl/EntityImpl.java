@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.util.UUID;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.nasdanika.ncore.Entity;
@@ -34,10 +36,11 @@ public abstract class EntityImpl extends ModelElementImpl implements Entity {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected EntityImpl() {
 		super();
+		setId(UUID.randomUUID().toString());		
 	}
 
 	/**
