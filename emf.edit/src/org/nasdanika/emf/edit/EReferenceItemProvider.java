@@ -107,7 +107,12 @@ public class EReferenceItemProvider
 			EStructuralFeature feature,
 			Collection<?> collection, 
 			int index) {
-		return wrap(super.createAddCommand(domain, owner == null ? (EObject) target : owner, feature, collection, index), owner);
+		return wrap(super.createAddCommand(
+				domain, 
+				owner == null ? (EObject) target : owner, 
+				feature == null ? getEReference() : feature, 
+				collection, 
+				index), owner);
 	}
 	
 	@Override
@@ -116,7 +121,7 @@ public class EReferenceItemProvider
 			EObject owner, 
 			EStructuralFeature feature,
 			Collection<?> collection) {
-		return wrap(super.createRemoveCommand(domain, owner == null ? (EObject) target : owner, feature, collection), owner);
+		return wrap(super.createRemoveCommand(domain, owner == null ? (EObject) target : owner, feature == null ? getEReference() : feature, collection), owner);
 	}
 
 	protected Command wrap(Command command, EObject owner) {	
@@ -142,13 +147,15 @@ public class EReferenceItemProvider
 			Collection<?> collection) {
 		
 		if (owner instanceof EReferenceItemProvider) {
-			owner = ((EReferenceItemProvider) owner).target;
-		}
-		if (new AddCommand(domain, (EObject) owner, eReference, collection).canExecute()) {
-			return super.createDragAndDropCommand(domain, owner, location, operations, operation, collection);
+			EReferenceItemProvider eRefererenceItemProvider = (EReferenceItemProvider) owner;
+			if (!new AddCommand(domain, (EObject) eRefererenceItemProvider.getTarget(), eRefererenceItemProvider.getEReference(), collection).canExecute()) {
+				return UnexecutableCommand.INSTANCE;
+//				return super.createDragAndDropCommand(domain, owner, location, operations, operation, collection);
+			}
 		}
 		
-		return UnexecutableCommand.INSTANCE;
+//		return UnexecutableCommand.INSTANCE;
+		return super.createDragAndDropCommand(domain, owner, location, operations, operation, collection);
 	}
 	
 	public EReference getEReference() {
@@ -159,5 +166,37 @@ public class EReferenceItemProvider
 	protected Object getFeatureValue(EObject object, EStructuralFeature feature) {
 		return super.getFeatureValue(object == null && target instanceof EObject ? (EObject) target : object, feature);
 	}
-
+	
+	@Override
+	protected Command createMoveCommand(EditingDomain domain, EObject owner, EStructuralFeature feature, Object value, int index) {
+		return wrap(super.createMoveCommand(domain, owner == null ? (EObject) target : owner, feature == null ? getEReference() : feature, value, index), owner);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getName()+"(target = " + target + ", reference = " + eReference.getName() +")";
+	}
+	
+//	@Override
+//	protected CommandParameter unwrapCommandValues(CommandParameter commandParameter, Class<? extends Command> commandClass) {
+//		if (commandParameter.owner instanceof EReferenceItemProvider) {
+//			commandParameter = new CommandParameter(
+//	    	        ((EReferenceItemProvider) commandParameter.owner).getTarget(),
+//	    	        commandParameter.feature,
+//	    	        commandParameter.value,
+//	    	        commandParameter.collection,
+//	    	        commandParameter.index);
+//		}
+//		if (commandParameter.value instanceof EReferenceItemProvider) {
+//			commandParameter = new CommandParameter(
+//	    	        commandParameter.owner,
+//	    	        commandParameter.owner,
+//	    	        ((EReferenceItemProvider) commandParameter.value).getTarget(),
+//	    	        commandParameter.collection,
+//	    	        commandParameter.index);
+//		}
+//		
+//		return super.unwrapCommandValues(commandParameter, commandClass);
+//	}
+	
 }

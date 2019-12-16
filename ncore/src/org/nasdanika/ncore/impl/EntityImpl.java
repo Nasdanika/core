@@ -130,5 +130,10 @@ public abstract class EntityImpl extends ModelElementImpl implements Entity {
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@Override
+	public String toString() {
+		return eClass().getName() + "(title = "+getTitle()+", id=" + getId() + ")";
+	}
 
 } //EntityImpl

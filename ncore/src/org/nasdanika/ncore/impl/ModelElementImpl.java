@@ -179,5 +179,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@Override
+	public String toString() {		
+		return eClass().getName()+"(title = "+getTitle()+")";
+	}
 
 } //ModelElementImpl
