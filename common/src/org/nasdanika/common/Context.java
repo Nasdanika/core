@@ -615,7 +615,7 @@ public interface Context extends Composeable<Context> {
 				String parentKey = key.substring(0, lastSlash);
 				Object parentProperty = get(parentKey);
 				if (parentProperty instanceof PropertyComputer) {
-					return ((PropertyComputer) parentProperty).compute(this, parentKey, type);
+					return ((PropertyComputer) parentProperty).compute(this, key, type);
 				}				
 				String subKey = key.substring(lastSlash + 1);
 				if (parentProperty instanceof Context) {
@@ -644,6 +644,11 @@ public interface Context extends Composeable<Context> {
 			@Override
 			public <T> T get(Class<T> type) {
 				return Context.this.get(type);
+			}
+			
+			@Override
+			public String toString() {
+				return "Computing context " + super.toString();
 			}
 			
 		};
