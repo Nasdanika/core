@@ -43,11 +43,26 @@ public class MarkdownHelper {
 		
 	protected HtmlRenderer createMarkdownHtmlRenderer() {
 		return HtmlRenderer.builder(getFlexmarkOptions()).build();
-	}	
-	
+	}
+			
 	public String markdownToHtml(String markdown) {
+		return markdownToHtml(markdown, true);
+	}
+	
+	public String markdownToHtml(String markdown, boolean peel) {
 		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown));
-		return createMarkdownHtmlRenderer().render(document);
+		String html = createMarkdownHtmlRenderer().render(document);
+
+		if (peel) {
+			// Peeling of <p></p>
+			String pOpen = "<p>";
+			String pClose = "</p>";
+			if (html.startsWith(pOpen) && html.endsWith(pClose)) {
+				return html.substring(pOpen.length(), html.length() - pClose.length());
+			}
+		}
+		
+		return html;
 	}		
 	
 	/**
