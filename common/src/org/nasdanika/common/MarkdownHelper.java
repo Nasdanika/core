@@ -46,23 +46,8 @@ public class MarkdownHelper {
 	}
 			
 	public String markdownToHtml(String markdown) {
-		return markdownToHtml(markdown, true);
-	}
-	
-	public String markdownToHtml(String markdown, boolean peel) {
 		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown));
-		String html = createMarkdownHtmlRenderer().render(document);
-
-		if (peel) {
-			// Peeling of <p></p>
-			String pOpen = "<p>";
-			String pClose = "</p>";
-			if (html.startsWith(pOpen) && html.endsWith(pClose)) {
-				return html.substring(pOpen.length(), html.length() - pClose.length());
-			}
-		}
-		
-		return html;
+		return createMarkdownHtmlRenderer().render(document);
 	}		
 	
 	/**
