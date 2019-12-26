@@ -182,8 +182,7 @@ public class SimpleMutableContext implements MutableContext {
 	 */
 	public <T> void register(Class<T> type, T service) {
 		getServices(type).add(service);
-	}
-	
+	}	
 	
 	/**
 	 * Unregisters a service.
@@ -193,6 +192,17 @@ public class SimpleMutableContext implements MutableContext {
 	 */
 	public <T> void unregister(Class<T> type, T service) {
 		getServices(type).remove(service);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> void register(Class<T> type, ServiceComputer<? super T> serviceComputer) {
+		services.computeIfAbsent((Class<Object>) type, (serviceType) -> new ArrayList<Object>()).add(serviceComputer);
+	}
+
+	@Override
+	public <T> void unregister(Class<T> type, ServiceComputer<? super T> serviceComputer) {
+		getServices(type).remove(serviceComputer);
 	}
 	
 }

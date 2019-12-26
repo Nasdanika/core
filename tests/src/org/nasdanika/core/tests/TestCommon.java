@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.zip.ZipInputStream;
@@ -29,6 +30,7 @@ import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.resources.BinaryEntity;
@@ -46,6 +48,27 @@ public class TestCommon {
 		Map<String, Object> m = Collections.singletonMap("f", f);
 		Context c = Context.wrap(m::get);
 		Assert.assertEquals("** mom", c.get("f/mom"));
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Test
+	public void testServiceComputer() throws Exception {
+		MutableContext mc = new SimpleMutableContext();
+		ServiceComputer<Callable> serviceComputer = new ServiceComputer<Callable>() {
+
+			@Override
+			public Callable compute(Context context, Class<Callable> type) {
+				return () -> "I'm computed...";
+			}
+			
+		};
+		mc.register(Callable.class, serviceComputer);
+		
+		Object raw = mc.get(Callable.class);		
+		assertTrue(raw instanceof ServiceComputer);
+		
+		Callable callable = mc.computingContext().get(Callable.class);		
+		assertEquals("I'm computed..." , callable.call());
 	}
 
 	@Test

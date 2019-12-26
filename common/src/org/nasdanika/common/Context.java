@@ -641,9 +641,14 @@ public interface Context extends Composeable<Context> {
 				return null;
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(Class<T> type) {
-				return Context.this.get(type);
+				T svc = Context.this.get(type);
+				if (svc instanceof ServiceComputer) {
+					return ((ServiceComputer<T>) svc).compute(this, type);
+				}
+				return svc;
 			}
 			
 			@Override
