@@ -103,7 +103,7 @@ public class NasdanikaLifecycleManagerProvider implements IEEFLifecycleManagerPr
 							contextAdapter);
 				}
 			} else if (RICH_TEXT_WIDGET_ID.equals(description.getIdentifier())) {
-				return new RichTextLifecycleManager(description, variableManager, interpreter, contextAdapter);
+				return new RichTextLifecycleManager(description, variableManager, interpreter, contextAdapter, target, eStructuralFeature);
 			}
 		}
 		throw new IllegalArgumentException("Don't know how to handle " + controlDescription.getIdentifier());

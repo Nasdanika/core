@@ -35,6 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 public class RichTextEditorExample {
@@ -46,7 +48,7 @@ public class RichTextEditorExample {
 
 		final Shell shell = new Shell(display);
 		shell.setText("SWT Rich Text Editor example");
-		shell.setSize(800, 600);
+		shell.setSize(800, 700);
 
 		shell.setLayout(new GridLayout(1, true));
 
@@ -63,21 +65,68 @@ public class RichTextEditorExample {
 
 	public void createControls(Composite parent) {
 		parent.setLayout(new GridLayout(1, true));
+		
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		
+		TabItem tbtmDesign = new TabItem(tabFolder, SWT.NONE);
+		tbtmDesign.setText("Design");
+		
+		TabItem tbtmSource = new TabItem(tabFolder, SWT.NONE);
+		tbtmSource.setText("Source");
+		
 
-		final RichTextEditor editor = new RichTextEditor(parent);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
+		RichTextEditorConfiguration config = new RichTextEditorConfiguration();
+		config.setOption(RichTextEditorConfiguration.TOOLBAR_GROUPS, "["
+//				+ "{ name: 'clipboard', groups: [ 'clipboard', 'undo', 'find' ] },"
+//				+ "{ name: 'other' },"
+//				+ "'/',"
+//				+ "{ name: 'document', groups: [ 'mode' ] },"
+				+ "{ name: 'paragraph', groups: [ 'list', 'indent', 'align', 'blocks' ] },"
+				+ "{ name: 'colors' },"
+//				+ "'/',"
+				+ "{ name: 'styles' },"
+				+ "{ name: 'links' },"
+				+ "{ name: 'insert' },"
+//				+ "{ name: 'tools' },"
+//				+ "'/',"
+//				+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }"
+				+ "]");
+		config.removeDefaultToolbarButton("Source");
+		
+		final RichTextEditor editor = new RichTextEditor(tabFolder, config);
+		tbtmDesign.setControl(editor);
+		
+		GridDataFactory grabBoth = GridDataFactory.fillDefaults().grab(true, true);
+		grabBoth.applyTo(tabFolder);
+//		grabBoth.applyTo(editor);
 
-		final Text htmlOutput = new Text(parent,
-				SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.READ_ONLY);
-		GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 100).applyTo(htmlOutput);
-
+		final Text htmlSource = new Text(tabFolder, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 100).applyTo(htmlSource);
+		
+		tbtmSource.setControl(htmlSource);		
+		
 		editor.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				htmlOutput.setText(editor.getText());
+				if (editor.isFocusControl()) {
+					htmlSource.setText(editor.getText());
+				}
 			}
+			
 		});
+		
+		htmlSource.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (htmlSource.isFocusControl()) {
+					editor.setText(htmlSource.getText());
+				}
+			}
+			
+		});
+		
 
 //		editor.addKeyListener(new KeyAdapter() {
 //

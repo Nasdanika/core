@@ -2,58 +2,77 @@ package org.nasdanika.eef.ext.widgets;
 
 import java.util.function.Consumer;
 
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.EEFWidgetDescription;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
 import org.eclipse.eef.core.api.EditingContextAdapter;
 import org.eclipse.eef.core.api.controllers.IEEFWidgetController;
 import org.eclipse.eef.ide.ui.api.widgets.AbstractEEFWidgetLifecycleManager;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
-import org.eclipse.nebula.widgets.richtext.toolbar.ToolbarConfiguration;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 
 
 public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager {
 
     private EEFCustomWidgetDescription description;
 
-    private TableViewer tableViewer;
-
-    private ComposedAdapterFactory composedAdapterFactory;
-
-    private SelectionListener onClickListener;
-
     private RichTextController controller;
 
     private Consumer<Object> newValueConsumer;
-    
+
+	private TabFolder tabFolder;
+
+	private EObject target;
+
+	private EStructuralFeature feature;
+
+	private Text htmlSource;
+
+	private RichTextEditor editor;
+	
     public RichTextLifecycleManager(
     		EEFCustomWidgetDescription description, 
     		IVariableManager variableManager, 
     		IInterpreter interpreter,
-            EditingContextAdapter contextAdapter) {
+            EditingContextAdapter contextAdapter,
+            EObject target,
+            EStructuralFeature feature) {
     	
         super(variableManager, interpreter, contextAdapter);
         this.description = description;
+        this.target = target;
+        this.feature = feature;
     }
 
     @Override
-    protected void createMainControl(Composite parent, IEEFFormContainer formContainer) {    	
+    protected void createMainControl(Composite parent, IEEFFormContainer formContainer) {
+		tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		
+		TabItem tbtmDesign = new TabItem(tabFolder, SWT.NONE);
+		tbtmDesign.setText("Design");
+		
+		TabItem tbtmSource = new TabItem(tabFolder, SWT.NONE);
+		tbtmSource.setText("Source");
+		
+		GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 800).applyTo(tabFolder);    	
+    	
 		RichTextEditorConfiguration config = new RichTextEditorConfiguration();
 		config.setOption(RichTextEditorConfiguration.TOOLBAR_GROUPS, "["
 //				+ "{ name: 'clipboard', groups: [ 'clipboard', 'undo', 'find' ] },"
@@ -63,88 +82,120 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 				+ "{ name: 'colors' },"
 //				+ "'/',"
 				+ "{ name: 'styles' },"
-				+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }"
+				+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },"
+				+ "'/',"
+				+ "{ name: 'links' },"
+				+ "{ name: 'insert' }"
 				+ "]");
-		final RichTextEditor editor = new RichTextEditor(parent, config);
-		GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 500).applyTo(editor);
+		editor = new RichTextEditor(tabFolder, config);
     	
-    	
-//        Table table = formContainer.getWidgetFactory().createTable(parent,
-//                SWT.READ_ONLY | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER | SWT.SINGLE);
-//        this.tableViewer = new TableViewer(table);
-        this.composedAdapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		tbtmDesign.setControl(editor);
+		
+//		GridDataFactory grabBoth = GridDataFactory.fillDefaults().grab(true, true);
+//		grabBoth.applyTo(tabFolder);
+//		grabBoth.applyTo(editor);
 
-//        this.tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-//        this.tableViewer.setLabelProvider(new DelegatingStyledCellLabelProvider(new AdapterFactoryLabelProvider.StyledLabelProvider(
-//                this.composedAdapterFactory, this.tableViewer)));
+		htmlSource = new Text(tabFolder, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 100).applyTo(htmlSource);
+		
+		tbtmSource.setControl(htmlSource);		
+		
+//		WritableValue<String> data = new WritableValue<String>();
+//		data.
+		
+		IObservableValue<String> textModifyObservable = WidgetProperties.text(SWT.Modify).observeDelayed(700, htmlSource);
+		
+		IChangeListener listener = new IChangeListener() {
+			
+			@Override
+			public void handleChange(ChangeEvent event) {
+				setValue(htmlSource.getText());				
+			}
+			
+		};
+		
+		textModifyObservable.addChangeListener(listener);
+		
+		editor.addModifyListener(new ModifyListener() {
 
-        this.controller = new RichTextController(description, variableManager, interpreter, editingContextAdapter);
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (editor.isFocusControl()) {
+					htmlSource.setText(editor.getText());
+				}
+			}
+			
+		});
+		
+		htmlSource.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (htmlSource.isFocusControl()) {
+					editor.setText(htmlSource.getText());
+				}
+			}
+			
+		});
+
+        this.controller = new RichTextController(description, variableManager, interpreter, editingContextAdapter, target, feature);
+    }
+    
+    private void setValue(String value) {
+    	editingContextAdapter.performModelChange(() -> target.eSet(feature, value));     		    	
     }
 
     @Override
     public void aboutToBeShown() {
         super.aboutToBeShown();
 
-//        this.newValueConsumer = (newValue) -> this.tableViewer.setInput(newValue);
-//        this.controller.onNewValue(this.newValueConsumer);
-
-//        this.onClickListener = new SelectionListener() {
-//            @Override
-//            public void widgetSelected(SelectionEvent event) {
-//                Object selection = ((IStructuredSelection) RichTextLifecycleManager.this.tableViewer.getSelection()).getFirstElement();
-//                RichTextLifecycleManager.this.controller.handleClick(selection);
-//            }
-//
-//            @Override
-//            public void widgetDefaultSelected(SelectionEvent event) {
-//                Object selection = ((IStructuredSelection) RichTextLifecycleManager.this.tableViewer.getSelection()).getFirstElement();
-//                RichTextLifecycleManager.this.controller.handleClick(selection);
-//            }
-//        };
-//        this.tableViewer.getTable().addSelectionListener(this.onClickListener);
+        this.newValueConsumer = (newValue) -> {
+			String text = newValue == null ? "" : String.valueOf(newValue);
+			// Updates are ignored if any of the controls is in focus.
+			if (!editor.isFocusControl() && !htmlSource.isFocusControl()) {
+				editor.setText(text);
+				htmlSource.setText(text);				
+			}
+        };
+        this.controller.onNewValue(this.newValueConsumer);
     }
 
     @Override
     public void refresh() {
         super.refresh();
-
-        this.controller.refresh();
+        controller.refresh();
     }
 
     @Override
     public void aboutToBeHidden() {
         super.aboutToBeHidden();
-//        this.controller.removeValueConsumer();
-//        this.newValueConsumer = null;
-
-//        this.tableViewer.getTable().removeSelectionListener(this.onClickListener);
-//        this.onClickListener = null;
+        this.controller.removeValueConsumer();
+        this.newValueConsumer = null;
     }
 
     @Override
     protected IEEFWidgetController getController() {
-        return this.controller;
+        return controller;
     }
 
     @Override
     protected EEFWidgetDescription getWidgetDescription() {
-        return this.description;
+        return description;
     }
 
     @Override
     protected Control getValidationControl() {
-        return this.tableViewer.getTable();
+        return tabFolder;
     }
 
     @Override
     public void dispose() {
         super.dispose();
-
-        this.composedAdapterFactory.dispose();
+        tabFolder.dispose();
     }
     
     @Override
     protected void setEnabled(boolean isEnabled) {
-//        this.tableViewer.getTable().setEnabled(isEnabled);
+    	tabFolder.setEnabled(isEnabled);
     }
 }
