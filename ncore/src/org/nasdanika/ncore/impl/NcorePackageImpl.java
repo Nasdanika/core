@@ -1901,6 +1901,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "category", "General"
 		   });
+		addAnnotation
+		  (getModelElement_Description(),
+		   source,
+		   new String[] {
+			   "content-type", "text/html"
+		   });
 	}
 
 	/**
