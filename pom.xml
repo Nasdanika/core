@@ -21,7 +21,7 @@
 	<repositories>
 		<repository>
 			<id>foundation</id>
-			<url>https://www.nasdanika.org/master/foundation-repository</url>
+			<url>https://www.nasdanika.org/develop/foundation-repository</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
