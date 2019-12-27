@@ -24,6 +24,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
@@ -90,18 +91,11 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 		editor = new RichTextEditor(tabFolder, config);
     	
 		tbtmDesign.setControl(editor);
-		
-//		GridDataFactory grabBoth = GridDataFactory.fillDefaults().grab(true, true);
-//		grabBoth.applyTo(tabFolder);
-//		grabBoth.applyTo(editor);
 
 		htmlSource = new Text(tabFolder, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().grab(true, false).hint(SWT.DEFAULT, 100).applyTo(htmlSource);
 		
 		tbtmSource.setControl(htmlSource);		
-		
-//		WritableValue<String> data = new WritableValue<String>();
-//		data.
 		
 		IObservableValue<String> textModifyObservable = WidgetProperties.text(SWT.Modify).observeDelayed(700, htmlSource);
 		
@@ -153,8 +147,10 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 			String text = newValue == null ? "" : String.valueOf(newValue);
 			// Updates are ignored if any of the controls is in focus.
 			if (!editor.isFocusControl() && !htmlSource.isFocusControl()) {
-				editor.setText(text);
-				htmlSource.setText(text);				
+				Display.getCurrent().asyncExec(() -> {
+					editor.setText(text);
+					htmlSource.setText(text);
+				});
 			}
         };
         this.controller.onNewValue(this.newValueConsumer);

@@ -1607,7 +1607,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getModelElement_Description(),
 		   source,
 		   new String[] {
-			   "documentation", "Description in markdown."
+			   "documentation", "Description in HTML."
 		   });
 		addAnnotation
 		  (namedElementEClass,
