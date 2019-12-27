@@ -39,6 +39,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.nasdanika.common.Util;
 
 /**
  * Common superclass of both the single and multi-valued reference lifecycle managers.
@@ -253,7 +254,7 @@ public abstract class AbstractNasdanikaExtReferenceLifecycleManager extends Abst
 	public void refresh() {
 		super.refresh();
 
-		if (ReferenceLifecycleManagerProvider.isBlank(this.description.getLabelExpression())) {
+		if (Util.isBlank(this.description.getLabelExpression())) {
 			Adapter adapter = this.composedAdapterFactory.adapt(this.target, IItemPropertySource.class);
 			if (adapter instanceof IItemPropertySource) {
 				IItemPropertySource propertySource = (IItemPropertySource) adapter;

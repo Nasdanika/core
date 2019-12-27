@@ -4,10 +4,10 @@
    <extension
          point="org.eclipse.eef.ide.ui.eefLifecycleManagerProvider">
       <descriptor
-            class="org.nasdanika.eef.ext.widgets.reference.ReferenceLifecycleManagerProvider"
-            description="Reference provider customizing object selection dialogs"
-            id="org.nasdanika.eef.ext.widgets.reference.ReferenceWidgetLifecycleManager"
-            label="Nasdanika Reference Widget Lifecycle Manager Provider">
+            class="org.nasdanika.eef.ext.widgets.NasdanikaLifecycleManagerProvider"
+            description="Provider of Nasdanika custom widgets"
+            id="org.nasdanika.eef.ext.widgets.NasdanikaWidgetLifecycleManager"
+            label="Nasdanika Widget Lifecycle Manager Provider">
       </descriptor>
    </extension>
 </plugin>

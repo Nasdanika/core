@@ -13,7 +13,7 @@
  * Contributors: Obeo - initial API and implementation
  *******************************************************************************/
 
-package org.nasdanika.eef.ext.widgets.reference;
+package org.nasdanika.eef.ext.widgets;
 
 import org.eclipse.eef.EEFControlDescription;
 import org.eclipse.eef.EEFCustomWidgetDescription;
@@ -28,6 +28,8 @@ import org.eclipse.sirius.common.interpreter.api.IEvaluationResult;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.nasdanika.common.Util;
+import org.nasdanika.eef.ext.widgets.reference.MultipleReferenceLifecycleManager;
+import org.nasdanika.eef.ext.widgets.reference.SingleReferenceLifecycleManager;
 
 /**
  * Customization of EEFExtReferenceLifecycleManagerProvider to provide tree features selection dialogs instead of FeatureEditorDialog.
@@ -37,9 +39,10 @@ import org.nasdanika.common.Util;
  * @author sbegaudeau
  * @author Pavel Vlasov
  */
-public class ReferenceLifecycleManagerProvider implements IEEFLifecycleManagerProvider {
+public class NasdanikaLifecycleManagerProvider implements IEEFLifecycleManagerProvider {
 	
-	private static String WIDGET_ID = "nasdanika_reference_widget";
+	private static String REFERENCE_WIDGET_ID = "nasdanika_reference_widget";
+	private static String RICH_TEXT_WIDGET_ID = "nasdanika_rich_text_widget";
 
 	/**
 	 * {@inheritDoc}
@@ -48,7 +51,10 @@ public class ReferenceLifecycleManagerProvider implements IEEFLifecycleManagerPr
 	 */
 	@Override
 	public boolean canHandle(EEFControlDescription controlDescription) {
-		return controlDescription instanceof EEFCustomWidgetDescription && WIDGET_ID.equals(controlDescription.getIdentifier());
+		return controlDescription instanceof EEFCustomWidgetDescription && (
+				REFERENCE_WIDGET_ID.equals(controlDescription.getIdentifier())
+				|| RICH_TEXT_WIDGET_ID.equals(controlDescription.getIdentifier())
+				);
 	}
 
 	/**
@@ -69,25 +75,26 @@ public class ReferenceLifecycleManagerProvider implements IEEFLifecycleManagerPr
 			return null;
 		}
 
-		IEEFLifecycleManager lifecycleManager = null;
 		EEFCustomWidgetDescription description = (EEFCustomWidgetDescription) controlDescription;
 
 		EObject target = this.getTarget(description, interpreter, variableManager);
-		String referenceName = this.getReferenceName(description, interpreter, variableManager);
-		if (target != null && !Util.isBlank(referenceName)) {
-			EStructuralFeature eStructuralFeature = target.eClass().getEStructuralFeature(referenceName);
+		String featureName = this.getFeatureName(description, interpreter, variableManager);
+		if (target != null && !Util.isBlank(featureName)) {
+			EStructuralFeature eStructuralFeature = target.eClass().getEStructuralFeature(featureName);			
 			if (eStructuralFeature instanceof EReference) {
-				EReference eReference = (EReference) eStructuralFeature;
-				if (eReference.isMany()) {
-					lifecycleManager = new MultipleReferenceLifecycleManager(
-							description, 
-							target, 
-							eReference, 
-							variableManager, 
-							interpreter,
-							contextAdapter);
-				} else {
-					lifecycleManager = new SingleReferenceLifecycleManager(
+				if (REFERENCE_WIDGET_ID.equals(description.getIdentifier())) {
+					EReference eReference = (EReference) eStructuralFeature;
+					if (eReference.isMany()) {
+						return new MultipleReferenceLifecycleManager(
+								description, 
+								target, 
+								eReference, 
+								variableManager, 
+								interpreter,
+								contextAdapter);
+					}
+					
+					return new SingleReferenceLifecycleManager(
 							description, 
 							target, 
 							eReference, 
@@ -95,9 +102,11 @@ public class ReferenceLifecycleManagerProvider implements IEEFLifecycleManagerPr
 							interpreter,
 							contextAdapter);
 				}
+			} else if (RICH_TEXT_WIDGET_ID.equals(description.getIdentifier())) {
+				return new RichTextLifecycleManager(description, target, eStructuralFeature, variableManager, interpreter, contextAdapter);
 			}
 		}
-		return lifecycleManager;
+		throw new IllegalArgumentException("Don't know how to handle " + controlDescription.getIdentifier());
 	}
 
 	/**
@@ -132,7 +141,7 @@ public class ReferenceLifecycleManagerProvider implements IEEFLifecycleManagerPr
 	 *            The variable manager
 	 * @return The name of the reference
 	 */
-	private String getReferenceName(EEFCustomWidgetDescription description, IInterpreter interpreter, IVariableManager variableManager) {
+	private String getFeatureName(EEFCustomWidgetDescription description, IInterpreter interpreter, IVariableManager variableManager) {
 		IEvaluationResult evaluationResult = interpreter.evaluateExpression(variableManager.getVariables(), "aql:eStructuralFeature.name");
 		if (evaluationResult.success()) {
 			return evaluationResult.asString();
