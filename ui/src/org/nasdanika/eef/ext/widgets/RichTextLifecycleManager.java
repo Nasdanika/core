@@ -2,19 +2,15 @@ package org.nasdanika.eef.ext.widgets;
 
 import java.util.function.Consumer;
 
-import org.eclipse.core.databinding.observable.ChangeEvent;
-import org.eclipse.core.databinding.observable.IChangeListener;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.EEFWidgetDescription;
-import org.eclipse.eef.common.ui.api.EEFWidgetFactory;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
 import org.eclipse.eef.core.api.EditingContextAdapter;
 import org.eclipse.eef.core.api.controllers.IEEFWidgetController;
 import org.eclipse.eef.ide.ui.api.widgets.AbstractEEFWidgetLifecycleManager;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
@@ -22,17 +18,11 @@ import org.eclipse.nebula.widgets.richtext.toolbar.ToolbarButton;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 
 
 public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager {
@@ -43,13 +33,9 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 
     private Consumer<Object> newValueConsumer;
 
-	private CTabFolder tabFolder;
-
 	private EObject target;
 
 	private EStructuralFeature feature;
-
-	private StyledText htmlSource;
 
 	private RichTextEditor editor;
 	
@@ -69,23 +55,6 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 
     @Override
     protected void createMainControl(Composite parent, IEEFFormContainer formContainer) {
-		EEFWidgetFactory widgetFactory = formContainer.getWidgetFactory();
-//		ScrolledPageBook pageBook = widgetFactory.createPageBook(parent, SWT.BORDER);
-//		pageBook.
-		
-		
-		
-		tabFolder = widgetFactory.createTabFolder(parent, SWT.BOTTOM | SWT.BORDER);		
-		GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 800).applyTo(tabFolder);
-		
-//		widgetFactory.cre
-		
-		CTabItem tbtmDesign = widgetFactory.createTabItem(tabFolder, SWT.NONE);
-		tbtmDesign.setText("Design");
-		
-		CTabItem tbtmSource = widgetFactory.createTabItem(tabFolder, SWT.NONE);
-		tbtmSource.setText("Source");		
-    	
 		RichTextEditorConfiguration config = new RichTextEditorConfiguration();
 		config.setOption(RichTextEditorConfiguration.TOOLBAR_GROUPS, "["
 //				+ "{ name: 'document', groups: [ 'mode' ] },"
@@ -102,76 +71,39 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 				+ "{ name: 'insert' }"
 				+ "]");
 		
-		ToolbarButton sourceButton = new ToolbarButton("Source", "souce", "Source", "insert", null) {
+		ToolbarButton sourceButton = new ToolbarButton("HTML Source", "htmlSource", "HTML Source", "insert", getClass().getResource("source.png")) {
 			
 			@Override
 			public Object execute() {
-				System.out.println("Hi!");
-				// TODO Auto-generated method stub
+				MultiLineInputDialog sourceDialog = new MultiLineInputDialog(editor.getShell(), "HTML Source", "Edit HTML Source", editor.getText(), null);
+				int result = sourceDialog.open();
+				if (result == Dialog.OK) {
+					editor.setText(sourceDialog.getValue());
+				}
 				return super.execute();
 			}
 			
 		};
 		config.addToolbarButton(sourceButton);
-		editor = new RichTextEditor(tabFolder, config);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
-    	
-		tbtmDesign.setControl(editor);
 		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setExpandHorizontal(true);
-		scrolledComposite.setExpandVertical(true);
-
-//		ScrolledComposite sourceComposite = widgetFactory.createScrolledComposite(tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
-//		sourceComposite.setExpandHorizontal(true);
-//		sourceComposite.setExpandVertical(true);
-		htmlSource = widgetFactory.createStyledText(scrolledComposite, SWT.BORDER | SWT.WRAP /* | SWT.H_SCROLL | SWT.V_SCROLL */ | SWT.CANCEL | SWT.MULTI);
-//		htmlSource.setLayoutData(new GridData(GridData.FILL_BOTH))		
-		scrolledComposite.setContent(htmlSource);
-//		scrolledComposite.setMinSize(htmlSource.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		editor = new RichTextEditor(parent, config);
+		GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, 800).applyTo(editor);
 		
-		GridDataFactory.fillDefaults().grab(false, true).applyTo(scrolledComposite);
-//		htmlSource.setM
-		
-		tbtmSource.setControl(scrolledComposite);		
-		
-		IObservableValue<String> textModifyObservable = WidgetProperties.text(SWT.Modify).observeDelayed(700, htmlSource);
-		
-		IChangeListener listener = new IChangeListener() {
+		FocusListener focusListener = new FocusListener() {
 			
 			@Override
-			public void handleChange(ChangeEvent event) {
-				setValue(htmlSource.getText());				
+			public void focusLost(FocusEvent e) {
+				setValue(editor.getText());				
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// NOP
 			}
 			
 		};
 		
-		textModifyObservable.addChangeListener(listener);
-		
-		editor.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (editor.isFocusControl()) {
-					htmlSource.setText(editor.getText());
-				}
-			}
-			
-		});
-		
-		htmlSource.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-//				if (htmlSource.isFocusControl()) {
-//					editor.setText(htmlSource.getText());
-//				}
-			}
-			
-		});
-		
-		tabFolder.setSelection(tbtmDesign);
-		tabFolder.pack();
+		editor.addFocusListener(focusListener);
 
         this.controller = new RichTextController(description, variableManager, interpreter, editingContextAdapter, target, feature);
     }
@@ -186,17 +118,11 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 
         this.newValueConsumer = (newValue) -> {
 			String text = newValue == null ? "" : String.valueOf(newValue);
-			// Updates are ignored if any of the controls is in focus.
-			if (!editor.isFocusControl() && !htmlSource.isFocusControl()) {
-				Display.getCurrent().asyncExec(() -> {
-					if (!text.equals(editor.getText())) {
-						editor.setText(text);
-					}
-					if (!text.equals(htmlSource.getText())) {
-						htmlSource.setText(text);
-					}
-				});
-			}
+			Display.getCurrent().asyncExec(() -> {
+				if (!text.equals(editor.getText())) {
+					editor.setText(text);
+				}
+			});
         };
         this.controller.onNewValue(this.newValueConsumer);
     }
@@ -226,17 +152,17 @@ public class RichTextLifecycleManager extends AbstractEEFWidgetLifecycleManager 
 
     @Override
     protected Control getValidationControl() {
-        return tabFolder;
+        return editor;
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        tabFolder.dispose();
+        editor.dispose();
     }
     
     @Override
     protected void setEnabled(boolean isEnabled) {
-    	tabFolder.setEnabled(isEnabled);
+    	editor.setEnabled(isEnabled);
     }
 }
