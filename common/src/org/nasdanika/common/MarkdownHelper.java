@@ -46,6 +46,9 @@ public class MarkdownHelper {
 	}
 			
 	public String markdownToHtml(String markdown) {
+		if (Util.isBlank(markdown)) {
+			return "";
+		}
 		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown));
 		return createMarkdownHtmlRenderer().render(document);
 	}		

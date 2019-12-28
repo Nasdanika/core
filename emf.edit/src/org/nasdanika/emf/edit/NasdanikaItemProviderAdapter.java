@@ -36,6 +36,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
+import org.nasdanika.common.Util;
 import org.nasdanika.emf.LocaleLanguageResourceLocator;
 import org.nasdanika.emf.localization.RussianResourceLocator;
 
@@ -56,7 +57,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	public String getDescription(EModelElement modelElement) {
 		String markdown = getResourceLocator(modelElement).getString("documentation", EcoreUtil.getDocumentation(modelElement));
 
-		if (markdown == null || markdown.trim().isEmpty()) {
+		if (Util.isBlank(markdown)) {
 			return null;
 		}
 	
