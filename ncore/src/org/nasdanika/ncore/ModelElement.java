@@ -56,12 +56,12 @@ public interface ModelElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Description in HTML.
+	 * Model element description in markdown.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Description</em>' attribute.
 	 * @see #setDescription(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Description()
-	 * @model annotation="urn:org.nasdanika content-type='text/html'"
+	 * @model
 	 * @generated
 	 */
 	String getDescription();
