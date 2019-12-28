@@ -624,6 +624,29 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Html} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HtmlItemProvider htmlItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Html}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHtmlAdapter() {
+		if (htmlItemProvider == null) {
+			htmlItemProvider = new HtmlItemProvider(this);
+		}
+
+		return htmlItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -752,6 +775,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (httpCallItemProvider != null) httpCallItemProvider.dispose();
 		if (restOperationItemProvider != null) restOperationItemProvider.dispose();
 		if (restFunctionItemProvider != null) restFunctionItemProvider.dispose();
+		if (htmlItemProvider != null) htmlItemProvider.dispose();
 	}
 
 }

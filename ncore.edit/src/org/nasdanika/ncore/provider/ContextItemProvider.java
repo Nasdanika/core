@@ -238,6 +238,11 @@ public class ContextItemProvider
 			(createChildParameter
 				(NcorePackage.Literals.CONTEXT__ELEMENTS,
 				 NcoreFactory.eINSTANCE.createRestFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.CONTEXT__ELEMENTS,
+				 NcoreFactory.eINSTANCE.createHtml()));
 	}
 
 }

@@ -124,5 +124,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//RestOperation/arguments"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//RestFunction"/>
+    <genClasses ecoreClass="ncore.ecore#//Html">
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//Html/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Html/interpolate"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

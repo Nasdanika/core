@@ -240,6 +240,11 @@ public class OperationItemProvider extends SupplierItemProvider {
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createRestFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.OPERATION__ARGUMENTS,
+				 NcoreFactory.eINSTANCE.createHtml()));
 	}
 
 }

@@ -18,6 +18,7 @@ import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.Map;
@@ -399,6 +400,16 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(restFunction);
 				if (result == null) result = caseModelElement(restFunction);
 				if (result == null) result = caseISupplierFactory(restFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.HTML: {
+				Html html = (Html)theEObject;
+				T1 result = caseHtml(html);
+				if (result == null) result = caseSupplier(html);
+				if (result == null) result = caseTypedElement(html);
+				if (result == null) result = caseModelElement(html);
+				if (result == null) result = caseISupplierFactory(html);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -928,6 +939,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseRestFunction(RestFunction object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Html</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Html</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseHtml(Html object) {
 		return null;
 	}
 

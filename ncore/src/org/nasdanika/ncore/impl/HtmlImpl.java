@@ -2,39 +2,37 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Value;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Value</b></em>'.
+ * An implementation of the model object '<em><b>Html</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ValueImpl#getValue <em>Value</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.ValueImpl#isInterpolate <em>Interpolate</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.HtmlImpl#getContent <em>Content</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.HtmlImpl#isInterpolate <em>Interpolate</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ValueImpl extends SupplierImpl implements Value {
+public class HtmlImpl extends SupplierImpl implements Html {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * The default value of the '{@link #getContent() <em>Content</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getValue()
+	 * @see #getContent()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = null;
+	protected static final String CONTENT_EDEFAULT = null;
 
 	/**
 	 * The default value of the '{@link #isInterpolate() <em>Interpolate</em>}' attribute.
@@ -51,7 +49,7 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ValueImpl() {
+	protected HtmlImpl() {
 		super();
 	}
 
@@ -62,7 +60,7 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.VALUE;
+		return NcorePackage.Literals.HTML;
 	}
 
 	/**
@@ -71,8 +69,8 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 * @generated
 	 */
 	@Override
-	public String getValue() {
-		return (String)eDynamicGet(NcorePackage.VALUE__VALUE, NcorePackage.Literals.VALUE__VALUE, true, true);
+	public String getContent() {
+		return (String)eDynamicGet(NcorePackage.HTML__CONTENT, NcorePackage.Literals.HTML__CONTENT, true, true);
 	}
 
 	/**
@@ -81,8 +79,8 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 * @generated
 	 */
 	@Override
-	public void setValue(String newValue) {
-		eDynamicSet(NcorePackage.VALUE__VALUE, NcorePackage.Literals.VALUE__VALUE, newValue);
+	public void setContent(String newContent) {
+		eDynamicSet(NcorePackage.HTML__CONTENT, NcorePackage.Literals.HTML__CONTENT, newContent);
 	}
 
 	/**
@@ -92,7 +90,7 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 */
 	@Override
 	public boolean isInterpolate() {
-		return (Boolean)eDynamicGet(NcorePackage.VALUE__INTERPOLATE, NcorePackage.Literals.VALUE__INTERPOLATE, true, true);
+		return (Boolean)eDynamicGet(NcorePackage.HTML__INTERPOLATE, NcorePackage.Literals.HTML__INTERPOLATE, true, true);
 	}
 
 	/**
@@ -102,7 +100,7 @@ public class ValueImpl extends SupplierImpl implements Value {
 	 */
 	@Override
 	public void setInterpolate(boolean newInterpolate) {
-		eDynamicSet(NcorePackage.VALUE__INTERPOLATE, NcorePackage.Literals.VALUE__INTERPOLATE, newInterpolate);
+		eDynamicSet(NcorePackage.HTML__INTERPOLATE, NcorePackage.Literals.HTML__INTERPOLATE, newInterpolate);
 	}
 
 	/**
@@ -113,9 +111,9 @@ public class ValueImpl extends SupplierImpl implements Value {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.VALUE__VALUE:
-				return getValue();
-			case NcorePackage.VALUE__INTERPOLATE:
+			case NcorePackage.HTML__CONTENT:
+				return getContent();
+			case NcorePackage.HTML__INTERPOLATE:
 				return isInterpolate();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -129,10 +127,10 @@ public class ValueImpl extends SupplierImpl implements Value {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.VALUE__VALUE:
-				setValue((String)newValue);
+			case NcorePackage.HTML__CONTENT:
+				setContent((String)newValue);
 				return;
-			case NcorePackage.VALUE__INTERPOLATE:
+			case NcorePackage.HTML__INTERPOLATE:
 				setInterpolate((Boolean)newValue);
 				return;
 		}
@@ -147,10 +145,10 @@ public class ValueImpl extends SupplierImpl implements Value {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.VALUE__VALUE:
-				setValue(VALUE_EDEFAULT);
+			case NcorePackage.HTML__CONTENT:
+				setContent(CONTENT_EDEFAULT);
 				return;
-			case NcorePackage.VALUE__INTERPOLATE:
+			case NcorePackage.HTML__INTERPOLATE:
 				setInterpolate(INTERPOLATE_EDEFAULT);
 				return;
 		}
@@ -165,22 +163,21 @@ public class ValueImpl extends SupplierImpl implements Value {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.VALUE__VALUE:
-				return VALUE_EDEFAULT == null ? getValue() != null : !VALUE_EDEFAULT.equals(getValue());
-			case NcorePackage.VALUE__INTERPOLATE:
+			case NcorePackage.HTML__CONTENT:
+				return CONTENT_EDEFAULT == null ? getContent() != null : !CONTENT_EDEFAULT.equals(getContent());
+			case NcorePackage.HTML__INTERPOLATE:
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 	
-	// TODO - proper implementation.
 	@Override
 	public Supplier<Object> create(Context context) throws Exception {
 		return new Supplier<Object>() {
 
 			@Override
 			public Object execute(ProgressMonitor progressMonitor) throws Exception {
-				return isInterpolate() ? context.interpolate(getValue()) : getValue();
+				return isInterpolate() ? context.interpolate(getContent()) : getContent();
 			}
 
 			@Override
@@ -196,4 +193,4 @@ public class ValueImpl extends SupplierImpl implements Value {
 		};
 	}
 
-} //ValueImpl
+} //HtmlImpl

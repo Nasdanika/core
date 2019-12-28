@@ -23,6 +23,7 @@ import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
 import org.nasdanika.ncore.List;
@@ -187,6 +188,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateRestOperation((RestOperation)value, diagnostics, context);
 			case NcorePackage.REST_FUNCTION:
 				return validateRestFunction((RestFunction)value, diagnostics, context);
+			case NcorePackage.HTML:
+				return validateHtml((Html)value, diagnostics, context);
 			case NcorePackage.HTTP_METHOD:
 				return validateHttpMethod((HttpMethod)value, diagnostics, context);
 			case NcorePackage.ICONTEXT:
@@ -544,6 +547,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateRestFunction(RestFunction restFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(restFunction, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateHtml(Html html, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(html, diagnostics, context);
 	}
 
 	/**

@@ -18,6 +18,7 @@ import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.Map;
@@ -235,6 +236,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseRestFunction(RestFunction object) {
 				return createRestFunctionAdapter();
+			}
+			@Override
+			public Adapter caseHtml(Html object) {
+				return createHtmlAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -743,6 +748,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRestFunctionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Html <em>Html</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Html
+	 * @generated
+	 */
+	public Adapter createHtmlAdapter() {
 		return null;
 	}
 

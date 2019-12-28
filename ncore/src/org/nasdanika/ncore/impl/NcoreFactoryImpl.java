@@ -15,6 +15,7 @@ import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Function;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
 import org.nasdanika.ncore.List;
@@ -105,6 +106,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.HTTP_CALL: return createHttpCall();
 			case NcorePackage.REST_OPERATION: return createRestOperation();
 			case NcorePackage.REST_FUNCTION: return createRestFunction();
+			case NcorePackage.HTML: return createHtml();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -410,6 +412,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public RestFunction createRestFunction() {
 		RestFunctionImpl restFunction = new RestFunctionImpl();
 		return restFunction;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Html createHtml() {
+		HtmlImpl html = new HtmlImpl();
+		return html;
 	}
 
 	/**

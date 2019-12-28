@@ -238,6 +238,15 @@ public interface NcoreFactory extends EFactory {
 	RestFunction createRestFunction();
 
 	/**
+	 * Returns a new object of class '<em>Html</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Html</em>'.
+	 * @generated
+	 */
+	Html createHtml();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

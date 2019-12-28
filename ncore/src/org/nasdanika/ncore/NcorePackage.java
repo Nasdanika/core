@@ -2377,6 +2377,97 @@ public interface NcorePackage extends EPackage {
 	int REST_FUNCTION_OPERATION_COUNT = REST_OPERATION_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HtmlImpl <em>Html</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.HtmlImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHtml()
+	 * @generated
+	 */
+	int HTML = 35;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__TITLE = SUPPLIER__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__DESCRIPTION = SUPPLIER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__TYPE = SUPPLIER__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Required</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__REQUIRED = SUPPLIER__REQUIRED;
+
+	/**
+	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__IMPLEMENTATION = SUPPLIER__IMPLEMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Content</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__CONTENT = SUPPLIER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Interpolate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__INTERPOLATE = SUPPLIER_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Html</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_FEATURE_COUNT = SUPPLIER_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Html</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_OPERATION_COUNT = SUPPLIER_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2384,7 +2475,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 35;
+	int HTTP_METHOD = 36;
 
 	/**
 	 * The meta object id for the '<em>IContext</em>' data type.
@@ -2394,7 +2485,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIContext()
 	 * @generated
 	 */
-	int ICONTEXT = 36;
+	int ICONTEXT = 37;
 
 
 	/**
@@ -2405,7 +2496,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getException()
 	 * @generated
 	 */
-	int EXCEPTION = 37;
+	int EXCEPTION = 38;
 
 
 	/**
@@ -3161,6 +3252,38 @@ public interface NcorePackage extends EPackage {
 	EClass getRestFunction();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Html <em>Html</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Html</em>'.
+	 * @see org.nasdanika.ncore.Html
+	 * @generated
+	 */
+	EClass getHtml();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Html#getContent <em>Content</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Content</em>'.
+	 * @see org.nasdanika.ncore.Html#getContent()
+	 * @see #getHtml()
+	 * @generated
+	 */
+	EAttribute getHtml_Content();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Html#isInterpolate <em>Interpolate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Interpolate</em>'.
+	 * @see org.nasdanika.ncore.Html#isInterpolate()
+	 * @see #getHtml()
+	 * @generated
+	 */
+	EAttribute getHtml_Interpolate();
+
+	/**
 	 * Returns the meta object for enum '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3852,6 +3975,32 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass REST_FUNCTION = eINSTANCE.getRestFunction();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.HtmlImpl <em>Html</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.HtmlImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHtml()
+		 * @generated
+		 */
+		EClass HTML = eINSTANCE.getHtml();
+
+		/**
+		 * The meta object literal for the '<em><b>Content</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HTML__CONTENT = eINSTANCE.getHtml_Content();
+
+		/**
+		 * The meta object literal for the '<em><b>Interpolate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HTML__INTERPOLATE = eINSTANCE.getHtml_Interpolate();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.

@@ -25,6 +25,7 @@ import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
+import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
 import org.nasdanika.ncore.List;
@@ -300,6 +301,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass restFunctionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass htmlEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1109,6 +1117,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getHtml() {
+		return htmlEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHtml_Content() {
+		return (EAttribute)htmlEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHtml_Interpolate() {
+		return (EAttribute)htmlEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getHttpMethod() {
 		return httpMethodEEnum;
 	}
@@ -1268,6 +1306,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		restFunctionEClass = createEClass(REST_FUNCTION);
 
+		htmlEClass = createEClass(HTML);
+		createEAttribute(htmlEClass, HTML__CONTENT);
+		createEAttribute(htmlEClass, HTML__INTERPOLATE);
+
 		// Create enums
 		httpMethodEEnum = createEEnum(HTTP_METHOD);
 
@@ -1424,6 +1466,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
 		restFunctionEClass.getEGenericSuperTypes().add(g1);
+		htmlEClass.getESuperTypes().add(this.getSupplier());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1552,6 +1595,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getRestOperation_Arguments(), g1, null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(restFunctionEClass, RestFunction.class, "RestFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(htmlEClass, Html.class, "Html", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getHtml_Content(), ecorePackage.getEString(), "content", null, 0, 1, Html.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getHtml_Interpolate(), ecorePackage.getEBoolean(), "interpolate", "true", 0, 1, Html.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(httpMethodEEnum, HttpMethod.class, "HttpMethod");
@@ -1885,6 +1932,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "documentation", "Function is a named operation."
 		   });
+		addAnnotation
+		  (htmlEClass,
+		   source,
+		   new String[] {
+			   "documentation", "HTML text."
+		   });
+		addAnnotation
+		  (getHtml_Content(),
+		   source,
+		   new String[] {
+			   "documentation", "HTML content"
+		   });
+		addAnnotation
+		  (getHtml_Interpolate(),
+		   source,
+		   new String[] {
+			   "documentation", "If ``true`` (default) the value is interpolated."
+		   });
 	}
 
 	/**
@@ -1903,6 +1968,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   });
 		addAnnotation
 		  (getModelElement_Description(),
+		   source,
+		   new String[] {
+			   "content-type", "text/html"
+		   });
+		addAnnotation
+		  (getHtml_Content(),
 		   source,
 		   new String[] {
 			   "content-type", "text/html"
