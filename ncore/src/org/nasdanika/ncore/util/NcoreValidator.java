@@ -2,7 +2,9 @@
  */
 package org.nasdanika.ncore.util;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
@@ -17,6 +19,7 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
@@ -483,7 +486,41 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateMap(org.nasdanika.ncore.Map map, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(map, diagnostics, context);
+		if (!validate_NoCircularContainment(map, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(map, diagnostics, context);
+		if (result || diagnostics != null) result &= validateMap_entries(map, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the entries constraint of '<em>Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean validateMap_entries(org.nasdanika.ncore.Map map, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (diagnostics != null) {			
+			Set<String> names = new HashSet<>();
+			boolean ret = true;
+			for (Entry<?> entry: map.getEntries()) {
+				if (entry.isEnabled()) {
+					DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, entry);
+					if (!names.add(entry.getName())) {
+						helper.error("Duplicate entry: "+entry.getName(), NcorePackage.Literals.NAMED_ELEMENT__NAME);
+						ret = false;
+					}
+				}
+			}
+			return ret;
+		}
+		return true;
 	}
 
 	/**
@@ -519,7 +556,17 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateObject(org.nasdanika.ncore.Object object, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(object, diagnostics, context);
+		if (!validate_NoCircularContainment(object, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(object, diagnostics, context);
+		if (result || diagnostics != null) result &= validateMap_entries(object, diagnostics, context);
+		return result;
 	}
 
 	/**

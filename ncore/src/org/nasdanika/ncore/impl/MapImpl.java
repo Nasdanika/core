@@ -140,7 +140,9 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 		MapCompoundSupplier<String,Object> ret = new MapCompoundSupplier<>(getTitle());
 		
 		for (Entry<Object> e: getEntries()) {
-			ret.put(e.getName(), e.create(context));
+			if (e.isEnabled()) {
+				ret.put(e.getName(), e.create(context));
+			}
 		}
 		return ret;
 	}

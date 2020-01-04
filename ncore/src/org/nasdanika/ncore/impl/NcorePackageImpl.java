@@ -2006,6 +2006,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "constraints", "target"
 		   });
+		addAnnotation
+		  (mapEClass,
+		   source,
+		   new String[] {
+			   "constraints", "entries"
+		   });
 	}
 
 } //NcorePackageImpl

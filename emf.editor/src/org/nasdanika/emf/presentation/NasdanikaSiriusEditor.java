@@ -713,7 +713,7 @@ public class NasdanikaSiriusEditor
 		selectionViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		selectionViewer.setUseHashlookup(true);
 
-		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider(getAdapterFactory()), new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
+		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(getAdapterFactory(), selectionViewer), new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
 
 		selectionViewer.setInput(getEditingDomain().getResourceSet());
 		ViewerFilter filter = new ViewerFilter() {

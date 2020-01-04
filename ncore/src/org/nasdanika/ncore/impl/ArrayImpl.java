@@ -137,10 +137,10 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 
 	@Override
 	public Supplier<EList<Object>> create(Context context) throws Exception {
+		@SuppressWarnings("resource")
 		ListCompoundSupplier<Object> ret = new ListCompoundSupplier<Object>(getTitle());
 		for (SupplierFactory<Object> e: getElements()) {
-			Supplier<Object> child = e.create(context);
-			ret.add(child);
+			ret.add(e.create(context));
 		}
 		
 		return ret.then(BasicEList::new);

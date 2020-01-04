@@ -25,6 +25,7 @@ import org.nasdanika.common.SupplierFactory;
  *
  * @see org.nasdanika.ncore.NcorePackage#getMap()
  * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='entries'"
  * @generated
  */
 public interface Map extends ModelElement, SupplierFactory<java.util.Map<String, Object>> {
