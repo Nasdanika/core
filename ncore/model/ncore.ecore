@@ -254,6 +254,12 @@
       <details key="documentation" value="Command factory with an name."/>
     </eAnnotations>
     <eTypeParameters name="T"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If this attribute is set to ``false`` the entry is &quot;commented out&quot; - not included into its container result."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//NamedElement"/>
     <eGenericSuperTypes eClassifier="#//ISupplierFactory">
       <eTypeArguments eTypeParameter="#//Entry/T"/>

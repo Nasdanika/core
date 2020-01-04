@@ -46,6 +46,7 @@ public class SupplierEntryItemProvider extends SupplierItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -68,6 +69,27 @@ public class SupplierEntryItemProvider extends SupplierItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Enabled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	protected void addEnabledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor(
+				 getResourceLocator(),
+				 getString("_UI_Entry_enabled_feature"),
+				 NcorePackage.Literals.ENTRY__ENABLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -121,6 +143,7 @@ public class SupplierEntryItemProvider extends SupplierItemProvider {
 
 		switch (notification.getFeatureID(SupplierEntry.class)) {
 			case NcorePackage.SUPPLIER_ENTRY__NAME:
+			case NcorePackage.SUPPLIER_ENTRY__ENABLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -1593,13 +1593,22 @@ public interface NcorePackage extends EPackage {
 	int ENTRY__NAME = NAMED_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__ENABLED = NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ENTRY_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Entry</em>' class.
@@ -1656,13 +1665,22 @@ public interface NcorePackage extends EPackage {
 	int TYPED_ENTRY__NAME = TYPED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TYPED_ENTRY__ENABLED = TYPED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Typed Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 1;
+	int TYPED_ENTRY_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Typed Entry</em>' class.
@@ -1738,13 +1756,22 @@ public interface NcorePackage extends EPackage {
 	int SUPPLIER_ENTRY__NAME = SUPPLIER_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUPPLIER_ENTRY__ENABLED = SUPPLIER_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Supplier Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUPPLIER_ENTRY_FEATURE_COUNT = SUPPLIER_FEATURE_COUNT + 1;
+	int SUPPLIER_ENTRY_FEATURE_COUNT = SUPPLIER_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Supplier Entry</em>' class.
@@ -1873,13 +1900,22 @@ public interface NcorePackage extends EPackage {
 	int PROPERTY__NAME = VALUE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__ENABLED = VALUE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Property</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_FEATURE_COUNT = VALUE_FEATURE_COUNT + 1;
+	int PROPERTY_FEATURE_COUNT = VALUE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Property</em>' class.
@@ -1954,13 +1990,22 @@ public interface NcorePackage extends EPackage {
 	int FUNCTION__NAME = OPERATION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FUNCTION__ENABLED = OPERATION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Function</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION_FEATURE_COUNT = OPERATION_FEATURE_COUNT + 1;
+	int FUNCTION_FEATURE_COUNT = OPERATION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Function</em>' class.
@@ -2008,13 +2053,22 @@ public interface NcorePackage extends EPackage {
 	int LIST__NAME = ARRAY_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__ENABLED = ARRAY_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>List</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_FEATURE_COUNT = ARRAY_FEATURE_COUNT + 1;
+	int LIST_FEATURE_COUNT = ARRAY_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>List</em>' class.
@@ -2062,13 +2116,22 @@ public interface NcorePackage extends EPackage {
 	int OBJECT__NAME = MAP_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OBJECT__ENABLED = MAP_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OBJECT_FEATURE_COUNT = MAP_FEATURE_COUNT + 1;
+	int OBJECT_FEATURE_COUNT = MAP_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Object</em>' class.
@@ -2359,13 +2422,22 @@ public interface NcorePackage extends EPackage {
 	int REST_FUNCTION__NAME = REST_OPERATION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REST_FUNCTION__ENABLED = REST_OPERATION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Rest Function</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REST_FUNCTION_FEATURE_COUNT = REST_OPERATION_FEATURE_COUNT + 1;
+	int REST_FUNCTION_FEATURE_COUNT = REST_OPERATION_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Rest Function</em>' class.
@@ -3062,6 +3134,17 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Entry#isEnabled <em>Enabled</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Enabled</em>'.
+	 * @see org.nasdanika.ncore.Entry#isEnabled()
+	 * @see #getEntry()
+	 * @generated
+	 */
+	EAttribute getEntry_Enabled();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.TypedEntry <em>Typed Entry</em>}'.
@@ -3811,6 +3894,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ENTRY = eINSTANCE.getEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTRY__ENABLED = eINSTANCE.getEntry_Enabled();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.

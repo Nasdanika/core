@@ -937,6 +937,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getEntry_Enabled() {
+		return (EAttribute)entryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTypedEntry() {
 		return typedEntryEClass;
 	}
@@ -1277,6 +1287,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEReference(contextEClass, CONTEXT__ELEMENTS);
 
 		entryEClass = createEClass(ENTRY);
+		createEAttribute(entryEClass, ENTRY__ENABLED);
 
 		typedEntryEClass = createEClass(TYPED_ENTRY);
 
@@ -1558,6 +1569,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getContext_Elements(), g1, null, "elements", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(entryEClass, Entry.class, "Entry", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getEntry_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(typedEntryEClass, TypedEntry.class, "TypedEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1835,6 +1847,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Command factory with an name."
+		   });
+		addAnnotation
+		  (getEntry_Enabled(),
+		   source,
+		   new String[] {
+			   "documentation", "If this attribute is set to ``false`` the entry is \"commented out\" - not included into its container result."
 		   });
 		addAnnotation
 		  (typedEntryEClass,

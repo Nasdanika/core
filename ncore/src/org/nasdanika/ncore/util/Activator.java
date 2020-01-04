@@ -50,11 +50,11 @@ public class Activator implements BundleActivator {
 		// TODO -> FunctionFactory
 		// TODO Resource
 		
-//		NAMED_EXPRESSIONS_PALETTE.add(
+		NAMED_EXPRESSIONS_PALETTE.add(
 //			NcorePackage.Literals.FUNCTION,
-//			NcorePackage.Literals.LIST,	
-//			NcorePackage.Literals.OBJECT,	
-//			NcorePackage.Literals.PROPERTY,	
+			NcorePackage.Literals.LIST,	
+			NcorePackage.Literals.OBJECT,	
+			NcorePackage.Literals.PROPERTY); //,	
 //			NcorePackage.Literals.REST_FUNCTION);	
 
 		// TODO HTTP FunctionFactory

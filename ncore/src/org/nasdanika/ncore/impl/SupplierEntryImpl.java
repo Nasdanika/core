@@ -18,6 +18,7 @@ import org.nasdanika.ncore.SupplierEntry;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.impl.SupplierEntryImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.SupplierEntryImpl#isEnabled <em>Enabled</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,6 +33,16 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 	 * @ordered
 	 */
 	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ENABLED_EDEFAULT = true;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -78,10 +89,32 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 	 * @generated
 	 */
 	@Override
+	public boolean isEnabled() {
+		return (Boolean)eDynamicGet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEnabled(boolean newEnabled) {
+		eDynamicSet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				return getName();
+			case NcorePackage.SUPPLIER_ENTRY__ENABLED:
+				return isEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -96,6 +129,9 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 		switch (featureID) {
 			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				setName((String)newValue);
+				return;
+			case NcorePackage.SUPPLIER_ENTRY__ENABLED:
+				setEnabled((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -112,6 +148,9 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case NcorePackage.SUPPLIER_ENTRY__ENABLED:
+				setEnabled(ENABLED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -126,6 +165,8 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 		switch (featureID) {
 			case NcorePackage.SUPPLIER_ENTRY__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
+			case NcorePackage.SUPPLIER_ENTRY__ENABLED:
+				return isEnabled() != ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -145,6 +186,7 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 		}
 		if (baseClass == Entry.class) {
 			switch (derivedFeatureID) {
+				case NcorePackage.SUPPLIER_ENTRY__ENABLED: return NcorePackage.ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -166,6 +208,7 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 		}
 		if (baseClass == Entry.class) {
 			switch (baseFeatureID) {
+				case NcorePackage.ENTRY__ENABLED: return NcorePackage.SUPPLIER_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}

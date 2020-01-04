@@ -45,6 +45,7 @@ public class ObjectItemProvider extends MapItemProvider {
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -67,6 +68,27 @@ public class ObjectItemProvider extends MapItemProvider {
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Enabled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	protected void addEnabledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor(
+				 getResourceLocator(),
+				 getString("_UI_Entry_enabled_feature"),
+				 NcorePackage.Literals.ENTRY__ENABLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -120,6 +142,7 @@ public class ObjectItemProvider extends MapItemProvider {
 
 		switch (notification.getFeatureID(org.nasdanika.ncore.Object.class)) {
 			case NcorePackage.OBJECT__NAME:
+			case NcorePackage.OBJECT__ENABLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

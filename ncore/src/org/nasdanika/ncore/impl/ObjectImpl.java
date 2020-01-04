@@ -17,6 +17,7 @@ import org.nasdanika.ncore.NcorePackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.impl.ObjectImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ObjectImpl#isEnabled <em>Enabled</em>}</li>
  * </ul>
  *
  * @generated
@@ -31,6 +32,16 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 	 * @ordered
 	 */
 	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ENABLED_EDEFAULT = true;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -77,10 +88,32 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 	 * @generated
 	 */
 	@Override
+	public boolean isEnabled() {
+		return (Boolean)eDynamicGet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEnabled(boolean newEnabled) {
+		eDynamicSet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NcorePackage.OBJECT__NAME:
 				return getName();
+			case NcorePackage.OBJECT__ENABLED:
+				return isEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -95,6 +128,9 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 		switch (featureID) {
 			case NcorePackage.OBJECT__NAME:
 				setName((String)newValue);
+				return;
+			case NcorePackage.OBJECT__ENABLED:
+				setEnabled((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -111,6 +147,9 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 			case NcorePackage.OBJECT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case NcorePackage.OBJECT__ENABLED:
+				setEnabled(ENABLED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -125,6 +164,8 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 		switch (featureID) {
 			case NcorePackage.OBJECT__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
+			case NcorePackage.OBJECT__ENABLED:
+				return isEnabled() != ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -144,6 +185,7 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 		}
 		if (baseClass == Entry.class) {
 			switch (derivedFeatureID) {
+				case NcorePackage.OBJECT__ENABLED: return NcorePackage.ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -165,6 +207,7 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 		}
 		if (baseClass == Entry.class) {
 			switch (baseFeatureID) {
+				case NcorePackage.ENTRY__ENABLED: return NcorePackage.OBJECT__ENABLED;
 				default: return -1;
 			}
 		}
