@@ -21,6 +21,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.ncore.Array;
+import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.EMail;
@@ -121,24 +122,6 @@ public class NcoreValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
-			case NcorePackage.MODEL_ELEMENT:
-				return validateModelElement((ModelElement)value, diagnostics, context);
-			case NcorePackage.NAMED_ELEMENT:
-				return validateNamedElement((NamedElement)value, diagnostics, context);
-			case NcorePackage.ENTITY:
-				return validateEntity((Entity)value, diagnostics, context);
-			case NcorePackage.PARTY:
-				return validateParty((Party)value, diagnostics, context);
-			case NcorePackage.CONTACT_METHOD:
-				return validateContactMethod((ContactMethod)value, diagnostics, context);
-			case NcorePackage.EMAIL:
-				return validateEMail((EMail)value, diagnostics, context);
-			case NcorePackage.PHONE:
-				return validatePhone((Phone)value, diagnostics, context);
-			case NcorePackage.POSTAL_ADDRESS:
-				return validatePostalAddress((PostalAddress)value, diagnostics, context);
-			case NcorePackage.WEB_ADDRESS:
-				return validateWebAddress((WebAddress)value, diagnostics, context);
 			case NcorePackage.ISUPPLIER:
 				return validateISupplier((Supplier<?>)value, diagnostics, context);
 			case NcorePackage.ISUPPLIER_FACTORY:
@@ -153,6 +136,26 @@ public class NcoreValidator extends EObjectValidator {
 				return validateIConsumer((Consumer<?>)value, diagnostics, context);
 			case NcorePackage.ICONSUMER_FACTORY:
 				return validateIConsumerFactory((ConsumerFactory<?>)value, diagnostics, context);
+			case NcorePackage.MODEL_ELEMENT:
+				return validateModelElement((ModelElement)value, diagnostics, context);
+			case NcorePackage.NAMED_ELEMENT:
+				return validateNamedElement((NamedElement)value, diagnostics, context);
+			case NcorePackage.ENTITY:
+				return validateEntity((Entity)value, diagnostics, context);
+			case NcorePackage.CONFIGURABLE:
+				return validateConfigurable((Configurable)value, diagnostics, context);
+			case NcorePackage.PARTY:
+				return validateParty((Party)value, diagnostics, context);
+			case NcorePackage.CONTACT_METHOD:
+				return validateContactMethod((ContactMethod)value, diagnostics, context);
+			case NcorePackage.EMAIL:
+				return validateEMail((EMail)value, diagnostics, context);
+			case NcorePackage.PHONE:
+				return validatePhone((Phone)value, diagnostics, context);
+			case NcorePackage.POSTAL_ADDRESS:
+				return validatePostalAddress((PostalAddress)value, diagnostics, context);
+			case NcorePackage.WEB_ADDRESS:
+				return validateWebAddress((WebAddress)value, diagnostics, context);
 			case NcorePackage.TYPED_ELEMENT:
 				return validateTypedElement((TypedElement)value, diagnostics, context);
 			case NcorePackage.SUPPLIER:
@@ -195,10 +198,10 @@ public class NcoreValidator extends EObjectValidator {
 				return validateHtml((Html)value, diagnostics, context);
 			case NcorePackage.HTTP_METHOD:
 				return validateHttpMethod((HttpMethod)value, diagnostics, context);
-			case NcorePackage.ICONTEXT:
-				return validateIContext((org.nasdanika.common.Context)value, diagnostics, context);
 			case NcorePackage.EXCEPTION:
 				return validateException((Exception)value, diagnostics, context);
+			case NcorePackage.ICONTEXT:
+				return validateIContext((org.nasdanika.common.Context)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -229,6 +232,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateEntity(Entity entity, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(entity, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConfigurable(Configurable configurable, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(configurable, diagnostics, context);
 	}
 
 	/**

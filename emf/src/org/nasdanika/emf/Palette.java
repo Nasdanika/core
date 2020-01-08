@@ -175,10 +175,21 @@ public interface Palette {
 	 * @param id
 	 */
 	default void add(String id, EObject eObject) {
-		add(id, EcoreUtil.copy(eObject));
+		add(new Contributor() {
+
+			@Override
+			public EObject get() {
+				return EcoreUtil.copy(eObject);
+			}
+
+			@Override
+			public String getId() {
+				return id;
+			}
+			
+		});
 	}
-	
-	
+		
 	String getName();
 	
 	String getDescription();

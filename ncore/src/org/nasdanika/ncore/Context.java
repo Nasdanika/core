@@ -34,7 +34,7 @@ public interface Context extends ModelElement, SupplierFactory<org.nasdanika.com
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Context elements. Elements which extend Entry are treated as context properties and unnamed typed elments are treated as services.
+	 * Context elements. Elements which extend Entry are treated as context properties and unnamed typed elements are treated as services.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getContext_Elements()

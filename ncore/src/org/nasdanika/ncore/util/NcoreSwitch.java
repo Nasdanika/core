@@ -12,6 +12,7 @@ import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
+import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.EMail;
@@ -98,6 +99,50 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	@Override
 	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case NcorePackage.ISUPPLIER: {
+				Supplier<?> iSupplier = (Supplier<?>)theEObject;
+				T1 result = caseISupplier(iSupplier);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.ISUPPLIER_FACTORY: {
+				SupplierFactory<?> iSupplierFactory = (SupplierFactory<?>)theEObject;
+				T1 result = caseISupplierFactory(iSupplierFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: {
+				SupplierFactoryReference supplierFactoryReference = (SupplierFactoryReference)theEObject;
+				T1 result = caseSupplierFactoryReference(supplierFactoryReference);
+				if (result == null) result = caseModelElement(supplierFactoryReference);
+				if (result == null) result = caseISupplierFactory(supplierFactoryReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.IFUNCTION: {
+				org.nasdanika.common.Function<?, ?> iFunction = (org.nasdanika.common.Function<?, ?>)theEObject;
+				T1 result = caseIFunction(iFunction);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.IFUNCTION_FACTORY: {
+				FunctionFactory<?, ?> iFunctionFactory = (FunctionFactory<?, ?>)theEObject;
+				T1 result = caseIFunctionFactory(iFunctionFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.ICONSUMER: {
+				Consumer<?> iConsumer = (Consumer<?>)theEObject;
+				T1 result = caseIConsumer(iConsumer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.ICONSUMER_FACTORY: {
+				ConsumerFactory<?> iConsumerFactory = (ConsumerFactory<?>)theEObject;
+				T1 result = caseIConsumerFactory(iConsumerFactory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.MODEL_ELEMENT: {
 				ModelElement modelElement = (ModelElement)theEObject;
 				T1 result = caseModelElement(modelElement);
@@ -115,6 +160,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				Entity entity = (Entity)theEObject;
 				T1 result = caseEntity(entity);
 				if (result == null) result = caseModelElement(entity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.CONFIGURABLE: {
+				Configurable configurable = (Configurable)theEObject;
+				T1 result = caseConfigurable(configurable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -168,50 +219,6 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseContactMethod(webAddress);
 				if (result == null) result = caseNamedElement(webAddress);
 				if (result == null) result = caseModelElement(webAddress);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.ISUPPLIER: {
-				Supplier<?> iSupplier = (Supplier<?>)theEObject;
-				T1 result = caseISupplier(iSupplier);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.ISUPPLIER_FACTORY: {
-				SupplierFactory<?> iSupplierFactory = (SupplierFactory<?>)theEObject;
-				T1 result = caseISupplierFactory(iSupplierFactory);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: {
-				SupplierFactoryReference supplierFactoryReference = (SupplierFactoryReference)theEObject;
-				T1 result = caseSupplierFactoryReference(supplierFactoryReference);
-				if (result == null) result = caseModelElement(supplierFactoryReference);
-				if (result == null) result = caseISupplierFactory(supplierFactoryReference);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.IFUNCTION: {
-				org.nasdanika.common.Function<?, ?> iFunction = (org.nasdanika.common.Function<?, ?>)theEObject;
-				T1 result = caseIFunction(iFunction);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.IFUNCTION_FACTORY: {
-				FunctionFactory<?, ?> iFunctionFactory = (FunctionFactory<?, ?>)theEObject;
-				T1 result = caseIFunctionFactory(iFunctionFactory);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.ICONSUMER: {
-				Consumer<?> iConsumer = (Consumer<?>)theEObject;
-				T1 result = caseIConsumer(iConsumer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.ICONSUMER_FACTORY: {
-				ConsumerFactory<?> iConsumerFactory = (ConsumerFactory<?>)theEObject;
-				T1 result = caseIConsumerFactory(iConsumerFactory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -459,6 +466,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseEntity(Entity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseConfigurable(Configurable object) {
 		return null;
 	}
 

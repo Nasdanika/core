@@ -10,7 +10,7 @@ import java.lang.Object;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Function is a named operation.
+ * REST function is a named REST operation.
  * <!-- end-model-doc -->
  *
  *

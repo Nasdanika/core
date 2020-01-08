@@ -10,7 +10,7 @@ import org.nasdanika.common.SupplierFactory;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Command factory with an name.
+ * Supplier factory with an name.
  * <!-- end-model-doc -->
  *
  * <p>

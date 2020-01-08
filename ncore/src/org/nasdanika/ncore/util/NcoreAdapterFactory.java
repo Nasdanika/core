@@ -12,6 +12,7 @@ import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
+import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.EMail;
@@ -98,42 +99,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	protected NcoreSwitch<Adapter> modelSwitch =
 		new NcoreSwitch<Adapter>() {
 			@Override
-			public Adapter caseModelElement(ModelElement object) {
-				return createModelElementAdapter();
-			}
-			@Override
-			public Adapter caseNamedElement(NamedElement object) {
-				return createNamedElementAdapter();
-			}
-			@Override
-			public Adapter caseEntity(Entity object) {
-				return createEntityAdapter();
-			}
-			@Override
-			public Adapter caseParty(Party object) {
-				return createPartyAdapter();
-			}
-			@Override
-			public Adapter caseContactMethod(ContactMethod object) {
-				return createContactMethodAdapter();
-			}
-			@Override
-			public Adapter caseEMail(EMail object) {
-				return createEMailAdapter();
-			}
-			@Override
-			public Adapter casePhone(Phone object) {
-				return createPhoneAdapter();
-			}
-			@Override
-			public Adapter casePostalAddress(PostalAddress object) {
-				return createPostalAddressAdapter();
-			}
-			@Override
-			public Adapter caseWebAddress(WebAddress object) {
-				return createWebAddressAdapter();
-			}
-			@Override
 			public <T> Adapter caseISupplier(Supplier<T> object) {
 				return createISupplierAdapter();
 			}
@@ -160,6 +125,46 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public <T> Adapter caseIConsumerFactory(ConsumerFactory<T> object) {
 				return createIConsumerFactoryAdapter();
+			}
+			@Override
+			public Adapter caseModelElement(ModelElement object) {
+				return createModelElementAdapter();
+			}
+			@Override
+			public Adapter caseNamedElement(NamedElement object) {
+				return createNamedElementAdapter();
+			}
+			@Override
+			public Adapter caseEntity(Entity object) {
+				return createEntityAdapter();
+			}
+			@Override
+			public Adapter caseConfigurable(Configurable object) {
+				return createConfigurableAdapter();
+			}
+			@Override
+			public Adapter caseParty(Party object) {
+				return createPartyAdapter();
+			}
+			@Override
+			public Adapter caseContactMethod(ContactMethod object) {
+				return createContactMethodAdapter();
+			}
+			@Override
+			public Adapter caseEMail(EMail object) {
+				return createEMailAdapter();
+			}
+			@Override
+			public Adapter casePhone(Phone object) {
+				return createPhoneAdapter();
+			}
+			@Override
+			public Adapter casePostalAddress(PostalAddress object) {
+				return createPostalAddressAdapter();
+			}
+			@Override
+			public Adapter caseWebAddress(WebAddress object) {
+				return createWebAddressAdapter();
 			}
 			@Override
 			public Adapter caseTypedElement(TypedElement object) {
@@ -300,6 +305,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEntityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Configurable <em>Configurable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Configurable
+	 * @generated
+	 */
+	public Adapter createConfigurableAdapter() {
 		return null;
 	}
 

@@ -29,9 +29,9 @@ public interface Supplier extends TypedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Provider implementation. If empty, type's constructor is used as a provider.
+	 * Supplier implementation. If empty, type's constructor is used as a provider.
 	 * 
-	 * Provider implementation can be defined as follows:
+	 * Supplier implementation can be defined as follows:
 	 * 
 	 * * Fully qualified class name, e.g. ``java.lang.Integer``. If both type and implementation as defined then the implementation must be a subclass/implementation of type or there should be a Converter service in the context which converts implementation into type. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.
 	 * * Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.

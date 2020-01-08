@@ -753,12 +753,12 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	 */
 	@Override
 	public void dispose() {
+		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
 		if (contactMethodItemProvider != null) contactMethodItemProvider.dispose();
 		if (eMailItemProvider != null) eMailItemProvider.dispose();
 		if (phoneItemProvider != null) phoneItemProvider.dispose();
 		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
 		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
-		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (resourceItemProvider != null) resourceItemProvider.dispose();

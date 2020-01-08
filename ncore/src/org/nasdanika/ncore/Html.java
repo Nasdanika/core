@@ -56,7 +56,7 @@ public interface Html extends Supplier {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * If ``true`` (default) the value is interpolated.
+	 * If ``true`` (default) the HTML content is interpolated.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Interpolate</em>' attribute.
 	 * @see #setInterpolate(boolean)

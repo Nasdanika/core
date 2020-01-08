@@ -13,7 +13,7 @@ import org.nasdanika.common.SupplierFactory;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * A sequence of other elements.
+ * A sequence of elements.
  * <!-- end-model-doc -->
  *
  * <p>

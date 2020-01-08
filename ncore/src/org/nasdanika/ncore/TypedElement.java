@@ -11,7 +11,7 @@ import org.nasdanika.common.SupplierFactory;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Typed element is a command factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context's service with the specified type. The primary pupose of of the typed element is to serve as a specification/description.
+ * Typed element is a supplier factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context's service with the specified type. The primary pupose of of the typed element is to serve as a specification/description.
  * <!-- end-model-doc -->
  *
  * <p>

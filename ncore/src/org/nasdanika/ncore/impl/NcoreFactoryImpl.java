@@ -82,12 +82,12 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
 			case NcorePackage.CONTACT_METHOD: return createContactMethod();
 			case NcorePackage.EMAIL: return createEMail();
 			case NcorePackage.PHONE: return createPhone();
 			case NcorePackage.POSTAL_ADDRESS: return createPostalAddress();
 			case NcorePackage.WEB_ADDRESS: return createWebAddress();
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
 			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.RESOURCE: return createResource();
@@ -122,10 +122,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 		switch (eDataType.getClassifierID()) {
 			case NcorePackage.HTTP_METHOD:
 				return createHttpMethodFromString(eDataType, initialValue);
-			case NcorePackage.ICONTEXT:
-				return createIContextFromString(eDataType, initialValue);
 			case NcorePackage.EXCEPTION:
 				return createExceptionFromString(eDataType, initialValue);
+			case NcorePackage.ICONTEXT:
+				return createIContextFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -141,10 +141,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 		switch (eDataType.getClassifierID()) {
 			case NcorePackage.HTTP_METHOD:
 				return convertHttpMethodToString(eDataType, instanceValue);
-			case NcorePackage.ICONTEXT:
-				return convertIContextToString(eDataType, instanceValue);
 			case NcorePackage.EXCEPTION:
 				return convertExceptionToString(eDataType, instanceValue);
+			case NcorePackage.ICONTEXT:
+				return convertIContextToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
