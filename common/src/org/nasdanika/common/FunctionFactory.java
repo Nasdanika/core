@@ -27,6 +27,21 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 			}
 			
 		};
-	}		
+	}	
+		
+	/**
+	 * @param contextSupplierFactory Factory which creates a context to be passed to this factory to create supplier.
+	 * @return Function factory which creates a context using the context supplier factory and then uses that context and this factory to create a function.
+	 */
+	default FunctionFactory<T,R> contextify(SupplierFactory<Context> contextSupplierFactory) {
+		return new FunctionFactory<T,R>() {
+
+			@Override
+			public Function<T,R> create(Context context) throws Exception {
+				return new ContextifiedExecutionParticipant.ContextifiedFunction<T,R>(contextSupplierFactory.create(context), FunctionFactory.this);
+			}
+			
+		};
+	}	
 	
 }

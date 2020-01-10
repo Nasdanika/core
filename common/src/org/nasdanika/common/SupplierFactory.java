@@ -63,4 +63,19 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		};
 	}
 	
+	/**
+	 * @param contextSupplierFactory Factory which creates a context to be passed to this factory to create supplier.
+	 * @return Supplier factory which creates a context using the context supplier factory and then uses that context and this factory to create a supplier.
+	 */
+	default SupplierFactory<T> contextify(SupplierFactory<Context> contextSupplierFactory) {
+		return new SupplierFactory<T>() {
+
+			@Override
+			public Supplier<T> create(Context context) throws Exception {
+				return new ContextifiedExecutionParticipant.ContextifiedSupplier<T>(contextSupplierFactory.create(context), SupplierFactory.this);
+			}
+			
+		};
+	}
+	
 }
