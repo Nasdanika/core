@@ -42,6 +42,12 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 	}
 	
+	default T splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			return execute(subMonitor);
+		}
+	}
+	
 	Supplier<Object> EMPTY = new Supplier<Object>() {
 
 		@Override

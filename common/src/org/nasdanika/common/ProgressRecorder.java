@@ -229,8 +229,9 @@ public class ProgressRecorder implements ProgressMonitor {
 		}
 	}
 	@Override
-	public void setWorkRemaining(double size) {
-		// TODO - record too?		
+	public ProgressRecorder setWorkRemaining(double size) {
+		// TODO - record too?
+		return this;
 	}
 
 }

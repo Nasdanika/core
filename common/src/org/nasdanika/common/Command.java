@@ -34,6 +34,12 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 			execute(subMonitor);
 		}
 	}	
+	
+	default void splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			execute(subMonitor);
+		}
+	}	
 		
 	static Command fromRunnable(Runnable runnable, String name, double size) {
 		return new Command() {

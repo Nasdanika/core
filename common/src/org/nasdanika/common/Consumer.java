@@ -21,6 +21,12 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 	}	
 	
+	default void splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			execute(arg, subMonitor);
+		}
+	}	
+	
 	Consumer<Object> NOP = new Consumer<Object>() {
 
 		@Override

@@ -51,8 +51,9 @@ public class ProgressMonitorAdapter implements ProgressMonitor {
 	}
 
 	@Override
-	public void setWorkRemaining(double size) {
+	public ProgressMonitorAdapter setWorkRemaining(double size) {
 		target.setWorkRemaining((int) (size * scale));
+		return this;
 	}
 	
 	/**

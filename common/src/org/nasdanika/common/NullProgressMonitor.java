@@ -28,8 +28,9 @@ public class NullProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void setWorkRemaining(double size) {
-		// NOP		
+	public ProgressMonitor setWorkRemaining(double size) {
+		// NOP	
+		return this;
 	}
 
 }

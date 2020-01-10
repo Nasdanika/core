@@ -57,9 +57,10 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 	
 	/**
 	 * Resizes the remaining amount of work.
-	 * @param ticks
+	 * @param size
+	 * @return This instance - fluent API.
 	 */
-	void setWorkRemaining(double size);
+	ProgressMonitor setWorkRemaining(double size);
 
 	/**
 	 * Composes two monitors. The resulting monitor reports isCancelled() as OR, composes splits, 
@@ -95,11 +96,51 @@ public interface ProgressMonitor extends AutoCloseable, Composeable<ProgressMoni
 			}
 
 			@Override
-			public void setWorkRemaining(double size) {
+			public ProgressMonitor setWorkRemaining(double size) {
 				ProgressMonitor.this.setWorkRemaining(size);
-				other.setWorkRemaining(size);				
+				other.setWorkRemaining(size);
+				return this;
 			}
 			
+		};
+	}
+	
+	/**
+	 * Creates a progress monitor which multiplies work sizes passed to it by the scale. I.e. when
+	 * the returned scaled monitor consumes X amount of work, this monitor consumes X / scale amount of work. 
+	 * For example you want to consume 1 from this monitor and the task size is 10, then the scale is 10.
+	 * @param scale
+	 * @return
+	 */
+	default ProgressMonitor scale(double scale) {
+		return new ProgressMonitor() {
+			
+			@Override
+			public void worked(Status status, double work, String progressMessage, Object... data) {
+				ProgressMonitor.this.worked(status, work / scale, progressMessage, data);
+				
+			}
+			
+			@Override
+			public ProgressMonitor split(String taskName, double size, Object... data) {
+				return ProgressMonitor.this.split(taskName, size / scale, data).scale(scale);
+			}
+			
+			@Override
+			public ProgressMonitor setWorkRemaining(double size) {
+				ProgressMonitor.this.setWorkRemaining(size / scale);
+				return this;
+			}
+			
+			@Override
+			public boolean isCancelled() {
+				return ProgressMonitor.this.isCancelled();
+			}
+			
+			@Override
+			public void close() {
+				ProgressMonitor.this.close();				
+			}
 		};
 	}
 		

@@ -90,8 +90,9 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void setWorkRemaining(double size) {
+	public ProgressMonitor setWorkRemaining(double size) {
 		// NOP
+		return this;
 	}
 
 }

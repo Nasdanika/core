@@ -28,6 +28,12 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		}
 	}	
 			
+	default void splitAndCommit(double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			commit(subMonitor);
+		}
+	}	
+			
 	/**
 	 * Rolls back all the changes done by this instance of Supplier. The method can be called when a composite work was
 	 * cancelled or one of participants failed and the result of the entire work shall be rolled back. 
@@ -46,8 +52,14 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		}
 	}	
 	
+	default boolean splitAndRollback(double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			return rollback(subMonitor);
+		}
+	}	
+	
 	/**
-	 * Splits the monitor for this participant.
+	 * Splits the monitor for this participant's size and name.
 	 * @param parent
 	 * @return
 	 */
@@ -55,8 +67,24 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		return parent.split(name(), size(), this);
 	}
 		
+	/**
+	 * Splits the monitor for the specified size and this participant's name, then resizes the result to the participant size.
+	 * @param size
+	 * @param parent
+	 * @return
+	 */
+	default ProgressMonitor split(double size, ProgressMonitor parent) {
+		return parent.split(name(), size, this).setWorkRemaining(size());
+	}
+		
 	default Diagnostic splitAndDiagnose(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+			return diagnose(subMonitor);
+		}
+	}	
+	
+	default Diagnostic splitAndDiagnose(double size, ProgressMonitor progressMonitor) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
 			return diagnose(subMonitor);
 		}
 	}	

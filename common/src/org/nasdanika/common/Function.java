@@ -20,6 +20,12 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		}
 	}
 	
+	default R splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+			return execute(arg, subMonitor);
+		}
+	}
+	
 	Function<Object,Object> NOP = new Function<Object,Object>() {
 
 		@Override
