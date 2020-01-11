@@ -112,7 +112,7 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Configuration entries."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//Entry">
+      <eGenericType eClassifier="#//ISupplierFactory">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
