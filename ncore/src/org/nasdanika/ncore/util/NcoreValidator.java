@@ -367,28 +367,25 @@ public class NcoreValidator extends EObjectValidator {
 	public boolean validateSupplierFactoryReference_target(SupplierFactoryReference supplierFactoryReference, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (diagnostics != null && supplierFactoryReference.getTarget() != null) {
 			// Validate circularity
-			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplierFactoryReference);
 			Set<SupplierFactoryReference> traversed = new HashSet<>();
-			validateCircularReference(supplierFactoryReference, traversed);
-			StringBuilder path = new StringBuilder();
-			for (SupplierFactoryReference pe: traversed) {	
-				if (path.length() > 0) {
-					path.append(" => ");
+			if (!validateCircularReference(supplierFactoryReference, traversed)) {
+				StringBuilder path = new StringBuilder();
+				for (SupplierFactoryReference pe: traversed) {	
+					if (path.length() > 0) {
+						path.append(" => ");
+					}
+					 SupplierFactory<Object> target = pe.getTarget();
+					String targetLabel;
+					if (target instanceof ModelElement) {
+						targetLabel = ((ModelElement) target).getTitle();
+					} else {
+						targetLabel = target.toString();
+					}
+					path.append(pe.getTitle() + " -> " + targetLabel);
 				}
-				 SupplierFactory<Object> target = pe.getTarget();
-				String targetLabel;
-				if (target instanceof ModelElement) {
-					targetLabel = ((ModelElement) target).getTitle();
-				} else {
-					targetLabel = target.toString();
-				}
-				path.append(pe.getTitle() + " -> " + targetLabel);
-			}
-			helper.error("Loop in supplier factory references: "+path, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);			
-			
-			// Do not proceed if circularity test failed
-			if (!helper.isSuccess()) {
-				return false;
+				DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplierFactoryReference);
+				helper.error("Loop in supplier factory references: "+path, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);							
+				return false; // Do not proceed if circularity test failed
 			}
 			
 			// Maybe unnecessary?
