@@ -1,32 +1,30 @@
 /**
  */
-package org.nasdanika.emf.presentation;
+package org.nasdanika.sirius.tree.provider;
 
 import org.eclipse.emf.common.EMFPlugin;
-import org.eclipse.emf.common.ui.EclipseUIPlugin;
+
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.provider.EcoreEditPlugin;
+
+import org.eclipse.sirius.viewpoint.provider.SiriusEditPlugin;
+
 /**
- * This is the central singleton for the App editor plugin.
+ * This is the central singleton for the Tree edit plugin.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public final class NasdanikaEditorPlugin extends EMFPlugin {
-	
-    /**
-     * The ID associated to this plugin.
-     */
-    public static final String ID = "org.nasdanika.emf.presentation"; //$NON-NLS-1$
-	
+public final class TreeEditPlugin extends EMFPlugin {
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final NasdanikaEditorPlugin INSTANCE = new NasdanikaEditorPlugin();
-	
+	public static final TreeEditPlugin INSTANCE = new TreeEditPlugin();
+
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
@@ -41,8 +39,8 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NasdanikaEditorPlugin() {
-		super(new ResourceLocator [] { });
+	public TreeEditPlugin() {
+		super(new ResourceLocator[] { EcoreEditPlugin.INSTANCE, SiriusEditPlugin.INSTANCE, });
 	}
 
 	/**
@@ -54,9 +52,9 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 	 */
 	@Override
 	public ResourceLocator getPluginResourceLocator() {
-		return plugin; 
+		return plugin;
 	}
-	
+
 	/**
 	 * Returns the singleton instance of the Eclipse plugin.
 	 * <!-- begin-user-doc -->
@@ -67,14 +65,14 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 	public static Implementation getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static class Implementation extends EclipseUIPlugin {
+	public static class Implementation extends EclipsePlugin {
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc -->
@@ -83,7 +81,7 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 		 */
 		public Implementation() {
 			super();
-	
+
 			// Remember the static instance.
 			//
 			plugin = this;

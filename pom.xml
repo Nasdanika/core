@@ -160,6 +160,9 @@
 		<module>emf.edit</module>		
 		<module>emf.presentation</module>		
 
+		<module>sirius.tree</module>		
+		<module>sirius.tree.edit</module>		
+
 		<module>eclipse</module>		
 
 		<module>ncore</module>		

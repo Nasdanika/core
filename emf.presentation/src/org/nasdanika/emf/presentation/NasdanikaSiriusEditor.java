@@ -38,6 +38,7 @@ import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -70,6 +71,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -84,8 +86,10 @@ import org.eclipse.sirius.business.api.session.SessionStatus;
 import org.eclipse.sirius.ext.base.Option;
 import org.eclipse.sirius.ui.business.api.editor.ISiriusEditor;
 import org.eclipse.sirius.ui.business.api.session.IEditingSession;
+import org.eclipse.sirius.ui.business.api.session.SessionEditorInput;
 import org.eclipse.sirius.ui.business.api.session.SessionUIManager;
 import org.eclipse.sirius.ui.properties.internal.ContributorWrapper;
+import org.eclipse.sirius.viewpoint.DSemanticDecorator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.dnd.DND;
@@ -715,23 +719,8 @@ public class NasdanikaSiriusEditor
 
 		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(getAdapterFactory(), selectionViewer), new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
 
-		selectionViewer.setInput(getEditingDomain().getResourceSet());
-		ViewerFilter filter = new ViewerFilter() {
-			
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				if (parentElement instanceof ResourceSet && element instanceof Resource) {
-					IFile file = ((IFileEditorInput) getEditorInput()).getFile();
-					URI inputURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-					URI resourceURI = ((Resource) element).getURI();
-					// Showing only the input. 
-					return inputURI.equals(resourceURI);
-				}
-				return true;
-			}
-			
-		};
-		selectionViewer.addFilter(filter);
+		setSelectionViewerInput();
+		
 		selectionViewer.setSelection(new StructuredSelection(getEditingDomain().getResourceSet().getResources().get(0)), true);
 		viewerPane.setTitle(getEditingDomain().getResourceSet());
 
@@ -777,6 +766,58 @@ public class NasdanikaSiriusEditor
 			 });
 		
 		selectionViewer.addSelectionChangedListener(new PropertyViewUpdater());
+	}
+
+	protected void setSelectionViewerInput() {
+		if (selectionViewer != null) {
+			if (getEditorInput() instanceof SessionEditorInput) {
+				SessionEditorInput sessionEditorInput = (SessionEditorInput) getEditorInput();
+				EObject inputObject = sessionEditorInput.getInput();			
+				EObject viewerRoot = inputObject instanceof DSemanticDecorator ? ((DSemanticDecorator) inputObject).getTarget() : inputObject;
+				
+				Object parent = ((ITreeContentProvider) selectionViewer.getContentProvider()).getParent(viewerRoot);
+				if (parent == null) {
+					if (selectionViewer.getInput() != viewerRoot) {
+						selectionViewer.setInput(viewerRoot);
+					}
+				} else {
+					if (selectionViewer.getInput() != parent) {
+						// Setting input to root's parent and filtering out only the root.
+						selectionViewer.setInput(parent);
+						ViewerFilter filter = new ViewerFilter() {
+							
+							@Override
+							public boolean select(Viewer viewer, Object parentElement, Object element) {
+								if (parentElement == selectionViewer.getInput()) {
+									return element == viewerRoot;
+								}
+								return true;
+							}
+							
+						};
+						selectionViewer.addFilter(filter);
+					}
+				}
+			} else {
+				selectionViewer.setInput(getEditingDomain().getResourceSet());
+				ViewerFilter filter = new ViewerFilter() {
+					
+					@Override
+					public boolean select(Viewer viewer, Object parentElement, Object element) {
+						if (parentElement instanceof ResourceSet && element instanceof Resource && getEditorInput() instanceof IFileEditorInput) {
+							IFile file = ((IFileEditorInput) getEditorInput()).getFile();
+							URI inputURI = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
+							URI resourceURI = ((Resource) element).getURI();
+							// Showing only the input. 
+							return inputURI.equals(resourceURI);
+						}
+						return true;
+					}
+					
+				};
+				selectionViewer.addFilter(filter);
+			}
+		}
 	}
 
 	/**
@@ -1148,45 +1189,52 @@ public class NasdanikaSiriusEditor
 	public void init(IEditorSite site, IEditorInput editorInput) {
 		setSite(site);
 		
-		IFile file = ((IFileEditorInput) editorInput).getFile();
-		IProject project = file.getProject();
-		try {
-			ModelingProject modelingProject = (ModelingProject) project.getNature(ModelingProject.NATURE_ID);
-			if (modelingProject == null) {				
-				MessageDialog.openError(site.getShell(), "Not a modeling project", "The model shall be contained in a modeling project - add the modeling nature.");
-			} else {
-				Session session = modelingProject.getSession();
-				if (session == null) {
-//					IActionBars bars = site.getActionBars();
-//					IStatusLineManager statusLine = bars.getStatusLineManager();
-//					IProgressMonitor pm = statusLine.getProgressMonitor();					
-//					modelingProject.getMainRepresentationsFileURI(pm);
-//					SessionManager.INSTANCE.getSession()
-					// create session here
-					IProgressMonitor pm = new NullProgressMonitor();
-					Option<URI> uriOpt = modelingProject.getMainRepresentationsFileURI(pm);
-					if (uriOpt == null) {
-						ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
-						throw new UnsupportedOperationException("No session");
+		if (editorInput instanceof IFileEditorInput) {			
+			IFile file = ((IFileEditorInput) editorInput).getFile();
+			IProject project = file.getProject();
+			try {
+				ModelingProject modelingProject = (ModelingProject) project.getNature(ModelingProject.NATURE_ID);
+				if (modelingProject == null) {				
+					MessageDialog.openError(site.getShell(), "Not a modeling project", "The model shall be contained in a modeling project - add the modeling nature.");
+				} else {
+					Session session = modelingProject.getSession();
+					if (session == null) {
+	//					IActionBars bars = site.getActionBars();
+	//					IStatusLineManager statusLine = bars.getStatusLineManager();
+	//					IProgressMonitor pm = statusLine.getProgressMonitor();					
+	//					modelingProject.getMainRepresentationsFileURI(pm);
+	//					SessionManager.INSTANCE.getSession()
+						// create session here
+						IProgressMonitor pm = new NullProgressMonitor();
+						Option<URI> uriOpt = modelingProject.getMainRepresentationsFileURI(pm);
+						if (uriOpt == null) {
+							ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
+							throw new UnsupportedOperationException("No session");
+						}
+						
+						URI uri = uriOpt.get();
+						if (uri == null) {
+							ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
+							throw new UnsupportedOperationException("No session");
+						}
+						session = SessionManager.INSTANCE.getSession(uri, pm);
+						if (session == null) {
+							ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
+							throw new UnsupportedOperationException("No session");						
+						}
 					}
 					
-					URI uri = uriOpt.get();
-					if (uri == null) {
-						ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
-						throw new UnsupportedOperationException("No session");
-					}
-					session = SessionManager.INSTANCE.getSession(uri, pm);
-					if (session == null) {
-						ErrorDialog.openError(site.getShell(), "No Sirius session", "No Sirius session, please close and re-open the editor.", null);						
-						throw new UnsupportedOperationException("No session");						
-					}
+					setInput(editorInput, session);
 				}
-				
-				setInput(editorInput, session);
+			} catch (CoreException e) {
+				throw new IllegalStateException("Cannot obtain modeling project "+e, e); //$NON-NLS-1$
 			}
-		} catch (CoreException e) {
-			throw new IllegalStateException("Cannot obtain modeling project "+e, e); //$NON-NLS-1$
-		}		
+		} else if (editorInput instanceof SessionEditorInput) {
+			SessionEditorInput sessionEditorInput = (SessionEditorInput) editorInput;
+			setInput(editorInput, sessionEditorInput.getSession());
+		} else { 
+			throw new IllegalArgumentException("Unsupported input type: " + editorInput);
+		}
 		
 		setPartName(editorInput.getName());
 		site.setSelectionProvider(this);
