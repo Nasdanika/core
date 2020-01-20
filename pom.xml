@@ -158,7 +158,7 @@
 	<modules>
 		<module>emf</module>		
 		<module>emf.edit</module>		
-		<module>emf.editor</module>		
+		<module>emf.presentation</module>		
 
 		<module>eclipse</module>		
 
