@@ -87,15 +87,6 @@ public interface TreePackage extends EPackage {
 	int ADAPTER_FACTORY_TREE__EANNOTATIONS = ViewpointPackage.DREPRESENTATION__EANNOTATIONS;
 
 	/**
-	 * The feature id for the '<em><b>Documentation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FACTORY_TREE__DOCUMENTATION = ViewpointPackage.DREPRESENTATION__DOCUMENTATION;
-
-	/**
 	 * The feature id for the '<em><b>Owned Representation Elements</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -114,15 +105,6 @@ public interface TreePackage extends EPackage {
 	int ADAPTER_FACTORY_TREE__REPRESENTATION_ELEMENTS = ViewpointPackage.DREPRESENTATION__REPRESENTATION_ELEMENTS;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FACTORY_TREE__NAME = ViewpointPackage.DREPRESENTATION__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Owned Annotation Entries</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -139,6 +121,24 @@ public interface TreePackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FACTORY_TREE__UI_STATE = ViewpointPackage.DREPRESENTATION__UI_STATE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FACTORY_TREE__NAME = ViewpointPackage.DREPRESENTATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FACTORY_TREE__DOCUMENTATION = ViewpointPackage.DREPRESENTATION__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -167,23 +167,23 @@ public interface TreePackage extends EPackage {
 	 */
 	int ADAPTER_FACTORY_TREE_FEATURE_COUNT = ViewpointPackage.DREPRESENTATION_FEATURE_COUNT + 2;
 
-	/**
-	 * The operation id for the '<em>Get DAnnotation</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT - Not used anywhere, suppressing a compilation error after generation.
-	 * @ordered
-	 */
-	int ADAPTER_FACTORY_TREE___GET_DANNOTATION__STRING = 0;
-
-	/**
-	 * The number of operations of the '<em>Adapter Factory Tree</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT - Not used anywhere, suppressing a compilation error after generation.
-	 * @ordered
-	 */
-	int ADAPTER_FACTORY_TREE_OPERATION_COUNT = 0;
+//	/**
+//	 * The operation id for the '<em>Get DAnnotation</em>' operation.
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated
+//	 * @ordered
+//	 */
+//	int ADAPTER_FACTORY_TREE___GET_DANNOTATION__STRING = ViewpointPackage.DREPRESENTATION___GET_DANNOTATION__STRING;
+//
+//	/**
+//	 * The number of operations of the '<em>Adapter Factory Tree</em>' class.
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated
+//	 * @ordered
+//	 */
+//	int ADAPTER_FACTORY_TREE_OPERATION_COUNT = ViewpointPackage.DREPRESENTATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl <em>Adapter Factory Tree Description</em>}' class.
@@ -277,14 +277,15 @@ public interface TreePackage extends EPackage {
 	int ADAPTER_FACTORY_TREE_DESCRIPTION_FEATURE_COUNT = DescriptionPackage.REPRESENTATION_DESCRIPTION_FEATURE_COUNT
 			+ 0;
 
-	/**
-	 * The number of operations of the '<em>Adapter Factory Tree Description</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT - Not used anywhere, suppressing a compilation error after generation.
-	 * @ordered
-	 */
-	int ADAPTER_FACTORY_TREE_DESCRIPTION_OPERATION_COUNT = 0;
+//	/**
+//	 * The number of operations of the '<em>Adapter Factory Tree Description</em>' class.
+//	 * <!-- begin-user-doc -->
+//	 * <!-- end-user-doc -->
+//	 * @generated
+//	 * @ordered
+//	 */
+//	int ADAPTER_FACTORY_TREE_DESCRIPTION_OPERATION_COUNT = DescriptionPackage.REPRESENTATION_DESCRIPTION_OPERATION_COUNT
+//			+ 0;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.sirius.tree.AdapterFactoryTree <em>Adapter Factory Tree</em>}'.

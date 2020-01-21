@@ -2,14 +2,11 @@
  */
 package org.nasdanika.sirius.tree.impl;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.sirius.viewpoint.DRepresentationElement;
 import org.eclipse.sirius.viewpoint.DSemanticDecorator;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
@@ -35,26 +32,6 @@ import org.nasdanika.sirius.tree.TreePackage;
  */
 public class AdapterFactoryTreeImpl extends DRepresentationImpl implements AdapterFactoryTree {
 	/**
-	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTarget()
-	 * @generated
-	 * @ordered
-	 */
-	protected EObject target;
-
-	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
-	protected AdapterFactoryTreeDescription description;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -78,17 +55,26 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	protected static final int ESTATIC_FEATURE_COUNT = 8;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return ESTATIC_FEATURE_COUNT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EObject getTarget() {
-		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject) target;
-			target = eResolveProxy(oldTarget);
-			if (target != oldTarget) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, TreePackage.ADAPTER_FACTORY_TREE__TARGET,
-							oldTarget, target));
-			}
-		}
-		return target;
+		return (EObject) eDynamicGet(TreePackage.ADAPTER_FACTORY_TREE__TARGET - ESTATIC_FEATURE_COUNT,
+				ViewpointPackage.Literals.DSEMANTIC_DECORATOR__TARGET, true, true);
 	}
 
 	/**
@@ -97,7 +83,8 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * @generated
 	 */
 	public EObject basicGetTarget() {
-		return target;
+		return (EObject) eDynamicGet(TreePackage.ADAPTER_FACTORY_TREE__TARGET - ESTATIC_FEATURE_COUNT,
+				ViewpointPackage.Literals.DSEMANTIC_DECORATOR__TARGET, false, true);
 	}
 
 	/**
@@ -106,11 +93,8 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * @generated
 	 */
 	public void setTarget(EObject newTarget) {
-		EObject oldTarget = target;
-		target = newTarget;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TreePackage.ADAPTER_FACTORY_TREE__TARGET, oldTarget,
-					target));
+		eDynamicSet(TreePackage.ADAPTER_FACTORY_TREE__TARGET - ESTATIC_FEATURE_COUNT,
+				ViewpointPackage.Literals.DSEMANTIC_DECORATOR__TARGET, newTarget);
 	}
 
 	/**
@@ -119,16 +103,9 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * @generated
 	 */
 	public AdapterFactoryTreeDescription getDescription() {
-		if (description != null && description.eIsProxy()) {
-			InternalEObject oldDescription = (InternalEObject) description;
-			description = (AdapterFactoryTreeDescription) eResolveProxy(oldDescription);
-			if (description != oldDescription) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION, oldDescription, description));
-			}
-		}
-		return description;
+		return (AdapterFactoryTreeDescription) eDynamicGet(
+				TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION - ESTATIC_FEATURE_COUNT,
+				TreePackage.Literals.ADAPTER_FACTORY_TREE__DESCRIPTION, true, true);
 	}
 
 	/**
@@ -137,7 +114,9 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * @generated
 	 */
 	public AdapterFactoryTreeDescription basicGetDescription() {
-		return description;
+		return (AdapterFactoryTreeDescription) eDynamicGet(
+				TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION - ESTATIC_FEATURE_COUNT,
+				TreePackage.Literals.ADAPTER_FACTORY_TREE__DESCRIPTION, false, true);
 	}
 
 	/**
@@ -146,11 +125,8 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	 * @generated
 	 */
 	public void setDescription(AdapterFactoryTreeDescription newDescription) {
-		AdapterFactoryTreeDescription oldDescription = description;
-		description = newDescription;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION,
-					oldDescription, description));
+		eDynamicSet(TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION - ESTATIC_FEATURE_COUNT,
+				TreePackage.Literals.ADAPTER_FACTORY_TREE__DESCRIPTION, newDescription);
 	}
 
 	/**
@@ -218,9 +194,9 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TreePackage.ADAPTER_FACTORY_TREE__TARGET:
-			return target != null;
+			return basicGetTarget() != null;
 		case TreePackage.ADAPTER_FACTORY_TREE__DESCRIPTION:
-			return description != null;
+			return basicGetDescription() != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -260,7 +236,7 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
-	
+
 	@Override
 	public EList<DRepresentationElement> getRepresentationElements() {
 		return ECollections.emptyEList();

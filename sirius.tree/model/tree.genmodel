@@ -4,8 +4,8 @@
     modelDirectory="/org.nasdanika.sirius.tree/src-gen" creationIcons="false"
     editDirectory="/org.nasdanika.sirius.tree.edit/src-gen" editorDirectory="/org.nasdanika.sirius.tree.editor/src-gen"
     modelPluginID="org.nasdanika.sirius.tree" modelName="Tree" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" complianceLevel="5.0"
-    copyrightFields="false" usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.sirius/model/viewpoint.genmodel#//viewpoint"
+    codeFormatting="true" importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic"
+    complianceLevel="5.0" copyrightFields="false" usedGenPackages="../../org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.sirius/model/viewpoint.genmodel#//viewpoint"
     operationReflection="true" importOrganizing="true">
   <foreignModel>tree.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>

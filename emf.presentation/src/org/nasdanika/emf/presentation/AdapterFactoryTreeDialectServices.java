@@ -67,7 +67,7 @@ public class AdapterFactoryTreeDialectServices extends AbstractRepresentationDia
             monitor.beginTask("Creating adapter factory tree " + name, 11);
             monitor.subTask("Creating adapter factory tree " + name);
             AdapterFactoryTree tree = TreeFactory.eINSTANCE.createAdapterFactoryTree();
-            tree.setName(name);
+//            tree.setName(name);
             tree.setTarget(semantic);
             tree.setDescription((AdapterFactoryTreeDescription) description);
             monitor.worked(1);
@@ -113,13 +113,13 @@ public class AdapterFactoryTreeDialectServices extends AbstractRepresentationDia
     protected <T extends RepresentationDescription> void initRepresentationForElement(T representationDescription, EObject semanticElement, IProgressMonitor monitor) {
     	// NOP
     }
-
-    @Override
-    public DRepresentation copyRepresentation(DRepresentation representation, String name, Session session, IProgressMonitor monitor) {
-        DRepresentation newRepresentation = super.copyRepresentation(representation, name, session, monitor);
-        session.getServices().putCustomData(CustomDataConstants.DREPRESENTATION, ((DSemanticDecorator) representation).getTarget(), newRepresentation);
-        return newRepresentation;
-    }
+//
+//    @Override
+//    public DRepresentation copyRepresentation(DRepresentation representation, String name, Session session, IProgressMonitor monitor) {
+//        DRepresentation newRepresentation = super.copyRepresentation(representation, name, session, monitor);
+//        session.getServices().putCustomData(CustomDataConstants.DREPRESENTATION, ((DSemanticDecorator) representation).getTarget(), newRepresentation);
+//        return newRepresentation;
+//    }
 
     @Override
     public IInterpretedExpressionQuery createInterpretedExpressionQuery(EObject target, EStructuralFeature feature) {

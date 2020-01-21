@@ -88,8 +88,6 @@ public class TreeSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseDModelElement(adapterFactoryTree);
 			if (result == null)
-				result = caseDocumentedElement(adapterFactoryTree);
-			if (result == null)
 				result = caseDRefreshable(adapterFactoryTree);
 			if (result == null)
 				result = defaultCase(theEObject);

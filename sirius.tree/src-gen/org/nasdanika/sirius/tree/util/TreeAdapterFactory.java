@@ -97,11 +97,6 @@ public class TreeAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseDocumentedElement(DocumentedElement object) {
-			return createDocumentedElementAdapter();
-		}
-
-		@Override
 		public Adapter caseDRefreshable(DRefreshable object) {
 			return createDRefreshableAdapter();
 		}
@@ -114,6 +109,11 @@ public class TreeAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseDSemanticDecorator(DSemanticDecorator object) {
 			return createDSemanticDecoratorAdapter();
+		}
+
+		@Override
+		public Adapter caseDocumentedElement(DocumentedElement object) {
+			return createDocumentedElementAdapter();
 		}
 
 		@Override
