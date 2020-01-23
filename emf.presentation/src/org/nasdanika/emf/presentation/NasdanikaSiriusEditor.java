@@ -798,6 +798,7 @@ public class NasdanikaSiriusEditor
 						selectionViewer.addFilter(filter);
 					}
 				}
+				selectionViewer.refresh();
 			} else {
 				selectionViewer.setInput(getEditingDomain().getResourceSet());
 				ViewerFilter filter = new ViewerFilter() {
