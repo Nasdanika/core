@@ -93,7 +93,9 @@ public class AdapterFactoryTreeDialectUIServices implements DialectUIServices {
                 URI uri = EcoreUtil.getURI(dRepresentation);
                 DRepresentationQuery query = new DRepresentationQuery(dRepresentation);
                 URI repDescURI = Optional.ofNullable(query.getRepresentationDescriptor()).map(repDesc -> EcoreUtil.getURI(repDesc)).orElse(null);
-                final IEditorInput editorInput = new SessionEditorInput(uri, repDescURI, getEditorName(dRepresentation), session);
+                SessionEditorInput editorInput = new SessionEditorInput(uri, repDescURI, getEditorName(dRepresentation), session);
+                AdapterFactoryTreeDescription description = ((AdapterFactoryTree) dRepresentation).getDescription();
+                String editorId = description == null ? AdapterFactoryTreeEditor.ID : description.getEditorId();
                 monitor.worked(2);
                 monitor.subTask("Opening tree: " + dRepresentation.getName()); //$NON-NLS-1$
                 RunnableWithResult<IEditorPart> runnable = new RunnableWithResult.Impl<IEditorPart>() {
@@ -101,7 +103,7 @@ public class AdapterFactoryTreeDialectUIServices implements DialectUIServices {
                     public void run() {
                         final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
                         try {
-                            setResult(page.openEditor(editorInput, AdapterFactoryTreeEditor.ID));
+                            setResult(page.openEditor(editorInput, editorId));
                         } catch (final PartInitException e) {
                             NasdanikaEditorPlugin.getPlugin().log(new Status(IStatus.ERROR, NasdanikaEditorPlugin.ID, "Error opening editor", e));
                         }

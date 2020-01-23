@@ -31,6 +31,7 @@ import org.nasdanika.sirius.tree.TreePackage;
  *   <li>{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl#isInitialisation <em>Initialisation</em>}</li>
  *   <li>{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl#getMetamodel <em>Metamodel</em>}</li>
  *   <li>{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl#isShowOnStartup <em>Show On Startup</em>}</li>
+ *   <li>{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl#getEditorId <em>Editor Id</em>}</li>
  * </ul>
  *
  * @generated
@@ -95,6 +96,16 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 	 * @ordered
 	 */
 	protected static final boolean SHOW_ON_STARTUP_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #getEditorId() <em>Editor Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEditorId()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String EDITOR_ID_EDEFAULT = "org.nasdanika.emf.presentation.AdapterFactoryTreeEditor.ID";
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -274,6 +285,26 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getEditorId() {
+		return (String) eDynamicGet(TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID - ESTATIC_FEATURE_COUNT,
+				TreePackage.Literals.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEditorId(String newEditorId) {
+		eDynamicSet(TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID - ESTATIC_FEATURE_COUNT,
+				TreePackage.Literals.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID, newEditorId);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -291,6 +322,8 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 			return getMetamodel();
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP:
 			return isShowOnStartup();
+		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID:
+			return getEditorId();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -326,6 +359,9 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP:
 			setShowOnStartup((Boolean) newValue);
 			return;
+		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID:
+			setEditorId((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -359,6 +395,9 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP:
 			setShowOnStartup(SHOW_ON_STARTUP_EDEFAULT);
 			return;
+		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID:
+			setEditorId(EDITOR_ID_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -387,6 +426,8 @@ public class AdapterFactoryTreeDescriptionImpl extends DocumentedElementImpl imp
 			return !getMetamodel().isEmpty();
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP:
 			return isShowOnStartup() != SHOW_ON_STARTUP_EDEFAULT;
+		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID:
+			return EDITOR_ID_EDEFAULT == null ? getEditorId() != null : !EDITOR_ID_EDEFAULT.equals(getEditorId());
 		}
 		return super.eIsSet(featureID);
 	}

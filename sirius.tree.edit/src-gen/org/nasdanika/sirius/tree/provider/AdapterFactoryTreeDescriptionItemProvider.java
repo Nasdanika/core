@@ -57,6 +57,7 @@ public class AdapterFactoryTreeDescriptionItemProvider extends DocumentedElement
 			addInitialisationPropertyDescriptor(object);
 			addMetamodelPropertyDescriptor(object);
 			addShowOnStartupPropertyDescriptor(object);
+			addEditorIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -165,6 +166,22 @@ public class AdapterFactoryTreeDescriptionItemProvider extends DocumentedElement
 	}
 
 	/**
+	 * This adds a property descriptor for the Editor Id feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEditorIdPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_AdapterFactoryTreeDescription_editorId_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_AdapterFactoryTreeDescription_editorId_feature",
+						"_UI_AdapterFactoryTreeDescription_type"),
+				TreePackage.Literals.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns AdapterFactoryTreeDescription.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -216,6 +233,7 @@ public class AdapterFactoryTreeDescriptionItemProvider extends DocumentedElement
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__TITLE_EXPRESSION:
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__INITIALISATION:
 		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP:
+		case TreePackage.ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}

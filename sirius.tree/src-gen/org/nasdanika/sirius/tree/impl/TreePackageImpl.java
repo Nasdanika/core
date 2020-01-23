@@ -2,6 +2,7 @@
  */
 package org.nasdanika.sirius.tree.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -138,6 +139,15 @@ public class TreePackageImpl extends EPackageImpl implements TreePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getAdapterFactoryTreeDescription_EditorId() {
+		return (EAttribute) adapterFactoryTreeDescriptionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public TreeFactory getTreeFactory() {
 		return (TreeFactory) getEFactoryInstance();
 	}
@@ -166,6 +176,7 @@ public class TreePackageImpl extends EPackageImpl implements TreePackage {
 		createEReference(adapterFactoryTreeEClass, ADAPTER_FACTORY_TREE__DESCRIPTION);
 
 		adapterFactoryTreeDescriptionEClass = createEClass(ADAPTER_FACTORY_TREE_DESCRIPTION);
+		createEAttribute(adapterFactoryTreeDescriptionEClass, ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID);
 	}
 
 	/**
@@ -197,6 +208,7 @@ public class TreePackageImpl extends EPackageImpl implements TreePackage {
 				.getEPackage(ViewpointPackage.eNS_URI);
 		DescriptionPackage theDescriptionPackage = (DescriptionPackage) EPackage.Registry.INSTANCE
 				.getEPackage(DescriptionPackage.eNS_URI);
+		EcorePackage theEcorePackage = (EcorePackage) EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -216,6 +228,9 @@ public class TreePackageImpl extends EPackageImpl implements TreePackage {
 
 		initEClass(adapterFactoryTreeDescriptionEClass, AdapterFactoryTreeDescription.class,
 				"AdapterFactoryTreeDescription", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAdapterFactoryTreeDescription_EditorId(), theEcorePackage.getEString(), "editorId",
+				"org.nasdanika.emf.presentation.AdapterFactoryTreeEditor.ID", 0, 1, AdapterFactoryTreeDescription.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -2,6 +2,7 @@
  */
 package org.nasdanika.sirius.tree;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -167,23 +168,23 @@ public interface TreePackage extends EPackage {
 	 */
 	int ADAPTER_FACTORY_TREE_FEATURE_COUNT = ViewpointPackage.DREPRESENTATION_FEATURE_COUNT + 2;
 
-//	/**
-//	 * The operation id for the '<em>Get DAnnotation</em>' operation.
-//	 * <!-- begin-user-doc -->
-//	 * <!-- end-user-doc -->
-//	 * @generated
-//	 * @ordered
-//	 */
-//	int ADAPTER_FACTORY_TREE___GET_DANNOTATION__STRING = ViewpointPackage.DREPRESENTATION___GET_DANNOTATION__STRING;
-//
-//	/**
-//	 * The number of operations of the '<em>Adapter Factory Tree</em>' class.
-//	 * <!-- begin-user-doc -->
-//	 * <!-- end-user-doc -->
-//	 * @generated
-//	 * @ordered
-//	 */
-//	int ADAPTER_FACTORY_TREE_OPERATION_COUNT = ViewpointPackage.DREPRESENTATION_OPERATION_COUNT + 0;
+	//	/**
+	//	 * The operation id for the '<em>Get DAnnotation</em>' operation.
+	//	 * <!-- begin-user-doc -->
+	//	 * <!-- end-user-doc -->
+	//	 * @generated
+	//	 * @ordered
+	//	 */
+	//	int ADAPTER_FACTORY_TREE___GET_DANNOTATION__STRING = ViewpointPackage.DREPRESENTATION___GET_DANNOTATION__STRING;
+	//
+	//	/**
+	//	 * The number of operations of the '<em>Adapter Factory Tree</em>' class.
+	//	 * <!-- begin-user-doc -->
+	//	 * <!-- end-user-doc -->
+	//	 * @generated
+	//	 * @ordered
+	//	 */
+	//	int ADAPTER_FACTORY_TREE_OPERATION_COUNT = ViewpointPackage.DREPRESENTATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.sirius.tree.impl.AdapterFactoryTreeDescriptionImpl <em>Adapter Factory Tree Description</em>}' class.
@@ -268,6 +269,15 @@ public interface TreePackage extends EPackage {
 	int ADAPTER_FACTORY_TREE_DESCRIPTION__SHOW_ON_STARTUP = DescriptionPackage.REPRESENTATION_DESCRIPTION__SHOW_ON_STARTUP;
 
 	/**
+	 * The feature id for the '<em><b>Editor Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID = DescriptionPackage.REPRESENTATION_DESCRIPTION_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Adapter Factory Tree Description</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -275,17 +285,17 @@ public interface TreePackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_FACTORY_TREE_DESCRIPTION_FEATURE_COUNT = DescriptionPackage.REPRESENTATION_DESCRIPTION_FEATURE_COUNT
-			+ 0;
+			+ 1;
 
-//	/**
-//	 * The number of operations of the '<em>Adapter Factory Tree Description</em>' class.
-//	 * <!-- begin-user-doc -->
-//	 * <!-- end-user-doc -->
-//	 * @generated
-//	 * @ordered
-//	 */
-//	int ADAPTER_FACTORY_TREE_DESCRIPTION_OPERATION_COUNT = DescriptionPackage.REPRESENTATION_DESCRIPTION_OPERATION_COUNT
-//			+ 0;
+	//	/**
+	//	 * The number of operations of the '<em>Adapter Factory Tree Description</em>' class.
+	//	 * <!-- begin-user-doc -->
+	//	 * <!-- end-user-doc -->
+	//	 * @generated
+	//	 * @ordered
+	//	 */
+	//	int ADAPTER_FACTORY_TREE_DESCRIPTION_OPERATION_COUNT = DescriptionPackage.REPRESENTATION_DESCRIPTION_OPERATION_COUNT
+	//			+ 0;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.sirius.tree.AdapterFactoryTree <em>Adapter Factory Tree</em>}'.
@@ -317,6 +327,17 @@ public interface TreePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAdapterFactoryTreeDescription();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.sirius.tree.AdapterFactoryTreeDescription#getEditorId <em>Editor Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Editor Id</em>'.
+	 * @see org.nasdanika.sirius.tree.AdapterFactoryTreeDescription#getEditorId()
+	 * @see #getAdapterFactoryTreeDescription()
+	 * @generated
+	 */
+	EAttribute getAdapterFactoryTreeDescription_EditorId();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -366,6 +387,13 @@ public interface TreePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ADAPTER_FACTORY_TREE_DESCRIPTION = eINSTANCE.getAdapterFactoryTreeDescription();
+		/**
+		 * The meta object literal for the '<em><b>Editor Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ADAPTER_FACTORY_TREE_DESCRIPTION__EDITOR_ID = eINSTANCE.getAdapterFactoryTreeDescription_EditorId();
 
 	}
 
