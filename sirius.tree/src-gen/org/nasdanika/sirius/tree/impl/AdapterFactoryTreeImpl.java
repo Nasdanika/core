@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.viewpoint.DRepresentationElement;
 import org.eclipse.sirius.viewpoint.DSemanticDecorator;
 import org.eclipse.sirius.viewpoint.ViewpointPackage;
+import org.eclipse.sirius.viewpoint.description.DAnnotation;
 import org.eclipse.sirius.viewpoint.impl.DRepresentationImpl;
 
 import org.nasdanika.sirius.tree.AdapterFactoryTree;
@@ -240,6 +241,16 @@ public class AdapterFactoryTreeImpl extends DRepresentationImpl implements Adapt
 	@Override
 	public EList<DRepresentationElement> getRepresentationElements() {
 		return ECollections.emptyEList();
+	}
+	
+	@Override
+	public EList<DRepresentationElement> getOwnedRepresentationElements() {
+		return ECollections.emptyEList();
+	}
+	
+	@Override
+	public DAnnotation getDAnnotation(String source) {
+		return null;
 	}
 
 } //AdapterFactoryTreeImpl
