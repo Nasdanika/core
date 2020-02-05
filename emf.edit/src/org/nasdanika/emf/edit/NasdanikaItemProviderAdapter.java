@@ -84,14 +84,6 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		}
 		return Context.EMPTY_CONTEXT;
 	}
-
-	protected MultiReferenceDialogCellEditorFactory createMultiReferenceDialogCellEditorFactory() {
-		return new MultiReferenceDialogCellEditorFactory(null, ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory());
-	}
-	
-	protected SingleReferenceDialogCellEditorFactory createSingleReferenceDialogCellEditorFactory() {
-		return new SingleReferenceDialogCellEditorFactory(null, ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory());
-	}
 	
 	/**
 	 * Provides cell editor factory for references.
@@ -110,10 +102,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		    String category,
 		    String[] filterFlags)
 		  {			
-		    Object cellEditorFactory =  null;
-		    if (feature instanceof EReference) {
-		    	cellEditorFactory = feature.isMany() ? createMultiReferenceDialogCellEditorFactory() : createSingleReferenceDialogCellEditorFactory();
-		    }
+		    Object cellEditorFactory = createCellEditorFactory(feature);
 			return createItemPropertyDescriptor
 		      (adapterFactory,
 		       resourceLocator,
@@ -156,11 +145,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 			    String[] filterFlags, 
 			    Collection<Object> choiceOfValues)
 			  {			
-			    Object cellEditorFactory =  null;
-			    if (feature instanceof EReference) {
-			    	cellEditorFactory = feature.isMany() ? createMultiReferenceDialogCellEditorFactory() : createSingleReferenceDialogCellEditorFactory();
-			    }
-				return 
+			    return 
 				  new ItemPropertyDescriptor
 				    (((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 				     resourceLocator,
@@ -173,7 +158,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 				     staticImage,
 				     category,
 				     filterFlags,
-				     cellEditorFactory) {
+				     createCellEditorFactory(feature)) {
 					
 					@Override
 					protected Collection<?> getComboBoxObjects(Object object) {
@@ -181,8 +166,17 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 					}
 					
 				};
-	}	  
-		
+	}
+
+	protected Object createCellEditorFactory(EStructuralFeature feature) {
+		Object cellEditorFactory =  null;
+		if (feature instanceof EReference) {
+			ComposeableAdapterFactory rootAdapterFactory = ((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory();
+			cellEditorFactory = feature.isMany() ? new MultiReferenceDialogCellEditorFactory(null, rootAdapterFactory) : new SingleReferenceDialogCellEditorFactory(null, rootAdapterFactory);
+		}
+		return cellEditorFactory;
+	}	  	
+
 	@Override
 	protected boolean shouldComposeCreationImage() {
 		return true;
