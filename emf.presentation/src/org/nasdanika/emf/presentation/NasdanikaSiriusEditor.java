@@ -371,13 +371,17 @@ public class NasdanikaSiriusEditor
 	 */
 	protected void updateProblemIndication() {
 		if (updateProblemIndication) {
+			AdapterFactoryEditingDomain editingDomain = getEditingDomain();
+			if (editingDomain == null) {
+				return;
+			}
 			BasicDiagnostic diagnostic =
 				new BasicDiagnostic
 					(Diagnostic.OK,
 					 "org.nasdanika.vinci.app.editor",
 					 0,
 					 null,
-					 new Object [] { getEditingDomain().getResourceSet() });
+					 new Object [] { editingDomain.getResourceSet() });
 			for (Diagnostic childDiagnostic : resourceToDiagnosticMap.values()) {
 				if (childDiagnostic.getSeverity() != Diagnostic.OK) {
 					diagnostic.add(childDiagnostic);
@@ -406,7 +410,7 @@ public class NasdanikaSiriusEditor
 				}
 			}
 
-			if (markerHelper.hasMarkers(getEditingDomain().getResourceSet())) {
+			if (markerHelper.hasMarkers(editingDomain.getResourceSet())) {
 				try {
 					markerHelper.updateMarkers(diagnostic);
 				}
