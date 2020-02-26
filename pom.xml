@@ -15,71 +15,19 @@
 	</prerequisites>
 
 	<properties>
-		<tycho-version>1.5.0</tycho-version>
+		<tycho-version>1.6.0</tycho-version>
 	</properties>
 
 	<repositories>
 		<repository>
 			<id>foundation</id>
-			<url>https://www.nasdanika.org/${env.CIRCLE_BRANCH}/foundation-repository</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>third-party</id>
-			<url>https://www.nasdanika.org/master/products/third-party/repository</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
-			<id>maven-osgi</id>
-			<url>https://www.nasdanika.org/master/products/maven-osgi/repository</url>
+			<url>https://www.nasdanika.org/builds/${env.RELEASE}/repositories/composite</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-site-plugin</artifactId>
-			    <version>3.7.1</version>
-			    <configuration>
-			        <skip>true</skip>
-			        <skipDeploy>true</skipDeploy>
-			    </configuration>
-			</plugin>	
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.1</version>
-				<configuration>
-				    <skipAssembly>true</skipAssembly>
-				</configuration>
-			</plugin>						
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<linksource>true</linksource>
-					<failOnError>false</failOnError>
-					
-			        	<doclet>ch.raffael.doclets.pegdown.PegdownDoclet</doclet>
-			        	<docletArtifact>
-			         		<groupId>ch.raffael.pegdown-doclet</groupId>
-			         		<artifactId>pegdown-doclet</artifactId>
-			        		<version>1.1</version>
-			        	</docletArtifact>
-			        	<useStandardDocletOptions>true</useStandardDocletOptions>
-					
-					<links>
-						<link>http://download.eclipse.org/modeling/emf/emf/javadoc/2.11</link>
-						<link>http://help.eclipse.org/oxygen/topic/org.eclipse.emf.cdo.doc/javadoc</link>		
-						<link>http://help.eclipse.org/oxygen/topic/org.eclipse.platform.doc.isv/reference/api</link>
-						<link>http://stleary.github.io/JSON-java</link>			
-						<link>https://osgi.org/javadoc/r4v42/</link>
-						<link>http://seleniumhq.github.io/selenium/docs/api/java/</link>
-					</links>
-				</configuration>				
-			</plugin>
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-document-bundle-plugin</artifactId>
@@ -127,32 +75,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.2</version>
-				<!-- 
-				<configuration>
-					<excludes>
-						<exclude>**/plugin1/Main.class</exclude>
-					</excludes>
-				</configuration>
-				 -->
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent-integration</goal>
-						</goals>
-					</execution>
-			        <execution>
-			            <id>report-aggregate</id>
-			            <phase>verify</phase>
-			            <goals>
-			                <goal>report-aggregate</goal>
-			            </goals>
-			        </execution>					
-				</executions>
-			</plugin>									
 		</plugins>
 	</build>
 	<modules>
@@ -180,8 +102,6 @@
 		<module>repository</module>
 
 	</modules>
-	<!-- For resolution of JavaDoc between modules -->
-	<url>https://www.nasdanika.org/products/core/${project.version}/${env.CIRCLE_BRANCH}/apidocs/</url>
 	<organization>
 		<name>Nasdanika LLC</name>
 		<url>https://www.nasdanika.org</url>
