@@ -28,6 +28,26 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
+			<plugin>	
+				<groupId>org.apache.maven.plugins</groupId>	
+			    <artifactId>maven-site-plugin</artifactId>	
+			    <version>3.8.2</version>	
+			    <configuration>	
+			        <skip>true</skip>	
+			        <skipDeploy>true</skipDeploy>	
+			    </configuration>	
+			</plugin>		
+			<plugin>	
+				<groupId>org.apache.maven.plugins</groupId>	
+				<artifactId>maven-javadoc-plugin</artifactId>	
+				<version>3.1.1</version>	
+				<configuration>	
+					<linksource>true</linksource>	
+					<failOnError>false</failOnError>	
+			        	<useStandardDocletOptions>true</useStandardDocletOptions>	
+				</configuration>					
+			</plugin>	
+
 			<plugin>
 				<groupId>org.eclipse.tycho.extras</groupId>
 				<artifactId>tycho-document-bundle-plugin</artifactId>

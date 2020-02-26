@@ -13,46 +13,12 @@
 	
 	<description>Nasdanika core bundles.</description>
 	
-	<properties>
-		<siteDir>core/${project.version}/${env.CIRCLE_BRANCH}</siteDir>
-	</properties>
-	
 	<build>
-		<extensions>
-	      <extension>
-	        <groupId>org.apache.maven.wagon</groupId>
-	         <artifactId>wagon-ssh</artifactId>
-	         <version>3.3.2</version>
-	      </extension>
-		</extensions>
 		<plugins>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.1.1</version>
-				<configuration>
-					<skipAssembly>false</skipAssembly>
-					<outputDirectory>${project.build.directory}/site</outputDirectory>
-					<formats>zip</formats>
-					<finalName>nasdanika-core</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-					<descriptors>
-						<descriptor>src/assembly/workspace.xml</descriptor>
-					</descriptors>
-				</configuration>
-			        <executions>
-			          <execution>
-			            <id>create-archive</id>
-			            <phase>pre-site</phase>
-			            <goals>
-			              <goal>single</goal>
-			            </goals>
-			          </execution>
-			        </executions>
-			</plugin>			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-site-plugin</artifactId>
-			    <version>3.7.1</version>
+			    <version>3.8.2</version>
 			    <configuration>
 			        <skip>false</skip>
 			        <skipDeploy>false</skipDeploy>
@@ -168,44 +134,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>ftp</id>
-						<phase>pre-site</phase>
-						<configuration>
-							<target>
-								<ftp passive="yes" action="mkdir" server="${env.FTP_SERVER}" userid="${env.FTP_USER}" password="${env.FTP_PASSWORD}" remotedir="/${siteDir}"/>
-							
-								<ftp passive="yes" action="delete" server="${env.FTP_SERVER}" userid="${env.FTP_USER}" password="${env.FTP_PASSWORD}" remotedir="/${siteDir}">
-									<fileset defaultexcludes="false">
-										<include name="**" />
-									</fileset>
-								</ftp>
-								
-								<ftp passive="yes" action="rmdir" server="${env.FTP_SERVER}" userid="${env.FTP_USER}" password="${env.FTP_PASSWORD}" remotedir="/${siteDir}">
-									<fileset defaultexcludes="false">
-										<include name="**" />
-									</fileset>
-								</ftp>
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.ant</groupId>
-						<artifactId>ant-commons-net</artifactId>
-						<version>1.10.5</version>
-					</dependency>
-				</dependencies>
-			</plugin>								
-			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-repository-plugin</artifactId>
 				<version>${tycho-version}</version>
@@ -215,12 +143,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<url>https://www.nasdanika.org/home/products/${siteDir}/</url>
-	<distributionManagement>
-		<site>
-			<id>nasdanika-org</id>
-			<url>sftp://${env.FTP_SERVER}/${siteDir}</url>
-		</site>
-	</distributionManagement>	
-
 </project>
