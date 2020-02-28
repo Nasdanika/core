@@ -44,7 +44,7 @@
 				<executions>
 					<execution>
 						<id>make-assembly</id>
-						<phase>initialize</phase>
+						<phase>site</phase>
 						<goals>
 							<goal>single</goal>
 						</goals>
