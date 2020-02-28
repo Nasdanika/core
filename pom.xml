@@ -33,9 +33,9 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.2.0</version>
 				<configuration>
-					<descriptorRefs>
+					<descriptors>
 						<descriptor>source-assembly.xml</descriptor>
-					</descriptorRefs>
+					</descriptors>
 					<!--<outputDirectory>${project.build.directory}/site</outputDirectory>-->
 					<formats>zip</formats>
 					<finalName>source</finalName>
