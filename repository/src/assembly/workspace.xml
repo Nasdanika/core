@@ -8,11 +8,11 @@
   <fileSets>
     <fileSet>
       <directory>${project.basedir}/..</directory>
-      <outputDirectory>/</outputDirectory>
       <useDefaultExcludes>false</useDefaultExcludes>
       <excludes>
         <exclude>.repository/**</exclude>
         <exclude>*/target/**</exclude>
+        <exclude>*/bin/**</exclude>
         <exclude>*.jar</exclude>
         <exclude>.git/**</exclude>
         <exclude>.circleci/**</exclude>
