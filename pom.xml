@@ -98,6 +98,8 @@
 		</plugins>
 	</build>
 	<modules>
+		<module>cli</module>		
+
 		<module>emf</module>		
 		<module>emf.edit</module>		
 		<module>emf.presentation</module>		

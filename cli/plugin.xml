@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+   <extension-point id="org.nasdanika.cli" name="Nasdanika Command Line Interface" schema="schema/org.nasdanika.cli.exsd"/>
+   <extension
+         id="app"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+         <run
+               class="....Application">
+         </run>
+      </application>
+   </extension>
+</plugin>
