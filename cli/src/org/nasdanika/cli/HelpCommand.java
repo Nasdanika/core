@@ -91,7 +91,7 @@ public class HelpCommand extends CommandBase {
 			cmd.usage(out);
 		}		
 		
-		List<String> cPath = new ArrayList<>();
+		List<String> cPath = new ArrayList<>(cmdPath);
 		cPath.add(cmd.getCommandName());
 		for (CommandLine subCommand: cmd.getSubcommands().values()) {
 			usage(cPath, subCommand, out);

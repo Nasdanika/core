@@ -9,7 +9,7 @@ Export-Package: org.nasdanika.cli
 Bundle-ClassPath: .
 Automatic-Module-Name: org.nasdanika.cli
 Require-Bundle: org.fusesource.jansi;bundle-version="1.18.0",
- picocli;bundle-version="4.2.0",
+ picocli;bundle-version="4.2.0";visibility:=reexport,
  org.eclipse.equinox.app,
  org.eclipse.osgi;bundle-version="3.15.100",
  org.eclipse.equinox.registry,

@@ -2,7 +2,7 @@
 <?eclipse version="3.0"?>
 
 <plugin>
-   <extension-point id="org.nasdanika.cli" name="Nasdanika Command Line Interface" schema="schema/org.nasdanika.cli.exsd"/>
+   <extension-point id="command" name="Nasdanika Command Line Interface Contributions" schema="schema/command.exsd"/>
    <extension
          id="app"
          point="org.eclipse.core.runtime.applications">

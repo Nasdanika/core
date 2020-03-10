@@ -3,18 +3,18 @@
 <schema targetNamespace="org.nasdanika.cli" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.nasdanika.cli" id="org.nasdanika.cli" name="Nasdanika Command Line Interface"/>
+         <meta.schema plugin="org.nasdanika.cli" id="command" name="Nasdanika Command Line Interface Contributions"/>
       </appInfo>
       <documentation>
-         Nasdanika Command Line Interface schema defines a hierarchy of commands.
+         [Enter description of this extension point.]
       </documentation>
    </annotation>
 
    <element name="extension">
       <annotation>
-         <appinfo>
+         <appInfo>
             <meta.element />
-         </appinfo>
+         </appInfo>
       </annotation>
       <complexType>
          <sequence>
@@ -39,9 +39,9 @@
                <documentation>
                   
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute translatable="true"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -60,7 +60,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  Command implementation class. If the definition contains parameters the implementation class shall implement java.util.function.BiConsumer<String,String>.
+                  Command implementation class. If the definition contains parameters the implementation class shall implement java.util.function.BiConsumer&lt;String,String&gt;.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":java.util.concurrent.Callable"/>
@@ -78,7 +78,7 @@
             <annotation>
                <documentation>
                   Link to the parent command for bottom-up construction of the command hierarchy. 
-Format: <code><plugin symbolic name>#<command id></code>.
+Format: &lt;code&gt;&lt;plugin symbolic name&gt;#&lt;command id&gt;&lt;/code&gt;.
 
 Top-down construction shall be performed using the PicoCli means.
                </documentation>
@@ -86,14 +86,14 @@ Top-down construction shall be performed using the PicoCli means.
          </attribute>
       </complexType>
    </element>
-
+   
    <element name="parameter">
       <annotation>
          <appinfo>
             <meta.element labelAttribute="name"/>
          </appinfo>
          <documentation>
-            Command parameter is passed to the command by calling its <code>java.util.function.BiConsumer.accept(String,String)</code> method.
+            Command parameter is passed to the command by calling its &lt;code&gt;java.util.function.BiConsumer.accept(String,String)&lt;/code&gt; method.
          </documentation>
       </annotation>
       <complexType>
@@ -112,41 +112,43 @@ Top-down construction shall be performed using the PicoCli means.
             </annotation>
          </attribute>
       </complexType>
-   </element>
+   </element>   
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="since"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter the first release in which this extension point appears.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="examples"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter extension point usage example here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="apiinfo"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter API information here.]
       </documentation>
    </annotation>
 
    <annotation>
-      <appinfo>
+      <appInfo>
          <meta.section type="implementation"/>
-      </appinfo>
+      </appInfo>
       <documentation>
          [Enter information about supplied implementation of this extension point.]
       </documentation>
    </annotation>
+
+
 </schema>
