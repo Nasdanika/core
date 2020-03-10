@@ -11,7 +11,7 @@
             thread="main"
             visible="true">
          <run
-               class="....Application">
+               class="org.nasdanika.cli.Application">
          </run>
       </application>
    </extension>

@@ -48,12 +48,12 @@ public class HelpCommand extends CommandBase {
 		if (html) {
 			int hLevel = Math.min(cmdPath.size() + level, 6);
 			out.println("<h" + hLevel + ">" + cmd.getCommandName() + "</h" + hLevel + ">");
-			out.print("<p><strong>Version:</strong>: ");
+			out.print("<table><tr><th valign=\"top\">Version:</th><td> ");
 			for (String vs: commandSpec.version()) {
 				out.print(vs);
-				out.print(" ");
+				out.print("<br/>");
 			}
-			out.print("</p>");
+			out.print("</td></tr></table>");
 			
 			out.println("<pre style=\"background:black;color:white;width:" + WIDTH + "ch\">");
 			try (HtmlAnsiOutputStream haos = new HtmlAnsiOutputStream(new FilterOutputStream(out) { @Override public void close() {} })) {
@@ -75,22 +75,19 @@ public class HelpCommand extends CommandBase {
 				hb.append(ps).append(" > ");
 			}
 			hb.append(cmd.getCommandName());
-			hb.append(" v. ");
+			out.print(center(hb, WIDTH - 4));
+			out.println(" *");
+			
 			for (String vs: commandSpec.version()) {
-				hb.append(vs).append(" ");
+				out.print("* ");
+				out.print(center(vs, WIDTH - 4));
+				out.println(" *");			
 			}
 			
-			for (int i=0, padding = (WIDTH - hb.length() - 3)/2; i < padding; ++i) {
-				hb.append(" ");
-			}
-			for (int i = 0, padding = WIDTH - hb.length() -1; i < padding; ++i) {
-				out.print(" ");
-			}
-			out.print(hb.toString());
-			out.println("*");
 			for (int i = 0; i < WIDTH; ++i) {
 				out.print("*");
 			}
+			out.println();
 			cmd.usage(out);
 		}		
 		
@@ -99,6 +96,19 @@ public class HelpCommand extends CommandBase {
 		for (CommandLine subCommand: cmd.getSubcommands().values()) {
 			usage(cPath, subCommand, out);
 		}
+	}
+	
+	private String center(CharSequence text, int width) {
+		StringBuilder sb = new StringBuilder();
+		int toPad = width - text.length();
+		for (int i=0, padding = toPad/2; i < padding; ++i) {
+			sb.append(" ");
+		}
+		sb.append(text);
+		while (sb.length() < width) {
+			sb.append(" ");
+		}
+		return sb.toString();
 	}
 	
 	@Override
