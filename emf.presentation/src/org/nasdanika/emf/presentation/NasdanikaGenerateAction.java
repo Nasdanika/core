@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
-import org.nasdanika.common.Context;
 import org.nasdanika.common.Util;
 
 /**
@@ -151,16 +150,6 @@ public abstract class NasdanikaGenerateAction<T extends EObject> extends Action 
 		}
 		return null;
 	};
-
-	/**
-	 * Validates that URL is a valid relative file name/path - a very basic check.
-	 * @param url
-	 * @return
-	 */
-	protected boolean isValidAndRelative(String url) {
-		String interpolated = Context.wrap(k -> "something").interpolate(url); // interpolates tokens if any with valid file part name.
-		return !interpolated.contains("://") && !interpolated.startsWith("/") && !interpolated.startsWith("./");
-	}
 
 	private static MultiStatus createMultiStatus(String msg, Throwable t) {
 		List<Status> childStatuses = new ArrayList<>();

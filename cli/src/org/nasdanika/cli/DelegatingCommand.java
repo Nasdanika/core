@@ -9,6 +9,7 @@ import java.io.Writer;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.ProgressRecorder;
@@ -69,7 +70,7 @@ public abstract class DelegatingCommand extends ContextCommand {
 				@Override
 				public void close() {
 					try (Writer w = new FileWriter(progressOutput)) {
-						toJSON().write(w, 4, 4);
+						toJSON().write(w, 4, 0);
 					} catch (IOException e) {
 						System.err.println("Error closing progress writer");
 						e.printStackTrace();
@@ -98,6 +99,9 @@ public abstract class DelegatingCommand extends ContextCommand {
 			} catch (Exception e) {
 				System.err.println("Exception during command execution or commit: "+e.getMessage());
 				e.printStackTrace();
+				if (e instanceof DiagnosticException) {
+					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+				}
 				return delegate.splitAndRollback(progressMonitor) ? 4 : 5;
 			}			
 		}
