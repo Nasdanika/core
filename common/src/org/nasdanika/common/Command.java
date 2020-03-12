@@ -30,13 +30,13 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 	void execute(ProgressMonitor progressMonitor) throws Exception;	
 	
 	default void splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			execute(subMonitor);
 		}
 	}	
 	
 	default void splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			execute(subMonitor);
 		}
 	}	

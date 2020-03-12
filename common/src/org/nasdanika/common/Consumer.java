@@ -16,13 +16,13 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 	void execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
 	
 	default void splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			execute(arg, subMonitor);
 		}
 	}	
 	
 	default void splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			execute(arg, subMonitor);
 		}
 	}	

@@ -135,7 +135,7 @@ public class HelpCommand extends CommandBase {
 	}
 	
 	@Override
-	public Object call() throws Exception {
+	public Integer call() throws Exception {
 		if (output == null) {
 			usage(Collections.emptyList(), root, System.out);
 		} else {

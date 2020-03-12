@@ -15,13 +15,13 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 	R execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
 	
 	default R splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			return execute(arg, subMonitor);
 		}
 	}
 	
 	default R splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			return execute(arg, subMonitor);
 		}
 	}

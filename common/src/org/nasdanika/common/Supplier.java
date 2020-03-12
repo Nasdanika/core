@@ -37,13 +37,13 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 	T execute(ProgressMonitor progressMonitor) throws Exception;	
 	
 	default T splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			return execute(subMonitor);
 		}
 	}
 	
 	default T splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			return execute(subMonitor);
 		}
 	}

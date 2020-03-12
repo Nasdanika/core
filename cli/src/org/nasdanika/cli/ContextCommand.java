@@ -47,8 +47,7 @@ public abstract class ContextCommand extends CommandBase {
 					+ "or extension. Mounts shadow context entries."
 			})
 	private Map<String,String> mounts = new LinkedHashMap<>();
-	
-	
+		
 	@Option(			
 			names = {"-C", "--context"},
 			description = {
@@ -61,7 +60,7 @@ public abstract class ContextCommand extends CommandBase {
 			})
 	private List<String> contexts = new ArrayList<>();
 	
-	protected Context buildContext() throws IOException {
+	protected Context createContext() throws IOException {
 		Context ret = Context.EMPTY_CONTEXT;		
 		for (Entry<String, String> mountEntry: mounts.entrySet()) {
 			ret = ret.mount(load(mountEntry.getValue()), mountEntry.getKey());

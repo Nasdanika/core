@@ -42,6 +42,7 @@ public interface Diagnostic {
 		
 		Status status = getStatus();
 		if (status != null) {
+			// TODO - ANSI coloring of statuses
 			out.print(status.name());
 			out.print(' ');
 		}

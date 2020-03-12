@@ -10,6 +10,6 @@ import picocli.CommandLine.Command;
  *
  */
 @Command(mixinStandardHelpOptions = true)
-public abstract class CommandBase implements Callable<Object> {
+public abstract class CommandBase implements Callable<Integer> {
 
 }

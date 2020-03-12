@@ -23,13 +23,13 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	}
 		
 	default void splitAndCommit(ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Commiting "+name())) {
 			commit(subMonitor);
 		}
 	}	
 			
 	default void splitAndCommit(double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Commiting "+name())) {
 			commit(subMonitor);
 		}
 	}	
@@ -47,13 +47,13 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	};
 	
 	default boolean splitAndRollback(ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Rolling back "+name())) {
 			return rollback(subMonitor);
 		}
 	}	
 	
 	default boolean splitAndRollback(double size, ProgressMonitor progressMonitor) throws Exception {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Rolling back "+name())) {
 			return rollback(subMonitor);
 		}
 	}	
@@ -61,10 +61,11 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	/**
 	 * Splits the monitor for this participant's size and name.
 	 * @param parent
+	 * @param taskName Task name, e.g. diagnose. If null then execution participant name is used as the task name.
 	 * @return
 	 */
-	default ProgressMonitor split(ProgressMonitor parent) {
-		return parent.split(name(), size(), this);
+	default ProgressMonitor split(ProgressMonitor parent, String taskName) {
+		return parent.split(Util.isBlank(taskName) ? name() : taskName, size(), this);
 	}
 		
 	/**
@@ -73,18 +74,18 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	 * @param parent
 	 * @return
 	 */
-	default ProgressMonitor split(double size, ProgressMonitor parent) {
-		return parent.split(name(), size, this).setWorkRemaining(size());
+	default ProgressMonitor split(double size, ProgressMonitor parent, String taskName) {
+		return parent.split(Util.isBlank(taskName) ? name() : taskName, size, this).setWorkRemaining(size());
 	}
 		
 	default Diagnostic splitAndDiagnose(ProgressMonitor progressMonitor) {
-		try (ProgressMonitor subMonitor = split(progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(progressMonitor, "Diagnosing "+name())) {
 			return diagnose(subMonitor);
 		}
 	}	
 	
 	default Diagnostic splitAndDiagnose(double size, ProgressMonitor progressMonitor) {
-		try (ProgressMonitor subMonitor = split(size, progressMonitor)) {
+		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Diagnosing "+name())) {
 			return diagnose(subMonitor);
 		}
 	}	
