@@ -1,6 +1,10 @@
 package org.nasdanika.cli;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.Writer;
 
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.Context;
@@ -43,19 +47,39 @@ public abstract class DelegatingCommand extends ContextCommand {
 	@Option(names = {"-j", "--json"}, description = "Output progress in JSON")
 	private boolean jsonProgress;
 	
-	protected ProgressMonitor createProgressMonitor(double size) {
+	protected ProgressMonitor createProgressMonitor(double size) throws Exception {
+		if (progressOutput == null) {
+			if (jsonProgress) {
+				return new ProgressRecorder() {
+					
+					@Override
+					public void close() {
+						System.out.println(toJSON().toString(4));
+						super.close();
+					}
+					
+				};			
+			}
+			return new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		}
+		
 		if (jsonProgress) {
 			return new ProgressRecorder() {
 				
 				@Override
 				public void close() {
-					System.out.println(toJSON().toString(4));
+					try (Writer w = new FileWriter(progressOutput)) {
+						toJSON().write(w, 4, 4);
+					} catch (IOException e) {
+						System.err.println("Error closing progress writer");
+						e.printStackTrace();
+					}
 					super.close();
 				}
 				
 			};			
 		}
-		return new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		return new PrintStreamProgressMonitor(new PrintStream(progressOutput), 0, 4, true);		
 	}
 	
 	@Override
