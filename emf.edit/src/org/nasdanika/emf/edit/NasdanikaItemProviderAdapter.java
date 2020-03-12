@@ -48,7 +48,7 @@ import org.nasdanika.emf.localization.RussianResourceLocator;
  */
 public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements EReferencePredicate {
 	
-	protected MarkdownHelper markdownHelper = new MarkdownHelper();
+	protected MarkdownHelper markdownHelper = MarkdownHelper.INSTANCE;
 
 	protected NasdanikaItemProviderAdapter(AdapterFactory adapterFactory) {
 		super(adapterFactory);

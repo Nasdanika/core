@@ -10,7 +10,24 @@ import com.vladsch.flexmark.profile.pegdown.PegdownOptionsAdapter;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.data.DataHolder;
 
+/**
+ * Helper class to generate HTML from markdown. Use INSTANCE for default behavior and subclass to customize.
+ * @author Pavel
+ *
+ */
 public class MarkdownHelper {
+	
+	/**
+	 * Shared instance with default configuration.
+	 */
+	public static final MarkdownHelper INSTANCE = new MarkdownHelper();
+	
+	/**
+	 * Subclass to customize by overriding protected methods.
+	 */
+	protected MarkdownHelper() {
+		
+	}
 	
 	/**
 	 * CDN URL of the Github Markdown CSS (https://github.com/sindresorhus/github-markdown-css)

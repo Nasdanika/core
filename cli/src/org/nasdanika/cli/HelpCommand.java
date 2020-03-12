@@ -3,12 +3,16 @@ package org.nasdanika.cli;
 import java.io.File;
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.fusesource.jansi.HtmlAnsiOutputStream;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.MarkdownHelper;
+import org.nasdanika.common.Util;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -63,6 +67,25 @@ public class HelpCommand extends CommandBase {
 				haos.flush();
 			}
 			out.println("</pre>");
+
+			// Description 
+			Object userObject = commandSpec.userObject();
+			if (userObject != null) {
+				Class<? extends Object> clazz = userObject.getClass();
+				Description description = clazz.getAnnotation(Description.class);
+				if (description != null) {
+					String dResource = description.value();
+					if (Util.isBlank(dResource)) {
+						dResource = clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + ".md";						
+					}
+					InputStream dStream = clazz.getResourceAsStream(dResource);
+					if (dStream == null) {
+						throw new IllegalArgumentException("Description resource "+dResource+" not found for command class "+clazz);
+					}
+					String markdown = DefaultConverter.INSTANCE.toString(dStream);
+					out.println("<div class=\"markdown-body\">" + MarkdownHelper.INSTANCE.markdownToHtml(markdown) + "</div>");
+				}
+			}
 		} else {
 			out.println();
 			for (int i = 0; i < WIDTH; ++i) {

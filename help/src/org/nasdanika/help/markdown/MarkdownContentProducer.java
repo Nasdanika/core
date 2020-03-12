@@ -27,7 +27,7 @@ import org.osgi.framework.Bundle;
  */
 public class MarkdownContentProducer implements IHelpContentProducer {
 
-	private MarkdownHelper markdownHelper = new MarkdownHelper();
+	private MarkdownHelper markdownHelper = MarkdownHelper.INSTANCE;
 	
 	@Override
 	public InputStream getInputStream(String pluginID, String href, Locale locale) {
