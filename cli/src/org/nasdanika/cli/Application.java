@@ -50,7 +50,7 @@ public class Application implements IApplication {
 			}
 			
 			String[] args = (String[]) context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-			return new Integer(commandLine.execute(args));
+			return commandLine.execute(args);
 		} finally {
 			AnsiConsole.systemUninstall();
 		}
