@@ -110,7 +110,11 @@ public class DefaultConverter extends ReflectiveConverter {
 	public Reader toReader(InputStream in) {
 		return new InputStreamReader(in, StandardCharsets.UTF_8);
 	}
-	
+			
+	@ConverterMethod
+	public String toString(byte[] bytes) throws IOException {
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
 	
 	@ConverterMethod
 	public String toString(InputStream in) throws IOException {
