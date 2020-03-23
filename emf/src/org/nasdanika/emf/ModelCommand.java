@@ -35,7 +35,7 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 	@Parameters(
 			paramLabel = "URI", 
 			description = "Model (object) URI resolved relative to the current directory. May include fragment to address a non-root object")
-	private String uri;
+	protected String uri;
 	
 	/**
 	 * @return Consumer factory which create a consumer to pass the loaded model to.
@@ -110,6 +110,5 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 			}
 		};
 	}
-
 
 }
