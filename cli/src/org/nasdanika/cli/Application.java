@@ -50,7 +50,9 @@ public class Application implements IApplication {
 			}
 			
 			String[] args = (String[]) context.getArguments().get(IApplicationContext.APPLICATION_ARGS);
-			return commandLine.execute(args);
+			int exitCode = commandLine.execute(args);
+			System.out.println("Exit code: "+exitCode);
+			return exitCode;
 		} finally {
 			AnsiConsole.systemUninstall();
 		}
