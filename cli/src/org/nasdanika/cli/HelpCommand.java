@@ -32,13 +32,13 @@ public class HelpCommand extends CommandBase {
 		this.root = root;
 	}
 	
-	@Option(names = "--output", description = "Output file")
+	@Option(names = {"-o", "--output"}, description = "Output file")
 	private File output;
 	
-	@Option(names = "--html", defaultValue = "false", description = "Output to HTML with ANSI styling")
+	@Option(names = {"-H", "--html"}, defaultValue = "false", description = "Output to HTML with ANSI styling")
 	private boolean html;
 	
-	@Option(names = "--header-level", defaultValue = "1", description = "Starting level for HTML header tags in HTML output, the default value is ${DEFAULT_VALUE}.")
+	@Option(names = {"-l", "--header-level"}, defaultValue = "1", description = "Starting level for HTML header tags in HTML output, the default value is ${DEFAULT_VALUE}.")
 	private int level;
 	
 	private static final int WIDTH = 80;
