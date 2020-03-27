@@ -110,6 +110,8 @@
 	
 	<modules>
 		<module>common/jar-pom.xml</module>
+		<module>emf/jar-pom.xml</module>
+		<module>ncore/jar-pom.xml</module>
 	</modules>	
 	
 	<profiles>

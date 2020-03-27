@@ -23,6 +23,14 @@ public class ReflectiveConverter implements Converter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T convert(Object source, Class<T> type) {
+		// Adaptable conversion
+		if (source instanceof Adaptable) {
+			T ret = ((Adaptable) source).adaptTo(type);
+			if (ret != null) {
+				return ret;
+			}
+		}
+		
 		// Converter methods conversion
 		Optional<Method> cm = Arrays.stream(getClass().getMethods())
 				.filter(m -> m.getAnnotation(ConverterMethod.class) != null 
@@ -40,7 +48,7 @@ public class ReflectiveConverter implements Converter {
 			}
 		}			
 		
-		if(acceptConstructorConversionTargetType(type)) {
+		if (acceptConstructorConversionTargetType(type)) {
 			// Constructor conversion
 			Optional<Constructor<?>> co = Arrays.stream(type.getConstructors())
 				.filter(c -> c.getParameterCount() == 1 && c.getParameterTypes()[0].isInstance(source))
