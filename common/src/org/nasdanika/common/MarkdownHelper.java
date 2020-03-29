@@ -3,6 +3,8 @@ package org.nasdanika.common;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jsoup.Jsoup;
+
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.profile.pegdown.Extensions;
@@ -69,7 +71,16 @@ public class MarkdownHelper {
 		}
 		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown));
 		return createMarkdownHtmlRenderer().render(document);
-	}		
+	}
+	
+	/**
+	 * Converts markdown to HTML, converts HTML to plain text and then extracts the first sentence.
+	 * @param markdown
+	 * @return
+	 */
+	public String firstPlainTextSentence(String markdown) {
+		return firstSentence(Jsoup.parse(markdownToHtml(markdown)).text());		
+	}
 	
 	/**
 	 * Extracts first sentence from text

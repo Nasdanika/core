@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.fusesource.jansi.HtmlAnsiOutputStream;
 import org.nasdanika.common.DefaultConverter;
@@ -116,7 +117,7 @@ public class HelpCommand extends CommandBase {
 		
 		List<String> cPath = new ArrayList<>(cmdPath);
 		cPath.add(cmd.getCommandName());
-		for (CommandLine subCommand: cmd.getSubcommands().values()) {
+		for (CommandLine subCommand: cmd.getSubcommands().values().stream().sorted((a,b) -> a.getCommandName().compareTo(b.getCommandName())).collect(Collectors.toList())) {
 			usage(cPath, subCommand, out);
 		}
 	}
