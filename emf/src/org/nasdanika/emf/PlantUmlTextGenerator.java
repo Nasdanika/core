@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EOperation;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.DependencyTracer;
@@ -77,7 +79,7 @@ public class PlantUmlTextGenerator {
 	protected String getLocalizedName(ENamedElement namedElement) {
 		return EObjectAdaptable.getResourceContext(namedElement).getString("label", namedElement.getName());
 	}
-
+	
 	protected void appendClassEnd() throws IOException {
 		collector.append("}\n");
 	}
@@ -124,14 +126,28 @@ public class PlantUmlTextGenerator {
 		appendMember(modifiers, visibility, type, name, parameters);
 	}
 		
-	public void appendGeneralization(EClass subClass, EClass superClass) throws IOException {
+	public void appendGeneralization(EClass subClass, EGenericType superType) throws IOException {
+		EClass superClass = (EClass) superType.getEClassifier();
 		collector
 			.append(qualifiedName(superClass))
 			.append(" ")
 			.append(superClass.isInterface() && !subClass.isInterface() ? IMPLEMENTS_RELATION : EXTENDS_RELATION)
 			.append(" ")
-			.append(qualifiedName(subClass))
-			.append("\n");
+			.append(qualifiedName(subClass));
+		
+		if (!superType.getETypeArguments().isEmpty()) {
+			collector.append(" : <");
+			Iterator<EGenericType> it = superType.getETypeArguments().iterator();
+			while (it.hasNext()) {
+				collector.append(genericName(it.next()));
+				if (it.hasNext()) {
+					collector.append(",");
+				}
+			}
+			collector.append(">");
+		}		
+		
+		collector.append("\n");
 	}
 		
 	// --- ECore ---
@@ -230,9 +246,9 @@ public class PlantUmlTextGenerator {
 		allClassifiers.addAll(relatedSet);
 		for (EClassifier c: allClassifiers) {
 			if (c instanceof EClass) {
-				for (EClass sc: ((EClass) c).getESuperTypes()) {
-					if (allClassifiers.contains(sc)) {
-						appendGeneralization((EClass) c, sc);
+				for (EGenericType gsc: ((EClass) c).getEGenericSuperTypes()) {
+					if (allClassifiers.contains(gsc.getEClassifier())) {
+						appendGeneralization((EClass) c, gsc);
 					}
 				}
 			}
@@ -319,6 +335,8 @@ public class PlantUmlTextGenerator {
 			collector
 				.append(" : ")
 				.append(getLocalizedName(ref));
+			
+			collector.append(genericTypeArguments(ref.getEGenericType()));
 		}
 		
 		collector.append(System.lineSeparator());
@@ -396,21 +414,116 @@ public class PlantUmlTextGenerator {
 			return getLocalizedName(eClassifier);				
 		}
 		return "\""+getLocalizedName(ePackage)+" ("+ePackage.getNsURI()+")."+getLocalizedName(eClassifier)+"\"";
+	}	
+	
+	protected String typeParameters(EClassifier eClassifier) {
+		if (eClassifier.getETypeParameters().isEmpty()) {
+			return "";
+		}
+		StringBuilder typeParameters = new StringBuilder();
+		for (ETypeParameter typeParameter: eClassifier.getETypeParameters()) {
+			if (typeParameters.length() > 0) {
+				typeParameters.append(",");
+			}
+			typeParameters.append(genericName(typeParameter));
+		}		
+		
+		return "<" + typeParameters +">";
+	}	
+	
+	protected String genericName(ETypeParameter typeParameter) {
+		StringBuilder ret = new StringBuilder(typeParameter.getName());
+		for (EGenericType bound : typeParameter.getEBounds()) {
+			if (bound.getEUpperBound() != null) {
+				ret.append(" extends ").append(genericName(bound.getEUpperBound()));
+			}
+			if (bound.getELowerBound() != null) {
+				ret.append(" super ").append(genericName(bound.getELowerBound()));
+			}
+		}
+		
+		return ret.toString();
 	}
 	
+	protected String genericName(EGenericType eGenericType) {
+		StringBuilder ret = new StringBuilder();
+		if (eGenericType.getETypeParameter() != null) {
+			ret.append(eGenericType.getETypeParameter().getName());
+		} else if (eGenericType.getEClassifier() != null) {
+			ret.append(eGenericType.getEClassifier().getName());			
+		}
+		ret.append(genericTypeArguments(eGenericType));
+		return ret.toString();
+	}
+
+	protected String genericTypeArguments(EGenericType eGenericType) {
+		StringBuilder ret = new StringBuilder();
+		Iterator<EGenericType> it = eGenericType.getETypeArguments().iterator();
+		if (it.hasNext()) {
+			ret.append("<");
+			while (it.hasNext()) {
+				ret.append(genericName(it.next()));
+				if (it.hasNext()) {
+					ret.append(",");
+				}
+			}
+			ret.append(">");
+		}
+		return ret.toString();
+	}
+
+//	/**
+//	 * Adds generics to the name
+//	 * @param eClassifier
+//	 * @return
+//	 */
+//	protected String getGenericName(EClassifier eClassifier) {
+//		String eClassifierName = EObjectAdaptable.getResourceContext(eClassifier).getString("label", eClassifier.getName());
+//		if (eClassifier.getETypeParameters().isEmpty()) {
+//			return eClassifierName;
+//		}
+//		StringBuilder typeParameters = new StringBuilder();
+//		for (ETypeParameter typeParameter: eClassifier.getETypeParameters()) {
+//			if (typeParameters.length() > 0) {
+//				typeParameters.append(",");
+//			}
+//			typeParameters.append(getName(typeParameter));
+//		}
+//		return eClassifierName + "<" + typeParameters +">";
+//	}	
+//	//	
+//	protected String getName(EGenericType genericType) {
+//		StringBuilder ret = new StringBuilder();
+//		ret.append(genericType.getEClassifier().getName());
+//		if (!genericType.getETypeArguments().isEmpty()) {
+//			ret.append("<");
+//			for (EGenericType typeArguments: genericType.getETypeArguments()) {
+//				
+//				if (bound.getEUpperBound() != null) {
+//					ret.append(" extends ").append(getName(bound.getEUpperBound()));
+//				} 
+//				if (bound.getELowerBound() != null) {
+//					ret.append(" super ").append(getName(bound.getELowerBound()));
+//				} 				
+//			}
+//			ret.append(">");
+//		}
+//		return ret.toString();		
+//	}
+	
+
 	public void append(EClass eClass) throws IOException {
 		append(eClass, null);
 	}
 	
 	public void append(EClass eClass, String background) throws IOException {
-		// TODO - Generics
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
-		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass), getEClassifierLink(eClass), background);
+		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), background);
 		if (isAppendAttributes(eClass)) {
 			for (EAttribute attribute: eClass.getEAttributes()) {			
-				EClassifier eType = attribute.getEType();
-				if (eType != null) {
-					appendAttribute(null, null, getTypeName(eType) + (attribute.isMany() ? "[]" : ""), getLocalizedName(attribute));
+				EGenericType eGenericType = attribute.getEGenericType();
+				if (eGenericType != null) {
+					appendAttribute(null, null, genericName(eGenericType) + (attribute.isMany() ? "[]" : ""), getLocalizedName(attribute));
 				}						
 			}
 		}
@@ -419,12 +532,12 @@ public class PlantUmlTextGenerator {
 				Collection<String> parameters = new ArrayList<String>();
 				for (EParameter parameter : op.getEParameters()) {
 					String paramString = getLocalizedName(parameter);
-					if (parameter.getEType() != null) {
-						paramString = getLocalizedName(parameter.getEType()) + " " + paramString;
+					if (parameter.getEGenericType() != null) {
+						paramString = genericName(parameter.getEGenericType()) + " " + paramString;
 					}
 					parameters.add(paramString);
 				}
-				appendOperation(null, null, getTypeName(op.getEType()), getLocalizedName(op), parameters);
+				appendOperation(null, null, genericName(op.getEGenericType()), getLocalizedName(op), parameters);
 			}
 		}
 		appendClassEnd();
