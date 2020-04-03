@@ -446,7 +446,10 @@ public class PlantUmlTextGenerator {
 	}
 	
 	protected String genericName(EGenericType eGenericType) {
-		StringBuilder ret = new StringBuilder();
+		if (eGenericType == null) {
+			return "void";
+		}
+		StringBuilder ret = new StringBuilder();		
 		if (eGenericType.getETypeParameter() != null) {
 			ret.append(eGenericType.getETypeParameter().getName());
 		} else if (eGenericType.getEClassifier() != null) {
@@ -471,46 +474,6 @@ public class PlantUmlTextGenerator {
 		}
 		return ret.toString();
 	}
-
-//	/**
-//	 * Adds generics to the name
-//	 * @param eClassifier
-//	 * @return
-//	 */
-//	protected String getGenericName(EClassifier eClassifier) {
-//		String eClassifierName = EObjectAdaptable.getResourceContext(eClassifier).getString("label", eClassifier.getName());
-//		if (eClassifier.getETypeParameters().isEmpty()) {
-//			return eClassifierName;
-//		}
-//		StringBuilder typeParameters = new StringBuilder();
-//		for (ETypeParameter typeParameter: eClassifier.getETypeParameters()) {
-//			if (typeParameters.length() > 0) {
-//				typeParameters.append(",");
-//			}
-//			typeParameters.append(getName(typeParameter));
-//		}
-//		return eClassifierName + "<" + typeParameters +">";
-//	}	
-//	//	
-//	protected String getName(EGenericType genericType) {
-//		StringBuilder ret = new StringBuilder();
-//		ret.append(genericType.getEClassifier().getName());
-//		if (!genericType.getETypeArguments().isEmpty()) {
-//			ret.append("<");
-//			for (EGenericType typeArguments: genericType.getETypeArguments()) {
-//				
-//				if (bound.getEUpperBound() != null) {
-//					ret.append(" extends ").append(getName(bound.getEUpperBound()));
-//				} 
-//				if (bound.getELowerBound() != null) {
-//					ret.append(" super ").append(getName(bound.getELowerBound()));
-//				} 				
-//			}
-//			ret.append(">");
-//		}
-//		return ret.toString();		
-//	}
-	
 
 	public void append(EClass eClass) throws IOException {
 		append(eClass, null);
