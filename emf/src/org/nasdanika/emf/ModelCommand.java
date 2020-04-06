@@ -23,6 +23,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 /**
@@ -36,6 +37,10 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 			paramLabel = "URI", 
 			description = "Model (object) URI resolved relative to the current directory. May include fragment to address a non-root object")
 	protected String uri;
+	
+	@Option(names = {"-f", "--file"}, description = "URI is a file path")
+	private boolean isFile;	
+	
 	
 	/**
 	 * @return Consumer factory which create a consumer to pass the loaded model to.
@@ -75,7 +80,7 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 					resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
 				}
 
-				URI modelUri = URI.createURI(new File(".").toURI().resolve(ModelCommand.this.uri).toString());
+				URI modelUri = isFile ? URI.createFileURI(uri) : URI.createURI(new File(".").toURI().resolve(ModelCommand.this.uri).toString());
 				Resource modelResource = resourceSet.getResource(modelUri, true);
 				EObject target = modelUri.hasFragment() ? modelResource.getEObject(modelUri.fragment()) : modelResource.getContents().iterator().next();			
 				
