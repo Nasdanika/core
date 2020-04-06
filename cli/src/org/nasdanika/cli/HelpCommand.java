@@ -60,7 +60,7 @@ public class HelpCommand extends CommandBase {
 			}
 			out.print("</td></tr></table>");
 			
-			out.println("<pre style=\"background:black;color:white;width:" + WIDTH + "ch\">");
+			out.println("<pre style=\"background:black;color:white;padding-left:2px;width:" + WIDTH + "ch\">");
 			try (HtmlAnsiOutputStream haos = new HtmlAnsiOutputStream(new FilterOutputStream(out) { @Override public void close() {} })) {
 				try (PrintStream ps = new PrintStream(haos)) {
 					cmd.usage(ps, Help.Ansi.ON);
