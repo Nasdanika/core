@@ -80,11 +80,10 @@ public class HelpCommand extends CommandBase {
 						dResource = clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + ".md";						
 					}
 					InputStream dStream = clazz.getResourceAsStream(dResource);
-					if (dStream == null) {
-						throw new IllegalArgumentException("Description resource "+dResource+" not found for command class "+clazz);
+					if (dStream != null) {
+						String markdown = DefaultConverter.INSTANCE.toString(dStream);
+						out.println("<div class=\"markdown-body\">" + MarkdownHelper.INSTANCE.markdownToHtml(markdown) + "</div>");
 					}
-					String markdown = DefaultConverter.INSTANCE.toString(dStream);
-					out.println("<div class=\"markdown-body\">" + MarkdownHelper.INSTANCE.markdownToHtml(markdown) + "</div>");
 				}
 			}
 		} else {
