@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -16,6 +15,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.nasdanika.common.FunctionFactory;
 
 /**
  * Base class for adapter factories delegating to {@link Supplier} or {@link FunctionFactory} to create an adapter and 
