@@ -21,7 +21,9 @@ import picocli.CommandLine.Command;
 public class Application implements IApplication {
 	
 	@Command(
-			description="Nasdanika Command Line Interface", 
+			description= "Nasdanika Command Line Interface. " +
+					"Eclipse options can be added before nsd options, " +
+					"e.g. @|bold,yellow -data|@ to specify workspace location", 
 			synopsisSubcommandLabel = "COMMAND", 
 			name="nsd", 
 			mixinStandardHelpOptions = true, 
