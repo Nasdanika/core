@@ -42,7 +42,7 @@ public class HelpCommand extends CommandBase {
 	@Option(names = {"-l", "--header-level"}, defaultValue = "1", description = "Starting level for HTML header tags in HTML output, the default value is ${DEFAULT_VALUE}.")
 	private int level;
 	
-	private static final int WIDTH = 80;
+	private static final int WIDTH = 81;
 	
 	private void usage(
 			List<String> cmdPath, 
