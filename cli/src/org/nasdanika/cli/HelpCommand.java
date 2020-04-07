@@ -42,7 +42,7 @@ public class HelpCommand extends CommandBase {
 	@Option(names = {"-l", "--header-level"}, defaultValue = "1", description = "Starting level for HTML header tags in HTML output, the default value is ${DEFAULT_VALUE}.")
 	private int level;
 	
-	private static final int WIDTH = 81;
+	private static final int WIDTH = 80;
 	
 	private void usage(
 			List<String> cmdPath, 
@@ -60,7 +60,7 @@ public class HelpCommand extends CommandBase {
 			}
 			out.print("</td></tr></table>");
 			
-			out.println("<pre style=\"background:black;color:white;padding-left:2px;width:" + WIDTH + "ch\">");
+			out.println("<pre style=\"background:black;color:white;padding:5px;width:max-content\">");
 			try (HtmlAnsiOutputStream haos = new HtmlAnsiOutputStream(new FilterOutputStream(out) { @Override public void close() {} })) {
 				try (PrintStream ps = new PrintStream(haos)) {
 					cmd.usage(ps, Help.Ansi.ON);
