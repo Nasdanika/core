@@ -51,8 +51,7 @@ public abstract class DelegatingCommand extends ContextCommand {
 				delegate.splitAndExecute(progressMonitor);
 				delegate.splitAndCommit(progressMonitor);
 			} catch (Exception e) {
-				System.err.println("Exception during command execution or commit: "+e.getMessage());
-				e.printStackTrace();
+				reportException(e);
 				if (e instanceof DiagnosticException) {
 					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
 				}
@@ -60,6 +59,11 @@ public abstract class DelegatingCommand extends ContextCommand {
 			}			
 		}
 		return 0;
+	}
+
+	protected void reportException(Exception e) {
+		System.err.println("Exception during command execution or commit: "+e.getMessage());
+		e.printStackTrace();
 	}
 
 }

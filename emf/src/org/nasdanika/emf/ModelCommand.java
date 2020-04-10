@@ -115,5 +115,65 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 			}
 		};
 	}
+	
+	@Override
+	protected void reportException(Exception e) {
+		if (e instanceof DiagnosticException) {
+			System.err.println("Diagnostic error:");
+			dumpDiagnostic(((DiagnosticException) e).getDiagnostic(), 0);
+		}
+		super.reportException(e);
+	}
 
+	public static void dumpDiagnostic(Diagnostic d, int indent) {
+		for (int i=0; i < indent; ++i) {
+			System.err.print("    ");
+		}
+		System.err.println(toString(d));
+	    if (d.getChildren() != null) {
+	    	d.getChildren().forEach(c -> dumpDiagnostic(c, indent + 1));
+	    }
+		
+	}
+	
+	static String toString(Diagnostic d) {
+		StringBuilder result = new StringBuilder();
+		switch (d.getSeverity()) {
+		case Diagnostic.OK:
+			result.append("OK");
+			break;
+		case Diagnostic.INFO:
+			result.append("INFO");
+			break;
+		case Diagnostic.WARNING:
+			result.append("WARNING");
+			break;
+		case Diagnostic.ERROR:
+			result.append("ERROR");
+			break;
+		case Diagnostic.CANCEL:
+			result.append("CANCEL");
+			break;
+		default:
+			result.append(Integer.toHexString(d.getSeverity()));
+			break;
+		}
+
+		result.append(" source=");
+		result.append(d.getSource());
+
+		result.append(" code=");
+		result.append(d.getCode());
+
+		result.append(' ');
+		result.append(d.getMessage());
+
+		if (d.getData() != null) {
+			result.append(" data=");
+			result.append(d.getData());
+		}
+
+		return result.toString();
+	}	
+	
 }

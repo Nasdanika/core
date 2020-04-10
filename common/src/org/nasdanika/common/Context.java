@@ -26,6 +26,11 @@ import java.util.regex.Pattern;
 public interface Context extends Composeable<Context> {
 	
 	/**
+	 * Constant for base URI property.
+	 */
+	String BASE_URI_PROPERTY = "base-uri";
+	
+	/**
 	 * Empty context which can be used as a starting point
 	 * for creating of composed/mounted contexts. 
 	 */

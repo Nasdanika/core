@@ -131,7 +131,15 @@ public class SimpleMutableContext implements MutableContext {
 			return chain.get(type);
 		}
 		
-		return svcs.get(0);
+		T candidate = svcs.get(0);
+		if (type.isInstance(candidate)) {
+			return candidate;
+		}
+		if (candidate instanceof ServiceComputer) {
+			return ((ServiceComputer<T>) candidate).compute(this, type);					
+		}
+		
+		throw new IllegalStateException("Service entry is neither of service type (" + type + "), nor a service computer: " + candidate);
 	}
 	
 	/**
