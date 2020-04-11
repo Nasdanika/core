@@ -594,6 +594,9 @@ public interface Context extends Composeable<Context> {
 				if (parentProperty instanceof Function) {
 					return ((Function<String, Object>) parentProperty).apply(subKey);
 				}
+				if (parentProperty instanceof BiFunction) {
+					return ((BiFunction<Context, String, Object>) parentProperty).apply(this, subKey);
+				}
 
 				return null;				
 			}
@@ -641,6 +644,9 @@ public interface Context extends Composeable<Context> {
 				}
 				if (parentProperty instanceof Function) {
 					return converter.convert(((Function<String, Object>) parentProperty).apply(subKey), type);
+				}
+				if (parentProperty instanceof BiFunction) {
+					return converter.convert(((BiFunction<Context, String, Object>) parentProperty).apply(this, subKey), type);
 				}
 
 				return null;
