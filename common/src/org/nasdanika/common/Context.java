@@ -546,73 +546,55 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
-	 * @return Context backed by this context which computes final property values by invoking {@link PropertyComputer}.compute() for properties of that type.
+	 * Computing context retrieves properties from this context. If a property is found and is of {@link PropertyComputer} type, then the property computer is
+	 * invoked to produce value otherwise the value is returned as is. If a property for a given key is not found, the computer traverses the key hierarchy up. Slash (/) is 
+	 * a key separator. When it finds a parent property value then is computes the property value in the following way - for a property computer its compute() method is invoked,
+	 * for {@link Context} the path from the parent property is used to retrieve value, for {@link Map} its get method is used, for {@link List} an element is retrived if key path is parseable to int,  
+	 * for {@link Function} the path is passed to it as an argument and the value is returned as property value. 
+	 * @return 
 	 */
 	default Context computingContext() {
 		
 		return new Context() {
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public Object get(String key) {
-				Object ret = Context.this.get(key);
-				if (ret instanceof PropertyComputer) {
-					return ((PropertyComputer) ret).compute(this, key, Object.class);
-				}
-				
-				if (ret != null) {
-					return ret;
-				}
-				
-				int lastSlash = key.lastIndexOf('/');
-				if (lastSlash == -1) {
-					return null;
-				}
-				
-				String parentKey = key.substring(0, lastSlash);
-				Object parentProperty = get(parentKey);
-				if (parentProperty instanceof PropertyComputer) {
-					return ((PropertyComputer) parentProperty).compute(this, parentKey, Object.class);
-				}				
-				String subKey = key.substring(lastSlash + 1);
-				if (parentProperty instanceof Context) {
-					return ((Context) parentProperty).get(subKey);	
-				}
-				if (parentProperty instanceof Map) {
-					return ((Map<?,?>) parentProperty).get(subKey);
-				}
-				if (parentProperty instanceof List) {
-					try {
-						int idx = Integer.parseInt(subKey);
-						if (idx >= 0 && idx < ((List<?>) parentProperty).size()) {
-							return ((List<?>) parentProperty).get(idx);
-						}
-					} catch (NumberFormatException e) {
-						// NOP
-					}
-				}
-				if (parentProperty instanceof Function) {
-					return ((Function<String, Object>) parentProperty).apply(subKey);
-				}
-				if (parentProperty instanceof BiFunction) {
-					return ((BiFunction<Context, String, Object>) parentProperty).apply(this, subKey);
-				}
-
-				return null;				
+				return get(key, Object.class);
 			}
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(String key, Class<T> type) {
-				Object ret = Context.this.get(key);
+				T ret = Context.this.get(key, type);
+				
+				// At the spot computing of the property itself
 				if (ret instanceof PropertyComputer) {
-					return ((PropertyComputer) ret).compute(this, key, type);
-				}
+					return ((PropertyComputer) ret).compute(this, key, null, type);
+				}								
 				
-				Converter converter = get(Converter.class, DefaultConverter.INSTANCE);
-				
-				if (ret != null) {
-					return converter.convert(ret,  type);
+				return ret == null ? computeByParent(key, null, type) : ret;
+			}
+			
+			/**
+			 * Computes value by walking up the property key path.
+			 * @param <T>
+			 * @param key Current path
+			 * @param path Key path after the key
+			 * @param type
+			 * @return
+			 */
+			@SuppressWarnings("unchecked")
+			private <T> T computeByParent(String key, String path, Class<T> type) {				
+				Converter converter;
+				if (type == null || type == Object.class) {
+					converter = new Converter() {
+						
+						@Override
+						public <TP> TP convert(Object source, Class<TP> type) {
+							return (TP) source;
+						}
+					};  
+				} else {
+					converter = get(Converter.class, DefaultConverter.INSTANCE);
 				}
 				
 				int lastSlash = key.lastIndexOf('/');
@@ -621,11 +603,15 @@ public interface Context extends Composeable<Context> {
 				}
 				
 				String parentKey = key.substring(0, lastSlash);
-				Object parentProperty = get(parentKey);
-				if (parentProperty instanceof PropertyComputer) {
-					return ((PropertyComputer) parentProperty).compute(this, key, type);
-				}				
 				String subKey = key.substring(lastSlash + 1);
+				if (path != null) {
+					subKey += "/" + path;
+				}
+				Object parentProperty = Context.this.get(parentKey);
+				if (parentProperty instanceof PropertyComputer) {
+					return ((PropertyComputer) parentProperty).compute(this,  parentKey, subKey, type);
+				}
+				
 				if (parentProperty instanceof Context) {
 					return ((Context) parentProperty).get(subKey, type);	
 				}
@@ -645,11 +631,8 @@ public interface Context extends Composeable<Context> {
 				if (parentProperty instanceof Function) {
 					return converter.convert(((Function<String, Object>) parentProperty).apply(subKey), type);
 				}
-				if (parentProperty instanceof BiFunction) {
-					return converter.convert(((BiFunction<Context, String, Object>) parentProperty).apply(this, subKey), type);
-				}
 
-				return null;
+				return computeByParent(parentKey, subKey, type);
 			}
 
 			@SuppressWarnings("unchecked")

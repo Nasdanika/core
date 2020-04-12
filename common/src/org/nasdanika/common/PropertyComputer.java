@@ -12,10 +12,11 @@ public interface PropertyComputer {
 	 * Computes property value.
 	 * @param <T>
 	 * @param context
-	 * @param key
+	 * @param key Property computer registration key.
+	 * @param path Key path after the registration key or null if there is no path.
 	 * @param type
 	 * @return
 	 */
-	<T> T compute(Context context, String key, Class<T> type);
+	<T> T compute(Context context, String key, String path, Class<T> type);
 
 }

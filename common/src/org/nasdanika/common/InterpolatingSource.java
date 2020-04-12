@@ -48,7 +48,7 @@ public class InterpolatingSource implements Function<String,Object> {
 			return new PropertyComputer() {
 				
 				@Override
-				public <T> T compute(Context context, String key, Class<T> type) {
+				public <T> T compute(Context context, String key, String path, Class<T> type) {
 					Converter converter = context.get(Converter.class);
 					String interpolated = context.interpolate((String) value);
 					return converter == null ? (T) interpolated : converter.convert(interpolated, type);

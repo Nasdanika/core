@@ -30,6 +30,7 @@ import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Supplier;
@@ -260,4 +261,20 @@ public class TestCommon {
 		context.put("name", "World");
 		assertEquals("Hello World!!!", context.computingContext().interpolate("${eval/\"Hello \"+context.get(\"name\")}!!!"));		
 	}
+	
+	@Test
+	public void testMultiLevelPropertyComputer() {
+		MutableContext context = new SimpleMutableContext();
+		context.put("a/b/c", new PropertyComputer() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				return (T) (key + " -> " + path);
+			}
+		});
+		
+		assertEquals("a/b/c -> d/e/f/g", context.computingContext().get("a/b/c/d/e/f/g"));		
+	}
+	
 }

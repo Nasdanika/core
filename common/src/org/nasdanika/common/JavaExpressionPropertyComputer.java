@@ -1,7 +1,6 @@
 package org.nasdanika.common;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.function.Function;
 
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ExpressionEvaluator;
@@ -27,29 +26,22 @@ public class JavaExpressionPropertyComputer implements PropertyComputer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T compute(Context context, String key, Class<T> type) {
-		return (T) new Function<String, Object>() {
-
-			@Override
-			public Object apply(String expression) {
-				ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
-				expressionEvaluator.setParentClassLoader(context.get(ClassLoader.class, classLoader));
-				expressionEvaluator.setExpressionType(type);
-				expressionEvaluator.setParameters(new String[] { "context" }, new Class[] { Context.class });
-				try {
-					expressionEvaluator.cook(expression);
-				} catch (CompileException e) {
-					throw new NasdanikaException("Cannot compile java expression "+expression, e);
-				}
-				
-				try {
-					return (T) expressionEvaluator.evaluate(new Object[] { context });
-				} catch (InvocationTargetException e) {
-					throw new NasdanikaException("Cannot evaluate java expression "+expression, e);
-				}
-			}
-			
-		};
+	public <T> T compute(Context context, String key, String path, Class<T> type) {
+		ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator();
+		expressionEvaluator.setParentClassLoader(context.get(ClassLoader.class, classLoader));
+		expressionEvaluator.setExpressionType(type);
+		expressionEvaluator.setParameters(new String[] { "context" }, new Class[] { Context.class });
+		try {
+			expressionEvaluator.cook(path);
+		} catch (CompileException e) {
+			throw new NasdanikaException("Cannot compile java expression "+path, e);
+		}
+		
+		try {
+			return (T) expressionEvaluator.evaluate(new Object[] { context });
+		} catch (InvocationTargetException e) {
+			throw new NasdanikaException("Cannot evaluate java expression "+path, e);
+		}
 	}
 
 }
