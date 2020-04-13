@@ -25,14 +25,4 @@ public class Util {
 		return str == null || str.trim().length() == 0;
 	}
 	
-	/**
-	 * Validates that URL is a valid relative file name/path - a very basic check.
-	 * @param url
-	 * @return
-	 */
-	public static boolean isValidAndRelative(String url) {
-		String interpolated = Context.wrap(k -> "something").interpolate(url); // interpolates tokens if any with valid file part name.
-		return !interpolated.contains("://") && !interpolated.startsWith("/") && !interpolated.startsWith("./");
-	}	
-	
 }
