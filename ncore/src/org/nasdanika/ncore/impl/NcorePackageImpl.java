@@ -1901,7 +1901,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (entryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Supplier factory with an name."
+			   "documentation", "Supplier factory with a name."
 		   });
 		addAnnotation
 		  (getEntry_Enabled(),
