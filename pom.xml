@@ -168,6 +168,10 @@
 	      </properties>
 	    </developer>
 	</developers>
+
+	<!-- For Javadoc cross-ref resolution -->
+	<url>https://www.nasdanika.org/builds/${env.RELEASE}/products/core/bundles</url>
+
 	<scm>
 		<url>https://github.com/Nasdanika/core</url>
 	</scm>
