@@ -88,7 +88,11 @@ public class TestCommon {
 		
 		ctx.put("nameResource", getClass().getResource("name.txt"));
 		ctx.register(Converter.class, DefaultConverter.INSTANCE);
-		Assert.assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${nameResource}!"));		
+		Assert.assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${nameResource}!"));	
+		
+		// Escaping, peeling
+		Assert.assertEquals("${name}", ctx.interpolate("${{name}}"));						
+		Assert.assertEquals("Hello, World - ${name}!", ctx.interpolate("${greeting|Hello}, ${name} - ${{name}}!"));						
 	}
 	
 	@Test 

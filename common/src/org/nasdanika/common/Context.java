@@ -419,7 +419,9 @@ public interface Context extends Composeable<Context> {
 	 * If there is no default value then the expansion is not processed. Token names shall not contain pipes.
 	 * If replacement is not null and there is a {@link Converter} service then the converter is used 
 	 * to convert the replacement to {@link String}. If no such conversion can be done then toString() is used 
-	 * as default conversion.
+	 * as default conversion. Add extra open/closing curly brackets to escape the token, e.g. in documentation. 
+	 * For example <code>${{xyz}}</code> will be "interpolated" as <code>${xyz}</code>. There may be multiple levels of curly brackets.
+	 * This behavior may be leveraged in multi-stage interpolation where early stage interpolators "peel" the token until it comes at the interpolation level where it is supposed to be expanded.    
 	 * @param input
 	 * @return
 	 */
@@ -436,24 +438,31 @@ public interface Context extends Composeable<Context> {
 		int i = 0;
 		while (matcher.find()) {
 		    String token = matcher.group();
-		    String peeledToken = token.substring(2, token.length()-1); // Peeling of ${ and } 
-		    int pipeIdx = peeledToken.indexOf('|');
-		    String defaultValue = pipeIdx == -1 ? null : peeledToken.substring(pipeIdx + 1);
-		    if (pipeIdx != -1) {
-		    	peeledToken = peeledToken.substring(0, pipeIdx);
-		    }
-		    
-			Object replacement = tokenComputer.getString(peeledToken, defaultValue);
-		    if (replacement != null) {
-		    	Converter converter = get(Converter.class);
-		    	if (converter != null) {
-		    		String str = converter.convert(replacement, String.class);
-		    		if (str != null) {
-		    			replacement = str;
-		    		}
-		    	}
-			    output.append(input.substring(i, matcher.start())).append(replacement);			    
+		    String peeledToken = token.substring(2, token.length()-1); // Peeling of ${ and }
+		    if (peeledToken.startsWith("{") && input.length() > matcher.end() && '}' == input.charAt(matcher.end())) {
+			    output
+			    	.append(input.substring(i, matcher.start() + 2))
+			    	.append(peeledToken.substring(1));
 			    i = matcher.end();
+		    } else {
+			    int pipeIdx = peeledToken.indexOf('|');
+			    String defaultValue = pipeIdx == -1 ? null : peeledToken.substring(pipeIdx + 1);
+			    if (pipeIdx != -1) {
+			    	peeledToken = peeledToken.substring(0, pipeIdx);
+			    }
+			    
+				Object replacement = tokenComputer.getString(peeledToken, defaultValue);
+			    if (replacement != null) {
+			    	Converter converter = get(Converter.class);
+			    	if (converter != null) {
+			    		String str = converter.convert(replacement, String.class);
+			    		if (str != null) {
+			    			replacement = str;
+			    		}
+			    	}
+				    output.append(input.substring(i, matcher.start())).append(replacement);			    
+				    i = matcher.end();
+			    }
 		    }
 		}
 		output.append(input.substring(i, input.length()));
