@@ -13,6 +13,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.DiagnosticException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
@@ -134,7 +135,7 @@ public abstract class NasdanikaGenerateAction<T extends EObject> extends Action 
 			while (exception.getCause() instanceof Exception && exception.getSuppressed().length == 0) {
 				exception = (Exception) exception.getCause();
 			}
-            MultiStatus status = createMultiStatus(exception.toString(), exception);
+            IStatus status = createStatus(exception.toString(), exception);
             ErrorDialog.openError(shell, "Generation error", exception.toString(), status);
 			getLog().log(status);
 			exception.printStackTrace();
@@ -151,19 +152,27 @@ public abstract class NasdanikaGenerateAction<T extends EObject> extends Action 
 		return null;
 	};
 
-	private static MultiStatus createMultiStatus(String msg, Throwable t) {
-		List<Status> childStatuses = new ArrayList<>();
+	private static IStatus createStatus(String msg, Throwable t) {
+		if (t instanceof DiagnosticException) {
+			return BasicDiagnostic.toIStatus((DiagnosticException) t);
+		}
+		
+		if (t instanceof org.nasdanika.common.DiagnosticException) {
+			return createMultiStatus(((org.nasdanika.common.DiagnosticException) t).getDiagnostic());
+		}
+		
+		List<IStatus> childStatuses = new ArrayList<>();
 
 		for (StackTraceElement stackTrace : t.getStackTrace()) {
 			childStatuses.add(new Status(IStatus.ERROR, "org.nasdanika.codegen.editor", stackTrace.toString()));
 		}
 
 		if (t.getCause() != null) {
-			childStatuses.add(createMultiStatus("Caused by: " + t.getCause(), t.getCause()));
+			childStatuses.add(createStatus("Caused by: " + t.getCause(), t.getCause()));
 		}
 
 		for (Throwable s : t.getSuppressed()) {
-			childStatuses.add(createMultiStatus("Supressed: " + s, s.getCause()));
+			childStatuses.add(createStatus("Supressed: " + s, s.getCause()));
 		}
 
 		MultiStatus ms = new MultiStatus("org.nasdanika.codegen.editor", IStatus.ERROR,	childStatuses.toArray(new Status[childStatuses.size()]), msg, t);
