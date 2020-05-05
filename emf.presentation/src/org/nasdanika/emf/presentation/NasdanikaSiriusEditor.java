@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,6 +29,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.eef.properties.ui.api.EEFTabbedPropertySheetPage;
 import org.eclipse.eef.properties.ui.api.IEEFTabbedPropertySheetPageContributor;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.ui.MarkerHelper;
@@ -1247,7 +1251,37 @@ public class NasdanikaSiriusEditor
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 	}
 	
-	protected void setInput(IEditorInput editorInput, Session session) {
+	private CommandStackListener commandStackListener = new CommandStackListener() {
+		
+		 @Override
+		 public void commandStackChanged(final EventObject event) {
+			 getContainer().getDisplay().asyncExec
+				 (new Runnable() {
+					  @Override
+					  public void run() {
+						  firePropertyChange(IEditorPart.PROP_DIRTY);
+
+						  // Try to select the affected objects.
+						  //
+						  Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
+						  if (mostRecentCommand != null) {
+							  setSelectionToViewer(mostRecentCommand.getAffectedObjects());
+						  }
+					  }
+				  });
+		 }
+	};			
+	
+	protected void setInput(IEditorInput editorInput, Session session) {		
+		if (this.session != session) {
+			if (this.session != null) {
+				session.getTransactionalEditingDomain().getCommandStack().removeCommandStackListener(commandStackListener);
+			}
+			if (session != null) {
+				session.getTransactionalEditingDomain().getCommandStack().addCommandStackListener(commandStackListener);				
+			}
+		}
+		
 		this.session = session;
 		session.addListener(this);
 		IEditingSession uiSession = SessionUIManager.INSTANCE.getUISession(session);
