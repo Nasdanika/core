@@ -1,14 +1,10 @@
 package org.nasdanika.eef.ext.widgets;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.eclipse.eef.EEFCustomWidgetDescription;
 import org.eclipse.eef.EEFWidgetDescription;
-import org.eclipse.eef.common.ui.api.EEFWidgetFactory;
 import org.eclipse.eef.common.ui.api.IEEFFormContainer;
 import org.eclipse.eef.core.api.EditingContextAdapter;
 import org.eclipse.eef.core.api.controllers.IEEFWidgetController;
@@ -18,6 +14,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
 import org.eclipse.sirius.common.interpreter.api.IVariableManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -28,8 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.nasdanika.common.DefaultConverter;
 
 
 public class ImageLifecycleManager extends AbstractEEFWidgetLifecycleManager {
@@ -76,8 +71,9 @@ public class ImageLifecycleManager extends AbstractEEFWidgetLifecycleManager {
 			public void widgetSelected(SelectionEvent e) {
 				
 				try {
-					setValue(DefaultConverter.INSTANCE.toByteArray(new FileInputStream(new File("C:\\Users\\Pavel\\Pictures\\Pavel headsot S.jpg"))));
+					new CaptureFrame(ImageLifecycleManager.this::setValue).setVisible(true);
 				} catch (Exception ex) {
+					// TODO - error dialog
 					ex.printStackTrace();
 				}
 				
@@ -89,17 +85,22 @@ public class ImageLifecycleManager extends AbstractEEFWidgetLifecycleManager {
 			}
 			
 		});
-				
-		EEFWidgetFactory widgetFactory = formContainer.getWidgetFactory();
-		label = widgetFactory.createLabel(control, "",  SWT.H_SCROLL | SWT.V_SCROLL );
-		GridData gridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 1, 1);
-		gridData.heightHint = 500;
-//		gridData.widthHint = 300;
-		gridData.horizontalIndent = VALIDATION_MARKER_OFFSET;
-		label.setLayoutData(gridData);
 
-		label.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-		widgetFactory.paintBordersFor(parent);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(control, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		layoutData.heightHint = 500;
+		scrolledComposite.setLayoutData(layoutData);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		
+    	Composite wrapper = new Composite(scrolledComposite, SWT.NONE);
+		wrapper.setLayout(new GridLayout(1, false));
+		wrapper.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		scrolledComposite.setContent(wrapper);
+		
+		label = new Label(wrapper, SWT.NONE);
+//		scrolledComposite.setContent(label);
 
         this.controller = new ImageController(description, variableManager, interpreter, editingContextAdapter, target, feature);
     }
@@ -113,16 +114,15 @@ public class ImageLifecycleManager extends AbstractEEFWidgetLifecycleManager {
         super.aboutToBeShown();
 
         this.newValueConsumer = (newValue) -> {
-			Object text = newValue == null ? "" : String.valueOf(newValue);
 			Display.getCurrent().asyncExec(() -> {
-
 				if (newValue instanceof byte[]) {
 					Image image = new Image(label.getDisplay(), new ByteArrayInputStream((byte[]) newValue));						
 					label.setImage(image);
+					label.setSize(image.getBounds().width, image.getBounds().height);
 				} else {
 					label.setImage(null);
 				}
-				
+				((ScrolledComposite) label.getParent().getParent()).setMinSize(label.getParent().computeSize(SWT.DEFAULT, SWT.DEFAULT));				
 			});
         };
         this.controller.onNewValue(this.newValueConsumer);
