@@ -106,7 +106,7 @@ public interface EntityContainer<C,E extends Entity<C,E>> extends Container<E> {
 				if (ret instanceof EntityContainer) {
 					return ((EntityContainer<C,E>) ret).stateAdapter();
 				}
-				return ((E) ret).getState(monitor.split("Getting state", 1, this));
+				return ret == null ? null : ((E) ret).getState(monitor.split("Getting state", 1, this));
 			}
 
 			@Override
