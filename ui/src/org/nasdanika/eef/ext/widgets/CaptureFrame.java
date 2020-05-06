@@ -1,7 +1,6 @@
 package org.nasdanika.eef.ext.widgets;
 import java.awt.BorderLayout;
 import java.awt.DisplayMode;
-import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
