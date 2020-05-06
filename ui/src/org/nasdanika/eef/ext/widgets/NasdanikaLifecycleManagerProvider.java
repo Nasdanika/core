@@ -43,6 +43,7 @@ public class NasdanikaLifecycleManagerProvider implements IEEFLifecycleManagerPr
 	
 	private static String REFERENCE_WIDGET_ID = "nasdanika_reference_widget";
 	private static String RICH_TEXT_WIDGET_ID = "nasdanika_rich_text_widget";
+	private static String IMAGE_WIDGET_ID = "nasdanika_image_widget";
 
 	/**
 	 * {@inheritDoc}
@@ -54,6 +55,7 @@ public class NasdanikaLifecycleManagerProvider implements IEEFLifecycleManagerPr
 		return controlDescription instanceof EEFCustomWidgetDescription && (
 				REFERENCE_WIDGET_ID.equals(controlDescription.getIdentifier())
 				|| RICH_TEXT_WIDGET_ID.equals(controlDescription.getIdentifier())
+				|| IMAGE_WIDGET_ID.equals(controlDescription.getIdentifier())
 				);
 	}
 
@@ -104,6 +106,8 @@ public class NasdanikaLifecycleManagerProvider implements IEEFLifecycleManagerPr
 				}
 			} else if (RICH_TEXT_WIDGET_ID.equals(description.getIdentifier())) {
 				return new RichTextLifecycleManager(description, variableManager, interpreter, contextAdapter, target, eStructuralFeature);
+			} else if (IMAGE_WIDGET_ID.equals(description.getIdentifier())) {
+				return new ImageLifecycleManager(description, variableManager, interpreter, contextAdapter, target, eStructuralFeature);
 			}
 		}
 		throw new IllegalArgumentException("Don't know how to handle " + controlDescription.getIdentifier());
