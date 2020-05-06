@@ -3,6 +3,7 @@ package org.nasdanika.eef.ext.widgets;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Point;
@@ -24,8 +25,7 @@ import javax.swing.SwingUtilities;
  */
 public class ComponentResizer extends MouseAdapter {
 	private final static Dimension MINIMUM_SIZE = new Dimension(10, 10);
-	private final static Dimension MAXIMUM_SIZE = new Dimension(
-			Integer.MAX_VALUE, Integer.MAX_VALUE);
+	private final static Dimension MAXIMUM_SIZE = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 	private static Map<Integer, Integer> cursors = new HashMap<Integer, Integer>();
 	{
@@ -363,8 +363,7 @@ public class ComponentResizer extends MouseAdapter {
 		if (WEST == (direction & WEST)) {
 			int drag = getDragDistance(pressed.x, current.x, snapSize.width);
 			int maximum = Math.min(width + x, maximumSize.width);
-			drag = getDragBounded(drag, snapSize.width, width,
-					minimumSize.width, maximum);
+			drag = getDragBounded(drag, snapSize.width, width, minimumSize.width, maximum);
 
 			x -= drag;
 			width += drag;
@@ -373,8 +372,7 @@ public class ComponentResizer extends MouseAdapter {
 		if (NORTH == (direction & NORTH)) {
 			int drag = getDragDistance(pressed.y, current.y, snapSize.height);
 			int maximum = Math.min(height + y, maximumSize.height);
-			drag = getDragBounded(drag, snapSize.height, height,
-					minimumSize.height, maximum);
+			drag = getDragBounded(drag, snapSize.height, height, minimumSize.height, maximum);
 
 			y -= drag;
 			height += drag;
@@ -395,8 +393,7 @@ public class ComponentResizer extends MouseAdapter {
 			int drag = getDragDistance(current.y, pressed.y, snapSize.height);
 			Dimension boundingSize = getBoundingSize(source);
 			int maximum = Math.min(boundingSize.height - y, maximumSize.height);
-			drag = getDragBounded(drag, snapSize.height, height,
-					minimumSize.height, maximum);
+			drag = getDragBounded(drag, snapSize.height, height, minimumSize.height, maximum);
 			height += drag;
 		}
 
@@ -419,13 +416,14 @@ public class ComponentResizer extends MouseAdapter {
 	/*
 	 * Adjust the drag value to be within the minimum and maximum range.
 	 */
-	private int getDragBounded(int drag, int snapSize, int dimension,
-			int minimum, int maximum) {
-		while (dimension + drag < minimum)
+	private int getDragBounded(int drag, int snapSize, int dimension, int minimum, int maximum) {
+		while (dimension + drag < minimum) {
 			drag += snapSize;
-
-		while (dimension + drag > maximum)
+		}
+		
+		while (dimension + drag > maximum) {
 			drag -= snapSize;
+		}
 
 		return drag;
 	}
@@ -435,9 +433,12 @@ public class ComponentResizer extends MouseAdapter {
 	 */
 	private Dimension getBoundingSize(Component source) {
 		if (source instanceof Window) {
-			GraphicsEnvironment env = GraphicsEnvironment
-					.getLocalGraphicsEnvironment();
-			Rectangle bounds = env.getMaximumWindowBounds();
+			Rectangle bounds = new Rectangle(0, 0, 0, 0);
+			for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+			    Rectangle deviceBounds = gd.getDefaultConfiguration().getBounds();
+			    System.out.println(deviceBounds);
+				bounds = bounds.union(deviceBounds);
+			}			
 			return new Dimension(bounds.width, bounds.height);
 		} else {
 			return source.getParent().getSize();

@@ -1,5 +1,7 @@
 package org.nasdanika.eef.ext.widgets;
 import java.awt.BorderLayout;
+import java.awt.DisplayMode;
+import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsDevice.WindowTranslucency;
 import java.awt.GraphicsEnvironment;
@@ -11,6 +13,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,6 +34,7 @@ import javax.swing.border.LineBorder;
  * @author Pavel Vlasov.
  *
  */
+@SuppressWarnings("serial")
 public class CaptureFrame extends javax.swing.JFrame {
 	
 	private JPanel capturePanel;	
@@ -78,10 +82,6 @@ public class CaptureFrame extends javax.swing.JFrame {
 				Point loc = bounds.getLocation();
 				SwingUtilities.convertPointToScreen(loc, capturePanel);
 				bounds.setLocation(loc);
-//				Properties props = captureConfig.setRecordingRectangle(bounds);
-//				if (props!=null) {
-//					getApplet().storeConfig(props);
-//				}
 				capturing.set(true);
 				setVisible(false);
 			}
@@ -141,20 +141,40 @@ public class CaptureFrame extends javax.swing.JFrame {
 			// Ignore
 		}
 		
-		BufferedImage screenShot = new Robot().createScreenCapture(bounds);
-		
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(screenShot, "PNG", baos);
-			baos.close();
-			imageConsumer.accept(baos.toByteArray());
-		} catch (IOException ex) {
-	    	JOptionPane.showMessageDialog(
-	    			this,
-					ex.toString(), 
-					"Error saving image",
-					JOptionPane.ERROR_MESSAGE);									
-		}
+		for (GraphicsDevice screen : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
+		    Rectangle deviceBounds = screen.getDefaultConfiguration().getBounds();
+		    if (deviceBounds.contains(bounds)) {
+		    	
+		        DisplayMode displayMode = screen.getDisplayMode();
+		    			    	
+		        int displayWidth = displayMode.getWidth();
+		        int displayHeight = displayMode.getHeight();
+
+		        // Scaling if needed
+		        Rectangle effectiveBounds = bounds;
+		        if (displayHeight != deviceBounds.height || displayWidth != deviceBounds.width) {
+		        	AffineTransform tx = new AffineTransform();
+		        	tx.scale(((double) displayWidth) / (double) deviceBounds.getWidth(), ((double) displayHeight) / (double) deviceBounds.getHeight());
+		        	effectiveBounds = tx.createTransformedShape(bounds).getBounds();
+		        }
+		    	
+				BufferedImage screenShot = new Robot(screen).createScreenCapture(effectiveBounds);
+				
+				try {
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(screenShot, "PNG", baos);
+					baos.close();
+					imageConsumer.accept(baos.toByteArray());
+				} catch (IOException ex) {
+			    	JOptionPane.showMessageDialog(
+			    			this,
+							ex.toString(), 
+							"Error saving image",
+							JOptionPane.ERROR_MESSAGE);									
+				}
+				break;
+		    }
+		}			
 	}
 
 	private AtomicBoolean capturing = new AtomicBoolean(false);
