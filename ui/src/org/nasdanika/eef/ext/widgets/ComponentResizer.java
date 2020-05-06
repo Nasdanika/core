@@ -436,7 +436,6 @@ public class ComponentResizer extends MouseAdapter {
 			Rectangle bounds = new Rectangle(0, 0, 0, 0);
 			for (GraphicsDevice gd : GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()) {
 			    Rectangle deviceBounds = gd.getDefaultConfiguration().getBounds();
-			    System.out.println(deviceBounds);
 				bounds = bounds.union(deviceBounds);
 			}			
 			return new Dimension(bounds.width, bounds.height);
