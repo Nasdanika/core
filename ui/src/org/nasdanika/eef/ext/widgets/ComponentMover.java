@@ -278,26 +278,6 @@ public class ComponentMover extends MouseAdapter {
 		int locationX = location.x + dragX;
 		int locationY = location.y + dragY;
 
-		// Mouse dragged events are not generated for every pixel the mouse
-		// is moved. Adjust the location to make sure we are still on a
-		// snap value.
-
-//		while (locationX < edgeInsets.left)
-//			locationX += snapSize.width;
-//
-//		while (locationY < edgeInsets.top)
-//			locationY += snapSize.height;
-//
-//		Dimension d = getBoundingSize(destination);
-
-//		while (locationX + destination.getSize().width + edgeInsets.right > d.width)
-//			locationX -= snapSize.width;
-//
-//		while (locationY + destination.getSize().height + edgeInsets.bottom > d.height)
-//			locationY -= snapSize.height;
-
-		// Adjustments are finished, move the component
-
 		destination.setLocation(locationX, locationY);
 	}
 
@@ -314,20 +294,6 @@ public class ComponentMover extends MouseAdapter {
 		return drag;
 	}
 
-//	/*
-//	 * Get the bounds of the parent of the dragged component.
-//	 */
-//	private Dimension getBoundingSize(Component source) {
-//		if (source instanceof Window) {
-//			GraphicsEnvironment env = GraphicsEnvironment
-//					.getLocalGraphicsEnvironment();
-//			Rectangle bounds = env.getMaximumWindowBounds();
-//			return new Dimension(bounds.width, bounds.height);
-//		} else {
-//			return source.getParent().getSize();
-//		}
-//	}
-
 	/**
 	 * Restore the original state of the Component
 	 */
@@ -339,8 +305,9 @@ public class ComponentMover extends MouseAdapter {
 		source.removeMouseMotionListener(this);
 		potentialDrag = false;
 
-		if (changeCursor)
+		if (changeCursor) {
 			source.setCursor(originalCursor);
+		}
 
 		if (destination instanceof JComponent) {
 			((JComponent) destination).setAutoscrolls(autoscrolls);
