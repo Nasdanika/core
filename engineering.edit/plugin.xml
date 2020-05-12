@@ -7,10 +7,10 @@
 <plugin>
 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
-      <!-- @generated rigel -->
+      <!-- @generated engineering -->
       <factory
-            uri="urn:org.nasdanika.rigel"
-            class="org.nasdanika.rigel.provider.RigelItemProviderAdapterFactory"
+            uri="urn:org.nasdanika.engineering"
+            class="org.nasdanika.engineering.provider.EngineeringItemProviderAdapterFactory"
             supportedTypes=
               "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
                org.eclipse.emf.edit.provider.IStructuredItemContentProvider
