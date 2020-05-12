@@ -11,9 +11,6 @@ Export-Package: org.nasdanika.decisioning,
  org.nasdanika.decisioning.impl,
  org.nasdanika.decisioning.util
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport,
- org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport,
- org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
+ org.nasdanika.party;bundle-version="0.1.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.decisioning
-Bundle-Activator: org.nasdanika.decisioning.util.Activator
