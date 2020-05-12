@@ -1,25 +1,25 @@
 /**
  */
-package org.nasdanika.rigel.provider;
+package org.nasdanika.engineering.provider;
 
 import org.eclipse.emf.common.EMFPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
 /**
- * This is the central singleton for the Rigel edit plugin.
+ * This is the central singleton for the Engineering edit plugin.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public final class RigelEditPlugin extends EMFPlugin {
+public final class EngineeringEditPlugin extends EMFPlugin {
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final RigelEditPlugin INSTANCE = new RigelEditPlugin();
+	public static final EngineeringEditPlugin INSTANCE = new EngineeringEditPlugin();
 
 	/**
 	 * Keep track of the singleton.
@@ -35,7 +35,7 @@ public final class RigelEditPlugin extends EMFPlugin {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RigelEditPlugin() {
+	public EngineeringEditPlugin() {
 		super
 		  (new ResourceLocator [] {
 		   });
