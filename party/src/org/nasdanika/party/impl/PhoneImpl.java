@@ -1,11 +1,10 @@
 /**
  */
-package org.nasdanika.ncore.impl;
+package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Phone;
+import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.Phone;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,10 +14,10 @@ import org.nasdanika.ncore.Phone;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.PhoneImpl#getCountryCode <em>Country Code</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.PhoneImpl#getAreaCode <em>Area Code</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.PhoneImpl#getPhoneNumber <em>Phone Number</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.PhoneImpl#getExtension <em>Extension</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PhoneImpl#getCountryCode <em>Country Code</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PhoneImpl#getAreaCode <em>Area Code</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PhoneImpl#getPhoneNumber <em>Phone Number</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PhoneImpl#getExtension <em>Extension</em>}</li>
  * </ul>
  *
  * @generated
@@ -80,7 +79,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.PHONE;
+		return PartyPackage.Literals.PHONE;
 	}
 
 	/**
@@ -90,7 +89,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public int getCountryCode() {
-		return (Integer)eDynamicGet(NcorePackage.PHONE__COUNTRY_CODE, NcorePackage.Literals.PHONE__COUNTRY_CODE, true, true);
+		return (Integer)eDynamicGet(PartyPackage.PHONE__COUNTRY_CODE, PartyPackage.Literals.PHONE__COUNTRY_CODE, true, true);
 	}
 
 	/**
@@ -100,7 +99,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public void setCountryCode(int newCountryCode) {
-		eDynamicSet(NcorePackage.PHONE__COUNTRY_CODE, NcorePackage.Literals.PHONE__COUNTRY_CODE, newCountryCode);
+		eDynamicSet(PartyPackage.PHONE__COUNTRY_CODE, PartyPackage.Literals.PHONE__COUNTRY_CODE, newCountryCode);
 	}
 
 	/**
@@ -110,7 +109,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public int getAreaCode() {
-		return (Integer)eDynamicGet(NcorePackage.PHONE__AREA_CODE, NcorePackage.Literals.PHONE__AREA_CODE, true, true);
+		return (Integer)eDynamicGet(PartyPackage.PHONE__AREA_CODE, PartyPackage.Literals.PHONE__AREA_CODE, true, true);
 	}
 
 	/**
@@ -120,7 +119,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public void setAreaCode(int newAreaCode) {
-		eDynamicSet(NcorePackage.PHONE__AREA_CODE, NcorePackage.Literals.PHONE__AREA_CODE, newAreaCode);
+		eDynamicSet(PartyPackage.PHONE__AREA_CODE, PartyPackage.Literals.PHONE__AREA_CODE, newAreaCode);
 	}
 
 	/**
@@ -130,7 +129,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public int getPhoneNumber() {
-		return (Integer)eDynamicGet(NcorePackage.PHONE__PHONE_NUMBER, NcorePackage.Literals.PHONE__PHONE_NUMBER, true, true);
+		return (Integer)eDynamicGet(PartyPackage.PHONE__PHONE_NUMBER, PartyPackage.Literals.PHONE__PHONE_NUMBER, true, true);
 	}
 
 	/**
@@ -140,7 +139,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public void setPhoneNumber(int newPhoneNumber) {
-		eDynamicSet(NcorePackage.PHONE__PHONE_NUMBER, NcorePackage.Literals.PHONE__PHONE_NUMBER, newPhoneNumber);
+		eDynamicSet(PartyPackage.PHONE__PHONE_NUMBER, PartyPackage.Literals.PHONE__PHONE_NUMBER, newPhoneNumber);
 	}
 
 	/**
@@ -150,7 +149,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public int getExtension() {
-		return (Integer)eDynamicGet(NcorePackage.PHONE__EXTENSION, NcorePackage.Literals.PHONE__EXTENSION, true, true);
+		return (Integer)eDynamicGet(PartyPackage.PHONE__EXTENSION, PartyPackage.Literals.PHONE__EXTENSION, true, true);
 	}
 
 	/**
@@ -160,7 +159,7 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	 */
 	@Override
 	public void setExtension(int newExtension) {
-		eDynamicSet(NcorePackage.PHONE__EXTENSION, NcorePackage.Literals.PHONE__EXTENSION, newExtension);
+		eDynamicSet(PartyPackage.PHONE__EXTENSION, PartyPackage.Literals.PHONE__EXTENSION, newExtension);
 	}
 
 	/**
@@ -171,13 +170,13 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.PHONE__COUNTRY_CODE:
+			case PartyPackage.PHONE__COUNTRY_CODE:
 				return getCountryCode();
-			case NcorePackage.PHONE__AREA_CODE:
+			case PartyPackage.PHONE__AREA_CODE:
 				return getAreaCode();
-			case NcorePackage.PHONE__PHONE_NUMBER:
+			case PartyPackage.PHONE__PHONE_NUMBER:
 				return getPhoneNumber();
-			case NcorePackage.PHONE__EXTENSION:
+			case PartyPackage.PHONE__EXTENSION:
 				return getExtension();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -191,16 +190,16 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.PHONE__COUNTRY_CODE:
+			case PartyPackage.PHONE__COUNTRY_CODE:
 				setCountryCode((Integer)newValue);
 				return;
-			case NcorePackage.PHONE__AREA_CODE:
+			case PartyPackage.PHONE__AREA_CODE:
 				setAreaCode((Integer)newValue);
 				return;
-			case NcorePackage.PHONE__PHONE_NUMBER:
+			case PartyPackage.PHONE__PHONE_NUMBER:
 				setPhoneNumber((Integer)newValue);
 				return;
-			case NcorePackage.PHONE__EXTENSION:
+			case PartyPackage.PHONE__EXTENSION:
 				setExtension((Integer)newValue);
 				return;
 		}
@@ -215,16 +214,16 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PHONE__COUNTRY_CODE:
+			case PartyPackage.PHONE__COUNTRY_CODE:
 				setCountryCode(COUNTRY_CODE_EDEFAULT);
 				return;
-			case NcorePackage.PHONE__AREA_CODE:
+			case PartyPackage.PHONE__AREA_CODE:
 				setAreaCode(AREA_CODE_EDEFAULT);
 				return;
-			case NcorePackage.PHONE__PHONE_NUMBER:
+			case PartyPackage.PHONE__PHONE_NUMBER:
 				setPhoneNumber(PHONE_NUMBER_EDEFAULT);
 				return;
-			case NcorePackage.PHONE__EXTENSION:
+			case PartyPackage.PHONE__EXTENSION:
 				setExtension(EXTENSION_EDEFAULT);
 				return;
 		}
@@ -239,13 +238,13 @@ public class PhoneImpl extends ContactMethodImpl implements Phone {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PHONE__COUNTRY_CODE:
+			case PartyPackage.PHONE__COUNTRY_CODE:
 				return getCountryCode() != COUNTRY_CODE_EDEFAULT;
-			case NcorePackage.PHONE__AREA_CODE:
+			case PartyPackage.PHONE__AREA_CODE:
 				return getAreaCode() != AREA_CODE_EDEFAULT;
-			case NcorePackage.PHONE__PHONE_NUMBER:
+			case PartyPackage.PHONE__PHONE_NUMBER:
 				return getPhoneNumber() != PHONE_NUMBER_EDEFAULT;
-			case NcorePackage.PHONE__EXTENSION:
+			case PartyPackage.PHONE__EXTENSION:
 				return getExtension() != EXTENSION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);

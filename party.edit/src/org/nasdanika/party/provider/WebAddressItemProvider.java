@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.provider;
+package org.nasdanika.party.provider;
 
 
 import java.util.Collection;
@@ -12,11 +12,10 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.WebAddress;
+import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.WebAddress} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.WebAddress} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -61,7 +60,7 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_WebAddress_url_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_WebAddress_url_feature", "_UI_WebAddress_type"),
-				 NcorePackage.Literals.WEB_ADDRESS__URL,
+				 PartyPackage.Literals.WEB_ADDRESS__URL,
 				 true,
 				 false,
 				 false,
@@ -99,7 +98,7 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((WebAddress)object).getName();
+		String label = ((org.nasdanika.party.WebAddress)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_WebAddress_type") :
 			getString("_UI_WebAddress_type") + " " + label;
@@ -117,8 +116,8 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(WebAddress.class)) {
-			case NcorePackage.WEB_ADDRESS__URL:
+		switch (notification.getFeatureID(org.nasdanika.party.WebAddress.class)) {
+			case PartyPackage.WEB_ADDRESS__URL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

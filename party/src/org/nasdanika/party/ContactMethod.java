@@ -1,6 +1,8 @@
 /**
  */
-package org.nasdanika.ncore;
+package org.nasdanika.party;
+
+import org.nasdanika.ncore.NamedElement;
 
 
 /**
@@ -13,7 +15,7 @@ package org.nasdanika.ncore;
  * <!-- end-model-doc -->
  *
  *
- * @see org.nasdanika.ncore.NcorePackage#getContactMethod()
+ * @see org.nasdanika.party.PartyPackage#getContactMethod()
  * @model
  * @generated
  */

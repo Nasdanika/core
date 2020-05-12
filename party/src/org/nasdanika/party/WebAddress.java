@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore;
+package org.nasdanika.party;
 
 
 /**
@@ -12,10 +12,10 @@ package org.nasdanika.ncore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.WebAddress#getUrl <em>Url</em>}</li>
+ *   <li>{@link org.nasdanika.party.WebAddress#getUrl <em>Url</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getWebAddress()
+ * @see org.nasdanika.party.PartyPackage#getWebAddress()
  * @model
  * @generated
  */
@@ -26,14 +26,14 @@ public interface WebAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Url</em>' attribute.
 	 * @see #setUrl(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getWebAddress_Url()
+	 * @see org.nasdanika.party.PartyPackage#getWebAddress_Url()
 	 * @model
 	 * @generated
 	 */
 	String getUrl();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.WebAddress#getUrl <em>Url</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.WebAddress#getUrl <em>Url</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Url</em>' attribute.

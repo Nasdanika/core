@@ -1,8 +1,10 @@
 /**
  */
-package org.nasdanika.ncore;
+package org.nasdanika.party;
 
 import org.eclipse.emf.common.util.EList;
+import org.nasdanika.ncore.Entity;
+import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -13,24 +15,24 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.Party#getContactMethods <em>Contact Methods</em>}</li>
+ *   <li>{@link org.nasdanika.party.Party#getContactMethods <em>Contact Methods</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getParty()
+ * @see org.nasdanika.party.PartyPackage#getParty()
  * @model abstract="true"
  * @generated
  */
 public interface Party extends NamedElement, Entity {
 	/**
 	 * Returns the value of the '<em><b>Contact Methods</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.ContactMethod}.
+	 * The list contents are of type {@link org.nasdanika.party.ContactMethod}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Party can have zero or more contact methods.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Contact Methods</em>' containment reference list.
-	 * @see org.nasdanika.ncore.NcorePackage#getParty_ContactMethods()
+	 * @see org.nasdanika.party.PartyPackage#getParty_ContactMethods()
 	 * @model containment="true"
 	 * @generated
 	 */

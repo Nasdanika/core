@@ -5,55 +5,11 @@
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
     featureDelegation="Dynamic" complianceLevel="8.0" suppressGenModelAnnotations="false"
     copyrightFields="false" providerRootExtendsClass="org.nasdanika.party.provider.PartyItemProviderAdapter"
-    colorProviders="true" operationReflection="true" importOrganizing="true" decoration="Live">
+    colorProviders="true" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
+    operationReflection="true" importOrganizing="true" decoration="Live">
   <foreignModel>party.ecore</foreignModel>
   <genPackages prefix="Party" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="party.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="party.ecore#//HttpMethod">
-      <genEnumLiterals ecoreEnumLiteral="party.ecore#//HttpMethod/GET"/>
-      <genEnumLiterals ecoreEnumLiteral="party.ecore#//HttpMethod/POST"/>
-      <genEnumLiterals ecoreEnumLiteral="party.ecore#//HttpMethod/PUT"/>
-      <genEnumLiterals ecoreEnumLiteral="party.ecore#//HttpMethod/DELETE"/>
-      <genEnumLiterals ecoreEnumLiteral="party.ecore#//HttpMethod/PATCH"/>
-    </genEnums>
-    <genDataTypes ecoreDataType="party.ecore#//Exception"/>
-    <genDataTypes ecoreDataType="party.ecore#//IContext"/>
-    <genClasses image="false" ecoreClass="party.ecore#//ISupplier">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//ISupplier/T"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//ISupplierFactory">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//ISupplierFactory/T"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//SupplierFactoryReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//SupplierFactoryReference/target"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//IFunction">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IFunction/T"/>
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IFunction/R"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//IFunctionFactory">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IFunctionFactory/T"/>
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IFunctionFactory/R"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//IConsumer">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IConsumer/T"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//IConsumerFactory">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//IConsumerFactory/T"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//ModelElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//ModelElement/title"/>
-      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute party.ecore#//ModelElement/description"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//NamedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//NamedElement/name"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Entity">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Entity/id"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//Configurable">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Configurable/configuration"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="party.ecore#//Party">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Party/contactMethods"/>
     </genClasses>
@@ -77,60 +33,6 @@
     </genClasses>
     <genClasses ecoreClass="party.ecore#//WebAddress">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//WebAddress/url"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//TypedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//TypedElement/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//TypedElement/required"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//Supplier">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Supplier/implementation"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Resource">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Resource/location"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Resource/interpolate"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Value">
-      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute party.ecore#//Value/value"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Value/interpolate"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Null"/>
-    <genClasses ecoreClass="party.ecore#//Operation">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Operation/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Array">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Array/elements"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Context">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Context/elements"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//Entry">
-      <genTypeParameters ecoreTypeParameter="party.ecore#//Entry/T"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Entry/enabled"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//TypedEntry"/>
-    <genClasses ecoreClass="party.ecore#//SupplierEntry"/>
-    <genClasses ecoreClass="party.ecore#//Map">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Map/entries"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//Property"/>
-    <genClasses ecoreClass="party.ecore#//Function"/>
-    <genClasses ecoreClass="party.ecore#//List"/>
-    <genClasses ecoreClass="party.ecore#//Object"/>
-    <genClasses ecoreClass="party.ecore#//HttpCall">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//HttpCall/url"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//HttpCall/method"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//HttpCall/headers"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//HttpCall/connectTimeout"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//HttpCall/readTimeout"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//HttpCall/successCode"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//RestOperation">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//RestOperation/arguments"/>
-    </genClasses>
-    <genClasses ecoreClass="party.ecore#//RestFunction"/>
-    <genClasses ecoreClass="party.ecore#//Html">
-      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute party.ecore#//Html/content"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Html/interpolate"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

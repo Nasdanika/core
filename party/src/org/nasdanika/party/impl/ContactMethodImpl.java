@@ -1,11 +1,11 @@
 /**
  */
-package org.nasdanika.ncore.impl;
+package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.nasdanika.ncore.ContactMethod;
-import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.nasdanika.party.ContactMethod;
+import org.nasdanika.party.PartyPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +31,7 @@ public class ContactMethodImpl extends NamedElementImpl implements ContactMethod
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.CONTACT_METHOD;
+		return PartyPackage.Literals.CONTACT_METHOD;
 	}
 
 } //ContactMethodImpl

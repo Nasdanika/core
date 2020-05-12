@@ -1,11 +1,10 @@
 /**
  */
-package org.nasdanika.ncore.impl;
+package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.nasdanika.ncore.EMail;
-import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.party.EMail;
+import org.nasdanika.party.PartyPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +14,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.EMailImpl#getEMailAddress <em>EMail Address</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.EMailImpl#getEMailAddress <em>EMail Address</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,7 +46,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.EMAIL;
+		return PartyPackage.Literals.EMAIL;
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	 */
 	@Override
 	public String getEMailAddress() {
-		return (String)eDynamicGet(NcorePackage.EMAIL__EMAIL_ADDRESS, NcorePackage.Literals.EMAIL__EMAIL_ADDRESS, true, true);
+		return (String)eDynamicGet(PartyPackage.EMAIL__EMAIL_ADDRESS, PartyPackage.Literals.EMAIL__EMAIL_ADDRESS, true, true);
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	 */
 	@Override
 	public void setEMailAddress(String newEMailAddress) {
-		eDynamicSet(NcorePackage.EMAIL__EMAIL_ADDRESS, NcorePackage.Literals.EMAIL__EMAIL_ADDRESS, newEMailAddress);
+		eDynamicSet(PartyPackage.EMAIL__EMAIL_ADDRESS, PartyPackage.Literals.EMAIL__EMAIL_ADDRESS, newEMailAddress);
 	}
 
 	/**
@@ -78,7 +77,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.EMAIL__EMAIL_ADDRESS:
+			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				return getEMailAddress();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -92,7 +91,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.EMAIL__EMAIL_ADDRESS:
+			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				setEMailAddress((String)newValue);
 				return;
 		}
@@ -107,7 +106,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.EMAIL__EMAIL_ADDRESS:
+			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				setEMailAddress(EMAIL_ADDRESS_EDEFAULT);
 				return;
 		}
@@ -122,7 +121,7 @@ public class EMailImpl extends ContactMethodImpl implements EMail {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.EMAIL__EMAIL_ADDRESS:
+			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				return EMAIL_ADDRESS_EDEFAULT == null ? getEMailAddress() != null : !EMAIL_ADDRESS_EDEFAULT.equals(getEMailAddress());
 		}
 		return super.eIsSet(featureID);

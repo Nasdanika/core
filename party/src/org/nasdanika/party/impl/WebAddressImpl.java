@@ -1,11 +1,10 @@
 /**
  */
-package org.nasdanika.ncore.impl;
+package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.WebAddress;
+import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.WebAddress;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,7 +14,7 @@ import org.nasdanika.ncore.WebAddress;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.WebAddressImpl#getUrl <em>Url</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.WebAddressImpl#getUrl <em>Url</em>}</li>
  * </ul>
  *
  * @generated
@@ -47,7 +46,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.WEB_ADDRESS;
+		return PartyPackage.Literals.WEB_ADDRESS;
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	 */
 	@Override
 	public String getUrl() {
-		return (String)eDynamicGet(NcorePackage.WEB_ADDRESS__URL, NcorePackage.Literals.WEB_ADDRESS__URL, true, true);
+		return (String)eDynamicGet(PartyPackage.WEB_ADDRESS__URL, PartyPackage.Literals.WEB_ADDRESS__URL, true, true);
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	 */
 	@Override
 	public void setUrl(String newUrl) {
-		eDynamicSet(NcorePackage.WEB_ADDRESS__URL, NcorePackage.Literals.WEB_ADDRESS__URL, newUrl);
+		eDynamicSet(PartyPackage.WEB_ADDRESS__URL, PartyPackage.Literals.WEB_ADDRESS__URL, newUrl);
 	}
 
 	/**
@@ -78,7 +77,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.WEB_ADDRESS__URL:
+			case PartyPackage.WEB_ADDRESS__URL:
 				return getUrl();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -92,7 +91,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.WEB_ADDRESS__URL:
+			case PartyPackage.WEB_ADDRESS__URL:
 				setUrl((String)newValue);
 				return;
 		}
@@ -107,7 +106,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.WEB_ADDRESS__URL:
+			case PartyPackage.WEB_ADDRESS__URL:
 				setUrl(URL_EDEFAULT);
 				return;
 		}
@@ -122,7 +121,7 @@ public class WebAddressImpl extends ContactMethodImpl implements WebAddress {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.WEB_ADDRESS__URL:
+			case PartyPackage.WEB_ADDRESS__URL:
 				return URL_EDEFAULT == null ? getUrl() != null : !URL_EDEFAULT.equals(getUrl());
 		}
 		return super.eIsSet(featureID);

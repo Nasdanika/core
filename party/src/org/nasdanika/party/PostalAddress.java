@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore;
+package org.nasdanika.party;
 
 
 /**
@@ -12,15 +12,15 @@ package org.nasdanika.ncore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getCountry <em>Country</em>}</li>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getStateProvince <em>State Province</em>}</li>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getCity <em>City</em>}</li>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getPostalCode <em>Postal Code</em>}</li>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getLine1 <em>Line1</em>}</li>
- *   <li>{@link org.nasdanika.ncore.PostalAddress#getLine2 <em>Line2</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getCountry <em>Country</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getStateProvince <em>State Province</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getCity <em>City</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getPostalCode <em>Postal Code</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getLine1 <em>Line1</em>}</li>
+ *   <li>{@link org.nasdanika.party.PostalAddress#getLine2 <em>Line2</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getPostalAddress()
+ * @see org.nasdanika.party.PartyPackage#getPostalAddress()
  * @model
  * @generated
  */
@@ -31,14 +31,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Country</em>' attribute.
 	 * @see #setCountry(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_Country()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Country()
 	 * @model
 	 * @generated
 	 */
 	String getCountry();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getCountry <em>Country</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getCountry <em>Country</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Country</em>' attribute.
@@ -53,14 +53,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>State Province</em>' attribute.
 	 * @see #setStateProvince(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_StateProvince()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_StateProvince()
 	 * @model
 	 * @generated
 	 */
 	String getStateProvince();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getStateProvince <em>State Province</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getStateProvince <em>State Province</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>State Province</em>' attribute.
@@ -75,14 +75,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>City</em>' attribute.
 	 * @see #setCity(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_City()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_City()
 	 * @model
 	 * @generated
 	 */
 	String getCity();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getCity <em>City</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getCity <em>City</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>City</em>' attribute.
@@ -97,14 +97,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Postal Code</em>' attribute.
 	 * @see #setPostalCode(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_PostalCode()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_PostalCode()
 	 * @model
 	 * @generated
 	 */
 	String getPostalCode();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getPostalCode <em>Postal Code</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getPostalCode <em>Postal Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Postal Code</em>' attribute.
@@ -119,14 +119,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Line1</em>' attribute.
 	 * @see #setLine1(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_Line1()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Line1()
 	 * @model
 	 * @generated
 	 */
 	String getLine1();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getLine1 <em>Line1</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getLine1 <em>Line1</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Line1</em>' attribute.
@@ -141,14 +141,14 @@ public interface PostalAddress extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Line2</em>' attribute.
 	 * @see #setLine2(String)
-	 * @see org.nasdanika.ncore.NcorePackage#getPostalAddress_Line2()
+	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Line2()
 	 * @model
 	 * @generated
 	 */
 	String getLine2();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.PostalAddress#getLine2 <em>Line2</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.PostalAddress#getLine2 <em>Line2</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Line2</em>' attribute.

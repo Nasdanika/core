@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.impl;
+package org.nasdanika.party.impl;
 
 import java.util.Collection;
 
@@ -12,11 +12,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Party;
+import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.nasdanika.party.ContactMethod;
+import org.nasdanika.party.Party;
+import org.nasdanika.party.PartyPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,8 +27,8 @@ import org.nasdanika.ncore.Party;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.PartyImpl#getId <em>Id</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.PartyImpl#getContactMethods <em>Contact Methods</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PartyImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PartyImpl#getContactMethods <em>Contact Methods</em>}</li>
  * </ul>
  *
  * @generated
@@ -59,7 +60,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.PARTY;
+		return PartyPackage.Literals.PARTY;
 	}
 
 	/**
@@ -69,7 +70,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	 */
 	@Override
 	public String getId() {
-		return (String)eDynamicGet(NcorePackage.PARTY__ID, NcorePackage.Literals.ENTITY__ID, true, true);
+		return (String)eDynamicGet(PartyPackage.PARTY__ID, NcorePackage.Literals.ENTITY__ID, true, true);
 	}
 
 	/**
@@ -79,7 +80,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	 */
 	@Override
 	public void setId(String newId) {
-		eDynamicSet(NcorePackage.PARTY__ID, NcorePackage.Literals.ENTITY__ID, newId);
+		eDynamicSet(PartyPackage.PARTY__ID, NcorePackage.Literals.ENTITY__ID, newId);
 	}
 
 	/**
@@ -90,7 +91,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<ContactMethod> getContactMethods() {
-		return (EList<ContactMethod>)eDynamicGet(NcorePackage.PARTY__CONTACT_METHODS, NcorePackage.Literals.PARTY__CONTACT_METHODS, true, true);
+		return (EList<ContactMethod>)eDynamicGet(PartyPackage.PARTY__CONTACT_METHODS, PartyPackage.Literals.PARTY__CONTACT_METHODS, true, true);
 	}
 
 	/**
@@ -101,7 +102,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				return ((InternalEList<?>)getContactMethods()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -115,9 +116,9 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.PARTY__ID:
+			case PartyPackage.PARTY__ID:
 				return getId();
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				return getContactMethods();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -132,10 +133,10 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.PARTY__ID:
+			case PartyPackage.PARTY__ID:
 				setId((String)newValue);
 				return;
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				getContactMethods().clear();
 				getContactMethods().addAll((Collection<? extends ContactMethod>)newValue);
 				return;
@@ -151,10 +152,10 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PARTY__ID:
+			case PartyPackage.PARTY__ID:
 				setId(ID_EDEFAULT);
 				return;
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				getContactMethods().clear();
 				return;
 		}
@@ -169,9 +170,9 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.PARTY__ID:
+			case PartyPackage.PARTY__ID:
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				return !getContactMethods().isEmpty();
 		}
 		return super.eIsSet(featureID);
@@ -186,7 +187,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == Entity.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.PARTY__ID: return NcorePackage.ENTITY__ID;
+				case PartyPackage.PARTY__ID: return NcorePackage.ENTITY__ID;
 				default: return -1;
 			}
 		}
@@ -202,7 +203,7 @@ public abstract class PartyImpl extends NamedElementImpl implements Party {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == Entity.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.ENTITY__ID: return NcorePackage.PARTY__ID;
+				case NcorePackage.ENTITY__ID: return PartyPackage.PARTY__ID;
 				default: return -1;
 			}
 		}

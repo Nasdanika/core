@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.provider;
+package org.nasdanika.party.provider;
 
 
 import java.util.Collection;
@@ -8,17 +8,19 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Party;
+import org.nasdanika.ncore.provider.NamedElementItemProvider;
+import org.nasdanika.party.PartyFactory;
+import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Party} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.Party} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -84,7 +86,7 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(NcorePackage.Literals.PARTY__CONTACT_METHODS);
+			childrenFeatures.add(PartyPackage.Literals.PARTY__CONTACT_METHODS);
 		}
 		return childrenFeatures;
 	}
@@ -120,7 +122,7 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Party)object).getName();
+		String label = ((org.nasdanika.party.Party)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Party_type") :
 			getString("_UI_Party_type") + " " + label;
@@ -138,11 +140,11 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Party.class)) {
-			case NcorePackage.PARTY__ID:
+		switch (notification.getFeatureID(org.nasdanika.party.Party.class)) {
+			case PartyPackage.PARTY__ID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case NcorePackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__CONTACT_METHODS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -162,28 +164,39 @@ public class PartyItemProvider extends NamedElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.PARTY__CONTACT_METHODS,
-				 NcoreFactory.eINSTANCE.createContactMethod()));
+				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
+				 PartyFactory.eINSTANCE.createContactMethod()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.PARTY__CONTACT_METHODS,
-				 NcoreFactory.eINSTANCE.createEMail()));
+				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
+				 PartyFactory.eINSTANCE.createEMail()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.PARTY__CONTACT_METHODS,
-				 NcoreFactory.eINSTANCE.createPhone()));
+				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
+				 PartyFactory.eINSTANCE.createPhone()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.PARTY__CONTACT_METHODS,
-				 NcoreFactory.eINSTANCE.createPostalAddress()));
+				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
+				 PartyFactory.eINSTANCE.createPostalAddress()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.PARTY__CONTACT_METHODS,
-				 NcoreFactory.eINSTANCE.createWebAddress()));
+				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
+				 PartyFactory.eINSTANCE.createWebAddress()));
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return PartyEditPlugin.INSTANCE;
 	}
 
 }

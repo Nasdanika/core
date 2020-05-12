@@ -12,8 +12,7 @@ Export-Package: org.nasdanika.party,
  org.nasdanika.party.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport,
- org.nasdanika.emf;bundle-version="1.0.0";visibility:=reexport
+ org.nasdanika.ncore;bundle-version="0.1.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.party
 Bundle-Activator: org.nasdanika.party.util.Activator

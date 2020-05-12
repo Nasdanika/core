@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore;
+package org.nasdanika.party;
 
 
 /**
@@ -12,13 +12,13 @@ package org.nasdanika.ncore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.Phone#getCountryCode <em>Country Code</em>}</li>
- *   <li>{@link org.nasdanika.ncore.Phone#getAreaCode <em>Area Code</em>}</li>
- *   <li>{@link org.nasdanika.ncore.Phone#getPhoneNumber <em>Phone Number</em>}</li>
- *   <li>{@link org.nasdanika.ncore.Phone#getExtension <em>Extension</em>}</li>
+ *   <li>{@link org.nasdanika.party.Phone#getCountryCode <em>Country Code</em>}</li>
+ *   <li>{@link org.nasdanika.party.Phone#getAreaCode <em>Area Code</em>}</li>
+ *   <li>{@link org.nasdanika.party.Phone#getPhoneNumber <em>Phone Number</em>}</li>
+ *   <li>{@link org.nasdanika.party.Phone#getExtension <em>Extension</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getPhone()
+ * @see org.nasdanika.party.PartyPackage#getPhone()
  * @model
  * @generated
  */
@@ -29,14 +29,14 @@ public interface Phone extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Country Code</em>' attribute.
 	 * @see #setCountryCode(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getPhone_CountryCode()
+	 * @see org.nasdanika.party.PartyPackage#getPhone_CountryCode()
 	 * @model
 	 * @generated
 	 */
 	int getCountryCode();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Phone#getCountryCode <em>Country Code</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.Phone#getCountryCode <em>Country Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Country Code</em>' attribute.
@@ -51,14 +51,14 @@ public interface Phone extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Area Code</em>' attribute.
 	 * @see #setAreaCode(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getPhone_AreaCode()
+	 * @see org.nasdanika.party.PartyPackage#getPhone_AreaCode()
 	 * @model
 	 * @generated
 	 */
 	int getAreaCode();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Phone#getAreaCode <em>Area Code</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.Phone#getAreaCode <em>Area Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Area Code</em>' attribute.
@@ -73,14 +73,14 @@ public interface Phone extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Phone Number</em>' attribute.
 	 * @see #setPhoneNumber(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getPhone_PhoneNumber()
+	 * @see org.nasdanika.party.PartyPackage#getPhone_PhoneNumber()
 	 * @model
 	 * @generated
 	 */
 	int getPhoneNumber();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Phone#getPhoneNumber <em>Phone Number</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.Phone#getPhoneNumber <em>Phone Number</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Phone Number</em>' attribute.
@@ -95,14 +95,14 @@ public interface Phone extends ContactMethod {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Extension</em>' attribute.
 	 * @see #setExtension(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getPhone_Extension()
+	 * @see org.nasdanika.party.PartyPackage#getPhone_Extension()
 	 * @model
 	 * @generated
 	 */
 	int getExtension();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Phone#getExtension <em>Extension</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.party.Phone#getExtension <em>Extension</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Extension</em>' attribute.

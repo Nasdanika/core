@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.provider;
+package org.nasdanika.party.provider;
 
 
 import java.util.Collection;
@@ -12,11 +12,10 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Phone;
+import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Phone} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.Phone} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -64,7 +63,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_Phone_countryCode_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_countryCode_feature", "_UI_Phone_type"),
-				 NcorePackage.Literals.PHONE__COUNTRY_CODE,
+				 PartyPackage.Literals.PHONE__COUNTRY_CODE,
 				 true,
 				 false,
 				 false,
@@ -86,7 +85,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_Phone_areaCode_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_areaCode_feature", "_UI_Phone_type"),
-				 NcorePackage.Literals.PHONE__AREA_CODE,
+				 PartyPackage.Literals.PHONE__AREA_CODE,
 				 true,
 				 false,
 				 false,
@@ -108,7 +107,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_Phone_phoneNumber_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_phoneNumber_feature", "_UI_Phone_type"),
-				 NcorePackage.Literals.PHONE__PHONE_NUMBER,
+				 PartyPackage.Literals.PHONE__PHONE_NUMBER,
 				 true,
 				 false,
 				 false,
@@ -130,7 +129,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_Phone_extension_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_extension_feature", "_UI_Phone_type"),
-				 NcorePackage.Literals.PHONE__EXTENSION,
+				 PartyPackage.Literals.PHONE__EXTENSION,
 				 true,
 				 false,
 				 false,
@@ -168,7 +167,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Phone)object).getName();
+		String label = ((org.nasdanika.party.Phone)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Phone_type") :
 			getString("_UI_Phone_type") + " " + label;
@@ -186,11 +185,11 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Phone.class)) {
-			case NcorePackage.PHONE__COUNTRY_CODE:
-			case NcorePackage.PHONE__AREA_CODE:
-			case NcorePackage.PHONE__PHONE_NUMBER:
-			case NcorePackage.PHONE__EXTENSION:
+		switch (notification.getFeatureID(org.nasdanika.party.Phone.class)) {
+			case PartyPackage.PHONE__COUNTRY_CODE:
+			case PartyPackage.PHONE__AREA_CODE:
+			case PartyPackage.PHONE__PHONE_NUMBER:
+			case PartyPackage.PHONE__EXTENSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

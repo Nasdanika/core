@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.provider;
+package org.nasdanika.party.provider;
 
 
 import java.util.Collection;
@@ -12,11 +12,10 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.EMail;
-import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.EMail} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.EMail} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -61,7 +60,7 @@ public class EMailItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_EMail_eMailAddress_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_EMail_eMailAddress_feature", "_UI_EMail_type"),
-				 NcorePackage.Literals.EMAIL__EMAIL_ADDRESS,
+				 PartyPackage.Literals.EMAIL__EMAIL_ADDRESS,
 				 true,
 				 false,
 				 false,
@@ -99,7 +98,7 @@ public class EMailItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EMail)object).getName();
+		String label = ((org.nasdanika.party.EMail)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_EMail_type") :
 			getString("_UI_EMail_type") + " " + label;
@@ -117,8 +116,8 @@ public class EMailItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(EMail.class)) {
-			case NcorePackage.EMAIL__EMAIL_ADDRESS:
+		switch (notification.getFeatureID(org.nasdanika.party.EMail.class)) {
+			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

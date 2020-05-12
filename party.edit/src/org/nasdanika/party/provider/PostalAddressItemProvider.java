@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.ncore.provider;
+package org.nasdanika.party.provider;
 
 
 import java.util.Collection;
@@ -12,11 +12,10 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.PostalAddress;
+import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.PostalAddress} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.PostalAddress} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -66,7 +65,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_country_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_country_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__COUNTRY,
+				 PartyPackage.Literals.POSTAL_ADDRESS__COUNTRY,
 				 true,
 				 false,
 				 false,
@@ -88,7 +87,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_stateProvince_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_stateProvince_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__STATE_PROVINCE,
+				 PartyPackage.Literals.POSTAL_ADDRESS__STATE_PROVINCE,
 				 true,
 				 false,
 				 false,
@@ -110,7 +109,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_city_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_city_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__CITY,
+				 PartyPackage.Literals.POSTAL_ADDRESS__CITY,
 				 true,
 				 false,
 				 false,
@@ -132,7 +131,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_postalCode_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_postalCode_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__POSTAL_CODE,
+				 PartyPackage.Literals.POSTAL_ADDRESS__POSTAL_CODE,
 				 true,
 				 false,
 				 false,
@@ -154,7 +153,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_line1_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_line1_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__LINE1,
+				 PartyPackage.Literals.POSTAL_ADDRESS__LINE1,
 				 true,
 				 false,
 				 false,
@@ -176,7 +175,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_line2_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_line2_feature", "_UI_PostalAddress_type"),
-				 NcorePackage.Literals.POSTAL_ADDRESS__LINE2,
+				 PartyPackage.Literals.POSTAL_ADDRESS__LINE2,
 				 true,
 				 false,
 				 false,
@@ -214,7 +213,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((PostalAddress)object).getName();
+		String label = ((org.nasdanika.party.PostalAddress)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_PostalAddress_type") :
 			getString("_UI_PostalAddress_type") + " " + label;
@@ -232,13 +231,13 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PostalAddress.class)) {
-			case NcorePackage.POSTAL_ADDRESS__COUNTRY:
-			case NcorePackage.POSTAL_ADDRESS__STATE_PROVINCE:
-			case NcorePackage.POSTAL_ADDRESS__CITY:
-			case NcorePackage.POSTAL_ADDRESS__POSTAL_CODE:
-			case NcorePackage.POSTAL_ADDRESS__LINE1:
-			case NcorePackage.POSTAL_ADDRESS__LINE2:
+		switch (notification.getFeatureID(org.nasdanika.party.PostalAddress.class)) {
+			case PartyPackage.POSTAL_ADDRESS__COUNTRY:
+			case PartyPackage.POSTAL_ADDRESS__STATE_PROVINCE:
+			case PartyPackage.POSTAL_ADDRESS__CITY:
+			case PartyPackage.POSTAL_ADDRESS__POSTAL_CODE:
+			case PartyPackage.POSTAL_ADDRESS__LINE1:
+			case PartyPackage.POSTAL_ADDRESS__LINE2:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

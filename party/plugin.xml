@@ -10,7 +10,7 @@
       <!-- @generated party -->
       <package
             uri="urn:org.nasdanika.party"
-            class="org.nasdanika.ncore.PartyPackage"
+            class="org.nasdanika.party.PartyPackage"
             genModel="model/party.genmodel"/>
    </extension>
 
