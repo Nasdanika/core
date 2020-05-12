@@ -54,30 +54,6 @@
     <genClasses image="false" ecoreClass="ncore.ecore#//Configurable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Configurable/configuration"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//Party">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Party/contactMethods"/>
-    </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//ContactMethod"/>
-    <genClasses ecoreClass="ncore.ecore#//EMail">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//EMail/eMailAddress"/>
-    </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//Phone">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/countryCode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/areaCode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/phoneNumber"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Phone/extension"/>
-    </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//PostalAddress">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/country"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/stateProvince"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/city"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/postalCode"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/line1"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//PostalAddress/line2"/>
-    </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//WebAddress">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//WebAddress/url"/>
-    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//TypedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/required"/>

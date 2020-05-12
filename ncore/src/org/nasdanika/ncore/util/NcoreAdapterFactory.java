@@ -13,9 +13,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
-import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
@@ -28,9 +26,6 @@ import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
-import org.nasdanika.ncore.Party;
-import org.nasdanika.ncore.Phone;
-import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
@@ -40,7 +35,6 @@ import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
-import org.nasdanika.ncore.WebAddress;
 
 /**
  * <!-- begin-user-doc -->
@@ -141,30 +135,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseConfigurable(Configurable object) {
 				return createConfigurableAdapter();
-			}
-			@Override
-			public Adapter caseParty(Party object) {
-				return createPartyAdapter();
-			}
-			@Override
-			public Adapter caseContactMethod(ContactMethod object) {
-				return createContactMethodAdapter();
-			}
-			@Override
-			public Adapter caseEMail(EMail object) {
-				return createEMailAdapter();
-			}
-			@Override
-			public Adapter casePhone(Phone object) {
-				return createPhoneAdapter();
-			}
-			@Override
-			public Adapter casePostalAddress(PostalAddress object) {
-				return createPostalAddressAdapter();
-			}
-			@Override
-			public Adapter caseWebAddress(WebAddress object) {
-				return createWebAddressAdapter();
 			}
 			@Override
 			public Adapter caseTypedElement(TypedElement object) {
@@ -319,90 +289,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConfigurableAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Party <em>Party</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.Party
-	 * @generated
-	 */
-	public Adapter createPartyAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ContactMethod <em>Contact Method</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.ContactMethod
-	 * @generated
-	 */
-	public Adapter createContactMethodAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.EMail <em>EMail</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.EMail
-	 * @generated
-	 */
-	public Adapter createEMailAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Phone <em>Phone</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.Phone
-	 * @generated
-	 */
-	public Adapter createPhoneAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.PostalAddress <em>Postal Address</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.PostalAddress
-	 * @generated
-	 */
-	public Adapter createPostalAddressAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.WebAddress <em>Web Address</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.WebAddress
-	 * @generated
-	 */
-	public Adapter createWebAddressAdapter() {
 		return null;
 	}
 

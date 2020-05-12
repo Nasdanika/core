@@ -11,9 +11,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.ncore.Array;
-import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
-import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -24,8 +22,6 @@ import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
-import org.nasdanika.ncore.Phone;
-import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.Supplier;
@@ -36,7 +32,6 @@ import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
-import org.nasdanika.ncore.WebAddress;
 
 /**
  * <!-- begin-user-doc -->
@@ -83,11 +78,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
-			case NcorePackage.CONTACT_METHOD: return createContactMethod();
-			case NcorePackage.EMAIL: return createEMail();
-			case NcorePackage.PHONE: return createPhone();
-			case NcorePackage.POSTAL_ADDRESS: return createPostalAddress();
-			case NcorePackage.WEB_ADDRESS: return createWebAddress();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
 			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.RESOURCE: return createResource();
@@ -148,61 +138,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ContactMethod createContactMethod() {
-		ContactMethodImpl contactMethod = new ContactMethodImpl();
-		return contactMethod;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EMail createEMail() {
-		EMailImpl eMail = new EMailImpl();
-		return eMail;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Phone createPhone() {
-		PhoneImpl phone = new PhoneImpl();
-		return phone;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public PostalAddress createPostalAddress() {
-		PostalAddressImpl postalAddress = new PostalAddressImpl();
-		return postalAddress;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public WebAddress createWebAddress() {
-		WebAddressImpl webAddress = new WebAddressImpl();
-		return webAddress;
 	}
 
 	/**

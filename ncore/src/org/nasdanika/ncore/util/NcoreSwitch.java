@@ -13,9 +13,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
-import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
@@ -28,9 +26,6 @@ import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
-import org.nasdanika.ncore.Party;
-import org.nasdanika.ncore.Phone;
-import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
@@ -40,7 +35,6 @@ import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
-import org.nasdanika.ncore.WebAddress;
 
 /**
  * <!-- begin-user-doc -->
@@ -166,59 +160,6 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.CONFIGURABLE: {
 				Configurable configurable = (Configurable)theEObject;
 				T1 result = caseConfigurable(configurable);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.PARTY: {
-				Party party = (Party)theEObject;
-				T1 result = caseParty(party);
-				if (result == null) result = caseNamedElement(party);
-				if (result == null) result = caseEntity(party);
-				if (result == null) result = caseModelElement(party);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.CONTACT_METHOD: {
-				ContactMethod contactMethod = (ContactMethod)theEObject;
-				T1 result = caseContactMethod(contactMethod);
-				if (result == null) result = caseNamedElement(contactMethod);
-				if (result == null) result = caseModelElement(contactMethod);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.EMAIL: {
-				EMail eMail = (EMail)theEObject;
-				T1 result = caseEMail(eMail);
-				if (result == null) result = caseContactMethod(eMail);
-				if (result == null) result = caseNamedElement(eMail);
-				if (result == null) result = caseModelElement(eMail);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.PHONE: {
-				Phone phone = (Phone)theEObject;
-				T1 result = casePhone(phone);
-				if (result == null) result = caseContactMethod(phone);
-				if (result == null) result = caseNamedElement(phone);
-				if (result == null) result = caseModelElement(phone);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.POSTAL_ADDRESS: {
-				PostalAddress postalAddress = (PostalAddress)theEObject;
-				T1 result = casePostalAddress(postalAddress);
-				if (result == null) result = caseContactMethod(postalAddress);
-				if (result == null) result = caseNamedElement(postalAddress);
-				if (result == null) result = caseModelElement(postalAddress);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.WEB_ADDRESS: {
-				WebAddress webAddress = (WebAddress)theEObject;
-				T1 result = caseWebAddress(webAddress);
-				if (result == null) result = caseContactMethod(webAddress);
-				if (result == null) result = caseNamedElement(webAddress);
-				if (result == null) result = caseModelElement(webAddress);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -481,96 +422,6 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseConfigurable(Configurable object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Party</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Party</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseParty(Party object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Contact Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Contact Method</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseContactMethod(ContactMethod object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>EMail</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>EMail</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseEMail(EMail object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Phone</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Phone</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 casePhone(Phone object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Postal Address</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Postal Address</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 casePostalAddress(PostalAddress object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Web Address</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Web Address</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseWebAddress(WebAddress object) {
 		return null;
 	}
 

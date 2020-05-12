@@ -103,66 +103,6 @@ public interface NcorePackage extends EPackage {
 	int CONFIGURABLE = 10;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PartyImpl <em>Party</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.PartyImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getParty()
-	 * @generated
-	 */
-	int PARTY = 11;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ContactMethodImpl <em>Contact Method</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.ContactMethodImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getContactMethod()
-	 * @generated
-	 */
-	int CONTACT_METHOD = 12;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.EMailImpl <em>EMail</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.EMailImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEMail()
-	 * @generated
-	 */
-	int EMAIL = 13;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PhoneImpl <em>Phone</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.PhoneImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPhone()
-	 * @generated
-	 */
-	int PHONE = 14;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PostalAddressImpl <em>Postal Address</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.PostalAddressImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPostalAddress()
-	 * @generated
-	 */
-	int POSTAL_ADDRESS = 15;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.WebAddressImpl <em>Web Address</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.WebAddressImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getWebAddress()
-	 * @generated
-	 */
-	int WEB_ADDRESS = 16;
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.common.Supplier <em>ISupplier</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -317,7 +257,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplier()
 	 * @generated
 	 */
-	int SUPPLIER = 18;
+	int SUPPLIER = 12;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.common.Function <em>IFunction</em>}' class.
@@ -549,402 +489,6 @@ public interface NcorePackage extends EPackage {
 	int CONFIGURABLE_OPERATION_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__TITLE = NAMED_ELEMENT__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__NAME = NAMED_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__ID = NAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__CONTACT_METHODS = NAMED_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Party</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Party</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD__TITLE = NAMED_ELEMENT__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD__NAME = NAMED_ELEMENT__NAME;
-
-	/**
-	 * The number of structural features of the '<em>Contact Method</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>Contact Method</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL__TITLE = CONTACT_METHOD__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL__NAME = CONTACT_METHOD__NAME;
-
-	/**
-	 * The feature id for the '<em><b>EMail Address</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL__EMAIL_ADDRESS = CONTACT_METHOD_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>EMail</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL_FEATURE_COUNT = CONTACT_METHOD_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>EMail</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__TITLE = CONTACT_METHOD__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__NAME = CONTACT_METHOD__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Country Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__COUNTRY_CODE = CONTACT_METHOD_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Area Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__AREA_CODE = CONTACT_METHOD_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Phone Number</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__PHONE_NUMBER = CONTACT_METHOD_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Extension</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__EXTENSION = CONTACT_METHOD_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Phone</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE_FEATURE_COUNT = CONTACT_METHOD_FEATURE_COUNT + 4;
-
-	/**
-	 * The number of operations of the '<em>Phone</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__TITLE = CONTACT_METHOD__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__NAME = CONTACT_METHOD__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Country</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__COUNTRY = CONTACT_METHOD_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>State Province</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__STATE_PROVINCE = CONTACT_METHOD_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>City</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__CITY = CONTACT_METHOD_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Postal Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__POSTAL_CODE = CONTACT_METHOD_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Line1</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__LINE1 = CONTACT_METHOD_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Line2</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__LINE2 = CONTACT_METHOD_FEATURE_COUNT + 5;
-
-	/**
-	 * The number of structural features of the '<em>Postal Address</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS_FEATURE_COUNT = CONTACT_METHOD_FEATURE_COUNT + 6;
-
-	/**
-	 * The number of operations of the '<em>Postal Address</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS__TITLE = CONTACT_METHOD__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS__NAME = CONTACT_METHOD__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Url</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS__URL = CONTACT_METHOD_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Web Address</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS_FEATURE_COUNT = CONTACT_METHOD_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Web Address</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedElementImpl <em>Typed Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -952,7 +496,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedElement()
 	 * @generated
 	 */
-	int TYPED_ELEMENT = 17;
+	int TYPED_ELEMENT = 11;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ValueImpl <em>Value</em>}' class.
@@ -962,7 +506,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValue()
 	 * @generated
 	 */
-	int VALUE = 20;
+	int VALUE = 14;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.NullImpl <em>Null</em>}' class.
@@ -972,7 +516,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNull()
 	 * @generated
 	 */
-	int NULL = 21;
+	int NULL = 15;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.OperationImpl <em>Operation</em>}' class.
@@ -982,7 +526,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getOperation()
 	 * @generated
 	 */
-	int OPERATION = 22;
+	int OPERATION = 16;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ArrayImpl <em>Array</em>}' class.
@@ -992,7 +536,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getArray()
 	 * @generated
 	 */
-	int ARRAY = 23;
+	int ARRAY = 17;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ContextImpl <em>Context</em>}' class.
@@ -1002,7 +546,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getContext()
 	 * @generated
 	 */
-	int CONTEXT = 24;
+	int CONTEXT = 18;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
@@ -1012,7 +556,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
 	 * @generated
 	 */
-	int ENTRY = 25;
+	int ENTRY = 19;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.
@@ -1022,7 +566,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedEntry()
 	 * @generated
 	 */
-	int TYPED_ENTRY = 26;
+	int TYPED_ENTRY = 20;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
@@ -1032,7 +576,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 28;
+	int MAP = 22;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
@@ -1042,7 +586,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 29;
+	int PROPERTY = 23;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.FunctionImpl <em>Function</em>}' class.
@@ -1052,7 +596,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFunction()
 	 * @generated
 	 */
-	int FUNCTION = 30;
+	int FUNCTION = 24;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -1062,7 +606,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 31;
+	int LIST = 25;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ObjectImpl <em>Object</em>}' class.
@@ -1072,7 +616,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 32;
+	int OBJECT = 26;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HttpCallImpl <em>Http Call</em>}' class.
@@ -1082,7 +626,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpCall()
 	 * @generated
 	 */
-	int HTTP_CALL = 33;
+	int HTTP_CALL = 27;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
@@ -1092,7 +636,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestOperation()
 	 * @generated
 	 */
-	int REST_OPERATION = 34;
+	int REST_OPERATION = 28;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestFunctionImpl <em>Rest Function</em>}' class.
@@ -1102,7 +646,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestFunction()
 	 * @generated
 	 */
-	int REST_FUNCTION = 35;
+	int REST_FUNCTION = 29;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1229,7 +773,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 19;
+	int RESOURCE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1734,7 +1278,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplierEntry()
 	 * @generated
 	 */
-	int SUPPLIER_ENTRY = 27;
+	int SUPPLIER_ENTRY = 21;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -2491,7 +2035,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHtml()
 	 * @generated
 	 */
-	int HTML = 36;
+	int HTML = 30;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -2582,7 +2126,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 37;
+	int HTTP_METHOD = 31;
 
 	/**
 	 * The meta object id for the '<em>IContext</em>' data type.
@@ -2592,7 +2136,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIContext()
 	 * @generated
 	 */
-	int ICONTEXT = 39;
+	int ICONTEXT = 33;
 
 
 	/**
@@ -2603,7 +2147,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getException()
 	 * @generated
 	 */
-	int EXCEPTION = 38;
+	int EXCEPTION = 32;
 
 
 	/**
@@ -2700,209 +2244,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getConfigurable_Configuration();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.Party <em>Party</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Party</em>'.
-	 * @see org.nasdanika.ncore.Party
-	 * @generated
-	 */
-	EClass getParty();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Party#getContactMethods <em>Contact Methods</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Contact Methods</em>'.
-	 * @see org.nasdanika.ncore.Party#getContactMethods()
-	 * @see #getParty()
-	 * @generated
-	 */
-	EReference getParty_ContactMethods();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.ContactMethod <em>Contact Method</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Contact Method</em>'.
-	 * @see org.nasdanika.ncore.ContactMethod
-	 * @generated
-	 */
-	EClass getContactMethod();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.EMail <em>EMail</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>EMail</em>'.
-	 * @see org.nasdanika.ncore.EMail
-	 * @generated
-	 */
-	EClass getEMail();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.EMail#getEMailAddress <em>EMail Address</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>EMail Address</em>'.
-	 * @see org.nasdanika.ncore.EMail#getEMailAddress()
-	 * @see #getEMail()
-	 * @generated
-	 */
-	EAttribute getEMail_EMailAddress();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.Phone <em>Phone</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Phone</em>'.
-	 * @see org.nasdanika.ncore.Phone
-	 * @generated
-	 */
-	EClass getPhone();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Phone#getCountryCode <em>Country Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Country Code</em>'.
-	 * @see org.nasdanika.ncore.Phone#getCountryCode()
-	 * @see #getPhone()
-	 * @generated
-	 */
-	EAttribute getPhone_CountryCode();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Phone#getAreaCode <em>Area Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Area Code</em>'.
-	 * @see org.nasdanika.ncore.Phone#getAreaCode()
-	 * @see #getPhone()
-	 * @generated
-	 */
-	EAttribute getPhone_AreaCode();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Phone#getPhoneNumber <em>Phone Number</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Phone Number</em>'.
-	 * @see org.nasdanika.ncore.Phone#getPhoneNumber()
-	 * @see #getPhone()
-	 * @generated
-	 */
-	EAttribute getPhone_PhoneNumber();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Phone#getExtension <em>Extension</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Extension</em>'.
-	 * @see org.nasdanika.ncore.Phone#getExtension()
-	 * @see #getPhone()
-	 * @generated
-	 */
-	EAttribute getPhone_Extension();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.PostalAddress <em>Postal Address</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Postal Address</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress
-	 * @generated
-	 */
-	EClass getPostalAddress();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getCountry <em>Country</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Country</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getCountry()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_Country();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getStateProvince <em>State Province</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>State Province</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getStateProvince()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_StateProvince();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getCity <em>City</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>City</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getCity()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_City();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getPostalCode <em>Postal Code</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Postal Code</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getPostalCode()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_PostalCode();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getLine1 <em>Line1</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Line1</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getLine1()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_Line1();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.PostalAddress#getLine2 <em>Line2</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Line2</em>'.
-	 * @see org.nasdanika.ncore.PostalAddress#getLine2()
-	 * @see #getPostalAddress()
-	 * @generated
-	 */
-	EAttribute getPostalAddress_Line2();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.WebAddress <em>Web Address</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Web Address</em>'.
-	 * @see org.nasdanika.ncore.WebAddress
-	 * @generated
-	 */
-	EClass getWebAddress();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.WebAddress#getUrl <em>Url</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Url</em>'.
-	 * @see org.nasdanika.ncore.WebAddress#getUrl()
-	 * @see #getWebAddress()
-	 * @generated
-	 */
-	EAttribute getWebAddress_Url();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Supplier <em>ISupplier</em>}'.
@@ -3556,170 +2897,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONFIGURABLE__CONFIGURATION = eINSTANCE.getConfigurable_Configuration();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PartyImpl <em>Party</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.PartyImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getParty()
-		 * @generated
-		 */
-		EClass PARTY = eINSTANCE.getParty();
-
-		/**
-		 * The meta object literal for the '<em><b>Contact Methods</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARTY__CONTACT_METHODS = eINSTANCE.getParty_ContactMethods();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ContactMethodImpl <em>Contact Method</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.ContactMethodImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getContactMethod()
-		 * @generated
-		 */
-		EClass CONTACT_METHOD = eINSTANCE.getContactMethod();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.EMailImpl <em>EMail</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.EMailImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEMail()
-		 * @generated
-		 */
-		EClass EMAIL = eINSTANCE.getEMail();
-
-		/**
-		 * The meta object literal for the '<em><b>EMail Address</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute EMAIL__EMAIL_ADDRESS = eINSTANCE.getEMail_EMailAddress();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PhoneImpl <em>Phone</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.PhoneImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPhone()
-		 * @generated
-		 */
-		EClass PHONE = eINSTANCE.getPhone();
-
-		/**
-		 * The meta object literal for the '<em><b>Country Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PHONE__COUNTRY_CODE = eINSTANCE.getPhone_CountryCode();
-
-		/**
-		 * The meta object literal for the '<em><b>Area Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PHONE__AREA_CODE = eINSTANCE.getPhone_AreaCode();
-
-		/**
-		 * The meta object literal for the '<em><b>Phone Number</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PHONE__PHONE_NUMBER = eINSTANCE.getPhone_PhoneNumber();
-
-		/**
-		 * The meta object literal for the '<em><b>Extension</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PHONE__EXTENSION = eINSTANCE.getPhone_Extension();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PostalAddressImpl <em>Postal Address</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.PostalAddressImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPostalAddress()
-		 * @generated
-		 */
-		EClass POSTAL_ADDRESS = eINSTANCE.getPostalAddress();
-
-		/**
-		 * The meta object literal for the '<em><b>Country</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__COUNTRY = eINSTANCE.getPostalAddress_Country();
-
-		/**
-		 * The meta object literal for the '<em><b>State Province</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__STATE_PROVINCE = eINSTANCE.getPostalAddress_StateProvince();
-
-		/**
-		 * The meta object literal for the '<em><b>City</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__CITY = eINSTANCE.getPostalAddress_City();
-
-		/**
-		 * The meta object literal for the '<em><b>Postal Code</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__POSTAL_CODE = eINSTANCE.getPostalAddress_PostalCode();
-
-		/**
-		 * The meta object literal for the '<em><b>Line1</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__LINE1 = eINSTANCE.getPostalAddress_Line1();
-
-		/**
-		 * The meta object literal for the '<em><b>Line2</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute POSTAL_ADDRESS__LINE2 = eINSTANCE.getPostalAddress_Line2();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.WebAddressImpl <em>Web Address</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.WebAddressImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getWebAddress()
-		 * @generated
-		 */
-		EClass WEB_ADDRESS = eINSTANCE.getWebAddress();
-
-		/**
-		 * The meta object literal for the '<em><b>Url</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute WEB_ADDRESS__URL = eINSTANCE.getWebAddress_Url();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.Supplier <em>ISupplier</em>}' class.

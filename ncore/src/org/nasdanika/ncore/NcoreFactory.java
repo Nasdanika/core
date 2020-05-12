@@ -22,51 +22,6 @@ public interface NcoreFactory extends EFactory {
 	NcoreFactory eINSTANCE = org.nasdanika.ncore.impl.NcoreFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Contact Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Contact Method</em>'.
-	 * @generated
-	 */
-	ContactMethod createContactMethod();
-
-	/**
-	 * Returns a new object of class '<em>EMail</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>EMail</em>'.
-	 * @generated
-	 */
-	EMail createEMail();
-
-	/**
-	 * Returns a new object of class '<em>Phone</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Phone</em>'.
-	 * @generated
-	 */
-	Phone createPhone();
-
-	/**
-	 * Returns a new object of class '<em>Postal Address</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Postal Address</em>'.
-	 * @generated
-	 */
-	PostalAddress createPostalAddress();
-
-	/**
-	 * Returns a new object of class '<em>Web Address</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Web Address</em>'.
-	 * @generated
-	 */
-	WebAddress createWebAddress();
-
-	/**
 	 * Returns a new object of class '<em>Supplier Factory Reference</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

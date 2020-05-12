@@ -23,9 +23,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.ContactMethod;
 import org.nasdanika.ncore.Context;
-import org.nasdanika.ncore.EMail;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Html;
@@ -37,9 +35,6 @@ import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
-import org.nasdanika.ncore.Party;
-import org.nasdanika.ncore.Phone;
-import org.nasdanika.ncore.PostalAddress;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
@@ -49,7 +44,6 @@ import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
-import org.nasdanika.ncore.WebAddress;
 
 /**
  * <!-- begin-user-doc -->
@@ -145,18 +139,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateEntity((Entity)value, diagnostics, context);
 			case NcorePackage.CONFIGURABLE:
 				return validateConfigurable((Configurable)value, diagnostics, context);
-			case NcorePackage.PARTY:
-				return validateParty((Party)value, diagnostics, context);
-			case NcorePackage.CONTACT_METHOD:
-				return validateContactMethod((ContactMethod)value, diagnostics, context);
-			case NcorePackage.EMAIL:
-				return validateEMail((EMail)value, diagnostics, context);
-			case NcorePackage.PHONE:
-				return validatePhone((Phone)value, diagnostics, context);
-			case NcorePackage.POSTAL_ADDRESS:
-				return validatePostalAddress((PostalAddress)value, diagnostics, context);
-			case NcorePackage.WEB_ADDRESS:
-				return validateWebAddress((WebAddress)value, diagnostics, context);
 			case NcorePackage.TYPED_ELEMENT:
 				return validateTypedElement((TypedElement)value, diagnostics, context);
 			case NcorePackage.SUPPLIER:
@@ -242,60 +224,6 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateConfigurable(Configurable configurable, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(configurable, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateParty(Party party, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(party, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateContactMethod(ContactMethod contactMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(contactMethod, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateEMail(EMail eMail, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(eMail, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validatePhone(Phone phone, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(phone, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validatePostalAddress(PostalAddress postalAddress, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(postalAddress, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateWebAddress(WebAddress webAddress, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(webAddress, diagnostics, context);
 	}
 
 	/**

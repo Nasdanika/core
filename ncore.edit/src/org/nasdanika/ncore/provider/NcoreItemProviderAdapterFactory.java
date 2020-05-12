@@ -74,121 +74,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ContactMethod} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ContactMethodItemProvider contactMethodItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.ContactMethod}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createContactMethodAdapter() {
-		if (contactMethodItemProvider == null) {
-			contactMethodItemProvider = new ContactMethodItemProvider(this);
-		}
-
-		return contactMethodItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.EMail} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EMailItemProvider eMailItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.EMail}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createEMailAdapter() {
-		if (eMailItemProvider == null) {
-			eMailItemProvider = new EMailItemProvider(this);
-		}
-
-		return eMailItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Phone} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PhoneItemProvider phoneItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.Phone}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPhoneAdapter() {
-		if (phoneItemProvider == null) {
-			phoneItemProvider = new PhoneItemProvider(this);
-		}
-
-		return phoneItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.PostalAddress} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PostalAddressItemProvider postalAddressItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.PostalAddress}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPostalAddressAdapter() {
-		if (postalAddressItemProvider == null) {
-			postalAddressItemProvider = new PostalAddressItemProvider(this);
-		}
-
-		return postalAddressItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.WebAddress} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected WebAddressItemProvider webAddressItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.WebAddress}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createWebAddressAdapter() {
-		if (webAddressItemProvider == null) {
-			webAddressItemProvider = new WebAddressItemProvider(this);
-		}
-
-		return webAddressItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.SupplierFactoryReference} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -754,11 +639,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	@Override
 	public void dispose() {
 		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
-		if (contactMethodItemProvider != null) contactMethodItemProvider.dispose();
-		if (eMailItemProvider != null) eMailItemProvider.dispose();
-		if (phoneItemProvider != null) phoneItemProvider.dispose();
-		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
-		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (resourceItemProvider != null) resourceItemProvider.dispose();
