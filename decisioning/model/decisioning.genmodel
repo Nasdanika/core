@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.decisioning/src" creationIcons="false"
+    creationSubmenus="true" modelPluginID="org.nasdanika.decisioning" modelName="Decisioning"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    featureDelegation="Dynamic" complianceLevel="8.0" suppressGenModelAnnotations="false"
+    copyrightFields="false" providerRootExtendsClass="org.nasdanika.decisioning.provider.DecisioningItemProviderAdapter"
+    colorProviders="true" operationReflection="true" importOrganizing="true" decoration="Live">
+  <foreignModel>decisioning.ecore</foreignModel>
+  <genPackages prefix="Decisioning" basePackage="org.nasdanika" disposableProviderFactory="true"
+      ecorePackage="decisioning.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="decisioning.ecore#//HttpMethod">
+      <genEnumLiterals ecoreEnumLiteral="decisioning.ecore#//HttpMethod/GET"/>
+      <genEnumLiterals ecoreEnumLiteral="decisioning.ecore#//HttpMethod/POST"/>
+      <genEnumLiterals ecoreEnumLiteral="decisioning.ecore#//HttpMethod/PUT"/>
+      <genEnumLiterals ecoreEnumLiteral="decisioning.ecore#//HttpMethod/DELETE"/>
+      <genEnumLiterals ecoreEnumLiteral="decisioning.ecore#//HttpMethod/PATCH"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="decisioning.ecore#//Exception"/>
+    <genDataTypes ecoreDataType="decisioning.ecore#//IContext"/>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//ISupplier">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//ISupplier/T"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//ISupplierFactory">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//ISupplierFactory/T"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//SupplierFactoryReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference decisioning.ecore#//SupplierFactoryReference/target"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//IFunction">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IFunction/T"/>
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IFunction/R"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//IFunctionFactory">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IFunctionFactory/T"/>
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IFunctionFactory/R"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//IConsumer">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IConsumer/T"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//IConsumerFactory">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//IConsumerFactory/T"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//ModelElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//ModelElement/title"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute decisioning.ecore#//ModelElement/description"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//NamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//NamedElement/name"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Entity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Entity/id"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//Configurable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Configurable/configuration"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//Decisioning">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Decisioning/contactMethods"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//ContactMethod"/>
+    <genClasses ecoreClass="decisioning.ecore#//EMail">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//EMail/eMailAddress"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Phone">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Phone/countryCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Phone/areaCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Phone/phoneNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Phone/extension"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//PostalAddress">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/country"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/stateProvince"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/city"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/postalCode"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/line1"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//PostalAddress/line2"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//WebAddress">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//WebAddress/url"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//TypedElement/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//TypedElement/required"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//Supplier">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Supplier/implementation"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Resource/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Resource/interpolate"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Value">
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute decisioning.ecore#//Value/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Value/interpolate"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Null"/>
+    <genClasses ecoreClass="decisioning.ecore#//Operation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Operation/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Array">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Array/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Context">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Context/elements"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="decisioning.ecore#//Entry">
+      <genTypeParameters ecoreTypeParameter="decisioning.ecore#//Entry/T"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Entry/enabled"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//TypedEntry"/>
+    <genClasses ecoreClass="decisioning.ecore#//SupplierEntry"/>
+    <genClasses ecoreClass="decisioning.ecore#//Map">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//Map/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//Property"/>
+    <genClasses ecoreClass="decisioning.ecore#//Function"/>
+    <genClasses ecoreClass="decisioning.ecore#//List"/>
+    <genClasses ecoreClass="decisioning.ecore#//Object"/>
+    <genClasses ecoreClass="decisioning.ecore#//HttpCall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//HttpCall/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//HttpCall/method"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//HttpCall/headers"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//HttpCall/connectTimeout"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//HttpCall/readTimeout"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//HttpCall/successCode"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//RestOperation">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference decisioning.ecore#//RestOperation/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="decisioning.ecore#//RestFunction"/>
+    <genClasses ecoreClass="decisioning.ecore#//Html">
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute decisioning.ecore#//Html/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute decisioning.ecore#//Html/interpolate"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

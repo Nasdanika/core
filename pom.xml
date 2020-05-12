@@ -136,6 +136,18 @@
 		<module>ncore</module>		
 		<module>ncore.edit</module>		
 
+		<module>party</module>		
+		<module>party.edit</module>		
+
+		<module>provisioning</module>		
+		<module>provisioning.edit</module>		
+
+		<module>engineering</module>		
+		<module>engineering.edit</module>		
+
+		<module>decisioning</module>		
+		<module>decisioning.edit</module>		
+
 		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>

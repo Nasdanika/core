@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.nasdanika.provisioning.edit;singleton:=true
+Automatic-Module-Name: org.nasdanika.provisioning.edit
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: org.nasdanika.provisioning.provider.RigelEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.nasdanika.provisioning.provider
+Require-Bundle: org.eclipse.core.runtime,
+ org.nasdanika.provisioning;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport,
+ org.nasdanika.emf.edit;bundle-version="1.0.0";visibility:=reexport
+Bundle-ActivationPolicy: lazy

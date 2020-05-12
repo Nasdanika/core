@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.provisioning/src" creationIcons="false"
+    editorDirectory="" modelPluginID="org.nasdanika.provisioning" modelName="Provisioning" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic" complianceLevel="8.0"
+    suppressGenModelAnnotations="false" copyrightFields="false" providerRootExtendsClass="org.nasdanika.emf.edit.NasdanikaItemProviderAdapter"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>provisioning.ecore</foreignModel>
+  <genPackages prefix="Provisioning" basePackage="org.nasdanika" disposableProviderFactory="true"
+      ecorePackage="provisioning.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="provisioning.ecore#//IssueStatus">
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueStatus/Open"/>
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueStatus/InProgress"/>
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueStatus/Done"/>
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueStatus/Cancelled"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="provisioning.ecore#//IssueImportance">
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueImportance/Low"/>
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueImportance/Medium"/>
+      <genEnumLiterals ecoreEnumLiteral="provisioning.ecore#//IssueImportance/High"/>
+    </genEnums>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//ModelElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//ModelElement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//ModelElement/url"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute provisioning.ecore#//ModelElement/description"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute provisioning.ecore#//ModelElement/configuration"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//PackageElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//PackageElement/associations"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//EngineeredElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//EngineeredElement/owners"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//EngineeredElement/issues"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//IPackage">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//IPackage/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Package"/>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Participant">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Participant/flows"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Actor"/>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Capability">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Capability/requiredBy"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Requirement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Requirement/requiredCapabilities"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Flow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Flow/elements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Flow/paricipants"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Flow/totalSize"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Flow/totalProgress"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//FlowElement"/>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Source">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Source/outboundTransitions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Source/outputs"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Start"/>
+    <genClasses image="false" ecoreClass="provisioning.ecore#//Target">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Target/inboundTransitions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Target/inputs"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//End"/>
+    <genClasses ecoreClass="provisioning.ecore#//Partition"/>
+    <genClasses ecoreClass="provisioning.ecore#//Activity">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Activity/size"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Activity/progress"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Milestone">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Milestone/size"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Milestone/progress"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Milestone/targetDate"/>
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Milestone/missed"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//ActivityReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//ActivityReference/activity"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Artifact">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Artifact/consumers"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Artifact/producers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Artifact/children"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Resource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Resource/children"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Resource/artifacts"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Transition">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Transition/target"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Transition/inputs"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Transition/results"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Association">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Association/target"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Engineer">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Engineer/owns"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Engineer/assignments"/>
+    </genClasses>
+    <genClasses ecoreClass="provisioning.ecore#//Issue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Issue/importance"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Issue/status"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Issue/assignedTo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Issue/size"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute provisioning.ecore#//Issue/benefit"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference provisioning.ecore#//Issue/children"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference provisioning.ecore#//Issue/implementation"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
