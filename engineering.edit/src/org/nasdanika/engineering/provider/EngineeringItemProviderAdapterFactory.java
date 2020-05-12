@@ -72,6 +72,75 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Engineer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EngineerItemProvider engineerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Engineer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEngineerAdapter() {
+		if (engineerItemProvider == null) {
+			engineerItemProvider = new EngineerItemProvider(this);
+		}
+
+		return engineerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Issue} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueItemProvider issueItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Issue}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueAdapter() {
+		if (issueItemProvider == null) {
+			issueItemProvider = new IssueItemProvider(this);
+		}
+
+		return issueItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Increment} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IncrementItemProvider incrementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Increment}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIncrementAdapter() {
+		if (incrementItemProvider == null) {
+			incrementItemProvider = new IncrementItemProvider(this);
+		}
+
+		return incrementItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -176,6 +245,9 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	 */
 	@Override
 	public void dispose() {
+		if (engineerItemProvider != null) engineerItemProvider.dispose();
+		if (issueItemProvider != null) issueItemProvider.dispose();
+		if (incrementItemProvider != null) incrementItemProvider.dispose();
 	}
 
 }

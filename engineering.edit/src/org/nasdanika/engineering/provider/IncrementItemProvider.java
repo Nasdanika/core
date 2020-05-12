@@ -1,6 +1,6 @@
 /**
  */
-package org.nasdanika.party.provider;
+package org.nasdanika.engineering.provider;
 
 
 import java.util.Collection;
@@ -8,32 +8,36 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcorePackage;
+
+import org.nasdanika.engineering.EngineeringFactory;
+import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.Increment;
+
 import org.nasdanika.ncore.provider.NamedElementItemProvider;
-import org.nasdanika.party.Party;
-import org.nasdanika.party.PartyFactory;
-import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.party.Party} object.
+ * This is the item provider adapter for a {@link org.nasdanika.engineering.Increment} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PartyItemProvider extends NamedElementItemProvider {
+public class IncrementItemProvider extends NamedElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PartyItemProvider(AdapterFactory adapterFactory) {
+	public IncrementItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -48,25 +52,48 @@ public class PartyItemProvider extends NamedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIdPropertyDescriptor(object);
+			addStartPropertyDescriptor(object);
+			addEndPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Id feature.
+	 * This adds a property descriptor for the Start feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIdPropertyDescriptor(Object object) {
+	protected void addStartPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Entity_id_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_id_feature", "_UI_Entity_type"),
-				 NcorePackage.Literals.ENTITY__ID,
+				 getString("_UI_Increment_start_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Increment_start_feature", "_UI_Increment_type"),
+				 EngineeringPackage.Literals.INCREMENT__START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Increment_end_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Increment_end_feature", "_UI_Increment_type"),
+				 EngineeringPackage.Literals.INCREMENT__END,
 				 true,
 				 false,
 				 false,
@@ -87,7 +114,7 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PartyPackage.Literals.PARTY__CONTACT_METHODS);
+			childrenFeatures.add(EngineeringPackage.Literals.INCREMENT__CHILDREN);
 		}
 		return childrenFeatures;
 	}
@@ -103,6 +130,17 @@ public class PartyItemProvider extends NamedElementItemProvider {
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns Increment.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Increment"));
 	}
 
 	/**
@@ -123,10 +161,10 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Party)object).getName();
+		String label = ((Increment)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Party_type") :
-			getString("_UI_Party_type") + " " + label;
+			getString("_UI_Increment_type") :
+			getString("_UI_Increment_type") + " " + label;
 	}
 
 
@@ -141,11 +179,12 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Party.class)) {
-			case PartyPackage.PARTY__ID:
+		switch (notification.getFeatureID(Increment.class)) {
+			case EngineeringPackage.INCREMENT__START:
+			case EngineeringPackage.INCREMENT__END:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case PartyPackage.PARTY__CONTACT_METHODS:
+			case EngineeringPackage.INCREMENT__CHILDREN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -165,28 +204,8 @@ public class PartyItemProvider extends NamedElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createContactMethod()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createEMail()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createPhone()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createPostalAddress()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createWebAddress()));
+				(EngineeringPackage.Literals.INCREMENT__CHILDREN,
+				 EngineeringFactory.eINSTANCE.createIncrement()));
 	}
 
 	/**
@@ -197,7 +216,7 @@ public class PartyItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return PartyEditPlugin.INSTANCE;
+		return EngineeringEditPlugin.INSTANCE;
 	}
 
 }

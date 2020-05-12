@@ -18,6 +18,7 @@ import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
 import org.nasdanika.party.Phone;
 import org.nasdanika.party.PostalAddress;
+import org.nasdanika.party.Role;
 import org.nasdanika.party.WebAddress;
 
 /**
@@ -68,6 +69,13 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	private EClass webAddressEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass roleEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -329,6 +337,26 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getRole() {
+		return roleEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRole_Parties() {
+		return (EReference)roleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public PartyFactory getPartyFactory() {
 		return (PartyFactory)getEFactoryInstance();
 	}
@@ -376,6 +404,9 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		webAddressEClass = createEClass(WEB_ADDRESS);
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
+
+		roleEClass = createEClass(ROLE);
+		createEReference(roleEClass, ROLE__PARTIES);
 	}
 
 	/**
@@ -416,6 +447,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		phoneEClass.getESuperTypes().add(this.getContactMethod());
 		postalAddressEClass.getESuperTypes().add(this.getContactMethod());
 		webAddressEClass.getESuperTypes().add(this.getContactMethod());
+		roleEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(partyEClass, Party.class, "Party", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -442,6 +474,9 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(roleEClass, Role.class, "Role", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRole_Parties(), this.getParty(), null, "parties", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -476,6 +511,18 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Generic contact method."
+		   });
+		addAnnotation
+		  (roleEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Parties can play roles, e.g. a person \"Joe Doe\" can play a role of an engineer of some flow activity."
+		   });
+		addAnnotation
+		  (getRole_Parties(),
+		   source,
+		   new String[] {
+			   "documentation", "Parties in role. "
 		   });
 	}
 

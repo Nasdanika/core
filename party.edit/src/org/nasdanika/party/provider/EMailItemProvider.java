@@ -12,6 +12,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.party.EMail;
 import org.nasdanika.party.PartyPackage;
 
 /**
@@ -98,7 +99,7 @@ public class EMailItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((org.nasdanika.party.EMail)object).getName();
+		String label = ((EMail)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_EMail_type") :
 			getString("_UI_EMail_type") + " " + label;
@@ -116,7 +117,7 @@ public class EMailItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(org.nasdanika.party.EMail.class)) {
+		switch (notification.getFeatureID(EMail.class)) {
 			case PartyPackage.EMAIL__EMAIL_ADDRESS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

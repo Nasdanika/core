@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.Phone;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.party.Phone} object.
@@ -167,7 +168,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((org.nasdanika.party.Phone)object).getName();
+		String label = ((Phone)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Phone_type") :
 			getString("_UI_Phone_type") + " " + label;
@@ -185,7 +186,7 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(org.nasdanika.party.Phone.class)) {
+		switch (notification.getFeatureID(Phone.class)) {
 			case PartyPackage.PHONE__COUNTRY_CODE:
 			case PartyPackage.PHONE__AREA_CODE:
 			case PartyPackage.PHONE__PHONE_NUMBER:

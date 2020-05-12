@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.WebAddress;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.party.WebAddress} object.
@@ -98,7 +99,7 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((org.nasdanika.party.WebAddress)object).getName();
+		String label = ((WebAddress)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_WebAddress_type") :
 			getString("_UI_WebAddress_type") + " " + label;
@@ -116,7 +117,7 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(org.nasdanika.party.WebAddress.class)) {
+		switch (notification.getFeatureID(WebAddress.class)) {
 			case PartyPackage.WEB_ADDRESS__URL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

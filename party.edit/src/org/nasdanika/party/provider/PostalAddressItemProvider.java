@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.PostalAddress;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.party.PostalAddress} object.
@@ -213,7 +214,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((org.nasdanika.party.PostalAddress)object).getName();
+		String label = ((PostalAddress)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_PostalAddress_type") :
 			getString("_UI_PostalAddress_type") + " " + label;
@@ -231,7 +232,7 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(org.nasdanika.party.PostalAddress.class)) {
+		switch (notification.getFeatureID(PostalAddress.class)) {
 			case PartyPackage.POSTAL_ADDRESS__COUNTRY:
 			case PartyPackage.POSTAL_ADDRESS__STATE_PROVINCE:
 			case PartyPackage.POSTAL_ADDRESS__CITY:

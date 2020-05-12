@@ -12,6 +12,8 @@ Export-Package: org.nasdanika.engineering,
  org.nasdanika.engineering.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.emf.ecore.xmi;bundle-version="2.15.0";visibility:=reexport
+ org.nasdanika.ncore;visibility:=reexport,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.15.0";visibility:=reexport,
+ org.nasdanika.party;bundle-version="0.1.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.engineering

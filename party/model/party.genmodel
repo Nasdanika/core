@@ -34,5 +34,8 @@
     <genClasses ecoreClass="party.ecore#//WebAddress">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//WebAddress/url"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="party.ecore#//Role">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/parties"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -5,6 +5,8 @@ package org.nasdanika.engineering.provider;
 import org.eclipse.emf.common.EMFPlugin;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.nasdanika.ncore.provider.NcoreEditPlugin;
+import org.nasdanika.party.provider.PartyEditPlugin;
 
 /**
  * This is the central singleton for the Engineering edit plugin.
@@ -38,6 +40,8 @@ public final class EngineeringEditPlugin extends EMFPlugin {
 	public EngineeringEditPlugin() {
 		super
 		  (new ResourceLocator [] {
+		     NcoreEditPlugin.INSTANCE,
+		     PartyEditPlugin.INSTANCE,
 		   });
 	}
 
