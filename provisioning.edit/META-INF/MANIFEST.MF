@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.nasdanika.provisioning.edit;singleton:=true
 Automatic-Module-Name: org.nasdanika.provisioning.edit
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: org.nasdanika.provisioning.provider.RigelEditPlugin$Implementation
+Bundle-Activator: org.nasdanika.provisioning.provider.ProvisioningEditPlugin$Implementation
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
