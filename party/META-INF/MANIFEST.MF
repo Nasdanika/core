@@ -15,4 +15,3 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nasdanika.ncore;bundle-version="0.1.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.party
-Bundle-Activator: org.nasdanika.party.util.Activator
