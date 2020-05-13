@@ -398,6 +398,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 
 		// Add supertypes to classes
 		engineerEClass.getESuperTypes().add(thePartyPackage.getRole());
+		issueEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		incrementEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 
 		// Initialize classes, features, and operations; add parameters

@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.engineering.*;
+import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.party.Role;
@@ -87,6 +88,8 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			case EngineeringPackage.ISSUE: {
 				Issue issue = (Issue)theEObject;
 				T result = caseIssue(issue);
+				if (result == null) result = caseEntity(issue);
+				if (result == null) result = caseModelElement(issue);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -204,6 +207,21 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRole(Role object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEntity(Entity object) {
 		return null;
 	}
 

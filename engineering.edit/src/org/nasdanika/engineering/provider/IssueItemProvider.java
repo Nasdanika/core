@@ -14,21 +14,13 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
-
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Issue;
-import org.nasdanika.engineering.IssueImportance;
+import org.nasdanika.ncore.provider.EntityItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Issue} object.
@@ -37,13 +29,7 @@ import org.nasdanika.engineering.IssueImportance;
  * @generated
  */
 public class IssueItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends EntityItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -266,8 +252,7 @@ public class IssueItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		IssueImportance labelValue = ((Issue)object).getImportance();
-		String label = labelValue == null ? null : labelValue.toString();
+		String label = ((Issue)object).getId();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Issue_type") :
 			getString("_UI_Issue_type") + " " + label;

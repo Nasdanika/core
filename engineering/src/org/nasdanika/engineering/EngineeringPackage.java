@@ -184,13 +184,40 @@ public interface EngineeringPackage extends EPackage {
 	int ISSUE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISSUE__TITLE = NcorePackage.ENTITY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISSUE__DESCRIPTION = NcorePackage.ENTITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISSUE__ID = NcorePackage.ENTITY__ID;
+
+	/**
 	 * The feature id for the '<em><b>Importance</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__IMPORTANCE = 0;
+	int ISSUE__IMPORTANCE = NcorePackage.ENTITY_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Status</b></em>' attribute.
@@ -199,7 +226,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__STATUS = 1;
+	int ISSUE__STATUS = NcorePackage.ENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Assigned To</b></em>' reference.
@@ -208,7 +235,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__ASSIGNED_TO = 2;
+	int ISSUE__ASSIGNED_TO = NcorePackage.ENTITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Size</b></em>' attribute.
@@ -217,7 +244,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__SIZE = 3;
+	int ISSUE__SIZE = NcorePackage.ENTITY_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Benefit</b></em>' attribute.
@@ -226,7 +253,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__BENEFIT = 4;
+	int ISSUE__BENEFIT = NcorePackage.ENTITY_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -235,7 +262,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__CHILDREN = 5;
+	int ISSUE__CHILDREN = NcorePackage.ENTITY_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Planned For</b></em>' reference.
@@ -244,7 +271,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE__PLANNED_FOR = 6;
+	int ISSUE__PLANNED_FOR = NcorePackage.ENTITY_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Issue</em>' class.
@@ -253,7 +280,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE_FEATURE_COUNT = 7;
+	int ISSUE_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of operations of the '<em>Issue</em>' class.
@@ -262,7 +289,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE_OPERATION_COUNT = 0;
+	int ISSUE_OPERATION_COUNT = NcorePackage.ENTITY_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IncrementImpl <em>Increment</em>}' class.

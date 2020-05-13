@@ -30,7 +30,7 @@
       <details key="documentation" value="Engineers own engineered elements and are assigned issues associated with these elements."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Issue">
+  <eClassifiers xsi:type="ecore:EClass" name="Issue" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Something to possibly act on regarding the owning element - a problem/pain point, an improvement opportunity/enhancement.&#xA;&#xA;Example:&#xA;&#xA;* Containing activity - &quot;Initial setup of a software project&quot;, &#xA;* Size - 4.0 (hours) - copy an existing project and modify its sources.&#xA;* Issue - &quot;Create a code generator&quot; (enhancement),&#xA;    * Size - 40.0 (hours).&#xA;    * Benefit - 3.5 (hours).&#xA;    * Implementation - an activity providing a detailed explanation how code generator shall be implemented."/>
     </eAnnotations>

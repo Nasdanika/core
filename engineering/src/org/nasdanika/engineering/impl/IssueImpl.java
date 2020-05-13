@@ -10,9 +10,6 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.engineering.Engineer;
@@ -21,6 +18,7 @@ import org.nasdanika.engineering.Increment;
 import org.nasdanika.engineering.Issue;
 import org.nasdanika.engineering.IssueImportance;
 import org.nasdanika.engineering.IssueStatus;
+import org.nasdanika.ncore.impl.EntityImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -41,7 +39,7 @@ import org.nasdanika.engineering.IssueStatus;
  *
  * @generated
  */
-public class IssueImpl extends MinimalEObjectImpl.Container implements Issue {
+public class IssueImpl extends EntityImpl implements Issue {
 	/**
 	 * The default value of the '{@link #getImportance() <em>Importance</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -99,16 +97,6 @@ public class IssueImpl extends MinimalEObjectImpl.Container implements Issue {
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.ISSUE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**
