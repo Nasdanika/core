@@ -47,9 +47,9 @@ public class TextToSpeechCommand extends DelegatingCommand {
 			index = "1..*",
 			arity = "0..*",
 			description = "A list of files to generate speech from. "
-					+ "File type is determined by its extension .txt for plain text and .ssml for SSML (https://cloud.google.com/text-to-speech/docs/ssml) unless explicitly specified by the SSML option. "
+					+ "File type is determined by its extension - .txt for plain text and .ssml for SSML (https://cloud.google.com/text-to-speech/docs/ssml) unless explicitly specified by the SSML option. "
 					+ "If FILE argument is not provided then text is taken from the standard input and is treated as text or SSML based on the SSML option value. "
-					+ "If a file is a directory then it is processed processed recursively generating speach from .txt and .ssml files. "
+					+ "If a file is a directory then it is processed recursively generating speach from .txt and .ssml files. "
 					+ "In this case if SSML option is set to true only ssml files are processed, if it is set to false then only text files are processed.")
 	protected List<File> files = new ArrayList<>();	
 		
