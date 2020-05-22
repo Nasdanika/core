@@ -36,7 +36,6 @@ public abstract class ContextCommand extends CommandBase {
 			})
     private Map<String, String> entries = new LinkedHashMap<>();
 	
-
 	@Option(			
 			names = {"-M", "--context-mount"},
 			description = {
@@ -50,6 +49,7 @@ public abstract class ContextCommand extends CommandBase {
 		
 	@Option(			
 			names = {"-C", "--context"},
+			paramLabel = "URL",
 			description = {
 					"Context resource URL relative to the current directory. "
 					 + "YAML, JSON, or properties. "

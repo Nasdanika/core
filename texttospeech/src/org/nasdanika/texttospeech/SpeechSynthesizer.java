@@ -9,7 +9,7 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public interface SpeechSynthesizer {
+public interface SpeechSynthesizer extends AutoCloseable {
 	
 	/**
 	 * @param language Language

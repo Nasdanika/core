@@ -11,7 +11,7 @@ import org.nasdanika.common.resources.BinaryContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
 
 /**
- * {@link SpeechSynthesizer} which caches synthesized speech in a container and returns cached result.
+ * {@link SpeechSynthesizer} which caches synthesized speech in a container and returns a cached result if one is found.
  * @author Pavel
  *
  */
@@ -27,13 +27,18 @@ public class CachingSpeechSynthesizer implements SpeechSynthesizer {
 	public CachingSpeechSynthesizer(SpeechSynthesizer chain) {
 		this.chain = chain;
 		
-		File userHome = new File(System.getProperty("user.home"));
-		File cacheDir = new File(userHome, ".nasdanika" + File.separator + "speech-synthesizer" + File.separator + "cache");
+		File cacheDir = getDefaultCacheDir();
 		if (!cacheDir.exists()) {
 			cacheDir.mkdirs();
 		}
 		
 		cache = new FileSystemContainer(cacheDir).stateAdapter();		
+	}
+
+	public static File getDefaultCacheDir() {
+		File userHome = new File(System.getProperty("user.home"));
+		File cacheDir = new File(userHome, ".nasdanika" + File.separator + "speech-synthesizer" + File.separator + "cache");
+		return cacheDir;
 	}
 	
 	/**
@@ -63,6 +68,11 @@ public class CachingSpeechSynthesizer implements SpeechSynthesizer {
 			cache.put(cachePath, chain.synthesizeSpeech(language, voice, ssml, text, progressMonitor), progressMonitor);
 		}
 		return (InputStream) cache.find(cachePath, progressMonitor);
+	}
+
+	@Override
+	public void close() throws Exception {
+		chain.close();		
 	}
 
 }
