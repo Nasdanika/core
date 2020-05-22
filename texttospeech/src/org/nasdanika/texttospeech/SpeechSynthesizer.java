@@ -1,6 +1,8 @@
-package org.nasdanika.common;
+package org.nasdanika.texttospeech;
 
 import java.io.InputStream;
+
+import org.nasdanika.common.ProgressMonitor;
 
 /**
  * Interface for speech synthesis.

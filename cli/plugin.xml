@@ -14,5 +14,5 @@
                class="org.nasdanika.cli.Application">
          </run>
       </application>
-   </extension>
+   </extension>   
 </plugin>

@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.texttospeech;
 
 import java.io.File;
 import java.io.InputStream;
@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.binary.Hex;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.resources.BinaryContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
 
@@ -34,6 +35,20 @@ public class CachingSpeechSynthesizer implements SpeechSynthesizer {
 		
 		cache = new FileSystemContainer(cacheDir).stateAdapter();		
 	}
+	
+	/**
+	 * Creates a cache which stores generated sound files in the specified cache directory 
+	 * @param chain
+	 */	
+	public CachingSpeechSynthesizer(SpeechSynthesizer chain, File cacheDir) {
+		this.chain = chain;
+		
+		if (!cacheDir.exists()) {
+			cacheDir.mkdirs();
+		}
+		
+		cache = new FileSystemContainer(cacheDir).stateAdapter();		
+	}	
 
 	public CachingSpeechSynthesizer(SpeechSynthesizer chain, BinaryContainer cache) {
 		this.chain = chain;
