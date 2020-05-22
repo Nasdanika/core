@@ -28,6 +28,7 @@ public class Application implements IApplication {
 			name="nsd", 
 			mixinStandardHelpOptions = true, 
 			versionProvider = BundleVersionProvider.class)
+	
 //	@Description(icon = "las la-terminal")
 	public static class RootCommand extends CommandGroup {
 		
@@ -91,6 +92,7 @@ public class Application implements IApplication {
 				}
 			}
 		}
+		ret.sort((a,b) -> a.getCommandName().compareTo(b.getCommandName()));
 		return ret;
 	}
 	
