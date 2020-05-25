@@ -55,10 +55,10 @@ public class TextToSpeechCommand extends DelegatingCommand {
 		
 	@Option(names = {
 			"-o", "--output"}, 
-			description = "Output file for a single input (file or standard input) "
+			description = "Output file or directory for a single input (file or standard input) "
 					+ "or an output directory for multiple inputs. "
 					+ "If not provided, generated sound is output to the standard output for single input and to the location of inputs for multiple inputs. "
-					+ "In the latter case output file name is formed by adding .mp3 extension to the source file name. E.g. my.txt -> my.txt.mp3")
+					+ "In the latter case or if the output is a directory, audio file name is formed by adding .mp3 extension to the source file name. E.g. my.txt -> my.txt.mp3")
 	private File output;		
 	
 	@Option(
@@ -66,10 +66,16 @@ public class TextToSpeechCommand extends DelegatingCommand {
 			negatable = true, 
 			description = "Input is SSML.")
 	private Boolean ssml;
+	
+	@Option(
+			names = {"-S", "--skip-unmodified"}, 
+			description = "Set this option to skip generation for files which were not modified since the previous generation, i.e. "
+					+ "an output audio file exists and has a timestamp greater than the timestamp of the source text of SSML file. ")
+	private boolean skipUnmodified;
 		
 	@Option(
 			names = {"-v", "--voice"}, 
-			description = "Voice. See https://cloud.google.com/text-to-speech/docs/voices for a list of supported voices.")
+			description = "Voice name. See https://cloud.google.com/text-to-speech/docs/voices for a list of supported voices.")
 	private String voice;
 		
 	@Option(
@@ -279,7 +285,12 @@ public class TextToSpeechCommand extends DelegatingCommand {
 				return System.out;
 			}
 			
-			return new FileOutputStream(output);
+			if (!output.isDirectory()) {
+				if (skipUnmodified && file != null && output.isFile() && output.lastModified() > file.lastModified()) {
+					return null;
+				}
+				return new FileOutputStream(output);
+			}
 		}
 		
 		File outputDir;
@@ -291,7 +302,11 @@ public class TextToSpeechCommand extends DelegatingCommand {
 			outputDir.mkdirs();
 		}
 		
-		return new FileOutputStream(new File(outputDir, file.getName()+".mp3"));
+		File audioFile = new File(outputDir, file.getName()+".mp3");
+		if (skipUnmodified && audioFile.isFile() && audioFile.lastModified() > file.lastModified()) {
+			return null;
+		}
+		return new FileOutputStream(audioFile);
 	}
 		
 	private void speak(
@@ -303,10 +318,13 @@ public class TextToSpeechCommand extends DelegatingCommand {
 		
 		String text = context.interpolate(inputText(file == null ? System.in : new FileInputStream(file)));
 		SpeechSynthesizer synthesizer = context.get(SpeechSynthesizer.class);
-		try (InputStream audio = new BufferedInputStream(synthesizer.synthesizeSpeech(language, voice, isSsml, text, progressMonitor)); OutputStream out = new BufferedOutputStream(audioOutput(file, path))) {
-			int b;
-			while ((b = audio.read()) != -1) {
-				out.write(b);
+		OutputStream audioOutput = audioOutput(file, path);
+		if (audioOutput != null) {
+			try (InputStream audio = new BufferedInputStream(synthesizer.synthesizeSpeech(language, voice, isSsml, text, progressMonitor)); OutputStream out = new BufferedOutputStream(audioOutput)) {
+				int b;
+				while ((b = audio.read()) != -1) {
+					out.write(b);
+				}
 			}
 		}
 	}
