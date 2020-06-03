@@ -438,5 +438,22 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		}		
 		return ret;
 	}
+
+	/**
+	 * Augments child tooltip with child type tooltip.
+	 */
+	@Override
+	public String getCreateChildToolTipText(Object owner, Object feature, Object child, Collection<?> selection) {
+		if (child instanceof EObject) {
+			String childTypeTooltip = getTooltip(((EObject) child).eClass());
+			if (!Util.isBlank(childTypeTooltip)) {
+			    String childType = getTypeText(child) + " (" + childTypeTooltip +") ";
+			    return getResourceLocator().getString(
+			    		"_UI_CreateChild_tooltip",
+			    		new Object[] {childType , getFeatureText(feature), getTypeText(owner) });
+			}
+		}
+		return super.getCreateChildToolTipText(owner, feature, child, selection);
+	}
 			
 }
