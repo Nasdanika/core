@@ -72,22 +72,7 @@
 							</resources>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-emf-javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.emf/apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/../emf/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
+					
 					<execution>
 						<id>copy-cli-javadoc</id>
 						<phase>pre-site</phase>
@@ -99,6 +84,38 @@
 							<resources>
 								<resource>
 									<directory>${basedir}/../cli/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-common-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.common/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../common/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-emf-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika.emf/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../emf/target/site/apidocs</directory>
 									<filtering>false</filtering>
 								</resource>								
 							</resources>
@@ -259,38 +276,6 @@
 							<resources>
 								<resource>
 									<directory>${basedir}/../texttospeech/target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy--javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika./apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/..//target/site/apidocs</directory>
-									<filtering>false</filtering>
-								</resource>								
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy--javadoc</id>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/site/apidocs/org.nasdanika./apidocs</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/..//target/site/apidocs</directory>
 									<filtering>false</filtering>
 								</resource>								
 							</resources>
