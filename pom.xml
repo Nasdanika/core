@@ -16,6 +16,7 @@
 
 	<properties>
 		<tycho-version>1.7.0</tycho-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<repositories>
@@ -122,6 +123,8 @@
 		</plugins>
 	</build>
 	<modules>
+		<module>common</module>		
+
 		<module>cli</module>		
 
 		<module>emf</module>		
@@ -148,7 +151,6 @@
 		<module>decisioning</module>		
 		<module>decisioning.edit</module>		
 
-		<module>common</module>		
 		<module>feature</module>
 		<module>ui</module>
 		<module>help</module>
@@ -160,7 +162,6 @@
 
 		<module>tests</module>
 		<module>repository</module>
-
 	</modules>
 	<organization>
 		<name>Nasdanika LLC</name>
