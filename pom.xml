@@ -70,6 +70,10 @@
 					<linksource>true</linksource>	
 					<failOnError>false</failOnError>	
 			        	<useStandardDocletOptions>true</useStandardDocletOptions>	
+					<links>
+						<link>https://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/</link>
+						<link>https://picocli.info/apidocs/</link>
+					</links>
 				</configuration>					
 			</plugin>	
 
