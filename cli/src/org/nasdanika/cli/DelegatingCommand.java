@@ -58,8 +58,8 @@ public abstract class DelegatingCommand extends ContextCommand {
 	private int timeout;		
 	
 	@Override
-	protected Context createContext() throws IOException {
-		Context context = super.createContext();
+	protected Context createContext(ProgressMonitor progressMonitor) throws IOException {
+		Context context = super.createContext(progressMonitor);
 		if (parallelism <= 1) {
 			return context;
 		}
@@ -68,30 +68,33 @@ public abstract class DelegatingCommand extends ContextCommand {
 	
 	@Override
 	public Integer call() throws Exception {		
-		Context context = createContext();
-		try (org.nasdanika.common.Command delegate = getCommandFactory().create(context); ProgressMonitor progressMonitor = progressMonitorMixin.createProgressMonitor(3 * delegate.size())) {
-			Diagnostic diagnostic = delegate.splitAndDiagnose(progressMonitor);
-			if (diagnostic.getStatus() == Status.ERROR) {
-				System.err.println("Diagnostic failed");
-				diagnostic.dump(System.err, 4);
-				return 3;
-			}
-			
-			try {
-				delegate.splitAndExecute(progressMonitor);
-				delegate.splitAndCommit(progressMonitor);
-			} catch (Exception e) {
-				reportException(e);
-				if (e instanceof DiagnosticException) {
-					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+		try (ProgressMonitor progressMonitor = progressMonitorMixin.createProgressMonitor(4)) {
+			Context context = createContext(progressMonitor.split("Creating context", 1));
+			try (org.nasdanika.common.Command delegate = getCommandFactory().create(context)) {
+				ProgressMonitor commandMonitor = progressMonitor.split("Command monitor", 3).setWorkRemaining(3 * delegate.size());
+				Diagnostic diagnostic = delegate.splitAndDiagnose(commandMonitor);
+				if (diagnostic.getStatus() == Status.ERROR) {
+					System.err.println("Diagnostic failed");
+					diagnostic.dump(System.err, 4);
+					return 3;
 				}
-				return delegate.splitAndRollback(progressMonitor) ? 4 : 5;
-			}
-		} finally {
-			ExecutorService executorService = context.get(ExecutorService.class);
-			if (executorService != null) {
-				executorService.shutdown();
-				return executorService.awaitTermination(timeout, TimeUnit.SECONDS) ? 0 : 6;
+				
+				try {
+					delegate.splitAndExecute(commandMonitor);
+					delegate.splitAndCommit(commandMonitor);
+				} catch (Exception e) {
+					reportException(e);
+					if (e instanceof DiagnosticException) {
+						((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+					}
+					return delegate.splitAndRollback(commandMonitor) ? 4 : 5;
+				}
+			} finally {
+				ExecutorService executorService = context.get(ExecutorService.class);
+				if (executorService != null) {
+					executorService.shutdown();
+					return executorService.awaitTermination(timeout, TimeUnit.SECONDS) ? 0 : 6;
+				}
 			}
 		}
 		return 0;

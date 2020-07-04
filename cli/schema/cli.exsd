@@ -62,9 +62,9 @@
                <documentation>
                   Command implementation class. If the definition contains parameters the implementation class shall implement java.util.function.BiConsumer&lt;String,String&gt;.
                </documentation>
-               <appinfo>
+               <appInfo>
                   <meta.attribute kind="java" basedOn=":java.util.concurrent.Callable"/>
-               </appinfo>
+               </appInfo>
             </annotation>
          </attribute>
          <attribute name="id" type="string">
@@ -86,12 +86,59 @@ Top-down construction shall be performed using the PicoCli means.
          </attribute>
       </complexType>
    </element>
-   
+
+   <element name="context-buider">
+      <annotation>
+         <documentation>
+            Context builder definition
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Context builder implementation class. If the definition contains parameters the implementation class shall implement java.util.function.BiConsumer&lt;String,String&gt;.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.nasdanika.common.FunctionFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  Context builder ID. Must be unique within the contributing plugin.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="documentation" type="string">
+            <annotation>
+               <documentation>
+                  Markdown documentation resource.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="resource"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  Short description of the builder.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
    <element name="parameter">
       <annotation>
-         <appinfo>
+         <appInfo>
             <meta.element labelAttribute="name"/>
-         </appinfo>
+         </appInfo>
          <documentation>
             Command parameter is passed to the command by calling its &lt;code&gt;java.util.function.BiConsumer.accept(String,String)&lt;/code&gt; method.
          </documentation>
@@ -112,7 +159,7 @@ Top-down construction shall be performed using the PicoCli means.
             </annotation>
          </attribute>
       </complexType>
-   </element>   
+   </element>
 
    <annotation>
       <appInfo>

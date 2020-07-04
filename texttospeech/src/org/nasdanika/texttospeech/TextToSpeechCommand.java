@@ -96,12 +96,12 @@ public class TextToSpeechCommand extends DelegatingCommand {
 	private String charset;	
 	
 	@Override
-	protected Context createContext() throws IOException {
+	protected Context createContext(ProgressMonitor progressMonitor) throws IOException {
 		SpeechSynthesizer speechSynthesizer = new GoogleCloudTextToSpeechSynthesizer();
 		if (cache) {
 			speechSynthesizer = new CachingSpeechSynthesizer(speechSynthesizer, cacheDir);
 		}
-		return super.createContext().compose(Context.singleton(SpeechSynthesizer.class, speechSynthesizer));
+		return super.createContext(progressMonitor).compose(Context.singleton(SpeechSynthesizer.class, speechSynthesizer));
 	}
 
 	@Override

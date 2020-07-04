@@ -17,6 +17,7 @@ import java.util.function.Function;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
 import org.yaml.snakeyaml.Yaml;
 
 import picocli.CommandLine.Option;
@@ -59,8 +60,17 @@ public abstract class ContextCommand extends CommandBase {
 					+ "later context entries shadowing the former"
 			})
 	private List<String> contexts = new ArrayList<>();
-	
-	protected Context createContext() throws IOException {
+		
+	@Option(			
+			names = {"-B", "--context-builders"},
+			paramLabel = "URL",
+			description = {
+					"Context builders configuration resource URL relative to the current directory.  "
+					+ "See online documentation at https://www.nasdanika.org/builds/develop/doc/reference/cli/context-builders.html for details."
+			})
+	private List<String> contextBuilders = new ArrayList<>();
+		
+	protected Context createContext(ProgressMonitor progressMonitor) throws IOException {
 		Context ret = Context.EMPTY_CONTEXT;		
 		for (Entry<String, String> mountEntry: mounts.entrySet()) {
 			ret = ret.mount(load(mountEntry.getValue()), mountEntry.getKey());
