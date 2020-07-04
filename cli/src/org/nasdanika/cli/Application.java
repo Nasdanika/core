@@ -34,9 +34,9 @@ public class Application implements IApplication {
 		
 	}
 	
-	private static final String CLI_ID = "org.nasdanika.cli.cli";
+	static final String CLI_EXTENSION_POINT_ID = "org.nasdanika.cli.cli";
 	
-	private boolean equals(String a, String b) {
+	static boolean equal(String a, String b) {
 		if (a == null) {
 			return b == null || b.trim().length() == 0;
 		}
@@ -75,8 +75,8 @@ public class Application implements IApplication {
 	@SuppressWarnings("unchecked")
 	private List<CommandLine> getSubCommands(String id) throws Exception {
 		List<CommandLine> ret = new ArrayList<>();
-		for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(CLI_ID)) {
-			if ("command".equals(ce.getName()) && equals(id, ce.getAttribute("parent"))) {
+		for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(CLI_EXTENSION_POINT_ID)) {
+			if ("command".equals(ce.getName()) && equal(id, ce.getAttribute("parent"))) {
 				Object command = ce.createExecutableExtension("class");
 				for (IConfigurationElement parameter: ce.getChildren("parameter")) {
 					((BiConsumer<String, String>) command).accept(parameter.getAttribute("name"), parameter.getAttribute("value"));

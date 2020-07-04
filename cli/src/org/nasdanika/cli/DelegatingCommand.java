@@ -1,6 +1,5 @@
 package org.nasdanika.cli;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +57,7 @@ public abstract class DelegatingCommand extends ContextCommand {
 	private int timeout;		
 	
 	@Override
-	protected Context createContext(ProgressMonitor progressMonitor) throws IOException {
+	protected Context createContext(ProgressMonitor progressMonitor) throws Exception {
 		Context context = super.createContext(progressMonitor);
 		if (parallelism <= 1) {
 			return context;

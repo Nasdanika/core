@@ -19,6 +19,7 @@
       <complexType>
          <sequence>
             <element ref="command" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="context-builder" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -87,7 +88,7 @@ Top-down construction shall be performed using the PicoCli means.
       </complexType>
    </element>
 
-   <element name="context-buider">
+   <element name="context-builder">
       <annotation>
          <documentation>
             Context builder definition
@@ -103,11 +104,11 @@ Top-down construction shall be performed using the PicoCli means.
                   Context builder implementation class. If the definition contains parameters the implementation class shall implement java.util.function.BiConsumer&lt;String,String&gt;.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.nasdanika.common.FunctionFactory"/>
+                  <meta.attribute kind="java" basedOn=":org.nasdanika.cli.ContextBuilder"/>
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="id" type="string">
+         <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   Context builder ID. Must be unique within the contributing plugin.

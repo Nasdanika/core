@@ -96,7 +96,7 @@ public class TextToSpeechCommand extends DelegatingCommand {
 	private String charset;	
 	
 	@Override
-	protected Context createContext(ProgressMonitor progressMonitor) throws IOException {
+	protected Context createContext(ProgressMonitor progressMonitor) throws Exception {
 		SpeechSynthesizer speechSynthesizer = new GoogleCloudTextToSpeechSynthesizer();
 		if (cache) {
 			speechSynthesizer = new CachingSpeechSynthesizer(speechSynthesizer, cacheDir);
