@@ -317,9 +317,7 @@ public class NcoreValidator extends EObjectValidator {
 				return false; // Do not proceed if circularity test failed
 			}
 			
-			if (((EObject) refTarget).eContainmentFeature() == null) {
-				helper.error("Reference target is not contained in a resource", NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);											
-			} else {
+			if (!((EObject) refTarget).eIsProxy()) {
 				// Maybe unnecessary?
 				Diagnostician diagnostician = new Diagnostician() {
 					
