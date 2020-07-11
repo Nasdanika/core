@@ -293,8 +293,10 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated NOT
 	 */
 	public boolean validateSupplierFactoryReference_target(SupplierFactoryReference supplierFactoryReference, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (diagnostics != null && supplierFactoryReference.getTarget() != null) {
+		SupplierFactory<Object> refTarget = supplierFactoryReference.getTarget();
+		if (diagnostics != null && refTarget != null) {
 			// Validate circularity
+			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplierFactoryReference);
 			Set<SupplierFactoryReference> traversed = new HashSet<>();
 			if (!validateCircularReference(supplierFactoryReference, traversed)) {
 				StringBuilder path = new StringBuilder();
@@ -311,22 +313,26 @@ public class NcoreValidator extends EObjectValidator {
 					}
 					path.append(pe.getTitle() + " -> " + targetLabel);
 				}
-				DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplierFactoryReference);
 				helper.error("Loop in supplier factory references: "+path, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);							
 				return false; // Do not proceed if circularity test failed
 			}
 			
-			// Maybe unnecessary?
-			Diagnostician diagnostician = new Diagnostician() {
-				
-				public Map<Object,Object> createDefaultContext() {
-					return context;
+			if (((EObject) refTarget).eContainmentFeature() == null) {
+				helper.error("Reference target is not contained in a resource", NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);											
+			} else {
+				// Maybe unnecessary?
+				Diagnostician diagnostician = new Diagnostician() {
+					
+					public Map<Object,Object> createDefaultContext() {
+						return context;
+					};
+					
 				};
 				
-			};				
-			Diagnostic validationResult = diagnostician.validate((EObject) supplierFactoryReference.getTarget());
-			diagnostics.add(validationResult);
-			return validationResult.getSeverity() != Diagnostic.ERROR;
+				Diagnostic validationResult = diagnostician.validate((EObject) refTarget);				
+				diagnostics.add(validationResult);
+				return validationResult.getSeverity() != Diagnostic.ERROR;
+			}
 		}
 		return true;
 	}
