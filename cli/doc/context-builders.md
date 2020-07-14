@@ -1,8 +1,30 @@
 Context builders can be used customize ${org.nasdanika.common.Context} of command's ``ExecutionParticipant``. Implements org.nasdanika.cli.ContextBuilder
 For example, ``JavadocContextBuilder`` loads package lists from Javadoc URL's provided in configurations and replaces fully qualified names of classes with links to Javadoc documentation. 
-E.g. ``${{javadoc/org.nasdankia.common.Context}}`` with ${org.nasdanika.common.Context}.
+E.g. ``${{{javadoc/org.nasdankia.common.Context}}}`` with ${javadoc/org.nasdanika.common.Context}.
  
 Context builders are Java classes which implement ``FunctionFactory<Context,Context>`` and are registered with xxx extension point.
+
+Spec - members after fragments
+
+Tests:
+
+* Package: ${javadoc/org.nasdanika.common}
+* Class: 
+    * ${javadoc/org.nasdanika.common.Context}, 
+    * ${javadoc/org.nasdanika.vinci.design.Services}, 
+    * ${javadoc/java.util.Map}
+* Field: ${javadoc/org.nasdanika.common.Context#BASE_URI_PROPERTY}
+* Methods: 
+    * ${javadoc/org.nasdanika.common.Context#fork()}
+    * ${javadoc/org.nasdanika.common.Context#get(java.lang.Class)}
+    
+Ecoredoc tests:
+
+* Package: ${ecore-doc/ncore}
+* Class: ${ecore-doc/app/ActionBase}, 
+* Attribute: ${ecore-doc/app/ActionBase.activator}
+* Reference: ${ecore-doc/app/ActionBase:content}
+* Operation: ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507}
 
 TODO:
 
