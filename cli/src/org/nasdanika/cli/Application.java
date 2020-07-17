@@ -34,7 +34,7 @@ public class Application implements IApplication {
 		
 	}
 	
-	static final String CLI_EXTENSION_POINT_ID = "org.nasdanika.cli.cli";
+	public static final String CLI_EXTENSION_POINT_ID = "org.nasdanika.cli.cli";
 	
 	static boolean equal(String a, String b) {
 		if (a == null) {

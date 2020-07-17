@@ -21,10 +21,18 @@ Tests:
 Ecoredoc tests:
 
 * Package: ${ecore-doc/ncore}
-* Class: ${ecore-doc/app/ActionBase}, 
-* Attribute: ${ecore-doc/app/ActionBase.activator}
-* Reference: ${ecore-doc/app/ActionBase:content}
-* Operation: ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507}
+* Class: 
+    * ${ecore-doc/app/ActionBase}, 
+    * ${ecore-doc/app/ActionBase Action Base}, 
+* Attribute: 
+    * ${ecore-doc/app/ActionBase.activator}
+    * ${ecore-doc/app/ActionBase.activator Action Base activator}
+* Reference: 
+    * ${ecore-doc/app/ActionBase:content}
+    * ${ecore-doc/app/ActionBase:content Action Base content}
+* Operation: 
+    * ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507}
+    * ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507 createApplicationBuilderSupplier()}
 
 TODO:
 
