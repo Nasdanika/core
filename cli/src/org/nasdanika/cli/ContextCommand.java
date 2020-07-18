@@ -73,9 +73,26 @@ public abstract class ContextCommand extends CommandBase {
 					+ "See online documentation at https://www.nasdanika.org/builds/develop/doc/reference/cli/context-builders.html for details."
 			})
 	private List<String> contextBuilders = new ArrayList<>();
-		
+	
+	/**
+	 * Called by createContext to obtain an instance of context to be configured.
+	 * This implementation creates a new empty context.
+	 * Subclasses can override this method to add properties and services into the "primordial" context so they can be used during
+	 * context creation. E.g. a URI service can be used by context builders to resolve relative URI's. 
+	 * @return
+	 */
+	protected Context newContext() {
+		return Context.EMPTY_CONTEXT;				
+	}
+	
+	/**
+	 * Creates and configures context by adding mounts, contexts and calling context builders.
+	 * @param progressMonitor
+	 * @return
+	 * @throws Exception
+	 */
 	protected Context createContext(ProgressMonitor progressMonitor) throws Exception {
-		Context ret = Context.EMPTY_CONTEXT;		
+		Context ret = newContext();		
 		for (Entry<String, String> mountEntry: mounts.entrySet()) {
 			ret = ret.mount(load(mountEntry.getValue()), mountEntry.getKey());
 		}
