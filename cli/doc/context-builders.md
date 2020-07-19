@@ -67,99 +67,131 @@ nsd vinci generate application
 
 ``-B``/``--context-builders`` can be provided zero or more times. 
 
+This is an example of using context builders option from Maven exec command:
+
+```xml
+<exec
+	dir="${project.build.directory}\cli\eclipse"
+	executable="${project.build.directory}\cli\eclipse\nsd.exe" 
+	failonerror="true">
+
+	<arg value="-data"/>
+	<arg value="nsd-cli-workspace"/>
+	<arg value="vinci"/>
+	<arg value="generate"/>
+	<arg value="documentation"/>
+	<arg value="context-builders"/>
+	<arg value="-o"/>
+	<arg value="${project.basedir}\generated\context-builders.vinci"/>
+</exec>
+```
+
 ### Developing context builders
 
-index - reserved name.
+Development of new context builders includes the following steps:
 
-In an enterprise      
+* Implementation of ${javadoc/org.nasdanika.cli.ContextBuilder} interface.
+* Documenting the new implementation in markdown.  
+* Registration of a ``context-builder`` extension for ``org.nasdanika.cli.cli`` extension point.
+* Generation of context builders documentation model to include into the documentation system.
 
+#### Implementation
 
-examples of command line
- 's ``ExecutionParticipant``. Implements org.nasdanika.cli.ContextBuilder
-For example, ``JavadocContextBuilder`` loads package lists from Javadoc URL's provided in configurations and replaces fully qualified names of classes with links to Javadoc documentation. 
-E.g. ``${{{javadoc/org.nasdankia.common.Context}}}`` with ${javadoc/org.nasdanika.common.Context}.
- 
-Context builders are Java classes which implement ``FunctionFactory<Context,Context>`` and are registered with xxx extension point.
+The below code snippet shows an structure of a context builder.
+You can also take a look at linked sources of context builder implementations for concrete implementation examples.  
 
-Spec - members after fragments
+```java
+package ...;
 
-Tests:
+import org.eclipse.emf.common.util.URI;
 
-* Package: ${javadoc/org.nasdanika.common}
-* Class: 
-    * ${javadoc/org.nasdanika.common.Context}, 
-    * ${javadoc/org.nasdanika.vinci.design.Services}, 
-    * ${javadoc/java.util.Map}
-* Field: ${javadoc/org.nasdanika.common.Context#BASE_URI_PROPERTY}
-* Methods: 
-    * ${javadoc/org.nasdanika.common.Context#fork()}
-    * ${javadoc/org.nasdanika.common.Context#get(java.lang.Class)}
-    
-Ecoredoc tests:
+import org.nasdanika.cli.ContextBuilder;
+import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
+import org.nasdanika.common.Util;
 
-* Package: ${ecore-doc/ncore}
-* Class: 
-    * ${ecore-doc/app/ActionBase}, 
-    * ${ecore-doc/app/ActionBase Action Base}, 
-* Attribute: 
-    * ${ecore-doc/app/ActionBase.activator}
-    * ${ecore-doc/app/ActionBase.activator Action Base activator}
-* Reference: 
-    * ${ecore-doc/app/ActionBase:content}
-    * ${ecore-doc/app/ActionBase:content Action Base content}
-* Operation: 
-    * ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507}
-    * ${ecore-doc/app/BootstrapContainerApplicationBuilder#EOperation-createApplicationBuilderSupplier-978b17ea4dfe41ec4562d0ce7f4eaa16b83bc0a4e3250ba83665d93d4b799507 createApplicationBuilderSupplier()}
+/**
+ * ... API documentation here ...
+ */
+public class MyContextBuilder implements ContextBuilder {
+	
+	@Override
+	public Context build(Object config, Context context, ProgressMonitor progressMonitor) {
+		// Logic which needs to be executed once, e.g. loading and caching of information from remote systems.
+		
+		// Context URI may be available to context builders in some commands for resolving relative URL's.
+		String location = ...  		
+		URI contextURI = context.get(URI.class);
+		if (contextURI != null) {
+			location = URI.createURI(location).resolve(contextURI).toString();
+		}
+		
+		return new Context() {
+		
+			// Helper methods here			
 
-TODO:
+			@Override
+			public Object get(String key) {
+				// Logic property resolving key to value
+				
+				...
+				
+				return ... 
+			}
 
-* Registration example
-* Implementation example - configuration context to factory and command context to function.
-* Command line example, config example
-* Generate vinci model from registered context builders - doc resource attribute. Mount under Context builders action - generate the action and link from the doc model. ``vinci generate documentation context-builders``. 
-* Tech doc - org context/dictionary/language - link - Javadoc, model doc, service catalogue, mainframe structures and - mega-wiki.  
-Modify other documentation commands to move under documentation - ecore-doc and help to cli
+			@Override
+			public <T> T get(Class<T> type) {
+				// Root (not mounted) context builders can also provide services
+				return null;
+			}
+			
+		};
+	}
 
-Builders may have parameters in this case they have to implement BiConsumer. Builder parameters are passed to the builder by calling its <code>java.util.function.BiConsumer.accept(String,String)</code> method.
- 
-Addressing plugin symbolic name/builder id e.g. ``org.nasdanika.vinci.cli/javadoc-context-builder``
+}
+```   
 
-context-builder - individual c/b? or context-builders - mapping, config
+#### Documentation
 
-Config:
+Create a folder to store documentation, e.g. ``doc``. Add the folder to the ``build.properties`` ``bin.includes``.
+Then create a markdown file and document the new builder in markdown. 
 
-- Map - id, config, mounts
-- List of maps
+[Documenation examples](https://github.com/Nasdanika/vinci/tree/master/cli/doc).
 
-# Headings
+#### Registration
 
-3+
+Available context builders are discovered using [Eclipse Extension Points and Extensions](https://www.vogella.com/tutorials/EclipseExtensionPoint/article.html) mechanism.
 
-# Next steps
+The below snippet shows registration of two context builders:
 
-* Implement context builder loading in the command - javadoc context builder in vinci.cli bundle.
-* Test - javadoc context builder for documentation.
-
-```yaml
-mounts:
-    javadoc:
-        id: org.nasdanika.vinci.cli/javadoc-context-builder
-        config:
-            # Core
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.cli/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.common/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.eclipse/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.emf/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.emf.edit/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.emf.presentation/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.help/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.ncore/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.ncore.edit/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.sirius.tree/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.sirius.tree.edit/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.texttospeech/apidocs/
-            - https://nasdanika.org/builds/${release}/products/core/bundles/org.nasdanika.ui/apidocs/
-
-            # HTML
-            - https://nasdanika.org/builds/${release}/products/html/bundles/org.nasdanika.html/apidocs/
+```xml
+<plugin>
+   <extension point="org.nasdanika.cli.cli">
+      <context-builder
+            class="org.nasdanika.vinci.cli.JavadocContextBuilder"
+            description="Resolves fully qualified class names to links to class Javadoc."
+            documentation="doc/javadoc-doc-context-builder.md"
+            id="javadoc-context-builder"></context-builder>
+      <context-builder
+            class="org.nasdanika.vinci.cli.EcoreDocContextBuilder"
+            description="Resolves EPackage alias/EClass name to links to Ecore model documentation."
+            documentation="doc/ecore-doc-context-builder.md"
+            id="ecore-doc-context-builder"></context-builder>
+   </extension>
+</plugin>
 ```
+
+Where:
+
+* ``class`` - context builder implementation class.
+* ``description`` - an optional description which is shown in the documentation list of contents.
+* ``documentation`` - path to the documentation resource within the contributing plug-in.
+* ``id`` - context builder id for addressing context builders in the context builders configuration YAML resource. It must be unique within the contributing plug-in. Do not use ``index`` as context builder id - while the context builder will work, its documentation will overwrite the documentation page of the declaring plug-in. 
+
+#### Generate documentation model
+
+Use [Nasdanika CLI](${base-uri}reference/cli/index.html) [vinci generate documentation context-builders](${base-uri}reference/cli/nsd/vinci/generate/documentation/context-builders.html) command to generate documentation for registered context builders. 
+Then reference the generated documentation from the product documentation model. 
+See the sources of [Nasdanika tool suite doc plug-in](https://github.com/Nasdanika/release/tree/master/tool-suite/doc) for a concrete example.
+``pom-generate-doc.xml`` contains generation commands. The generated content is references from ``models/documentation.vinci`` model. 
