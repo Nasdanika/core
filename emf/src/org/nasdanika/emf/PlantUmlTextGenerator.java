@@ -41,6 +41,8 @@ import org.nasdanika.common.DependencyTracer;
  */
 public class PlantUmlTextGenerator {
 	
+	private static final String RELATED_BACKGROUND = "#DDDDDD";
+
 	public enum RelationshipDirection { in, out, both } 
 	
 	// TODO - support of packages and fully qualified names -> get rid of Logical name?
@@ -61,6 +63,7 @@ public class PlantUmlTextGenerator {
 	private static final String RELATION_LINE = "--";
 	private static final String ASSOCIATION_RELATION = RELATION_LINE + ">";
 	private static final String EXTENDS_RELATION = "<|" + RELATION_LINE, IMPLEMENTS_RELATION = "<|..";
+	private static final String CLASS_COMPARTMENT_SEPARATOR_LINE = "\t__\n";
 
 	protected void appendClassStart(String modifiers, String classType, String name, String link, String background) throws IOException {
 		if (modifiers != null) {
@@ -210,16 +213,10 @@ public class PlantUmlTextGenerator {
 	 * @throws IOException 
 	 */
 	public void appendWithRelationships(
-			Iterable<EClassifier> coreClassifiers,
+			Collection<EClassifier> coreClassifiers,
 			RelationshipDirection direction,
 			int depth) throws IOException {
-		Set<EClassifier> coreSet = new HashSet<>();
-		for (EClassifier cc: coreClassifiers) {
-			if (coreSet.add(cc)) {
-				append(cc);
-			}
-		}
-				
+		Set<EClassifier> coreSet = new HashSet<>(coreClassifiers);				
 		Set<EClassifier> relatedSet = new HashSet<>();
 		
 		switch (direction) {
@@ -236,14 +233,24 @@ public class PlantUmlTextGenerator {
 			break;		
 		}
 		
+		Set<EClassifier> allClassifiers = new HashSet<>(coreSet);
+		
 		for (EClassifier rc: relatedSet) {
-			if (!coreSet.contains(rc)) {
-				append(rc, "#DDDDDD");
+			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
+				allClassifiers.add(rc);				
 			}
 		}
 		
-		Set<EClassifier> allClassifiers = new HashSet<>(coreSet);
-		allClassifiers.addAll(relatedSet);
+		for (EClassifier cc: coreSet) {
+			appendEClassifier(cc, allClassifiers);
+		}
+		
+		for (EClassifier rc: relatedSet) {
+			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
+				appendEClassifier(rc, RELATED_BACKGROUND, allClassifiers);
+			}
+		}		
+		
 		for (EClassifier c: allClassifiers) {
 			if (c instanceof EClass) {
 				for (EGenericType gsc: ((EClass) c).getEGenericSuperTypes()) {
@@ -259,7 +266,7 @@ public class PlantUmlTextGenerator {
 			if (c instanceof EClass) {
 				for (EReference ref: ((EClass) c).getEReferences()) {
 					if (!processedOpposites.contains(ref) && allClassifiers.contains(ref.getEReferenceType())) {
-						append(ref);
+						appendEReference(ref);
 						EReference opposite = ref.getEOpposite();
 						if (opposite!=null) {
 							processedOpposites.add(opposite);
@@ -286,7 +293,7 @@ public class PlantUmlTextGenerator {
 		return "";
 	}	
 	
-	protected void append(EReference ref) throws IOException {
+	protected void appendEReference(EReference ref) throws IOException {
 		collector.append(qualifiedName(ref.getEContainingClass()));
 		collector.append(" ");
 		EReference opposite = ref.getEOpposite();
@@ -394,17 +401,17 @@ public class PlantUmlTextGenerator {
 		return ret;
 	}
 	
-	public void append(EClassifier eClassifier) throws IOException {
-		append(eClassifier, null);
+	public void appendEClassifier(EClassifier eClassifier, Set<EClassifier> allClassifiers) throws IOException {
+		appendEClassifier(eClassifier, null, allClassifiers);
 	}
 	
-	public void append(EClassifier eClassifier, String background) throws IOException {
+	public void appendEClassifier(EClassifier eClassifier, String background, Set<EClassifier> allClassifiers) throws IOException {
 		if (eClassifier instanceof EClass) {
-			append((EClass) eClassifier, background);
+			appendEClass((EClass) eClassifier, background, allClassifiers);
 		} else if (eClassifier instanceof EEnum) {
-			append((EEnum) eClassifier, background);			
+			appendEEnum((EEnum) eClassifier, background, allClassifiers);			
 		} else if (eClassifier instanceof EDataType) {
-			append((EDataType) eClassifier, background);
+			appendEDataType((EDataType) eClassifier, background, allClassifiers);
 		}
 	}
 	
@@ -475,11 +482,11 @@ public class PlantUmlTextGenerator {
 		return ret.toString();
 	}
 
-	public void append(EClass eClass) throws IOException {
-		append(eClass, null);
+	public void appendEClass(EClass eClass, Set<EClassifier> allClassifiers) throws IOException {
+		appendEClass(eClass, null, allClassifiers);
 	}
 	
-	public void append(EClass eClass, String background) throws IOException {
+	public void appendEClass(EClass eClass, String background, Set<EClassifier> allClassifiers) throws IOException {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
 		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), background);
 		if (isAppendAttributes(eClass)) {
@@ -490,6 +497,15 @@ public class PlantUmlTextGenerator {
 				}						
 			}
 		}
+		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
+		for (EReference reference: eClass.getEReferences()) {
+			EGenericType eGenericType = reference.getEGenericType();			
+			if (eGenericType == null || !allClassifiers.contains(reference.getEReferenceType())) {
+				appendAttribute(null, null, genericName(eGenericType) + (reference.isMany() ? "[]" : ""), getLocalizedName(reference));
+			}						
+		}
+		
+		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
 		if (isAppendOperations(eClass)) {
 			for (EOperation op : eClass.getEOperations()) {
 				Collection<String> parameters = new ArrayList<String>();
@@ -513,7 +529,7 @@ public class PlantUmlTextGenerator {
 	 */
 	protected String getEClassifierLink(EClassifier eClassifier) {
 		String link = null;
-		if (eClassifierLinkResolver != null) {
+		if (eClassifier != null && eClassifierLinkResolver != null) {
 			link = eClassifierLinkResolver.apply(eClassifier);
 			if (link != null && eModelElementFirstDocSentenceProvider != null) {
 				String firstDocSentence = eModelElementFirstDocSentenceProvider.apply(eClassifier);
@@ -533,11 +549,11 @@ public class PlantUmlTextGenerator {
 		return true;
 	}
 
-	public void append(EDataType dataType) throws IOException {
-		append(dataType, null);
+	public void appendEDataType(EDataType dataType, Set<EClassifier> allClassifiers) throws IOException {
+		appendEDataType(dataType, null, allClassifiers);
 	}	
 	
-	public void append(EDataType dataType, String background) throws IOException {
+	public void appendEDataType(EDataType dataType, String background, Set<EClassifier> allClassifiers) throws IOException {
 		appendClassStart(null, "class", qualifiedName(dataType)+" << (D,orchid) >>", getEClassifierLink(dataType), background);
 		if (dataType.getInstanceClassName() != null) {
 			appendAttribute(null, null, null, dataType.getInstanceClassName());
@@ -545,11 +561,11 @@ public class PlantUmlTextGenerator {
 		appendClassEnd();
 	}
 
-	public void append(EEnum eEnum) throws IOException {
-		append(eEnum, null);
+	public void appendEEnum(EEnum eEnum, Set<EClassifier> allClassifiers) throws IOException {
+		appendEEnum(eEnum, null, allClassifiers);
 	}
 	
-	public void append(EEnum eEnum, String background) throws IOException {
+	public void appendEEnum(EEnum eEnum, String background, Set<EClassifier> allClassifiers) throws IOException {
 		appendClassStart(null, "enum", qualifiedName(eEnum), getEClassifierLink(eEnum), background);
 		for (EEnumLiteral literal : eEnum.getELiterals()) {
 			appendAttribute(String.valueOf(literal.getValue()), null, getLocalizedName(literal), literal.getName().equals(literal.getLiteral()) ? "" : literal.getLiteral());
