@@ -36,6 +36,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
@@ -226,15 +227,16 @@ public class SingleReferenceLifecycleManager extends AbstractNasdanikaExtReferen
 				// TODO icon for the reference type
 				dialog.open();
 				
-				Object[] result = dialog.getResult();
-				if (result != null) {
-					if (result.length == 0) {
-						this.target.eUnset(this.eReference);
-					} else if (result.length == 1 && choiceOfValues.contains(result[0])) {						
-						this.target.eSet(this.eReference, result[0]);
+				if (dialog.getReturnCode() == Window.OK) {
+					Object[] result = dialog.getResult();
+					if (result != null) {
+						if (result.length == 0) {
+							this.target.eUnset(this.eReference);
+						} else if (result.length == 1 && choiceOfValues.contains(result[0])) {						
+							this.target.eSet(this.eReference, result[0]);
+						}
 					}
 				}
-
 			}
 		}
 	}

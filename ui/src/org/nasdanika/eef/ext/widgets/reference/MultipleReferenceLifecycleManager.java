@@ -46,6 +46,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sirius.common.interpreter.api.IInterpreter;
@@ -283,12 +284,12 @@ public class MultipleReferenceLifecycleManager extends AbstractNasdanikaExtRefer
 				dialog.setTitle(propertyDescriptor.getDisplayName(null));
 				
 				dialog.open();
-				
-				Object[] result = dialog.getResult();
-				if (result != null) {					
-					this.target.eSet(this.eReference, Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList()));
+				if (dialog.getReturnCode() == Window.OK) {
+					Object[] result = dialog.getResult();
+					if (result != null) {					
+						this.target.eSet(this.eReference, Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList()));
+					}
 				}
-
 			}
 		}
 	}
