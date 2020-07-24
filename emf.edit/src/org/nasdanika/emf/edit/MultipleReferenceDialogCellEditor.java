@@ -10,6 +10,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -44,8 +45,11 @@ public class MultipleReferenceDialogCellEditor extends ExtendedDialogCellEditor 
 		dialog.setTitle(title);
 		
 		dialog.open();		
-		Object[] result = dialog.getResult();		
-		return result == null ? null : Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList());
+		if (dialog.getReturnCode() == Window.OK) {
+			Object[] result = dialog.getResult();		
+			return result == null ? null : Arrays.stream(result).filter(choiceOfValues::contains).collect(Collectors.toList());			
+		}
+		return null;
 	}
 	
 };

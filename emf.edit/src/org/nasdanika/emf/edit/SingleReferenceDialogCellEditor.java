@@ -9,6 +9,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -43,16 +44,19 @@ public class SingleReferenceDialogCellEditor extends ExtendedDialogCellEditor {
 		dialog.setTitle(title);
 		
 		dialog.open();		
-		Object[] result = dialog.getResult();
-		if (result == null) {
-			return null;
+		if (dialog.getReturnCode() == Window.OK) {
+			Object[] result = dialog.getResult();
+			if (result == null) {
+				return null;
+			}
+			if (result.length == 0) {
+				markDirty();
+				doSetValue(null);
+				return null;
+			}
+			return Arrays.stream(result).filter(choiceOfValues::contains).findFirst().orElse(null);
 		}
-		if (result.length == 0) {
-			markDirty();
-			doSetValue(null);
-			return null;
-		}
-		return Arrays.stream(result).filter(choiceOfValues::contains).findFirst().orElse(null);
+		return null;
 	}
 	
 };
