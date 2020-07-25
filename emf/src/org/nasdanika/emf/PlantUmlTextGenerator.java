@@ -63,6 +63,7 @@ public class PlantUmlTextGenerator {
 	private static final String RELATION_LINE = "--";
 	private static final String ASSOCIATION_RELATION = RELATION_LINE + ">";
 	private static final String EXTENDS_RELATION = "<|" + RELATION_LINE, IMPLEMENTS_RELATION = "<|..";
+	private static final String DEPENDENCY_RELATION = "..>";	
 	private static final String CLASS_COMPARTMENT_SEPARATOR_LINE = "\t__\n";
 
 	protected void appendClassStart(String modifiers, String classType, String name, String link, String background) throws IOException {
@@ -155,17 +156,43 @@ public class PlantUmlTextGenerator {
 		
 	// --- ECore ---
 	
+	/**
+	 * Collects type dependencies for a given class - attribute types, eoperation return and exception types, eparameter types.
+	 * Does not collect reference types.
+	 * @param eClass
+	 * @return
+	 */
+	protected Collection<EClassifier> collectTypeDependencies(EClass eClass) {
+		Collection<EClassifier> collector = new HashSet<>();
+		for (EAttribute attr: eClass.getEAttributes()) {
+			collector.add(attr.getEType());
+		}					
+		for (EOperation op: eClass.getEOperations()) {
+			EClassifier opType = op.getEType();
+			if (opType != null) {
+				collector.add(opType);
+			}
+			collector.addAll(op.getEExceptions());
+			for (EParameter ep: op.getEParameters()) {
+				collector.add(ep.getEType());
+			}
+		}					
+		return collector;
+	}
 	
-	private static DependencyTracer<EClassifier> OUT_DEPENDENCY_TRACER = new DependencyTracer<EClassifier>() {
+	private DependencyTracer<EClassifier> OUT_DEPENDENCY_TRACER = new DependencyTracer<EClassifier>() {
 
 		@Override
 		protected Iterable<EClassifier> getDependencies(EClassifier obj) {
 			Collection<EClassifier> ret = new HashSet<>();
 			if (obj instanceof EClass) {
-				ret.addAll(((EClass) obj).getESuperTypes());
-				for (EReference ref: ((EClass) obj).getEReferences()) {
+				EClass eClass = (EClass) obj;
+				ret.addAll(eClass.getESuperTypes());
+				for (EReference ref: eClass.getEReferences()) {
 					ret.add(ref.getEReferenceType());
 				}
+				
+				ret.addAll(collectTypeDependencies(eClass));				
 			}
 			return ret;
 		}
@@ -181,6 +208,7 @@ public class PlantUmlTextGenerator {
 				ret.addAll(getSubTypes((EClass) obj));
 				ret.addAll(getReferrers((EClass) obj));
 			}
+			ret.addAll(getUses(obj));
 			return ret;
 		}
 		
@@ -193,14 +221,22 @@ public class PlantUmlTextGenerator {
 			Collection<EClassifier> ret = new HashSet<>();
 			if (obj instanceof EClass) {
 				// In
-				ret.addAll(getSubTypes((EClass) obj));
-				ret.addAll(getReferrers((EClass) obj));
+				EClass eClass = (EClass) obj;
+				ret.addAll(getSubTypes(eClass));
+				ret.addAll(getReferrers(eClass));
+				
 				// Out
-				ret.addAll(((EClass) obj).getESuperTypes());
-				for (EReference ref: ((EClass) obj).getEReferences()) {
+				ret.addAll(eClass.getESuperTypes());
+				for (EReference ref: eClass.getEReferences()) {
 					ret.add(ref.getEReferenceType());
 				}
+				
+				ret.addAll(collectTypeDependencies(eClass));				
 			}
+
+			// In
+			ret.addAll(getUses(obj));
+			
 			return ret;
 		}
 		
@@ -274,7 +310,19 @@ public class PlantUmlTextGenerator {
 					} 
 				}
 			}
-		}				
+		}	
+		
+		// Type dependencies
+		for (EClassifier c: allClassifiers) {
+			if (c instanceof EClass) {
+				EClass eClass = (EClass) c;
+				for (EClassifier ec: collectTypeDependencies(eClass)) {
+					if (allClassifiers.contains(ec)) {
+						appendTypeDependency(eClass, ec);
+					}
+				}
+			}
+		}			
 	}
 	
 	protected static String getMultiplicity(EStructuralFeature feature) {
@@ -349,6 +397,15 @@ public class PlantUmlTextGenerator {
 		collector.append(System.lineSeparator());
 	}
 	
+	protected void appendTypeDependency(EClass source, EClassifier target) throws IOException {
+		collector.append(qualifiedName(source));
+		collector.append(" ");
+		collector.append(DEPENDENCY_RELATION);
+		collector.append(" ");
+		collector.append(qualifiedName(target));		
+		collector.append(System.lineSeparator());
+	}
+	
 	/**
 	 * Finds all subtypes in the resourceset. 
 	 * @return
@@ -401,6 +458,32 @@ public class PlantUmlTextGenerator {
 		return ret;
 	}
 	
+	/**
+	 * Finds all type uses in the resourceset. 
+	 * @return
+	 */
+	protected Collection<EClass> getUses(EClassifier eClassifier) {
+		TreeIterator<?> acit;
+		Resource eResource = eClassifier.eResource();
+		if (eResource == null) {
+			EPackage ePackage = eClassifier.getEPackage();
+			if (ePackage == null) {
+				return Collections.emptySet();
+			}
+			acit = ePackage.eAllContents();
+		} else {
+			ResourceSet resourceSet = eResource.getResourceSet();
+			acit = resourceSet == null ? eResource.getAllContents() : eResource.getAllContents();
+		}
+		Set<EClass> ret = new HashSet<>();
+		acit.forEachRemaining(obj -> {
+			if (obj instanceof Class && collectTypeDependencies((EClass) obj).contains(eClassifier)) {
+				ret.add((EClass) obj);
+			}
+		});
+		return ret;
+	}
+		
 	public void appendEClassifier(EClassifier eClassifier, Set<EClassifier> allClassifiers) throws IOException {
 		appendEClassifier(eClassifier, null, allClassifiers);
 	}
