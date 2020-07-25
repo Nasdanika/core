@@ -421,7 +421,7 @@ public class PlantUmlTextGenerator {
 			acit = ePackage.eAllContents();
 		} else {
 			ResourceSet resourceSet = eResource.getResourceSet();
-			acit = resourceSet == null ? eResource.getAllContents() : eResource.getAllContents();
+			acit = resourceSet == null ? eResource.getAllContents() : resourceSet.getAllContents();
 		}
 		Set<EClass> ret = new HashSet<>();
 		acit.forEachRemaining(obj -> {
@@ -447,7 +447,7 @@ public class PlantUmlTextGenerator {
 			acit = ePackage.eAllContents();
 		} else {
 			ResourceSet resourceSet = eResource.getResourceSet();
-			acit = resourceSet == null ? eResource.getAllContents() : eResource.getAllContents();
+			acit = resourceSet == null ? eResource.getAllContents() : resourceSet.getAllContents();
 		}
 		Set<EClass> ret = new HashSet<>();
 		acit.forEachRemaining(obj -> {
@@ -473,11 +473,11 @@ public class PlantUmlTextGenerator {
 			acit = ePackage.eAllContents();
 		} else {
 			ResourceSet resourceSet = eResource.getResourceSet();
-			acit = resourceSet == null ? eResource.getAllContents() : eResource.getAllContents();
+			acit = resourceSet == null ? eResource.getAllContents() : resourceSet.getAllContents();
 		}
 		Set<EClass> ret = new HashSet<>();
 		acit.forEachRemaining(obj -> {
-			if (obj instanceof Class && collectTypeDependencies((EClass) obj).contains(eClassifier)) {
+			if (obj instanceof EClass && collectTypeDependencies((EClass) obj).contains(eClassifier)) {
 				ret.add((EClass) obj);
 			}
 		});
