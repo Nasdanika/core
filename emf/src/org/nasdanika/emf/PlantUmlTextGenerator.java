@@ -156,30 +156,6 @@ public class PlantUmlTextGenerator {
 		
 	// --- ECore ---
 	
-	/**
-	 * Collects type dependencies for a given class - attribute types, eoperation return and exception types, eparameter types.
-	 * Does not collect reference types.
-	 * @param eClass
-	 * @return
-	 */
-	protected Collection<EClassifier> collectTypeDependencies(EClass eClass) {
-		Collection<EClassifier> collector = new HashSet<>();
-		for (EAttribute attr: eClass.getEAttributes()) {
-			collector.add(attr.getEType());
-		}					
-		for (EOperation op: eClass.getEOperations()) {
-			EClassifier opType = op.getEType();
-			if (opType != null) {
-				collector.add(opType);
-			}
-			collector.addAll(op.getEExceptions());
-			for (EParameter ep: op.getEParameters()) {
-				collector.add(ep.getEType());
-			}
-		}					
-		return collector;
-	}
-	
 	private DependencyTracer<EClassifier> OUT_DEPENDENCY_TRACER = new DependencyTracer<EClassifier>() {
 
 		@Override
@@ -192,7 +168,7 @@ public class PlantUmlTextGenerator {
 					ret.add(ref.getEReferenceType());
 				}
 				
-				ret.addAll(collectTypeDependencies(eClass));				
+				ret.addAll(Util.collectTypeDependencies(eClass));				
 			}
 			return ret;
 		}
@@ -231,7 +207,7 @@ public class PlantUmlTextGenerator {
 					ret.add(ref.getEReferenceType());
 				}
 				
-				ret.addAll(collectTypeDependencies(eClass));				
+				ret.addAll(Util.collectTypeDependencies(eClass));				
 			}
 
 			// In
@@ -314,13 +290,10 @@ public class PlantUmlTextGenerator {
 		
 		// Type dependencies
 		for (EClassifier c: allClassifiers) {
-			if (c instanceof EClass) {
-				EClass eClass = (EClass) c;
-				for (EClassifier ec: collectTypeDependencies(eClass)) {
-					if (allClassifiers.contains(ec)) {
-						appendTypeDependency(eClass, ec);
-					}
-				}
+			for (EClass src: getUses(c)) {
+				if (allClassifiers.contains(src)) {
+					appendTypeDependency(src, c);
+				}				
 			}
 		}			
 	}
@@ -477,7 +450,7 @@ public class PlantUmlTextGenerator {
 		}
 		Set<EClass> ret = new HashSet<>();
 		acit.forEachRemaining(obj -> {
-			if (obj instanceof EClass && collectTypeDependencies((EClass) obj).contains(eClassifier)) {
+			if (obj instanceof EClass && Util.collectTypeDependencies((EClass) obj).contains(eClassifier)) {
 				ret.add((EClass) obj);
 			}
 		});
