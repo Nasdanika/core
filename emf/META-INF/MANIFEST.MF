@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nasdanika EMF
-Bundle-SymbolicName: org.nasdanika.emf
+Bundle-SymbolicName: org.nasdanika.emf;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -15,4 +15,5 @@ Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0";visibility:=reexpo
  org.eclipse.core.runtime;bundle-version="3.15.300",
  org.nasdanika.cli;bundle-version="1.0.0";visibility:=reexport
 Automatic-Module-Name: org.nasdanika.emf
+Bundle-ActivationPolicy: lazy
 

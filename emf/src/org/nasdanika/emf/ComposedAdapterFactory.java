@@ -7,12 +7,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 
 /**
  * Composed factory delegates to its child factories. It uses inheritance ordering to delegate -
@@ -22,7 +27,49 @@ import org.eclipse.emf.ecore.EcorePackage;
  *
  */
 public class ComposedAdapterFactory implements ComposeableAdapterFactory {
-
+	
+	// TODO - registry & utility methods to add to a resource set if not yet
+	// Register Nasdanika adapters if not yet
+	// ((EObject) selection).eResource().getResourceSet().getAdapterFactories() - static method in Compose
+	
+	private static final ComposedAdapterFactory GLOBAL_FACTORY = new ComposedAdapterFactory();
+	private static boolean IS_GLOBAL_FACTORY_LOADED;
+		
+	public static final String ADAPTER_FACTORY_EXTENSION_POINT_ID = "org.nasdanika.emf.adapterFactory";
+				
+	/**
+	 * Returns global instance of {@link ComposedAdapterFactory} with {@link ComposeableAdapterFactory} children loaded from extensions.
+	 */
+	public static ComposedAdapterFactory getGlobalFactory() {
+		synchronized (GLOBAL_FACTORY) {
+			if (!IS_GLOBAL_FACTORY_LOADED) {
+				for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(ADAPTER_FACTORY_EXTENSION_POINT_ID)) {
+					if ("factory".equals(ce.getName())) {
+						try {
+							GLOBAL_FACTORY.registerAdapterFactory((ComposeableAdapterFactory) ce.createExecutableExtension("class"));
+						} catch (CoreException e) {
+							EcorePlugin.INSTANCE.log(e);
+						}
+					}
+				}
+				
+				IS_GLOBAL_FACTORY_LOADED = true;
+			}
+			return GLOBAL_FACTORY;
+		}
+	}
+	
+	/**
+	 * Adds the global factory to the list or {@link ResourceSet} adapter factories if it is not yet there, so this method is idempotent.
+	 * @param resourceSet
+	 */
+	public static void registerGlobalFactory(ResourceSet resourceSet) {
+		ComposedAdapterFactory gf = getGlobalFactory();
+		if (!resourceSet.getAdapterFactories().contains(gf)) {
+			resourceSet.getAdapterFactories().add(gf);
+		}
+	}
+	
 	private ComposedAdapterFactory parentAdapterFactory;
 
 	@Override

@@ -1,22 +1,15 @@
 package org.nasdanika.emf;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.nasdanika.cli.DelegatingCommand;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
@@ -31,7 +24,7 @@ import picocli.CommandLine.Parameters;
  * @author Pavel
  *
  */
-public abstract class ModelCommand<T extends EObject> extends DelegatingCommand {
+public abstract class ModelCommand<T extends EObject> extends ResourceSetCommand {
 	
 	@Parameters(
 			paramLabel = "URI", 
@@ -46,15 +39,6 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 	 * @return Consumer factory which create a consumer to pass the loaded model to.
 	 */
 	protected abstract ConsumerFactory<T> getConsumerFactory();
-	
-	/**
-	 * @return {@link EPackage}'s to register with the resource set for loading the model.
-	 * This implementation returns all registered packages.
-	 */
-	protected Collection<EPackage> getEPackages() {
-		Registry registry = EPackage.Registry.INSTANCE;
-		return new ArrayList<String>(registry.keySet()).stream().map(nsURI -> registry.getEPackage(nsURI)).collect(Collectors.toList());
-	}
 	
 	protected Supplier<T> createSupplier(Context context) {
 		return new Supplier<T>() {
@@ -74,11 +58,7 @@ public abstract class ModelCommand<T extends EObject> extends DelegatingCommand 
 			public T execute(ProgressMonitor progressMonitor) throws Exception {
 				
 				// Creating a resource set
-				ResourceSetImpl resourceSet = new ResourceSetImpl();
-				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-				for (EPackage ePackage: getEPackages()) {
-					resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
-				}
+				ResourceSet resourceSet = createResourceSet();
 
 				URI modelUri = isFile ? URI.createFileURI(uri) : URI.createURI(new File(".").toURI().resolve(ModelCommand.this.uri).toString());
 				Resource modelResource = resourceSet.getResource(modelUri, true);
