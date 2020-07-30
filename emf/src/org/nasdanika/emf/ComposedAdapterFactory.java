@@ -35,7 +35,7 @@ public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 	private static final ComposedAdapterFactory GLOBAL_FACTORY = new ComposedAdapterFactory();
 	private static boolean IS_GLOBAL_FACTORY_LOADED;
 		
-	public static final String ADAPTER_FACTORY_EXTENSION_POINT_ID = "org.nasdanika.emf.adapterFactory";
+	public static final String ADAPTER_FACTORIES_EXTENSION_POINT_ID = "org.nasdanika.emf.adapterFactories";
 				
 	/**
 	 * Returns global instance of {@link ComposedAdapterFactory} with {@link ComposeableAdapterFactory} children loaded from extensions.
@@ -43,7 +43,7 @@ public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 	public static ComposedAdapterFactory getGlobalFactory() {
 		synchronized (GLOBAL_FACTORY) {
 			if (!IS_GLOBAL_FACTORY_LOADED) {
-				for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(ADAPTER_FACTORY_EXTENSION_POINT_ID)) {
+				for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(ADAPTER_FACTORIES_EXTENSION_POINT_ID)) {
 					if ("factory".equals(ce.getName())) {
 						try {
 							GLOBAL_FACTORY.registerAdapterFactory((ComposeableAdapterFactory) ce.createExecutableExtension("class"));
