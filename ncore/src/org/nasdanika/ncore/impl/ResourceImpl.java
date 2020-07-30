@@ -9,7 +9,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Supplier;
-import org.nasdanika.emf.Util;
+import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Resource;
 
@@ -179,7 +179,7 @@ public class ResourceImpl extends TypedElementImpl implements Resource {
 	@Override
 	public Supplier<Object> create(Context context) throws Exception {
 		return Supplier.<Object>fromCallable(() -> {
-			URL url = Util.resolveReference(eResource(), context.interpolate(getLocation()));
+			URL url = EmfUtil.resolveReference(eResource(), context.interpolate(getLocation()));
 			if (org.nasdanika.common.Util.isBlank(getType())) {
 				return url;
 			}

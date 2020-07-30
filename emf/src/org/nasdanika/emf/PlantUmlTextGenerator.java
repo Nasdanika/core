@@ -168,7 +168,7 @@ public class PlantUmlTextGenerator {
 					ret.add(ref.getEReferenceType());
 				}
 				
-				ret.addAll(Util.collectTypeDependencies(eClass));				
+				ret.addAll(EmfUtil.collectTypeDependencies(eClass));				
 			}
 			return ret;
 		}
@@ -207,7 +207,7 @@ public class PlantUmlTextGenerator {
 					ret.add(ref.getEReferenceType());
 				}
 				
-				ret.addAll(Util.collectTypeDependencies(eClass));				
+				ret.addAll(EmfUtil.collectTypeDependencies(eClass));				
 			}
 
 			// In
@@ -450,7 +450,7 @@ public class PlantUmlTextGenerator {
 		}
 		Set<EClass> ret = new HashSet<>();
 		acit.forEachRemaining(obj -> {
-			if (obj instanceof EClass && Util.collectTypeDependencies((EClass) obj).contains(eClassifier)) {
+			if (obj instanceof EClass && EmfUtil.collectTypeDependencies((EClass) obj).contains(eClassifier)) {
 				ret.add((EClass) obj);
 			}
 		});

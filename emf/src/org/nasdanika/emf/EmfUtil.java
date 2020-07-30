@@ -20,11 +20,11 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.osgi.framework.Bundle;
 
-public class Util {
+public class EmfUtil {
 
 	private static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";
 
-	private Util() {
+	private EmfUtil() {
 		// Singleton
 	}
 		
