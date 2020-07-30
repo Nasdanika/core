@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.nasdanika.ncore.gen;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.nasdanika.ncore.gen
+Require-Bundle: org.nasdanika.ncore
+Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: org.nasdanika.ncore.gen

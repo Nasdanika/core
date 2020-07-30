@@ -142,6 +142,7 @@
 
 		<module>ncore</module>		
 		<module>ncore.edit</module>		
+		<module>ncore.gen</module>		
 
 		<module>party</module>		
 		<module>party.edit</module>		
