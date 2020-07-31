@@ -7,6 +7,15 @@ package org.nasdanika.common;
  */
 public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer<T>> {
 	
+	/**
+	 * Provides {@link ConsumerFactory} for a specific type.
+	 * @author Pavel
+	 *
+	 */
+	interface Provider {
+		<T> ConsumerFactory<T> getFactory(Class<T> type);
+	}
+	
 	default FunctionFactory<T,T> asFunctionFactory() {
 		return new FunctionFactory<T, T>() {
 

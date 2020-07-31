@@ -7,6 +7,15 @@ package org.nasdanika.common;
  */
 public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Function<T,R>> {
 	
+	/**
+	 * Provides {@link FunctionFactory} for a specific argument and return type.
+	 * @author Pavel
+	 *
+	 */
+	interface Provider {
+		<T,R> FunctionFactory<T,R> getFactory(Class<T> parameterType, Class<R> resultType);
+	}	
+	
 	default <V> FunctionFactory<T,V> then(FunctionFactory<? super R,V> then) {
 		return new FunctionFactory<T, V>() {
 			

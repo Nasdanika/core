@@ -8,8 +8,15 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.AccessController;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.Converter;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Function;
+import org.nasdanika.common.FunctionFactory;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.ResourceLocator;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * Bridges {@link Adaptable} and EObject adaptation framework - {@link Adapter}.
@@ -32,7 +39,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	@Override
 	public <A> A adaptTo(Class<A> type) {
 		return adaptTo(target, type);
-	}
+	}		
 
 	/**
 	 * Adapts target to ResourceLocator and returns context or empty context if there is no context, i.e. the context is never null.
@@ -336,6 +343,137 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 */
 	protected boolean canExecute(String qualifier, Context context) {
 		return adaptToAccessController().canExecute(qualifier, context);
+	}
+	
+	// --- Adapting to execution participants factories
+	
+	/**
+	 * Adapts to a {@link SupplierFactory} of specific type by adapting to {@link SupplierFactory.Provider} first and obtaining a typed factory from it.
+	 * If it doesn't work then adapts to SupplierFactory and then's it with a {@link FunctionFactory} which converts the result to requested type.
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> SupplierFactory<T> adaptToSupplierFactory(EObject target, Class<T> type) {
+		SupplierFactory.Provider provider = adaptTo(target, SupplierFactory.Provider.class);
+		if (provider != null) {
+			SupplierFactory<T> factory = provider.getFactory(type);
+			if (factory != null) {
+				return factory;
+			}
+		}
+		SupplierFactory<Object> factory = adaptTo(target, SupplierFactory.class);
+		if (factory == null) { 
+			return null;
+		}
+		return factory.then(new FunctionFactory<Object,T>() {
+
+			@Override
+			public Function<Object, T> create(Context context) throws Exception {				
+				return new Function<Object, T>() {
+
+					@Override
+					public double size() {
+						return 1;
+					}
+
+					@Override
+					public String name() {
+						return "Converter to "+type;
+					}
+
+					@Override
+					public T execute(Object result, ProgressMonitor progressMonitor) throws Exception {
+						if (result == null || type.isInstance(result)) {
+							return (T) result;
+						}
+						Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
+						T ret = converter.convert(result, type);
+						if (ret == null) {
+							throw new IllegalArgumentException("Cannot convert " + result.getClass() + " " + result + " to " + type);
+						}
+						return ret;
+					}
+				};
+			}
+			
+		});		
+	}
+	
+	/**
+	 * Adapts to a {@link FunctionFactory} of specific parameter and result types by adapting to {@link FunctionFactory.Provider} first and obtaining a typed factory from it.
+	 * If it doesn't work then adapts to FunctionFactory and then's it with a {@link FunctionFactory} which converts the result to requested type. The argument is not converted.
+	 * @param <T>
+	 * @param <R>
+	 * @param parameterType
+	 * @param resultType
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T,R> FunctionFactory<T,R> adaptToFunctionFactory(EObject target, Class<T> parameterType, Class<R> resultType) {
+		FunctionFactory.Provider provider = adaptTo(target, FunctionFactory.Provider.class);
+		if (provider != null) {
+			FunctionFactory<T,R> factory = provider.getFactory(parameterType, resultType);
+			if (factory != null) {
+				return factory;
+			}
+		}
+		FunctionFactory<Object,Object> factory = adaptTo(target, FunctionFactory.class);
+		if (factory == null) { 
+			return null;
+		}
+		return (FunctionFactory<T,R>) factory.then(new FunctionFactory<Object,R>() {
+
+			@Override
+			public Function<Object,R> create(Context context) throws Exception {				
+				return new Function<Object,R>() {
+
+					@Override
+					public double size() {
+						return 1;
+					}
+
+					@Override
+					public String name() {
+						return "Converter to "+resultType;
+					}
+
+					@Override
+					public R execute(Object result, ProgressMonitor progressMonitor) throws Exception {
+						if (result == null || resultType.isInstance(result)) {
+							return (R) result;
+						}
+						Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
+						R ret = converter.convert(result, resultType);
+						if (ret == null) {
+							throw new IllegalArgumentException("Cannot convert " + result.getClass() + " " + result + " to " + resultType);
+						}
+						return ret;
+					}
+				};
+			}
+			
+		});		
+	}
+	
+	/**
+	 * Adapts to a {@link ConsumerFactory} of specific type by adapting to {@link ConsumerFactory.Provider} first and obtaining a typed factory from it.
+	 * If it doesn't work then adapts to ConsumerFactory.
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> ConsumerFactory<T> adaptToConsumerFactory(EObject target, Class<T> type) {
+		ConsumerFactory.Provider provider = adaptTo(target, ConsumerFactory.Provider.class);
+		if (provider != null) {
+			ConsumerFactory<T> factory = provider.getFactory(type);
+			if (factory != null) {
+				return factory;
+			}
+		}
+		return (ConsumerFactory<T>) adaptTo(target, SupplierFactory.class);
 	}
 
 }

@@ -8,6 +8,15 @@ import java.util.function.BiFunction;
  * @param <T>
  */
 public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier<T>>, java.util.function.BiFunction<Context,ProgressMonitor,T> {
+	
+	/**
+	 * Provides {@link SupplierFactory} for a specific type.
+	 * @author Pavel
+	 *
+	 */
+	interface Provider {
+		<T> SupplierFactory<T> getFactory(Class<T> type);
+	}
 		
 	default <V> SupplierFactory<V> then(FunctionFactory<? super T,V> then) {
 		return new SupplierFactory<V>() {
