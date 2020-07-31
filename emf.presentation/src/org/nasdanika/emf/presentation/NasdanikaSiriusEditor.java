@@ -1255,7 +1255,7 @@ public class NasdanikaSiriusEditor
 		
 		 @Override
 		 public void commandStackChanged(final EventObject event) {
-			 getContainer().getDisplay().asyncExec
+			getSite().getShell().getDisplay().asyncExec
 				 (new Runnable() {
 					  @Override
 					  public void run() {
@@ -1270,6 +1270,7 @@ public class NasdanikaSiriusEditor
 					  }
 				  });
 		 }
+		 
 	};			
 	
 	protected void setInput(IEditorInput editorInput, Session session) {		
