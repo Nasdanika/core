@@ -2,10 +2,8 @@
  */
 package org.nasdanika.ncore;
 
-import java.lang.Object;
-
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.common.SupplierFactory;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,13 +24,14 @@ import org.nasdanika.common.SupplierFactory;
  *   <li>{@link org.nasdanika.ncore.HttpCall#getConnectTimeout <em>Connect Timeout</em>}</li>
  *   <li>{@link org.nasdanika.ncore.HttpCall#getReadTimeout <em>Read Timeout</em>}</li>
  *   <li>{@link org.nasdanika.ncore.HttpCall#getSuccessCode <em>Success Code</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.HttpCall#getBody <em>Body</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getHttpCall()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model
  * @generated
  */
-public interface HttpCall extends ModelElement, SupplierFactory<Object> {
+public interface HttpCall extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -86,15 +85,15 @@ public interface HttpCall extends ModelElement, SupplierFactory<Object> {
 
 	/**
 	 * Returns the value of the '<em><b>Headers</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.Entry}<code>&lt;java.lang.Object&gt;</code>.
+	 * The list contents are of type {@link org.nasdanika.ncore.Entry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Headers</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getHttpCall_Headers()
-	 * @model type="org.nasdanika.ncore.Entry&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Entry<Object>> getHeaders();
+	EList<Entry> getHeaders();
 
 	/**
 	 * Returns the value of the '<em><b>Connect Timeout</b></em>' attribute.
@@ -173,5 +172,17 @@ public interface HttpCall extends ModelElement, SupplierFactory<Object> {
 	 * @generated
 	 */
 	void setSuccessCode(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Body</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Body</em>' containment reference list.
+	 * @see org.nasdanika.ncore.NcorePackage#getHttpCall_Body()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<EObject> getBody();
 
 } // HttpCall

@@ -74,29 +74,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.SupplierFactoryReference} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SupplierFactoryReferenceItemProvider supplierFactoryReferenceItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.SupplierFactoryReference}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSupplierFactoryReferenceAdapter() {
-		if (supplierFactoryReferenceItemProvider == null) {
-			supplierFactoryReferenceItemProvider = new SupplierFactoryReferenceItemProvider(this);
-		}
-
-		return supplierFactoryReferenceItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedElement} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -163,6 +140,29 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		}
 
 		return resourceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Reference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ReferenceItemProvider referenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Reference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createReferenceAdapter() {
+		if (referenceItemProvider == null) {
+			referenceItemProvider = new ReferenceItemProvider(this);
+		}
+
+		return referenceItemProvider;
 	}
 
 	/**
@@ -255,29 +255,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		}
 
 		return arrayItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Context} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ContextItemProvider contextItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.Context}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createContextAdapter() {
-		if (contextItemProvider == null) {
-			contextItemProvider = new ContextItemProvider(this);
-		}
-
-		return contextItemProvider;
 	}
 
 	/**
@@ -638,15 +615,14 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	 */
 	@Override
 	public void dispose() {
-		if (supplierFactoryReferenceItemProvider != null) supplierFactoryReferenceItemProvider.dispose();
 		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (resourceItemProvider != null) resourceItemProvider.dispose();
+		if (referenceItemProvider != null) referenceItemProvider.dispose();
 		if (valueItemProvider != null) valueItemProvider.dispose();
 		if (nullItemProvider != null) nullItemProvider.dispose();
 		if (operationItemProvider != null) operationItemProvider.dispose();
 		if (arrayItemProvider != null) arrayItemProvider.dispose();
-		if (contextItemProvider != null) contextItemProvider.dispose();
 		if (typedEntryItemProvider != null) typedEntryItemProvider.dispose();
 		if (supplierEntryItemProvider != null) supplierEntryItemProvider.dispose();
 		if (mapItemProvider != null) mapItemProvider.dispose();

@@ -2,18 +2,14 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.ListCompoundSupplier;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -57,8 +53,8 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<SupplierFactory<Object>> getElements() {
-		return (EList<SupplierFactory<Object>>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
+	public EList<EObject> getElements() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.ARRAY__ELEMENTS, NcorePackage.Literals.ARRAY__ELEMENTS, true, true);
 	}
 
 	/**
@@ -100,7 +96,7 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 		switch (featureID) {
 			case NcorePackage.ARRAY__ELEMENTS:
 				getElements().clear();
-				getElements().addAll((Collection<? extends SupplierFactory<Object>>)newValue);
+				getElements().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -133,17 +129,6 @@ public class ArrayImpl extends ModelElementImpl implements Array {
 				return !getElements().isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	@Override
-	public Supplier<EList<Object>> create(Context context) throws Exception {
-		@SuppressWarnings("resource")
-		ListCompoundSupplier<Object> ret = new ListCompoundSupplier<Object>(getTitle());
-		for (SupplierFactory<Object> e: getElements()) {
-			ret.add(e.create(context));
-		}
-		
-		return ret.then(BasicEList::new);
 	}
 
 } //ArrayImpl

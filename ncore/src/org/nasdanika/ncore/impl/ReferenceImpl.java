@@ -2,15 +2,10 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.common.SupplierFactory;
-
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.SupplierFactoryReference;
+import org.nasdanika.ncore.Reference;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,18 +15,18 @@ import org.nasdanika.ncore.SupplierFactoryReference;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.SupplierFactoryReferenceImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ReferenceImpl#getTarget <em>Target</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class SupplierFactoryReferenceImpl extends ModelElementImpl implements SupplierFactoryReference {
+public class ReferenceImpl extends ModelElementImpl implements Reference {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SupplierFactoryReferenceImpl() {
+	protected ReferenceImpl() {
 		super();
 	}
 
@@ -42,7 +37,7 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE;
+		return NcorePackage.Literals.REFERENCE;
 	}
 
 	/**
@@ -52,8 +47,8 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public SupplierFactory<Object> getTarget() {
-		return (SupplierFactory<Object>)eDynamicGet(NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET, true, true);
+	public EObject getTarget() {
+		return (EObject)eDynamicGet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, true, true);
 	}
 
 	/**
@@ -61,8 +56,8 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SupplierFactory<Object> basicGetTarget() {
-		return (SupplierFactory<Object>)eDynamicGet(NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET, false, true);
+	public EObject basicGetTarget() {
+		return (EObject)eDynamicGet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, false, true);
 	}
 
 	/**
@@ -71,8 +66,8 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	 * @generated
 	 */
 	@Override
-	public void setTarget(SupplierFactory<Object> newTarget) {
-		eDynamicSet(NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET, newTarget);
+	public void setTarget(EObject newTarget) {
+		eDynamicSet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, newTarget);
 	}
 
 	/**
@@ -83,7 +78,7 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET:
+			case NcorePackage.REFERENCE__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
 		}
@@ -99,8 +94,8 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET:
-				setTarget((SupplierFactory<Object>)newValue);
+			case NcorePackage.REFERENCE__TARGET:
+				setTarget((EObject)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -114,8 +109,8 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET:
-				setTarget((SupplierFactory<Object>)null);
+			case NcorePackage.REFERENCE__TARGET:
+				setTarget((EObject)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -129,15 +124,10 @@ public class SupplierFactoryReferenceImpl extends ModelElementImpl implements Su
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE__TARGET:
+			case NcorePackage.REFERENCE__TARGET:
 				return basicGetTarget() != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		return getTarget().create(context);
 	}
 
 } //SupplierFactoryReferenceImpl

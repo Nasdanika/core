@@ -5,7 +5,6 @@ package org.nasdanika.ncore.impl;
 import java.util.UUID;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.NcorePackage;
 

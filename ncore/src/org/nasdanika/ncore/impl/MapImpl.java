@@ -2,19 +2,15 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
 import java.util.Collection;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.MapCompoundSupplier;
-import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -30,7 +26,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @generated
  */
-public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map {
+public class MapImpl extends ModelElementImpl implements Map {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -57,8 +53,8 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Entry<Object>> getEntries() {
-		return (EList<Entry<Object>>)eDynamicGet(NcorePackage.MAP__ENTRIES, NcorePackage.Literals.MAP__ENTRIES, true, true);
+	public EList<Entry> getEntries() {
+		return (EList<Entry>)eDynamicGet(NcorePackage.MAP__ENTRIES, NcorePackage.Literals.MAP__ENTRIES, true, true);
 	}
 
 	/**
@@ -100,7 +96,7 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 		switch (featureID) {
 			case NcorePackage.MAP__ENTRIES:
 				getEntries().clear();
-				getEntries().addAll((Collection<? extends Entry<Object>>)newValue);
+				getEntries().addAll((Collection<? extends Entry>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -133,18 +129,6 @@ public class MapImpl extends ModelElementImpl implements org.nasdanika.ncore.Map
 				return !getEntries().isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	@Override
-	public Supplier<Map<String, Object>> create(Context context) throws Exception {
-		MapCompoundSupplier<String,Object> ret = new MapCompoundSupplier<>(getTitle());
-		
-		for (Entry<Object> e: getEntries()) {
-			if (e.isEnabled()) {
-				ret.put(e.getName(), e.create(context));
-			}
-		}
-		return ret;
 	}
 
 } //MapImpl

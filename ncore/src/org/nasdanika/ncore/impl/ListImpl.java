@@ -3,7 +3,6 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.NamedElement;

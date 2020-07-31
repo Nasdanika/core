@@ -2,19 +2,14 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Operation;
 
@@ -58,8 +53,8 @@ public class OperationImpl extends SupplierImpl implements Operation {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<SupplierFactory<Object>> getArguments() {
-		return (EList<SupplierFactory<Object>>)eDynamicGet(NcorePackage.OPERATION__ARGUMENTS, NcorePackage.Literals.OPERATION__ARGUMENTS, true, true);
+	public EList<EObject> getArguments() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.OPERATION__ARGUMENTS, NcorePackage.Literals.OPERATION__ARGUMENTS, true, true);
 	}
 
 	/**
@@ -101,7 +96,7 @@ public class OperationImpl extends SupplierImpl implements Operation {
 		switch (featureID) {
 			case NcorePackage.OPERATION__ARGUMENTS:
 				getArguments().clear();
-				getArguments().addAll((Collection<? extends SupplierFactory<Object>>)newValue);
+				getArguments().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

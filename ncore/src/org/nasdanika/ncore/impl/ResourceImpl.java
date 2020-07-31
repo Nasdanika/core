@@ -2,14 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.net.URL;
-
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.Converter;
-import org.nasdanika.common.DefaultConverter;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Resource;
 
@@ -173,28 +166,6 @@ public class ResourceImpl extends TypedElementImpl implements Resource {
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		return Supplier.<Object>fromCallable(() -> {
-			URL url = EmfUtil.resolveReference(eResource(), context.interpolate(getLocation()));
-			if (org.nasdanika.common.Util.isBlank(getType())) {
-				return url;
-			}
-			Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
-			ClassLoader classLoader = context.get(ClassLoader.class);
-			if (classLoader == null) {
-				classLoader = getClass().getClassLoader();
-			}
-			Class type = classLoader.loadClass(getType());
-			Object ret = converter.convert(url, type);
-			if (ret instanceof String && isInterpolate()) {
-				return context.interpolate((String) ret);
-			}
-			return ret;
-		}, getTitle(), 1);
 	}
 
 } //ResourceImpl

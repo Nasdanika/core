@@ -2,8 +2,6 @@
  */
 package org.nasdanika.ncore;
 
-import java.lang.Object;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Rest FunctionFactory</b></em>'.
@@ -15,8 +13,8 @@ import java.lang.Object;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getRestFunction()
- * @model superTypes="org.nasdanika.ncore.RestOperation org.nasdanika.ncore.Entry&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model
  * @generated
  */
-public interface RestFunction extends RestOperation, Entry<Object> {
+public interface RestFunction extends RestOperation, Entry {
 } // RestFunction

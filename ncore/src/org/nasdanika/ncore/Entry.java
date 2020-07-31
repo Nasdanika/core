@@ -2,8 +2,6 @@
  */
 package org.nasdanika.ncore;
 
-import org.nasdanika.common.SupplierFactory;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Entry</b></em>'.
@@ -21,10 +19,10 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getEntry()
- * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.NamedElement org.nasdanika.ncore.ISupplierFactory&lt;T&gt;"
+ * @model interface="true" abstract="true"
  * @generated
  */
-public interface Entry<T> extends NamedElement, SupplierFactory<T> {
+public interface Entry extends NamedElement {
 
 	/**
 	 * Returns the value of the '<em><b>Enabled</b></em>' attribute.

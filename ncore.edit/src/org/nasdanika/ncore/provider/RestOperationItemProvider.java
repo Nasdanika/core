@@ -192,6 +192,7 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 
 		boolean qualify =
 			childFeature == NcorePackage.Literals.HTTP_CALL__HEADERS ||
+			childFeature == NcorePackage.Literals.HTTP_CALL__BODY ||
 			childFeature == NcorePackage.Literals.REST_OPERATION__ARGUMENTS;
 
 		if (qualify) {

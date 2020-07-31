@@ -10,22 +10,22 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.SupplierFactoryReference;
+import org.nasdanika.ncore.Reference;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.SupplierFactoryReference} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.Reference} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SupplierFactoryReferenceItemProvider extends ModelElementItemProvider {
+public class ReferenceItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SupplierFactoryReferenceItemProvider(AdapterFactory adapterFactory) {
+	public ReferenceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -55,8 +55,8 @@ public class SupplierFactoryReferenceItemProvider extends ModelElementItemProvid
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor(
 				 getResourceLocator(),
-				 getString("_UI_SupplierFactoryReference_target_feature"),
-				 NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET,
+				 getString("_UI_Reference_target_feature"),
+				 NcorePackage.Literals.REFERENCE__TARGET,
 				 true,
 				 false,
 				 true,
@@ -67,14 +67,14 @@ public class SupplierFactoryReferenceItemProvider extends ModelElementItemProvid
 	}
 
 	/**
-	 * This returns SupplierFactoryReference.gif.
+	 * This returns Reference.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SupplierFactoryReference"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Reference"));
 	}
 
 	/**
@@ -95,10 +95,10 @@ public class SupplierFactoryReferenceItemProvider extends ModelElementItemProvid
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SupplierFactoryReference)object).getTitle();
+		String label = ((Reference)object).getTitle();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SupplierFactoryReference_type") :
-			getString("_UI_SupplierFactoryReference_type") + " " + label;
+			getString("_UI_Reference_type") :
+			getString("_UI_Reference_type") + " " + label;
 	}
 
 	/**

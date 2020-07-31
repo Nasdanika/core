@@ -6,12 +6,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.ncore.Array;
-import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -23,12 +20,12 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Supplier;
+import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -77,15 +74,14 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE: return createSupplierFactoryReference();
 			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
 			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.RESOURCE: return createResource();
+			case NcorePackage.REFERENCE: return createReference();
 			case NcorePackage.VALUE: return createValue();
 			case NcorePackage.NULL: return createNull();
 			case NcorePackage.OPERATION: return createOperation();
 			case NcorePackage.ARRAY: return createArray();
-			case NcorePackage.CONTEXT: return createContext();
 			case NcorePackage.TYPED_ENTRY: return createTypedEntry();
 			case NcorePackage.SUPPLIER_ENTRY: return createSupplierEntry();
 			case NcorePackage.MAP: return createMap();
@@ -112,10 +108,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 		switch (eDataType.getClassifierID()) {
 			case NcorePackage.HTTP_METHOD:
 				return createHttpMethodFromString(eDataType, initialValue);
-			case NcorePackage.EXCEPTION:
-				return createExceptionFromString(eDataType, initialValue);
-			case NcorePackage.ICONTEXT:
-				return createIContextFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -131,24 +123,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 		switch (eDataType.getClassifierID()) {
 			case NcorePackage.HTTP_METHOD:
 				return convertHttpMethodToString(eDataType, instanceValue);
-			case NcorePackage.EXCEPTION:
-				return convertExceptionToString(eDataType, instanceValue);
-			case NcorePackage.ICONTEXT:
-				return convertIContextToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SupplierFactoryReference createSupplierFactoryReference() {
-		SupplierFactoryReferenceImpl supplierFactoryReference = new SupplierFactoryReferenceImpl();
-		return supplierFactoryReference;
 	}
 
 	/**
@@ -182,6 +159,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Resource createResource() {
 		ResourceImpl resource = new ResourceImpl();
 		return resource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Reference createReference() {
+		ReferenceImpl reference = new ReferenceImpl();
+		return reference;
 	}
 
 	/**
@@ -226,17 +214,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Array createArray() {
 		ArrayImpl array = new ArrayImpl();
 		return array;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Context createContext() {
-		ContextImpl context = new ContextImpl();
-		return context;
 	}
 
 	/**
@@ -378,42 +355,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 */
 	public String convertHttpMethodToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public org.nasdanika.common.Context createIContextFromString(EDataType eDataType, String initialValue) {
-		return (org.nasdanika.common.Context)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertIContextToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Exception createExceptionFromString(EDataType eDataType, String initialValue) {
-		return (Exception)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertExceptionToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

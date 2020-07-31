@@ -3,9 +3,6 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -169,28 +166,6 @@ public class HtmlImpl extends SupplierImpl implements Html {
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-	
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		return new Supplier<Object>() {
-
-			@Override
-			public Object execute(ProgressMonitor progressMonitor) throws Exception {
-				return isInterpolate() ? context.interpolate(getContent()) : getContent();
-			}
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return getTitle();
-			}
-			
-		};
 	}
 
 } //HtmlImpl

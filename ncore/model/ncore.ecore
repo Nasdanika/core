@@ -7,66 +7,6 @@
   <eAnnotations source="urn:org.nasdanika">
     <details key="category" value="General"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="IContext" instanceClassName="org.nasdanika.common.Context"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ISupplier" instanceClassName="org.nasdanika.common.Supplier"
-      abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
-    </eAnnotations>
-    <eTypeParameters name="T"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ISupplierFactory" instanceClassName="org.nasdanika.common.SupplierFactory"
-      abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."/>
-    </eAnnotations>
-    <eTypeParameters name="T"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SupplierFactoryReference">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="SupplierFactoryReference delegates its functionality to its target. It is primarily used to build multi-resource (file) models."/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="target"/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Reference to the target supplier factory."/>
-      </eAnnotations>
-      <eGenericType eClassifier="#//ISupplierFactory">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IFunction" instanceClassName="org.nasdanika.common.Function"
-      abstract="true" interface="true">
-    <eTypeParameters name="T"/>
-    <eTypeParameters name="R"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IFunctionFactory" instanceClassName="org.nasdanika.common.FunctionFactory"
-      abstract="true" interface="true">
-    <eTypeParameters name="T"/>
-    <eTypeParameters name="R"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IConsumer" instanceClassName="org.nasdanika.common.Consumer"
-      abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
-    </eAnnotations>
-    <eTypeParameters name="T"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IConsumerFactory" instanceClassName="org.nasdanika.common.ConsumerFactory"
-      abstract="true" interface="true">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."/>
-    </eAnnotations>
-    <eTypeParameters name="T"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Model element with a description."/>
@@ -108,16 +48,13 @@
       <details key="documentation" value="Model element which contains configuration entries."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" upperBound="-1"
-        containment="true">
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Configuration entries."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//ISupplierFactory">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" eSuperTypes="#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Typed element is a supplier factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context's service with the specified type. The primary pupose of of the typed element is to serve as a specification/description."/>
     </eAnnotations>
@@ -131,10 +68,6 @@
         <details key="documentation" value="Indicates that the element result can not be null."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Supplier" eSuperTypes="#//TypedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -159,6 +92,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="interpolate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="If this flag is set to true and the type is ``java.lang.String`` then the string is interpolated. This flag is ignored otherwise."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reference" eSuperTypes="#//ModelElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reference delegates its functionality to its target. It is primarily used to build multi-resource (file) models."/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="target"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference to the target supplier factory."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -188,88 +135,46 @@
       <details key="documentation" value="Operation computes its result the operation arguments. &#xA;&#xA;Operation implementation can be defined as follows:&#xA;&#xA;* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.&#xA;* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.&#xA;* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method not static then its parameters shall be compatible with Context and as the first argument and then operation arguments, or just with operation arguments without context. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments and the method shall not take any arguments.&#xA;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
-        containment="true">
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Operation arguments."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//ISupplierFactory">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Array">
+  <eClassifiers xsi:type="ecore:EClass" name="Array" eSuperTypes="#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A sequence of elements."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        containment="true">
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Array elements."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//ISupplierFactory">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eTypeArguments>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Context">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Produces ``org.nasdanika.common.Context``. "/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        containment="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Context elements. Elements which extend Entry are treated as context properties and unnamed typed elements are treated as services."/>
-      </eAnnotations>
-      <eGenericType eClassifier="#//ISupplierFactory">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="#//IContext"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Entry" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="Entry" abstract="true" interface="true"
+      eSuperTypes="#//NamedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Supplier factory with a name."/>
     </eAnnotations>
-    <eTypeParameters name="T"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
         defaultValueLiteral="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="If this attribute is set to ``false`` the entry is &quot;commented out&quot; - not included into its container result."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//NamedElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eTypeParameter="#//Entry/T"/>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TypedEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="TypedEntry" eSuperTypes="#//TypedElement #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Typed element with a name. Typed entry gets its result from the context's properti with the specified name converted to the specified type. The primary pupose of of the typed entry is to serve as a specification/description."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//TypedElement"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SupplierEntry">
+  <eClassifiers xsi:type="ecore:EClass" name="SupplierEntry" eSuperTypes="#//Supplier #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Supplier with a name."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Supplier"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Map">
+  <eClassifiers xsi:type="ecore:EClass" name="Map" eSuperTypes="#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A collection of entries mapping names to results."/>
     </eAnnotations>
@@ -277,62 +182,31 @@
       <details key="constraints" value="entries"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
-        containment="true">
+        eType="#//Entry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Map entries."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//Entry">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eTypeArguments>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Property">
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Value #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Property is a named value."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Value"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Function">
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//Operation #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Function is a named operation."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Operation"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="List">
+  <eClassifiers xsi:type="ecore:EClass" name="List" eSuperTypes="#//Array #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="List is a named array."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Array"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eTypeArguments>
-    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Object">
+  <eClassifiers xsi:type="ecore:EClass" name="Object" eSuperTypes="#//Map #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Object is a named map."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//Map"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eTypeArguments>
-    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="HttpMethod">
     <eLiterals name="GET"/>
@@ -341,7 +215,7 @@
     <eLiterals name="DELETE" value="3"/>
     <eLiterals name="PATCH" value="4"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="HttpCall">
+  <eClassifiers xsi:type="ecore:EClass" name="HttpCall" eSuperTypes="#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Makes an HTTP Call. Converts result to Map/List for ``application/json`` content type, to text for ``text/...`` content types. Returns a byte array otherwise."/>
     </eAnnotations>
@@ -353,11 +227,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="method" eType="#//HttpMethod"
         defaultValueLiteral="GET"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="headers" upperBound="-1"
-        containment="true">
-      <eGenericType eClassifier="#//Entry">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
-    </eStructuralFeatures>
+        eType="#//Entry" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="60">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -376,33 +246,24 @@
         <details key="documentation" value="HTTP response code indicating success."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//ModelElement"/>
-    <eGenericSuperTypes eClassifier="#//ISupplierFactory">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RestOperation" eSuperTypes="#//HttpCall">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="HTTP Call with JSON payload constructed from arguments."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
-        containment="true">
+        eType="#//Entry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Operation arguments."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//Entry">
-        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-      </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RestFunction">
+  <eClassifiers xsi:type="ecore:EClass" name="RestFunction" eSuperTypes="#//RestOperation #//Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="REST function is a named REST operation."/>
     </eAnnotations>
-    <eGenericSuperTypes eClassifier="#//RestOperation"/>
-    <eGenericSuperTypes eClassifier="#//Entry">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Html" eSuperTypes="#//Supplier">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

@@ -3,9 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
@@ -25,7 +23,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @generated
  */
-public abstract class EntryImpl<T> extends MinimalEObjectImpl.Container implements Entry<T> {
+public abstract class EntryImpl extends MinimalEObjectImpl.Container implements Entry {
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->

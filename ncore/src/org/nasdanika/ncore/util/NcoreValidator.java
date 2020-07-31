@@ -14,18 +14,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EObjectValidator;
-import org.nasdanika.common.Consumer;
-import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.Function;
-import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
@@ -36,11 +30,12 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -117,20 +112,6 @@ public class NcoreValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
-			case NcorePackage.ISUPPLIER:
-				return validateISupplier((Supplier<?>)value, diagnostics, context);
-			case NcorePackage.ISUPPLIER_FACTORY:
-				return validateISupplierFactory((SupplierFactory<?>)value, diagnostics, context);
-			case NcorePackage.SUPPLIER_FACTORY_REFERENCE:
-				return validateSupplierFactoryReference((SupplierFactoryReference)value, diagnostics, context);
-			case NcorePackage.IFUNCTION:
-				return validateIFunction((Function<?, ?>)value, diagnostics, context);
-			case NcorePackage.IFUNCTION_FACTORY:
-				return validateIFunctionFactory((FunctionFactory<?, ?>)value, diagnostics, context);
-			case NcorePackage.ICONSUMER:
-				return validateIConsumer((Consumer<?>)value, diagnostics, context);
-			case NcorePackage.ICONSUMER_FACTORY:
-				return validateIConsumerFactory((ConsumerFactory<?>)value, diagnostics, context);
 			case NcorePackage.MODEL_ELEMENT:
 				return validateModelElement((ModelElement)value, diagnostics, context);
 			case NcorePackage.NAMED_ELEMENT:
@@ -142,9 +123,11 @@ public class NcoreValidator extends EObjectValidator {
 			case NcorePackage.TYPED_ELEMENT:
 				return validateTypedElement((TypedElement)value, diagnostics, context);
 			case NcorePackage.SUPPLIER:
-				return validateSupplier((org.nasdanika.ncore.Supplier)value, diagnostics, context);
+				return validateSupplier((Supplier)value, diagnostics, context);
 			case NcorePackage.RESOURCE:
 				return validateResource((Resource)value, diagnostics, context);
+			case NcorePackage.REFERENCE:
+				return validateReference((Reference)value, diagnostics, context);
 			case NcorePackage.VALUE:
 				return validateValue((Value)value, diagnostics, context);
 			case NcorePackage.NULL:
@@ -153,10 +136,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateOperation((Operation)value, diagnostics, context);
 			case NcorePackage.ARRAY:
 				return validateArray((Array)value, diagnostics, context);
-			case NcorePackage.CONTEXT:
-				return validateContext((Context)value, diagnostics, context);
 			case NcorePackage.ENTRY:
-				return validateEntry((Entry<?>)value, diagnostics, context);
+				return validateEntry((Entry)value, diagnostics, context);
 			case NcorePackage.TYPED_ENTRY:
 				return validateTypedEntry((TypedEntry)value, diagnostics, context);
 			case NcorePackage.SUPPLIER_ENTRY:
@@ -166,7 +147,7 @@ public class NcoreValidator extends EObjectValidator {
 			case NcorePackage.PROPERTY:
 				return validateProperty((Property)value, diagnostics, context);
 			case NcorePackage.FUNCTION:
-				return validateFunction((org.nasdanika.ncore.Function)value, diagnostics, context);
+				return validateFunction((Function)value, diagnostics, context);
 			case NcorePackage.LIST:
 				return validateList((List)value, diagnostics, context);
 			case NcorePackage.OBJECT:
@@ -181,10 +162,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateHtml((Html)value, diagnostics, context);
 			case NcorePackage.HTTP_METHOD:
 				return validateHttpMethod((HttpMethod)value, diagnostics, context);
-			case NcorePackage.EXCEPTION:
-				return validateException((Exception)value, diagnostics, context);
-			case NcorePackage.ICONTEXT:
-				return validateIContext((org.nasdanika.common.Context)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -226,56 +203,18 @@ public class NcoreValidator extends EObjectValidator {
 		return validate_EveryDefaultConstraint(configurable, diagnostics, context);
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateISupplier(Supplier<?> iSupplier, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iSupplier, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateISupplierFactory(SupplierFactory<?> iSupplierFactory, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iSupplierFactory, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateSupplierFactoryReference(SupplierFactoryReference supplierFactoryReference, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(supplierFactoryReference, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(supplierFactoryReference, diagnostics, context);
-		if (result || diagnostics != null) result &= validateSupplierFactoryReference_target(supplierFactoryReference, diagnostics, context);
-		return result;
-	}
-	
-	
-	private boolean validateCircularReference(SupplierFactoryReference supplierFactoryReference, Set<SupplierFactoryReference> traversed) {
-		if (traversed.add(supplierFactoryReference)) {
-			SupplierFactory<Object> target = supplierFactoryReference.getTarget();
-			if (target instanceof SupplierFactoryReference) {
-				return validateCircularReference((SupplierFactoryReference) target, traversed);
+	private boolean validateCircularReference(Reference reference, Set<Reference> traversed) {
+		if (traversed.add(reference)) {
+			EObject target = reference.getTarget();
+			if (target instanceof Reference) {
+				return validateCircularReference((Reference) target, traversed);
 			}
 			if (target instanceof EObject) {
 				TreeIterator<EObject> cit = ((EObject) target).eAllContents();
 				while (cit.hasNext()) {
 					EObject next = cit.next();
-					if (next instanceof SupplierFactoryReference) {
-						if (!validateCircularReference((SupplierFactoryReference) next, traversed)) {
+					if (next instanceof Reference) {
+						if (!validateCircularReference((Reference) next, traversed)) {
 							return false;
 						}
 					}
@@ -292,19 +231,19 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public boolean validateSupplierFactoryReference_target(SupplierFactoryReference supplierFactoryReference, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		SupplierFactory<Object> refTarget = supplierFactoryReference.getTarget();
+	public boolean validateReference_target(Reference reference, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		EObject refTarget = reference.getTarget();
 		if (diagnostics != null && refTarget != null) {
 			// Validate circularity
-			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplierFactoryReference);
-			Set<SupplierFactoryReference> traversed = new HashSet<>();
-			if (!validateCircularReference(supplierFactoryReference, traversed)) {
+			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, reference);
+			Set<Reference> traversed = new HashSet<>();
+			if (!validateCircularReference(reference, traversed)) {
 				StringBuilder path = new StringBuilder();
-				for (SupplierFactoryReference pe: traversed) {	
+				for (Reference pe: traversed) {	
 					if (path.length() > 0) {
 						path.append(" => ");
 					}
-					 SupplierFactory<Object> target = pe.getTarget();
+					 EObject target = pe.getTarget();
 					String targetLabel;
 					if (target instanceof ModelElement) {
 						targetLabel = ((ModelElement) target).getTitle();
@@ -313,7 +252,7 @@ public class NcoreValidator extends EObjectValidator {
 					}
 					path.append(pe.getTitle() + " -> " + targetLabel);
 				}
-				helper.error("Loop in supplier factory references: "+path, NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE__TARGET);							
+				helper.error("Loop in supplier factory references: "+path, NcorePackage.Literals.REFERENCE__TARGET);							
 				return false; // Do not proceed if circularity test failed
 			}
 			
@@ -340,42 +279,6 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIFunction(Function<?, ?> iFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iFunction, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateIFunctionFactory(FunctionFactory<?, ?> iFunctionFactory, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iFunctionFactory, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateIConsumer(Consumer<?> iConsumer, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iConsumer, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateIConsumerFactory(ConsumerFactory<?> iConsumerFactory, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)iConsumerFactory, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean validateTypedElement(TypedElement typedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(typedElement, diagnostics, context);
 	}
@@ -385,7 +288,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateSupplier(org.nasdanika.ncore.Supplier supplier, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateSupplier(Supplier supplier, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(supplier, diagnostics, context);
 	}
 
@@ -396,6 +299,25 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateResource(Resource resource, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(resource, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateReference(Reference reference, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(reference, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(reference, diagnostics, context);
+		if (result || diagnostics != null) result &= validateReference_target(reference, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -439,16 +361,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateContext(Context context, DiagnosticChain diagnostics, Map<Object, Object> theContext) {
-		return validate_EveryDefaultConstraint(context, diagnostics, theContext);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateEntry(Entry<?> entry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateEntry(Entry entry, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(entry, diagnostics, context);
 	}
 
@@ -499,7 +412,7 @@ public class NcoreValidator extends EObjectValidator {
 		if (diagnostics != null) {			
 			Set<String> names = new HashSet<>();
 			boolean ret = true;
-			for (Entry<?> entry: map.getEntries()) {
+			for (Entry entry: map.getEntries()) {
 				if (entry.isEnabled()) {
 					DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, entry);
 					if (!names.add(entry.getName())) {
@@ -527,7 +440,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFunction(org.nasdanika.ncore.Function function, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFunction(Function function, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(function, diagnostics, context);
 	}
 
@@ -601,24 +514,6 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateHttpMethod(HttpMethod httpMethod, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateIContext(org.nasdanika.common.Context iContext, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateException(Exception exception, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

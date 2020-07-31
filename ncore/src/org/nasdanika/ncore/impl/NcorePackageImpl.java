@@ -2,25 +2,17 @@
  */
 package org.nasdanika.ncore.impl;
 
+import static org.nasdanika.ncore.NcorePackage.RESOURCE;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-import org.nasdanika.common.Consumer;
-import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.Context;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
@@ -36,11 +28,12 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.SupplierFactoryReference;
 import org.nasdanika.ncore.TypedElement;
 import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
@@ -85,27 +78,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass iSupplierEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iSupplierFactoryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass supplierFactoryReferenceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass supplierEClass = null;
 
 	/**
@@ -120,28 +92,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass iFunctionEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iFunctionFactoryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iConsumerEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass iConsumerFactoryEClass = null;
+	private EClass referenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -177,13 +128,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass arrayEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass contextEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -275,20 +219,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EEnum httpMethodEEnum = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EDataType iContextEDataType = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EDataType exceptionEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -457,46 +387,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getISupplier() {
-		return iSupplierEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getISupplierFactory() {
-		return iSupplierFactoryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getSupplierFactoryReference() {
-		return supplierFactoryReferenceEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSupplierFactoryReference_Target() {
-		return (EReference)supplierFactoryReferenceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getSupplier() {
 		return supplierEClass;
 	}
@@ -547,8 +437,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getIFunction() {
-		return iFunctionEClass;
+	public EClass getReference() {
+		return referenceEClass;
 	}
 
 	/**
@@ -557,28 +447,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getIFunctionFactory() {
-		return iFunctionFactoryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getIConsumer() {
-		return iConsumerEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getIConsumerFactory() {
-		return iConsumerFactoryEClass;
+	public EReference getReference_Target() {
+		return (EReference)referenceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -689,26 +559,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EReference getArray_Elements() {
 		return (EReference)arrayEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getContext() {
-		return contextEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getContext_Elements() {
-		return (EReference)contextEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -887,6 +737,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getHttpCall_Body() {
+		return (EReference)httpCallEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getRestOperation() {
 		return restOperationEClass;
 	}
@@ -957,26 +817,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EDataType getIContext() {
-		return iContextEDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EDataType getException() {
-		return exceptionEDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NcoreFactory getNcoreFactory() {
 		return (NcoreFactory)getEFactoryInstance();
 	}
@@ -1000,21 +840,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		isCreated = true;
 
 		// Create classes and their features
-		iSupplierEClass = createEClass(ISUPPLIER);
-
-		iSupplierFactoryEClass = createEClass(ISUPPLIER_FACTORY);
-
-		supplierFactoryReferenceEClass = createEClass(SUPPLIER_FACTORY_REFERENCE);
-		createEReference(supplierFactoryReferenceEClass, SUPPLIER_FACTORY_REFERENCE__TARGET);
-
-		iFunctionEClass = createEClass(IFUNCTION);
-
-		iFunctionFactoryEClass = createEClass(IFUNCTION_FACTORY);
-
-		iConsumerEClass = createEClass(ICONSUMER);
-
-		iConsumerFactoryEClass = createEClass(ICONSUMER_FACTORY);
-
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__TITLE);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
@@ -1039,6 +864,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
 		createEAttribute(resourceEClass, RESOURCE__INTERPOLATE);
 
+		referenceEClass = createEClass(REFERENCE);
+		createEReference(referenceEClass, REFERENCE__TARGET);
+
 		valueEClass = createEClass(VALUE);
 		createEAttribute(valueEClass, VALUE__VALUE);
 		createEAttribute(valueEClass, VALUE__INTERPOLATE);
@@ -1050,9 +878,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		arrayEClass = createEClass(ARRAY);
 		createEReference(arrayEClass, ARRAY__ELEMENTS);
-
-		contextEClass = createEClass(CONTEXT);
-		createEReference(contextEClass, CONTEXT__ELEMENTS);
 
 		entryEClass = createEClass(ENTRY);
 		createEAttribute(entryEClass, ENTRY__ENABLED);
@@ -1079,6 +904,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(httpCallEClass, HTTP_CALL__CONNECT_TIMEOUT);
 		createEAttribute(httpCallEClass, HTTP_CALL__READ_TIMEOUT);
 		createEAttribute(httpCallEClass, HTTP_CALL__SUCCESS_CODE);
+		createEReference(httpCallEClass, HTTP_CALL__BODY);
 
 		restOperationEClass = createEClass(REST_OPERATION);
 		createEReference(restOperationEClass, REST_OPERATION__ARGUMENTS);
@@ -1091,10 +917,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Create enums
 		httpMethodEEnum = createEEnum(HTTP_METHOD);
-
-		// Create data types
-		exceptionEDataType = createEDataType(EXCEPTION);
-		iContextEDataType = createEDataType(ICONTEXT);
 	}
 
 	/**
@@ -1121,144 +943,41 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		setNsURI(eNS_URI);
 
 		// Create type parameters
-		addETypeParameter(iSupplierEClass, "T");
-		addETypeParameter(iSupplierFactoryEClass, "T");
-		addETypeParameter(iFunctionEClass, "T");
-		addETypeParameter(iFunctionEClass, "R");
-		addETypeParameter(iFunctionFactoryEClass, "T");
-		addETypeParameter(iFunctionFactoryEClass, "R");
-		addETypeParameter(iConsumerEClass, "T");
-		addETypeParameter(iConsumerFactoryEClass, "T");
-		ETypeParameter entryEClass_T = addETypeParameter(entryEClass, "T");
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		EGenericType g1 = createEGenericType(this.getModelElement());
-		supplierFactoryReferenceEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		EGenericType g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		supplierFactoryReferenceEClass.getEGenericSuperTypes().add(g1);
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
 		entityEClass.getESuperTypes().add(this.getModelElement());
-		g1 = createEGenericType(this.getModelElement());
-		typedElementEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		typedElementEClass.getEGenericSuperTypes().add(g1);
+		typedElementEClass.getESuperTypes().add(this.getModelElement());
 		supplierEClass.getESuperTypes().add(this.getTypedElement());
 		resourceEClass.getESuperTypes().add(this.getTypedElement());
+		referenceEClass.getESuperTypes().add(this.getModelElement());
 		valueEClass.getESuperTypes().add(this.getSupplier());
 		nullEClass.getESuperTypes().add(this.getTypedElement());
 		operationEClass.getESuperTypes().add(this.getSupplier());
-		g1 = createEGenericType(this.getModelElement());
-		arrayEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEEList());
-		g1.getETypeArguments().add(g2);
-		EGenericType g3 = createEGenericType(ecorePackage.getEJavaObject());
-		g2.getETypeArguments().add(g3);
-		arrayEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getModelElement());
-		contextEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(this.getIContext());
-		g1.getETypeArguments().add(g2);
-		contextEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getNamedElement());
-		entryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(entryEClass_T);
-		g1.getETypeArguments().add(g2);
-		entryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getTypedElement());
-		typedEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		typedEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getSupplier());
-		supplierEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		supplierEntryEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getModelElement());
-		mapEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEMap());
-		g1.getETypeArguments().add(g2);
-		g3 = createEGenericType(ecorePackage.getEString());
-		g2.getETypeArguments().add(g3);
-		g3 = createEGenericType(ecorePackage.getEJavaObject());
-		g2.getETypeArguments().add(g3);
-		mapEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getValue());
-		propertyEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		propertyEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getOperation());
-		functionEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		functionEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getArray());
-		listEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEEList());
-		g1.getETypeArguments().add(g2);
-		g3 = createEGenericType(ecorePackage.getEJavaObject());
-		g2.getETypeArguments().add(g3);
-		listEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getMap());
-		objectEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEMap());
-		g1.getETypeArguments().add(g2);
-		g3 = createEGenericType(ecorePackage.getEString());
-		g2.getETypeArguments().add(g3);
-		g3 = createEGenericType(ecorePackage.getEJavaObject());
-		g2.getETypeArguments().add(g3);
-		objectEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getModelElement());
-		httpCallEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		httpCallEClass.getEGenericSuperTypes().add(g1);
+		arrayEClass.getESuperTypes().add(this.getModelElement());
+		entryEClass.getESuperTypes().add(this.getNamedElement());
+		typedEntryEClass.getESuperTypes().add(this.getTypedElement());
+		typedEntryEClass.getESuperTypes().add(this.getEntry());
+		supplierEntryEClass.getESuperTypes().add(this.getSupplier());
+		supplierEntryEClass.getESuperTypes().add(this.getEntry());
+		mapEClass.getESuperTypes().add(this.getModelElement());
+		propertyEClass.getESuperTypes().add(this.getValue());
+		propertyEClass.getESuperTypes().add(this.getEntry());
+		functionEClass.getESuperTypes().add(this.getOperation());
+		functionEClass.getESuperTypes().add(this.getEntry());
+		listEClass.getESuperTypes().add(this.getArray());
+		listEClass.getESuperTypes().add(this.getEntry());
+		objectEClass.getESuperTypes().add(this.getMap());
+		objectEClass.getESuperTypes().add(this.getEntry());
+		httpCallEClass.getESuperTypes().add(this.getModelElement());
 		restOperationEClass.getESuperTypes().add(this.getHttpCall());
-		g1 = createEGenericType(this.getRestOperation());
-		restFunctionEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		restFunctionEClass.getEGenericSuperTypes().add(g1);
+		restFunctionEClass.getESuperTypes().add(this.getRestOperation());
+		restFunctionEClass.getESuperTypes().add(this.getEntry());
 		htmlEClass.getESuperTypes().add(this.getSupplier());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(iSupplierEClass, Supplier.class, "ISupplier", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(iSupplierFactoryEClass, SupplierFactory.class, "ISupplierFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(supplierFactoryReferenceEClass, SupplierFactoryReference.class, "SupplierFactoryReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getSupplierFactoryReference_Target(), g1, null, "target", null, 1, 1, SupplierFactoryReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(iFunctionEClass, org.nasdanika.common.Function.class, "IFunction", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(iFunctionFactoryEClass, FunctionFactory.class, "IFunctionFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(iConsumerEClass, Consumer.class, "IConsumer", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(iConsumerFactoryEClass, ConsumerFactory.class, "IConsumerFactory", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElement_Title(), ecorePackage.getEString(), "title", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1270,21 +989,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getEntity_Id(), ecorePackage.getEString(), "id", null, 0, 1, Entity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(configurableEClass, Configurable.class, "Configurable", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getConfigurable_Configuration(), g1, null, "configuration", null, 0, -1, Configurable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConfigurable_Configuration(), ecorePackage.getEObject(), null, "configuration", null, 0, -1, Configurable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTypedElement_Required(), ecorePackage.getEBoolean(), "required", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(supplierEClass, org.nasdanika.ncore.Supplier.class, "Supplier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSupplier_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, org.nasdanika.ncore.Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(supplierEClass, Supplier.class, "Supplier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSupplier_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResource_Interpolate(), ecorePackage.getEBoolean(), "interpolate", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(referenceEClass, Reference.class, "Reference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getReference_Target(), ecorePackage.getEObject(), null, "target", null, 1, 1, Reference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(valueEClass, Value.class, "Value", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getValue_Value(), ecorePackage.getEString(), "value", null, 0, 1, Value.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1293,22 +1012,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(nullEClass, Null.class, "Null", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(operationEClass, Operation.class, "Operation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getOperation_Arguments(), g1, null, "arguments", null, 0, -1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOperation_Arguments(), ecorePackage.getEObject(), null, "arguments", null, 0, -1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(arrayEClass, Array.class, "Array", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getArray_Elements(), g1, null, "elements", null, 0, -1, Array.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(contextEClass, Context.class, "Context", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getISupplierFactory());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getContext_Elements(), g1, null, "elements", null, 0, -1, Context.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArray_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, Array.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(entryEClass, Entry.class, "Entry", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getEntry_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1318,10 +1025,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(supplierEntryEClass, SupplierEntry.class, "SupplierEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getMap_Entries(), g1, null, "entries", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMap_Entries(), this.getEntry(), null, "entries", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1334,19 +1038,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(httpCallEClass, HttpCall.class, "HttpCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHttpCall_Url(), ecorePackage.getEString(), "url", null, 1, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_Method(), this.getHttpMethod(), "method", "GET", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getHttpCall_Headers(), g1, null, "headers", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getHttpCall_Headers(), this.getEntry(), null, "headers", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_ConnectTimeout(), ecorePackage.getEInt(), "connectTimeout", "60", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_ReadTimeout(), ecorePackage.getEInt(), "readTimeout", "60", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_SuccessCode(), ecorePackage.getEInt(), "successCode", "200", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getHttpCall_Body(), ecorePackage.getEObject(), null, "body", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(restOperationEClass, RestOperation.class, "RestOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getEntry());
-		g2 = createEGenericType(ecorePackage.getEJavaObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getRestOperation_Arguments(), g1, null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRestOperation_Arguments(), this.getEntry(), null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(restFunctionEClass, RestFunction.class, "RestFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1361,10 +1060,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		addEEnumLiteral(httpMethodEEnum, HttpMethod.PUT);
 		addEEnumLiteral(httpMethodEEnum, HttpMethod.DELETE);
 		addEEnumLiteral(httpMethodEEnum, HttpMethod.PATCH);
-
-		// Initialize data types
-		initEDataType(exceptionEDataType, Exception.class, "Exception", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(iContextEDataType, org.nasdanika.common.Context.class, "IContext", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -1391,42 +1086,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Nasdanika core model containing common classes"
-		   });
-		addAnnotation
-		  (iSupplierEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
-		   });
-		addAnnotation
-		  (iSupplierFactoryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Work factory creates work a given context. When the work is executed with a progress monitor it returns a result of a specific type."
-		   });
-		addAnnotation
-		  (supplierFactoryReferenceEClass,
-		   source,
-		   new String[] {
-			   "documentation", "SupplierFactoryReference delegates its functionality to its target. It is primarily used to build multi-resource (file) models."
-		   });
-		addAnnotation
-		  (getSupplierFactoryReference_Target(),
-		   source,
-		   new String[] {
-			   "documentation", "Reference to the target supplier factory."
-		   });
-		addAnnotation
-		  (iConsumerEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
-		   });
-		addAnnotation
-		  (iConsumerFactoryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Consumer takes an argument of type T and creates a void work factory. The work factory creates work a given context. When the work is executed with a progress monitor it operates on the consumer argument and returns null."
 		   });
 		addAnnotation
 		  (modelElementEClass,
@@ -1531,6 +1190,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "If this flag is set to true and the type is ``java.lang.String`` then the string is interpolated. This flag is ignored otherwise."
 		   });
 		addAnnotation
+		  (referenceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Reference delegates its functionality to its target. It is primarily used to build multi-resource (file) models."
+		   });
+		addAnnotation
+		  (getReference_Target(),
+		   source,
+		   new String[] {
+			   "documentation", "Reference to the target supplier factory."
+		   });
+		addAnnotation
 		  (valueEClass,
 		   source,
 		   new String[] {
@@ -1577,18 +1248,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Array elements."
-		   });
-		addAnnotation
-		  (contextEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Produces ``org.nasdanika.common.Context``. "
-		   });
-		addAnnotation
-		  (getContext_Elements(),
-		   source,
-		   new String[] {
-			   "documentation", "Context elements. Elements which extend Entry are treated as context properties and unnamed typed elements are treated as services."
 		   });
 		addAnnotation
 		  (entryEClass,
@@ -1749,7 +1408,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	protected void createEcoreAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/Ecore";
 		addAnnotation
-		  (supplierFactoryReferenceEClass,
+		  (referenceEClass,
 		   source,
 		   new String[] {
 			   "constraints", "target"

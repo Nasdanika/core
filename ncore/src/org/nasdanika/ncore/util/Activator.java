@@ -34,15 +34,14 @@ public class Activator implements BundleActivator {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		EXPRESSIONS_PALETTE.add(
-//				NcorePackage.Literals.ARRAY,
-//				NcorePackage.Literals.CONTEXT,
-//				NcorePackage.Literals.HTTP_CALL,
-//				NcorePackage.Literals.MAP,
-//				NcorePackage.Literals.NULL,
+				NcorePackage.Literals.ARRAY,
+				NcorePackage.Literals.HTTP_CALL,
+				NcorePackage.Literals.MAP,
+				NcorePackage.Literals.NULL,
 //				NcorePackage.Literals.OPERATION,
 //				NcorePackage.Literals.REST_OPERATION,
 //				NcorePackage.Literals.TYPED_ELEMENT,
-				NcorePackage.Literals.SUPPLIER_FACTORY_REFERENCE,
+				NcorePackage.Literals.REFERENCE,
 				NcorePackage.Literals.RESOURCE,
 				NcorePackage.Literals.HTML,
 				NcorePackage.Literals.VALUE);	

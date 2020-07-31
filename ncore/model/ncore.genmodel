@@ -16,31 +16,6 @@
       <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/DELETE"/>
       <genEnumLiterals ecoreEnumLiteral="ncore.ecore#//HttpMethod/PATCH"/>
     </genEnums>
-    <genDataTypes ecoreDataType="ncore.ecore#//Exception"/>
-    <genDataTypes ecoreDataType="ncore.ecore#//IContext"/>
-    <genClasses image="false" ecoreClass="ncore.ecore#//ISupplier">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//ISupplier/T"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//ISupplierFactory">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//ISupplierFactory/T"/>
-    </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//SupplierFactoryReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ncore.ecore#//SupplierFactoryReference/target"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//IFunction">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunction/T"/>
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunction/R"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//IFunctionFactory">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunctionFactory/T"/>
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IFunctionFactory/R"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//IConsumer">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IConsumer/T"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//IConsumerFactory">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//IConsumerFactory/T"/>
-    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//ModelElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/title"/>
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>
@@ -65,6 +40,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Resource/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Resource/interpolate"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Reference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ncore.ecore#//Reference/target"/>
+    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Value">
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Value/interpolate"/>
@@ -76,11 +54,7 @@
     <genClasses ecoreClass="ncore.ecore#//Array">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Array/elements"/>
     </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//Context">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Context/elements"/>
-    </genClasses>
     <genClasses image="false" ecoreClass="ncore.ecore#//Entry">
-      <genTypeParameters ecoreTypeParameter="ncore.ecore#//Entry/T"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Entry/enabled"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//TypedEntry"/>
@@ -99,6 +73,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/connectTimeout"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/readTimeout"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//HttpCall/successCode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//HttpCall/body"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//RestOperation">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//RestOperation/arguments"/>

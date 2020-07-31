@@ -2,19 +2,13 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.RestOperation;
@@ -59,8 +53,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Entry<Object>> getArguments() {
-		return (EList<Entry<Object>>)eDynamicGet(NcorePackage.REST_OPERATION__ARGUMENTS, NcorePackage.Literals.REST_OPERATION__ARGUMENTS, true, true);
+	public EList<Entry> getArguments() {
+		return (EList<Entry>)eDynamicGet(NcorePackage.REST_OPERATION__ARGUMENTS, NcorePackage.Literals.REST_OPERATION__ARGUMENTS, true, true);
 	}
 
 	/**
@@ -102,7 +96,7 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 		switch (featureID) {
 			case NcorePackage.REST_OPERATION__ARGUMENTS:
 				getArguments().clear();
-				getArguments().addAll((Collection<? extends Entry<Object>>)newValue);
+				getArguments().addAll((Collection<? extends Entry>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

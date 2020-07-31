@@ -3,7 +3,6 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Supplier;
 

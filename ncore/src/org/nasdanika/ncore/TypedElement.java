@@ -2,9 +2,6 @@
  */
 package org.nasdanika.ncore;
 
-import java.lang.Object;
-import org.nasdanika.common.SupplierFactory;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Typed Element</b></em>'.
@@ -23,10 +20,10 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getTypedElement()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;"
+ * @model
  * @generated
  */
-public interface TypedElement extends ModelElement, SupplierFactory<Object> {
+public interface TypedElement extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -146,11 +146,6 @@ public class OperationItemProvider extends SupplierItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createSupplierFactoryReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createTypedElement()));
 
 		newChildDescriptors.add
@@ -162,6 +157,11 @@ public class OperationItemProvider extends SupplierItemProvider {
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.OPERATION__ARGUMENTS,
+				 NcoreFactory.eINSTANCE.createReference()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -182,11 +182,6 @@ public class OperationItemProvider extends SupplierItemProvider {
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createArray()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createContext()));
 
 		newChildDescriptors.add
 			(createChildParameter

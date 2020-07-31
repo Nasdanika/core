@@ -22,15 +22,6 @@ public interface NcoreFactory extends EFactory {
 	NcoreFactory eINSTANCE = org.nasdanika.ncore.impl.NcoreFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Supplier Factory Reference</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Supplier Factory Reference</em>'.
-	 * @generated
-	 */
-	SupplierFactoryReference createSupplierFactoryReference();
-
-	/**
 	 * Returns a new object of class '<em>Typed Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -56,6 +47,15 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	Resource createResource();
+
+	/**
+	 * Returns a new object of class '<em>Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Reference</em>'.
+	 * @generated
+	 */
+	Reference createReference();
 
 	/**
 	 * Returns a new object of class '<em>Value</em>'.
@@ -92,15 +92,6 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	Array createArray();
-
-	/**
-	 * Returns a new object of class '<em>Context</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Context</em>'.
-	 * @generated
-	 */
-	Context createContext();
 
 	/**
 	 * Returns a new object of class '<em>Typed Entry</em>'.

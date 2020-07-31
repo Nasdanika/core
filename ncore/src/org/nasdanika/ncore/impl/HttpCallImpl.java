@@ -2,30 +2,14 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.Object;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collection;
-import java.util.Map;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.Converter;
-import org.nasdanika.common.DefaultConverter;
-import org.nasdanika.common.Function;
-import org.nasdanika.common.MapCompoundSupplier;
-import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
@@ -45,6 +29,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.ncore.impl.HttpCallImpl#getConnectTimeout <em>Connect Timeout</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.HttpCallImpl#getReadTimeout <em>Read Timeout</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.HttpCallImpl#getSuccessCode <em>Success Code</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.HttpCallImpl#getBody <em>Body</em>}</li>
  * </ul>
  *
  * @generated
@@ -166,8 +151,8 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Entry<Object>> getHeaders() {
-		return (EList<Entry<Object>>)eDynamicGet(NcorePackage.HTTP_CALL__HEADERS, NcorePackage.Literals.HTTP_CALL__HEADERS, true, true);
+	public EList<Entry> getHeaders() {
+		return (EList<Entry>)eDynamicGet(NcorePackage.HTTP_CALL__HEADERS, NcorePackage.Literals.HTTP_CALL__HEADERS, true, true);
 	}
 
 	/**
@@ -235,11 +220,24 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<EObject> getBody() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.HTTP_CALL__BODY, NcorePackage.Literals.HTTP_CALL__BODY, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NcorePackage.HTTP_CALL__HEADERS:
 				return ((InternalEList<?>)getHeaders()).basicRemove(otherEnd, msgs);
+			case NcorePackage.HTTP_CALL__BODY:
+				return ((InternalEList<?>)getBody()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -264,6 +262,8 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				return getReadTimeout();
 			case NcorePackage.HTTP_CALL__SUCCESS_CODE:
 				return getSuccessCode();
+			case NcorePackage.HTTP_CALL__BODY:
+				return getBody();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -285,7 +285,7 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				return;
 			case NcorePackage.HTTP_CALL__HEADERS:
 				getHeaders().clear();
-				getHeaders().addAll((Collection<? extends Entry<Object>>)newValue);
+				getHeaders().addAll((Collection<? extends Entry>)newValue);
 				return;
 			case NcorePackage.HTTP_CALL__CONNECT_TIMEOUT:
 				setConnectTimeout((Integer)newValue);
@@ -295,6 +295,10 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				return;
 			case NcorePackage.HTTP_CALL__SUCCESS_CODE:
 				setSuccessCode((Integer)newValue);
+				return;
+			case NcorePackage.HTTP_CALL__BODY:
+				getBody().clear();
+				getBody().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -326,6 +330,9 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 			case NcorePackage.HTTP_CALL__SUCCESS_CODE:
 				setSuccessCode(SUCCESS_CODE_EDEFAULT);
 				return;
+			case NcorePackage.HTTP_CALL__BODY:
+				getBody().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -350,97 +357,10 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				return getReadTimeout() != READ_TIMEOUT_EDEFAULT;
 			case NcorePackage.HTTP_CALL__SUCCESS_CODE:
 				return getSuccessCode() != SUCCESS_CODE_EDEFAULT;
+			case NcorePackage.HTTP_CALL__BODY:
+				return !getBody().isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-	
-	/**
-	 * Override to provide request body.
-	 * @return
-	 */
-	protected Supplier<InputStream> createBodyWork(Context context) throws Exception {
-		return null;
-	}
-	
-	protected Supplier<Map<String,Object>> createHeadersWork(Context context) throws Exception {
-		EList<Entry<Object>> headers = getHeaders();
-		if (headers.isEmpty()) {
-			return null;
-		}
-		
-		MapCompoundSupplier<String, Object> headersWork = new MapCompoundSupplier<>("Headers");
-		for (Entry<Object> e: headers) {
-			headersWork.put(e.getName(), e.create(context));
-		}
-
-		return headersWork;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		MapCompoundSupplier<String,Object> ret = new MapCompoundSupplier<>(getTitle());
-		
-		// Ugly, but what to do?
-		ret.put("Headers", (Supplier) createHeadersWork(context));		
-		
-		Supplier<InputStream> bodyWork = createBodyWork(context);
-		if (bodyWork != null) {
-			ret.put("Body", (Supplier) bodyWork);
-		}
-				
-		return ret.then(new Function<Map<String,Object>,Object>() {
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return HttpCallImpl.this.getTitle();
-			}
-
-			@Override
-			public Object execute(Map<String, Object> arg, ProgressMonitor progressMonitor) throws Exception {
-				URL url = new URL(context.interpolate(getUrl()));
-				URLConnection connection = url.openConnection();
-				if (!(connection instanceof HttpURLConnection)) {
-					throw new IllegalArgumentException("Not an HTTP(s) url: "+url);
-				}
-				
-				HttpURLConnection httpConnection = (HttpURLConnection) connection;
-				httpConnection.setRequestMethod(getMethod().getLiteral());
-				Object body = arg.get("Body");
-				httpConnection.setDoOutput(body != null);
-				Converter converter = context.get(Converter.class);
-				if (converter == null) {
-					converter = DefaultConverter.INSTANCE;
-				}
-				for (Map.Entry<String, Object> header: ((Map<String,Object>) arg.get("Headers")).entrySet()) {						
-					httpConnection.setRequestProperty(header.getKey(), converter.convert(header.getValue(), String.class));
-				}
-				httpConnection.setConnectTimeout(getConnectTimeout() * 1000); 
-				httpConnection.setReadTimeout(getReadTimeout() * 1000); 
-				
-				if (body != null) {
-					try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream()); InputStream bin = new BufferedInputStream(converter.convert(body, InputStream.class))) {
-						int b;
-						while ((b = bin.read()) != -1) {
-							bout.write(b);
-						}
-					}
-				}
-				
-				int responseCode = httpConnection.getResponseCode();
-				if (responseCode == getSuccessCode()) { 
-					return httpConnection.getInputStream(); // TODO - convert to String, Map, ... 
-				}
-				
-				throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage()); // TODO - body to message if message is empty, e.g. JSON details. Also TODO - to common.
-			}
-			
-		});
 	}
 
 } //HttpCallImpl

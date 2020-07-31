@@ -2,12 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Object;
-
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Value;
 
@@ -171,29 +166,6 @@ public class ValueImpl extends SupplierImpl implements Value {
 				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-	
-	// TODO - proper implementation.
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		return new Supplier<Object>() {
-
-			@Override
-			public Object execute(ProgressMonitor progressMonitor) throws Exception {
-				return isInterpolate() ? context.interpolate(getValue()) : getValue();
-			}
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return getTitle();
-			}
-			
-		};
 	}
 
 } //ValueImpl

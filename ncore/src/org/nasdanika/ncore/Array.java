@@ -2,10 +2,8 @@
  */
 package org.nasdanika.ncore;
 
-import java.lang.Object;
-
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.common.SupplierFactory;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,13 +22,13 @@ import org.nasdanika.common.SupplierFactory;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getArray()
- * @model superTypes="org.nasdanika.ncore.ModelElement org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EEList&lt;org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+ * @model
  * @generated
  */
-public interface Array extends ModelElement, SupplierFactory<EList<Object>> {
+public interface Array extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.common.SupplierFactory}<code>&lt;java.lang.Object&gt;</code>.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -38,9 +36,9 @@ public interface Array extends ModelElement, SupplierFactory<EList<Object>> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getArray_Elements()
-	 * @model type="org.nasdanika.ncore.ISupplierFactory&lt;org.eclipse.emf.ecore.EJavaObject&gt;" containment="true"
+	 * @model containment="true"
 	 * @generated
 	 */
-	EList<SupplierFactory<Object>> getElements();
+	EList<EObject> getElements();
 
 } // Array

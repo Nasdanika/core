@@ -178,6 +178,7 @@ public class HttpCallItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(NcorePackage.Literals.HTTP_CALL__HEADERS);
+			childrenFeatures.add(NcorePackage.Literals.HTTP_CALL__BODY);
 		}
 		return childrenFeatures;
 	}
@@ -251,6 +252,7 @@ public class HttpCallItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case NcorePackage.HTTP_CALL__HEADERS:
+			case NcorePackage.HTTP_CALL__BODY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -302,6 +304,124 @@ public class HttpCallItemProvider
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__HEADERS,
 				 NcoreFactory.eINSTANCE.createRestFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createTypedElement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createSupplier()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createResource()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createValue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createNull()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createOperation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createArray()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createTypedEntry()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createSupplierEntry()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createMap()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createProperty()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createList()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createHttpCall()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createRestOperation()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createRestFunction()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createHtml()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == NcorePackage.Literals.HTTP_CALL__HEADERS ||
+			childFeature == NcorePackage.Literals.HTTP_CALL__BODY;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

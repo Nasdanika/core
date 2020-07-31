@@ -126,7 +126,7 @@ public class PropertyItemProvider extends ValueItemProvider {
 
 	@Override
 	public Object getForeground(Object object) {
-		return ((Entry<?>) object).isEnabled() ? super.getForeground(object) : GRAYED_OUT_COLOR;
+		return ((Entry) object).isEnabled() ? super.getForeground(object) : GRAYED_OUT_COLOR;
 	}
 
 	/**

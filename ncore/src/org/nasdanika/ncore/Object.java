@@ -14,8 +14,8 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getObject()
- * @model superTypes="org.nasdanika.ncore.Map org.nasdanika.ncore.Entry&lt;org.eclipse.emf.ecore.EMap&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EJavaObject&gt;&gt;"
+ * @model
  * @generated
  */
-public interface Object extends Map, Entry<java.util.Map<String, java.lang.Object>> {
+public interface Object extends Map, Entry {
 } // Object

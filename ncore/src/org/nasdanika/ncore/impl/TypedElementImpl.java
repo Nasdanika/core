@@ -3,9 +3,6 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.common.Context;
-import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Supplier;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.TypedElement;
 
@@ -169,32 +166,6 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 				return isRequired() != REQUIRED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	@Override
-	public Supplier<Object> create(Context context) throws Exception {
-		return new Supplier<Object>() {
-
-			@Override
-			public Object execute(ProgressMonitor progressMonitor) throws Exception {
-				ClassLoader classLoader = context.get(ClassLoader.class);
-				if (classLoader == null) {
-					classLoader = getClass().getClassLoader();
-				}
-				return context.get(classLoader.loadClass(getType()));
-			}
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return getTitle();
-			}
-			
-		};
 	}
 
 } //TypedElementImpl
