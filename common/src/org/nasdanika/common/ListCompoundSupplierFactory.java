@@ -10,7 +10,7 @@ public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> 
 	private String name;
 	private List<SupplierFactory<T>> elements = new ArrayList<>();
 
-	public ListCompoundSupplierFactory(String name, Collection<SupplierFactory<T>> elements) {
+	public ListCompoundSupplierFactory(String name, Collection<? extends SupplierFactory<T>> elements) {
 		this.name = name;
 		this.elements.addAll(elements);
 	}
