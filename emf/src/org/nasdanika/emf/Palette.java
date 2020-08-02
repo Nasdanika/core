@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 /**
  * Palettes are used for grouping of EObjects, e.g. child candidates for containment references.
  * Palettes allow to manage reference children in groups and also to have pre-configured children, e.g. objects with pre-populated structural features.
- * Palette extends {@link EReferencePredicate} so it can be used by flow control and reference model elements to filter candidates for a reference. 
+ * Palette extends {@link EReferencePredicate} so it can be used by control flow (if, for, ...) and reference model elements to filter candidates for a reference. 
  * 
  * @author Pavel
  *
