@@ -11,7 +11,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 
 /**
- * This class loads a model with the root element implementing {@link SupplierFactory}, and delegates its methods to it. 
+ * This class loads a model with the root element, adapts it to {@link SupplierFactory}, and delegates its methods to it. 
  * @author Pavel
  *
  */
@@ -64,16 +64,24 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 		}
 		return resourceSet;
 	}
+
+	/**
+	 * Override to specify result type of supplier.
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected Class<T> getSupplierResultType() {
+		return (Class<T>) Object.class;
+	}
 	
 	/**
 	 * Creates a generator by loading a generator model from the specified URI into the specified {@link ResourceSet}.
 	 * @param resourceSet Resource set to load the model to. 
 	 * @throws Exception 
 	 */
-	@SuppressWarnings("unchecked")
 	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
 		modelResource = resourceSet.getResource(modelUri, true);
-		supplierFactory = (SupplierFactory<T>) modelResource.getContents().iterator().next();
+		supplierFactory = EObjectAdaptable.adaptToSupplierFactoryNonNull(modelResource.getContents().iterator().next(), getSupplierResultType());
 	}
 	
 	@Override
