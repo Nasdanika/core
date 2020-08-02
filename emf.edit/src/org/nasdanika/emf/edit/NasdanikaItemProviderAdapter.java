@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.command.Command;
@@ -37,6 +38,7 @@ import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.EReferencePredicate;
 import org.nasdanika.emf.LocaleLanguageResourceLocator;
 import org.nasdanika.emf.localization.RussianResourceLocator;
 
@@ -167,6 +169,65 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 					
 				};
 	}
+		/**
+		 * Creates an item property descriptor with description loaded from a model annotation, display name also loaded from a model annotation for localization.
+		 * Creates a cell editor factory for {@link EReference} based on isMany().
+		 * The method name is different to avoid ambiguity compilation error when choice of values is null.
+		 * @param resourceLocator
+		 * @param displayName
+		 * @param feature
+		 * @param isSettable
+		 * @param multiLine
+		 * @param sortChoices
+		 * @param staticImage
+		 * @param category
+		 * @param filterFlags
+		 * @param choiceOfValuesSource BiFunction taking object and inherited choice of values and providing a choice values, the inherited choice of values is used if this one is null or returns null.
+		 * @return
+		 */
+		  protected ItemPropertyDescriptor createItemPropertyDescriptorWithChoiceOfValuesSource(
+				    ResourceLocator resourceLocator,
+				    String displayName,
+				    EStructuralFeature feature,
+				    boolean isSettable,
+				    boolean multiLine,
+				    boolean sortChoices,
+				    Object staticImage,
+				    String category,
+				    String[] filterFlags, 
+				    BiFunction<Object,Collection<Object>,Collection<Object>> choiceOfValuesSource)
+				  {			
+				    return 
+					  new ItemPropertyDescriptor
+					    (((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
+					     resourceLocator,
+					     getLabel(feature, displayName),
+					     getTooltip(feature),
+					     feature,
+					     isSettable,
+					     multiLine,
+					     sortChoices,
+					     staticImage,
+					     category,
+					     filterFlags,
+					     createCellEditorFactory(feature)) {
+						
+						@SuppressWarnings({ "unchecked", "rawtypes" })
+						@Override
+						protected Collection<?> getComboBoxObjects(Object object) {
+							Collection<Object> superChoiceOfValues = (Collection) super.getComboBoxObjects(object);
+							if (choiceOfValuesSource != null) {
+								Collection<Object> ret = choiceOfValuesSource.apply(object, superChoiceOfValues);
+								if (ret != null) {
+									return ret;
+								}
+							}
+							return superChoiceOfValues;
+						}
+						
+					};
+		}
+
 
 	protected Object createCellEditorFactory(EStructuralFeature feature) {
 		Object cellEditorFactory =  null;
@@ -257,7 +318,7 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 	}
 
 	@Override
-	public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
+	public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {		
 		return true;
 	}
 	

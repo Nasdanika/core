@@ -3,12 +3,17 @@
 package org.nasdanika.ncore.provider;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Reference;
 
@@ -53,7 +58,7 @@ public class ReferenceItemProvider extends ModelElementItemProvider {
 	 */
 	protected void addTargetPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
+			(createItemPropertyDescriptorWithChoiceOfValuesSource(
 				 getResourceLocator(),
 				 getString("_UI_Reference_target_feature"),
 				 NcorePackage.Literals.REFERENCE__TARGET,
@@ -63,7 +68,31 @@ public class ReferenceItemProvider extends ModelElementItemProvider {
 				 null,
 				 null,
 				 null,
-				 null));
+				 this::getTargetChoiceOfValues));
+	}
+	
+	private Collection<Object> getTargetChoiceOfValues(Object object, Collection<Object> choices) {
+		if (object instanceof EObject && choices != null) {
+			EObject eObject = (EObject) object;
+			EObject eContainer = eObject.eContainer();
+			if (eContainer != null) {
+				EReference eContainmentReference = eObject.eContainmentFeature();
+				if (eContainmentReference != null) {
+					for (Adapter adapter: eContainer.eAdapters()) {
+						if (adapter instanceof NasdanikaItemProviderAdapter) {
+							Collection<Object> ret = new ArrayList<>();
+							for (Object choice: choices) {
+								if (choice instanceof EObject && ((NasdanikaItemProviderAdapter) adapter).accept(eContainer, eContainmentReference, (EObject) choice, false)) {
+									ret.add(choice);
+								}
+							}
+							return ret;
+						}
+					}
+				}
+			}
+		}
+		return choices;
 	}
 
 	/**

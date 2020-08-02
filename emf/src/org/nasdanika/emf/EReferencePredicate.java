@@ -1,4 +1,4 @@
-package org.nasdanika.emf.edit;
+package org.nasdanika.emf;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;

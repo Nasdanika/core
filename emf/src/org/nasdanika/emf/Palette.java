@@ -10,16 +10,18 @@ import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * Palettes are used for grouping of EObjects, e.g. child candidates for containment references.
  * Palettes allow to manage reference children in groups and also to have pre-configured children, e.g. objects with pre-populated structural features.
+ * Palette extends {@link EReferencePredicate} so it can be used by flow control and reference model elements to filter candidates for a reference. 
  * 
  * @author Pavel
  *
  */
-public interface Palette {
+public interface Palette extends EReferencePredicate {
 	
 	interface Registry {
 		
@@ -62,6 +64,7 @@ public interface Palette {
 				return palettes.computeIfAbsent(id, pid -> new Palette() {
 					
 					private List<Contributor> contributors = new ArrayList<>();
+					private List<EReferencePredicate> eReferencePredicates = new ArrayList<>();
 
 					@Override
 					synchronized public List<Contributor> getContributors() {
@@ -86,6 +89,21 @@ public interface Palette {
 					@Override
 					public String getDescription() {
 						return description;
+					}
+
+					@Override
+					synchronized public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
+						for (EReferencePredicate p: eReferencePredicates) {
+							if (p.accept(source, eReference, target, direct)) {
+								return true;
+							}
+						}
+						return false;
+					}
+
+					@Override
+					synchronized public void add(EReferencePredicate predicate) {
+						eReferencePredicates.add(predicate);
 					}
 					
 				});
@@ -116,7 +134,7 @@ public interface Palette {
 	List<Contributor> getContributors();
 	
 	void add(Contributor contributor);
-	
+			
 	default void add(String id, Supplier<EObject> supplier) {
 		add(new Contributor() {
 
@@ -149,6 +167,7 @@ public interface Palette {
 		
 	/**
 	 * Adds a contributor which instantiates given EClass and uses EClass name and EPackage namespace URI as ID.
+	 * Also adds predicates checking that a candidate is instance of one of provided EClass'es. 
 	 * @param eClass
 	 */
 	default void add(EClass... eClass) {
@@ -163,6 +182,14 @@ public interface Palette {
 				@Override
 				public String getId() {
 					return ec.getName()+"@"+ec.getEPackage().getNsURI();
+				}
+				
+			});
+			add(new EReferencePredicate() {
+
+				@Override
+				public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
+					return ec.isInstance(target);
 				}
 				
 			});
@@ -189,6 +216,12 @@ public interface Palette {
 			
 		});
 	}
+	
+	/**
+	 * Adds a predicate to the palette. The predicates are OR'd.
+	 * @param predicate
+	 */
+	void add(EReferencePredicate predicate);
 		
 	String getName();
 	

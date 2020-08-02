@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -91,6 +93,7 @@ public class SingleReferenceSelectionDialog extends ElementTreeSelectionDialog {
 			
 		};
 		addFilter(filter);
+		setValidator(selection -> selection != null && selection.length == 1 && choiceOfValues.contains(selection[0]) ? Status.OK_STATUS : new Status(IStatus.ERROR, "org.nasdanika.emf", "Invalid selection")); 
 		setAllowMultiple(false);	
 		setInput(commonAncestor(choiceOfValues));
 		setInitialSelection(value);
