@@ -110,6 +110,10 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 		return adapter;		
 	}
 	
+	public static <A> A adaptToNonNull(EObject target, Class<A> type) {
+		return Objects.requireNonNull(adaptTo(target, type), "Cannot adapt " + target + " to " + type);
+	}
+	
 	// --- Convenience methods for checking access permissions ---
 	
 	public static AccessController adaptToAccessController(EObject target) {
@@ -405,6 +409,17 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	}
 	
 	/**
+	 * Adapts target to {@link SupplierFactory} and throws {@link NullPointerException} if result is null.
+	 * @param <T>
+	 * @param target
+	 * @param type
+	 * @return
+	 */
+	public static <T> SupplierFactory<T> adaptToSupplierFactoryNonNull(EObject target, Class<T> type) {
+		return Objects.requireNonNull(adaptToSupplierFactory(target, type), "Cannot adapt " + target + " to SupplierFactory<" + type + ">");
+	}
+		
+	/**
 	 * Adapts each element of the targets collection to {@link SupplierFactory} and returns as a list.
 	 * Throws {@link NullPointerException} if any of the targets cannot be adapted.
 	 * @param <T>
@@ -413,7 +428,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<SupplierFactory<T>> adaptToSupplierFactory(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e -> Objects.requireNonNull(adaptToSupplierFactory(e, type))).collect(Collectors.toList());
+		return targets.stream().map(e ->adaptToSupplierFactoryNonNull(e, type)).collect(Collectors.toList());
 	}
 	
 	/**
@@ -473,12 +488,23 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	}
 	
 	/**
+	 * Adapts target to FunctionFactory and throws {@link NullPointerException} if result is null.
+	 * @param <T>
+	 * @param target
+	 * @param type
+	 * @return
+	 */
+	public static <T,R> FunctionFactory<T,R> adaptToFunctionFactoryNonNull(EObject target, Class<T> parameterType, Class<R> resultType) {
+		return Objects.requireNonNull(adaptToFunctionFactory(target, parameterType, resultType), "Cannot adapt " + target + " to FunctionFactory<" + parameterType + ", " + resultType + ">");
+	}
+	
+	/**
 	 * Adapts each element of the targets collection to {@link FunctionFactory} and returns as a list.
 	 * Throws {@link NullPointerException} if any of the targets cannot be adapted.
 	 * @return
 	 */
 	public static <T,R> List<FunctionFactory<T,R>> adaptToFunctionFactory(Collection<? extends EObject> targets, Class<T> parameterType, Class<R> resultType) {
-		return targets.stream().map(e -> Objects.requireNonNull(adaptToFunctionFactory(e, parameterType, resultType))).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToFunctionFactoryNonNull(e, parameterType, resultType)).collect(Collectors.toList());
 	}
 	
 	/**
@@ -499,6 +525,17 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 		}
 		return (ConsumerFactory<T>) adaptTo(target, SupplierFactory.class);
 	}
+		
+	/**
+	 * Adapts target to ConsumerFactory and throws {@link NullPointerException} if result is null.
+	 * @param <T>
+	 * @param target
+	 * @param type
+	 * @return
+	 */
+	public static <T> ConsumerFactory<T> adaptToConsumerFactoryNonNull(EObject target, Class<T> type) {
+		return Objects.requireNonNull(adaptToConsumerFactory(target, type), "Cannot adapt " + target + " to ConsumerFactory<" + type + ">");
+	}
 	
 	/**
 	 * Adapts each element of the targets collection to {@link ConsumerFactory} and returns as a list.
@@ -509,7 +546,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<ConsumerFactory<T>> adaptToConsumerFactory(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e -> Objects.requireNonNull(adaptToConsumerFactory(e, type))).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToConsumerFactoryNonNull(e, type)).collect(Collectors.toList());
 	}
 
 }

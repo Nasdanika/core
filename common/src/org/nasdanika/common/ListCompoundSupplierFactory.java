@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> {
 
@@ -12,6 +13,7 @@ public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> 
 
 	public ListCompoundSupplierFactory(String name, Collection<? extends SupplierFactory<T>> elements) {
 		this.name = name;
+		elements.stream().forEach(Objects::requireNonNull);
 		this.elements.addAll(elements);
 	}
 	
@@ -30,7 +32,7 @@ public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> 
 	}
 	
 	public void add(SupplierFactory<T> element) {
-		elements.add(element);
+		elements.add(Objects.requireNonNull(element));
 	}
 
 }
