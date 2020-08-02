@@ -1,6 +1,7 @@
 package org.nasdanika.emf;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -17,7 +18,7 @@ import org.nasdanika.common.SupplierFactory;
  */
 public class ModelWorkFactory<T> implements SupplierFactory<T> { 
 
-	protected SupplierFactory<T> supplierFactory;	
+	protected EObject root;	
 	protected Resource modelResource;
 
 	/**
@@ -81,12 +82,12 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	 */
 	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
 		modelResource = resourceSet.getResource(modelUri, true);
-		supplierFactory = EObjectAdaptable.adaptToSupplierFactoryNonNull(modelResource.getContents().iterator().next(), getSupplierResultType());
+		root = modelResource.getContents().iterator().next();
 	}
 	
 	@Override
 	public Supplier<T> create(Context context) throws Exception {
-		return supplierFactory.create(context);
+		return EObjectAdaptable.adaptToSupplierFactoryNonNull(root, getSupplierResultType()).create(context);
 	}
 	
 	public Resource getModelResource() {

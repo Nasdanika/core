@@ -5,7 +5,6 @@ import java.util.Map;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticException;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
@@ -46,7 +45,7 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 			};
 			
 		};				
-		Diagnostic validationResult = diagnostician.validate((EObject) supplierFactory);
+		Diagnostic validationResult = diagnostician.validate(root);
 		if (validationResult.getSeverity() == Diagnostic.ERROR) {
 			throw new DiagnosticException(validationResult);
 		}
