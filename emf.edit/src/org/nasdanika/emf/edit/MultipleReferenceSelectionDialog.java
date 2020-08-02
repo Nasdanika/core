@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -101,6 +103,17 @@ public class MultipleReferenceSelectionDialog extends CheckedTreeSelectionDialog
 						
 		setInput(SingleReferenceSelectionDialog.commonAncestor(choiceOfValues));
 		setInitialElementSelections(selectedValues);
+		
+		setValidator(selection -> {
+			if (selection != null) {
+				for (Object e: selection) {
+					if (!choiceOfValues.contains(e)) {
+						return new Status(IStatus.ERROR, "org.nasdanika.emf", "Invalid selection: " + e);						
+					}
+				}
+			}
+			return Status.OK_STATUS;
+		}); 		
 		
 		Set<Object> toExpand = new HashSet<>();
 		for (Object value: selectedValues) {
