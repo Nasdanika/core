@@ -42,19 +42,32 @@ public abstract class ResourceSetCommand extends DelegatingCommand {
 		return new ArrayList<String>(registry.keySet()).stream().map(nsURI -> registry.getEPackage(nsURI)).collect(Collectors.toList());
 	}
 	
+	/**
+	 * Creates an empty resource set with registered packages and {@link XMIResourceFactoryImpl} and loads resource to it.
+	 * @return
+	 */
 	protected ResourceSet createResourceSet() {
-		ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-		ComposedAdapterFactory.registerGlobalFactory(resourceSet);
-		for (EPackage ePackage: getEPackages()) {
-			resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
-		}
+		ResourceSet resourceSet = createEmptyResourceSet();
 
 		for (String uri: resources) {
 			URI resourceUri = URI.createURI(new File(".").toURI().resolve(uri).toString());
 			resourceSet.getResource(resourceUri, true);
 		}
 		return resourceSet;		
+	}
+
+	/**
+	 * Creates a {@link ResourceSet} with all known packages registered and with {@link XMIResourceFactoryImpl}
+	 * @return
+	 */
+	protected ResourceSet createEmptyResourceSet() {
+		ResourceSetImpl resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+		ComposedAdapterFactory.registerGlobalFactory(resourceSet);
+		for (EPackage ePackage: getEPackages()) {
+			resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
+		}
+		return resourceSet;
 	}	
 	
 }
