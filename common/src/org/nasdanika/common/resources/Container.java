@@ -90,18 +90,6 @@ public interface Container<E> extends Resource<E> {
 	 */
 	Map<String, Object> getChildren(ProgressMonitor monitor);
 	
-	
-	/**
-	 * @return Parent container.
-	 */
-	Container<E> getParent();
-
-	/**
-	 * Container name (last path segment).
-	 * @return
-	 */
-	String getName();
-	
 	interface Copier<T,R> {
 		
 		/**
