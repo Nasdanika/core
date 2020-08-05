@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Common Sirius extension
+Bundle-SymbolicName: org.nasdanika.sirius
+Bundle-Version: 0.1.0.qualifier
+Require-Bundle: org.eclipse.sirius.properties;bundle-version="6.2.1",
+ org.nasdanika.ncore;bundle-version="0.1.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: %providerName
+Automatic-Module-Name: org.nasdanika.sirius
+Export-Package: org.nasdanika.sirius

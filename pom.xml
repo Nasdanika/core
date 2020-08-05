@@ -135,6 +135,7 @@
 		<module>emf.edit</module>		
 		<module>emf.presentation</module>		
 
+		<module>sirius</module>		
 		<module>sirius.tree</module>		
 		<module>sirius.tree.edit</module>		
 
