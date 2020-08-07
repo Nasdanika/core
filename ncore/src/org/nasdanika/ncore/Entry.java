@@ -19,7 +19,7 @@ package org.nasdanika.ncore;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getEntry()
- * @model interface="true" abstract="true"
+ * @model abstract="true"
  * @generated
  */
 public interface Entry extends NamedElement {

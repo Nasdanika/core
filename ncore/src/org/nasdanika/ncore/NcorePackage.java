@@ -315,10 +315,10 @@ public interface NcorePackage extends EPackage {
 	int ARRAY = 11;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.Entry
+	 * @see org.nasdanika.ncore.impl.EntryImpl
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
 	 * @generated
 	 */
@@ -2742,10 +2742,10 @@ public interface NcorePackage extends EPackage {
 		EReference ARRAY__ELEMENTS = eINSTANCE.getArray_Elements();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.Entry <em>Entry</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.Entry
+		 * @see org.nasdanika.ncore.impl.EntryImpl
 		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
 		 * @generated
 		 */

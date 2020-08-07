@@ -1,0 +1,23 @@
+map:
+    a: b
+    c: d
+    e: 
+        - 11
+        - 12
+        - 13
+
+list-of-maps:
+    - aa: bb
+      cc: dd
+    - ee: ff
+      gg: hh
+      
+list-of-scalars:
+    - aaa
+    - bbb
+    - ccc
+    
+logical-yes: true
+logical-no: false
+scalar: aaaa             
+               

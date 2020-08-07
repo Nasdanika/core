@@ -39,6 +39,7 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralEntityContainer;
 import org.nasdanika.common.resources.TypedEntityContainer;
+import org.yaml.snakeyaml.Yaml;
 
 
 public class TestCommon {
@@ -279,6 +280,31 @@ public class TestCommon {
 		});
 		
 		assertEquals("a/b/c -> d/e/f/g", context.computingContext().get("a/b/c/d/e/f/g"));		
+	}
+	
+	/**
+	 * Tests retrieval of different entries from a context wrapping a map.
+	 */
+	@Test
+	public void testMapContext() {
+		Map<String, Object> yaml = new Yaml().load(TestCommon.class.getResourceAsStream("test-map-context.yml"));
+		Context mapContext = Context.wrap(yaml::get);
+		System.out.println("map: " + toString(mapContext.get("map")));
+		System.out.println("map/a: " + toString(mapContext.get("map/a")));
+		System.out.println("map/e: " + toString(mapContext.get("map/e")));
+		System.out.println("map/e as sub-context: " + toString(mapContext.map(k -> "map/" + k).get("e")));
+		System.out.println("list-of-maps: " + toString(mapContext.get("list-of-maps")));
+		System.out.println("logical-yes: " + toString(mapContext.get("logical-yes")));
+		System.out.println("logical-no: " + toString(mapContext.get("logical-no")));
+	}
+	
+	private static String toString(Object obj) {
+		if (obj == null) {
+			return null;
+		}
+		
+		return "[" + obj.getClass().toString() + "] " + obj;
+			
 	}
 	
 }

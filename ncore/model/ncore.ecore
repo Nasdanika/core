@@ -152,8 +152,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Entry" abstract="true" interface="true"
-      eSuperTypes="#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Entry" abstract="true" eSuperTypes="#//NamedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Supplier factory with a name."/>
     </eAnnotations>

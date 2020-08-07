@@ -443,6 +443,9 @@ public class NasdanikaItemProviderAdapter extends ItemProviderAdapter implements
 		};
 	}
 	
+	/**
+	 * Object-specific lists of {@link EReferenceItemProvider}s. 
+	 */
 	protected Map<Object,List<EReferenceItemProvider>> eReferenceItemProviders = new HashMap<>();
 	
 	@Override

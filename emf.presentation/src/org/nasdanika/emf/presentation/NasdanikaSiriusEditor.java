@@ -104,6 +104,7 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
@@ -341,7 +342,7 @@ public class NasdanikaSiriusEditor
 			protected void dispatchUpdateProblemIndication() {
 				if (updateProblemIndication && !dispatching) {
 					dispatching = true;
-					getSite().getShell().getDisplay().asyncExec
+					Display.getDefault().asyncExec
 						(new Runnable() {
 							 @Override
 							 public void run() {
@@ -1255,7 +1256,7 @@ public class NasdanikaSiriusEditor
 		
 		 @Override
 		 public void commandStackChanged(final EventObject event) {
-			getSite().getShell().getDisplay().asyncExec
+			Display.getDefault().asyncExec
 				 (new Runnable() {
 					  @Override
 					  public void run() {

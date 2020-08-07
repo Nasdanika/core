@@ -61,7 +61,7 @@ public class CommonServices {
     	return feature == NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION;
     }
     
-    public boolean hasVinciRule(EObject self, EStructuralFeature feature) {
+    public boolean hasNasdanikaRule(EObject self, EStructuralFeature feature) {
     	return isCode(self, feature) 
     			|| isDescription(self, feature) 
     			|| isHtml(self, feature) 

@@ -107,6 +107,15 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 				}
 			}
 		}
+		if (adapter == null) {
+			// Last resort - iterate over all adapters for type compatibility without
+			// using Adapter.isAdapterForType as it checks adapter factory for edit adapters
+			for (Adapter a: target.eAdapters()) {
+				if (type.isInstance(a)) {
+					return (A) a;
+				}
+			}			
+		}
 		return adapter;		
 	}
 	
