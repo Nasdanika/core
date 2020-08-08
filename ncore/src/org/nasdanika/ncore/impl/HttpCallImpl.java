@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.HttpCall;
 import org.nasdanika.ncore.HttpMethod;
 import org.nasdanika.ncore.NcorePackage;
@@ -151,8 +151,8 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Entry> getHeaders() {
-		return (EList<Entry>)eDynamicGet(NcorePackage.HTTP_CALL__HEADERS, NcorePackage.Literals.HTTP_CALL__HEADERS, true, true);
+	public EList<AbstractEntry> getHeaders() {
+		return (EList<AbstractEntry>)eDynamicGet(NcorePackage.HTTP_CALL__HEADERS, NcorePackage.Literals.HTTP_CALL__HEADERS, true, true);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class HttpCallImpl extends ModelElementImpl implements HttpCall {
 				return;
 			case NcorePackage.HTTP_CALL__HEADERS:
 				getHeaders().clear();
-				getHeaders().addAll((Collection<? extends Entry>)newValue);
+				getHeaders().addAll((Collection<? extends AbstractEntry>)newValue);
 				return;
 			case NcorePackage.HTTP_CALL__CONNECT_TIMEOUT:
 				setConnectTimeout((Integer)newValue);

@@ -52,6 +52,7 @@ public class Activator implements BundleActivator {
 		NAMED_EXPRESSIONS_PALETTE.add(
 //			NcorePackage.Literals.FUNCTION,
 			NcorePackage.Literals.LIST,	
+			// TODO - Supplier entry and other other entries. HTTP function.
 			NcorePackage.Literals.OBJECT,	
 			NcorePackage.Literals.PROPERTY); //,	
 //			NcorePackage.Literals.REST_FUNCTION);	

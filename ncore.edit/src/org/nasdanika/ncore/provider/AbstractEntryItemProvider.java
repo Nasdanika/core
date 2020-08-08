@@ -8,27 +8,28 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.common.Util;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Resource;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Resource} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.AbstractEntry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ResourceItemProvider extends ServiceItemProvider {
+public class AbstractEntryItemProvider 
+	extends NamedElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ResourceItemProvider(AdapterFactory adapterFactory) {
+	public AbstractEntryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -43,63 +44,31 @@ public class ResourceItemProvider extends ServiceItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLocationPropertyDescriptor(object);
-			addInterpolatePropertyDescriptor(object);
+			addEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Location feature.
+	 * This adds a property descriptor for the Enabled feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
-	protected void addLocationPropertyDescriptor(Object object) {
+	protected void addEnabledPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Resource_location_feature"),
-				 NcorePackage.Literals.RESOURCE__LOCATION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Interpolate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	protected void addInterpolatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
-				 getResourceLocator(),
-				 getString("_UI_Resource_interpolate_feature"),
-				 NcorePackage.Literals.RESOURCE__INTERPOLATE,
+				 getString("_UI_AbstractEntry_enabled_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractEntry_enabled_feature", "_UI_AbstractEntry_type"),
+				 NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
-				 null,
 				 null));
-	}
-
-	/**
-	 * This returns Resource.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Resource.png"));
 	}
 
 	/**
@@ -116,17 +85,16 @@ public class ResourceItemProvider extends ServiceItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		Resource resource = (Resource)object;
-		String label = resource.getTitle();
-		if (Util.isBlank(label)) {
-			label = resource.getLocation();
-		}
-		return label == null || label.length() == 0 ? getString("_UI_Resource_type") : label;
+		String label = ((AbstractEntry)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_AbstractEntry_type") :
+			getString("_UI_AbstractEntry_type") + " " + label;
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -139,9 +107,8 @@ public class ResourceItemProvider extends ServiceItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Resource.class)) {
-			case NcorePackage.RESOURCE__LOCATION:
-			case NcorePackage.RESOURCE__INTERPOLATE:
+		switch (notification.getFeatureID(AbstractEntry.class)) {
+			case NcorePackage.ABSTRACT_ENTRY__ENABLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

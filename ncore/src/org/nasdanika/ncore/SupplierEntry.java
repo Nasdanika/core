@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface SupplierEntry extends Supplier, Entry {
+public interface SupplierEntry extends Supplier, AbstractEntry {
 } // SupplierEntry

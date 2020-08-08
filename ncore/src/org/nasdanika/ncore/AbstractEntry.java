@@ -15,14 +15,14 @@ package org.nasdanika.ncore;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.Entry#isEnabled <em>Enabled</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.AbstractEntry#isEnabled <em>Enabled</em>}</li>
  * </ul>
  *
- * @see org.nasdanika.ncore.NcorePackage#getEntry()
+ * @see org.nasdanika.ncore.NcorePackage#getAbstractEntry()
  * @model abstract="true"
  * @generated
  */
-public interface Entry extends NamedElement {
+public interface AbstractEntry extends NamedElement {
 
 	/**
 	 * Returns the value of the '<em><b>Enabled</b></em>' attribute.
@@ -34,14 +34,14 @@ public interface Entry extends NamedElement {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Enabled</em>' attribute.
 	 * @see #setEnabled(boolean)
-	 * @see org.nasdanika.ncore.NcorePackage#getEntry_Enabled()
+	 * @see org.nasdanika.ncore.NcorePackage#getAbstractEntry_Enabled()
 	 * @model default="true"
 	 * @generated
 	 */
 	boolean isEnabled();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Entry#isEnabled <em>Enabled</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.ncore.AbstractEntry#isEnabled <em>Enabled</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Enabled</em>' attribute.

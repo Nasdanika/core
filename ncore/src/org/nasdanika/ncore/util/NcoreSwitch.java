@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -25,10 +25,13 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Script;
+import org.nasdanika.ncore.ScriptResource;
+import org.nasdanika.ncore.ScriptText;
+import org.nasdanika.ncore.Service;
+import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.TypedElement;
-import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -114,17 +117,16 @@ public class NcoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.TYPED_ELEMENT: {
-				TypedElement typedElement = (TypedElement)theEObject;
-				T result = caseTypedElement(typedElement);
-				if (result == null) result = caseModelElement(typedElement);
+			case NcorePackage.SERVICE: {
+				Service service = (Service)theEObject;
+				T result = caseService(service);
+				if (result == null) result = caseModelElement(service);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.SUPPLIER: {
 				Supplier supplier = (Supplier)theEObject;
 				T result = caseSupplier(supplier);
-				if (result == null) result = caseTypedElement(supplier);
 				if (result == null) result = caseModelElement(supplier);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -132,7 +134,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 			case NcorePackage.RESOURCE: {
 				Resource resource = (Resource)theEObject;
 				T result = caseResource(resource);
-				if (result == null) result = caseTypedElement(resource);
+				if (result == null) result = caseService(resource);
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -148,7 +150,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 				Value value = (Value)theEObject;
 				T result = caseValue(value);
 				if (result == null) result = caseSupplier(value);
-				if (result == null) result = caseTypedElement(value);
 				if (result == null) result = caseModelElement(value);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -156,7 +157,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 			case NcorePackage.NULL: {
 				Null null_ = (Null)theEObject;
 				T result = caseNull(null_);
-				if (result == null) result = caseTypedElement(null_);
+				if (result == null) result = caseService(null_);
 				if (result == null) result = caseModelElement(null_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -165,7 +166,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 				Operation operation = (Operation)theEObject;
 				T result = caseOperation(operation);
 				if (result == null) result = caseSupplier(operation);
-				if (result == null) result = caseTypedElement(operation);
 				if (result == null) result = caseModelElement(operation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -177,21 +177,21 @@ public class NcoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.ENTRY: {
-				Entry entry = (Entry)theEObject;
-				T result = caseEntry(entry);
-				if (result == null) result = caseNamedElement(entry);
-				if (result == null) result = caseModelElement(entry);
+			case NcorePackage.ABSTRACT_ENTRY: {
+				AbstractEntry abstractEntry = (AbstractEntry)theEObject;
+				T result = caseAbstractEntry(abstractEntry);
+				if (result == null) result = caseNamedElement(abstractEntry);
+				if (result == null) result = caseModelElement(abstractEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.TYPED_ENTRY: {
-				TypedEntry typedEntry = (TypedEntry)theEObject;
-				T result = caseTypedEntry(typedEntry);
-				if (result == null) result = caseTypedElement(typedEntry);
-				if (result == null) result = caseEntry(typedEntry);
-				if (result == null) result = caseNamedElement(typedEntry);
-				if (result == null) result = caseModelElement(typedEntry);
+			case NcorePackage.SERVICE_ENTRY: {
+				ServiceEntry serviceEntry = (ServiceEntry)theEObject;
+				T result = caseServiceEntry(serviceEntry);
+				if (result == null) result = caseService(serviceEntry);
+				if (result == null) result = caseAbstractEntry(serviceEntry);
+				if (result == null) result = caseNamedElement(serviceEntry);
+				if (result == null) result = caseModelElement(serviceEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -199,8 +199,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 				SupplierEntry supplierEntry = (SupplierEntry)theEObject;
 				T result = caseSupplierEntry(supplierEntry);
 				if (result == null) result = caseSupplier(supplierEntry);
-				if (result == null) result = caseEntry(supplierEntry);
-				if (result == null) result = caseTypedElement(supplierEntry);
+				if (result == null) result = caseAbstractEntry(supplierEntry);
 				if (result == null) result = caseNamedElement(supplierEntry);
 				if (result == null) result = caseModelElement(supplierEntry);
 				if (result == null) result = defaultCase(theEObject);
@@ -217,10 +216,9 @@ public class NcoreSwitch<T> extends Switch<T> {
 				Property property = (Property)theEObject;
 				T result = caseProperty(property);
 				if (result == null) result = caseValue(property);
-				if (result == null) result = caseEntry(property);
+				if (result == null) result = caseAbstractEntry(property);
 				if (result == null) result = caseSupplier(property);
 				if (result == null) result = caseNamedElement(property);
-				if (result == null) result = caseTypedElement(property);
 				if (result == null) result = caseModelElement(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -229,10 +227,9 @@ public class NcoreSwitch<T> extends Switch<T> {
 				Function function = (Function)theEObject;
 				T result = caseFunction(function);
 				if (result == null) result = caseOperation(function);
-				if (result == null) result = caseEntry(function);
+				if (result == null) result = caseAbstractEntry(function);
 				if (result == null) result = caseSupplier(function);
 				if (result == null) result = caseNamedElement(function);
-				if (result == null) result = caseTypedElement(function);
 				if (result == null) result = caseModelElement(function);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -241,7 +238,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 				List list = (List)theEObject;
 				T result = caseList(list);
 				if (result == null) result = caseArray(list);
-				if (result == null) result = caseEntry(list);
+				if (result == null) result = caseAbstractEntry(list);
 				if (result == null) result = caseNamedElement(list);
 				if (result == null) result = caseModelElement(list);
 				if (result == null) result = defaultCase(theEObject);
@@ -251,7 +248,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 				org.nasdanika.ncore.Object object = (org.nasdanika.ncore.Object)theEObject;
 				T result = caseObject(object);
 				if (result == null) result = caseMap(object);
-				if (result == null) result = caseEntry(object);
+				if (result == null) result = caseAbstractEntry(object);
 				if (result == null) result = caseNamedElement(object);
 				if (result == null) result = caseModelElement(object);
 				if (result == null) result = defaultCase(theEObject);
@@ -276,7 +273,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 				RestFunction restFunction = (RestFunction)theEObject;
 				T result = caseRestFunction(restFunction);
 				if (result == null) result = caseRestOperation(restFunction);
-				if (result == null) result = caseEntry(restFunction);
+				if (result == null) result = caseAbstractEntry(restFunction);
 				if (result == null) result = caseHttpCall(restFunction);
 				if (result == null) result = caseNamedElement(restFunction);
 				if (result == null) result = caseModelElement(restFunction);
@@ -287,8 +284,30 @@ public class NcoreSwitch<T> extends Switch<T> {
 				Html html = (Html)theEObject;
 				T result = caseHtml(html);
 				if (result == null) result = caseSupplier(html);
-				if (result == null) result = caseTypedElement(html);
 				if (result == null) result = caseModelElement(html);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.SCRIPT: {
+				Script script = (Script)theEObject;
+				T result = caseScript(script);
+				if (result == null) result = caseModelElement(script);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.SCRIPT_TEXT: {
+				ScriptText scriptText = (ScriptText)theEObject;
+				T result = caseScriptText(scriptText);
+				if (result == null) result = caseScript(scriptText);
+				if (result == null) result = caseModelElement(scriptText);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.SCRIPT_RESOURCE: {
+				ScriptResource scriptResource = (ScriptResource)theEObject;
+				T result = caseScriptResource(scriptResource);
+				if (result == null) result = caseScript(scriptResource);
+				if (result == null) result = caseModelElement(scriptResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -357,17 +376,17 @@ public class NcoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Service</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Service</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTypedElement(TypedElement object) {
+	public T caseService(Service object) {
 		return null;
 	}
 
@@ -477,32 +496,32 @@ public class NcoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Entry</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEntry(Entry object) {
+	public T caseAbstractEntry(AbstractEntry object) {
 		return null;
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Typed Entry</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Service Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Typed Entry</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Service Entry</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTypedEntry(TypedEntry object) {
+	public T caseServiceEntry(ServiceEntry object) {
 		return null;
 	}
 
@@ -653,6 +672,51 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseHtml(Html object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Script</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Script</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScript(Script object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Script Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Script Text</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScriptText(ScriptText object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Script Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Script Resource</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScriptResource(ScriptResource object) {
 		return null;
 	}
 

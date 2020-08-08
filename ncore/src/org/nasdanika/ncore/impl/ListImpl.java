@@ -3,7 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
@@ -89,7 +89,7 @@ public class ListImpl extends ArrayImpl implements List {
 	 */
 	@Override
 	public boolean isEnabled() {
-		return (Boolean)eDynamicGet(NcorePackage.LIST__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+		return (Boolean)eDynamicGet(NcorePackage.LIST__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, true, true);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class ListImpl extends ArrayImpl implements List {
 	 */
 	@Override
 	public void setEnabled(boolean newEnabled) {
-		eDynamicSet(NcorePackage.LIST__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+		eDynamicSet(NcorePackage.LIST__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, newEnabled);
 	}
 
 	/**
@@ -183,9 +183,9 @@ public class ListImpl extends ArrayImpl implements List {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.LIST__ENABLED: return NcorePackage.ENTRY__ENABLED;
+				case NcorePackage.LIST__ENABLED: return NcorePackage.ABSTRACT_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -205,9 +205,9 @@ public class ListImpl extends ArrayImpl implements List {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.ENTRY__ENABLED: return NcorePackage.LIST__ENABLED;
+				case NcorePackage.ABSTRACT_ENTRY__ENABLED: return NcorePackage.LIST__ENABLED;
 				default: return -1;
 			}
 		}

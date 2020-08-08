@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
 public interface RestOperation extends HttpCall {
 	/**
 	 * Returns the value of the '<em><b>Arguments</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.Entry}.
+	 * The list contents are of type {@link org.nasdanika.ncore.AbstractEntry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -38,6 +38,6 @@ public interface RestOperation extends HttpCall {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Entry> getArguments();
+	EList<AbstractEntry> getArguments();
 
 } // RestOperation

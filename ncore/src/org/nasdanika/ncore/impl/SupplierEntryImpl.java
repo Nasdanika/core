@@ -3,7 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.SupplierEntry;
@@ -89,7 +89,7 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 	 */
 	@Override
 	public boolean isEnabled() {
-		return (Boolean)eDynamicGet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+		return (Boolean)eDynamicGet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, true, true);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 	 */
 	@Override
 	public void setEnabled(boolean newEnabled) {
-		eDynamicSet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+		eDynamicSet(NcorePackage.SUPPLIER_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, newEnabled);
 	}
 
 	/**
@@ -183,9 +183,9 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.SUPPLIER_ENTRY__ENABLED: return NcorePackage.ENTRY__ENABLED;
+				case NcorePackage.SUPPLIER_ENTRY__ENABLED: return NcorePackage.ABSTRACT_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -205,9 +205,9 @@ public class SupplierEntryImpl extends SupplierImpl implements SupplierEntry {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.ENTRY__ENABLED: return NcorePackage.SUPPLIER_ENTRY__ENABLED;
+				case NcorePackage.ABSTRACT_ENTRY__ENABLED: return NcorePackage.SUPPLIER_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}

@@ -265,14 +265,59 @@ public interface NcorePackage extends EPackage {
 	int CONFIGURABLE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedElementImpl <em>Typed Element</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ServiceImpl <em>Service</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.TypedElementImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedElement()
+	 * @see org.nasdanika.ncore.impl.ServiceImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getService()
 	 * @generated
 	 */
-	int TYPED_ELEMENT = 4;
+	int SERVICE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__TYPE = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Service</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Service</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ValueImpl <em>Value</em>}' class.
@@ -313,26 +358,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	int ARRAY = 11;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.EntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
-	 * @generated
-	 */
-	int ENTRY = 12;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.TypedEntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedEntry()
-	 * @generated
-	 */
-	int TYPED_ENTRY = 13;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
@@ -421,7 +446,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ELEMENT__TITLE = MODEL_ELEMENT__TITLE;
+	int SUPPLIER__TITLE = MODEL_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -430,88 +455,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ELEMENT__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int SUPPLIER__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ELEMENT__TYPE = MODEL_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPED_ELEMENT__REQUIRED = MODEL_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Typed Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPED_ELEMENT_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Typed Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPED_ELEMENT_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER__TITLE = TYPED_ELEMENT__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER__DESCRIPTION = TYPED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER__TYPE = TYPED_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER__REQUIRED = TYPED_ELEMENT__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER__IMPLEMENTATION = TYPED_ELEMENT_FEATURE_COUNT + 0;
+	int SUPPLIER__FACTORY = MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Supplier</em>' class.
@@ -520,7 +473,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUPPLIER_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 1;
+	int SUPPLIER_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Supplier</em>' class.
@@ -529,7 +482,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SUPPLIER_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
+	int SUPPLIER_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ResourceImpl <em>Resource</em>}' class.
@@ -548,7 +501,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__TITLE = TYPED_ELEMENT__TITLE;
+	int RESOURCE__TITLE = SERVICE__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -557,7 +510,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DESCRIPTION = TYPED_ELEMENT__DESCRIPTION;
+	int RESOURCE__DESCRIPTION = SERVICE__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -566,16 +519,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__TYPE = TYPED_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE__REQUIRED = TYPED_ELEMENT__REQUIRED;
+	int RESOURCE__TYPE = SERVICE__TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -584,7 +528,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__LOCATION = TYPED_ELEMENT_FEATURE_COUNT + 0;
+	int RESOURCE__LOCATION = SERVICE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Interpolate</b></em>' attribute.
@@ -593,7 +537,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__INTERPOLATE = TYPED_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE__INTERPOLATE = SERVICE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -602,7 +546,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 2;
+	int RESOURCE_FEATURE_COUNT = SERVICE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -611,7 +555,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
+	int RESOURCE_OPERATION_COUNT = SERVICE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ReferenceImpl <em>Reference</em>}' class.
@@ -687,31 +631,13 @@ public interface NcorePackage extends EPackage {
 	int VALUE__DESCRIPTION = SUPPLIER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE__TYPE = SUPPLIER__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE__REQUIRED = SUPPLIER__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE__IMPLEMENTATION = SUPPLIER__IMPLEMENTATION;
+	int VALUE__FACTORY = SUPPLIER__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -756,7 +682,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NULL__TITLE = TYPED_ELEMENT__TITLE;
+	int NULL__TITLE = SERVICE__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -765,7 +691,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NULL__DESCRIPTION = TYPED_ELEMENT__DESCRIPTION;
+	int NULL__DESCRIPTION = SERVICE__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -774,16 +700,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NULL__TYPE = TYPED_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NULL__REQUIRED = TYPED_ELEMENT__REQUIRED;
+	int NULL__TYPE = SERVICE__TYPE;
 
 	/**
 	 * The number of structural features of the '<em>Null</em>' class.
@@ -792,7 +709,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NULL_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 0;
+	int NULL_FEATURE_COUNT = SERVICE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Null</em>' class.
@@ -801,7 +718,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NULL_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
+	int NULL_OPERATION_COUNT = SERVICE_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -822,31 +739,13 @@ public interface NcorePackage extends EPackage {
 	int OPERATION__DESCRIPTION = SUPPLIER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPERATION__TYPE = SUPPLIER__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPERATION__REQUIRED = SUPPLIER__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPERATION__IMPLEMENTATION = SUPPLIER__IMPLEMENTATION;
+	int OPERATION__FACTORY = SUPPLIER__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -921,13 +820,23 @@ public interface NcorePackage extends EPackage {
 	int ARRAY_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.AbstractEntryImpl <em>Abstract Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.AbstractEntryImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getAbstractEntry()
+	 * @generated
+	 */
+	int ABSTRACT_ENTRY = 12;
+
+	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY__TITLE = NAMED_ELEMENT__TITLE;
+	int ABSTRACT_ENTRY__TITLE = NAMED_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -936,7 +845,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
+	int ABSTRACT_ENTRY__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -945,7 +854,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY__NAME = NAMED_ELEMENT__NAME;
+	int ABSTRACT_ENTRY__NAME = NAMED_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -954,25 +863,35 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY__ENABLED = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ABSTRACT_ENTRY__ENABLED = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of structural features of the '<em>Entry</em>' class.
+	 * The number of structural features of the '<em>Abstract Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ABSTRACT_ENTRY_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of operations of the '<em>Entry</em>' class.
+	 * The number of operations of the '<em>Abstract Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int ABSTRACT_ENTRY_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ServiceEntryImpl <em>Service Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ServiceEntryImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getServiceEntry()
+	 * @generated
+	 */
+	int SERVICE_ENTRY = 13;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -981,7 +900,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY__TITLE = TYPED_ELEMENT__TITLE;
+	int SERVICE_ENTRY__TITLE = SERVICE__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -990,7 +909,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY__DESCRIPTION = TYPED_ELEMENT__DESCRIPTION;
+	int SERVICE_ENTRY__DESCRIPTION = SERVICE__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -999,16 +918,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY__TYPE = TYPED_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TYPED_ENTRY__REQUIRED = TYPED_ELEMENT__REQUIRED;
+	int SERVICE_ENTRY__TYPE = SERVICE__TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1017,7 +927,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY__NAME = TYPED_ELEMENT_FEATURE_COUNT + 0;
+	int SERVICE_ENTRY__NAME = SERVICE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -1026,25 +936,25 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY__ENABLED = TYPED_ELEMENT_FEATURE_COUNT + 1;
+	int SERVICE_ENTRY__ENABLED = SERVICE_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Typed Entry</em>' class.
+	 * The number of structural features of the '<em>Service Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY_FEATURE_COUNT = TYPED_ELEMENT_FEATURE_COUNT + 2;
+	int SERVICE_ENTRY_FEATURE_COUNT = SERVICE_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of operations of the '<em>Typed Entry</em>' class.
+	 * The number of operations of the '<em>Service Entry</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TYPED_ENTRY_OPERATION_COUNT = TYPED_ELEMENT_OPERATION_COUNT + 0;
+	int SERVICE_ENTRY_OPERATION_COUNT = SERVICE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.SupplierEntryImpl <em>Supplier Entry</em>}' class.
@@ -1075,31 +985,13 @@ public interface NcorePackage extends EPackage {
 	int SUPPLIER_ENTRY__DESCRIPTION = SUPPLIER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUPPLIER_ENTRY__TYPE = SUPPLIER__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__REQUIRED = SUPPLIER__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__IMPLEMENTATION = SUPPLIER__IMPLEMENTATION;
+	int SUPPLIER_ENTRY__FACTORY = SUPPLIER__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1201,31 +1093,13 @@ public interface NcorePackage extends EPackage {
 	int PROPERTY__DESCRIPTION = VALUE__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY__TYPE = VALUE__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY__REQUIRED = VALUE__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY__IMPLEMENTATION = VALUE__IMPLEMENTATION;
+	int PROPERTY__FACTORY = VALUE__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1300,31 +1174,13 @@ public interface NcorePackage extends EPackage {
 	int FUNCTION__DESCRIPTION = OPERATION__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FUNCTION__TYPE = OPERATION__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUNCTION__REQUIRED = OPERATION__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FUNCTION__IMPLEMENTATION = OPERATION__IMPLEMENTATION;
+	int FUNCTION__FACTORY = OPERATION__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -1859,31 +1715,13 @@ public interface NcorePackage extends EPackage {
 	int HTML__DESCRIPTION = SUPPLIER__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * The feature id for the '<em><b>Factory</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int HTML__TYPE = SUPPLIER__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Required</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HTML__REQUIRED = SUPPLIER__REQUIRED;
-
-	/**
-	 * The feature id for the '<em><b>Implementation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int HTML__IMPLEMENTATION = SUPPLIER__IMPLEMENTATION;
+	int HTML__FACTORY = SUPPLIER__FACTORY;
 
 	/**
 	 * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -1922,6 +1760,189 @@ public interface NcorePackage extends EPackage {
 	int HTML_OPERATION_COUNT = SUPPLIER_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ScriptImpl <em>Script</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ScriptImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScript()
+	 * @generated
+	 */
+	int SCRIPT = 24;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT__TITLE = MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT__BINDINGS = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Script</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Script</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ScriptTextImpl <em>Script Text</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ScriptTextImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptText()
+	 * @generated
+	 */
+	int SCRIPT_TEXT = 25;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT__TITLE = SCRIPT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT__DESCRIPTION = SCRIPT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT__BINDINGS = SCRIPT__BINDINGS;
+
+	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT__CODE = SCRIPT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Script Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT_FEATURE_COUNT = SCRIPT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Script Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_TEXT_OPERATION_COUNT = SCRIPT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ScriptResourceImpl <em>Script Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ScriptResourceImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptResource()
+	 * @generated
+	 */
+	int SCRIPT_RESOURCE = 26;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE__TITLE = SCRIPT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE__DESCRIPTION = SCRIPT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Bindings</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE__BINDINGS = SCRIPT__BINDINGS;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE__LOCATION = SCRIPT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Script Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE_FEATURE_COUNT = SCRIPT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Script Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCRIPT_RESOURCE_OPERATION_COUNT = SCRIPT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1929,7 +1950,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 24;
+	int HTTP_METHOD = 27;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.ModelElement <em>Model Element</em>}'.
@@ -2027,6 +2048,27 @@ public interface NcorePackage extends EPackage {
 	EReference getConfigurable_Configuration();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Service <em>Service</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Service</em>'.
+	 * @see org.nasdanika.ncore.Service
+	 * @generated
+	 */
+	EClass getService();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Service#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.nasdanika.ncore.Service#getType()
+	 * @see #getService()
+	 * @generated
+	 */
+	EAttribute getService_Type();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Supplier <em>Supplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2037,15 +2079,15 @@ public interface NcorePackage extends EPackage {
 	EClass getSupplier();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Supplier#getImplementation <em>Implementation</em>}'.
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Supplier#getFactory <em>Factory</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Implementation</em>'.
-	 * @see org.nasdanika.ncore.Supplier#getImplementation()
+	 * @return the meta object for the attribute '<em>Factory</em>'.
+	 * @see org.nasdanika.ncore.Supplier#getFactory()
 	 * @see #getSupplier()
 	 * @generated
 	 */
-	EAttribute getSupplier_Implementation();
+	EAttribute getSupplier_Factory();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Resource <em>Resource</em>}'.
@@ -2099,38 +2141,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getReference_Target();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.TypedElement <em>Typed Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Typed Element</em>'.
-	 * @see org.nasdanika.ncore.TypedElement
-	 * @generated
-	 */
-	EClass getTypedElement();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.TypedElement#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type</em>'.
-	 * @see org.nasdanika.ncore.TypedElement#getType()
-	 * @see #getTypedElement()
-	 * @generated
-	 */
-	EAttribute getTypedElement_Type();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.TypedElement#isRequired <em>Required</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Required</em>'.
-	 * @see org.nasdanika.ncore.TypedElement#isRequired()
-	 * @see #getTypedElement()
-	 * @generated
-	 */
-	EAttribute getTypedElement_Required();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Value <em>Value</em>}'.
@@ -2217,35 +2227,35 @@ public interface NcorePackage extends EPackage {
 	EReference getArray_Elements();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.Entry <em>Entry</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.AbstractEntry <em>Abstract Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Entry</em>'.
-	 * @see org.nasdanika.ncore.Entry
+	 * @return the meta object for class '<em>Abstract Entry</em>'.
+	 * @see org.nasdanika.ncore.AbstractEntry
 	 * @generated
 	 */
-	EClass getEntry();
+	EClass getAbstractEntry();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Entry#isEnabled <em>Enabled</em>}'.
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.AbstractEntry#isEnabled <em>Enabled</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Enabled</em>'.
-	 * @see org.nasdanika.ncore.Entry#isEnabled()
-	 * @see #getEntry()
+	 * @see org.nasdanika.ncore.AbstractEntry#isEnabled()
+	 * @see #getAbstractEntry()
 	 * @generated
 	 */
-	EAttribute getEntry_Enabled();
+	EAttribute getAbstractEntry_Enabled();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.TypedEntry <em>Typed Entry</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ServiceEntry <em>Service Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Typed Entry</em>'.
-	 * @see org.nasdanika.ncore.TypedEntry
+	 * @return the meta object for class '<em>Service Entry</em>'.
+	 * @see org.nasdanika.ncore.ServiceEntry
 	 * @generated
 	 */
-	EClass getTypedEntry();
+	EClass getServiceEntry();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.SupplierEntry <em>Supplier Entry</em>}'.
@@ -2469,6 +2479,69 @@ public interface NcorePackage extends EPackage {
 	EAttribute getHtml_Interpolate();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Script <em>Script</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Script</em>'.
+	 * @see org.nasdanika.ncore.Script
+	 * @generated
+	 */
+	EClass getScript();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Script#getBindings <em>Bindings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Bindings</em>'.
+	 * @see org.nasdanika.ncore.Script#getBindings()
+	 * @see #getScript()
+	 * @generated
+	 */
+	EReference getScript_Bindings();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ScriptText <em>Script Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Script Text</em>'.
+	 * @see org.nasdanika.ncore.ScriptText
+	 * @generated
+	 */
+	EClass getScriptText();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ScriptText#getCode <em>Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Code</em>'.
+	 * @see org.nasdanika.ncore.ScriptText#getCode()
+	 * @see #getScriptText()
+	 * @generated
+	 */
+	EAttribute getScriptText_Code();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ScriptResource <em>Script Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Script Resource</em>'.
+	 * @see org.nasdanika.ncore.ScriptResource
+	 * @generated
+	 */
+	EClass getScriptResource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ScriptResource#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.ncore.ScriptResource#getLocation()
+	 * @see #getScriptResource()
+	 * @generated
+	 */
+	EAttribute getScriptResource_Location();
+
+	/**
 	 * Returns the meta object for enum '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2582,6 +2655,24 @@ public interface NcorePackage extends EPackage {
 		EReference CONFIGURABLE__CONFIGURATION = eINSTANCE.getConfigurable_Configuration();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ServiceImpl <em>Service</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ServiceImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getService()
+		 * @generated
+		 */
+		EClass SERVICE = eINSTANCE.getService();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SERVICE__TYPE = eINSTANCE.getService_Type();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.SupplierImpl <em>Supplier</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2592,12 +2683,12 @@ public interface NcorePackage extends EPackage {
 		EClass SUPPLIER = eINSTANCE.getSupplier();
 
 		/**
-		 * The meta object literal for the '<em><b>Implementation</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Factory</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SUPPLIER__IMPLEMENTATION = eINSTANCE.getSupplier_Implementation();
+		EAttribute SUPPLIER__FACTORY = eINSTANCE.getSupplier_Factory();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ResourceImpl <em>Resource</em>}' class.
@@ -2642,32 +2733,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference REFERENCE__TARGET = eINSTANCE.getReference_Target();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TypedElementImpl <em>Typed Element</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.TypedElementImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedElement()
-		 * @generated
-		 */
-		EClass TYPED_ELEMENT = eINSTANCE.getTypedElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TYPED_ELEMENT__TYPE = eINSTANCE.getTypedElement_Type();
-
-		/**
-		 * The meta object literal for the '<em><b>Required</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TYPED_ELEMENT__REQUIRED = eINSTANCE.getTypedElement_Required();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ValueImpl <em>Value</em>}' class.
@@ -2742,14 +2807,14 @@ public interface NcorePackage extends EPackage {
 		EReference ARRAY__ELEMENTS = eINSTANCE.getArray_Elements();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.AbstractEntryImpl <em>Abstract Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.EntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
+		 * @see org.nasdanika.ncore.impl.AbstractEntryImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getAbstractEntry()
 		 * @generated
 		 */
-		EClass ENTRY = eINSTANCE.getEntry();
+		EClass ABSTRACT_ENTRY = eINSTANCE.getAbstractEntry();
 
 		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
@@ -2757,17 +2822,17 @@ public interface NcorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ENTRY__ENABLED = eINSTANCE.getEntry_Enabled();
+		EAttribute ABSTRACT_ENTRY__ENABLED = eINSTANCE.getAbstractEntry_Enabled();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TypedEntryImpl <em>Typed Entry</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ServiceEntryImpl <em>Service Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.TypedEntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTypedEntry()
+		 * @see org.nasdanika.ncore.impl.ServiceEntryImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getServiceEntry()
 		 * @generated
 		 */
-		EClass TYPED_ENTRY = eINSTANCE.getTypedEntry();
+		EClass SERVICE_ENTRY = eINSTANCE.getServiceEntry();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.SupplierEntryImpl <em>Supplier Entry</em>}' class.
@@ -2956,6 +3021,60 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute HTML__INTERPOLATE = eINSTANCE.getHtml_Interpolate();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ScriptImpl <em>Script</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ScriptImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScript()
+		 * @generated
+		 */
+		EClass SCRIPT = eINSTANCE.getScript();
+
+		/**
+		 * The meta object literal for the '<em><b>Bindings</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCRIPT__BINDINGS = eINSTANCE.getScript_Bindings();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ScriptTextImpl <em>Script Text</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ScriptTextImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptText()
+		 * @generated
+		 */
+		EClass SCRIPT_TEXT = eINSTANCE.getScriptText();
+
+		/**
+		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCRIPT_TEXT__CODE = eINSTANCE.getScriptText_Code();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ScriptResourceImpl <em>Script Resource</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ScriptResourceImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptResource()
+		 * @generated
+		 */
+		EClass SCRIPT_RESOURCE = eINSTANCE.getScriptResource();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCRIPT_RESOURCE__LOCATION = eINSTANCE.getScriptResource_Location();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.

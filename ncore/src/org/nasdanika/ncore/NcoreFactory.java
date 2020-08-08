@@ -22,13 +22,13 @@ public interface NcoreFactory extends EFactory {
 	NcoreFactory eINSTANCE = org.nasdanika.ncore.impl.NcoreFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Typed Element</em>'.
+	 * Returns a new object of class '<em>Service</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Typed Element</em>'.
+	 * @return a new object of class '<em>Service</em>'.
 	 * @generated
 	 */
-	TypedElement createTypedElement();
+	Service createService();
 
 	/**
 	 * Returns a new object of class '<em>Supplier</em>'.
@@ -94,13 +94,13 @@ public interface NcoreFactory extends EFactory {
 	Array createArray();
 
 	/**
-	 * Returns a new object of class '<em>Typed Entry</em>'.
+	 * Returns a new object of class '<em>Service Entry</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Typed Entry</em>'.
+	 * @return a new object of class '<em>Service Entry</em>'.
 	 * @generated
 	 */
-	TypedEntry createTypedEntry();
+	ServiceEntry createServiceEntry();
 
 	/**
 	 * Returns a new object of class '<em>Supplier Entry</em>'.
@@ -191,6 +191,24 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	Html createHtml();
+
+	/**
+	 * Returns a new object of class '<em>Script Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Script Text</em>'.
+	 * @generated
+	 */
+	ScriptText createScriptText();
+
+	/**
+	 * Returns a new object of class '<em>Script Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Script Resource</em>'.
+	 * @generated
+	 */
+	ScriptResource createScriptResource();
 
 	/**
 	 * Returns the package supported by this factory.

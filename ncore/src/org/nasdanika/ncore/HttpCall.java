@@ -85,7 +85,7 @@ public interface HttpCall extends ModelElement {
 
 	/**
 	 * Returns the value of the '<em><b>Headers</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.Entry}.
+	 * The list contents are of type {@link org.nasdanika.ncore.AbstractEntry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Headers</em>' containment reference list.
@@ -93,7 +93,7 @@ public interface HttpCall extends ModelElement {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Entry> getHeaders();
+	EList<AbstractEntry> getHeaders();
 
 	/**
 	 * Returns the value of the '<em><b>Connect Timeout</b></em>' attribute.

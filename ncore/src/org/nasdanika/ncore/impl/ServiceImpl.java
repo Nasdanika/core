@@ -3,24 +3,24 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
+
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.TypedElement;
+import org.nasdanika.ncore.Service;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Typed Element</b></em>'.
+ * An implementation of the model object '<em><b>Service</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.TypedElementImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.TypedElementImpl#isRequired <em>Required</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ServiceImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TypedElementImpl extends ModelElementImpl implements TypedElement {
+public class ServiceImpl extends ModelElementImpl implements Service {
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -32,21 +32,11 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	protected static final String TYPE_EDEFAULT = null;
 
 	/**
-	 * The default value of the '{@link #isRequired() <em>Required</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isRequired()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean REQUIRED_EDEFAULT = false;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypedElementImpl() {
+	protected ServiceImpl() {
 		super();
 	}
 
@@ -57,7 +47,7 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.TYPED_ELEMENT;
+		return NcorePackage.Literals.SERVICE;
 	}
 
 	/**
@@ -67,7 +57,7 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	 */
 	@Override
 	public String getType() {
-		return (String)eDynamicGet(NcorePackage.TYPED_ELEMENT__TYPE, NcorePackage.Literals.TYPED_ELEMENT__TYPE, true, true);
+		return (String)eDynamicGet(NcorePackage.SERVICE__TYPE, NcorePackage.Literals.SERVICE__TYPE, true, true);
 	}
 
 	/**
@@ -77,27 +67,7 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	 */
 	@Override
 	public void setType(String newType) {
-		eDynamicSet(NcorePackage.TYPED_ELEMENT__TYPE, NcorePackage.Literals.TYPED_ELEMENT__TYPE, newType);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isRequired() {
-		return (Boolean)eDynamicGet(NcorePackage.TYPED_ELEMENT__REQUIRED, NcorePackage.Literals.TYPED_ELEMENT__REQUIRED, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setRequired(boolean newRequired) {
-		eDynamicSet(NcorePackage.TYPED_ELEMENT__REQUIRED, NcorePackage.Literals.TYPED_ELEMENT__REQUIRED, newRequired);
+		eDynamicSet(NcorePackage.SERVICE__TYPE, NcorePackage.Literals.SERVICE__TYPE, newType);
 	}
 
 	/**
@@ -108,10 +78,8 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ELEMENT__TYPE:
+			case NcorePackage.SERVICE__TYPE:
 				return getType();
-			case NcorePackage.TYPED_ELEMENT__REQUIRED:
-				return isRequired();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -124,11 +92,8 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ELEMENT__TYPE:
+			case NcorePackage.SERVICE__TYPE:
 				setType((String)newValue);
-				return;
-			case NcorePackage.TYPED_ELEMENT__REQUIRED:
-				setRequired((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -142,11 +107,8 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ELEMENT__TYPE:
+			case NcorePackage.SERVICE__TYPE:
 				setType(TYPE_EDEFAULT);
-				return;
-			case NcorePackage.TYPED_ELEMENT__REQUIRED:
-				setRequired(REQUIRED_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -160,12 +122,10 @@ public class TypedElementImpl extends ModelElementImpl implements TypedElement {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ELEMENT__TYPE:
+			case NcorePackage.SERVICE__TYPE:
 				return TYPE_EDEFAULT == null ? getType() != null : !TYPE_EDEFAULT.equals(getType());
-			case NcorePackage.TYPED_ELEMENT__REQUIRED:
-				return isRequired() != REQUIRED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //TypedElementImpl
+} //ServiceImpl

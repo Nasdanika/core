@@ -3,7 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -88,7 +88,7 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 	 */
 	@Override
 	public boolean isEnabled() {
-		return (Boolean)eDynamicGet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+		return (Boolean)eDynamicGet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, true, true);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 	 */
 	@Override
 	public void setEnabled(boolean newEnabled) {
-		eDynamicSet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+		eDynamicSet(NcorePackage.OBJECT__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, newEnabled);
 	}
 
 	/**
@@ -182,9 +182,9 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.OBJECT__ENABLED: return NcorePackage.ENTRY__ENABLED;
+				case NcorePackage.OBJECT__ENABLED: return NcorePackage.ABSTRACT_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -204,9 +204,9 @@ public class ObjectImpl extends MapImpl implements org.nasdanika.ncore.Object {
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.ENTRY__ENABLED: return NcorePackage.OBJECT__ENABLED;
+				case NcorePackage.ABSTRACT_ENTRY__ENABLED: return NcorePackage.OBJECT__ENABLED;
 				default: return -1;
 			}
 		}

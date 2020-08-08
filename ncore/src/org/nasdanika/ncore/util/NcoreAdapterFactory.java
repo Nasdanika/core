@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -25,10 +25,13 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Script;
+import org.nasdanika.ncore.ScriptResource;
+import org.nasdanika.ncore.ScriptText;
+import org.nasdanika.ncore.Service;
+import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.TypedElement;
-import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -104,8 +107,8 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createConfigurableAdapter();
 			}
 			@Override
-			public Adapter caseTypedElement(TypedElement object) {
-				return createTypedElementAdapter();
+			public Adapter caseService(Service object) {
+				return createServiceAdapter();
 			}
 			@Override
 			public Adapter caseSupplier(Supplier object) {
@@ -136,12 +139,12 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createArrayAdapter();
 			}
 			@Override
-			public Adapter caseEntry(Entry object) {
-				return createEntryAdapter();
+			public Adapter caseAbstractEntry(AbstractEntry object) {
+				return createAbstractEntryAdapter();
 			}
 			@Override
-			public Adapter caseTypedEntry(TypedEntry object) {
-				return createTypedEntryAdapter();
+			public Adapter caseServiceEntry(ServiceEntry object) {
+				return createServiceEntryAdapter();
 			}
 			@Override
 			public Adapter caseSupplierEntry(SupplierEntry object) {
@@ -182,6 +185,18 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseHtml(Html object) {
 				return createHtmlAdapter();
+			}
+			@Override
+			public Adapter caseScript(Script object) {
+				return createScriptAdapter();
+			}
+			@Override
+			public Adapter caseScriptText(ScriptText object) {
+				return createScriptTextAdapter();
+			}
+			@Override
+			public Adapter caseScriptResource(ScriptResource object) {
+				return createScriptResourceAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -260,6 +275,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Service <em>Service</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Service
+	 * @generated
+	 */
+	public Adapter createServiceAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Supplier <em>Supplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -298,20 +327,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createReferenceAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.TypedElement <em>Typed Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.TypedElement
-	 * @generated
-	 */
-	public Adapter createTypedElementAdapter() {
 		return null;
 	}
 
@@ -372,30 +387,30 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Entry <em>Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.AbstractEntry <em>Abstract Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.Entry
+	 * @see org.nasdanika.ncore.AbstractEntry
 	 * @generated
 	 */
-	public Adapter createEntryAdapter() {
+	public Adapter createAbstractEntryAdapter() {
 		return null;
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.TypedEntry <em>Typed Entry</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ServiceEntry <em>Service Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.TypedEntry
+	 * @see org.nasdanika.ncore.ServiceEntry
 	 * @generated
 	 */
-	public Adapter createTypedEntryAdapter() {
+	public Adapter createServiceEntryAdapter() {
 		return null;
 	}
 
@@ -536,6 +551,48 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createHtmlAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Script <em>Script</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Script
+	 * @generated
+	 */
+	public Adapter createScriptAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ScriptText <em>Script Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.ScriptText
+	 * @generated
+	 */
+	public Adapter createScriptTextAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ScriptResource <em>Script Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.ScriptResource
+	 * @generated
+	 */
+	public Adapter createScriptResourceAdapter() {
 		return null;
 	}
 

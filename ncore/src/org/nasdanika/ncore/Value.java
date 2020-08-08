@@ -8,15 +8,9 @@ package org.nasdanika.ncore;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Value computes its result from text. 
+ * Value computes its result from text. If factory is empty then computation result is the value text interpolated if ``interpolate`` is set to true.
+ * Otherwise an adapter created by the factory provides value result.
  * 
- * Value implementation can be defined as follows:
- * 
- * * Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, just ``java.lang.String``.
- * * Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.
- * * Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then it shall take Context and String or just String. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.
- * 
- * When implementation is specified, value is equivalent to an operation with a single String argument.
  * <!-- end-model-doc -->
  *
  * <p>
@@ -37,8 +31,7 @@ public interface Value extends Supplier {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Textual representation of the value. If interpolate is ``true`` then the value is interpolated in the context. If type and implementation are empty value is returned as is. 
-	 * If type is specified and the result is not of that type, then the result is converted to the type using the context converter service.
+	 * Textual representation of the value. If interpolate is ``true`` then the value is interpolated in the context.
 	 * 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.

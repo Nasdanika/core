@@ -8,27 +8,29 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Resource;
+import org.nasdanika.ncore.Service;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Resource} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.Service} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ResourceItemProvider extends ServiceItemProvider {
+public class ServiceItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ResourceItemProvider(AdapterFactory adapterFactory) {
+	public ServiceItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -43,63 +45,42 @@ public class ResourceItemProvider extends ServiceItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLocationPropertyDescriptor(object);
-			addInterpolatePropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Location feature.
+	 * This adds a property descriptor for the Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
-	protected void addLocationPropertyDescriptor(Object object) {
+	protected void addTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Resource_location_feature"),
-				 NcorePackage.Literals.RESOURCE__LOCATION,
+				 getString("_UI_Service_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Service_type_feature", "_UI_Service_type"),
+				 NcorePackage.Literals.SERVICE__TYPE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
-				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Interpolate feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	protected void addInterpolatePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor(
-				 getResourceLocator(),
-				 getString("_UI_Resource_interpolate_feature"),
-				 NcorePackage.Literals.RESOURCE__INTERPOLATE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns Resource.gif.
+	 * This returns Service.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Resource.png"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Service.png"));
 	}
 
 	/**
@@ -120,13 +101,14 @@ public class ResourceItemProvider extends ServiceItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		Resource resource = (Resource)object;
-		String label = resource.getTitle();
+		String label = ((Service)object).getTitle();
 		if (Util.isBlank(label)) {
-			label = resource.getLocation();
+			label = ((Service)object).getType();
 		}
-		return label == null || label.length() == 0 ? getString("_UI_Resource_type") : label;
+		
+		return label == null || label.length() == 0 ? getString("_UI_Service_type") : label;
 	}
+
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -139,9 +121,8 @@ public class ResourceItemProvider extends ServiceItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Resource.class)) {
-			case NcorePackage.RESOURCE__LOCATION:
-			case NcorePackage.RESOURCE__INTERPOLATE:
+		switch (notification.getFeatureID(Service.class)) {
+			case NcorePackage.SERVICE__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

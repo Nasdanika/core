@@ -24,10 +24,12 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.ScriptResource;
+import org.nasdanika.ncore.ScriptText;
+import org.nasdanika.ncore.Service;
+import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.TypedElement;
-import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -74,7 +76,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case NcorePackage.TYPED_ELEMENT: return createTypedElement();
+			case NcorePackage.SERVICE: return createService();
 			case NcorePackage.SUPPLIER: return createSupplier();
 			case NcorePackage.RESOURCE: return createResource();
 			case NcorePackage.REFERENCE: return createReference();
@@ -82,7 +84,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.NULL: return createNull();
 			case NcorePackage.OPERATION: return createOperation();
 			case NcorePackage.ARRAY: return createArray();
-			case NcorePackage.TYPED_ENTRY: return createTypedEntry();
+			case NcorePackage.SERVICE_ENTRY: return createServiceEntry();
 			case NcorePackage.SUPPLIER_ENTRY: return createSupplierEntry();
 			case NcorePackage.MAP: return createMap();
 			case NcorePackage.PROPERTY: return createProperty();
@@ -93,6 +95,8 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.REST_OPERATION: return createRestOperation();
 			case NcorePackage.REST_FUNCTION: return createRestFunction();
 			case NcorePackage.HTML: return createHtml();
+			case NcorePackage.SCRIPT_TEXT: return createScriptText();
+			case NcorePackage.SCRIPT_RESOURCE: return createScriptResource();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -134,9 +138,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public TypedElement createTypedElement() {
-		TypedElementImpl typedElement = new TypedElementImpl();
-		return typedElement;
+	public Service createService() {
+		ServiceImpl service = new ServiceImpl();
+		return service;
 	}
 
 	/**
@@ -222,9 +226,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public TypedEntry createTypedEntry() {
-		TypedEntryImpl typedEntry = new TypedEntryImpl();
-		return typedEntry;
+	public ServiceEntry createServiceEntry() {
+		ServiceEntryImpl serviceEntry = new ServiceEntryImpl();
+		return serviceEntry;
 	}
 
 	/**
@@ -335,6 +339,28 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Html createHtml() {
 		HtmlImpl html = new HtmlImpl();
 		return html;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ScriptText createScriptText() {
+		ScriptTextImpl scriptText = new ScriptTextImpl();
+		return scriptText;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ScriptResource createScriptResource() {
+		ScriptResourceImpl scriptResource = new ScriptResourceImpl();
+		return scriptResource;
 	}
 
 	/**

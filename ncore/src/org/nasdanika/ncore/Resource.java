@@ -24,7 +24,7 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Resource extends TypedElement {
+public interface Resource extends Service {
 	/**
 	 * Returns the value of the '<em><b>Location</b></em>' attribute.
 	 * <!-- begin-user-doc -->

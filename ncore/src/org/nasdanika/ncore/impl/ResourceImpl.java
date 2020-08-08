@@ -20,7 +20,7 @@ import org.nasdanika.ncore.Resource;
  *
  * @generated
  */
-public class ResourceImpl extends TypedElementImpl implements Resource {
+public class ResourceImpl extends ServiceImpl implements Resource {
 	/**
 	 * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
 	 * <!-- begin-user-doc -->

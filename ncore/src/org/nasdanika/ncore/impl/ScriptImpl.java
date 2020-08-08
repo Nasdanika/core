@@ -5,34 +5,38 @@ package org.nasdanika.ncore.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Script;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Rest Operation</b></em>'.
+ * An implementation of the model object '<em><b>Script</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.RestOperationImpl#getArguments <em>Arguments</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ScriptImpl#getBindings <em>Bindings</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RestOperationImpl extends HttpCallImpl implements RestOperation {
+public abstract class ScriptImpl extends ModelElementImpl implements Script {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RestOperationImpl() {
+	protected ScriptImpl() {
 		super();
 	}
 
@@ -43,7 +47,7 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.REST_OPERATION;
+		return NcorePackage.Literals.SCRIPT;
 	}
 
 	/**
@@ -53,8 +57,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<AbstractEntry> getArguments() {
-		return (EList<AbstractEntry>)eDynamicGet(NcorePackage.REST_OPERATION__ARGUMENTS, NcorePackage.Literals.REST_OPERATION__ARGUMENTS, true, true);
+	public EList<AbstractEntry> getBindings() {
+		return (EList<AbstractEntry>)eDynamicGet(NcorePackage.SCRIPT__BINDINGS, NcorePackage.Literals.SCRIPT__BINDINGS, true, true);
 	}
 
 	/**
@@ -65,8 +69,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
+			case NcorePackage.SCRIPT__BINDINGS:
+				return ((InternalEList<?>)getBindings()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -79,8 +83,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return getArguments();
+			case NcorePackage.SCRIPT__BINDINGS:
+				return getBindings();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -94,9 +98,9 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				getArguments().clear();
-				getArguments().addAll((Collection<? extends AbstractEntry>)newValue);
+			case NcorePackage.SCRIPT__BINDINGS:
+				getBindings().clear();
+				getBindings().addAll((Collection<? extends AbstractEntry>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -110,8 +114,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				getArguments().clear();
+			case NcorePackage.SCRIPT__BINDINGS:
+				getBindings().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -125,10 +129,10 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return !getArguments().isEmpty();
+			case NcorePackage.SCRIPT__BINDINGS:
+				return !getBindings().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //RestOperationImpl
+} //ScriptImpl

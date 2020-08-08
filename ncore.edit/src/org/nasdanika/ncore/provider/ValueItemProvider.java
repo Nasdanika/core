@@ -125,14 +125,10 @@ public class ValueItemProvider extends SupplierItemProvider {
 		Value value = (Value) object;
 		String label = value.getTitle();
 		if (Util.isBlank(label)) {
-			String type = value.getType();			
 			StringBuilder labelBuilder = new StringBuilder();
-			if (!Util.isBlank(type)) {
-				labelBuilder.append("(").append(type).append(") ");
-			}
-			String implementation = value.getImplementation();
-			if (!Util.isBlank(implementation)) {
-				labelBuilder.append(implementation);
+			String factory = value.getFactory();
+			if (!Util.isBlank(factory)) {
+				labelBuilder.append(factory);
 			}
 			String strValue = value.getValue();
 			if (!Util.isBlank(strValue)) {

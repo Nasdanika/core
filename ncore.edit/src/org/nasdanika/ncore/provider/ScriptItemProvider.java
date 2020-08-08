@@ -8,27 +8,30 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
 import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Script;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.RestOperation} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.Script} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RestOperationItemProvider extends HttpCallItemProvider {
+public class ScriptItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RestOperationItemProvider(AdapterFactory adapterFactory) {
+	public ScriptItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -59,7 +62,7 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(NcorePackage.Literals.REST_OPERATION__ARGUMENTS);
+			childrenFeatures.add(NcorePackage.Literals.SCRIPT__BINDINGS);
 		}
 		return childrenFeatures;
 	}
@@ -78,17 +81,6 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	}
 
 	/**
-	 * This returns RestOperation.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/RestOperation"));
-	}
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -102,14 +94,13 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((RestOperation)object).getTitle();
+		String label = ((Script)object).getTitle();
 		return label == null || label.length() == 0 ?
-			getString("_UI_RestOperation_type") :
-			getString("_UI_RestOperation_type") + " " + label;
+			getString("_UI_Script_type") :	label;
 	}
 
 
@@ -124,8 +115,8 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(RestOperation.class)) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
+		switch (notification.getFeatureID(Script.class)) {
+			case NcorePackage.SCRIPT__BINDINGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -137,7 +128,7 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
@@ -145,62 +136,38 @@ public class RestOperationItemProvider extends HttpCallItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createServiceEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createSupplierEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createProperty()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createFunction()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createList()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createObject()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(NcorePackage.Literals.REST_OPERATION__ARGUMENTS,
+				(NcorePackage.Literals.SCRIPT__BINDINGS,
 				 NcoreFactory.eINSTANCE.createRestFunction()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == NcorePackage.Literals.HTTP_CALL__HEADERS ||
-			childFeature == NcorePackage.Literals.HTTP_CALL__BODY ||
-			childFeature == NcorePackage.Literals.REST_OPERATION__ARGUMENTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

@@ -17,5 +17,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Object extends Map, Entry {
+public interface Object extends Map, AbstractEntry {
 } // Object

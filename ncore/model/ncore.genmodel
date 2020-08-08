@@ -29,12 +29,11 @@
     <genClasses image="false" ecoreClass="ncore.ecore#//Configurable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Configurable/configuration"/>
     </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//TypedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//TypedElement/required"/>
+    <genClasses ecoreClass="ncore.ecore#//Service">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Service/type"/>
     </genClasses>
     <genClasses image="false" ecoreClass="ncore.ecore#//Supplier">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Supplier/implementation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Supplier/factory"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Resource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Resource/location"/>
@@ -54,10 +53,10 @@
     <genClasses ecoreClass="ncore.ecore#//Array">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Array/elements"/>
     </genClasses>
-    <genClasses image="false" ecoreClass="ncore.ecore#//Entry">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Entry/enabled"/>
+    <genClasses image="false" ecoreClass="ncore.ecore#//AbstractEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//AbstractEntry/enabled"/>
     </genClasses>
-    <genClasses ecoreClass="ncore.ecore#//TypedEntry"/>
+    <genClasses ecoreClass="ncore.ecore#//ServiceEntry"/>
     <genClasses ecoreClass="ncore.ecore#//SupplierEntry"/>
     <genClasses ecoreClass="ncore.ecore#//Map">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Map/entries"/>
@@ -82,6 +81,15 @@
     <genClasses ecoreClass="ncore.ecore#//Html">
       <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute ncore.ecore#//Html/content"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Html/interpolate"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="ncore.ecore#//Script">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Script/bindings"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//ScriptText">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ScriptText/code"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//ScriptResource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ScriptResource/location"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface List extends Array, Entry {
+public interface List extends Array, AbstractEntry {
 } // List

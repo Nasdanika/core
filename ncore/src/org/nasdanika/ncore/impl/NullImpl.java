@@ -13,7 +13,7 @@ import org.nasdanika.ncore.Null;
  *
  * @generated
  */
-public class NullImpl extends TypedElementImpl implements Null {
+public class NullImpl extends ServiceImpl implements Null {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

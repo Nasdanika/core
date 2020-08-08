@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Function extends Operation, Entry {
+public interface Function extends Operation, AbstractEntry {
 } // FunctionFactory

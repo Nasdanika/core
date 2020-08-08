@@ -74,26 +74,26 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedElement} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Service} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypedElementItemProvider typedElementItemProvider;
+	protected ServiceItemProvider serviceItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.TypedElement}.
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Service}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createTypedElementAdapter() {
-		if (typedElementItemProvider == null) {
-			typedElementItemProvider = new TypedElementItemProvider(this);
+	public Adapter createServiceAdapter() {
+		if (serviceItemProvider == null) {
+			serviceItemProvider = new ServiceItemProvider(this);
 		}
 
-		return typedElementItemProvider;
+		return serviceItemProvider;
 	}
 
 	/**
@@ -258,26 +258,26 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.TypedEntry} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ServiceEntry} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypedEntryItemProvider typedEntryItemProvider;
+	protected ServiceEntryItemProvider serviceEntryItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.TypedEntry}.
+	 * This creates an adapter for a {@link org.nasdanika.ncore.ServiceEntry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createTypedEntryAdapter() {
-		if (typedEntryItemProvider == null) {
-			typedEntryItemProvider = new TypedEntryItemProvider(this);
+	public Adapter createServiceEntryAdapter() {
+		if (serviceEntryItemProvider == null) {
+			serviceEntryItemProvider = new ServiceEntryItemProvider(this);
 		}
 
-		return typedEntryItemProvider;
+		return serviceEntryItemProvider;
 	}
 
 	/**
@@ -511,6 +511,52 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ScriptText} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScriptTextItemProvider scriptTextItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.ScriptText}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScriptTextAdapter() {
+		if (scriptTextItemProvider == null) {
+			scriptTextItemProvider = new ScriptTextItemProvider(this);
+		}
+
+		return scriptTextItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ScriptResource} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScriptResourceItemProvider scriptResourceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.ScriptResource}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScriptResourceAdapter() {
+		if (scriptResourceItemProvider == null) {
+			scriptResourceItemProvider = new ScriptResourceItemProvider(this);
+		}
+
+		return scriptResourceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -615,7 +661,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	 */
 	@Override
 	public void dispose() {
-		if (typedElementItemProvider != null) typedElementItemProvider.dispose();
+		if (serviceItemProvider != null) serviceItemProvider.dispose();
 		if (supplierItemProvider != null) supplierItemProvider.dispose();
 		if (resourceItemProvider != null) resourceItemProvider.dispose();
 		if (referenceItemProvider != null) referenceItemProvider.dispose();
@@ -623,7 +669,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (nullItemProvider != null) nullItemProvider.dispose();
 		if (operationItemProvider != null) operationItemProvider.dispose();
 		if (arrayItemProvider != null) arrayItemProvider.dispose();
-		if (typedEntryItemProvider != null) typedEntryItemProvider.dispose();
+		if (serviceEntryItemProvider != null) serviceEntryItemProvider.dispose();
 		if (supplierEntryItemProvider != null) supplierEntryItemProvider.dispose();
 		if (mapItemProvider != null) mapItemProvider.dispose();
 		if (propertyItemProvider != null) propertyItemProvider.dispose();
@@ -634,6 +680,8 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (restOperationItemProvider != null) restOperationItemProvider.dispose();
 		if (restFunctionItemProvider != null) restFunctionItemProvider.dispose();
 		if (htmlItemProvider != null) htmlItemProvider.dispose();
+		if (scriptTextItemProvider != null) scriptTextItemProvider.dispose();
+		if (scriptResourceItemProvider != null) scriptResourceItemProvider.dispose();
 	}
 
 }

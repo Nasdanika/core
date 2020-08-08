@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -32,10 +32,13 @@ import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
 import org.nasdanika.ncore.RestFunction;
 import org.nasdanika.ncore.RestOperation;
+import org.nasdanika.ncore.Script;
+import org.nasdanika.ncore.ScriptResource;
+import org.nasdanika.ncore.ScriptText;
+import org.nasdanika.ncore.Service;
+import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
 import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.TypedElement;
-import org.nasdanika.ncore.TypedEntry;
 import org.nasdanika.ncore.Value;
 import org.nasdanika.ncore.util.NcoreValidator;
 
@@ -78,6 +81,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass serviceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass supplierEClass = null;
 
 	/**
@@ -93,13 +103,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass referenceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass typedElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,14 +137,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass entryEClass = null;
+	private EClass abstractEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass typedEntryEClass = null;
+	private EClass serviceEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -212,6 +215,27 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass htmlEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scriptEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scriptTextEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scriptResourceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -387,6 +411,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getService() {
+		return serviceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getService_Type() {
+		return (EAttribute)serviceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSupplier() {
 		return supplierEClass;
 	}
@@ -397,7 +441,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSupplier_Implementation() {
+	public EAttribute getSupplier_Factory() {
 		return (EAttribute)supplierEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -449,36 +493,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EReference getReference_Target() {
 		return (EReference)referenceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getTypedElement() {
-		return typedElementEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getTypedElement_Type() {
-		return (EAttribute)typedElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getTypedElement_Required() {
-		return (EAttribute)typedElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -567,8 +581,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getEntry() {
-		return entryEClass;
+	public EClass getAbstractEntry() {
+		return abstractEntryEClass;
 	}
 
 	/**
@@ -577,8 +591,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getEntry_Enabled() {
-		return (EAttribute)entryEClass.getEStructuralFeatures().get(0);
+	public EAttribute getAbstractEntry_Enabled() {
+		return (EAttribute)abstractEntryEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -587,8 +601,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getTypedEntry() {
-		return typedEntryEClass;
+	public EClass getServiceEntry() {
+		return serviceEntryEClass;
 	}
 
 	/**
@@ -807,6 +821,66 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getScript() {
+		return scriptEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getScript_Bindings() {
+		return (EReference)scriptEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getScriptText() {
+		return scriptTextEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getScriptText_Code() {
+		return (EAttribute)scriptTextEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getScriptResource() {
+		return scriptResourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getScriptResource_Location() {
+		return (EAttribute)scriptResourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getHttpMethod() {
 		return httpMethodEEnum;
 	}
@@ -853,12 +927,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		configurableEClass = createEClass(CONFIGURABLE);
 		createEReference(configurableEClass, CONFIGURABLE__CONFIGURATION);
 
-		typedElementEClass = createEClass(TYPED_ELEMENT);
-		createEAttribute(typedElementEClass, TYPED_ELEMENT__TYPE);
-		createEAttribute(typedElementEClass, TYPED_ELEMENT__REQUIRED);
+		serviceEClass = createEClass(SERVICE);
+		createEAttribute(serviceEClass, SERVICE__TYPE);
 
 		supplierEClass = createEClass(SUPPLIER);
-		createEAttribute(supplierEClass, SUPPLIER__IMPLEMENTATION);
+		createEAttribute(supplierEClass, SUPPLIER__FACTORY);
 
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
@@ -879,10 +952,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		arrayEClass = createEClass(ARRAY);
 		createEReference(arrayEClass, ARRAY__ELEMENTS);
 
-		entryEClass = createEClass(ENTRY);
-		createEAttribute(entryEClass, ENTRY__ENABLED);
+		abstractEntryEClass = createEClass(ABSTRACT_ENTRY);
+		createEAttribute(abstractEntryEClass, ABSTRACT_ENTRY__ENABLED);
 
-		typedEntryEClass = createEClass(TYPED_ENTRY);
+		serviceEntryEClass = createEClass(SERVICE_ENTRY);
 
 		supplierEntryEClass = createEClass(SUPPLIER_ENTRY);
 
@@ -914,6 +987,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		htmlEClass = createEClass(HTML);
 		createEAttribute(htmlEClass, HTML__CONTENT);
 		createEAttribute(htmlEClass, HTML__INTERPOLATE);
+
+		scriptEClass = createEClass(SCRIPT);
+		createEReference(scriptEClass, SCRIPT__BINDINGS);
+
+		scriptTextEClass = createEClass(SCRIPT_TEXT);
+		createEAttribute(scriptTextEClass, SCRIPT_TEXT__CODE);
+
+		scriptResourceEClass = createEClass(SCRIPT_RESOURCE);
+		createEAttribute(scriptResourceEClass, SCRIPT_RESOURCE__LOCATION);
 
 		// Create enums
 		httpMethodEEnum = createEEnum(HTTP_METHOD);
@@ -949,33 +1031,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Add supertypes to classes
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
 		entityEClass.getESuperTypes().add(this.getModelElement());
-		typedElementEClass.getESuperTypes().add(this.getModelElement());
-		supplierEClass.getESuperTypes().add(this.getTypedElement());
-		resourceEClass.getESuperTypes().add(this.getTypedElement());
+		serviceEClass.getESuperTypes().add(this.getModelElement());
+		supplierEClass.getESuperTypes().add(this.getModelElement());
+		resourceEClass.getESuperTypes().add(this.getService());
 		referenceEClass.getESuperTypes().add(this.getModelElement());
 		valueEClass.getESuperTypes().add(this.getSupplier());
-		nullEClass.getESuperTypes().add(this.getTypedElement());
+		nullEClass.getESuperTypes().add(this.getService());
 		operationEClass.getESuperTypes().add(this.getSupplier());
 		arrayEClass.getESuperTypes().add(this.getModelElement());
-		entryEClass.getESuperTypes().add(this.getNamedElement());
-		typedEntryEClass.getESuperTypes().add(this.getTypedElement());
-		typedEntryEClass.getESuperTypes().add(this.getEntry());
+		abstractEntryEClass.getESuperTypes().add(this.getNamedElement());
+		serviceEntryEClass.getESuperTypes().add(this.getService());
+		serviceEntryEClass.getESuperTypes().add(this.getAbstractEntry());
 		supplierEntryEClass.getESuperTypes().add(this.getSupplier());
-		supplierEntryEClass.getESuperTypes().add(this.getEntry());
+		supplierEntryEClass.getESuperTypes().add(this.getAbstractEntry());
 		mapEClass.getESuperTypes().add(this.getModelElement());
 		propertyEClass.getESuperTypes().add(this.getValue());
-		propertyEClass.getESuperTypes().add(this.getEntry());
+		propertyEClass.getESuperTypes().add(this.getAbstractEntry());
 		functionEClass.getESuperTypes().add(this.getOperation());
-		functionEClass.getESuperTypes().add(this.getEntry());
+		functionEClass.getESuperTypes().add(this.getAbstractEntry());
 		listEClass.getESuperTypes().add(this.getArray());
-		listEClass.getESuperTypes().add(this.getEntry());
+		listEClass.getESuperTypes().add(this.getAbstractEntry());
 		objectEClass.getESuperTypes().add(this.getMap());
-		objectEClass.getESuperTypes().add(this.getEntry());
+		objectEClass.getESuperTypes().add(this.getAbstractEntry());
 		httpCallEClass.getESuperTypes().add(this.getModelElement());
 		restOperationEClass.getESuperTypes().add(this.getHttpCall());
 		restFunctionEClass.getESuperTypes().add(this.getRestOperation());
-		restFunctionEClass.getESuperTypes().add(this.getEntry());
+		restFunctionEClass.getESuperTypes().add(this.getAbstractEntry());
 		htmlEClass.getESuperTypes().add(this.getSupplier());
+		scriptEClass.getESuperTypes().add(this.getModelElement());
+		scriptTextEClass.getESuperTypes().add(this.getScript());
+		scriptResourceEClass.getESuperTypes().add(this.getScript());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -991,12 +1076,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(configurableEClass, Configurable.class, "Configurable", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConfigurable_Configuration(), ecorePackage.getEObject(), null, "configuration", null, 0, -1, Configurable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(typedElementEClass, TypedElement.class, "TypedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTypedElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTypedElement_Required(), ecorePackage.getEBoolean(), "required", null, 0, 1, TypedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getService_Type(), ecorePackage.getEString(), "type", null, 0, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(supplierEClass, Supplier.class, "Supplier", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSupplier_Implementation(), ecorePackage.getEString(), "implementation", null, 0, 1, Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSupplier_Factory(), ecorePackage.getEString(), "factory", null, 0, 1, Supplier.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1017,15 +1101,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(arrayEClass, Array.class, "Array", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getArray_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, Array.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(entryEClass, Entry.class, "Entry", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEntry_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(abstractEntryEClass, AbstractEntry.class, "AbstractEntry", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAbstractEntry_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, AbstractEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(typedEntryEClass, TypedEntry.class, "TypedEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(serviceEntryEClass, ServiceEntry.class, "ServiceEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(supplierEntryEClass, SupplierEntry.class, "SupplierEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMap_Entries(), this.getEntry(), null, "entries", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMap_Entries(), this.getAbstractEntry(), null, "entries", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1038,20 +1122,29 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(httpCallEClass, HttpCall.class, "HttpCall", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHttpCall_Url(), ecorePackage.getEString(), "url", null, 1, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_Method(), this.getHttpMethod(), "method", "GET", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getHttpCall_Headers(), this.getEntry(), null, "headers", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getHttpCall_Headers(), this.getAbstractEntry(), null, "headers", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_ConnectTimeout(), ecorePackage.getEInt(), "connectTimeout", "60", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_ReadTimeout(), ecorePackage.getEInt(), "readTimeout", "60", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_SuccessCode(), ecorePackage.getEInt(), "successCode", "200", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getHttpCall_Body(), ecorePackage.getEObject(), null, "body", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(restOperationEClass, RestOperation.class, "RestOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRestOperation_Arguments(), this.getEntry(), null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRestOperation_Arguments(), this.getAbstractEntry(), null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(restFunctionEClass, RestFunction.class, "RestFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(htmlEClass, Html.class, "Html", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHtml_Content(), ecorePackage.getEString(), "content", null, 0, 1, Html.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHtml_Interpolate(), ecorePackage.getEBoolean(), "interpolate", "true", 0, 1, Html.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scriptEClass, Script.class, "Script", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScript_Bindings(), this.getAbstractEntry(), null, "bindings", null, 0, -1, Script.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scriptTextEClass, ScriptText.class, "ScriptText", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScriptText_Code(), ecorePackage.getEString(), "code", null, 1, 1, ScriptText.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(scriptResourceEClass, ScriptResource.class, "ScriptResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScriptResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, ScriptResource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(httpMethodEEnum, HttpMethod.class, "HttpMethod");
@@ -1142,34 +1235,28 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Configuration entries."
 		   });
 		addAnnotation
-		  (typedElementEClass,
+		  (serviceEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Typed element is a supplier factory with specified return type, e.g. ``java.lang.Integer``. Typed element gets its result from the context\'s service with the specified type. The primary pupose of of the typed element is to serve as a specification/description."
+			   "documentation", "Service gets its result from the context\'s service with the specified type. "
 		   });
 		addAnnotation
-		  (getTypedElement_Type(),
+		  (getService_Type(),
 		   source,
 		   new String[] {
-			   "documentation", "Fully qualified Java type name. "
-		   });
-		addAnnotation
-		  (getTypedElement_Required(),
-		   source,
-		   new String[] {
-			   "documentation", "Indicates that the element result can not be null."
+			   "documentation", "Fully qualified Java type name of the service. "
 		   });
 		addAnnotation
 		  (supplierEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Supplier is a typed element which computes it result using an implementation operation - constructor or method. Supplier is equivalent to an operation without arguments."
+			   "documentation", "Supplier computes it result using an adapter obtained from a factory. "
 		   });
 		addAnnotation
-		  (getSupplier_Implementation(),
+		  (getSupplier_Factory(),
 		   source,
 		   new String[] {
-			   "documentation", "Supplier implementation. If empty, type\'s constructor is used as a provider.\n\nSupplier implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. If both type and implementation as defined then the implementation must be a subclass/implementation of type or there should be a Converter service in the context which converts implementation into type. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then a method with a given name which taks a single Context argument or not arguments is used. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` or the default contructor if there is no context constructor and a no-argument method with a given name is used.\n"
+			   "documentation", "Supplier named factory id in the form of ``<bundle symbolic name>/<factory id>``. \nThe factory shall be for ${javadoc/org.nasdanika.common.SupplierFactory} and ${javadoc/org.nasdanika.common.FunctionFactory} for [Operation](Operation.html) and [Function](Function.html)."
 		   });
 		addAnnotation
 		  (resourceEClass,
@@ -1205,13 +1292,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (valueEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Value computes its result from text. \n\nValue implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, just ``java.lang.String``.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method is static then it shall take Context and String or just String. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and ``java.lang.String``, or just ``java.lang.String``.\n\nWhen implementation is specified, value is equivalent to an operation with a single String argument."
+			   "documentation", "Value computes its result from text. If factory is empty then computation result is the value text interpolated if ``interpolate`` is set to true.\nOtherwise an adapter created by the factory provides value result.\n"
 		   });
 		addAnnotation
 		  (getValue_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Textual representation of the value. If interpolate is ``true`` then the value is interpolated in the context. If type and implementation are empty value is returned as is. \nIf type is specified and the result is not of that type, then the result is converted to the type using the context converter service.\n"
+			   "documentation", "Textual representation of the value. If interpolate is ``true`` then the value is interpolated in the context.\n"
 		   });
 		addAnnotation
 		  (getValue_Interpolate(),
@@ -1229,7 +1316,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (operationEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Operation computes its result the operation arguments. \n\nOperation implementation can be defined as follows:\n\n* Fully qualified class name, e.g. ``java.lang.Integer``. An instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.\n* Method reference using ``::`` as a separator between the fully qualified class name and the method name. This definition can be used if the type is a functional interface with a single method. If the method is not static then an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments.\n* Provider reference using ``->`` as a separator between the fully qualified class name and the provider method. If the method not static then its parameters shall be compatible with Context and as the first argument and then operation arguments, or just with operation arguments without context. Otherwise an instance of the implementation class is constructed using a contructor which takes ``org.nasdanika.common.Context`` and the results of the arguments, or just the results of the arguments and the method shall not take any arguments.\n"
+			   "documentation", "Operation computes its result the operation arguments using a ${javadoc/org.nasdanika.common.FunctionFactory} adapter created by the factory.\nArguments are passed as a list of objects to the function."
 		   });
 		addAnnotation
 		  (getOperation_Arguments(),
@@ -1250,22 +1337,22 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Array elements."
 		   });
 		addAnnotation
-		  (entryEClass,
+		  (abstractEntryEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Supplier factory with a name."
 		   });
 		addAnnotation
-		  (getEntry_Enabled(),
+		  (getAbstractEntry_Enabled(),
 		   source,
 		   new String[] {
 			   "documentation", "If this attribute is set to ``false`` the entry is \"commented out\" - not included into its container result."
 		   });
 		addAnnotation
-		  (typedEntryEClass,
+		  (serviceEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Typed element with a name. Typed entry gets its result from the context\'s properti with the specified name converted to the specified type. The primary pupose of of the typed entry is to serve as a specification/description."
+			   "documentation", "Named service. "
 		   });
 		addAnnotation
 		  (supplierEntryEClass,
@@ -1375,6 +1462,42 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "documentation", "If ``true`` (default) the HTML content is interpolated."
 		   });
+		addAnnotation
+		  (scriptEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Evaluates JavaScript code with provided bindings. Context is available via ``context`` binding."
+		   });
+		addAnnotation
+		  (getScript_Bindings(),
+		   source,
+		   new String[] {
+			   "documentation", "Script bindings. ``context`` binding is reserved for execution context."
+		   });
+		addAnnotation
+		  (scriptTextEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Evaluates script code."
+		   });
+		addAnnotation
+		  (getScriptText_Code(),
+		   source,
+		   new String[] {
+			   "documentation", "JavaScript code."
+		   });
+		addAnnotation
+		  (scriptResourceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Evaluates script loaded from a resource."
+		   });
+		addAnnotation
+		  (getScriptResource_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "Script resource location. The resource location is resolved relative to the model resource."
+		   });
 	}
 
 	/**
@@ -1397,6 +1520,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "content-type", "text/html"
 		   });
+		addAnnotation
+		  (getScriptText_Code(),
+		   source,
+		   new String[] {
+			   "content-type", "text/code"
+		   });
 	}
 
 	/**
@@ -1408,6 +1537,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	protected void createEcoreAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/Ecore";
 		addAnnotation
+		  (supplierEClass,
+		   source,
+		   new String[] {
+			   "constraints", "factory"
+		   });
+		addAnnotation
 		  (referenceEClass,
 		   source,
 		   new String[] {
@@ -1418,6 +1553,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "constraints", "entries"
+		   });
+		addAnnotation
+		  (scriptEClass,
+		   source,
+		   new String[] {
+			   "constraints", "bindings"
 		   });
 	}
 

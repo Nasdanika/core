@@ -2,37 +2,40 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.RestOperation;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Rest Operation</b></em>'.
+ * An implementation of the model object '<em><b>Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.RestOperationImpl#getArguments <em>Arguments</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.AbstractEntryImpl#isEnabled <em>Enabled</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RestOperationImpl extends HttpCallImpl implements RestOperation {
+public abstract class AbstractEntryImpl extends NamedElementImpl implements AbstractEntry {
+	/**
+	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ENABLED_EDEFAULT = true;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RestOperationImpl() {
+	protected AbstractEntryImpl() {
 		super();
 	}
 
@@ -43,18 +46,7 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.REST_OPERATION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<AbstractEntry> getArguments() {
-		return (EList<AbstractEntry>)eDynamicGet(NcorePackage.REST_OPERATION__ARGUMENTS, NcorePackage.Literals.REST_OPERATION__ARGUMENTS, true, true);
+		return NcorePackage.Literals.ABSTRACT_ENTRY;
 	}
 
 	/**
@@ -63,12 +55,18 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return ((InternalEList<?>)getArguments()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public boolean isEnabled() {
+		return (Boolean)eDynamicGet(NcorePackage.ABSTRACT_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEnabled(boolean newEnabled) {
+		eDynamicSet(NcorePackage.ABSTRACT_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, newEnabled);
 	}
 
 	/**
@@ -79,8 +77,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return getArguments();
+			case NcorePackage.ABSTRACT_ENTRY__ENABLED:
+				return isEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -90,13 +88,11 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				getArguments().clear();
-				getArguments().addAll((Collection<? extends AbstractEntry>)newValue);
+			case NcorePackage.ABSTRACT_ENTRY__ENABLED:
+				setEnabled((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -110,8 +106,8 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				getArguments().clear();
+			case NcorePackage.ABSTRACT_ENTRY__ENABLED:
+				setEnabled(ENABLED_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -125,10 +121,10 @@ public class RestOperationImpl extends HttpCallImpl implements RestOperation {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.REST_OPERATION__ARGUMENTS:
-				return !getArguments().isEmpty();
+			case NcorePackage.ABSTRACT_ENTRY__ENABLED:
+				return isEnabled() != ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //RestOperationImpl
+} //EntryImpl

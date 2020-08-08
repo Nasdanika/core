@@ -17,7 +17,7 @@ import org.nasdanika.ncore.Null;
  * <!-- end-user-doc -->
  * @generated
  */
-public class NullItemProvider extends TypedElementItemProvider {
+public class NullItemProvider extends ServiceItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

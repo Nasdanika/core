@@ -3,39 +3,40 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.Entry;
+
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.ScriptText;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Entry</b></em>'.
+ * An implementation of the model object '<em><b>Script Text</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.EntryImpl#isEnabled <em>Enabled</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ScriptTextImpl#getCode <em>Code</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class EntryImpl extends NamedElementImpl implements Entry {
+public class ScriptTextImpl extends ScriptImpl implements ScriptText {
 	/**
-	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * The default value of the '{@link #getCode() <em>Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isEnabled()
+	 * @see #getCode()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean ENABLED_EDEFAULT = true;
+	protected static final String CODE_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EntryImpl() {
+	protected ScriptTextImpl() {
 		super();
 	}
 
@@ -46,7 +47,7 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.ENTRY;
+		return NcorePackage.Literals.SCRIPT_TEXT;
 	}
 
 	/**
@@ -55,8 +56,8 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	 * @generated
 	 */
 	@Override
-	public boolean isEnabled() {
-		return (Boolean)eDynamicGet(NcorePackage.ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+	public String getCode() {
+		return (String)eDynamicGet(NcorePackage.SCRIPT_TEXT__CODE, NcorePackage.Literals.SCRIPT_TEXT__CODE, true, true);
 	}
 
 	/**
@@ -65,8 +66,8 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	 * @generated
 	 */
 	@Override
-	public void setEnabled(boolean newEnabled) {
-		eDynamicSet(NcorePackage.ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+	public void setCode(String newCode) {
+		eDynamicSet(NcorePackage.SCRIPT_TEXT__CODE, NcorePackage.Literals.SCRIPT_TEXT__CODE, newCode);
 	}
 
 	/**
@@ -77,8 +78,8 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.ENTRY__ENABLED:
-				return isEnabled();
+			case NcorePackage.SCRIPT_TEXT__CODE:
+				return getCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,8 +92,8 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.ENTRY__ENABLED:
-				setEnabled((Boolean)newValue);
+			case NcorePackage.SCRIPT_TEXT__CODE:
+				setCode((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -106,8 +107,8 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.ENTRY__ENABLED:
-				setEnabled(ENABLED_EDEFAULT);
+			case NcorePackage.SCRIPT_TEXT__CODE:
+				setCode(CODE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -121,10 +122,10 @@ public abstract class EntryImpl extends NamedElementImpl implements Entry {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.ENTRY__ENABLED:
-				return isEnabled() != ENABLED_EDEFAULT;
+			case NcorePackage.SCRIPT_TEXT__CODE:
+				return CODE_EDEFAULT == null ? getCode() != null : !CODE_EDEFAULT.equals(getCode());
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //EntryImpl
+} //ScriptTextImpl

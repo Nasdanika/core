@@ -146,7 +146,7 @@ public class OperationItemProvider extends SupplierItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createTypedElement()));
+				 NcoreFactory.eINSTANCE.createService()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -186,7 +186,7 @@ public class OperationItemProvider extends SupplierItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createTypedEntry()));
+				 NcoreFactory.eINSTANCE.createServiceEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -237,6 +237,16 @@ public class OperationItemProvider extends SupplierItemProvider {
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createHtml()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.OPERATION__ARGUMENTS,
+				 NcoreFactory.eINSTANCE.createScriptText()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.OPERATION__ARGUMENTS,
+				 NcoreFactory.eINSTANCE.createScriptResource()));
 	}
 
 }

@@ -3,26 +3,27 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.Entry;
+
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.TypedEntry;
+import org.nasdanika.ncore.ServiceEntry;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Typed Entry</b></em>'.
+ * An implementation of the model object '<em><b>Service Entry</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.TypedEntryImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.TypedEntryImpl#isEnabled <em>Enabled</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ServiceEntryImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ServiceEntryImpl#isEnabled <em>Enabled</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
+public class ServiceEntryImpl extends ServiceImpl implements ServiceEntry {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -48,7 +49,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypedEntryImpl() {
+	protected ServiceEntryImpl() {
 		super();
 	}
 
@@ -59,7 +60,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.TYPED_ENTRY;
+		return NcorePackage.Literals.SERVICE_ENTRY;
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 */
 	@Override
 	public String getName() {
-		return (String)eDynamicGet(NcorePackage.TYPED_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
+		return (String)eDynamicGet(NcorePackage.SERVICE_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 */
 	@Override
 	public void setName(String newName) {
-		eDynamicSet(NcorePackage.TYPED_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
+		eDynamicSet(NcorePackage.SERVICE_ENTRY__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 */
 	@Override
 	public boolean isEnabled() {
-		return (Boolean)eDynamicGet(NcorePackage.TYPED_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, true, true);
+		return (Boolean)eDynamicGet(NcorePackage.SERVICE_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, true, true);
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	 */
 	@Override
 	public void setEnabled(boolean newEnabled) {
-		eDynamicSet(NcorePackage.TYPED_ENTRY__ENABLED, NcorePackage.Literals.ENTRY__ENABLED, newEnabled);
+		eDynamicSet(NcorePackage.SERVICE_ENTRY__ENABLED, NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED, newEnabled);
 	}
 
 	/**
@@ -110,9 +111,9 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ENTRY__NAME:
+			case NcorePackage.SERVICE_ENTRY__NAME:
 				return getName();
-			case NcorePackage.TYPED_ENTRY__ENABLED:
+			case NcorePackage.SERVICE_ENTRY__ENABLED:
 				return isEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -126,10 +127,10 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ENTRY__NAME:
+			case NcorePackage.SERVICE_ENTRY__NAME:
 				setName((String)newValue);
 				return;
-			case NcorePackage.TYPED_ENTRY__ENABLED:
+			case NcorePackage.SERVICE_ENTRY__ENABLED:
 				setEnabled((Boolean)newValue);
 				return;
 		}
@@ -144,10 +145,10 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ENTRY__NAME:
+			case NcorePackage.SERVICE_ENTRY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case NcorePackage.TYPED_ENTRY__ENABLED:
+			case NcorePackage.SERVICE_ENTRY__ENABLED:
 				setEnabled(ENABLED_EDEFAULT);
 				return;
 		}
@@ -162,9 +163,9 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.TYPED_ENTRY__NAME:
+			case NcorePackage.SERVICE_ENTRY__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
-			case NcorePackage.TYPED_ENTRY__ENABLED:
+			case NcorePackage.SERVICE_ENTRY__ENABLED:
 				return isEnabled() != ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -179,13 +180,13 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedElement.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.TYPED_ENTRY__NAME: return NcorePackage.NAMED_ELEMENT__NAME;
+				case NcorePackage.SERVICE_ENTRY__NAME: return NcorePackage.NAMED_ELEMENT__NAME;
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.TYPED_ENTRY__ENABLED: return NcorePackage.ENTRY__ENABLED;
+				case NcorePackage.SERVICE_ENTRY__ENABLED: return NcorePackage.ABSTRACT_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
@@ -201,17 +202,17 @@ public class TypedEntryImpl extends TypedElementImpl implements TypedEntry {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedElement.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.NAMED_ELEMENT__NAME: return NcorePackage.TYPED_ENTRY__NAME;
+				case NcorePackage.NAMED_ELEMENT__NAME: return NcorePackage.SERVICE_ENTRY__NAME;
 				default: return -1;
 			}
 		}
-		if (baseClass == Entry.class) {
+		if (baseClass == AbstractEntry.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.ENTRY__ENABLED: return NcorePackage.TYPED_ENTRY__ENABLED;
+				case NcorePackage.ABSTRACT_ENTRY__ENABLED: return NcorePackage.SERVICE_ENTRY__ENABLED;
 				default: return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
-} //TypedEntryImpl
+} //ServiceEntryImpl

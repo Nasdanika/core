@@ -273,7 +273,7 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createTypedEntry()));
+				 NcoreFactory.eINSTANCE.createServiceEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -308,7 +308,7 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createTypedElement()));
+				 NcoreFactory.eINSTANCE.createService()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -348,7 +348,7 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createTypedEntry()));
+				 NcoreFactory.eINSTANCE.createServiceEntry()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -399,6 +399,16 @@ public class HttpCallItemProvider
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__BODY,
 				 NcoreFactory.eINSTANCE.createHtml()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createScriptText()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(NcorePackage.Literals.HTTP_CALL__BODY,
+				 NcoreFactory.eINSTANCE.createScriptResource()));
 	}
 
 	/**

@@ -11,7 +11,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Property;
 
@@ -126,7 +126,7 @@ public class PropertyItemProvider extends ValueItemProvider {
 
 	@Override
 	public Object getForeground(Object object) {
-		return ((Entry) object).isEnabled() ? super.getForeground(object) : GRAYED_OUT_COLOR;
+		return ((AbstractEntry) object).isEnabled() ? super.getForeground(object) : GRAYED_OUT_COLOR;
 	}
 
 	/**

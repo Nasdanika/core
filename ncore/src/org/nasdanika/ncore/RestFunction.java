@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface RestFunction extends RestOperation, Entry {
+public interface RestFunction extends RestOperation, AbstractEntry {
 } // RestFunction

@@ -2,37 +2,41 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.util.Collection;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.ncore.AbstractEntry;
-import org.nasdanika.ncore.Map;
+
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.ScriptResource;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Map</b></em>'.
+ * An implementation of the model object '<em><b>Script Resource</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.MapImpl#getEntries <em>Entries</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ScriptResourceImpl#getLocation <em>Location</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MapImpl extends ModelElementImpl implements Map {
+public class ScriptResourceImpl extends ScriptImpl implements ScriptResource {
+	/**
+	 * The default value of the '{@link #getLocation() <em>Location</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocation()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String LOCATION_EDEFAULT = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MapImpl() {
+	protected ScriptResourceImpl() {
 		super();
 	}
 
@@ -43,18 +47,7 @@ public class MapImpl extends ModelElementImpl implements Map {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.MAP;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<AbstractEntry> getEntries() {
-		return (EList<AbstractEntry>)eDynamicGet(NcorePackage.MAP__ENTRIES, NcorePackage.Literals.MAP__ENTRIES, true, true);
+		return NcorePackage.Literals.SCRIPT_RESOURCE;
 	}
 
 	/**
@@ -63,12 +56,18 @@ public class MapImpl extends ModelElementImpl implements Map {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case NcorePackage.MAP__ENTRIES:
-				return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public String getLocation() {
+		return (String)eDynamicGet(NcorePackage.SCRIPT_RESOURCE__LOCATION, NcorePackage.Literals.SCRIPT_RESOURCE__LOCATION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setLocation(String newLocation) {
+		eDynamicSet(NcorePackage.SCRIPT_RESOURCE__LOCATION, NcorePackage.Literals.SCRIPT_RESOURCE__LOCATION, newLocation);
 	}
 
 	/**
@@ -79,8 +78,8 @@ public class MapImpl extends ModelElementImpl implements Map {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.MAP__ENTRIES:
-				return getEntries();
+			case NcorePackage.SCRIPT_RESOURCE__LOCATION:
+				return getLocation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -90,13 +89,11 @@ public class MapImpl extends ModelElementImpl implements Map {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.MAP__ENTRIES:
-				getEntries().clear();
-				getEntries().addAll((Collection<? extends AbstractEntry>)newValue);
+			case NcorePackage.SCRIPT_RESOURCE__LOCATION:
+				setLocation((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -110,8 +107,8 @@ public class MapImpl extends ModelElementImpl implements Map {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MAP__ENTRIES:
-				getEntries().clear();
+			case NcorePackage.SCRIPT_RESOURCE__LOCATION:
+				setLocation(LOCATION_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -125,10 +122,10 @@ public class MapImpl extends ModelElementImpl implements Map {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MAP__ENTRIES:
-				return !getEntries().isEmpty();
+			case NcorePackage.SCRIPT_RESOURCE__LOCATION:
+				return LOCATION_EDEFAULT == null ? getLocation() != null : !LOCATION_EDEFAULT.equals(getLocation());
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //MapImpl
+} //ScriptResourceImpl

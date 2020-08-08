@@ -14,22 +14,21 @@ import org.nasdanika.ncore.Supplier;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.SupplierImpl#getImplementation <em>Implementation</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.SupplierImpl#getFactory <em>Factory</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class SupplierImpl extends TypedElementImpl implements Supplier {
+public class SupplierImpl extends ModelElementImpl implements Supplier {
 	/**
-	 * The default value of the '{@link #getImplementation() <em>Implementation</em>}' attribute.
+	 * The default value of the '{@link #getFactory() <em>Factory</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getImplementation()
+	 * @see #getFactory()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String IMPLEMENTATION_EDEFAULT = null;
-
+	protected static final String FACTORY_EDEFAULT = null;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -55,8 +54,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	 * @generated
 	 */
 	@Override
-	public String getImplementation() {
-		return (String)eDynamicGet(NcorePackage.SUPPLIER__IMPLEMENTATION, NcorePackage.Literals.SUPPLIER__IMPLEMENTATION, true, true);
+	public String getFactory() {
+		return (String)eDynamicGet(NcorePackage.SUPPLIER__FACTORY, NcorePackage.Literals.SUPPLIER__FACTORY, true, true);
 	}
 
 	/**
@@ -65,8 +64,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	 * @generated
 	 */
 	@Override
-	public void setImplementation(String newImplementation) {
-		eDynamicSet(NcorePackage.SUPPLIER__IMPLEMENTATION, NcorePackage.Literals.SUPPLIER__IMPLEMENTATION, newImplementation);
+	public void setFactory(String newFactory) {
+		eDynamicSet(NcorePackage.SUPPLIER__FACTORY, NcorePackage.Literals.SUPPLIER__FACTORY, newFactory);
 	}
 
 	/**
@@ -77,8 +76,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER__IMPLEMENTATION:
-				return getImplementation();
+			case NcorePackage.SUPPLIER__FACTORY:
+				return getFactory();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,8 +90,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER__IMPLEMENTATION:
-				setImplementation((String)newValue);
+			case NcorePackage.SUPPLIER__FACTORY:
+				setFactory((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -106,8 +105,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER__IMPLEMENTATION:
-				setImplementation(IMPLEMENTATION_EDEFAULT);
+			case NcorePackage.SUPPLIER__FACTORY:
+				setFactory(FACTORY_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -121,8 +120,8 @@ public class SupplierImpl extends TypedElementImpl implements Supplier {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.SUPPLIER__IMPLEMENTATION:
-				return IMPLEMENTATION_EDEFAULT == null ? getImplementation() != null : !IMPLEMENTATION_EDEFAULT.equals(getImplementation());
+			case NcorePackage.SUPPLIER__FACTORY:
+				return FACTORY_EDEFAULT == null ? getFactory() != null : !FACTORY_EDEFAULT.equals(getFactory());
 		}
 		return super.eIsSet(featureID);
 	}

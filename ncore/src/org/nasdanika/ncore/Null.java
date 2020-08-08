@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Null extends TypedElement {
+public interface Null extends Service {
 } // Null

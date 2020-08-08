@@ -21,7 +21,7 @@ import org.nasdanika.ncore.Supplier;
  * <!-- end-user-doc -->
  * @generated
  */
-public class SupplierItemProvider extends TypedElementItemProvider {
+public class SupplierItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -43,23 +43,23 @@ public class SupplierItemProvider extends TypedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addImplementationPropertyDescriptor(object);
+			addFactoryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Implementation feature.
+	 * This adds a property descriptor for the Factory feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	protected void addImplementationPropertyDescriptor(Object object) {
+	protected void addFactoryPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor(
 				 getResourceLocator(),
-				 getString("_UI_Provider_implementation_feature"),
-				 NcorePackage.Literals.SUPPLIER__IMPLEMENTATION,
+				 getString("_UI_Supplier_factory_feature"),
+				 NcorePackage.Literals.SUPPLIER__FACTORY,
 				 true,
 				 false,
 				 false,
@@ -90,14 +90,10 @@ public class SupplierItemProvider extends TypedElementItemProvider {
 		Supplier supplier = (Supplier)object;
 		String label = supplier.getTitle();
 		if (Util.isBlank(label)) {
-			String type = supplier.getType();			
 			StringBuilder labelBuilder = new StringBuilder();
-			if (!Util.isBlank(type)) {
-				labelBuilder.append("(").append(type).append(") ");
-			}
-			String implementation = supplier.getImplementation();
-			if (!Util.isBlank(implementation)) {
-				labelBuilder.append(implementation);
+			String factory = supplier.getFactory();
+			if (!Util.isBlank(factory)) {
+				labelBuilder.append(factory);
 			}
 			label = labelBuilder.toString();
 		}
@@ -117,7 +113,7 @@ public class SupplierItemProvider extends TypedElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Supplier.class)) {
-			case NcorePackage.SUPPLIER__IMPLEMENTATION:
+			case NcorePackage.SUPPLIER__FACTORY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -16,5 +16,5 @@ package org.nasdanika.ncore;
  * @model
  * @generated
  */
-public interface Property extends Value, Entry {
+public interface Property extends Value, AbstractEntry {
 } // Property

@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
 public interface Map extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Entries</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.Entry}.
+	 * The list contents are of type {@link org.nasdanika.ncore.AbstractEntry}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -38,6 +38,6 @@ public interface Map extends ModelElement {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<Entry> getEntries();
+	EList<AbstractEntry> getEntries();
 
 } // Map

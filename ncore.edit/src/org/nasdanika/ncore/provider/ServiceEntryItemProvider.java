@@ -8,28 +8,29 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.Entry;
+
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.ServiceEntry;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Entry} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.ServiceEntry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class EntryItemProvider 
-	extends NamedElementItemProvider {
+public class ServiceEntryItemProvider extends ServiceItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntryItemProvider(AdapterFactory adapterFactory) {
+	public ServiceEntryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -44,9 +45,32 @@ public class EntryItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNamePropertyDescriptor(object);
 			addEnabledPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Name feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNamePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedElement_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedElement_name_feature", "_UI_NamedElement_type"),
+				 NcorePackage.Literals.NAMED_ELEMENT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -60,15 +84,26 @@ public class EntryItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Entry_enabled_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Entry_enabled_feature", "_UI_Entry_type"),
-				 NcorePackage.Literals.ENTRY__ENABLED,
+				 getString("_UI_AbstractEntry_enabled_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractEntry_enabled_feature", "_UI_AbstractEntry_type"),
+				 NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
+	}
+
+	/**
+	 * This returns ServiceEntry.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Service.png"));
 	}
 
 	/**
@@ -85,14 +120,12 @@ public class EntryItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Entry)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Entry_type") :
-			getString("_UI_Entry_type") + " " + label;
+		String label = ((ServiceEntry)object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_ServiceEntry_type") : label;
 	}
 
 
@@ -107,8 +140,9 @@ public class EntryItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Entry.class)) {
-			case NcorePackage.ENTRY__ENABLED:
+		switch (notification.getFeatureID(ServiceEntry.class)) {
+			case NcorePackage.SERVICE_ENTRY__NAME:
+			case NcorePackage.SERVICE_ENTRY__ENABLED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

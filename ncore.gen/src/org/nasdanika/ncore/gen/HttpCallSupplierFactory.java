@@ -21,7 +21,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.EObjectAdaptable;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.HttpCall;
 
 public class HttpCallSupplierFactory implements SupplierFactory<InputStream> {
@@ -45,13 +45,13 @@ public class HttpCallSupplierFactory implements SupplierFactory<InputStream> {
 	}
 	
 	protected Supplier<Map<String,Object>> createHeadersSupplier(Context context) throws Exception {
-		EList<Entry> headers = target.getHeaders();
+		EList<AbstractEntry> headers = target.getHeaders();
 		if (headers.isEmpty()) {
 			return null;
 		}
 		
 		MapCompoundSupplier<String, Object> headersWork = new MapCompoundSupplier<>("Headers");
-		for (Entry e: headers) {
+		for (AbstractEntry e: headers) {
 			headersWork.put(e.getName(), EObjectAdaptable.adaptToSupplierFactory(e, Object.class).create(context));
 		}
 

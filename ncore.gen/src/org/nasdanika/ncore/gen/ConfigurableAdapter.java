@@ -9,7 +9,7 @@ import org.nasdanika.common.MapCompoundSupplierFactory;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.ncore.Configurable;
-import org.nasdanika.ncore.Entry;
+import org.nasdanika.ncore.AbstractEntry;
 
 /**
  * Base class for adapters for subclasses of {@link Configurable}. 
@@ -37,8 +37,8 @@ public abstract class ConfigurableAdapter<C extends Configurable> {
 		}
 		MapCompoundSupplierFactory<String, Object> entriesFactory = new MapCompoundSupplierFactory<String, Object>("Entries");
 		for (EObject ce: target.getConfiguration()) {
-			if (ce instanceof Entry) {
-				entriesFactory.put(((Entry) ce).getName(), EObjectAdaptable.adaptToSupplierFactory(ce, Object.class));
+			if (ce instanceof AbstractEntry) {
+				entriesFactory.put(((AbstractEntry) ce).getName(), EObjectAdaptable.adaptToSupplierFactory(ce, Object.class));
 			}
 		}
 		
