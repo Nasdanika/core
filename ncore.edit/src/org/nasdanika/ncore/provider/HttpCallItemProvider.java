@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.ncore.HttpCall;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -182,6 +182,8 @@ public class HttpCallItemProvider
 		}
 		return childrenFeatures;
 	}
+	
+	// TODO - EReferenceItemProvider for headers 
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -264,116 +266,22 @@ public class HttpCallItemProvider
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createProperty()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createFunction()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createList()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createService()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createSupplier()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createResource()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createValue()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createNull()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createOperation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createArray()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createMap()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createProperty()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createFunction()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createList()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createHttpCall()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createHtml()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createScriptText()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createScriptResource()));
+				
+		// --- Headers ---		
+		for (EObject expr: org.nasdanika.ncore.util.Activator.NAMED_EXPRESSIONS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(NcorePackage.Literals.HTTP_CALL__HEADERS, expr));						
+		}	
+		
+		// --- Body ---		
+		for (EObject expr: org.nasdanika.ncore.util.Activator.EXPRESSIONS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(NcorePackage.Literals.HTTP_CALL__BODY, expr));						
+		}		
+		
 	}
 
 	/**

@@ -1543,6 +1543,79 @@ public interface NcorePackage extends EPackage {
 	int SCRIPT_RESOURCE_OPERATION_COUNT = SCRIPT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.EntryImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
+	 * @generated
+	 */
+	int ENTRY = 23;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__TITLE = ABSTRACT_ENTRY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__DESCRIPTION = ABSTRACT_ENTRY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__NAME = ABSTRACT_ENTRY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__ENABLED = ABSTRACT_ENTRY__ENABLED;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY__VALUE = ABSTRACT_ENTRY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_FEATURE_COUNT = ABSTRACT_ENTRY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_OPERATION_COUNT = ABSTRACT_ENTRY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1550,7 +1623,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 23;
+	int HTTP_METHOD = 24;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.ModelElement <em>Model Element</em>}'.
@@ -2091,6 +2164,27 @@ public interface NcorePackage extends EPackage {
 	EAttribute getScriptResource_Location();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Entry <em>Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entry</em>'.
+	 * @see org.nasdanika.ncore.Entry
+	 * @generated
+	 */
+	EClass getEntry();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.Entry#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.Entry#getValue()
+	 * @see #getEntry()
+	 * @generated
+	 */
+	EReference getEntry_Value();
+
+	/**
 	 * Returns the meta object for enum '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2576,6 +2670,24 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SCRIPT_RESOURCE__LOCATION = eINSTANCE.getScriptResource_Location();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.EntryImpl <em>Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.EntryImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEntry()
+		 * @generated
+		 */
+		EClass ENTRY = eINSTANCE.getEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTRY__VALUE = eINSTANCE.getEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.HttpMethod <em>Http Method</em>}' enum.

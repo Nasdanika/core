@@ -85,5 +85,8 @@
     <genClasses ecoreClass="ncore.ecore#//ScriptResource">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ScriptResource/location"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Entry">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Entry/value"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

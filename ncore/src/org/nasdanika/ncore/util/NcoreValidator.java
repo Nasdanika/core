@@ -19,6 +19,7 @@ import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
+import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
@@ -158,6 +159,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateScriptText((ScriptText)value, diagnostics, context);
 			case NcorePackage.SCRIPT_RESOURCE:
 				return validateScriptResource((ScriptResource)value, diagnostics, context);
+			case NcorePackage.ENTRY:
+				return validateEntry((Entry)value, diagnostics, context);
 			case NcorePackage.HTTP_METHOD:
 				return validateHttpMethod((HttpMethod)value, diagnostics, context);
 			default:
@@ -623,6 +626,15 @@ public class NcoreValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(scriptResource, diagnostics, context);
 		if (result || diagnostics != null) result &= validateScript_bindings(scriptResource, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateEntry(Entry entry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(entry, diagnostics, context);
 	}
 
 	/**

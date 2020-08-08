@@ -12,23 +12,23 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.Script;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.ncore.Script} object.
+ * This is the item provider adapter for a {@link org.nasdanika.ncore.Entry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScriptItemProvider extends ModelElementItemProvider {
+public class EntryItemProvider extends AbstractEntryItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScriptItemProvider(AdapterFactory adapterFactory) {
+	public EntryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -59,7 +59,7 @@ public class ScriptItemProvider extends ModelElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(NcorePackage.Literals.SCRIPT__BINDINGS);
+			childrenFeatures.add(NcorePackage.Literals.ENTRY__VALUE);
 		}
 		return childrenFeatures;
 	}
@@ -78,6 +78,17 @@ public class ScriptItemProvider extends ModelElementItemProvider {
 	}
 
 	/**
+	 * This returns Entry.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Entry"));
+	}
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -91,15 +102,15 @@ public class ScriptItemProvider extends ModelElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Script)object).getTitle();
+		String label = ((Entry)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Script_type") :	label;
+			getString("_UI_Entry_type") :
+			getString("_UI_Entry_type") + " " + label;
 	}
-
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
@@ -112,8 +123,8 @@ public class ScriptItemProvider extends ModelElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Script.class)) {
-			case NcorePackage.SCRIPT__BINDINGS:
+		switch (notification.getFeatureID(Entry.class)) {
+			case NcorePackage.ENTRY__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -130,10 +141,25 @@ public class ScriptItemProvider extends ModelElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-		
-		// --- Bindings ---		
-		for (EObject expr: org.nasdanika.ncore.util.Activator.NAMED_EXPRESSIONS_PALETTE.getElements()) {
-			newChildDescriptors.add(createChildParameter(NcorePackage.Literals.SCRIPT__BINDINGS, expr));						
+				
+		// --- Value ---		
+		for (EObject expr: org.nasdanika.ncore.util.Activator.EXPRESSIONS_PALETTE.getElements()) {
+			if (expr.eClass() == NcorePackage.Literals.OPERATION) {
+				continue; // Function
+			}
+			if (expr.eClass() == NcorePackage.Literals.ARRAY) {
+				continue; // List
+			}
+			if (expr.eClass() == NcorePackage.Literals.MAP) {
+				continue; // OBJECT
+			}
+			if (expr.eClass() == NcorePackage.Literals.VALUE) {
+				continue; // Property
+			}
+			if (expr.eClass() == NcorePackage.Literals.NULL) {
+				continue; // Makes no sense
+			}
+			newChildDescriptors.add(createChildParameter(NcorePackage.Literals.ENTRY__VALUE, expr));						
 		}		
 	}
 

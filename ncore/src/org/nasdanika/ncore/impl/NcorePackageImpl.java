@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
+import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
@@ -204,6 +205,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass scriptResourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass entryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -799,6 +807,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getEntry() {
+		return entryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEntry_Value() {
+		return (EReference)entryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getHttpMethod() {
 		return httpMethodEEnum;
 	}
@@ -906,6 +934,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		scriptResourceEClass = createEClass(SCRIPT_RESOURCE);
 		createEAttribute(scriptResourceEClass, SCRIPT_RESOURCE__LOCATION);
 
+		entryEClass = createEClass(ENTRY);
+		createEReference(entryEClass, ENTRY__VALUE);
+
 		// Create enums
 		httpMethodEEnum = createEEnum(HTTP_METHOD);
 	}
@@ -963,6 +994,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		scriptEClass.getESuperTypes().add(this.getModelElement());
 		scriptTextEClass.getESuperTypes().add(this.getScript());
 		scriptResourceEClass.getESuperTypes().add(this.getScript());
+		entryEClass.getESuperTypes().add(this.getAbstractEntry());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1038,6 +1070,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(scriptResourceEClass, ScriptResource.class, "ScriptResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getScriptResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, ScriptResource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(entryEClass, Entry.class, "Entry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEntry_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(httpMethodEEnum, HttpMethod.class, "HttpMethod");
@@ -1360,6 +1395,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Script resource location. The resource location is resolved relative to the model resource."
+		   });
+		addAnnotation
+		  (entryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Entry is a mapping of a name to value providing model element."
+		   });
+		addAnnotation
+		  (getEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Entry value providing model element."
 		   });
 	}
 

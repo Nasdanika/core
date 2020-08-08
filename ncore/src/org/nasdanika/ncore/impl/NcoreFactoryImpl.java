@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.ncore.Array;
+import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
 import org.nasdanika.ncore.HttpCall;
@@ -89,6 +90,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.HTML: return createHtml();
 			case NcorePackage.SCRIPT_TEXT: return createScriptText();
 			case NcorePackage.SCRIPT_RESOURCE: return createScriptResource();
+			case NcorePackage.ENTRY: return createEntry();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -309,6 +311,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public ScriptResource createScriptResource() {
 		ScriptResourceImpl scriptResource = new ScriptResourceImpl();
 		return scriptResource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Entry createEntry() {
+		EntryImpl entry = new EntryImpl();
+		return entry;
 	}
 
 	/**

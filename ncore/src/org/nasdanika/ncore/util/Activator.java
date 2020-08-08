@@ -38,27 +38,23 @@ public class Activator implements BundleActivator {
 				NcorePackage.Literals.HTTP_CALL,
 				NcorePackage.Literals.MAP,
 				NcorePackage.Literals.NULL,
-//				NcorePackage.Literals.OPERATION,
-//				NcorePackage.Literals.REST_OPERATION,
-//				NcorePackage.Literals.TYPED_ELEMENT,
+				NcorePackage.Literals.OPERATION,
+				NcorePackage.Literals.SUPPLIER,
+				NcorePackage.Literals.SUPPLIER,
+				NcorePackage.Literals.SERVICE,
+				NcorePackage.Literals.SCRIPT_TEXT,				
+				NcorePackage.Literals.SCRIPT_RESOURCE,
 				NcorePackage.Literals.REFERENCE,
 				NcorePackage.Literals.RESOURCE,
 				NcorePackage.Literals.HTML,
 				NcorePackage.Literals.VALUE);	
-
-		// TODO -> FunctionFactory
-		// TODO Resource
 		
 		NAMED_EXPRESSIONS_PALETTE.add(
-//			NcorePackage.Literals.FUNCTION,
+			NcorePackage.Literals.FUNCTION,
 			NcorePackage.Literals.LIST,	
-			// TODO - Supplier entry and other other entries. HTTP function.
+			NcorePackage.Literals.ENTRY,	
 			NcorePackage.Literals.OBJECT,	
-			NcorePackage.Literals.PROPERTY); //,	
-//			NcorePackage.Literals.REST_FUNCTION);	
-
-		// TODO HTTP FunctionFactory
-		// TODO Link
+			NcorePackage.Literals.PROPERTY);
 		
 	}
 

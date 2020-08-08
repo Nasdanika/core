@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.ncore.Array;
 import org.nasdanika.ncore.Configurable;
 import org.nasdanika.ncore.Entity;
+import org.nasdanika.ncore.Entry;
 import org.nasdanika.ncore.AbstractEntry;
 import org.nasdanika.ncore.Function;
 import org.nasdanika.ncore.Html;
@@ -177,6 +178,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseScriptResource(ScriptResource object) {
 				return createScriptResourceAdapter();
+			}
+			@Override
+			public Adapter caseEntry(Entry object) {
+				return createEntryAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -517,6 +522,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScriptResourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Entry <em>Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Entry
+	 * @generated
+	 */
+	public Adapter createEntryAdapter() {
 		return null;
 	}
 

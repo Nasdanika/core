@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Operation;
 
@@ -137,96 +137,17 @@ public class OperationItemProvider extends SupplierItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createService()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createSupplier()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createResource()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createValue()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createNull()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createOperation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createArray()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createMap()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createProperty()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createFunction()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createList()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createHttpCall()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createHtml()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createScriptText()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createScriptResource()));
+		
+		// --- Arguments ---		
+		for (EObject expr: org.nasdanika.ncore.util.Activator.EXPRESSIONS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(NcorePackage.Literals.OPERATION__ARGUMENTS, expr));						
+		}
+		
 	}
 
 }

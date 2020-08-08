@@ -465,6 +465,29 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Entry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntryItemProvider entryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.ncore.Entry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntryAdapter() {
+		if (entryItemProvider == null) {
+			entryItemProvider = new EntryItemProvider(this);
+		}
+
+		return entryItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -586,6 +609,7 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (htmlItemProvider != null) htmlItemProvider.dispose();
 		if (scriptTextItemProvider != null) scriptTextItemProvider.dispose();
 		if (scriptResourceItemProvider != null) scriptResourceItemProvider.dispose();
+		if (entryItemProvider != null) entryItemProvider.dispose();
 	}
 
 }
