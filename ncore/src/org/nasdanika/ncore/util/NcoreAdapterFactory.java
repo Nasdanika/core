@@ -23,15 +23,11 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.RestFunction;
-import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.Script;
 import org.nasdanika.ncore.ScriptResource;
 import org.nasdanika.ncore.ScriptText;
 import org.nasdanika.ncore.Service;
-import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -143,14 +139,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createAbstractEntryAdapter();
 			}
 			@Override
-			public Adapter caseServiceEntry(ServiceEntry object) {
-				return createServiceEntryAdapter();
-			}
-			@Override
-			public Adapter caseSupplierEntry(SupplierEntry object) {
-				return createSupplierEntryAdapter();
-			}
-			@Override
 			public Adapter caseMap(Map object) {
 				return createMapAdapter();
 			}
@@ -173,14 +161,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseHttpCall(HttpCall object) {
 				return createHttpCallAdapter();
-			}
-			@Override
-			public Adapter caseRestOperation(RestOperation object) {
-				return createRestOperationAdapter();
-			}
-			@Override
-			public Adapter caseRestFunction(RestFunction object) {
-				return createRestFunctionAdapter();
 			}
 			@Override
 			public Adapter caseHtml(Html object) {
@@ -401,34 +381,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ServiceEntry <em>Service Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.ServiceEntry
-	 * @generated
-	 */
-	public Adapter createServiceEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.SupplierEntry <em>Supplier Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.SupplierEntry
-	 * @generated
-	 */
-	public Adapter createSupplierEntryAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Map <em>Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -509,34 +461,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createHttpCallAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.RestOperation <em>Rest Operation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.RestOperation
-	 * @generated
-	 */
-	public Adapter createRestOperationAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.RestFunction <em>Rest Function</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.RestFunction
-	 * @generated
-	 */
-	public Adapter createRestFunctionAdapter() {
 		return null;
 	}
 

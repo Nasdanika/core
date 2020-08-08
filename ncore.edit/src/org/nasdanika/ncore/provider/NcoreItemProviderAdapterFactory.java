@@ -258,52 +258,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.ServiceEntry} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ServiceEntryItemProvider serviceEntryItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.ServiceEntry}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createServiceEntryAdapter() {
-		if (serviceEntryItemProvider == null) {
-			serviceEntryItemProvider = new ServiceEntryItemProvider(this);
-		}
-
-		return serviceEntryItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.SupplierEntry} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SupplierEntryItemProvider supplierEntryItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.SupplierEntry}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSupplierEntryAdapter() {
-		if (supplierEntryItemProvider == null) {
-			supplierEntryItemProvider = new SupplierEntryItemProvider(this);
-		}
-
-		return supplierEntryItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.Map} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,52 +393,6 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		}
 
 		return httpCallItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.RestOperation} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RestOperationItemProvider restOperationItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.RestOperation}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRestOperationAdapter() {
-		if (restOperationItemProvider == null) {
-			restOperationItemProvider = new RestOperationItemProvider(this);
-		}
-
-		return restOperationItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.ncore.RestFunction} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RestFunctionItemProvider restFunctionItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.ncore.RestFunction}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRestFunctionAdapter() {
-		if (restFunctionItemProvider == null) {
-			restFunctionItemProvider = new RestFunctionItemProvider(this);
-		}
-
-		return restFunctionItemProvider;
 	}
 
 	/**
@@ -669,16 +577,12 @@ public class NcoreItemProviderAdapterFactory extends NcoreAdapterFactory impleme
 		if (nullItemProvider != null) nullItemProvider.dispose();
 		if (operationItemProvider != null) operationItemProvider.dispose();
 		if (arrayItemProvider != null) arrayItemProvider.dispose();
-		if (serviceEntryItemProvider != null) serviceEntryItemProvider.dispose();
-		if (supplierEntryItemProvider != null) supplierEntryItemProvider.dispose();
 		if (mapItemProvider != null) mapItemProvider.dispose();
 		if (propertyItemProvider != null) propertyItemProvider.dispose();
 		if (functionItemProvider != null) functionItemProvider.dispose();
 		if (listItemProvider != null) listItemProvider.dispose();
 		if (objectItemProvider != null) objectItemProvider.dispose();
 		if (httpCallItemProvider != null) httpCallItemProvider.dispose();
-		if (restOperationItemProvider != null) restOperationItemProvider.dispose();
-		if (restFunctionItemProvider != null) restFunctionItemProvider.dispose();
 		if (htmlItemProvider != null) htmlItemProvider.dispose();
 		if (scriptTextItemProvider != null) scriptTextItemProvider.dispose();
 		if (scriptResourceItemProvider != null) scriptResourceItemProvider.dispose();

@@ -367,7 +367,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 15;
+	int MAP = 13;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
@@ -377,7 +377,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 16;
+	int PROPERTY = 14;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.FunctionImpl <em>Function</em>}' class.
@@ -387,7 +387,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getFunction()
 	 * @generated
 	 */
-	int FUNCTION = 17;
+	int FUNCTION = 15;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -397,7 +397,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 18;
+	int LIST = 16;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ObjectImpl <em>Object</em>}' class.
@@ -407,7 +407,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 19;
+	int OBJECT = 17;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HttpCallImpl <em>Http Call</em>}' class.
@@ -417,27 +417,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpCall()
 	 * @generated
 	 */
-	int HTTP_CALL = 20;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.RestOperationImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestOperation()
-	 * @generated
-	 */
-	int REST_OPERATION = 21;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RestFunctionImpl <em>Rest Function</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.RestFunctionImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestFunction()
-	 * @generated
-	 */
-	int REST_FUNCTION = 22;
+	int HTTP_CALL = 18;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -884,152 +864,6 @@ public interface NcorePackage extends EPackage {
 	int ABSTRACT_ENTRY_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ServiceEntryImpl <em>Service Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.ServiceEntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getServiceEntry()
-	 * @generated
-	 */
-	int SERVICE_ENTRY = 13;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY__TITLE = SERVICE__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY__DESCRIPTION = SERVICE__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY__TYPE = SERVICE__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY__NAME = SERVICE_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY__ENABLED = SERVICE_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Service Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY_FEATURE_COUNT = SERVICE_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Service Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_ENTRY_OPERATION_COUNT = SERVICE_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.SupplierEntryImpl <em>Supplier Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.SupplierEntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplierEntry()
-	 * @generated
-	 */
-	int SUPPLIER_ENTRY = 14;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__TITLE = SUPPLIER__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__DESCRIPTION = SUPPLIER__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Factory</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__FACTORY = SUPPLIER__FACTORY;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__NAME = SUPPLIER_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY__ENABLED = SUPPLIER_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Supplier Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY_FEATURE_COUNT = SUPPLIER_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Supplier Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SUPPLIER_ENTRY_OPERATION_COUNT = SUPPLIER_OPERATION_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1453,240 +1287,6 @@ public interface NcorePackage extends EPackage {
 	int HTTP_CALL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__TITLE = HTTP_CALL__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__DESCRIPTION = HTTP_CALL__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Url</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__URL = HTTP_CALL__URL;
-
-	/**
-	 * The feature id for the '<em><b>Method</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__METHOD = HTTP_CALL__METHOD;
-
-	/**
-	 * The feature id for the '<em><b>Headers</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__HEADERS = HTTP_CALL__HEADERS;
-
-	/**
-	 * The feature id for the '<em><b>Connect Timeout</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__CONNECT_TIMEOUT = HTTP_CALL__CONNECT_TIMEOUT;
-
-	/**
-	 * The feature id for the '<em><b>Read Timeout</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__READ_TIMEOUT = HTTP_CALL__READ_TIMEOUT;
-
-	/**
-	 * The feature id for the '<em><b>Success Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__SUCCESS_CODE = HTTP_CALL__SUCCESS_CODE;
-
-	/**
-	 * The feature id for the '<em><b>Body</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__BODY = HTTP_CALL__BODY;
-
-	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION__ARGUMENTS = HTTP_CALL_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Rest Operation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION_FEATURE_COUNT = HTTP_CALL_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Rest Operation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_OPERATION_OPERATION_COUNT = HTTP_CALL_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__TITLE = REST_OPERATION__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__DESCRIPTION = REST_OPERATION__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Url</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__URL = REST_OPERATION__URL;
-
-	/**
-	 * The feature id for the '<em><b>Method</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__METHOD = REST_OPERATION__METHOD;
-
-	/**
-	 * The feature id for the '<em><b>Headers</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__HEADERS = REST_OPERATION__HEADERS;
-
-	/**
-	 * The feature id for the '<em><b>Connect Timeout</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__CONNECT_TIMEOUT = REST_OPERATION__CONNECT_TIMEOUT;
-
-	/**
-	 * The feature id for the '<em><b>Read Timeout</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__READ_TIMEOUT = REST_OPERATION__READ_TIMEOUT;
-
-	/**
-	 * The feature id for the '<em><b>Success Code</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__SUCCESS_CODE = REST_OPERATION__SUCCESS_CODE;
-
-	/**
-	 * The feature id for the '<em><b>Body</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__BODY = REST_OPERATION__BODY;
-
-	/**
-	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__ARGUMENTS = REST_OPERATION__ARGUMENTS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__NAME = REST_OPERATION_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION__ENABLED = REST_OPERATION_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Rest Function</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION_FEATURE_COUNT = REST_OPERATION_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of operations of the '<em>Rest Function</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int REST_FUNCTION_OPERATION_COUNT = REST_OPERATION_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.HtmlImpl <em>Html</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1694,7 +1294,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHtml()
 	 * @generated
 	 */
-	int HTML = 23;
+	int HTML = 19;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1767,7 +1367,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScript()
 	 * @generated
 	 */
-	int SCRIPT = 24;
+	int SCRIPT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1822,7 +1422,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptText()
 	 * @generated
 	 */
-	int SCRIPT_TEXT = 25;
+	int SCRIPT_TEXT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1886,7 +1486,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getScriptResource()
 	 * @generated
 	 */
-	int SCRIPT_RESOURCE = 26;
+	int SCRIPT_RESOURCE = 22;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1950,7 +1550,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getHttpMethod()
 	 * @generated
 	 */
-	int HTTP_METHOD = 27;
+	int HTTP_METHOD = 23;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.ModelElement <em>Model Element</em>}'.
@@ -2248,26 +1848,6 @@ public interface NcorePackage extends EPackage {
 	EAttribute getAbstractEntry_Enabled();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.ServiceEntry <em>Service Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Service Entry</em>'.
-	 * @see org.nasdanika.ncore.ServiceEntry
-	 * @generated
-	 */
-	EClass getServiceEntry();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.SupplierEntry <em>Supplier Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Supplier Entry</em>'.
-	 * @see org.nasdanika.ncore.SupplierEntry
-	 * @generated
-	 */
-	EClass getSupplierEntry();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Map <em>Map</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2414,37 +1994,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getHttpCall_Body();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.RestOperation <em>Rest Operation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Rest Operation</em>'.
-	 * @see org.nasdanika.ncore.RestOperation
-	 * @generated
-	 */
-	EClass getRestOperation();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.RestOperation#getArguments <em>Arguments</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Arguments</em>'.
-	 * @see org.nasdanika.ncore.RestOperation#getArguments()
-	 * @see #getRestOperation()
-	 * @generated
-	 */
-	EReference getRestOperation_Arguments();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.RestFunction <em>Rest Function</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Rest Function</em>'.
-	 * @see org.nasdanika.ncore.RestFunction
-	 * @generated
-	 */
-	EClass getRestFunction();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Html <em>Html</em>}'.
@@ -2825,26 +2374,6 @@ public interface NcorePackage extends EPackage {
 		EAttribute ABSTRACT_ENTRY__ENABLED = eINSTANCE.getAbstractEntry_Enabled();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ServiceEntryImpl <em>Service Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.ServiceEntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getServiceEntry()
-		 * @generated
-		 */
-		EClass SERVICE_ENTRY = eINSTANCE.getServiceEntry();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.SupplierEntryImpl <em>Supplier Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.SupplierEntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getSupplierEntry()
-		 * @generated
-		 */
-		EClass SUPPLIER_ENTRY = eINSTANCE.getSupplierEntry();
-
-		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2967,34 +2496,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference HTTP_CALL__BODY = eINSTANCE.getHttpCall_Body();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.RestOperationImpl <em>Rest Operation</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.RestOperationImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestOperation()
-		 * @generated
-		 */
-		EClass REST_OPERATION = eINSTANCE.getRestOperation();
-
-		/**
-		 * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference REST_OPERATION__ARGUMENTS = eINSTANCE.getRestOperation_Arguments();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.RestFunctionImpl <em>Rest Function</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.RestFunctionImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRestFunction()
-		 * @generated
-		 */
-		EClass REST_FUNCTION = eINSTANCE.getRestFunction();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.HtmlImpl <em>Html</em>}' class.

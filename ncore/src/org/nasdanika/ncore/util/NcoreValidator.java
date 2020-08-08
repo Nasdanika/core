@@ -33,15 +33,11 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.RestFunction;
-import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.Script;
 import org.nasdanika.ncore.ScriptResource;
 import org.nasdanika.ncore.ScriptText;
 import org.nasdanika.ncore.Service;
-import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -142,10 +138,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateArray((Array)value, diagnostics, context);
 			case NcorePackage.ABSTRACT_ENTRY:
 				return validateAbstractEntry((AbstractEntry)value, diagnostics, context);
-			case NcorePackage.SERVICE_ENTRY:
-				return validateServiceEntry((ServiceEntry)value, diagnostics, context);
-			case NcorePackage.SUPPLIER_ENTRY:
-				return validateSupplierEntry((SupplierEntry)value, diagnostics, context);
 			case NcorePackage.MAP:
 				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
 			case NcorePackage.PROPERTY:
@@ -158,10 +150,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateObject((org.nasdanika.ncore.Object)value, diagnostics, context);
 			case NcorePackage.HTTP_CALL:
 				return validateHttpCall((HttpCall)value, diagnostics, context);
-			case NcorePackage.REST_OPERATION:
-				return validateRestOperation((RestOperation)value, diagnostics, context);
-			case NcorePackage.REST_FUNCTION:
-				return validateRestFunction((RestFunction)value, diagnostics, context);
 			case NcorePackage.HTML:
 				return validateHtml((Html)value, diagnostics, context);
 			case NcorePackage.SCRIPT:
@@ -425,34 +413,6 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateServiceEntry(ServiceEntry serviceEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(serviceEntry, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateSupplierEntry(SupplierEntry supplierEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (!validate_NoCircularContainment(supplierEntry, diagnostics, context)) return false;
-		boolean result = validate_EveryMultiplicityConforms(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryProxyResolves(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_UniqueID(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryKeyUnique(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(supplierEntry, diagnostics, context);
-		if (result || diagnostics != null) result &= validateSupplier_factory(supplierEntry, diagnostics, context);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean validateMap(org.nasdanika.ncore.Map map, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(map, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(map, diagnostics, context);
@@ -564,24 +524,6 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateHttpCall(HttpCall httpCall, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(httpCall, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateRestOperation(RestOperation restOperation, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(restOperation, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateRestFunction(RestFunction restFunction, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(restFunction, diagnostics, context);
 	}
 
 	/**

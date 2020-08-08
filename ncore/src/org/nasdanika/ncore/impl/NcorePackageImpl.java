@@ -30,15 +30,11 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.RestFunction;
-import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.Script;
 import org.nasdanika.ncore.ScriptResource;
 import org.nasdanika.ncore.ScriptText;
 import org.nasdanika.ncore.Service;
-import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.Value;
 import org.nasdanika.ncore.util.NcoreValidator;
 
@@ -144,20 +140,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass serviceEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass supplierEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass mapEClass = null;
 
 	/**
@@ -194,20 +176,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass httpCallEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass restOperationEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass restFunctionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -601,26 +569,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getServiceEntry() {
-		return serviceEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getSupplierEntry() {
-		return supplierEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getMap() {
 		return mapEClass;
 	}
@@ -753,36 +701,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EReference getHttpCall_Body() {
 		return (EReference)httpCallEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getRestOperation() {
-		return restOperationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getRestOperation_Arguments() {
-		return (EReference)restOperationEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getRestFunction() {
-		return restFunctionEClass;
 	}
 
 	/**
@@ -955,10 +873,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		abstractEntryEClass = createEClass(ABSTRACT_ENTRY);
 		createEAttribute(abstractEntryEClass, ABSTRACT_ENTRY__ENABLED);
 
-		serviceEntryEClass = createEClass(SERVICE_ENTRY);
-
-		supplierEntryEClass = createEClass(SUPPLIER_ENTRY);
-
 		mapEClass = createEClass(MAP);
 		createEReference(mapEClass, MAP__ENTRIES);
 
@@ -978,11 +892,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(httpCallEClass, HTTP_CALL__READ_TIMEOUT);
 		createEAttribute(httpCallEClass, HTTP_CALL__SUCCESS_CODE);
 		createEReference(httpCallEClass, HTTP_CALL__BODY);
-
-		restOperationEClass = createEClass(REST_OPERATION);
-		createEReference(restOperationEClass, REST_OPERATION__ARGUMENTS);
-
-		restFunctionEClass = createEClass(REST_FUNCTION);
 
 		htmlEClass = createEClass(HTML);
 		createEAttribute(htmlEClass, HTML__CONTENT);
@@ -1040,10 +949,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		operationEClass.getESuperTypes().add(this.getSupplier());
 		arrayEClass.getESuperTypes().add(this.getModelElement());
 		abstractEntryEClass.getESuperTypes().add(this.getNamedElement());
-		serviceEntryEClass.getESuperTypes().add(this.getService());
-		serviceEntryEClass.getESuperTypes().add(this.getAbstractEntry());
-		supplierEntryEClass.getESuperTypes().add(this.getSupplier());
-		supplierEntryEClass.getESuperTypes().add(this.getAbstractEntry());
 		mapEClass.getESuperTypes().add(this.getModelElement());
 		propertyEClass.getESuperTypes().add(this.getValue());
 		propertyEClass.getESuperTypes().add(this.getAbstractEntry());
@@ -1054,9 +959,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		objectEClass.getESuperTypes().add(this.getMap());
 		objectEClass.getESuperTypes().add(this.getAbstractEntry());
 		httpCallEClass.getESuperTypes().add(this.getModelElement());
-		restOperationEClass.getESuperTypes().add(this.getHttpCall());
-		restFunctionEClass.getESuperTypes().add(this.getRestOperation());
-		restFunctionEClass.getESuperTypes().add(this.getAbstractEntry());
 		htmlEClass.getESuperTypes().add(this.getSupplier());
 		scriptEClass.getESuperTypes().add(this.getModelElement());
 		scriptTextEClass.getESuperTypes().add(this.getScript());
@@ -1104,10 +1006,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(abstractEntryEClass, AbstractEntry.class, "AbstractEntry", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAbstractEntry_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, AbstractEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(serviceEntryEClass, ServiceEntry.class, "ServiceEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(supplierEntryEClass, SupplierEntry.class, "SupplierEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMap_Entries(), this.getAbstractEntry(), null, "entries", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1127,11 +1025,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getHttpCall_ReadTimeout(), ecorePackage.getEInt(), "readTimeout", "60", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getHttpCall_SuccessCode(), ecorePackage.getEInt(), "successCode", "200", 0, 1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getHttpCall_Body(), ecorePackage.getEObject(), null, "body", null, 0, -1, HttpCall.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(restOperationEClass, RestOperation.class, "RestOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getRestOperation_Arguments(), this.getAbstractEntry(), null, "arguments", null, 0, -1, RestOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(restFunctionEClass, RestFunction.class, "RestFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(htmlEClass, Html.class, "Html", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getHtml_Content(), ecorePackage.getEString(), "content", null, 0, 1, Html.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1349,18 +1242,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "If this attribute is set to ``false`` the entry is \"commented out\" - not included into its container result."
 		   });
 		addAnnotation
-		  (serviceEntryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Named service. "
-		   });
-		addAnnotation
-		  (supplierEntryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Supplier with a name."
-		   });
-		addAnnotation
 		  (mapEClass,
 		   source,
 		   new String[] {
@@ -1425,24 +1306,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "HTTP response code indicating success."
-		   });
-		addAnnotation
-		  (restOperationEClass,
-		   source,
-		   new String[] {
-			   "documentation", "HTTP Call with JSON payload constructed from arguments."
-		   });
-		addAnnotation
-		  (getRestOperation_Arguments(),
-		   source,
-		   new String[] {
-			   "documentation", "Operation arguments."
-		   });
-		addAnnotation
-		  (restFunctionEClass,
-		   source,
-		   new String[] {
-			   "documentation", "REST function is a named REST operation."
 		   });
 		addAnnotation
 		  (htmlEClass,

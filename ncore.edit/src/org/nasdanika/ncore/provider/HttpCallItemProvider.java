@@ -273,16 +273,6 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createServiceEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createSupplierEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
 				 NcoreFactory.eINSTANCE.createProperty()));
 
 		newChildDescriptors.add
@@ -299,11 +289,6 @@ public class HttpCallItemProvider
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__HEADERS,
 				 NcoreFactory.eINSTANCE.createObject()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__HEADERS,
-				 NcoreFactory.eINSTANCE.createRestFunction()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -348,16 +333,6 @@ public class HttpCallItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createServiceEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createSupplierEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
 				 NcoreFactory.eINSTANCE.createMap()));
 
 		newChildDescriptors.add
@@ -384,16 +359,6 @@ public class HttpCallItemProvider
 			(createChildParameter
 				(NcorePackage.Literals.HTTP_CALL__BODY,
 				 NcoreFactory.eINSTANCE.createHttpCall()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createRestOperation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.HTTP_CALL__BODY,
-				 NcoreFactory.eINSTANCE.createRestFunction()));
 
 		newChildDescriptors.add
 			(createChildParameter

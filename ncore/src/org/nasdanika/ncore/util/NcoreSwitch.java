@@ -23,15 +23,11 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.RestFunction;
-import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.Script;
 import org.nasdanika.ncore.ScriptResource;
 import org.nasdanika.ncore.ScriptText;
 import org.nasdanika.ncore.Service;
-import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -185,26 +181,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.SERVICE_ENTRY: {
-				ServiceEntry serviceEntry = (ServiceEntry)theEObject;
-				T result = caseServiceEntry(serviceEntry);
-				if (result == null) result = caseService(serviceEntry);
-				if (result == null) result = caseAbstractEntry(serviceEntry);
-				if (result == null) result = caseNamedElement(serviceEntry);
-				if (result == null) result = caseModelElement(serviceEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.SUPPLIER_ENTRY: {
-				SupplierEntry supplierEntry = (SupplierEntry)theEObject;
-				T result = caseSupplierEntry(supplierEntry);
-				if (result == null) result = caseSupplier(supplierEntry);
-				if (result == null) result = caseAbstractEntry(supplierEntry);
-				if (result == null) result = caseNamedElement(supplierEntry);
-				if (result == null) result = caseModelElement(supplierEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case NcorePackage.MAP: {
 				Map map = (Map)theEObject;
 				T result = caseMap(map);
@@ -258,25 +234,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 				HttpCall httpCall = (HttpCall)theEObject;
 				T result = caseHttpCall(httpCall);
 				if (result == null) result = caseModelElement(httpCall);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.REST_OPERATION: {
-				RestOperation restOperation = (RestOperation)theEObject;
-				T result = caseRestOperation(restOperation);
-				if (result == null) result = caseHttpCall(restOperation);
-				if (result == null) result = caseModelElement(restOperation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.REST_FUNCTION: {
-				RestFunction restFunction = (RestFunction)theEObject;
-				T result = caseRestFunction(restFunction);
-				if (result == null) result = caseRestOperation(restFunction);
-				if (result == null) result = caseAbstractEntry(restFunction);
-				if (result == null) result = caseHttpCall(restFunction);
-				if (result == null) result = caseNamedElement(restFunction);
-				if (result == null) result = caseModelElement(restFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -511,36 +468,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Service Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Service Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseServiceEntry(ServiceEntry object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Supplier Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Supplier Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSupplierEntry(SupplierEntry object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Map</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -627,36 +554,6 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseHttpCall(HttpCall object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Rest Operation</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Rest Operation</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRestOperation(RestOperation object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Rest Function</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Rest Function</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRestFunction(RestFunction object) {
 		return null;
 	}
 

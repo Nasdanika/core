@@ -186,16 +186,6 @@ public class OperationItemProvider extends SupplierItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createServiceEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createSupplierEntry()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createMap()));
 
 		newChildDescriptors.add
@@ -222,16 +212,6 @@ public class OperationItemProvider extends SupplierItemProvider {
 			(createChildParameter
 				(NcorePackage.Literals.OPERATION__ARGUMENTS,
 				 NcoreFactory.eINSTANCE.createHttpCall()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createRestOperation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(NcorePackage.Literals.OPERATION__ARGUMENTS,
-				 NcoreFactory.eINSTANCE.createRestFunction()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -81,8 +81,8 @@ public class FunctionItemProvider extends OperationItemProvider {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor(
 				 getResourceLocator(),
-				 getString("_UI_Entry_enabled_feature"),
-				 NcorePackage.Literals.ENTRY__ENABLED,
+				 getString("_UI_AbstractEntry_enabled_feature"),
+				 NcorePackage.Literals.ABSTRACT_ENTRY__ENABLED,
 				 true,
 				 false,
 				 false,

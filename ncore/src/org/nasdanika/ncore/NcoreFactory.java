@@ -94,24 +94,6 @@ public interface NcoreFactory extends EFactory {
 	Array createArray();
 
 	/**
-	 * Returns a new object of class '<em>Service Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Service Entry</em>'.
-	 * @generated
-	 */
-	ServiceEntry createServiceEntry();
-
-	/**
-	 * Returns a new object of class '<em>Supplier Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Supplier Entry</em>'.
-	 * @generated
-	 */
-	SupplierEntry createSupplierEntry();
-
-	/**
 	 * Returns a new object of class '<em>Map</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -164,24 +146,6 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	HttpCall createHttpCall();
-
-	/**
-	 * Returns a new object of class '<em>Rest Operation</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rest Operation</em>'.
-	 * @generated
-	 */
-	RestOperation createRestOperation();
-
-	/**
-	 * Returns a new object of class '<em>Rest Function</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Rest Function</em>'.
-	 * @generated
-	 */
-	RestFunction createRestFunction();
 
 	/**
 	 * Returns a new object of class '<em>Html</em>'.

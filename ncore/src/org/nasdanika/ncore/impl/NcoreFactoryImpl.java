@@ -22,14 +22,10 @@ import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.RestFunction;
-import org.nasdanika.ncore.RestOperation;
 import org.nasdanika.ncore.ScriptResource;
 import org.nasdanika.ncore.ScriptText;
 import org.nasdanika.ncore.Service;
-import org.nasdanika.ncore.ServiceEntry;
 import org.nasdanika.ncore.Supplier;
-import org.nasdanika.ncore.SupplierEntry;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -84,16 +80,12 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.NULL: return createNull();
 			case NcorePackage.OPERATION: return createOperation();
 			case NcorePackage.ARRAY: return createArray();
-			case NcorePackage.SERVICE_ENTRY: return createServiceEntry();
-			case NcorePackage.SUPPLIER_ENTRY: return createSupplierEntry();
 			case NcorePackage.MAP: return createMap();
 			case NcorePackage.PROPERTY: return createProperty();
 			case NcorePackage.FUNCTION: return createFunction();
 			case NcorePackage.LIST: return createList();
 			case NcorePackage.OBJECT: return createObject();
 			case NcorePackage.HTTP_CALL: return createHttpCall();
-			case NcorePackage.REST_OPERATION: return createRestOperation();
-			case NcorePackage.REST_FUNCTION: return createRestFunction();
 			case NcorePackage.HTML: return createHtml();
 			case NcorePackage.SCRIPT_TEXT: return createScriptText();
 			case NcorePackage.SCRIPT_RESOURCE: return createScriptResource();
@@ -226,28 +218,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public ServiceEntry createServiceEntry() {
-		ServiceEntryImpl serviceEntry = new ServiceEntryImpl();
-		return serviceEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SupplierEntry createSupplierEntry() {
-		SupplierEntryImpl supplierEntry = new SupplierEntryImpl();
-		return supplierEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Map createMap() {
 		MapImpl map = new MapImpl();
 		return map;
@@ -306,28 +276,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public HttpCall createHttpCall() {
 		HttpCallImpl httpCall = new HttpCallImpl();
 		return httpCall;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public RestOperation createRestOperation() {
-		RestOperationImpl restOperation = new RestOperationImpl();
-		return restOperation;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public RestFunction createRestFunction() {
-		RestFunctionImpl restFunction = new RestFunctionImpl();
-		return restFunction;
 	}
 
 	/**
