@@ -56,6 +56,10 @@ public class TestCommon {
 	public void testSingleTokenInterpolation() throws Exception {
 		Context ctx = Context.singleton("key", 33);
 		Assert.assertEquals(33, ctx.interpolate("${key}"));
+		
+		Map<String,Object> map = new Yaml().load("k: ${key}");
+		Map<String, Object> iMap = ctx.interpolate(map);
+		Assert.assertEquals(33, iMap.get("k"));		
 	}
 
 	@SuppressWarnings("rawtypes")
