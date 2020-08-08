@@ -51,6 +51,12 @@ public class TestCommon {
 		Context c = Context.wrap(m::get);
 		Assert.assertEquals("** mom", c.get("f/mom"));
 	}
+	
+	@Test
+	public void testSingleTokenInterpolation() throws Exception {
+		Context ctx = Context.singleton("key", 33);
+		Assert.assertEquals(33, ctx.interpolate("${key}"));
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Test

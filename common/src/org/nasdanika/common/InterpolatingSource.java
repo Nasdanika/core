@@ -50,7 +50,7 @@ public class InterpolatingSource implements Function<String,Object> {
 				@Override
 				public <T> T compute(Context context, String key, String path, Class<T> type) {
 					Converter converter = context.get(Converter.class);
-					String interpolated = context.interpolate((String) value);
+					Object interpolated = context.interpolate((String) value);
 					return converter == null ? (T) interpolated : converter.convert(interpolated, type);
 				}
 				

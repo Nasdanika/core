@@ -316,7 +316,7 @@ public class TextToSpeechCommand extends DelegatingCommand {
 			String path, 
 			ProgressMonitor progressMonitor) throws Exception {
 		
-		String text = context.interpolate(inputText(file == null ? System.in : new FileInputStream(file)));
+		String text = context.interpolateToString(inputText(file == null ? System.in : new FileInputStream(file)));
 		SpeechSynthesizer synthesizer = context.get(SpeechSynthesizer.class);
 		OutputStream audioOutput = audioOutput(file, path);
 		if (audioOutput != null) {

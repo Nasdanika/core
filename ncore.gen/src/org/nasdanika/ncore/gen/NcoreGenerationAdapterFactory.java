@@ -13,9 +13,7 @@ import org.nasdanika.ncore.Null;
 import org.nasdanika.ncore.Operation;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Resource;
-import org.nasdanika.ncore.SupplierEntry;
-import org.nasdanika.ncore.TypedElement;
-import org.nasdanika.ncore.TypedEntry;
+import org.nasdanika.ncore.Service;
 import org.nasdanika.ncore.Value;
 
 /**
@@ -43,11 +41,11 @@ public class NcoreGenerationAdapterFactory extends ComposedAdapterFactory {
 					HttpCallSupplierFactory::new));
 
 		registerAdapterFactory(
-				new FunctionAdapterFactory<SupplierFactory, TypedElement>(
-					NcorePackage.Literals.TYPED_ELEMENT, 
+				new FunctionAdapterFactory<SupplierFactory, Service>(
+					NcorePackage.Literals.SERVICE, 
 					SupplierFactory.class, 
 					this.getClass().getClassLoader(),
-					TypedElementSupplierFactory::new));
+					ServiceSupplierFactory::new));
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory, org.nasdanika.ncore.Supplier>(
@@ -132,20 +130,8 @@ public class NcoreGenerationAdapterFactory extends ComposedAdapterFactory {
 					SupplierFactory.class, 
 					this.getClass().getClassLoader(),
 					OperationSupplierFactory::new));
-
-		registerAdapterFactory(
-				new FunctionAdapterFactory<SupplierFactory, SupplierEntry>(
-					NcorePackage.Literals.SUPPLIER_ENTRY, 
-					SupplierFactory.class, 
-					this.getClass().getClassLoader(),
-					SupplierSupplierFactory::new));
-
-		registerAdapterFactory(
-				new FunctionAdapterFactory<SupplierFactory, TypedEntry>(
-					NcorePackage.Literals.TYPED_ENTRY, 
-					SupplierFactory.class, 
-					this.getClass().getClassLoader(),
-					TypedElementSupplierFactory::new));
+		
+		// TODO - all Ncore elements.
 
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<SupplierFactory, org.nasdanika.ncore.Object>(

@@ -2,11 +2,14 @@ package org.nasdanika.ncore.gen;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 
-public class SupplierSupplierFactory<T extends org.nasdanika.ncore.Supplier> extends TypedElementSupplierFactory<T> {
+public class SupplierSupplierFactory<T extends org.nasdanika.ncore.Supplier>  implements SupplierFactory<Object> {
 	
+	protected T target;
+
 	public SupplierSupplierFactory(T target) {
-		super(target);
+		this.target = target;
 	}
 
 	@Override

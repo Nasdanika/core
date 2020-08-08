@@ -4,13 +4,13 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.ncore.TypedElement;
+import org.nasdanika.ncore.Service;
 
-public class TypedElementSupplierFactory<T extends TypedElement> implements SupplierFactory<Object> {
+public class ServiceSupplierFactory<T extends Service> implements SupplierFactory<Object> {
 	
 	protected T target;
 
-	public TypedElementSupplierFactory(T target) {
+	public ServiceSupplierFactory(T target) {
 		this.target = target;
 	}
 

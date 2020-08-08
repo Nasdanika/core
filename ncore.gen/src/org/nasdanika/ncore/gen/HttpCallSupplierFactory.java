@@ -85,7 +85,7 @@ public class HttpCallSupplierFactory implements SupplierFactory<InputStream> {
 
 			@Override
 			public InputStream execute(Map<String, Object> arg, ProgressMonitor progressMonitor) throws Exception {
-				URL url = new URL(context.interpolate(target.getUrl())); // Resole relative to model?
+				URL url = new URL(context.interpolateToString(target.getUrl())); // Resole relative to model?
 				URLConnection connection = url.openConnection();
 				if (!(connection instanceof HttpURLConnection)) {
 					throw new IllegalArgumentException("Not an HTTP(s) URL: "+url);

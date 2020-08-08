@@ -423,9 +423,9 @@ public interface Context extends Composeable<Context> {
 	 * For example <code>${{xyz}}</code> will be "interpolated" as <code>${xyz}</code>. There may be multiple levels of curly brackets.
 	 * This behavior may be leveraged in multi-stage interpolation where early stage interpolators "peel" the token until it comes at the interpolation level where it is supposed to be expanded.    
 	 * @param input
-	 * @return
+	 * @return If the string contains just a single token then the token value is returned as-is. Otherwise tokens in the input are replaced with their values converted to string using context {@link Converter} service if it is present or toString() method.
 	 */
-	default String interpolate(String input) {
+	default Object interpolate(String input) {
 		if (input == null) {
 			return input;
 		}
@@ -451,6 +451,10 @@ public interface Context extends Composeable<Context> {
 			    	peeledToken = peeledToken.substring(0, pipeIdx);
 			    }
 			    
+		    	if (matcher.start() == 0 && matcher.end() == input.length()) {
+		    		return tokenComputer.get(peeledToken, defaultValue);
+		    	}
+			    
 				Object replacement = tokenComputer.getString(peeledToken, defaultValue);
 			    if (replacement != null) {
 			    	Converter converter = get(Converter.class);
@@ -467,6 +471,26 @@ public interface Context extends Composeable<Context> {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+	
+	/**
+	 * Interpolates to {@link String}.
+	 * @param input
+	 * @return
+	 */
+	default String interpolateToString(String input) {
+		Object result = interpolate(input);
+		if (result instanceof String) {
+			return (String) result;
+		}
+    	Converter converter = get(Converter.class);
+    	if (converter != null) {
+    		String str = converter.convert(result, String.class);
+    		if (str != null) {
+    			return str;
+    		}
+    	}		
+    	return String.valueOf(result);
 	}
 	
 	/**

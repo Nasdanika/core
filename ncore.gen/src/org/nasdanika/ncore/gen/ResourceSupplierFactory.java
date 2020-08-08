@@ -9,7 +9,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.ncore.Resource;
 
-public class ResourceSupplierFactory extends TypedElementSupplierFactory<Resource> {
+public class ResourceSupplierFactory extends ServiceSupplierFactory<Resource> {
 	
 	public ResourceSupplierFactory(Resource target) {
 		super(target);
@@ -19,7 +19,7 @@ public class ResourceSupplierFactory extends TypedElementSupplierFactory<Resourc
 	@Override
 	public Supplier<Object> create(Context context) throws Exception {
 		return Supplier.<Object>fromCallable(() -> {
-			URL url = EmfUtil.resolveReference(target.eResource(), context.interpolate(target.getLocation()));
+			URL url = EmfUtil.resolveReference(target.eResource(), context.interpolateToString(target.getLocation()));
 			if (org.nasdanika.common.Util.isBlank(target.getType())) {
 				return url;
 			}
