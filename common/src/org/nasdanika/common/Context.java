@@ -474,12 +474,15 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
-	 * Interpolates to {@link String}.
+	 * Interpolates to {@link String}, null input is interpolated as an empty strings.
 	 * @param input
 	 * @return
 	 */
 	default String interpolateToString(String input) {
 		Object result = interpolate(input);
+		if (result == null) {
+			return "";
+		}
 		if (result instanceof String) {
 			return (String) result;
 		}

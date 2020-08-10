@@ -537,7 +537,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 				return factory;
 			}
 		}
-		return (ConsumerFactory<T>) adaptTo(target, SupplierFactory.class);
+		return adaptTo(target, ConsumerFactory.class);
 	}
 		
 	/**
