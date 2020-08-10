@@ -310,9 +310,11 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated NOT
 	 */
 	public boolean validateSupplier_factory(Supplier supplier, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		if (diagnostics != null && Util.isBlank(supplier.getFactory()) && !(supplier instanceof Value)) {			
+		if (diagnostics != null && Util.isBlank(supplier.getFactory()) 
+				&& !(supplier instanceof Value)
+				&& !(supplier instanceof Html)) {			
 			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, supplier);
-			helper.error("Supplier factory is a required attribute", NcorePackage.Literals.SUPPLIER__FACTORY);
+			helper.error("Supplier factory is a required attribute for " + supplier.eClass().getName(), NcorePackage.Literals.SUPPLIER__FACTORY);
 			return helper.isSuccess();
 		}
 		return true;
