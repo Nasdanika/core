@@ -166,6 +166,61 @@ public interface Palette extends EReferencePredicate {
 	}
 		
 	/**
+	 * @return Palette elements filtered for a given source object and containing reference.
+	 */
+	default List<EObject> getElements(EObject source, EReference eReference) {
+		Set<String> ids = new HashSet<>();			
+		List<EObject> ret = new ArrayList<>();
+		for (Contributor contributor: getContributors()) {
+			if (ids.add(contributor.getId())) {
+				EObject element = contributor.get();
+				if (!(contributor instanceof EReferencePredicate) || ((EReferencePredicate) contributor).accept(source, eReference, element, true)) {
+					ret.add(element);
+				}
+			}
+		}
+		return ret;
+	}
+		
+	/**
+	 * Adds a contributor which instantiates given EClass and uses EClass name and EPackage namespace URI as ID.
+	 * The contributor also implements {@link EReferencePredicate} delegating to the predicate parameter. It allows
+	 * to filter palette elements based on the container and containing reference.
+	 * Also adds predicates checking that a candidate is instance of one of provided EClass'es. 
+	 * @param eClass
+	 */
+	default void add(EClass eClass, EReferencePredicate predicate) {
+		abstract class ContributorPredicate implements Contributor, EReferencePredicate { }
+		Contributor contributor = new ContributorPredicate() {
+			
+			@Override
+			public EObject get() {
+				return eClass.getEPackage().getEFactoryInstance().create(eClass);
+			}
+			
+			@Override
+			public String getId() {
+				return eClass.getName()+"@"+eClass.getEPackage().getNsURI();
+			}
+
+			@Override
+			public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
+				return predicate == null ? true : predicate.accept(source, eReference, target, direct);
+			}
+			
+		};
+		add((Contributor) contributor);
+		add(new EReferencePredicate() {
+
+			@Override
+			public boolean accept(EObject source, EReference eReference, EObject target, boolean direct) {
+				return eClass.isInstance(target);
+			}
+			
+		});
+	};	
+		
+	/**
 	 * Adds a contributor which instantiates given EClass and uses EClass name and EPackage namespace URI as ID.
 	 * Also adds predicates checking that a candidate is instance of one of provided EClass'es. 
 	 * @param eClass
