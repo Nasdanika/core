@@ -55,8 +55,8 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new FunctionFactory<V, BiSupplier<V,T>>() {
 
 			@Override
-			public Function<V, BiSupplier<V, T>> create(Context arg) throws Exception {				
-				return SupplierFactory.this.create(arg).asFunction();
+			public Function<V, BiSupplier<V, T>> create(Context context) throws Exception {				
+				return SupplierFactory.this.create(context).asFunction();
 			}
 		};
 	}
