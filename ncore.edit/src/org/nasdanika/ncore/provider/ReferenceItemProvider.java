@@ -13,7 +13,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
+import org.nasdanika.emf.EReferencePredicate;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Reference;
 
@@ -79,10 +79,10 @@ public class ReferenceItemProvider extends ModelElementItemProvider {
 				EReference eContainmentReference = eObject.eContainmentFeature();
 				if (eContainmentReference != null) {
 					for (Adapter adapter: eContainer.eAdapters()) {
-						if (adapter instanceof NasdanikaItemProviderAdapter) {
+						if (adapter instanceof EReferencePredicate) {
 							Collection<Object> ret = new ArrayList<>();
 							for (Object choice: choices) {
-								if (choice instanceof EObject && ((NasdanikaItemProviderAdapter) adapter).accept(eContainer, eContainmentReference, (EObject) choice, false)) {
+								if (choice instanceof EObject && ((EReferencePredicate) adapter).accept(eContainer, eContainmentReference, (EObject) choice, false)) {
 									ret.add(choice);
 								}
 							}
