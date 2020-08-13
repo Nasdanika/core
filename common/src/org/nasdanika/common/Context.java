@@ -452,17 +452,20 @@ public interface Context extends Composeable<Context> {
 			    }
 			    
 		    	if (matcher.start() == 0 && matcher.end() == input.length()) {
-		    		return tokenComputer.get(peeledToken, defaultValue);
+		    		Object replacement = tokenComputer.get(peeledToken, defaultValue);
+					return replacement == null ? input : replacement;
 		    	}
 			    
 				Object replacement = tokenComputer.getString(peeledToken, defaultValue);
 			    if (replacement != null) {
-			    	Converter converter = get(Converter.class);
-			    	if (converter != null) {
-			    		String str = converter.convert(replacement, String.class);
-			    		if (str != null) {
-			    			replacement = str;
-			    		}
+			    	if (!(replacement instanceof String)) {
+				    	Converter converter = get(Converter.class);
+				    	if (converter != null) {
+				    		String str = converter.convert(replacement, String.class);
+				    		if (str != null) {
+				    			replacement = str;
+				    		}
+				    	}
 			    	}
 				    output.append(input.substring(i, matcher.start())).append(replacement);			    
 				    i = matcher.end();
@@ -481,7 +484,7 @@ public interface Context extends Composeable<Context> {
 	default String interpolateToString(String input) {
 		Object result = interpolate(input);
 		if (result == null) {
-			return "";
+			return null;
 		}
 		if (result instanceof String) {
 			return (String) result;

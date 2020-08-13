@@ -25,4 +25,13 @@ public class Util {
 		return str == null || str.trim().length() == 0;
 	}
 	
+	/**
+	 * Creates a function for context mapping which recognizes path navigation with ..
+	 * @param prefix
+	 * @return
+	 */
+	public static Function<String,String> hierarchicalMapper(String prefix) {
+		return null;
+	}
+	
 }

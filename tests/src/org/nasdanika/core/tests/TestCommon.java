@@ -107,6 +107,14 @@ public class TestCommon {
 	}
 	
 	@Test 
+	public void testYamlMapInterpolation() {
+		Map<String, Object> yaml = new Yaml().load(TestCommon.class.getResourceAsStream("test-map-interpolation.yml"));
+		Map<String, Object> interpolated = Context.singleton("name", "World").interpolate(yaml);	
+		Context mapContext = Context.wrap(interpolated::get);
+		Assert.assertEquals("World", mapContext.get("map/a"));
+	}
+	
+	@Test 
 	public void testProgressMonitor() {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		ProgressEntry pe = new ProgressEntry("Test progress entry", 0);		
