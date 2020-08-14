@@ -306,7 +306,8 @@ public class TestCommon {
 	@Test
 	public void testMapContext() {
 		Map<String, Object> yaml = new Yaml().load(TestCommon.class.getResourceAsStream("test-map-context.yml"));
-		Context mapContext = Context.wrap(yaml::get);
+		System.out.println(yaml.get("empty-map"));
+		Context mapContext = Context.wrap(yaml::get);		
 		System.out.println("map: " + toString(mapContext.get("map")));
 		System.out.println("map/a: " + toString(mapContext.get("map/a")));
 		System.out.println("map/e: " + toString(mapContext.get("map/e")));

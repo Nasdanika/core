@@ -19,5 +19,6 @@ list-of-scalars:
     
 logical-yes: true
 logical-no: false
-scalar: aaaa             
+scalar: aaaa   
+empty-map: {}
                

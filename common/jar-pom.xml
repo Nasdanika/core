@@ -4,10 +4,10 @@
 	  <parent>
 	    <artifactId>org.nasdanika.core.parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>1.0.0-SNAPSHOT</version>
+	    <version>2020.8</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
-	<artifactId>org.nasdanika.common</artifactId>
+	<artifactId>common</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Common</name>
 

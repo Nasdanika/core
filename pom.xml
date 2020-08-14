@@ -131,6 +131,8 @@
 
 		<module>cli</module>		
 
+		<module>exec</module>		
+
 		<module>emf</module>		
 		<module>emf.edit</module>		
 		<module>emf.presentation</module>		
