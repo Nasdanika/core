@@ -10,7 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -34,6 +36,7 @@ import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.SimpleMutableContext;
 import org.nasdanika.common.Supplier;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
@@ -324,6 +327,19 @@ public class TestCommon {
 		
 		return "[" + obj.getClass().toString() + "] " + obj;
 			
+	}
+
+	@Test
+	public void testHierarchicalMapping() {
+		Map<String, Object> yaml = new Yaml().load(TestCommon.class.getResourceAsStream("test-hierarchical-mapping.yml"));
+		Context mapContext = Context.wrap(yaml::get);		
+		Context b1 = mapContext.map(Util.hierarchicalMapper("b/b1/"));
+		Context b11 = b1.map(Util.hierarchicalMapper("b11/"));
+		assertEquals("w111", b11.get("b111"));		
+		assertEquals("w112", b1.get("b11/b112"));		
+		assertEquals("w12", b11.get("../b12"));		
+		assertEquals("w22", b11.get("../../b2/b22"));		
+		assertEquals("v11", b11.get("../../../a/a1/a11"));		
 	}
 	
 }

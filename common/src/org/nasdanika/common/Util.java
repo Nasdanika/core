@@ -1,5 +1,8 @@
 package org.nasdanika.common;
 
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class Util {
@@ -26,12 +29,40 @@ public class Util {
 	}
 	
 	/**
+	 * Processes a path (string separated by slashes) by removing <code>segment/..</code> pieces. E.g. <code>../a/../b</code> would be compacted to <code>../b</code>    
+	 * @param str
+	 * @return
+	 */
+	public static String compact(String path) {
+//		path
+		return null;
+	}
+	
+	/**
 	 * Creates a function for context mapping which recognizes path navigation with ..
 	 * @param prefix
 	 * @return
 	 */
-	public static Function<String,String> hierarchicalMapper(String prefix) {
-		return null;
+	public static java.util.function.Function<String,String> hierarchicalMapper(String prefix) {		
+		return key -> {
+			StringTokenizer st = new StringTokenizer(prefix + key, "/", true);
+			LinkedList<String> collector = new LinkedList<>();
+			while (st.hasMoreTokens()) {
+				String token = st.nextToken();
+				if ("..".equals(token) && collector.size() > 1 && !"..".equals(collector.get(collector.size() - 2))) {
+					collector.removeLast();
+					collector.removeLast();
+					if (st.hasMoreTokens()) {
+						st.nextToken(); 
+					}
+				} else {
+					collector.add(token);
+				}
+			}
+			StringBuilder sb = new StringBuilder();
+			collector.forEach(sb::append);
+			return sb.toString();			
+		};
 	}
 	
 }
