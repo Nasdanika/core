@@ -1,4 +1,4 @@
-package org.nasdanika.core.tests;
+package org.nasdanika.core.tests.exec;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,10 +29,10 @@ public class TestExec {
 	public void testIterator() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-		Object iterator = loader.loadYaml(TestExec.class.getResource("exec-iterator-spec.yml"), monitor);
+		Object iterator = loader.loadYaml(TestExec.class.getResource("iterator-spec.yml"), monitor);
 		assertEquals(Iterator.class, iterator.getClass());
 		
-		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("exec-iterator-config.yml"));
+		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
 		SupplierFactory<InputStream> sf = ((Adaptable) iterator).adaptTo(SupplierFactory.class);
@@ -49,10 +49,10 @@ public class TestExec {
 	public void testConfigurator() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-		Object configurator = loader.loadYaml(TestExec.class.getResource("exec-configurator-spec.yml"), monitor);
+		Object configurator = loader.loadYaml(TestExec.class.getResource("configurator-spec.yml"), monitor);
 		assertEquals(Configurator.class, configurator.getClass());
 		
-		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("exec-iterator-config.yml"));
+		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
 		SupplierFactory<InputStream> sf = ((Adaptable) configurator).adaptTo(SupplierFactory.class);
