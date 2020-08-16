@@ -18,7 +18,6 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ObjectLoader;
-import org.nasdanika.common.ObjectLoader.Factory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -46,9 +45,8 @@ public class Iterator implements Adaptable {
 	 * @param progressMonitor
 	 */
 	@SuppressWarnings("unchecked")
-	public Iterator(Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Iterator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
 		if (config instanceof Map) {
-			ObjectLoader loader = new ObjectLoader(factory);
 			for (Entry<String, Object> e: ((Map<String,Object>) config).entrySet()) {
 				iterators.put(e.getKey(), loader.load(e.getValue(), base, progressMonitor));
 			}
@@ -154,7 +152,6 @@ public class Iterator implements Adaptable {
 				}
 			}
 			
-			@SuppressWarnings("resource")
 			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Iterator");
 			for (Entry<String, Object> ie: iterators.entrySet()) {
 				SupplierFactory<InputStream> sf = context -> createSupplier(context, ie.getKey(), ie.getValue());
@@ -232,8 +229,8 @@ public class Iterator implements Adaptable {
 		if (target instanceof Collection) {
 			@SuppressWarnings("resource")
 			ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
-			for (SupplierFactory<InputStream> te: (Collection<SupplierFactory<InputStream>>) target) {
-				ret.add(te.create(iContext));
+			for (Object te: (Collection<?>) target) {
+				ret.add(createSupplierElement(iContext, te));
 			}
 			return ret.then(Util.JOIN_STREAMS);
 		}

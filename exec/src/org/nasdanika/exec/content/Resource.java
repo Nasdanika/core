@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader.Factory;
+import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -26,7 +26,7 @@ public class Resource implements SupplierFactory<InputStream> {
 		throw new IllegalArgumentException("Unsupported resource configuration: " + spec);
 	}
 
-	public Resource(Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) {
+	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) {
 		// TODO Auto-generated constructor stub
 	}
 

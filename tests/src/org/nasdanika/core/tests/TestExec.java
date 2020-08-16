@@ -14,6 +14,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
 import org.yaml.snakeyaml.Yaml;
 
@@ -26,7 +27,7 @@ public class TestExec {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterator() throws Exception {
-		ObjectLoader loader = new ObjectLoader(new org.nasdanika.exec.Factory());
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
 		Object iterator = loader.loadYaml(TestExec.class.getResource("exec-iterator-spec.yml"), monitor);
 		assertEquals(Iterator.class, iterator.getClass());
@@ -37,6 +38,26 @@ public class TestExec {
 		SupplierFactory<InputStream> sf = ((Adaptable) iterator).adaptTo(SupplierFactory.class);
 		Supplier<InputStream> s = sf.create(context);
 		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, s.execute(monitor)));
+	}
+
+	
+	/**
+	 * Tests injection of configuration.
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testConfigurator() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object configurator = loader.loadYaml(TestExec.class.getResource("exec-configurator-spec.yml"), monitor);
+		assertEquals(Configurator.class, configurator.getClass());
+		
+		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("exec-iterator-config.yml"));
+		Context context = Context.wrap(yaml::get);
+		
+		SupplierFactory<InputStream> sf = ((Adaptable) configurator).adaptTo(SupplierFactory.class);
+		Supplier<InputStream> s = sf.create(context);
+		assertEquals(" * 123 -- v11 * ", Util.toString(context, s.execute(monitor)));
 	}
 	
 }

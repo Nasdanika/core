@@ -10,5 +10,7 @@ public interface Marker {
 	int getLine();
 	
 	int getColumn();
+	
+	String getLocation();
 
 }

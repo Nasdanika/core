@@ -1,0 +1,4 @@
+configure:
+   properties:
+      p1: 123
+   target: ' * ${p1} -- ${a/a1/a11} * '

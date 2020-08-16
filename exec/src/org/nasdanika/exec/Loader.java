@@ -27,28 +27,28 @@ import org.nasdanika.exec.resources.ZipResourceCollection;
  * @author Pavel
  *
  */
-public class Factory implements ObjectLoader.Factory {
+public class Loader extends ObjectLoader {
 	
-	private org.nasdanika.common.ObjectLoader.Factory chain;
+	private org.nasdanika.common.ObjectLoader chain;
 
-	public Factory(ObjectLoader.Factory chain) {
+	public Loader(ObjectLoader chain) {
 		this.chain = chain;
 	}
 	
-	public Factory() {	}	
+	public Loader() {	}	
 
 	@Override
-	public Object create(ObjectLoader.Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
 		switch (type) {
 		// General
 		case "for-each":
-			return new Iterator(factory, type, config, base, progressMonitor);
+			return new Iterator(loader, type, config, base, progressMonitor);
 		case "configure":
-			return new Configurator(factory, type, config, base, progressMonitor);
+			return new Configurator(loader, type, config, base, progressMonitor);
 		case "map":
-			return new Mapper(factory, type, config, base, progressMonitor);
+			return new Mapper(loader, type, config, base, progressMonitor);
 		case "refernce": // Referencing another spec to load
-			return new Reference(factory, type, config, base, progressMonitor);
+			return new Reference(loader, type, config, base, progressMonitor);
 		case "group": // Both resource and content, is it needed - iterator and map shall do?
 			throw new UnsupportedOperationException();
 		/*
@@ -64,57 +64,57 @@ public class Factory implements ObjectLoader.Factory {
 		
 		// Resources
 		case "container":
-			return new Container(factory, type, config, base, progressMonitor);
+			return new Container(loader, type, config, base, progressMonitor);
 		case "file":
-			return new File(factory, type, config, base, progressMonitor);
+			return new File(loader, type, config, base, progressMonitor);
 		case "zip-resource-collection":
-			return new ZipResourceCollection(factory, type, config, base, progressMonitor);
+			return new ZipResourceCollection(loader, type, config, base, progressMonitor);
 		
 		
 		// Content
 		case "resource":
-			return new Resource(factory, type, config, base, progressMonitor);
+			return new Resource(loader, type, config, base, progressMonitor);
 		case "zip-archive":
-			return new ZipArchive(factory, type, config, base, progressMonitor);
+			return new ZipArchive(loader, type, config, base, progressMonitor);
 		case "interpolator":
-			return new Interpolator(factory, type, config, base, progressMonitor);
+			return new Interpolator(loader, type, config, base, progressMonitor);
 		case "mustache":
-			return new Mustache(factory, type, config, base, progressMonitor);
+			return new Mustache(loader, type, config, base, progressMonitor);
 		case "free-marker":
-			return new FreeMarker(factory, type, config, base, progressMonitor);
+			return new FreeMarker(loader, type, config, base, progressMonitor);
 		case "http":
-			return new HttpCall(factory, type, config, base, progressMonitor);
+			return new HttpCall(loader, type, config, base, progressMonitor);
 		case "script": // string value or bindings and source. Bindings are converted to String if streams.
-			return new ScriptEvaluator(factory, type, config, base, progressMonitor);
+			return new ScriptEvaluator(loader, type, config, base, progressMonitor);
 			
 		// Java
 		case "source-folder": 
-			return new SourceFolder(factory, type, config, base, progressMonitor);
+			return new SourceFolder(loader, type, config, base, progressMonitor);
 		case "package": 
-			return new org.nasdanika.exec.java.Package(factory, type, config, base, progressMonitor);
+			return new org.nasdanika.exec.java.Package(loader, type, config, base, progressMonitor);
 		case "compilation-unit": // Merger is external - passed by Codegen 
-			return new CompilationUnit(factory, type, config, base, progressMonitor);
+			return new CompilationUnit(loader, type, config, base, progressMonitor);
 		case "annotation": 
-			return new Annotation(factory, type, config, base, progressMonitor);
+			return new Annotation(loader, type, config, base, progressMonitor);
 		case "class": 
-			return new org.nasdanika.exec.java.Class(factory, type, config, base, progressMonitor);
+			return new org.nasdanika.exec.java.Class(loader, type, config, base, progressMonitor);
 		case "enum": 
-			return new org.nasdanika.exec.java.Enum(factory, type, config, base, progressMonitor);
+			return new org.nasdanika.exec.java.Enum(loader, type, config, base, progressMonitor);
 		case "interface": 
-			return new Interface(factory, type, config, base, progressMonitor);
+			return new Interface(loader, type, config, base, progressMonitor);
 		case "method": 
-			return new Method(factory, type, config, base, progressMonitor);
+			return new Method(loader, type, config, base, progressMonitor);
 		case "constructor": 
-			return new Constructor(factory, type, config, base, progressMonitor);
+			return new Constructor(loader, type, config, base, progressMonitor);
 		case "field": 
-			return new Field(factory, type, config, base, progressMonitor);
+			return new Field(loader, type, config, base, progressMonitor);
 		
 		default:
 			if (chain == null) {
 				throw new IllegalArgumentException("Unsupported type: " + type);
 			}
 			
-			return chain.create(factory, type, config, base, progressMonitor);
+			return chain.create(loader, type, config, base, progressMonitor);
 		}
 	}
 

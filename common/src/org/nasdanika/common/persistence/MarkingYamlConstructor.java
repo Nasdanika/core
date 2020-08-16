@@ -21,10 +21,16 @@ import org.yaml.snakeyaml.resolver.Resolver;
  */
 public class MarkingYamlConstructor extends Constructor {
 	
+	private String location;
+
+	public MarkingYamlConstructor(String location) {
+		this.location = location;
+	}
+	
 	@Override
 	protected List<? extends Object> constructSequence(SequenceNode node) {
 		MarkedArrayList<? extends Object> ret = (MarkedArrayList<? extends Object>) super.constructSequence(node);
-		node.getValue().forEach(n -> ret.getMarkers().add(new MarkerImpl(n.getStartMark())));
+		node.getValue().forEach(n -> ret.getMarkers().add(new MarkerImpl(location, n.getStartMark())));
 		return ret;
 	}
 	
@@ -40,7 +46,7 @@ public class MarkingYamlConstructor extends Constructor {
 			.stream()
 			.map(NodeTuple::getKeyNode)
 			.filter(n -> n instanceof ScalarNode)
-			.forEach(keyNode -> ret.mark(((ScalarNode) keyNode).getValue(), new MarkerImpl(keyNode.getStartMark())));
+			.forEach(keyNode -> ret.mark(((ScalarNode) keyNode).getValue(), new MarkerImpl(location, keyNode.getStartMark())));
 		return ret;
 	}
 	
@@ -52,8 +58,8 @@ public class MarkingYamlConstructor extends Constructor {
 	/**
 	 * @return Yaml which uses this {@link MarkingYamlConstructor} to create collections with markers.
 	 */
-	public static Yaml createMarkingYaml() {
-		return new Yaml(new MarkingYamlConstructor(), new Representer(), new DumperOptions(), new LoaderOptions(), new Resolver());
+	public static Yaml createMarkingYaml(String location) {
+		return new Yaml(new MarkingYamlConstructor(location), new Representer(), new DumperOptions(), new LoaderOptions(), new Resolver());
 	}
 
 }

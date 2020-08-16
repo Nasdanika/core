@@ -5,15 +5,15 @@ import java.net.URL;
 
 /**
  * Creates object instances with {@link ClassLoader}. Type shall resolve to fully qualified class name.
- * Classes shall have a 4-argument constructors taking {@link ObjectLoader.Factory}, config object, {@link URL}, and {@link ProgressMonitor}. 
+ * Classes shall have a 4-argument constructors taking {@link ObjectLoader}, config object, {@link URL}, and {@link ProgressMonitor}. 
  * @author Pavel
  *
  */
-public class ClassLoaderObjectFactory implements ObjectLoader.Factory {
+public class ClassLoaderObjectLoader extends ObjectLoader {
 	
 	private ClassLoader classLoader;
 	private java.util.function.Function<String, String> resolver;
-	private ObjectLoader.Factory chain;
+	private ObjectLoader chain;
 
 	/**
 	 * 
@@ -21,14 +21,14 @@ public class ClassLoaderObjectFactory implements ObjectLoader.Factory {
 	 * @param resolver Resolver of type to fully qualified class name. If null, then type is used AS-IS. E.g. a map::get for a map of logical names to fully qualified class names.
 	 * @param chain Object loader to fall back to if resolver is not null and returned null. 
 	 */
-	public ClassLoaderObjectFactory(ClassLoader classLoader, java.util.function.Function<String,String> resolver, ObjectLoader.Factory chain) {
+	public ClassLoaderObjectLoader(ClassLoader classLoader, java.util.function.Function<String,String> resolver, ObjectLoader chain) {
 		this.resolver = resolver;
 		this.classLoader = classLoader;
 		this.chain = chain;
 	}
 
 	@Override
-	public Object create(ObjectLoader.Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
 		String fqn = resolver == null ? type : resolver.apply(type);
 		if (fqn == null) {
 			if (resolver == null) {
@@ -38,12 +38,12 @@ public class ClassLoaderObjectFactory implements ObjectLoader.Factory {
 				throw new IllegalArgumentException("Type was resolved to null and there is no chain loader: " + type);
 			}
 			
-			return chain.create(factory, type, config, base, progressMonitor);
+			return chain.create(loader, type, config, base, progressMonitor);
 		}
 		
 		Class<?> clazz = classLoader.loadClass(fqn);		
-		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.Factory.class, Object.class, URL.class, ProgressMonitor.class); 		
-		return constructor.newInstance(factory, config, base, progressMonitor);
+		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class); 		
+		return constructor.newInstance(loader, config, base, progressMonitor);
 	}
 
 }

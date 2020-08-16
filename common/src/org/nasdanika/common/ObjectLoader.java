@@ -13,12 +13,13 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.persistence.MarkingYamlConstructor;
 import org.yaml.snakeyaml.Yaml;
 
 /**
  * Loads objects from configuration, e.g. YAML or JSON.
  * Objects are loaded as follows: 
- * a) If config value is a map with a single element, then it's key is an object type to be instantiated. Type is passed to factory create() method and is implementation-specific. E.g. a factory may use aliases/logical names for a 
+ * a) If config value is a map with a single element, then it's key is an object type to be instantiated. Type is passed to create() method and is implementation-specific. E.g. a factory may use aliases/logical names for a 
  * pre-defined set of supported objects/components.  
  * b) If config value is a multi-value map, then the result would be a map with each value instantiated as explained here.
  * c) If config value is a list then the result would be a list with each element instantiated as explained here.
@@ -30,29 +31,19 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public class ObjectLoader {
+public abstract class ObjectLoader {
 	
-	public interface Factory {
-		
-		/**
-		 * Creates an object of requested type with a given config.
-		 * @param Factory for creating object parts. This factory or parent/root factory for chained factories.
-		 * @param type
-		 * @param config
-		 * @param base Base URL for resolving references.
-		 * @param progressMonitor 
-		 * @return
-		 * @throws Exception
-		 */
-		Object create(Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception;
-		
-	}
-
-	private Factory factory;
-	
-	public ObjectLoader(Factory factory) {
-		this.factory = factory;
-	}
+	/**
+	 * Creates an object of requested type with a given config.
+	 * @param ObjectLoader for creating object parts. This factory or parent/root loader for chained loaders.
+	 * @param type
+	 * @param config
+	 * @param base Base URL for resolving references.
+	 * @param progressMonitor 
+	 * @return
+	 * @throws Exception
+	 */
+	public abstract Object create(ObjectLoader factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception;
 	
 	@SuppressWarnings("unchecked")
 	public Object load(Object spec, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -62,7 +53,7 @@ public class ObjectLoader {
 			// single
 			if (map.size() == 1) {
 				for (Entry<String, Object> e: map.entrySet()) {
-					return factory.create(factory, e.getKey(), e.getValue(), base, progressMonitor);
+					return create(this, e.getKey(), e.getValue(), base, progressMonitor);
 				}
 			}
 			// otherwise
@@ -87,22 +78,22 @@ public class ObjectLoader {
 	}
 	
 	public Object loadYaml(String yamlString, URL base, ProgressMonitor progressMonitor) throws Exception {
-		Yaml yaml = new Yaml();
+		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(yamlString), base, progressMonitor);
 	}
 	
 	public Object loadYaml(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
-		Yaml yaml = new Yaml();
+		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(in), base, progressMonitor);
 	}
 	
 	public Object loadYaml(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
-		Yaml yaml = new Yaml();
+		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(reader), base, progressMonitor);
 	}
 	
 	public Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
-		Yaml yaml = new Yaml();
+		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(url.toString());
 		return load(yaml.load(url.openStream()), url, progressMonitor);
 	}
 		

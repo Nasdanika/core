@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.nasdanika.common.persistence.MarkedLinkedHashMap;
+import org.nasdanika.common.persistence.Marker;
 
 public class Util {
 
@@ -194,5 +196,56 @@ public class Util {
 		
 	};
 	
-	
+	/**
+	 * Converts {@link Object} to {@link String} using {@link Util}.toString() if object is {@link InputStream} and using context converter, if it s present, otherwise.
+	 */
+	public static FunctionFactory<Object, String> OBJECT_TO_STRING_FACTORY = context -> new Function<Object,String>() {
+
+		@Override
+		public double size() {
+			return 1;
+		}
+
+		@Override
+		public String name() {
+			return "Object to String";
+		}
+
+		@Override
+		public String execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+			if (obj == null) {
+				return null;
+			}
+			if (obj instanceof InputStream) {
+				return Util.toString(context, (InputStream) obj);
+			}
+	    	Converter converter = context.get(Converter.class);
+	    	if (converter != null) {
+	    		String str = converter.convert(obj, String.class);
+	    		if (str != null) {
+	    			return str;
+	    		}
+	    	}
+			return obj.toString();
+		}
+	};
+		
+	/**
+	 * Convenience method for adding a marker to exception messages if source is {@link MarkedLinkedHashMap}.
+	 * @param candidate
+	 * @param prefix
+	 * @return
+	 */
+	public static String mark(String prefix, Object source, String key) {
+		if (source instanceof MarkedLinkedHashMap) {
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			Marker marker = ((MarkedLinkedHashMap) source).getMarker(key);
+			if (marker != null) {
+				return (prefix == null ? "" : prefix) + marker.toString();
+			}
+		}
+		
+		return "";
+	}
+		
 }
