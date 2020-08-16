@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public abstract class ObjectLoader {
+public class ObjectLoader {
 	
 	public interface Factory {
 		

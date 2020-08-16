@@ -34,13 +34,17 @@ public class Factory implements ObjectLoader.Factory {
 	public Factory(ObjectLoader.Factory chain) {
 		this.chain = chain;
 	}
+	
+	public Factory() {	}	
 
 	@Override
 	public Object create(ObjectLoader.Factory factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
 		switch (type) {
 		// General
-		case "iterate":
+		case "for-each":
 			return new Iterator(factory, type, config, base, progressMonitor);
+		case "configure":
+			return new Configurator(factory, type, config, base, progressMonitor);
 		case "map":
 			return new Mapper(factory, type, config, base, progressMonitor);
 		case "refernce": // Referencing another spec to load

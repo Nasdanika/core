@@ -5,8 +5,10 @@ Bundle-SymbolicName: org.nasdanika.exec
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.nasdanika.exec.resources,
- org.nasdanika.exec.content
+Export-Package: org.nasdanika.exec,
+ org.nasdanika.exec.content,
+ org.nasdanika.exec.java,
+ org.nasdanika.exec.resources
 Bundle-ClassPath: .
 Require-Bundle: org.nasdanika.common;visibility:=reexport
 Automatic-Module-Name: org.nasdanika.exec
