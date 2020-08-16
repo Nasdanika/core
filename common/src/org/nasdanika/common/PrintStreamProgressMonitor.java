@@ -86,7 +86,11 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public void worked(Status status, double work, String progressMessage, Object... data) {
-		out.println(indent+"  ["+status+" "+work+"] "+progressMessage+": "+Arrays.deepToString(data));
+		out.print(indent+"  ["+status+" "+work+"] "+progressMessage);
+		if (data.length > 0) { 
+			out.print(": "+Arrays.deepToString(data));
+		}
+		out.println();
 	}
 
 	@Override

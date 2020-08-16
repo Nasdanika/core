@@ -93,6 +93,7 @@ public abstract class ObjectLoader {
 	}
 	
 	public Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
+		progressMonitor.worked(1, "Loading YAML from " + url);
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(url.toString());
 		return load(yaml.load(url.openStream()), url, progressMonitor);
 	}
@@ -113,6 +114,7 @@ public abstract class ObjectLoader {
 	}
 	
 	public Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws Exception {
+		progressMonitor.worked(1, "Loading JSON object from " + url);
 		JSONObject jsonObject = new JSONObject(new JSONTokener(url.openStream()));
 		return load(jsonObject.toMap(), url, progressMonitor);
 	}
@@ -133,6 +135,7 @@ public abstract class ObjectLoader {
 	}
 	
 	public Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws Exception {
+		progressMonitor.worked(1, "Loading JSON array from " + url);
 		JSONArray jsonArray = new JSONArray(new JSONTokener(url.openStream()));
 		return load(jsonArray.toList(), url, progressMonitor);
 	}
