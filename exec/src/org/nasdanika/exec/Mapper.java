@@ -19,6 +19,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -36,11 +38,11 @@ public class Mapper implements Adaptable {
 	private Map<String,Object> map; 
 
 	@SuppressWarnings("unchecked")
-	public Mapper(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Mapper(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {
-				throw new IllegalArgumentException("Configuration must contain 'target' key");				
+				throw new ConfigurationException("Configuration must contain 'target' key", marker);				
 			}
 			Object targetSpec = map.get(TARGET_KEY);
 			if (targetSpec instanceof Collection) {
@@ -52,11 +54,11 @@ public class Mapper implements Adaptable {
 			}
 			
 			if (!map.containsKey(MAP_KEY)) {
-				throw new IllegalArgumentException("Configuration must contain 'map' key");				
+				throw new ConfigurationException("Configuration must contain 'map' key", marker);				
 			}
 			loadMap(loader, map.get(MAP_KEY), base, progressMonitor);
 		} else {
-			throw new IllegalArgumentException("Configuration must be a map, got " + config.getClass());
+			throw new ConfigurationException("Configuration must be a map, got " + config.getClass(), marker);
 		}
 	}	
 	

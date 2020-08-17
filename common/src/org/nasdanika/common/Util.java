@@ -11,11 +11,14 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
 
@@ -229,6 +232,26 @@ public class Util {
 			return obj.toString();
 		}
 	};
+		
+	/**
+	 * Returns marker if map is {@link MarkedLinkedHashMap} and the key is marked, or null otherwise.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	public static Marker getMarker(Map<String,Object > map, String key) {
+		return map instanceof MarkedLinkedHashMap ? ((MarkedLinkedHashMap<String,Object>) map).getMarker(key) : null;
+	}
+		
+	/**
+	 * Returns marker if collection is {@link MarkedArrayList} and the index is present is marked, or null otherwise.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	public static Marker getMarker(Collection<?> collection, int index) {
+		return collection instanceof MarkedArrayList && index > -1 && index < collection.size() ? ((MarkedArrayList<?>) collection).getMarkers().get(index) : null;
+	}
 		
 	/**
 	 * Convenience method for adding a marker to exception messages if source is {@link MarkedLinkedHashMap}.

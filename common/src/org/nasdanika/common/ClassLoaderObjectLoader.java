@@ -3,9 +3,11 @@ package org.nasdanika.common;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 
+import org.nasdanika.common.persistence.Marker;
+
 /**
  * Creates object instances with {@link ClassLoader}. Type shall resolve to fully qualified class name.
- * Classes shall have a 4-argument constructors taking {@link ObjectLoader}, config object, {@link URL}, and {@link ProgressMonitor}. 
+ * Classes shall have a 5-argument constructors taking {@link ObjectLoader}, config object, {@link URL}, {@link ProgressMonitor}, and {@link Marker}. 
  * @author Pavel
  *
  */
@@ -28,7 +30,7 @@ public class ClassLoaderObjectLoader extends ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		String fqn = resolver == null ? type : resolver.apply(type);
 		if (fqn == null) {
 			if (resolver == null) {
@@ -38,12 +40,12 @@ public class ClassLoaderObjectLoader extends ObjectLoader {
 				throw new IllegalArgumentException("Type was resolved to null and there is no chain loader: " + type);
 			}
 			
-			return chain.create(loader, type, config, base, progressMonitor);
+			return chain.create(loader, type, config, base, progressMonitor, marker);
 		}
 		
 		Class<?> clazz = classLoader.loadClass(fqn);		
-		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class); 		
-		return constructor.newInstance(loader, config, base, progressMonitor);
+		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class, Marker.class); 		
+		return constructor.newInstance(loader, config, base, progressMonitor, marker);
 	}
 
 }

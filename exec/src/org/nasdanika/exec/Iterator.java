@@ -22,6 +22,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -43,15 +45,16 @@ public class Iterator implements Adaptable {
 	 * @param config
 	 * @param base
 	 * @param progressMonitor
+	 * @param marker 
 	 */
 	@SuppressWarnings("unchecked")
-	public Iterator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Iterator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			for (Entry<String, Object> e: ((Map<String,Object>) config).entrySet()) {
 				iterators.put(e.getKey(), loader.load(e.getValue(), base, progressMonitor));
 			}
 		} else {
-			throw new IllegalArgumentException("Iterator specification must be a map.");
+			throw new ConfigurationException("Iterator specification must be a map.", marker);
 		}
 	}
 	

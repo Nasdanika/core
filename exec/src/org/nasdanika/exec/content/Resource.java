@@ -9,6 +9,7 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.persistence.Marker;
 
 /**
  * Loads content from URL.
@@ -26,7 +27,7 @@ public class Resource implements SupplierFactory<InputStream> {
 		throw new IllegalArgumentException("Unsupported resource configuration: " + spec);
 	}
 
-	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) {
+	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.MarkingYamlConstructor;
 import org.yaml.snakeyaml.Yaml;
 
@@ -40,10 +41,11 @@ public abstract class ObjectLoader {
 	 * @param config
 	 * @param base Base URL for resolving references.
 	 * @param progressMonitor 
+	 * @param marker Optional source marker for troubleshooting.  
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Object create(ObjectLoader factory, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception;
+	public abstract Object create(ObjectLoader factory, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
 	
 	@SuppressWarnings("unchecked")
 	public Object load(Object spec, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -53,7 +55,7 @@ public abstract class ObjectLoader {
 			// single
 			if (map.size() == 1) {
 				for (Entry<String, Object> e: map.entrySet()) {
-					return create(this, e.getKey(), e.getValue(), base, progressMonitor);
+					return create(this, e.getKey(), e.getValue(), base, progressMonitor, Util.getMarker(map, e.getKey()));
 				}
 			}
 			// otherwise

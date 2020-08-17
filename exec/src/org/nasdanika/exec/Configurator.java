@@ -24,6 +24,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -42,11 +44,11 @@ public class Configurator implements Adaptable {
 	private Map<String,Object> configuration = new HashMap<>(); 
 
 	@SuppressWarnings("unchecked")
-	public Configurator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
+	public Configurator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {
-				throw new IllegalArgumentException("Configuration must contain 'target' key");				
+				throw new ConfigurationException("Configuration must contain 'target' key", marker);				
 			}
 			Object targetSpec = map.get(TARGET_KEY);
 			if (targetSpec instanceof Collection) {
@@ -58,17 +60,17 @@ public class Configurator implements Adaptable {
 			}
 			
 			if (!map.containsKey(PROPERTIES_KEY)) {
-				throw new IllegalArgumentException("Configuration must contain 'properties' key");				
+				throw new ConfigurationException("Configuration must contain 'properties' key", marker);				
 			}
 			Object properties = map.get(PROPERTIES_KEY);
 			if (!(properties instanceof Map)) {
-				throw new IllegalArgumentException("Properties shall be a map, got " + properties.getClass() + Util.mark(" at ", map, PROPERTIES_KEY));								
+				throw new ConfigurationException("Properties shall be a map, got " + properties.getClass(), Util.getMarker(map, PROPERTIES_KEY));								
 			}
 			for (Entry<String, Object> pe: ((Map<String,Object>) properties).entrySet()) {
 				configuration.put(pe.getKey(), loader.load(pe.getValue(), base, progressMonitor));
 			}			
 		} else {
-			throw new IllegalArgumentException("Configuration must be a map, got " + config.getClass());
+			throw new ConfigurationException("Configuration must be a map, got " + config.getClass(), marker);
 		}
 	}	
 	
