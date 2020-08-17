@@ -1,9 +1,15 @@
 package org.nasdanika.exec;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 
+import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
@@ -75,8 +81,6 @@ public class Loader extends ObjectLoader {
 		// Content
 		case "resource":
 			return new Resource(loader, type, config, base, progressMonitor, marker);
-		case "zip-archive":
-			return new ZipArchive(loader, type, config, base, progressMonitor, marker);
 		case "interpolator":
 			return new Interpolator(loader, type, config, base, progressMonitor, marker);
 		case "mustache":
@@ -85,6 +89,8 @@ public class Loader extends ObjectLoader {
 			return new FreeMarker(loader, type, config, base, progressMonitor, marker);
 		case "http":
 			return new HttpCall(loader, type, config, base, progressMonitor, marker);
+		case "zip-archive":
+			return new ZipArchive(loader, type, config, base, progressMonitor, marker);
 		case "script": // string value or bindings and source. Bindings are converted to String if streams.
 			return new ScriptEvaluator(loader, type, config, base, progressMonitor, marker);
 			
@@ -118,5 +124,33 @@ public class Loader extends ObjectLoader {
 			return chain.create(loader, type, config, base, progressMonitor, marker);
 		}
 	}
+	
+	// --- Utility methods ---
+	
+	/**
+	 * Wraps object into an {@link InputStream} supplier factory. Handles collection and scalar cases.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
+		if (obj instanceof Collection) {
+			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asSupplierFactory(e));
+			}
+			return ret.then(Util.JOIN_STREAMS_FACTORY);
+		}
+		
+		if (obj instanceof SupplierFactory) {		
+			return (SupplierFactory<InputStream>) obj;
+		}
+		
+		// Converting to string, interpolating, streaming
+		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");
+		return textFactory.then(Util.TO_STREAM);
+	};		
+	
 
 }

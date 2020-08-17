@@ -1,6 +1,5 @@
 package org.nasdanika.exec.content;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -9,32 +8,29 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 
 /**
- * Loads content from URL.
+ * Loads content from URL resolved relative to the base url passed to the constructor.
+ * The URL is not interpolated.
  * @author Pavel
  *
  */
 public class Resource implements SupplierFactory<InputStream> {
 	
-	private String url;
+	private URL url;
 
-	public Resource(Object spec) {
-		if (spec instanceof String) {
-			this.url = (String) spec;
+	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		if (config instanceof String) {
+			url = new URL(base, (String) config);
+		} else {
+			throw new ConfigurationException("Resource value must be a string, got " + config.getClass(), marker);
 		}
-		throw new IllegalArgumentException("Unsupported resource configuration: " + spec);
-	}
-
-	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {
-		URL base = new File(".").toURI().toURL();
-		URL theURL = new URL(base, context.interpolateToString(url));
 		return new Supplier<InputStream>() {
 
 			@Override
@@ -44,12 +40,12 @@ public class Resource implements SupplierFactory<InputStream> {
 
 			@Override
 			public String name() {
-				return "Resource: " + theURL;
+				return "Resource: " + url;
 			}
 
 			@Override
 			public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
-				return theURL.openStream();
+				return url.openStream();
 			}
 			
 		};

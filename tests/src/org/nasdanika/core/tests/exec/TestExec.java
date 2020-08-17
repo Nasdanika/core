@@ -18,6 +18,9 @@ import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Mapper;
 import org.nasdanika.exec.Reference;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Mustache;
+import org.nasdanika.exec.content.Resource;
 import org.yaml.snakeyaml.Yaml;
 
 
@@ -69,13 +72,13 @@ public class TestExec {
 	public void testMapper() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-		Object configurator = loader.loadYaml(TestExec.class.getResource("mapper-spec.yml"), monitor);
-		assertEquals(Mapper.class, configurator.getClass());
+		Object mapper = loader.loadYaml(TestExec.class.getResource("mapper-spec.yml"), monitor);
+		assertEquals(Mapper.class, mapper.getClass());
 		
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> sf = ((Adaptable) configurator).adaptTo(SupplierFactory.class);
+		SupplierFactory<InputStream> sf = ((Adaptable) mapper).adaptTo(SupplierFactory.class);
 		Supplier<InputStream> s = sf.create(context);
 		assertEquals(" * 123_v11 -- ${a/a1/a11} * ", Util.toString(context, s.execute(monitor)));
 	}
@@ -88,34 +91,72 @@ public class TestExec {
 	public void testMapperResource() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-		Object configurator = loader.loadYaml(TestExec.class.getResource("mapper-resource-spec.yml"), monitor);
-		assertEquals(Mapper.class, configurator.getClass());
+		Object mapper = loader.loadYaml(TestExec.class.getResource("mapper-resource-spec.yml"), monitor);
+		assertEquals(Mapper.class, mapper.getClass());
 		
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> sf = ((Adaptable) configurator).adaptTo(SupplierFactory.class);
+		SupplierFactory<InputStream> sf = ((Adaptable) mapper).adaptTo(SupplierFactory.class);
 		Supplier<InputStream> s = sf.create(context);
 		assertEquals(" * 123_v11 -- Hello! * ", Util.toString(context, s.execute(monitor)));
 	}
 	
-	/**
-	 * Tests injection of configuration.
-	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testMapperReference() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-		Object configurator = loader.loadYaml(TestExec.class.getResource("mapper-reference-spec.yml"), monitor);
-		assertEquals(Reference.class, configurator.getClass());
+		Object reference = loader.loadYaml(TestExec.class.getResource("mapper-reference-spec.yml"), monitor);
+		assertEquals(Reference.class, reference.getClass());
 		
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> sf = ((Adaptable) configurator).adaptTo(SupplierFactory.class);
+		SupplierFactory<InputStream> sf = ((Adaptable) reference).adaptTo(SupplierFactory.class);
 		Supplier<InputStream> s = sf.create(context);
 		assertEquals(" * 123_v11 -- ${a/a1/a11} * ", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@Test
+	public void testResource() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object resource = loader.loadYaml(TestExec.class.getResource("resource-spec.yml"), monitor);
+		assertEquals(Resource.class, resource.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Supplier<InputStream> s = ((Resource) resource).create(context);
+		assertEquals("Hello, ${name}!", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testInterpolator() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object interpolator = loader.loadYaml(TestExec.class.getResource("interpolator-spec.yml"), monitor);
+		assertEquals(Interpolator.class, interpolator.getClass());
+		
+		Context context = Context.singleton("name", "World");		
+		
+		Supplier<InputStream> s = ((SupplierFactory<InputStream>) interpolator).create(context);
+		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testMustache() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object mustache = loader.loadYaml(TestExec.class.getResource("mustache-spec.yml"), monitor);
+		assertEquals(Mustache.class, mustache.getClass());
+		
+		Context context = Context.singleton("name", "World");		
+		
+		Supplier<InputStream> s = ((SupplierFactory<InputStream>) mustache).create(context);
+		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
 	}
 	
 }

@@ -1,15 +1,63 @@
 package org.nasdanika.exec.content;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.nasdanika.common.Context;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Marker;
 
-public class Mustache {
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.MustacheFactory;
 
-	public Mustache(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) {
-		throw new UnsupportedOperationException();
+public class Mustache extends Filter {
+
+	public Mustache(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, type, config, base, progressMonitor, marker);
 	}
+
+	@Override
+	protected String filter(Context context, String input) {		
+		/*
+		 * Context -> Map adapter. Breaks the map contract, but works with Mustache.
+		 * Shall it break, a customized ObjectHandler would be required which would support Context
+		 * in addition to Map.
+		 */
+		@SuppressWarnings("serial")
+		Map<String, Object> map = new HashMap<String, Object>() {
+			
+			@Override
+			public boolean containsKey(Object key) {
+				return context.get((String) key) != null;
+			}
+			
+			@Override
+			public Object get(Object key) {
+				return context.get((String) key);
+			}
+			
+		};
+
+		Writer writer = new StringWriter();
+		MustacheFactory mf = new DefaultMustacheFactory();
+
+		com.github.mustachejava.Mustache mustache = mf.compile(new StringReader(input), "Mustache Evaluator");
+		mustache.execute(writer, map);
+		try {
+			writer.close();
+		} catch (IOException e) {
+			throw new NasdanikaException("Unexpected here...", e);
+		}
+		return writer.toString();
+	}
+	
+	
 
 }

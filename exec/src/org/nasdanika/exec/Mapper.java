@@ -13,7 +13,6 @@ import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ListCompoundSupplier;
-import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -157,42 +156,15 @@ public class Mapper implements Adaptable {
 	@SuppressWarnings({ "resource" })
 	protected Supplier<InputStream> createSupplier(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return asSupplierFactory(targets.iterator().next()).create(context);
+			return Loader.asSupplierFactory(targets.iterator().next()).create(context);
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
 		for (Object te: targets) {
-			ret.add(asSupplierFactory(te).create(context));
+			ret.add(Loader.asSupplierFactory(te).create(context));
 		}
 		return ret.then(Util.JOIN_STREAMS);
 	};		
-	
-	/**
-	 * Wraps object into an {@link InputStream} supplier factory. Handles collection and scalar cases.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
-		if (obj instanceof Collection) {
-			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
-			for (Object e: (Collection<?>) obj) {
-				ret.add(asSupplierFactory(e));
-			}
-			return ret.then(Util.JOIN_STREAMS_FACTORY);
-		}
-		
-		if (obj instanceof SupplierFactory) {		
-			return (SupplierFactory<InputStream>) obj;
-		}
-		
-		// Converting to string, interpolating, streaming
-		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");
-		return textFactory.then(Util.TO_STREAM);
-	};		
-	
-	
 	
 	// --- Adapter ---
 		

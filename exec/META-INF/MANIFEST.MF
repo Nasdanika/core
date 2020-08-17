@@ -10,7 +10,8 @@ Export-Package: org.nasdanika.exec,
  org.nasdanika.exec.java,
  org.nasdanika.exec.resources
 Bundle-ClassPath: .
-Require-Bundle: org.nasdanika.common;visibility:=reexport
+Require-Bundle: org.nasdanika.common;visibility:=reexport,
+ com.github.spullara.mustache.java.compiler;bundle-version="0.9.6"
 Automatic-Module-Name: org.nasdanika.exec
 Bundle-ActivationPolicy: lazy
 
