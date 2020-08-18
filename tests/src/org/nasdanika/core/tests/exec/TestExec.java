@@ -3,6 +3,7 @@ package org.nasdanika.core.tests.exec;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.BinaryResource;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
+import org.nasdanika.common.resources.FileSystemContainer;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Mapper;
@@ -219,6 +221,23 @@ public class TestExec {
 		assertTrue(testFile.exists(monitor));
 		assertTrue(testFile instanceof BinaryEntity);		
 		assertEquals("Hello, world!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testZipArchive() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("zip-archive-spec.yml"), monitor);
+		assertEquals(Container.class, container.getClass());
+				
+		File outDir = new File("target" + File.separator + "test-output");
+		outDir.mkdirs();
+		Context context = Context.EMPTY_CONTEXT;		
+		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		consumer.execute(out, monitor);
+		
 	}
 	
 }
