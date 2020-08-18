@@ -22,5 +22,25 @@
 			<artifactId>org.eclipse.emf.codegen</artifactId>
 			<version>2.19.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+			<version>2.21.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>io.github.azagniotov</groupId>
+		    <artifactId>ant-style-path-matcher</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    <version>2.3.30</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.github.spullara.mustache.java</groupId>
+		    <artifactId>compiler</artifactId>
+		    <version>0.9.6</version>
+		</dependency>		
 	</dependencies>
 </project>
