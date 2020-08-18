@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
 
+import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.CompoundConsumerFactory;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
@@ -11,6 +14,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
@@ -128,7 +132,7 @@ public class Loader extends ObjectLoader {
 	// --- Utility methods ---
 	
 	/**
-	 * Wraps object into an {@link InputStream} supplier factory. Handles collection and scalar cases.
+	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
 	 * @param obj
 	 * @return
 	 * @throws Exception
@@ -147,10 +151,46 @@ public class Loader extends ObjectLoader {
 			return (SupplierFactory<InputStream>) obj;
 		}
 		
+		if (obj instanceof Adaptable) {
+			SupplierFactory<InputStream> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+		
 		// Converting to string, interpolating, streaming
 		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");
 		return textFactory.then(Util.TO_STREAM);
 	};		
-	
+		
+	/**
+	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj) throws Exception {
+		if (obj instanceof Collection) {
+			CompoundConsumerFactory<BinaryEntityContainer> ret = new CompoundConsumerFactory<>("Consumer collection");
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asConsumerFactory(e));
+			}
+			return ret;
+		}
+		
+		if (obj instanceof ConsumerFactory) {		
+			return (ConsumerFactory<BinaryEntityContainer>) obj;
+		}		
+		
+		if (obj instanceof Adaptable) {
+			ConsumerFactory<BinaryEntityContainer> adapter = ((Adaptable) obj).adaptTo(ConsumerFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+		
+		throw new IllegalArgumentException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory");
+	};		
 
 }

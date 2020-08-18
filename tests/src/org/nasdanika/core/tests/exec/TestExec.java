@@ -1,12 +1,15 @@
 package org.nasdanika.core.tests.exec;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 import java.util.Map;
 
 import org.junit.Test;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.Consumer;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -14,13 +17,20 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.resources.BinaryEntity;
+import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.common.resources.BinaryResource;
+import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Mapper;
 import org.nasdanika.exec.Reference;
+import org.nasdanika.exec.content.FreeMarker;
+import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.resources.Container;
 import org.yaml.snakeyaml.Yaml;
 
 
@@ -157,6 +167,58 @@ public class TestExec {
 		
 		Supplier<InputStream> s = ((SupplierFactory<InputStream>) mustache).create(context);
 		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testFreeMarker() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object freeMarker = loader.loadYaml(TestExec.class.getResource("free-marker-spec.yml"), monitor);
+		assertEquals(FreeMarker.class, freeMarker.getClass());
+		
+		Context context = Context.singleton("name", "World");		
+		
+		Supplier<InputStream> s = ((SupplierFactory<InputStream>) freeMarker).create(context);
+		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testHttpCall() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object httpCall = loader.loadYaml(TestExec.class.getResource("http-call-spec.yml"), monitor);
+		assertEquals(HttpCall.class, httpCall.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Supplier<InputStream> s = ((SupplierFactory<InputStream>) httpCall).create(context);
+		assertEquals("Hello World!", Util.toString(context, s.execute(monitor)));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testResources() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("resources-spec.yml"), monitor);
+		assertEquals(Container.class, container.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
+		EphemeralBinaryEntityContainer root = new EphemeralBinaryEntityContainer();
+		consumer.execute(root, monitor);
+		
+		BinaryResource testContainer = root.find("test-container", monitor);
+		assertTrue(testContainer.exists(monitor));
+		assertTrue(testContainer instanceof BinaryEntityContainer);
+		
+		BinaryResource testFile = root.find("test-container/test-file", monitor);
+		assertTrue(testFile.exists(monitor));
+		assertTrue(testFile instanceof BinaryEntity);		
+		assertEquals("Hello, world!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
 	}
 	
 }
