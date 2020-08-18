@@ -13,3 +13,20 @@ container:
                      contents:
                         interpolator:
                            resource: java-template.txt
+                  - compilation-unit:
+                     name: FineGrainedClass
+                     contents:
+                        - class:
+                           name: FineGrainedClass
+                           modifiers: public
+                           super-types:
+                              - java.lang.Object
+                              - '${import/org.nasdanika.common.SupplierFactory}<${import/java.io.InputStream}>'
+                           body: 
+                              - field:
+                                 name: myField
+                                 modifiers:
+                                    - private
+                                 comment: My rather important field
+                                 type: '${import/java.util.Collection}<${import/java.lang.String}>'
+                                 body: 'new ${import/java.util.ArrayList}<>()'

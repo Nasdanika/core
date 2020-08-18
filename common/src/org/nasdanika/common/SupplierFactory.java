@@ -8,6 +8,10 @@ import java.util.function.BiFunction;
  * @param <T>
  */
 public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier<T>>, java.util.function.BiFunction<Context,ProgressMonitor,T> {
+		
+	static <T> SupplierFactory<T> empty() {
+		return context -> Supplier.empty();
+	}	
 	
 	/**
 	 * Provides {@link SupplierFactory} for a specific type.

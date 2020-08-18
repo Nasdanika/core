@@ -154,6 +154,22 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>copy-exec-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/bundles/org.nasdanika.exec/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../exec/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-sirius-javadoc</id>
 						<phase>pre-site</phase>
 						<goals>

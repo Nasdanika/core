@@ -4,12 +4,12 @@
 	  <parent>
 	    <artifactId>org.nasdanika.core.parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2020.8</version>
+	    <version>2020.8.1</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
 	<artifactId>exec</artifactId>
 	<packaging>jar</packaging>
-	<name>Nasdanika Execution Paticipants Library</name>
+	<name>Nasdanika Execution Participants Library</name>
 
 	<dependencies>
 		<dependency>

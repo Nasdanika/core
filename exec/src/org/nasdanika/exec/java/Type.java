@@ -1,0 +1,24 @@
+package org.nasdanika.exec.java;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.nasdanika.common.ObjectLoader;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.exec.Loader;
+
+public abstract class Type extends Member {
+
+	private static final String SUPER_TYPES_KEY = "super-types";
+	protected List<String> superTypes = new ArrayList<>();
+
+	@SuppressWarnings("unchecked")
+	protected Type(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, type, config, base, progressMonitor, marker);
+		Loader.loadMultiString((Map<String, Object>) config, SUPER_TYPES_KEY, superTypes::add);
+	}
+
+}

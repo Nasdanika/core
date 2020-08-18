@@ -58,34 +58,13 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 			}
 			path = Loader.getString(configMap, PATH_KEY, false, marker);
 			prefix = Loader.getString(configMap, PREFIX_KEY, false, marker);
-			loadPatterns(configMap, INCLUDES_KEY, includes);
-			loadPatterns(configMap, EXCLUDES_KEY, excludes);
-			loadPatterns(configMap, INTERPOLATION_INCLUDES_KEY, interpolationIncludes);
-			loadPatterns(configMap, INTERPOLATION_EXCLUDES_KEY, interpolationExcludes);			
+			Loader.loadMultiString(configMap, INCLUDES_KEY, includes::add);
+			Loader.loadMultiString(configMap, EXCLUDES_KEY, excludes::add);
+			Loader.loadMultiString(configMap, INTERPOLATION_INCLUDES_KEY, interpolationIncludes::add);
+			Loader.loadMultiString(configMap, INTERPOLATION_EXCLUDES_KEY, interpolationExcludes::add);			
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 		}
-	}
-	
-	private static void loadPatterns(Map<String,Object> configMap, String key, Collection<String> patterns) {
-		if (configMap.containsKey(key)) {
-			Object val = configMap.get(key);
-			if (val instanceof String) {
-				patterns.add((String) val);
-			} else if (val instanceof Collection) {
-				int idx = 0;
-				for (Object ve: (Collection<?>) val) {
-					if (ve instanceof String) {
-						patterns.add((String) ve);
-					} else {
-						throw new ConfigurationException(key + " element must be a string", Util.getMarker((Collection<?>) val, idx));							
-					}
-					++idx;
-				}
-			} else {
-				throw new ConfigurationException(key + " value must be a string or list", Util.getMarker(configMap, key));
-			}
-		}		
 	}
 
 	/**
