@@ -3,6 +3,7 @@ package org.nasdanika.exec;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.CompoundConsumerFactory;
@@ -13,6 +14,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.content.FreeMarker;
@@ -193,4 +195,32 @@ public class Loader extends ObjectLoader {
 		throw new IllegalArgumentException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory");
 	};		
 
+	/**
+	 * Gets string configuration value.
+	 * @param configMap
+	 * @param key
+	 * @param required
+	 * @return
+	 */
+	public static String getString(Map<String, Object> configMap, String key, boolean required, Marker marker) {
+		if (configMap.containsKey(key)) {
+			Object val = configMap.get(key);
+			if (val == null && !required) {
+				return null;
+			}
+			if (val instanceof String) {
+				return (String) val;
+			} 
+			
+			throw new ConfigurationException(key + " value must be a string", Util.getMarker(configMap, key));
+		}
+		
+		if (required) {
+			throw new ConfigurationException(key + " is missing", marker);			
+		}
+		
+		return null;
+	}	
+
+	
 }

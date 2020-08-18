@@ -26,6 +26,11 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
+/**
+ * Config is either string (URL) or map.
+ * @author Pavel
+ *
+ */
 public class HttpCall implements SupplierFactory<InputStream> {
 	
 	private static final String METHOD_KEY = "method";
@@ -47,7 +52,9 @@ public class HttpCall implements SupplierFactory<InputStream> {
 	
 	@SuppressWarnings("unchecked")
 	public HttpCall(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		if (config instanceof Map) {
+		if (config instanceof String) {
+			this.url = new URL(base, (String) config);
+		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(METHOD_KEY)) {
 				Object methodObj = configMap.get(METHOD_KEY);
@@ -111,10 +118,9 @@ public class HttpCall implements SupplierFactory<InputStream> {
 				} else {
 					throw new ConfigurationException(READ_TIMEOUT_KEY + " value must be a number", Util.getMarker(configMap, READ_TIMEOUT_KEY));
 				}
-			}
-			
+			}			
 		} else {
-			throw new ConfigurationException("HTTP call configuration shall be a map, got " + config.getClass(), marker);
+			throw new ConfigurationException("HTTP call configuration shall be a string or a map, got " + config.getClass(), marker);
 		}
 	}
 	

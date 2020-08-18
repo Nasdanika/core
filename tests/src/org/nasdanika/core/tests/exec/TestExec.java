@@ -240,4 +240,28 @@ public class TestExec {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testZipResourceCollection() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("zip-resource-collection-spec.yml"), monitor);
+		assertEquals(Container.class, container.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
+		EphemeralBinaryEntityContainer root = new EphemeralBinaryEntityContainer();
+		consumer.execute(root, monitor);
+		
+		BinaryResource testContainer = root.find("test-container/templates", monitor);
+		assertTrue(testContainer.exists(monitor));
+		assertTrue(testContainer instanceof BinaryEntityContainer);
+		
+		BinaryResource testFile = root.find("test-container/templates/hello-world.txt", monitor);
+		assertTrue(testFile.exists(monitor));
+		assertTrue(testFile instanceof BinaryEntity);		
+		assertEquals("Hello ${name}!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
+	}
+	
 }

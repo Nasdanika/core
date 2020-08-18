@@ -12,7 +12,8 @@ Export-Package: org.nasdanika.exec,
 Bundle-ClassPath: .
 Require-Bundle: org.nasdanika.common;visibility:=reexport,
  com.github.spullara.mustache.java.compiler;bundle-version="0.9.6",
- org.freemarker.freemarker;bundle-version="2.3.30"
+ org.freemarker.freemarker;bundle-version="2.3.30",
+ io.github.azagniotov.ant-style-path-matcher;bundle-version="1.0.0"
 Automatic-Module-Name: org.nasdanika.exec
 Bundle-ActivationPolicy: lazy
 
