@@ -263,5 +263,23 @@ public class TestExec {
 		assertTrue(testFile instanceof BinaryEntity);		
 		assertEquals("Hello ${name}!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
 	}
+		
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testJava() throws Exception {
+		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("java-spec.yml"), monitor);
+		assertEquals(Container.class, container.getClass());
+				
+		File outDir = new File("target" + File.separator + "test-output");
+		outDir.mkdirs();
+		Context context = Context.EMPTY_CONTEXT;		
+		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		consumer.execute(out, monitor);
+		
+	}
+	
 	
 }

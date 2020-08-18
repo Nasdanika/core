@@ -1,0 +1,15 @@
+# Testing container and file
+container:
+   name: java-project
+   contents:
+      - source-folder:
+         name: src
+         contents:
+            - package:
+               name: org.nasdanika.test
+               contents:
+                  - compilation-unit:
+                     name: MyClass
+                     contents:
+                        interpolator:
+                           resource: java-template.txt

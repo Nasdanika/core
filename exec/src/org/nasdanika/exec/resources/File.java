@@ -40,6 +40,10 @@ public class File extends Resource {
 			merger = (Merger) loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor);
 		}
 	}
+	
+	protected SupplierFactory<InputStream> getContents() {
+		return contents;
+	}
 		
 	private ConsumerFactory<BiSupplier<BinaryEntityContainer, InputStream>> fileFactory = context -> new Consumer<BiSupplier<BinaryEntityContainer, InputStream>>() {
 
@@ -103,7 +107,7 @@ public class File extends Resource {
 
 	@Override
 	public Consumer<BinaryEntityContainer> create(Context iContext) throws Exception {
-		FunctionFactory<BinaryEntityContainer, BiSupplier<BinaryEntityContainer, InputStream>> contentFunctionFactory = contents.asFunctionFactory();
+		FunctionFactory<BinaryEntityContainer, BiSupplier<BinaryEntityContainer, InputStream>> contentFunctionFactory = getContents().asFunctionFactory();
 		return contentFunctionFactory.then(fileFactory).create(iContext);
 	}
 	

@@ -11,6 +11,10 @@ Export-Package: org.nasdanika.exec,
  org.nasdanika.exec.resources
 Bundle-ClassPath: .
 Require-Bundle: org.nasdanika.common;visibility:=reexport,
+ org.eclipse.jdt.core,
+ org.eclipse.emf.codegen,
+ org.eclipse.emf.codegen.ecore,
+ org.eclipse.jface.text,
  com.github.spullara.mustache.java.compiler;bundle-version="0.9.6",
  org.freemarker.freemarker;bundle-version="2.3.30",
  io.github.azagniotov.ant-style-path-matcher;bundle-version="1.0.0"
