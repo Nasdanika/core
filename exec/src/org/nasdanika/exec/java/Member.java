@@ -46,10 +46,10 @@ public abstract class Member implements SupplierFactory<InputStream> {
 			Loader.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
 			Loader.loadMultiString(configMap, TYPE_PARAMETERS_KEY, typeParameters::add);
 			if (configMap.containsKey(COMMENT_KEY)) {
-				comment = Loader.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
+				comment = Loader.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor), Util.getMarker(configMap, COMMENT_KEY));
 			}
 			if (configMap.containsKey(BODY_KEY)) {
-				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
+				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor), Util.getMarker(configMap, BODY_KEY));
 			}
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);

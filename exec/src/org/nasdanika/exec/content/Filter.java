@@ -19,7 +19,7 @@ public abstract class Filter implements SupplierFactory<InputStream> {
 	protected SupplierFactory<InputStream> source;
 	
 	protected Filter(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
+		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
 	}
 	
 	private FunctionFactory<InputStream,InputStream> filterFactory = ctx -> new Function<InputStream, InputStream>() {

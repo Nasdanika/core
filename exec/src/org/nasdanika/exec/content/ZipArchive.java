@@ -24,7 +24,7 @@ public class ZipArchive implements SupplierFactory<InputStream> {
 	private ConsumerFactory<BinaryEntityContainer> consumer;
 
 	public ZipArchive(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		consumer = Loader.asConsumerFactory(loader.load(config, base, progressMonitor));
+		consumer = Loader.asConsumerFactory(loader.load(config, base, progressMonitor), marker);
 	}	
 	
 	private FunctionFactory<BinaryEntityContainer,InputStream> streamFactory = context -> new Function<BinaryEntityContainer, InputStream>() {

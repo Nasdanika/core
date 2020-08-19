@@ -53,82 +53,85 @@ public class Loader extends ObjectLoader {
 
 	@Override
 	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		switch (type) {
-		// General
-		case "for-each":
-			return new Iterator(loader, type, config, base, progressMonitor, marker);
-		case "configure":
-			return new Configurator(loader, type, config, base, progressMonitor, marker);
-		case "map":
-			return new Mapper(loader, type, config, base, progressMonitor, marker);
-		case "reference": // Referencing another spec to load
-			return new Reference(loader, type, config, base, progressMonitor, marker);
-		case "group": // Both resource and content, is it needed - iterator and map shall do?
-			throw new UnsupportedOperationException();
-		/*
-		 * Command taking resource generators - 
-		 * - pulls or clones a repo from git to a pre-defined or temporary folder, from a specific branch or creates a branch off a specific branch  
-		 * - executes resource generation, pushes to the repo
-		 * - if temporary folder - deletes it
-		 * 
-		 * Gist showing how to work with jGit - https://gist.github.com/pvlasov/48dc0178feca6e74fa1d99d489f4400c
-		 */
-		case "git": 
-			throw new UnsupportedOperationException();					
 		
-		// Resources
-		case "container":
-			return new Container(loader, type, config, base, progressMonitor, marker);
-		case "file":
-			return new File(loader, type, config, base, progressMonitor, marker);
-		case "zip-resource-collection":
-			return new ZipResourceCollection(loader, type, config, base, progressMonitor, marker);
-		
-		
-		// Content
-		case "resource":
-			return new Resource(loader, type, config, base, progressMonitor, marker);
-		case "interpolator":
-			return new Interpolator(loader, type, config, base, progressMonitor, marker);
-		case "mustache":
-			return new Mustache(loader, type, config, base, progressMonitor, marker);
-		case "free-marker":
-			return new FreeMarker(loader, type, config, base, progressMonitor, marker);
-		case "http":
-			return new HttpCall(loader, type, config, base, progressMonitor, marker);
-		case "zip-archive":
-			return new ZipArchive(loader, type, config, base, progressMonitor, marker);
-		case "script": // string value or bindings and source. Bindings are converted to String if streams.
-			return new ScriptEvaluator(loader, type, config, base, progressMonitor, marker);
+		try (ProgressMonitor subMonitor = progressMonitor.setWorkRemaining(10).split("Creating " + type, 1, marker)) {
+			switch (type) {
+			// General
+			case "for-each":
+				return new Iterator(loader, type, config, base, subMonitor, marker);
+			case "configure":
+				return new Configurator(loader, type, config, base, subMonitor, marker);
+			case "map":
+				return new Mapper(loader, type, config, base, subMonitor, marker);
+			case "reference": // Referencing another spec to load
+				return new Reference(loader, type, config, base, subMonitor, marker);
+			case "group": // Both resource and content, is it needed - iterator and map shall do?
+				throw new UnsupportedOperationException();
+			/*
+			 * Command taking resource generators - 
+			 * - pulls or clones a repo from git to a pre-defined or temporary folder, from a specific branch or creates a branch off a specific branch  
+			 * - executes resource generation, pushes to the repo
+			 * - if temporary folder - deletes it
+			 * 
+			 * Gist showing how to work with jGit - https://gist.github.com/pvlasov/48dc0178feca6e74fa1d99d489f4400c
+			 */
+			case "git": 
+				throw new UnsupportedOperationException();					
 			
-		// Java
-		case "source-folder": 
-			return new SourceFolder(loader, type, config, base, progressMonitor, marker);
-		case "package": 
-			return new org.nasdanika.exec.java.Package(loader, type, config, base, progressMonitor, marker);
-		case "compilation-unit": // Merger is external - passed by Codegen 
-			return new CompilationUnit(loader, type, config, base, progressMonitor, marker);
-		case "annotation": 
-			return new Annotation(loader, type, config, base, progressMonitor, marker);
-		case "class": 
-			return new org.nasdanika.exec.java.Class(loader, type, config, base, progressMonitor, marker);
-		case "enum": 
-			return new org.nasdanika.exec.java.Enum(loader, type, config, base, progressMonitor, marker);
-		case "interface": 
-			return new Interface(loader, type, config, base, progressMonitor, marker);
-		case "method": 
-			return new Method(loader, type, config, base, progressMonitor, marker);
-		case "constructor": 
-			return new Constructor(loader, type, config, base, progressMonitor, marker);
-		case "field": 
-			return new Field(loader, type, config, base, progressMonitor, marker);
-		
-		default:
-			if (chain == null) {
-				throw new IllegalArgumentException("Unsupported type: " + type);
+			// Resources
+			case "container":
+				return new Container(loader, type, config, base, subMonitor, marker);
+			case "file":
+				return new File(loader, type, config, base, subMonitor, marker);
+			case "zip-resource-collection":
+				return new ZipResourceCollection(loader, type, config, base, subMonitor, marker);
+			
+			
+			// Content
+			case "resource":
+				return new Resource(loader, type, config, base, subMonitor, marker);
+			case "interpolator":
+				return new Interpolator(loader, type, config, base, subMonitor, marker);
+			case "mustache":
+				return new Mustache(loader, type, config, base, subMonitor, marker);
+			case "free-marker":
+				return new FreeMarker(loader, type, config, base, subMonitor, marker);
+			case "http":
+				return new HttpCall(loader, type, config, base, subMonitor, marker);
+			case "zip-archive":
+				return new ZipArchive(loader, type, config, base, subMonitor, marker);
+			case "script": // string value or bindings and source. Bindings are converted to String if streams.
+				return new ScriptEvaluator(loader, type, config, base, subMonitor, marker);
+				
+			// Java
+			case "source-folder": 
+				return new SourceFolder(loader, type, config, base, subMonitor, marker);
+			case "package": 
+				return new org.nasdanika.exec.java.Package(loader, type, config, base, subMonitor, marker);
+			case "compilation-unit": // Merger is external - passed by Codegen 
+				return new CompilationUnit(loader, type, config, base, subMonitor, marker);
+			case "annotation": 
+				return new Annotation(loader, type, config, base, subMonitor, marker);
+			case "class": 
+				return new org.nasdanika.exec.java.Class(loader, type, config, base, subMonitor, marker);
+			case "enum": 
+				return new org.nasdanika.exec.java.Enum(loader, type, config, base, subMonitor, marker);
+			case "interface": 
+				return new Interface(loader, type, config, base, subMonitor, marker);
+			case "method": 
+				return new Method(loader, type, config, base, subMonitor, marker);
+			case "constructor": 
+				return new Constructor(loader, type, config, base, subMonitor, marker);
+			case "field": 
+				return new Field(loader, type, config, base, subMonitor, marker);
+			
+			default:
+				if (chain == null) {
+					throw new ConfigurationException("Unsupported type: " + type, marker);
+				}
+				
+				return chain.create(loader, type, config, base, subMonitor, marker);
 			}
-			
-			return chain.create(loader, type, config, base, progressMonitor, marker);
 		}
 	}
 	
@@ -141,11 +144,12 @@ public class Loader extends ObjectLoader {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
+	public static SupplierFactory<InputStream> asSupplierFactory(Object obj, Marker marker) throws Exception {
 		if (obj instanceof Collection) {
 			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
+			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
-				ret.add(asSupplierFactory(e));
+				ret.add(asSupplierFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
 			}
 			return ret.then(Util.JOIN_STREAMS_FACTORY);
 		}
@@ -173,11 +177,12 @@ public class Loader extends ObjectLoader {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj) throws Exception {
+	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj, Marker marker) throws Exception {
 		if (obj instanceof Collection) {
 			CompoundConsumerFactory<BinaryEntityContainer> ret = new CompoundConsumerFactory<>("Consumer collection");
+			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
-				ret.add(asConsumerFactory(e));
+				ret.add(asConsumerFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
 			}
 			return ret;
 		}
@@ -193,7 +198,7 @@ public class Loader extends ObjectLoader {
 			}
 		}
 		
-		throw new IllegalArgumentException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory");
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", marker);
 	};		
 
 	/**

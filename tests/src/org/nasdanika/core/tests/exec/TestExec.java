@@ -236,8 +236,7 @@ public class TestExec {
 		Context context = Context.EMPTY_CONTEXT;		
 		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		FileSystemContainer out = new FileSystemContainer(outDir);
-		consumer.execute(out, monitor);
-		
+		consumer.execute(out, monitor);		
 	}
 	
 	@SuppressWarnings("unchecked")

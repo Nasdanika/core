@@ -6,9 +6,13 @@ container:
          name: my-archive.zip
          contents:
             zip-archive:
-               container:
+               - container:
                   name: test-container
                   contents:
                      - file:
                         name: test-file
                         contents: Hello, world!
+               - file:
+                  name: hello.txt
+                  contents: Hello World!!!
+                        

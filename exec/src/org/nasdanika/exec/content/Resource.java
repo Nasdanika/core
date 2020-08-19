@@ -2,6 +2,7 @@ package org.nasdanika.exec.content;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ObjectLoader;
@@ -45,7 +46,7 @@ public class Resource implements SupplierFactory<InputStream> {
 
 			@Override
 			public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
-				return url.openStream();
+				return Objects.requireNonNull(url.openStream(), "Resource does not exist at "+url);
 			}
 			
 		};

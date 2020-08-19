@@ -34,7 +34,9 @@ public class File extends Resource {
 		this.marker = marker;
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(CONTENTS_KEY)) {
-			contents = Loader.asSupplierFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor));
+			contents = Loader.asSupplierFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
+		} else {
+			throw new ConfigurationException("File contents is required", marker);
 		}
 		if (configMap.containsKey(MERGER_KEY)) {
 			merger = (Merger) loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor);

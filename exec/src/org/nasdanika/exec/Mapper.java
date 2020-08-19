@@ -34,6 +34,7 @@ public class Mapper implements Adaptable {
 	private static final String MAP_KEY = "map";
 	
 	private List<Object> targets = new ArrayList<>();
+	private List<Marker> targetMarkers = new ArrayList<>();
 	private Map<String,Object> map; 
 
 	@SuppressWarnings("unchecked")
@@ -43,13 +44,16 @@ public class Mapper implements Adaptable {
 			if (!map.containsKey(TARGET_KEY)) {
 				throw new ConfigurationException("Configuration must contain 'target' key", marker);				
 			}
-			Object targetSpec = map.get(TARGET_KEY);
+			Object targetSpec = map.get(TARGET_KEY);			
 			if (targetSpec instanceof Collection) {
+				int idx = 0;
 				for (Object e: (Collection<Object>) targetSpec) {
 					targets.add(loader.load(e, base, progressMonitor));					
+					targetMarkers.add(Util.getMarker((Collection<?>) targetSpec, idx++));
 				}
 			} else {
 				targets.add(loader.load(targetSpec, base, progressMonitor));
+				targetMarkers.add(Util.getMarker(map, TARGET_KEY));
 			}
 			
 			if (!map.containsKey(MAP_KEY)) {
@@ -125,15 +129,15 @@ public class Mapper implements Adaptable {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	protected Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return ((ConsumerFactory<BinaryEntityContainer>) targets.iterator().next()).create(context);
+			return Loader.asConsumerFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
 		}
 		
 		CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
+		int idx = 0;
 		for (Object te: targets) {
-			ret.add(((ConsumerFactory<BinaryEntityContainer>) te).create(context));
+			ret.add(Loader.asConsumerFactory(te, targetMarkers.get(idx++)).create(context));
 		}
 		return ret;			
 	}
@@ -156,12 +160,13 @@ public class Mapper implements Adaptable {
 	@SuppressWarnings({ "resource" })
 	protected Supplier<InputStream> createSupplier(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Loader.asSupplierFactory(targets.iterator().next()).create(context);
+			return Loader.asSupplierFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
+		int idx = 0;
 		for (Object te: targets) {
-			ret.add(Loader.asSupplierFactory(te).create(context));
+			ret.add(Loader.asSupplierFactory(te, targetMarkers.get(idx++)).create(context));
 		}
 		return ret.then(Util.JOIN_STREAMS);
 	};		

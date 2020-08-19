@@ -37,11 +37,12 @@ public class ZipResourceCollection extends ResourceCollection {
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		Object contentsVal = configMap.get(CONTENTS_KEY);
 		if (contentsVal instanceof Collection) {
+			int idx = 0;
 			for (Object ce: (Collection<?>) contentsVal) {
-				contents.add(Loader.asSupplierFactory(loader.load(ce, base, progressMonitor)));
+				contents.add(Loader.asSupplierFactory(loader.load(ce, base, progressMonitor), Util.getMarker((Collection<?>) contentsVal, idx++)));
 			}
 		} else {
-			contents.add(Loader.asSupplierFactory(loader.load(contentsVal, base, progressMonitor)));
+			contents.add(Loader.asSupplierFactory(loader.load(contentsVal, base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY)));
 		} 
 	}	
 	
