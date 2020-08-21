@@ -3,6 +3,7 @@ Loader supports the following types:
 * General - control flow and context manipulation components. Can be adapted to both supplier and consumer factories and as such can be used both as resource and as content generators:
     * ``configure`` - [Configurator](configurator.html) - Adds or overrides context properties.
     * ``for-each`` - [Iterator](iterator.html) - execute child components zero or more times with different contexts.
+    * ``(map)`` - [Map cast](map-cast.html) - Forces content to be treated as a map even if there is a single entry, which by default is treated as an object definition.
     * ``map`` - [Mapper](mapper.html) - Replaces the current context with a new context loaded from a map and intepolated.
     * ``reference`` - [Reference](reference.html) - Loads object(s) from a YAML resource identified by the reference.
 * [Resources](../resources/index.html) - components which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> and can contribute elements to a container:

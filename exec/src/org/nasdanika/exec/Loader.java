@@ -67,6 +67,8 @@ public class Loader extends ObjectLoader {
 				return new Configurator(loader, config, base, subMonitor, marker);
 			case "map":
 				return new Mapper(loader, config, base, subMonitor, marker);
+			case "(map)":
+				return new org.nasdanika.exec.Map(loader, config, base, subMonitor, marker).getMap();
 			case "reference": // Referencing another spec to load
 				return new Reference(loader, config, base, subMonitor, marker);
 			case "group": // Both resource and content, is it needed - iterator and map shall do?

@@ -338,4 +338,18 @@ public class TestExec {
 		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}
 	
+	@Test
+	public void testMapCast() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object json = loader.loadYaml(TestExec.class.getResource("map-cast-spec.yml"), monitor);
+		assertEquals(Json.class, json.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		System.out.println(Util.toString(context, supplier.execute(monitor)));
+	}
+	
 }
