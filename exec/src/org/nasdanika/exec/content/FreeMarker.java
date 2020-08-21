@@ -43,7 +43,7 @@ public class FreeMarker implements SupplierFactory<InputStream> {
 	private String template;
 	private String model;	
 
-	public FreeMarker(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public FreeMarker(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String,Object> configMap = (Map<String,Object>) config;

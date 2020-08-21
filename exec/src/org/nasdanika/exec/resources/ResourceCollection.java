@@ -45,7 +45,7 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 	protected String prefix;
 	
 	@SuppressWarnings("unchecked")
-	public ResourceCollection(ObjectLoader loader, String type, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) {
+	public ResourceCollection(ObjectLoader loader, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) {
 		if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {

@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantInfo, java.util.function.Function<ProgressMonitor,T> {
 	
 	/**
-	 * Executes the _LegacyCommandToRemove.
+	 * Executes the Supplier.
 	 * @param monitor Monitor to use.
 	 * @return
 	 * @throws Exception

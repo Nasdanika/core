@@ -8,7 +8,7 @@ import org.nasdanika.common.persistence.Marker;
 
 public class ScriptEvaluator {
 
-	public ScriptEvaluator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) {
+	public ScriptEvaluator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) {
 		throw new UnsupportedOperationException();
 	}
 

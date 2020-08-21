@@ -19,8 +19,8 @@ import com.github.mustachejava.MustacheFactory;
 
 public class Mustache extends Filter {
 
-	public Mustache(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Mustache(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 
 	@Override

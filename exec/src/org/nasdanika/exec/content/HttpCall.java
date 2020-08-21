@@ -51,7 +51,7 @@ public class HttpCall implements SupplierFactory<InputStream> {
 	private int readTimeout = 60;
 	
 	@SuppressWarnings("unchecked")
-	public HttpCall(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public HttpCall(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
 			this.url = new URL(base, (String) config);
 		} else if (config instanceof Map) {

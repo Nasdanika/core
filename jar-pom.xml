@@ -3,17 +3,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
 	<version>2020.8.1</version>
-	<artifactId>org.nasdanika.core.parent</artifactId>
+	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
 	<description>Parent pom.</description>
 
-	<url>https://github.com/Nasdanika/core</url>
+	<url>https://nasdanika.org</url>
 		
 	<licenses>
 		<license>
 			<name>Eclipse Public License 2.0</name>
-			<url>https://github.com/Nasdanika/core/blob/master/LICENSE</url>
+			<url>https://nasdanika.org/builds/master/eclipse-public-license-2.0.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>

@@ -22,7 +22,7 @@ public class Resource implements SupplierFactory<InputStream> {
 	
 	private URL url;
 
-	public Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
 			url = new URL(base, (String) config);
 		} else {

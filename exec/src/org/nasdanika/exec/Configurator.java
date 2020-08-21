@@ -44,7 +44,7 @@ public class Configurator implements Adaptable {
 	private Map<String,Object> configuration = new HashMap<>(); 
 
 	@SuppressWarnings("unchecked")
-	public Configurator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Configurator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {

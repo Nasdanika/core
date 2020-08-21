@@ -9,8 +9,8 @@ import org.nasdanika.common.persistence.Marker;
 
 public class Constructor extends Operation {
 
-	public Constructor(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Constructor(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 
 	@Override

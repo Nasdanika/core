@@ -27,7 +27,7 @@ public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>
 	protected String name;
 	
 	@SuppressWarnings("unchecked")
-	protected Resource(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {

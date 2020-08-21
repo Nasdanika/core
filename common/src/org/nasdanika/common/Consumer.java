@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
 public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantInfo, BiConsumer<T, ProgressMonitor> {
 		
 	/**
-	 * Executes the _LegacyCommandToRemove.
+	 * Executes Consumer.
 	 * @param monitor Monitor to use.
 	 * @return
 	 * @throws Exception

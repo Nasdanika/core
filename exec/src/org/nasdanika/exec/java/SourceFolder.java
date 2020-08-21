@@ -20,8 +20,8 @@ public class SourceFolder extends Container {
 	protected JdkLevel jdkLevel = JdkLevel.JDK_8;
 	
 	@SuppressWarnings("unchecked")
-	public SourceFolder(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public SourceFolder(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(JDK_LEVEL_KEY)) {
 			Object jdkObj = configMap.get(JDK_LEVEL_KEY);

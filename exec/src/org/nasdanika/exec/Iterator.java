@@ -41,14 +41,13 @@ public class Iterator implements Adaptable {
 	/**
 	 * Iterator config is a map of iterator values to objects to iterate over. I.e. one iterator (for-each) may contain multiple iteration "clauses". 
 	 * @param factory
-	 * @param type
 	 * @param config
 	 * @param base
 	 * @param progressMonitor
 	 * @param marker 
 	 */
 	@SuppressWarnings("unchecked")
-	public Iterator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Iterator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			for (Entry<String, Object> e: ((Map<String,Object>) config).entrySet()) {
 				iterators.put(e.getKey(), loader.load(e.getValue(), base, progressMonitor));

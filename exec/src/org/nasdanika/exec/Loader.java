@@ -18,12 +18,16 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.exec.content.Base64;
+import org.nasdanika.exec.content.Form;
 import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Json;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.ScriptEvaluator;
+import org.nasdanika.exec.content.Yaml;
 import org.nasdanika.exec.content.ZipArchive;
 import org.nasdanika.exec.java.Annotation;
 import org.nasdanika.exec.java.CompilationUnit;
@@ -58,13 +62,13 @@ public class Loader extends ObjectLoader {
 			switch (type) {
 			// General
 			case "for-each":
-				return new Iterator(loader, type, config, base, subMonitor, marker);
+				return new Iterator(loader, config, base, subMonitor, marker);
 			case "configure":
-				return new Configurator(loader, type, config, base, subMonitor, marker);
+				return new Configurator(loader, config, base, subMonitor, marker);
 			case "map":
-				return new Mapper(loader, type, config, base, subMonitor, marker);
+				return new Mapper(loader, config, base, subMonitor, marker);
 			case "reference": // Referencing another spec to load
-				return new Reference(loader, type, config, base, subMonitor, marker);
+				return new Reference(loader, config, base, subMonitor, marker);
 			case "group": // Both resource and content, is it needed - iterator and map shall do?
 				throw new UnsupportedOperationException();
 			/*
@@ -80,50 +84,58 @@ public class Loader extends ObjectLoader {
 			
 			// Resources
 			case "container":
-				return new Container(loader, type, config, base, subMonitor, marker);
+				return new Container(loader, config, base, subMonitor, marker);
 			case "file":
-				return new File(loader, type, config, base, subMonitor, marker);
+				return new File(loader, config, base, subMonitor, marker);
 			case "zip-resource-collection":
-				return new ZipResourceCollection(loader, type, config, base, subMonitor, marker);
+				return new ZipResourceCollection(loader, config, base, subMonitor, marker);
 			
 			
 			// Content
 			case "resource":
-				return new Resource(loader, type, config, base, subMonitor, marker);
+				return new Resource(loader, config, base, subMonitor, marker);
 			case "interpolator":
-				return new Interpolator(loader, type, config, base, subMonitor, marker);
+				return new Interpolator(loader, config, base, subMonitor, marker);
 			case "mustache":
-				return new Mustache(loader, type, config, base, subMonitor, marker);
+				return new Mustache(loader, config, base, subMonitor, marker);
 			case "free-marker":
-				return new FreeMarker(loader, type, config, base, subMonitor, marker);
+				return new FreeMarker(loader, config, base, subMonitor, marker);
 			case "http":
-				return new HttpCall(loader, type, config, base, subMonitor, marker);
+				return new HttpCall(loader, config, base, subMonitor, marker);
 			case "zip-archive":
-				return new ZipArchive(loader, type, config, base, subMonitor, marker);
+				return new ZipArchive(loader, config, base, subMonitor, marker);
 			case "script": // string value or bindings and source. Bindings are converted to String if streams.
-				return new ScriptEvaluator(loader, type, config, base, subMonitor, marker);
+				return new ScriptEvaluator(loader, config, base, subMonitor, marker);
+			case "json": 
+				return new Json(loader, config, base, subMonitor, marker);
+			case "yaml": 
+				return new Yaml(loader, config, base, subMonitor, marker);
+			case "base64": 
+				return new Base64(loader, config, base, subMonitor, marker);
+			case "form": 
+				return new Form(loader, config, base, subMonitor, marker);
 				
 			// Java
 			case "source-folder": 
-				return new SourceFolder(loader, type, config, base, subMonitor, marker);
+				return new SourceFolder(loader, config, base, subMonitor, marker);
 			case "package": 
-				return new org.nasdanika.exec.java.Package(loader, type, config, base, subMonitor, marker);
+				return new org.nasdanika.exec.java.Package(loader, config, base, subMonitor, marker);
 			case "compilation-unit": // Merger is external - passed by Codegen 
-				return new CompilationUnit(loader, type, config, base, subMonitor, marker);
+				return new CompilationUnit(loader, config, base, subMonitor, marker);
 			case "annotation": 
-				return new Annotation(loader, type, config, base, subMonitor, marker);
+				return new Annotation(loader, config, base, subMonitor, marker);
 			case "class": 
-				return new org.nasdanika.exec.java.Class(loader, type, config, base, subMonitor, marker);
+				return new org.nasdanika.exec.java.Class(loader, config, base, subMonitor, marker);
 			case "enum": 
-				return new org.nasdanika.exec.java.Enum(loader, type, config, base, subMonitor, marker);
+				return new org.nasdanika.exec.java.Enum(loader, config, base, subMonitor, marker);
 			case "interface": 
-				return new Interface(loader, type, config, base, subMonitor, marker);
+				return new Interface(loader, config, base, subMonitor, marker);
 			case "method": 
-				return new Method(loader, type, config, base, subMonitor, marker);
+				return new Method(loader, config, base, subMonitor, marker);
 			case "constructor": 
-				return new Constructor(loader, type, config, base, subMonitor, marker);
+				return new Constructor(loader, config, base, subMonitor, marker);
 			case "field": 
-				return new Field(loader, type, config, base, subMonitor, marker);
+				return new Field(loader, config, base, subMonitor, marker);
 			
 			default:
 				if (chain == null) {

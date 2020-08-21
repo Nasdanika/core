@@ -29,8 +29,8 @@ public class File extends Resource {
 	private Marker marker;
 
 	@SuppressWarnings("unchecked")
-	public File(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public File(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		this.marker = marker;
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(CONTENTS_KEY)) {

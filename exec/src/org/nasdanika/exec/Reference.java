@@ -3,9 +3,10 @@ package org.nasdanika.exec;
 import java.net.URL;
 
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 
@@ -18,11 +19,13 @@ import org.nasdanika.common.persistence.Marker;
 public class Reference implements Adaptable {
 	
 	private Object target;
+	private Marker marker;
 
-	public Reference(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Reference(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
 			URL targetURL = new URL(base, (String) config);
 			target = loader.loadYaml(targetURL, progressMonitor);
+			this.marker = marker;
 		} else {
 			throw new ConfigurationException("Reference type must be a string", marker);
 		}
@@ -37,7 +40,25 @@ public class Reference implements Adaptable {
 		if (target instanceof Adaptable) {
 			return ((Adaptable) target).adaptTo(type);
 		}
-		throw new NasdanikaException("Target " + target + " is not of requested type and cannot be adapted to it: " + type);
+		
+		// Handling collections etc by delegating to Loader utility methods for Consumer and Supplier factories
+		if (type == ConsumerFactory.class) {
+			try {
+				return (T) Loader.asConsumerFactory(target, marker);
+			} catch (Exception e) {
+				throw new ConfigurationException("Could not load " + target.getClass() + " as ConsumerFactory", e, marker);
+			}
+		}
+		
+		if (type == SupplierFactory.class) {
+			try {
+				return (T) Loader.asSupplierFactory(target, marker);
+			} catch (Exception e) {
+				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
+			}
+		}
+		
+		throw new ConfigurationException("Target " + target.getClass() + " is not of requested type and cannot be adapted to it: " + type, marker);
 	}		
 
 }

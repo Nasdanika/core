@@ -10,8 +10,8 @@ import org.nasdanika.common.persistence.Marker;
 
 public class Interface extends Type {
 
-	public Interface(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Interface(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 	@Override
 	protected String generate(Context context, String comment, String body, ProgressMonitor progressMonitor) throws Exception {

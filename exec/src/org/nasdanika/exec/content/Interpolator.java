@@ -9,8 +9,8 @@ import org.nasdanika.common.persistence.Marker;
 
 public class Interpolator extends Filter {
 
-	public Interpolator(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Interpolator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 
 	@Override

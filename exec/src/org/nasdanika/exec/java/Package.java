@@ -14,8 +14,8 @@ import org.nasdanika.exec.resources.Container;
 
 public class Package extends Container {
 
-	public Package(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Package(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 	
 	/**

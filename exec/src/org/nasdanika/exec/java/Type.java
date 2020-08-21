@@ -16,8 +16,8 @@ public abstract class Type extends Member {
 	protected List<String> superTypes = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
-	protected Type(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	protected Type(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		Loader.loadMultiString((Map<String, Object>) config, SUPER_TYPES_KEY, superTypes::add);
 	}
 

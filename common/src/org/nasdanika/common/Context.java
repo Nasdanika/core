@@ -477,7 +477,7 @@ public interface Context extends Composeable<Context> {
 	}
 	
 	/**
-	 * Interpolates to {@link String}, null input is interpolated as an empty strings.
+	 * Interpolates to {@link String}.
 	 * @param input
 	 * @return
 	 */

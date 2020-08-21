@@ -21,8 +21,8 @@ public abstract class Operation extends Member {
 	protected List<String> exceptions = new ArrayList<>();
 	
 	@SuppressWarnings("unchecked")
-	protected Operation(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	protected Operation(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		Loader.loadMultiString((Map<String, Object>) config, PARAMETERS_KEY, parameters::add);
 		Loader.loadMultiString((Map<String, Object>) config, EXCEPTIONS_KEY, exceptions::add);
 	}

@@ -38,7 +38,7 @@ public class Mapper implements Adaptable {
 	private Map<String,Object> map; 
 
 	@SuppressWarnings("unchecked")
-	public Mapper(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Mapper(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {

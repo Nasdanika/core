@@ -25,11 +25,15 @@ import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
+import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.Mapper;
 import org.nasdanika.exec.Reference;
+import org.nasdanika.exec.content.Base64;
+import org.nasdanika.exec.content.Form;
 import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Json;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.resources.Container;
@@ -41,10 +45,9 @@ public class TestExec {
 	/**
 	 * Tests retrieval of different entries from a context wrapping a map.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testIterator() throws Exception {
-		ObjectLoader loader = new org.nasdanika.exec.Loader();
+		ObjectLoader loader = new Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
 		Object iterator = loader.loadYaml(TestExec.class.getResource("iterator-spec.yml"), monitor);
 		assertEquals(Iterator.class, iterator.getClass());
@@ -52,9 +55,9 @@ public class TestExec {
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> sf = ((Adaptable) iterator).adaptTo(SupplierFactory.class);
-		Supplier<InputStream> s = sf.create(context);
-		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, s.execute(monitor)));
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(iterator, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, supplier.execute(monitor)));
 	}
 	
 	/**
@@ -276,9 +279,63 @@ public class TestExec {
 		Context context = Context.EMPTY_CONTEXT;		
 		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		FileSystemContainer out = new FileSystemContainer(outDir);
-		consumer.execute(out, monitor);
+		consumer.execute(out, monitor);		
+	}
 		
+	@Test
+	public void testBase64() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object base64 = loader.loadYaml(TestExec.class.getResource("base64-spec.yml"), monitor);
+		assertEquals(Base64.class, base64.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(base64, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}
 	
+	@Test
+	public void testForm() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object form = loader.loadYaml(TestExec.class.getResource("form-spec.yml"), monitor);
+		assertEquals(Form.class, form.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(form, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		System.out.println(Util.toString(context, supplier.execute(monitor)));
+	}
+	
+	@Test
+	public void testJson() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object json = loader.loadYaml(TestExec.class.getResource("json-spec.yml"), monitor);
+		assertEquals(Json.class, json.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		System.out.println(Util.toString(context, supplier.execute(monitor)));
+	}
+	
+	@Test
+	public void testYaml() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object yaml = loader.loadYaml(TestExec.class.getResource("yaml-spec.yml"), monitor);
+		assertEquals(org.nasdanika.exec.content.Yaml.class, yaml.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(yaml, null);
+		Supplier<InputStream> supplier = supplierFactory.create(context);
+		System.out.println(Util.toString(context, supplier.execute(monitor)));
+	}
 	
 }

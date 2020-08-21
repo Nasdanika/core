@@ -38,7 +38,7 @@ public abstract class Member implements SupplierFactory<InputStream> {
 	protected SupplierFactory<InputStream> body = SupplierFactory.empty();
 	
 	@SuppressWarnings("unchecked")
-	protected Member(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected Member(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			name = Loader.getString(configMap, NAME_KEY, true, marker);

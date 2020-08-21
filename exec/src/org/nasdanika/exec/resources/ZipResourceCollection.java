@@ -32,8 +32,8 @@ public class ZipResourceCollection extends ResourceCollection {
 	private Collection<SupplierFactory<InputStream>> contents = new ArrayList<>();
 
 	@SuppressWarnings("unchecked")
-	public ZipResourceCollection(ObjectLoader loader, String type, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public ZipResourceCollection(ObjectLoader loader, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		Object contentsVal = configMap.get(CONTENTS_KEY);
 		if (contentsVal instanceof Collection) {

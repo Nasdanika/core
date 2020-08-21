@@ -1,7 +1,7 @@
 package org.nasdanika.common;
 
 /**
- * Base interface for {@link Supplier}, {@link Function}, {@link Consumer}, and {@link _LegacyCommandToRemove}.
+ * Base interface for {@link Supplier}, {@link Function}, {@link Consumer}, and {@link Command}.
  * @author Pavel
  *
  */

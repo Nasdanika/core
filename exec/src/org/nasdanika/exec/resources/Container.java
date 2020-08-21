@@ -22,8 +22,8 @@ public class Container extends Resource {
 	private ConsumerFactory<BinaryEntityContainer> contents;
 	
 	@SuppressWarnings("unchecked")
-	public Container(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Container(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(CONTENTS_KEY)) {
 			contents = Loader.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));

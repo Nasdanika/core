@@ -10,8 +10,8 @@ import org.nasdanika.common.persistence.Marker;
 
 public class Enum extends Type {
 
-	public Enum(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Enum(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 
 	@Override

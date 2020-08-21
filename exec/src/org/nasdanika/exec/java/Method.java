@@ -17,8 +17,8 @@ public class Method extends Operation {
 	private String returnType;
 
 	@SuppressWarnings("unchecked")
-	public Method(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Method(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		returnType = Loader.getString((Map<String, Object>) config, RETURN_TYPE_KEY, false, marker);
 	}
 

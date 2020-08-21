@@ -16,8 +16,8 @@ public class Field extends Member {
 	private String type;
 
 	@SuppressWarnings("unchecked")
-	public Field(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public Field(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 		this.type = Loader.getString((Map<String, Object>) config, TYPE_KEY, true, marker);
 	}
 

@@ -16,6 +16,11 @@ public class ConfigurationException extends NasdanikaException {
 		super(marker == null ? message : message + " at " + marker);
 		this.marker = marker;
 	}
+
+	public ConfigurationException(String message, Throwable cause, Marker marker) {
+		super(marker == null ? message : message + " at " + marker, cause);
+		this.marker = marker;
+	}
 	
 	public Marker getMarker() {
 		return marker;

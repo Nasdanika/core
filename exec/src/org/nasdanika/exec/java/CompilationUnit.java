@@ -29,8 +29,8 @@ import org.nasdanika.exec.resources.File;
 
 public class CompilationUnit extends File {
 
-	public CompilationUnit(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		super(loader, type, config, base, progressMonitor, marker);
+	public CompilationUnit(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		super(loader, config, base, progressMonitor, marker);
 	}
 		
 	@Override
