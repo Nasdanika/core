@@ -20,6 +20,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
@@ -28,12 +29,19 @@ import org.nasdanika.exec.Loader;
  * @author Pavel
  *
  */
-public class Form implements SupplierFactory<InputStream> {
+public class Form implements SupplierFactory<InputStream>, Marked {
 	
 	protected MapCompoundSupplierFactory<String, Object> dataFactory = new MapCompoundSupplierFactory<String, Object>("Form");
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Form(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		Object data = loader.load(config, base, progressMonitor);
 		if (data instanceof Map) {
 			for (Entry<String, Object> me: ((Map<String,Object>) data).entrySet()) {

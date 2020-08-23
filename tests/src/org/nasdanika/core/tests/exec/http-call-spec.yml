@@ -1,2 +1,2 @@
 http:
-   url: https://nasdanika.org/hello-world.txt
+   url: ${nasdanika}/hello-world.txt

@@ -23,6 +23,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
@@ -31,7 +32,7 @@ import org.nasdanika.exec.Loader;
  * @author Pavel
  *
  */
-public class HttpCall implements SupplierFactory<InputStream> {
+public class HttpCall implements SupplierFactory<InputStream>, Marked {
 	
 	private static final String METHOD_KEY = "method";
 	private static final String URL_KEY = "url";
@@ -44,16 +45,25 @@ public class HttpCall implements SupplierFactory<InputStream> {
 	private String method = "GET";
 	private SupplierFactory<InputStream> body;
 	private Map<String, SupplierFactory<InputStream>> headers = new LinkedHashMap<>();
-	private URL url;
+	private URL base;
+	private String url;
+	private Marker marker;
 	private String name;
 	private int successCode = 200;
 	private int connectTimeout = 60;
 	private int readTimeout = 60;
 	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public HttpCall(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.base = base;
+		this.marker = marker;
 		if (config instanceof String) {
-			this.url = new URL(base, (String) config);
+			this.url = (String) config;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(METHOD_KEY)) {
@@ -73,7 +83,7 @@ public class HttpCall implements SupplierFactory<InputStream> {
 			
 			Object urlObj = configMap.get(URL_KEY);
 			if (urlObj instanceof String) {
-				this.url = new URL(base, (String) urlObj);
+				this.url = (String) urlObj;
 			} else {
 				throw new ConfigurationException(URL_KEY + " value must be a string", Util.getMarker(configMap, URL_KEY));
 			}
@@ -124,28 +134,6 @@ public class HttpCall implements SupplierFactory<InputStream> {
 		}
 	}
 	
-	public HttpCall(
-			String name, 
-			String method, 
-			URL url, 
-			Map<String, SupplierFactory<InputStream>> headers, 
-			SupplierFactory<InputStream> body,
-			int successCode,
-			int connectTimeout,
-			int readTimout) {
-		
-		this.name = name;
-		this.method = method;
-		this.url = url;
-		if (headers != null) {
-			this.headers.putAll(headers);
-		}
-		this.body = body;
-		this.successCode = successCode;
-		this.connectTimeout = connectTimeout;
-		this.readTimeout = readTimout;
-	}
-	
 	private FunctionFactory<BiSupplier<Map<String, InputStream>, InputStream>,InputStream> httpCallFactory = context -> new Function<BiSupplier<Map<String, InputStream>, InputStream>, InputStream>() {
 
 		@Override
@@ -192,38 +180,46 @@ public class HttpCall implements SupplierFactory<InputStream> {
 		return headersSupplierFactory.then(bf.asFunctionFactory()).then(httpCallFactory).create(iContext);
 	}
 	
-	protected InputStream call(Context context, Map<String, InputStream> headers, InputStream body, ProgressMonitor progressMonitor) throws Exception {				
-		URLConnection connection = url.openConnection();
-		if (!(connection instanceof HttpURLConnection)) {
-			throw new IllegalArgumentException("Not an HTTP(s) url: "+url);
-		}
-		
-		HttpURLConnection httpConnection = (HttpURLConnection) connection;
-		httpConnection.setRequestMethod(method);
-		httpConnection.setDoOutput(body != null);
-		for (Entry<String, InputStream> hwe: headers.entrySet()) {
-			httpConnection.setRequestProperty(hwe.getKey(), Util.toString(context, hwe.getValue()));
-		}
-		httpConnection.setConnectTimeout(connectTimeout * 1000); 
-		httpConnection.setReadTimeout(readTimeout * 1000); 
-		
-		if (body != null) {
-			try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream())) {
-				try (InputStream bin = new BufferedInputStream(body)) {
-					int b;
-					while ((b = bin.read()) != -1) {
-						bout.write(b);
+	protected InputStream call(Context context, Map<String, InputStream> headers, InputStream body, ProgressMonitor progressMonitor) throws Exception {		
+		URL theURL = new URL(base, context.interpolateToString(url));
+		try (ProgressMonitor subMonitor = progressMonitor.split("HTTP " + method + " to " + theURL, 2, marker)) {
+			URLConnection connection = theURL.openConnection();
+			if (!(connection instanceof HttpURLConnection)) {
+				throw new IllegalArgumentException("Not an HTTP(s) url: "+url);
+			}
+			
+			HttpURLConnection httpConnection = (HttpURLConnection) connection;
+			httpConnection.setRequestMethod(method);
+			httpConnection.setDoOutput(body != null);
+			for (Entry<String, InputStream> hwe: headers.entrySet()) {
+				httpConnection.setRequestProperty(hwe.getKey(), Util.toString(context, hwe.getValue()));
+			}
+			httpConnection.setConnectTimeout(connectTimeout * 1000); 
+			httpConnection.setReadTimeout(readTimeout * 1000);
+			
+			subMonitor.worked(1, "Open connection");
+					
+			if (body != null) {
+				try (OutputStream bout = new BufferedOutputStream(connection.getOutputStream())) {
+					try (InputStream bin = new BufferedInputStream(body)) {
+						int b;
+						while ((b = bin.read()) != -1) {
+							bout.write(b);
+						}
 					}
 				}
+				subMonitor.worked(1, "Wrote request body");
 			}
+			
+			int responseCode = httpConnection.getResponseCode();
+			subMonitor.worked(1, "Received response: " + responseCode);
+			if (responseCode == successCode) { 
+				return httpConnection.getInputStream();
+			}
+			
+			String location = marker == null ? "" : " at " + marker;
+			throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
 		}
-		
-		int responseCode = httpConnection.getResponseCode();
-		if (responseCode == successCode) { 
-			return httpConnection.getInputStream();
-		}
-		
-		throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage());
 	}	
 
 }

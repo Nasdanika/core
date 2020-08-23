@@ -18,6 +18,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
@@ -26,12 +27,19 @@ import org.nasdanika.exec.Loader;
  * @author Pavel
  *
  */
-public abstract class Encoder implements SupplierFactory<InputStream> {
+public abstract class Encoder implements SupplierFactory<InputStream>, Marked {
 	
 	protected SupplierFactory<Object> dataFactory;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	@SuppressWarnings("unchecked")
 	protected Encoder(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		dataFactory = load(loader, config, base, progressMonitor, marker);
 	}
 	

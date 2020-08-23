@@ -1,7 +1,9 @@
 package org.nasdanika.common.persistence;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
@@ -31,6 +33,15 @@ public class MarkingYamlConstructor extends Constructor {
 	protected List<? extends Object> constructSequence(SequenceNode node) {
 		MarkedArrayList<? extends Object> ret = (MarkedArrayList<? extends Object>) super.constructSequence(node);
 		node.getValue().forEach(n -> ret.getMarkers().add(new MarkerImpl(location, n.getStartMark())));
+		Iterator<? extends Object> eit = ret.iterator();
+		Iterator<Marker> mit = ret.getMarkers().iterator();
+		while (eit.hasNext() && mit.hasNext()) {
+			Object e = eit.next();
+			Marker m = mit.next();
+			if (e instanceof Markable) {
+				((Markable) e).setMarker(m);
+			}
+		}
 		return ret;
 	}
 	
@@ -47,6 +58,12 @@ public class MarkingYamlConstructor extends Constructor {
 			.map(NodeTuple::getKeyNode)
 			.filter(n -> n instanceof ScalarNode)
 			.forEach(keyNode -> ret.mark(((ScalarNode) keyNode).getValue(), new MarkerImpl(location, keyNode.getStartMark())));
+		
+		for (Entry<Object, Object> e: ret.entrySet()) {
+			if (e.getValue() instanceof Markable) {
+				((Markable) e.getValue()).setMarker(ret.getMarker(e.getKey()));
+			}
+		}
 		return ret;
 	}
 	

@@ -16,6 +16,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.content.Base64;
@@ -157,6 +158,16 @@ public class Loader extends ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
+	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
+		return asSupplierFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+	}	
+	
+	/**
+	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public static SupplierFactory<InputStream> asSupplierFactory(Object obj, Marker marker) throws Exception {
 		if (obj instanceof Collection) {
@@ -182,7 +193,17 @@ public class Loader extends ObjectLoader {
 		// Converting to string, interpolating, streaming
 		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");
 		return textFactory.then(Util.TO_STREAM);
-	};		
+	};
+	
+	/**
+	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj) throws Exception {
+		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+	}	
 		
 	/**
 	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.

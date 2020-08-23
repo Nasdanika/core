@@ -19,6 +19,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
@@ -28,7 +29,7 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
  * @author Pavel
  *
  */
-public class Mapper implements Adaptable {
+public class Mapper implements Adaptable, Marked {
 	
 	private static final String TARGET_KEY = "target";
 	private static final String MAP_KEY = "map";
@@ -36,10 +37,17 @@ public class Mapper implements Adaptable {
 	private List<Object> targets = new ArrayList<>();
 	private List<Marker> targetMarkers = new ArrayList<>();
 	private Map<String,Object> map; 
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	@SuppressWarnings("unchecked")
 	public Mapper(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
+			this.marker = marker;
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {
 				throw new ConfigurationException("Configuration must contain 'target' key", marker);				

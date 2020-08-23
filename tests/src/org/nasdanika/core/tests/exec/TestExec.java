@@ -55,7 +55,7 @@ public class TestExec {
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(iterator, null);
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(iterator);
 		Supplier<InputStream> supplier = supplierFactory.create(context);
 		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, supplier.execute(monitor)));
 	}
@@ -188,7 +188,6 @@ public class TestExec {
 		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testHttpCall() throws Exception {
 		ObjectLoader loader = new org.nasdanika.exec.Loader();
@@ -196,10 +195,11 @@ public class TestExec {
 		Object httpCall = loader.loadYaml(TestExec.class.getResource("http-call-spec.yml"), monitor);
 		assertEquals(HttpCall.class, httpCall.getClass());
 		
-		Context context = Context.EMPTY_CONTEXT;		
+		Context context = Context.singleton("nasdanika", "https://nasdanika.org");		
 		
-		Supplier<InputStream> s = ((SupplierFactory<InputStream>) httpCall).create(context);
-		assertEquals("Hello World!", Util.toString(context, s.execute(monitor)));
+		Supplier<InputStream> supplier = Loader.asSupplierFactory(httpCall).create(context);
+		InputStream response = supplier.execute(monitor);
+		assertEquals("Hello World!", Util.toString(context, response));
 	}
 	
 	@SuppressWarnings("unchecked")

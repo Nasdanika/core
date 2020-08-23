@@ -10,6 +10,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 
 /**
@@ -18,12 +19,19 @@ import org.nasdanika.common.persistence.Marker;
  * @author Pavel
  *
  */
-public class Resource implements SupplierFactory<InputStream> {
+public class Resource implements SupplierFactory<InputStream>, Marked {
 	
 	private URL url;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	public Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
+			this.marker = marker;
 			url = new URL(base, (String) config);
 		} else {
 			throw new ConfigurationException("Resource value must be a string, got " + config.getClass(), marker);

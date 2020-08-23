@@ -11,14 +11,22 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
-public abstract class Filter implements SupplierFactory<InputStream> {
+public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 	
 	protected SupplierFactory<InputStream> source;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	protected Filter(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
 	}
 	

@@ -11,6 +11,7 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
@@ -19,11 +20,18 @@ import org.nasdanika.exec.Loader;
  * @author Pavel
  *
  */
-public class Base64 implements SupplierFactory<InputStream> {
+public class Base64 implements SupplierFactory<InputStream>, Marked {
 	
 	protected SupplierFactory<InputStream> source;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	public Base64(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
 	}
 	

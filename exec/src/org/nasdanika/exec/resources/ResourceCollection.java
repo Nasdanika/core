@@ -12,13 +12,14 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.Loader;
 
 import io.github.azagniotov.matcher.AntPathMatcher;
 
-public abstract class ResourceCollection implements ConsumerFactory<BinaryEntityContainer> {
+public abstract class ResourceCollection implements ConsumerFactory<BinaryEntityContainer>, Marked {
 	
 	private static final String RECONCILE_ACTION_KEY = "reconcile-action";
 	static final String CONTENTS_KEY = "contents";
@@ -43,10 +44,17 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 	
 	protected String path;
 	protected String prefix;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public ResourceCollection(ObjectLoader loader, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) {
 		if (config instanceof Map) {
+			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {
 				Object reconcileActionObj = configMap.get(RECONCILE_ACTION_KEY);

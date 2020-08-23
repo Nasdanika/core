@@ -14,16 +14,24 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.exec.Loader;
 
-public class ZipArchive implements SupplierFactory<InputStream> { 
+public class ZipArchive implements SupplierFactory<InputStream>, Marked { 
 	
 	private ConsumerFactory<BinaryEntityContainer> consumer;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	public ZipArchive(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		consumer = Loader.asConsumerFactory(loader.load(config, base, progressMonitor), marker);
 	}	
 	

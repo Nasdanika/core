@@ -12,7 +12,7 @@ import java.util.Map;
  * @param <V>
  */
 @SuppressWarnings("serial")
-public class MarkedLinkedHashMap<K, V> extends LinkedHashMap<K, V> {
+public class MarkedLinkedHashMap<K, V> extends LinkedHashMap<K, V> implements Marked, Markable {
 	
 	private Map<K, Marker> markers = new HashMap<>();
 	
@@ -22,6 +22,18 @@ public class MarkedLinkedHashMap<K, V> extends LinkedHashMap<K, V> {
 
 	public Marker getMarker(K key) {
 		return markers.get(key);
+	}
+	
+	private Marker marker;
+
+	@Override
+	public void setMarker(Marker marker) {
+		this.marker = marker;
+	}
+
+	@Override
+	public Marker getMarker() {
+		return marker;
 	}
 	
 }

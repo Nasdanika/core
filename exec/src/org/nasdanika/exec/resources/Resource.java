@@ -8,6 +8,7 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
@@ -16,7 +17,7 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
  * @author Pavel
  *
  */
-public abstract class Resource implements ConsumerFactory<BinaryEntityContainer> {
+public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>, Marked {
 			
 	private static final String NAME_KEY = "name";
 	private static final String RECONCILE_ACTION_KEY = "reconcile-action";
@@ -25,10 +26,17 @@ public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>
 
 	protected ReconcileAction reconcileAction = ReconcileAction.OVERWRITE;
 	protected String name;
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	@SuppressWarnings("unchecked")
 	protected Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
+			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {
 				Object reconcileActionObj = configMap.get(RECONCILE_ACTION_KEY);

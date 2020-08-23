@@ -19,6 +19,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 
 import freemarker.cache.URLTemplateLoader;
@@ -32,7 +33,7 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.WrappingTemplateModel;
 
-public class FreeMarker implements SupplierFactory<InputStream> {
+public class FreeMarker implements SupplierFactory<InputStream>, Marked {
 	
 	private static final String BASE_KEY = "base";
 	private static final String TEMPLATE_KEY = "template";
@@ -42,9 +43,16 @@ public class FreeMarker implements SupplierFactory<InputStream> {
 	private String name;
 	private String template;
 	private String model;	
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	public FreeMarker(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
+			this.marker = marker;
 			@SuppressWarnings("unchecked")
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			if (configMap.containsKey(BASE_KEY)) {

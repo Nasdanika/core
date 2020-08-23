@@ -25,6 +25,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
@@ -35,17 +36,24 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
  * @author Pavel
  *
  */
-public class Configurator implements Adaptable {
+public class Configurator implements Adaptable, Marked {
 	
 	private static final String TARGET_KEY = "target";
 	private static final String PROPERTIES_KEY = "properties";
 	
 	private List<Object> targets = new ArrayList<>();
-	private Map<String,Object> configuration = new HashMap<>(); 
+	private Map<String,Object> configuration = new HashMap<>();
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	@SuppressWarnings("unchecked")
-	public Configurator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Configurator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {	
 		if (config instanceof Map) {
+			this.marker = marker;
 			Map<String,Object> map = (Map<String, Object>) config;
 			if (!map.containsKey(TARGET_KEY)) {
 				throw new ConfigurationException("Configuration must contain 'target' key", marker);				

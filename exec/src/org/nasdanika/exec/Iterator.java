@@ -23,6 +23,7 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
@@ -31,12 +32,18 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
  * @author Pavel
  *
  */
-public class Iterator implements Adaptable {
+public class Iterator implements Adaptable, Marked {
 
 	/**
 	 * key - context path for iteration, value - object to execute for each iteration (target).
 	 */
 	private Map<String,Object> iterators = new LinkedHashMap<>();
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	/**
 	 * Iterator config is a map of iterator values to objects to iterate over. I.e. one iterator (for-each) may contain multiple iteration "clauses". 
@@ -47,8 +54,9 @@ public class Iterator implements Adaptable {
 	 * @param marker 
 	 */
 	@SuppressWarnings("unchecked")
-	public Iterator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Iterator(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {		
 		if (config instanceof Map) {
+			this.marker = marker;
 			for (Entry<String, Object> e: ((Map<String,Object>) config).entrySet()) {
 				iterators.put(e.getKey(), loader.load(e.getValue(), base, progressMonitor));
 			}

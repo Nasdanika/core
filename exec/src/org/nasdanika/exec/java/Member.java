@@ -18,10 +18,11 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
-public abstract class Member implements SupplierFactory<InputStream> {
+public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	
 	private static final String NAME_KEY = "name";
 	private static final String MODIFIERS_KEY = "modifiers";
@@ -36,10 +37,17 @@ public abstract class Member implements SupplierFactory<InputStream> {
 	protected List<String> typeParameters = new ArrayList<>();
 	protected SupplierFactory<InputStream> comment = SupplierFactory.empty();
 	protected SupplierFactory<InputStream> body = SupplierFactory.empty();
+	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 	
 	@SuppressWarnings("unchecked")
 	protected Member(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
+			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			name = Loader.getString(configMap, NAME_KEY, true, marker);
 			Loader.loadMultiString(configMap, MODIFIERS_KEY, modifiers::add);

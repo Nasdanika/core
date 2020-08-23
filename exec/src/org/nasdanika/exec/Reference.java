@@ -8,6 +8,7 @@ import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 
 /**
@@ -16,10 +17,15 @@ import org.nasdanika.common.persistence.Marker;
  * @author Pavel
  *
  */
-public class Reference implements Adaptable {
+public class Reference implements Adaptable, Marked {
 	
 	private Object target;
 	private Marker marker;
+	
+	@Override
+	public Marker getMarker() {
+		return marker;
+	}
 
 	public Reference(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
