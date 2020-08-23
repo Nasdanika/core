@@ -20,6 +20,12 @@ http:
    url: ${nasdanika}/hello-world.txt
 ```
 
+or, because ``url`` is the only defined attribute:
+
+```yaml
+http: ${nasdanika}/hello-world.txt
+```
+
 #### Java code
  
 ```java
@@ -31,6 +37,6 @@ Object httpCall = loader.loadYaml(specURL, monitor);
 Context context = Context.singleton("nasdanika", "https://nasdanika.org");		
 
 // Can also cast in the case of HTTP Call, but Loader.asSupplierFactory() is more flexible.		
-Supplier<InputStream> supplier = Loader.asSupplierFactory(httpCall, null).create(context);
+Supplier<InputStream> supplier = Loader.asSupplierFactory(httpCall).create(context);
 InputStream response = supplier.execute(monitor);
 ``` 

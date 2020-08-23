@@ -1,2 +1,1 @@
-http:
-   url: ${nasdanika}/hello-world.txt
+http: ${nasdanika}/hello-world.txt

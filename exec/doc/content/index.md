@@ -1,1 +1,1 @@
-Coming soon.
+Content components implement ${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}> to supply content for files, HTTP Call bodies etc. in a form of input streams.
