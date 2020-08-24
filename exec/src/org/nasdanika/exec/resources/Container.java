@@ -8,6 +8,7 @@ import java.util.concurrent.CancellationException;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.FilterConsumer;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ObjectLoader;
@@ -77,17 +78,7 @@ public class Container extends Resource {
 		public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
 			Consumer<BinaryEntityContainer> contentsConsumer = contents.create(context);
 			
-			return new Consumer<BinaryEntityContainer>() {
-				
-				@Override
-				public double size() {
-					return contentsConsumer.size();
-				}
-				
-				@Override
-				public String name() {
-					return contentsConsumer.name();
-				}
+			return new FilterConsumer<BinaryEntityContainer>(contentsConsumer) {
 				
 				@Override
 				public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
@@ -95,6 +86,7 @@ public class Container extends Resource {
 						contentsConsumer.execute(container, progressMonitor);
 					}						
 				}
+				
 			};
 		}
 		

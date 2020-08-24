@@ -1,12 +1,15 @@
 package org.nasdanika.exec.content;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
 
+import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
@@ -21,7 +24,8 @@ import org.nasdanika.common.persistence.Marker;
  */
 public class Resource implements SupplierFactory<InputStream>, Marked {
 	
-	private URL url;
+	private URL base;
+	private String url;
 	private Marker marker;
 	
 	@Override
@@ -32,7 +36,8 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 	public Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
 			this.marker = marker;
-			url = new URL(base, (String) config);
+			this.url = (String) config;
+			this.base = base;
 		} else {
 			throw new ConfigurationException("Resource value must be a string, got " + config.getClass(), marker);
 		}
@@ -41,6 +46,18 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {
 		return new Supplier<InputStream>() {
+			
+			private URL theURL;
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				try{
+					theURL = new URL(base, context.interpolateToString(url));
+					return Supplier.super.diagnose(progressMonitor);
+				} catch (MalformedURLException e) {					
+					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (marker == null ? "" : " at " + marker));
+				}
+			}
 
 			@Override
 			public double size() {
@@ -49,12 +66,12 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 
 			@Override
 			public String name() {
-				return "Resource: " + url;
+				return "Resource: " + marker;
 			}
 
 			@Override
 			public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
-				return Objects.requireNonNull(url.openStream(), "Resource does not exist at "+url);
+				return theURL.openStream();
 			}
 			
 		};

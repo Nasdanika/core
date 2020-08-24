@@ -26,6 +26,8 @@ or, because ``url`` is the only defined attribute:
 http: ${nasdanika}/hello-world.txt
 ```
 
+HTTP Call with just URL as shown in the snippets above has the same behavior as [resource](resource.html) with a URL with ``http(s)`` protocol. ``resource`` supports additional protocols.
+
 #### Java code
  
 ```java
@@ -36,7 +38,5 @@ Object httpCall = loader.loadYaml(specURL, monitor);
 // For token replacement in the URL		
 Context context = Context.singleton("nasdanika", "https://nasdanika.org");		
 
-// Can also cast in the case of HTTP Call, but Loader.asSupplierFactory() is more flexible.		
-Supplier<InputStream> supplier = Loader.asSupplierFactory(httpCall).create(context);
-InputStream response = supplier.execute(monitor);
+InputStream response = callSupplier(context, monitor, httpCall);
 ``` 

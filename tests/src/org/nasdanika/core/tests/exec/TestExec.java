@@ -2,6 +2,7 @@ package org.nasdanika.core.tests.exec;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.InputStream;
@@ -12,9 +13,13 @@ import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.DiagnosticException;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
@@ -141,9 +146,76 @@ public class TestExec {
 		assertEquals(Resource.class, resource.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;		
-		
-		Supplier<InputStream> s = ((Resource) resource).create(context);
-		assertEquals("Hello, ${name}!", Util.toString(context, s.execute(monitor)));
+		InputStream result = callSupplier(context, monitor, resource);
+		assertEquals("Hello, ${name}!", Util.toString(context, result));
+	}
+
+	/**
+	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	static InputStream callSupplier(Context context, ProgressMonitor monitor, Object component) throws Exception {
+		try (Supplier<InputStream> supplier = Loader.asSupplierFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				diagnostic.dump(System.err, 4);
+				fail("Diagnostic failed: " + diagnostic.getMessage());
+			}
+			
+			try {
+				InputStream result = supplier.splitAndExecute(progressMonitor);
+				supplier.splitAndCommit(progressMonitor);
+				return result;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (e instanceof DiagnosticException) {
+					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+				}
+				if (supplier.splitAndRollback(progressMonitor)) {
+					fail("Exception " + e + ", rollback successful");
+				} else {
+					fail("Exception " + e + ", rollback failed");						
+				}
+				throw new NasdanikaException("Never get here");
+			}
+		}
+	}
+
+	/**
+	 * Executes full consumer lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	static void callConsumer(Context context, ProgressMonitor monitor, Object component, BinaryEntityContainer container) throws Exception {
+		try (Consumer<BinaryEntityContainer> consumer = Loader.asConsumerFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+			Diagnostic diagnostic = consumer.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				diagnostic.dump(System.err, 4);
+				fail("Diagnostic failed: " + diagnostic.getMessage());
+			}
+			
+			try {
+				consumer.splitAndExecute(container, progressMonitor);
+				consumer.splitAndCommit(progressMonitor);
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (e instanceof DiagnosticException) {
+					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+				}
+				if (consumer.splitAndRollback(progressMonitor)) {
+					fail("Exception " + e + ", rollback successful");
+				} else {
+					fail("Exception " + e + ", rollback failed");						
+				}
+			}
+		}
 	}
 	
 	@Test
@@ -155,12 +227,10 @@ public class TestExec {
 		
 		Context context = Context.singleton("name", "World");		
 		
-		Supplier<InputStream> supplier = Loader.asSupplierFactory(interpolator).create(context);
-		String result = Util.toString(context, supplier.execute(monitor));
+		String result = Util.toString(context, callSupplier(context, monitor, interpolator));
 		assertEquals("Hello, World!", result);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testMustache() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -170,8 +240,22 @@ public class TestExec {
 		
 		Context context = Context.singleton("name", "World");		
 		
-		Supplier<InputStream> s = ((SupplierFactory<InputStream>) mustache).create(context);
-		assertEquals("Hello, World!", Util.toString(context, s.execute(monitor)));
+		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		InputStream result = supplier.execute(monitor);
+		assertEquals("Hello, World!", Util.toString(context, result));
+	}
+	
+	@Test
+	public void testMustacheResource() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object mustache = loader.loadYaml(TestExec.class.getResource("mustache-resource-spec.yml"), monitor);
+		assertEquals(Mustache.class, mustache.getClass());
+		
+		Context context = Context.singleton("name", "World");		
+		
+		InputStream result = callSupplier(context, monitor, mustache);
+		assertEquals("Hello World!", Util.toString(context, result));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -197,8 +281,7 @@ public class TestExec {
 		
 		Context context = Context.singleton("nasdanika", "https://nasdanika.org");		
 		
-		Supplier<InputStream> supplier = Loader.asSupplierFactory(httpCall).create(context);
-		InputStream response = supplier.execute(monitor);
+		InputStream response = callSupplier(context, monitor, httpCall);
 		assertEquals("Hello World!", Util.toString(context, response));
 	}
 	
@@ -226,7 +309,6 @@ public class TestExec {
 		assertEquals("Hello, world!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testZipArchive() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -237,9 +319,8 @@ public class TestExec {
 		File outDir = new File("target" + File.separator + "test-output");
 		outDir.mkdirs();
 		Context context = Context.EMPTY_CONTEXT;		
-		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		FileSystemContainer out = new FileSystemContainer(outDir);
-		consumer.execute(out, monitor);		
+		callConsumer(context, monitor, container, out);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -266,7 +347,6 @@ public class TestExec {
 		assertEquals("Hello ${name}!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
 	}
 		
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testJava() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -277,9 +357,8 @@ public class TestExec {
 		File outDir = new File("target" + File.separator + "test-output");
 		outDir.mkdirs();
 		Context context = Context.EMPTY_CONTEXT;		
-		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		FileSystemContainer out = new FileSystemContainer(outDir);
-		consumer.execute(out, monitor);		
+		callConsumer(context, monitor, container, out);		
 	}
 		
 	@Test
@@ -291,9 +370,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(base64, null);
-		Supplier<InputStream> supplier = supplierFactory.create(context);
-		System.out.println(Util.toString(context, supplier.execute(monitor)));
+		System.out.println(Util.toString(context, callSupplier(context, monitor, base64)));
 	}
 	
 	@Test
@@ -305,9 +382,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(form, null);
-		Supplier<InputStream> supplier = supplierFactory.create(context);
-		System.out.println(Util.toString(context, supplier.execute(monitor)));
+		System.out.println(Util.toString(context, callSupplier(context, monitor, form)));
 	}
 	
 	@Test
@@ -319,9 +394,8 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json, null);
-		Supplier<InputStream> supplier = supplierFactory.create(context);
-		System.out.println(Util.toString(context, supplier.execute(monitor)));
+		InputStream result = callSupplier(context, monitor, json);
+		System.out.println(Util.toString(context, result));
 	}
 	
 	@Test
@@ -333,9 +407,8 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(yaml, null);
-		Supplier<InputStream> supplier = supplierFactory.create(context);
-		System.out.println(Util.toString(context, supplier.execute(monitor)));
+		InputStream result = callSupplier(context, monitor, yaml);
+		System.out.println(Util.toString(context, result));
 	}
 	
 	@Test

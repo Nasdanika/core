@@ -24,8 +24,7 @@ Object interpolator = loader.loadYaml(specURL, monitor);
 		
 Context context = Context.singleton("name", "World");		
 		
-Supplier<InputStream> supplier = Loader.asSupplierFactory(interpolator).create(context);
-String result = Util.toString(context, supplier.execute(monitor));
+String result = Util.toString(context, callSupplier(context, monitor, interpolator));
 assertEquals("Hello, World!", result);
 ```
     
