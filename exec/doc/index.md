@@ -1,5 +1,6 @@
 Nasdanika Core Exec module is a library of ${javadoc/org.nasdanika.common.ExecutionParticipant execution participants}.
 It provides an [object loader](general/loader.html) for loading and composing the participants for execution.
+See [Execution model](${base-uri}reference/knowledge-base/core/common/execution-model.html) for a general information regarding execution participants and Nasdanika execution model.
 
 To use the loader in the OSGi environment add ``org.nasdanika.exec`` dependency to the manifest file.
 

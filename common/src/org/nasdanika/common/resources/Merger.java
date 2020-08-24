@@ -9,7 +9,6 @@ import org.nasdanika.common.ProgressMonitor;
  * Merges new and old content of a {@link BinaryEntity}.
  * @author Pavel Vlasov
  *
- * @param <T>
  */
 public interface Merger {
 	
