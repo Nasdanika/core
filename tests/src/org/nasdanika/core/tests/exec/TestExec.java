@@ -59,9 +59,8 @@ public class TestExec {
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(iterator);
-		Supplier<InputStream> supplier = supplierFactory.create(context);
-		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, supplier.execute(monitor)));
+		InputStream result = callSupplier(context, monitor, iterator);
+		assertEquals(" * uno *  * dos *  * tres * ", Util.toString(context, result));
 	}
 	
 	/**
@@ -86,7 +85,6 @@ public class TestExec {
 	/**
 	 * Tests injection of configuration.
 	 */
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testMapper() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -97,9 +95,8 @@ public class TestExec {
 		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-config.yml"));
 		Context context = Context.wrap(yaml::get);
 		
-		SupplierFactory<InputStream> sf = ((Adaptable) mapper).adaptTo(SupplierFactory.class);
-		Supplier<InputStream> s = sf.create(context);
-		assertEquals(" * 123_v11 -- ${a/a1/a11} * ", Util.toString(context, s.execute(monitor)));
+		InputStream result = callSupplier(context, monitor, mapper);
+		assertEquals(" * 123_v11 -- ${a/a1/a11} * ", Util.toString(context, result));
 	}
 		
 	/**
