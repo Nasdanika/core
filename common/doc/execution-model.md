@@ -2,10 +2,10 @@ This page explains the Nasdanika execution model, which is used by a number of N
 
 The execution model contains the following steps:
 
-* Create a participant ${javadoc/org.nasdanika.commmon.ExecutionParticipantFactory factory}. Factories can be composed as explained in the subsequent sections.
-* Create an instance of ${javadoc/org.nasdanika.commmon.Context}.
+* Create a participant ${javadoc/org.nasdanika.common.ExecutionParticipantFactory factory}. Factories can be composed as explained in the subsequent sections.
+* Create an instance of ${javadoc/org.nasdanika.common.Context}.
 * Pass the context to the factory ``create()`` method to create a participant.
-* Create an instance of ${javadoc/org.nasdanika.commmon.ProgressMonitor}.
+* Create an instance of ${javadoc/org.nasdanika.common.ProgressMonitor}.
 * Walk the participant through the lifecycle methods. All lifecycle methods except ``execute()`` have the same signature for all paricipant types. 
     * ``diagnose()`` - performs diagnostic of the participant configuration and returns ${javadoc/org.nasdanika.common.Diagnostic}. If the diagnostic status is ``ERROR`` further execution is aborted. Diagnose may prepare the participant for further execution by initializing internal structures, e.g. resolving URL's. However, this method shall not perform any modifications in resources which might have to be rolled back, e.g. it shall not create or delete files or database records. The default implementation returns status ``SUCCESS``.
     * ``execute()`` - Executes participant's logic. May modify resources, e.g. write to files, create database records. Different participant types have different signatures of this method. There is no default implementation for this method.
@@ -15,10 +15,10 @@ The execution model contains the following steps:
     
 ### Execution participant types
 
-* ${javadoc/org.nasdanika.common.Supplier}<T> - ``T execute(ProgressMonitor)`` - returns value.      
-* ${javadoc/org.nasdanika.common.Function}<T,R> - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
-* ${javadoc/org.nasdanika.common.Consumer}<T> - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
-* ${javadoc/org.nasdanika.common.Command} -  - ``void execute(ProgressMonitor)``      
+* ${javadoc/org.nasdanika.common.Supplier}``<T>`` - ``T execute(ProgressMonitor)`` - returns value.      
+* ${javadoc/org.nasdanika.common.Function}``<T,R>`` - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
+* ${javadoc/org.nasdanika.common.Consumer}``<T>`` - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
+* ${javadoc/org.nasdanika.common.Command} - ``void execute(ProgressMonitor)``      
 
 ### Composition
 
@@ -32,10 +32,10 @@ Result producing participants (supplier and function) and their factories have `
 
 The participants can be chained as follows:
 
-* Supplier<T>.then(Function<? super T,R>) -> Supplier<R>
-* Supplier<T>.then(Consumer<? super T>) -> Command
-* Function<T,R>.then(Function<? super R,V>) -> Function<T,V>
-* Function<T,R>.then(Consumer<? super R>) -> Consumer<T>
+* ``Supplier<T>.then(Function<? super T,R>)`` -> ``Supplier<R>``
+* ``Supplier<T>.then(Consumer<? super T>)`` -> ``Command``
+* ``Function<T,R>.then(Function<? super R,V>)`` -> ``Function<T,V>``
+* ``Function<T,R>.then(Consumer<? super R>)`` -> ``Consumer<T>``
 
 #### asFunction
 
@@ -87,9 +87,9 @@ try (Supplier<InputStream> supplier = supplierFactory.create(context); ProgressM
 		if (supplier.splitAndRollback(progressMonitor)) {
 			fail("Exception " + e + ", rollback successful");
 		} else {
+			// Automated cleanup failed - perhaps notify somebody/something to performs manual/external cleanup
 			fail("Exception " + e + ", rollback failed");						
 		}
 	}
 }
-
 ``` 
