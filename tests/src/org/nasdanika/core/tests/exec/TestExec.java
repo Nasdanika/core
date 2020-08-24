@@ -11,7 +11,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.Consumer;
-import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
@@ -285,7 +284,6 @@ public class TestExec {
 		assertEquals("Hello World!", Util.toString(context, response));
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testResources() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -295,9 +293,8 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		EphemeralBinaryEntityContainer root = new EphemeralBinaryEntityContainer();
-		consumer.execute(root, monitor);
+		callConsumer(context, monitor, container, root);
 		
 		BinaryResource testContainer = root.find("test-container", monitor);
 		assertTrue(testContainer.exists(monitor));
@@ -323,7 +320,6 @@ public class TestExec {
 		callConsumer(context, monitor, container, out);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testZipResourceCollection() throws Exception {
 		ObjectLoader loader = new Loader();
@@ -333,9 +329,8 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Consumer<BinaryEntityContainer> consumer = ((ConsumerFactory<BinaryEntityContainer>) container).create(context);
 		EphemeralBinaryEntityContainer root = new EphemeralBinaryEntityContainer();
-		consumer.execute(root, monitor);
+		callConsumer(context, monitor, container, root);
 		
 		BinaryResource testContainer = root.find("test-container/templates", monitor);
 		assertTrue(testContainer.exists(monitor));
