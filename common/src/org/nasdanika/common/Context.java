@@ -506,7 +506,7 @@ public interface Context extends Composeable<Context> {
 	 * @return A deep copy of the map with string values interpolated.
 	 */
 	@SuppressWarnings("unchecked")
-	default <K> Map<K,Object> interpolate(Map<K,Object> input) {
+	default <K> Map<K,Object> interpolate(Map<K,?> input) {
 		if (input == null) {
 			return null;
 		}
@@ -534,7 +534,7 @@ public interface Context extends Composeable<Context> {
 	 * @return A deep copy of the collection with string values interpolated.
 	 */
 	@SuppressWarnings("unchecked")
-	default List<Object> interpolate(Collection<Object> input) {
+	default List<Object> interpolate(Collection<?> input) {
 		if (input == null) {
 			return null;
 		}

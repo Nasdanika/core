@@ -24,9 +24,9 @@ public class Enum extends Type {
 		
 		if (!superTypes.isEmpty()) {
 			ret.append(" implements ");
-			Iterator<String> stit = superTypes.iterator();
+			Iterator<String> stit = flatten(context, superTypes).iterator();
 			while (stit.hasNext()) {
-				ret.append(context.interpolate(stit.next()));
+				ret.append(stit.next());
 				if (stit.hasNext()) {
 					ret.append(", ");
 				}

@@ -30,3 +30,4 @@ container:
                                  comment: My rather important field
                                  type: '${import/java.util.Collection}<${import/java.lang.String}>'
                                  body: 'new ${import/java.util.ArrayList}<>()'
+                                 annotations: ${myFieldAnnotations}

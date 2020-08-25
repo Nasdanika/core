@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -114,16 +115,36 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	
 	protected abstract String generate(Context context, String comment, String body, ProgressMonitor progressMonitor) throws Exception;
 	
+	/**
+	 * Interpolates the argument collection. 
+	 * If any of collection elements are collections they are also interpolated and all elements are added to the returned collection. 
+	 * @param context
+	 * @param collection
+	 * @return
+	 */
+	protected static Collection<String> flatten(Context context, Collection<?> collection) {
+		Collection<String> ret = new ArrayList<>(); 
+		for (Object e: context.interpolate(collection)) {
+			if (e instanceof Collection) {
+				ret.addAll(flatten(context, (Collection<?>) e));
+			} else if (e == null) {
+				ret.add(null);
+			} else {
+				ret.add(e.toString());
+			}
+		}
+		return ret;
+	}
+	
 	protected void appendModifiers(Context context, StringBuilder builder) {
-		for (String modifier: modifiers) {
-			builder.append(context.interpolateToString(modifier)).append(" ");
+		for (String modifier: flatten(context, modifiers)) {
+			builder.append(modifier).append(" ");
 		}
 	}
 	
 	protected void appendAnnotations(Context context, StringBuilder builder) {
-		// Annotations
-		for (String ann: annotations) {
-			builder.append("@").append(context.interpolateToString(ann)).append(System.lineSeparator());
+		for (String ann: flatten(context, annotations)) {
+			builder.append("@").append(ann).append(System.lineSeparator());				
 		}
 	}
 	
@@ -131,11 +152,11 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 		if (!typeParameters.isEmpty()) {
 			builder.append("<");
 			boolean isFirst = true;
-			for (String tp: typeParameters) {
+			for (String tp: flatten(context, typeParameters)) {
 				if (!isFirst) {
 					builder.append(",");
 				}
-				builder.append(context.interpolateToString(tp));
+				builder.append(tp);
 				isFirst = false;
 			}
 			builder.append(">");

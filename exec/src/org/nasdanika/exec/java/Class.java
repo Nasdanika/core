@@ -25,8 +25,7 @@ public class Class extends Type {
 		
 		if (!superTypes.isEmpty()) {
 			int idx = 0;
-			for (String st: superTypes) {
-				String superTypeName = context.interpolateToString(st);
+			for (String superTypeName: flatten(context, superTypes)) {
 				if (superTypeName.trim().length() > 0) {
 					if (idx == 0) {
 						if (Object.class.getName().equals(superTypeName)) {

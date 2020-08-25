@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import org.junit.Test;
@@ -42,7 +44,6 @@ import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.resources.Container;
 import org.yaml.snakeyaml.Yaml;
-
 
 public class TestExec {
 	
@@ -348,7 +349,10 @@ public class TestExec {
 				
 		File outDir = new File("target" + File.separator + "test-output");
 		outDir.mkdirs();
-		Context context = Context.EMPTY_CONTEXT;		
+		Collection<String> annotations = new ArrayList<>();
+		annotations.add("Override");
+		annotations.add("${import/org.nasdanika.TestAnnotation}");
+		Context context = Context.singleton("myFieldAnnotations", annotations);		
 		FileSystemContainer out = new FileSystemContainer(outDir);
 		callConsumer(context, monitor, container, out);		
 	}

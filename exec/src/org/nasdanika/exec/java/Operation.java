@@ -31,9 +31,9 @@ public abstract class Operation extends Member {
 	protected void appendExceptions(Context context, StringBuilder builder) {
 		if (!exceptions.isEmpty()) {
 			builder.append(" throws ");
-			Iterator<String> eit = exceptions.iterator();
+			Iterator<String> eit = flatten(context, exceptions).iterator();
 			while (eit.hasNext()) {
-				builder.append(context.interpolate(eit.next()));
+				builder.append(eit.next());
 				if (eit.hasNext()) {
 					builder.append(", ");
 				}
@@ -44,9 +44,9 @@ public abstract class Operation extends Member {
 	protected void appendParameters(Context context, StringBuilder builder) {
 		builder.append("(");
 		if (!parameters.isEmpty()) {
-			Iterator<String> pit = parameters.iterator();
+			Iterator<String> pit = flatten(context, parameters).iterator();
 			while (pit.hasNext()) {
-				builder.append(context.interpolate(pit.next()));
+				builder.append(pit.next());
 				if (pit.hasNext()) {
 					builder.append(", ");
 				}
