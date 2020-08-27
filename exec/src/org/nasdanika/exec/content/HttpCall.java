@@ -66,6 +66,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			this.url = (String) config;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
+			Loader.checkUnsupportedKeys(configMap, METHOD_KEY, URL_KEY, HEADERS_KEY, BODY_KEY, SUCCESS_CODE_KEY, CONNECT_TIMEOUT_KEY, READ_TIMEOUT_KEY);			
 			if (configMap.containsKey(METHOD_KEY)) {
 				Object methodObj = configMap.get(METHOD_KEY);
 				if (methodObj instanceof String) {
@@ -218,7 +219,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			}
 			
 			String location = marker == null ? "" : " at " + marker;
-			throw new NasdanikaException("HTTP Call to "+url+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
+			throw new NasdanikaException("HTTP Call to "+theURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
 		}
 	}	
 

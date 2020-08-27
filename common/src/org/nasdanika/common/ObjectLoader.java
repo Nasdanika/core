@@ -45,7 +45,7 @@ public abstract class ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Object create(ObjectLoader factory, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
+	public abstract Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
 	
 	@SuppressWarnings("unchecked")
 	public Object load(Object spec, URL base, ProgressMonitor progressMonitor) throws Exception {

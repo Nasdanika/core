@@ -56,6 +56,18 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
+			
+			Loader.checkUnsupportedKeys(configMap, 
+					RECONCILE_ACTION_KEY, 
+					CONTENTS_KEY,
+					MERGER_KEY,
+					PATH_KEY,
+					PREFIX_KEY,
+					INCLUDES_KEY,
+					EXCLUDES_KEY,
+					INTERPOLATION_EXCLUDES_KEY,
+					INTERPOLATION_INCLUDES_KEY);
+			
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {
 				Object reconcileActionObj = configMap.get(RECONCILE_ACTION_KEY);
 				if (reconcileActionObj instanceof String) {

@@ -21,6 +21,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.exec.Loader;
 
 import freemarker.cache.URLTemplateLoader;
 import freemarker.template.Configuration;
@@ -55,6 +56,7 @@ public class FreeMarker implements SupplierFactory<InputStream>, Marked {
 			this.marker = marker;
 			@SuppressWarnings("unchecked")
 			Map<String,Object> configMap = (Map<String,Object>) config;
+			Loader.checkUnsupportedKeys(configMap, BASE_KEY, TEMPLATE_KEY, MODEL_KEY);
 			if (configMap.containsKey(BASE_KEY)) {
 				Object baseObj = configMap.get(BASE_KEY);
 				if (baseObj instanceof String) {

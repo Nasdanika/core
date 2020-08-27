@@ -1,6 +1,8 @@
 package org.nasdanika.exec.resources;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import org.nasdanika.common.ConsumerFactory;
@@ -11,6 +13,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.exec.Loader;
 
 /**
  * Base class for resources - {@link Container}, File, and Java specializations.
@@ -33,11 +36,21 @@ public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>
 		return marker;
 	}
 	
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> ret = new ArrayList<>();
+		ret.add(NAME_KEY);
+		ret.add(RECONCILE_ACTION_KEY);
+		ret.add(CONTENTS_KEY);
+		ret.add(MERGER_KEY);
+		return ret;
+	}
+	
 	@SuppressWarnings("unchecked")
 	protected Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
+			Loader.checkUnsupportedKeys(configMap, getSupportedKeys());			
 			if (configMap.containsKey(RECONCILE_ACTION_KEY)) {
 				Object reconcileActionObj = configMap.get(RECONCILE_ACTION_KEY);
 				if (reconcileActionObj instanceof String) {

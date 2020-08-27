@@ -2,6 +2,7 @@ package org.nasdanika.exec.java;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,13 @@ public abstract class Operation extends Member {
 		Loader.loadMultiString((Map<String, Object>) config, EXCEPTIONS_KEY, exceptions::add);
 	}
 	
+	@Override
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> supportedKeys = super.getSupportedKeys();
+		supportedKeys.add(PARAMETERS_KEY);
+		supportedKeys.add(EXCEPTIONS_KEY);
+		return supportedKeys;
+	}	
 	
 	protected void appendExceptions(Context context, StringBuilder builder) {
 		if (!exceptions.isEmpty()) {

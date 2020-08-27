@@ -1,6 +1,7 @@
 package org.nasdanika.exec.java;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 
 import org.nasdanika.common.Context;
@@ -20,6 +21,13 @@ public class Method extends Operation {
 	public Method(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
 		returnType = Loader.getString((Map<String, Object>) config, RETURN_TYPE_KEY, false, marker);
+	}
+	
+	@Override
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> supportedKeys = super.getSupportedKeys();
+		supportedKeys.add(RETURN_TYPE_KEY);
+		return supportedKeys;
 	}
 
 	@Override

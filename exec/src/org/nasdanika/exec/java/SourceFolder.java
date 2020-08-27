@@ -1,6 +1,7 @@
 package org.nasdanika.exec.java;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.Map;
 
 import org.nasdanika.common.Consumer;
@@ -18,6 +19,13 @@ public class SourceFolder extends Container {
 	private static final String JDK_LEVEL_KEY = "jdk";
 
 	protected JdkLevel jdkLevel = JdkLevel.JDK_8;
+	
+	@Override
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> supportedKeys = super.getSupportedKeys();
+		supportedKeys.add(JDK_LEVEL_KEY);
+		return supportedKeys;
+	}
 	
 	@SuppressWarnings("unchecked")
 	public SourceFolder(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {

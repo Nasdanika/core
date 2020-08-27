@@ -55,6 +55,7 @@ public class Configurator implements Adaptable, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> map = (Map<String, Object>) config;
+			Loader.checkUnsupportedKeys(map, TARGET_KEY, PROPERTIES_KEY);
 			if (!map.containsKey(TARGET_KEY)) {
 				throw new ConfigurationException("Configuration must contain 'target' key", marker);				
 			}

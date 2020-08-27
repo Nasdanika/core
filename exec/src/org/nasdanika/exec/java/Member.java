@@ -44,12 +44,24 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	public Marker getMarker() {
 		return marker;
 	}
+		
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> ret = new ArrayList<>();
+		ret.add(NAME_KEY);
+		ret.add(MODIFIERS_KEY);
+		ret.add(ANNOTATIONS_KEY);
+		ret.add(TYPE_PARAMETERS_KEY);
+		ret.add(COMMENT_KEY);
+		ret.add(BODY_KEY);
+		return ret;
+	}	
 	
 	@SuppressWarnings("unchecked")
 	protected Member(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
+			Loader.checkUnsupportedKeys(configMap, getSupportedKeys());
 			name = Loader.getString(configMap, NAME_KEY, true, marker);
 			Loader.loadMultiString(configMap, MODIFIERS_KEY, modifiers::add);
 			Loader.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
