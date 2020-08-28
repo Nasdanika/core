@@ -20,7 +20,7 @@ import org.nasdanika.exec.Loader;
 
 public class Container extends Resource {
 	
-	private ConsumerFactory<BinaryEntityContainer> contents;
+	protected ConsumerFactory<BinaryEntityContainer> contents;
 	
 	@SuppressWarnings("unchecked")
 	public Container(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {

@@ -24,8 +24,8 @@ import org.nasdanika.common.persistence.Marker;
  */
 public class Resource implements SupplierFactory<InputStream>, Marked {
 	
-	private URL base;
-	private String url;
+	protected URL base;
+	protected String url;
 	private Marker marker;
 	
 	@Override

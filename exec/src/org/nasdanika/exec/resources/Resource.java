@@ -75,6 +75,12 @@ public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>
 		}
 	}
 	
+	protected Resource(Marker marker, String name, ReconcileAction reconcileAction) {
+		this.marker = marker;
+		this.name = name;
+		this.reconcileAction = reconcileAction;
+	}
+	
 	/**
 	 * Produces final (physical) resource name from a a name (logical). E.g. "logical" Java package name is dot separated, but container name is slash separated.
 	 * @param name

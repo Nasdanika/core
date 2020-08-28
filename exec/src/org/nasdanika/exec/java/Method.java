@@ -12,10 +12,9 @@ import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
 public class Method extends Operation {
-	
-	
+		
 	private static final String RETURN_TYPE_KEY = "return-type";
-	private String returnType;
+	protected String returnType;
 
 	@SuppressWarnings("unchecked")
 	public Method(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {

@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2020.8.4</version>
+	    <version>2020.8.5</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
 	<artifactId>common</artifactId>

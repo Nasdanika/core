@@ -41,8 +41,8 @@ public class Configurator implements Adaptable, Marked {
 	private static final String TARGET_KEY = "target";
 	private static final String PROPERTIES_KEY = "properties";
 	
-	private List<Object> targets = new ArrayList<>();
-	private Map<String,Object> configuration = new HashMap<>();
+	protected List<Object> targets = new ArrayList<>();
+	protected Map<String,Object> configuration = new HashMap<>();
 	private Marker marker;
 	
 	@Override

@@ -39,6 +39,7 @@ import org.nasdanika.exec.java.Field;
 import org.nasdanika.exec.java.Interface;
 import org.nasdanika.exec.java.Method;
 import org.nasdanika.exec.java.SourceFolder;
+import org.nasdanika.exec.java.TypeAdapter;
 import org.nasdanika.exec.resources.Container;
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.ZipResourceCollection;
@@ -128,13 +129,13 @@ public class Loader extends ObjectLoader {
 			case "compilation-unit": // Merger is external - passed by Codegen 
 				return new CompilationUnit(loader, config, base, subMonitor, marker);
 			case "annotation": 
-				return new Annotation(loader, config, base, subMonitor, marker);
+				return new TypeAdapter(new Annotation(loader, config, base, subMonitor, marker));
 			case "class": 
-				return new org.nasdanika.exec.java.Class(loader, config, base, subMonitor, marker);
+				return new TypeAdapter(new org.nasdanika.exec.java.Class(loader, config, base, subMonitor, marker));
 			case "enum": 
-				return new org.nasdanika.exec.java.Enum(loader, config, base, subMonitor, marker);
+				return new TypeAdapter(new org.nasdanika.exec.java.Enum(loader, config, base, subMonitor, marker));
 			case "interface": 
-				return new Interface(loader, config, base, subMonitor, marker);
+				return new TypeAdapter(new Interface(loader, config, base, subMonitor, marker));
 			case "method": 
 				return new Method(loader, config, base, subMonitor, marker);
 			case "constructor": 

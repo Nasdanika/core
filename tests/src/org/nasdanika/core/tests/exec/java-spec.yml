@@ -14,6 +14,22 @@ container:
                         interpolator:
                            resource: java-template.txt
                   - compilation-unit:
+                     name: MyOtherClass
+                     imports:
+                        - org.nasdanika.common.ConsumerFactory
+                     contents:
+                        interpolator:
+                           resource: java-template.txt
+                  - class:
+                     name: TopLevelClass
+                     imports:
+                        - org.nasdanika.common.SupplierFactory
+                        - java.io.InputStream
+                     modifiers: public
+                     super-types:
+                        - java.lang.Object
+                        - SupplierFactory<InputStream>                           
+                  - compilation-unit:
                      name: FineGrainedClass
                      contents:
                         - class:
@@ -31,3 +47,14 @@ container:
                                  type: '${import/java.util.Collection}<${import/java.lang.String}>'
                                  body: 'new ${import/java.util.ArrayList}<>()'
                                  annotations: ${myFieldAnnotations}
+                              - field:
+                                 name: anotherField
+                                 modifiers:
+                                    - private
+                                 comment: Field with imports
+                                 type: ConsumerFactory<BinaryEntityContainer>
+                                 annotations: ${myFieldAnnotations}
+                                 imports:
+                                    - org.nasdanika.common.ConsumerFactory
+                                    - org.nasdanika.common.resources.BinaryEntityContainer
+                                 

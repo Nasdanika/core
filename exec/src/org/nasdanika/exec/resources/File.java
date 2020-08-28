@@ -24,8 +24,8 @@ import org.nasdanika.exec.Loader;
 
 public class File extends Resource {
 	
-	private SupplierFactory<InputStream> contents;
-	private Merger merger;
+	protected SupplierFactory<InputStream> contents;
+	protected Merger merger;
 	private Marker marker;
 
 	@SuppressWarnings("unchecked")
@@ -41,6 +41,18 @@ public class File extends Resource {
 		if (configMap.containsKey(MERGER_KEY)) {
 			merger = (Merger) loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor);
 		}
+	}
+	
+	public File(
+			Marker marker, 
+			String name, 
+			ReconcileAction reconcileAction, 
+			SupplierFactory<InputStream> contents, 
+			Merger merger) {
+		
+		super(marker, name, reconcileAction);
+		this.contents = contents;
+		this.merger = merger;
 	}
 	
 	protected SupplierFactory<InputStream> getContents() {

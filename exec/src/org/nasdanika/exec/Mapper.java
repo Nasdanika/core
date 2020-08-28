@@ -34,9 +34,9 @@ public class Mapper implements Adaptable, Marked {
 	private static final String TARGET_KEY = "target";
 	private static final String MAP_KEY = "map";
 	
-	private List<Object> targets = new ArrayList<>();
-	private List<Marker> targetMarkers = new ArrayList<>();
-	private Map<String,Object> map; 
+	protected List<Object> targets = new ArrayList<>();
+	protected List<Marker> targetMarkers = new ArrayList<>();
+	protected Map<String,Object> map; 
 	private Marker marker;
 	
 	@Override

@@ -22,7 +22,7 @@ import org.nasdanika.exec.Loader;
 
 public class ZipArchive implements SupplierFactory<InputStream>, Marked { 
 	
-	private ConsumerFactory<BinaryEntityContainer> consumer;
+	protected ConsumerFactory<BinaryEntityContainer> consumer;
 	private Marker marker;
 	
 	@Override

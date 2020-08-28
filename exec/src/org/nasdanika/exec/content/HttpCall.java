@@ -42,16 +42,16 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 	private static final String CONNECT_TIMEOUT_KEY = "connect-timeout";
 	private static final String READ_TIMEOUT_KEY = "read-timeout";
 
-	private String method = "GET";
-	private SupplierFactory<InputStream> body;
-	private Map<String, SupplierFactory<InputStream>> headers = new LinkedHashMap<>();
-	private URL base;
-	private String url;
+	protected String method = "GET";
+	protected SupplierFactory<InputStream> body;
+	protected Map<String, SupplierFactory<InputStream>> headers = new LinkedHashMap<>();
+	protected URL base;
+	protected String url;
 	private Marker marker;
-	private String name;
-	private int successCode = 200;
-	private int connectTimeout = 60;
-	private int readTimeout = 60;
+	protected String name;
+	protected int successCode = 200;
+	protected int connectTimeout = 60;
+	protected int readTimeout = 60;
 	
 	@Override
 	public Marker getMarker() {

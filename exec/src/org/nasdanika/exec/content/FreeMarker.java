@@ -40,10 +40,10 @@ public class FreeMarker implements SupplierFactory<InputStream>, Marked {
 	private static final String TEMPLATE_KEY = "template";
 	private static final String MODEL_KEY = "model";
 	
-	private URL base;
-	private String name;
-	private String template;
-	private String model;	
+	protected URL base;
+	protected String name;
+	protected String template;
+	protected String model;	
 	private Marker marker;
 	
 	@Override

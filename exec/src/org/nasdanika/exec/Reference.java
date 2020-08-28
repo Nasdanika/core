@@ -19,7 +19,7 @@ import org.nasdanika.common.persistence.Marker;
  */
 public class Reference implements Adaptable, Marked {
 	
-	private Object target;
+	protected Object target;
 	private Marker marker;
 	
 	@Override

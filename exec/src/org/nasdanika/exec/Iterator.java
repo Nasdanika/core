@@ -37,7 +37,7 @@ public class Iterator implements Adaptable, Marked {
 	/**
 	 * key - context path for iteration, value - object to execute for each iteration (target).
 	 */
-	private Map<String,Object> iterators = new LinkedHashMap<>();
+	protected Map<String,Object> iterators = new LinkedHashMap<>();
 	private Marker marker;
 	
 	@Override

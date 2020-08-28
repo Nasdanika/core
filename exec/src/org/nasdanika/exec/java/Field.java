@@ -14,7 +14,7 @@ import org.nasdanika.exec.Loader;
 public class Field extends Member {
 	
 	private static final String TYPE_KEY = "type";
-	private String type;
+	protected String type;
 	
 	@Override
 	protected Collection<String> getSupportedKeys() {

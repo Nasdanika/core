@@ -36,11 +36,11 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 	
 	protected ReconcileAction reconcileAction = ReconcileAction.OVERWRITE;
 	
-	private Collection<String> includes = new ArrayList<>();
-	private Collection<String> excludes = new ArrayList<>();
+	protected Collection<String> includes = new ArrayList<>();
+	protected Collection<String> excludes = new ArrayList<>();
 	
-	private Collection<String> interpolationIncludes = new ArrayList<>();
-	private Collection<String> interpolationExcludes = new ArrayList<>();
+	protected Collection<String> interpolationIncludes = new ArrayList<>();
+	protected Collection<String> interpolationExcludes = new ArrayList<>();
 	
 	protected String path;
 	protected String prefix;

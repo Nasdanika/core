@@ -38,6 +38,7 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	protected List<String> typeParameters = new ArrayList<>();
 	protected SupplierFactory<InputStream> comment = SupplierFactory.empty();
 	protected SupplierFactory<InputStream> body = SupplierFactory.empty();
+	protected List<String> imports = new ArrayList<>();
 	private Marker marker;
 	
 	@Override
@@ -53,6 +54,7 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 		ret.add(TYPE_PARAMETERS_KEY);
 		ret.add(COMMENT_KEY);
 		ret.add(BODY_KEY);
+		ret.add(CompilationUnit.IMPORTS_KEY);
 		return ret;
 	}	
 	
@@ -72,6 +74,7 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 			if (configMap.containsKey(BODY_KEY)) {
 				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor), Util.getMarker(configMap, BODY_KEY));
 			}
+			Loader.loadMultiString(configMap, CompilationUnit.IMPORTS_KEY, imports::add);			
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 		}
@@ -120,9 +123,15 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	};
 			
 	@Override
-	public Supplier<InputStream> create(Context iContext) throws Exception {		
-		ImportManager importManager = iContext.get(ImportManager.class);				
-		return comment.then(body.asFunctionFactory()).then(memberFactory).create(Context.singleton("import", importManager).compose(iContext));
+	public Supplier<InputStream> create(Context context) throws Exception {		
+		ImportManager importManager = context.get(ImportManager.class);
+		for (String imprt: Member.flatten(context, imports)) {
+			if (imprt.equals(importManager.addImport(imprt))) {
+				throw new ConfigurationException("Could not add import " + imprt + ", must be a name clash, use fully qualified name", marker);
+			}
+		}
+
+		return comment.then(body.asFunctionFactory()).then(memberFactory).create(Context.singleton("import", importManager).compose(context));
 	}
 	
 	protected abstract String generate(Context context, String comment, String body, ProgressMonitor progressMonitor) throws Exception;

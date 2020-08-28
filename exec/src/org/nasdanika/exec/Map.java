@@ -17,7 +17,7 @@ import org.nasdanika.common.persistence.Marker;
  */
 public class Map implements Marked {
 
-	private java.util.Map<String,Object> map = new LinkedHashMap<>();
+	protected java.util.Map<String,Object> map = new LinkedHashMap<>();
 	private Marker marker;
 	
 	@Override

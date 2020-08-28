@@ -2,8 +2,11 @@ package org.nasdanika.exec.java;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.core.ToolFactory;
@@ -24,13 +27,50 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.Merger;
+import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.java.Package.PackageInfo;
 import org.nasdanika.exec.resources.File;
+import org.nasdanika.exec.resources.ReconcileAction;
 
 public class CompilationUnit extends File {
 
+	static final String IMPORTS_KEY = "imports";
+	private static final String FORMAT_KEY = "format";
+
+	protected List<String> imports = new ArrayList<>();
+	protected boolean format = true;
+	
+	@SuppressWarnings("unchecked")
 	public CompilationUnit(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
+		Map<String, Object> configMap = (Map<String, Object>) config;
+		Loader.loadMultiString(configMap, IMPORTS_KEY, imports::add);
+		if (configMap.containsKey(FORMAT_KEY)) {
+			format = Boolean.TRUE.equals(configMap.get(FORMAT_KEY));
+		}
+	}
+	
+	public CompilationUnit(Marker marker, 
+			String name, 
+			ReconcileAction reconcileAction, 
+			SupplierFactory<InputStream> contents, 
+			Merger merger,
+			List<String> imports,
+			boolean format) {
+		
+		super(marker, name, reconcileAction, contents, merger);
+		if (imports != null) {
+			this.imports.addAll(imports);		
+		}
+		this.format = format;
+	}
+	
+	@Override
+	protected Collection<String> getSupportedKeys() {
+		Collection<String> supportedKeys = super.getSupportedKeys();
+		supportedKeys.add(IMPORTS_KEY);
+		supportedKeys.add(FORMAT_KEY);
+		return supportedKeys;
 	}
 		
 	@Override
@@ -175,6 +215,8 @@ public class CompilationUnit extends File {
 		}
 
 		ImportManager importManager = new SimpleImportManager(implicitImports);
+		Member.flatten(context, imports).forEach(importManager::addImport);
+		
 		Context ctx = Context.singleton("import", importManager)
 				.compose(Context.singleton(ImportManager.class, importManager))
 				.compose(context);
