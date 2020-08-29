@@ -93,6 +93,19 @@ public class FreeMarker implements SupplierFactory<InputStream>, Marked {
 		}
 	}
 	
+	public FreeMarker(
+			Marker marker,
+			URL base,
+			String template, 
+			String model) {
+
+		this.marker = marker;
+		this.base = base;
+		this.template = template;
+		this.model = model;
+		name = "FreeMarker" + (marker == null ? "" : " " + marker);
+	}
+	
 	public FreeMarker(String name, URL base, String template, String model) {
 		this.name = name;
 		this.base = base;

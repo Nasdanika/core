@@ -37,6 +37,11 @@ public class Reference implements Adaptable, Marked {
 		}
 	}
 	
+	public Reference(Marker marker, Object target) {
+		this.marker = marker;
+		this.target = target;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T adaptTo(Class<T> type) {

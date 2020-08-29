@@ -35,6 +35,11 @@ public class Base64 implements SupplierFactory<InputStream>, Marked {
 		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
 	}
 	
+	public Base64(Marker marker, SupplierFactory<InputStream> source) {
+		this.marker = marker;
+		this.source = source;
+	}
+	
 	private FunctionFactory<InputStream,InputStream> base64Factory = ctx -> new Function<InputStream, InputStream>() {
 
 		@Override

@@ -74,6 +74,13 @@ public class Mapper implements Adaptable, Marked {
 		}
 	}	
 	
+	public Mapper(Marker marker, Map<String,Object> map, List<Object> targets, List<Marker> targetMarkers) {
+		this.marker = marker;
+		this.map.putAll(map);
+		this.targets.addAll(targets);
+		this.targetMarkers.addAll(targetMarkers);
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void loadMap(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor) throws Exception {
 		if (config instanceof Map) {

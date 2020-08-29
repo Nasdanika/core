@@ -13,6 +13,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.resources.Container;
+import org.nasdanika.exec.resources.ReconcileAction;
 
 public class SourceFolder extends Container {
 	
@@ -41,6 +42,11 @@ public class SourceFolder extends Container {
 		}
 	}
 	
+	public SourceFolder(Marker marker, String name, ReconcileAction reconcileAction, JdkLevel jdkLevel) {
+		super(marker, name, reconcileAction);
+		this.jdkLevel = jdkLevel;
+	}
+
 	@Override
 	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
 		return super.create(Context.singleton(JdkLevel.class, jdkLevel).compose(context));

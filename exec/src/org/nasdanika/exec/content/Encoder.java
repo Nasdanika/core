@@ -43,6 +43,11 @@ public abstract class Encoder implements SupplierFactory<InputStream>, Marked {
 		dataFactory = load(loader, config, base, progressMonitor, marker);
 	}
 	
+	protected Encoder(Marker marker, SupplierFactory<Object> dataFactory) {
+		this.marker = marker;
+		this.dataFactory = dataFactory;
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected SupplierFactory load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		Object data = loader.load(config, base, progressMonitor);

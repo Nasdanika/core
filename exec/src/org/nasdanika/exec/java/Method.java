@@ -1,12 +1,15 @@
 package org.nasdanika.exec.java;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
@@ -21,6 +24,24 @@ public class Method extends Operation {
 		super(loader, config, base, progressMonitor, marker);
 		returnType = Loader.getString((Map<String, Object>) config, RETURN_TYPE_KEY, false, marker);
 	}
+	
+	public Method(
+			Marker marker, 
+			String name, 
+			List<String> modifiers, 
+			List<String> annotations,
+			List<String> typeParameters, 
+			SupplierFactory<InputStream> comment, 
+			SupplierFactory<InputStream> body,
+			List<String> imports, 
+			List<String> parameters, 
+			List<String> exceptions,
+			String returnType) {
+		
+		super(marker, name, modifiers, annotations, typeParameters, comment, body, imports, parameters, exceptions);
+		this.returnType = returnType;
+	}
+	
 	
 	@Override
 	protected Collection<String> getSupportedKeys() {

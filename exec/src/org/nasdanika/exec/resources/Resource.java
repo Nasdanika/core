@@ -44,7 +44,7 @@ public abstract class Resource implements ConsumerFactory<BinaryEntityContainer>
 		ret.add(MERGER_KEY);
 		return ret;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected Resource(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {

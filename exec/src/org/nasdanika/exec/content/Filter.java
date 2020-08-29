@@ -30,6 +30,11 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
 	}
 	
+	protected Filter(Marker marker, SupplierFactory<InputStream> source) {
+		this.marker = marker;
+		this.source = source;
+	}
+	
 	private FunctionFactory<InputStream,InputStream> filterFactory = ctx -> new Function<InputStream, InputStream>() {
 
 		@Override

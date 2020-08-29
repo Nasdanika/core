@@ -1,5 +1,6 @@
 package org.nasdanika.exec.java;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,6 +11,7 @@ import java.util.Map;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.exec.Loader;
 
@@ -27,6 +29,24 @@ public abstract class Operation extends Member {
 		Loader.loadMultiString((Map<String, Object>) config, PARAMETERS_KEY, parameters::add);
 		Loader.loadMultiString((Map<String, Object>) config, EXCEPTIONS_KEY, exceptions::add);
 	}
+	
+	protected Operation(
+			Marker marker, 
+			String name, 
+			List<String> modifiers, 
+			List<String> annotations,
+			List<String> typeParameters, 
+			SupplierFactory<InputStream> comment, 
+			SupplierFactory<InputStream> body,
+			List<String> imports,
+			List<String> parameters,
+			List<String> exceptions) {
+		
+		super(marker, name, modifiers, annotations, typeParameters, comment, body, imports);
+		this.parameters.addAll(parameters);
+		this.exceptions.addAll(exceptions);
+	}
+	
 	
 	@Override
 	protected Collection<String> getSupportedKeys() {

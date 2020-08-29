@@ -7,6 +7,7 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
 import org.yaml.snakeyaml.DumperOptions;
@@ -21,6 +22,10 @@ public class Yaml extends Encoder {
 
 	public Yaml(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
+	}
+
+	public Yaml(Marker marker, SupplierFactory<Object> dataFactory) {
+		super(marker, dataFactory);
 	}
 
 	@Override

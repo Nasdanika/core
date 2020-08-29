@@ -135,6 +135,29 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 		}
 	}
 	
+	public HttpCall(
+			Marker marker,
+			URL base, 
+			String url,
+			String method, 
+			Map<String, SupplierFactory<InputStream>> headers,
+			SupplierFactory<InputStream> body,
+			int successCode,
+			int connectTimeout,
+			int readTimeout) {
+		
+		this.marker = marker;
+		this.base = base;
+		this.url = url;
+		this.method = method;
+		this.headers.putAll(headers);
+		this.body = body;
+		this.successCode = successCode;
+		this.connectTimeout = connectTimeout;
+		this.readTimeout = readTimeout;
+		name = "HTTP Call" + (marker == null ? "" : " " + marker);
+	}
+	
 	private FunctionFactory<BiSupplier<Map<String, InputStream>, InputStream>,InputStream> httpCallFactory = context -> new Function<BiSupplier<Map<String, InputStream>, InputStream>, InputStream>() {
 
 		@Override

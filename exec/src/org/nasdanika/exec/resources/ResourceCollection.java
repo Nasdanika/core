@@ -86,6 +86,26 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 		}
 	}
+	
+	public ResourceCollection(
+			Marker marker, 
+			ReconcileAction reconcileAction, 
+			String path, 
+			String prefix,
+			Collection<String> includes, 
+			Collection<String> excludes, 
+			Collection<String> interpolationIncludes,
+			Collection<String> interpolationExcludes) {
+
+		this.marker = marker;
+		this.reconcileAction = reconcileAction;
+		this.path = path;
+		this.prefix = prefix;
+		this.includes = includes;
+		this.excludes = excludes;
+		this.interpolationIncludes = interpolationIncludes;
+		this.interpolationExcludes = interpolationExcludes;
+	}
 
 	/**
 	 * @param path

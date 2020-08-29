@@ -42,6 +42,16 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 			throw new ConfigurationException("Resource value must be a string, got " + config.getClass(), marker);
 		}
 	}
+	
+	public Resource(
+		Marker marker,
+		URL base,
+		String url) {
+		
+		this.marker = marker;
+		this.base = base;
+		this.url = url;
+	}
 
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {

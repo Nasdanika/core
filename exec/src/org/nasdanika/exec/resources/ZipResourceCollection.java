@@ -46,6 +46,20 @@ public class ZipResourceCollection extends ResourceCollection {
 		} 
 	}	
 	
+	public ZipResourceCollection(
+			Marker marker, 
+			ReconcileAction reconcileAction, 
+			String path, 
+			String prefix,
+			Collection<String> includes, 
+			Collection<String> excludes, 
+			Collection<String> interpolationIncludes,
+			Collection<String> interpolationExcludes, 
+			Collection<SupplierFactory<InputStream>> contents) {
+		super(marker, reconcileAction, path, prefix, includes, excludes, interpolationIncludes, interpolationExcludes);
+		this.contents.addAll(contents);
+	}
+
 	private ConsumerFactory<BiSupplier<BinaryEntityContainer, List<InputStream>>> extractFactory = context -> new Consumer<BiSupplier<BinaryEntityContainer,List<InputStream>>>() {
 
 		@Override

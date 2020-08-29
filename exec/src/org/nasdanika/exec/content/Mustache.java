@@ -1,6 +1,7 @@
 package org.nasdanika.exec.content;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -12,6 +13,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
 
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -21,6 +23,10 @@ public class Mustache extends Filter {
 
 	public Mustache(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
+	}
+
+	public Mustache(Marker marker, SupplierFactory<InputStream> source) {
+		super(marker, source);
 	}
 
 	@Override

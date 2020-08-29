@@ -12,6 +12,7 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
 
 /**
@@ -23,6 +24,10 @@ public class Json extends Encoder {
 
 	public Json(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
+	}
+	
+	public Json(Marker marker, SupplierFactory<Object> dataFactory) {
+		super(marker, dataFactory);
 	}
 
 	@Override

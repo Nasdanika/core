@@ -80,6 +80,28 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 		}
 	}
 	
+	protected Member(
+			Marker marker, 
+			String name, 
+			List<String> modifiers, 
+			List<String> annotations,
+			List<String> typeParameters, 
+			SupplierFactory<InputStream> comment, 
+			SupplierFactory<InputStream> body,
+			List<String> imports) {
+
+		this.marker = marker;
+		this.name = name;
+		this.modifiers = modifiers;
+		this.annotations = annotations;
+		this.typeParameters = typeParameters;
+		this.comment = comment;
+		this.body = body;
+		this.imports = imports;
+	}
+
+
+
 	private FunctionFactory<BiSupplier<InputStream, InputStream>,InputStream> memberFactory = context -> new Function<BiSupplier<InputStream, InputStream>,InputStream>() {
 		
 		@Override

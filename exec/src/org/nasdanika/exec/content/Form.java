@@ -61,6 +61,11 @@ public class Form implements SupplierFactory<InputStream>, Marked {
 		}
 	}
 	
+	public Form(Marker marker, MapCompoundSupplierFactory<String, Object> dataFactory) {
+		this.marker = marker;
+		this.dataFactory = dataFactory;
+	}
+	
 	private FunctionFactory<Map<String,Object>,InputStream> formFactory = ctx -> new Function<Map<String,Object>, InputStream>() {
 
 		@Override

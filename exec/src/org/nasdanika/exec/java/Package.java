@@ -11,6 +11,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.resources.Container;
+import org.nasdanika.exec.resources.ReconcileAction;
 
 public class Package extends Container {
 
@@ -18,6 +19,10 @@ public class Package extends Container {
 		super(loader, config, base, progressMonitor, marker);
 	}
 	
+	public Package(Marker marker, String name, ReconcileAction reconcileAction) {
+		super(marker, name, reconcileAction);
+	}
+
 	/**
 	 * Serivce interface to pass through generation contexts.
 	 * @author Pavel

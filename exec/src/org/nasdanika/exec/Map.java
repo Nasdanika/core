@@ -45,6 +45,11 @@ public class Map implements Marked {
 		}
 	}
 	
+	public Map(Marker marker, java.util.Map<String,Object> map) {
+		this.marker = marker;
+		this.map.putAll(map);
+	}
+	
 	public java.util.Map<String, Object> getMap() {
 		return map;
 	}

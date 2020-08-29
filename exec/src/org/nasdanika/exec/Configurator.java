@@ -83,6 +83,12 @@ public class Configurator implements Adaptable, Marked {
 		}
 	}	
 	
+	public Configurator(Marker marker, Map<String,Object> configuration, List<Object> targets) {
+		this.marker = marker;
+		this.configuration.putAll(configuration);
+		this.targets.addAll(targets);
+	}
+	
 	// --- Config ---
 	
 	/**

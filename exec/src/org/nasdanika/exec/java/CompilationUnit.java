@@ -49,7 +49,7 @@ public class CompilationUnit extends File {
 			format = Boolean.TRUE.equals(configMap.get(FORMAT_KEY));
 		}
 	}
-	
+
 	public CompilationUnit(Marker marker, 
 			String name, 
 			ReconcileAction reconcileAction, 

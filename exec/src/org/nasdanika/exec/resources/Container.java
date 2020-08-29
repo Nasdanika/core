@@ -31,6 +31,10 @@ public class Container extends Resource {
 		}
 	}
 	
+	public Container(Marker marker, String name, ReconcileAction reconcileAction) {
+		super(marker, name, reconcileAction);
+	}
+
 	private FunctionFactory<BinaryEntityContainer, BinaryEntityContainer> containerFactory = context -> new Function<BinaryEntityContainer, BinaryEntityContainer>() {
 		
 		private String finalName = finalName(context.interpolateToString(Container.this.name));

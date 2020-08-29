@@ -35,6 +35,12 @@ public class ZipArchive implements SupplierFactory<InputStream>, Marked {
 		consumer = Loader.asConsumerFactory(loader.load(config, base, progressMonitor), marker);
 	}	
 	
+	public ZipArchive(Marker marker, ConsumerFactory<BinaryEntityContainer> consumer) {
+		super();
+		this.marker = marker;
+		this.consumer = consumer;
+	}
+
 	private FunctionFactory<BinaryEntityContainer,InputStream> streamFactory = context -> new Function<BinaryEntityContainer, InputStream>() {
 
 		@Override

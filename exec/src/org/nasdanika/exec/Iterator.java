@@ -65,6 +65,11 @@ public class Iterator implements Adaptable, Marked {
 		}
 	}
 	
+	public Iterator(Marker marker, Map<String,Object> iterators) {
+		this.marker = marker;
+		this.iterators.putAll(iterators);
+	}
+	
 	public Iterator(String iterator, Object target) {
 		iterators.put(iterator, target);
 	}	
