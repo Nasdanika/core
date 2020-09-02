@@ -153,8 +153,7 @@ public class Configurator implements Adaptable, Marked {
 		}
 		return ret;			
 	}
-	
-	
+		
 	// --- Supplier ---
 	
 	protected Supplier<InputStream> configureSupplier(Context context) throws Exception {
@@ -205,6 +204,13 @@ public class Configurator implements Adaptable, Marked {
 		if (obj instanceof SupplierFactory) {		
 			return (SupplierFactory<InputStream>) obj;
 		}
+		
+		if (obj instanceof Adaptable) {
+			SupplierFactory<InputStream> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}		
 		
 		// Converting to string, interpolating, streaming
 		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");

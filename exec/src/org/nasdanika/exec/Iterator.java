@@ -214,7 +214,7 @@ public class Iterator implements Adaptable, Marked {
 			return ret;			
 		}
 		
-		return ((ConsumerFactory<BinaryEntityContainer>) target).create(iContext);
+		return Loader.asConsumerFactory(target).create(iContext);
 	}
 		
 	// --- Supplier ---
@@ -253,6 +253,13 @@ public class Iterator implements Adaptable, Marked {
 		if (target instanceof SupplierFactory) {		
 			return ((SupplierFactory<InputStream>) target).create(iContext);
 		}
+				
+		if (target instanceof Adaptable) {
+			SupplierFactory<InputStream> adapter = ((Adaptable) target).adaptTo(SupplierFactory.class);
+			if (adapter != null) {
+				return adapter.create(iContext);
+			}
+		}		
 		
 		// Converting to string, interpolating, streaming
 		Supplier<String> textSupplier = Supplier.from(iContext.interpolateToString(String.valueOf(target)), "Scalar");

@@ -53,6 +53,11 @@ public interface Diagnostic {
 		if (data != null) {
 			out.print(" data=");
 			out.print(getData());
+			for (Object de: data) {
+				if (de instanceof Throwable) {
+					((Throwable) de).printStackTrace(out);
+				}
+			}
 		}		
 		
 		out.println();
