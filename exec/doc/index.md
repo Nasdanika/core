@@ -14,7 +14,7 @@ Example as of the time of writing:
 <dependency>
   <groupId>org.nasdanika.core</groupId>
   <artifactId>exec</artifactId>
-  <version>2020.8.2</version>
+  <version>2020.9.0</version>
 </dependency>
 ```
 
