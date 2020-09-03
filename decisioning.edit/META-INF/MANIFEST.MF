@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.nasdanika.decisioning.edit;singleton:=true
 Automatic-Module-Name: org.nasdanika.decisioning.edit
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 2020.12.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nasdanika.decisioning.provider.DecisioningEditPlugin$Implementation
 Bundle-Vendor: %providerName
