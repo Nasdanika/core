@@ -27,5 +27,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.nasdanika.sirius.tree;bundle-version="0.1.0",
  org.eclipse.sirius.common.ui;bundle-version="6.2.1",
  org.eclipse.sirius.common;bundle-version="6.2.1",
- org.nasdanika.sirius.tree.edit;bundle-version="1.0.0"
+ org.nasdanika.sirius.tree.edit;bundle-version="1.0.0",
+ org.eclipse.jface.databinding;bundle-version="1.9.0",
+ org.eclipse.core.databinding;bundle-version="1.7.400",
+ org.eclipse.core.databinding.property;bundle-version="1.7.0",
+ org.nasdanika.ncore;bundle-version="2020.12.0",
+ org.nasdanika.ncore.edit
 Bundle-ActivationPolicy: lazy

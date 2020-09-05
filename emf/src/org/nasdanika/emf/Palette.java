@@ -1,6 +1,7 @@
 package org.nasdanika.emf;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public interface Palette extends EReferencePredicate {
 	interface Registry {
 		
 		Palette get(String id);
+		
+		Collection<Palette> getPalettes();
 		
 		Palette create(String id, String name, String description);		
 		
@@ -108,6 +111,12 @@ public interface Palette extends EReferencePredicate {
 					
 				});
 			}
+
+			@Override
+			public Collection<Palette> getPalettes() {
+				return palettes.values();
+			}
+			
 		};
 		
 	}
