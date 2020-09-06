@@ -282,6 +282,38 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>copy-party-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/bundles/org.nasdanika.party/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../party/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-party-edit-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/bundles/org.nasdanika.party.edit/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../party.edit/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-ui-javadoc</id>
 						<phase>pre-site</phase>
 						<goals>
