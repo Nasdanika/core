@@ -47,7 +47,6 @@
        </descriptorprovider>
     </extension>
     
-
    <extension point="org.eclipse.ui.editors">
       <editor
             id="org.nasdanika.emf.presentation.AdapterFactoryTreeEditor.ID"
@@ -56,7 +55,32 @@
             class="org.nasdanika.emf.presentation.AdapterFactoryTreeEditor"
             contributorClass="org.nasdanika.emf.presentation.NasdanikaActionBarContributor">
       </editor>      
+      <editor
+            id="org.nasdanika.emf.presentation.NasdanikaSiriusEditorID"
+            name="%_UI_NasdanikaSiriusEditor_label"
+            icon="icons/full/obj16/nasdanika-logo.png"
+            extensions="nsd"
+            default="true"
+            class="org.nasdanika.emf.presentation.NasdanikaSiriusEditor"
+            contributorClass="org.nasdanika.emf.presentation.NasdanikaActionBarContributor">
+      </editor>      
    </extension>
-    
-   
+
+   <extension-point id="wizard" name="Contributions to the Vinci new wizard" schema="schema/wizard.exsd"/>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="org.nasdanika"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.nasdanika.vinci.presentation.NasdanikaModelWizardID"
+            name="%_UI_NasdanikaModelWizard_label"
+            class="org.nasdanika.emf.presentation.NasdanikaModelWizard"
+            category="org.nasdanika"
+            icon="icons/full/obj16/nasdanika-logo.png">
+         <description>%_UI_NasdanikaModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+       
 </plugin>
