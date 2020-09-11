@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class ElementIdentityMapCompoundExecutionParticipant<E extends ExecutionParticipant, R> extends CompoundExecutionParticipant<E> {
 
 	protected ElementIdentityMapCompoundExecutionParticipant(String name) {
-		super(name);
+		super(name, false);
 	}
 
 	protected List<E> elements = new ArrayList<>();

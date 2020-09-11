@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
@@ -239,8 +240,8 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
-	public static Marker getMarker(Map<String,?> map, String key) {
-		return map instanceof MarkedLinkedHashMap ? ((MarkedLinkedHashMap<String,?>) map).getMarker(key) : null;
+	public static Marker getMarker(Map<?,?> map, String key) {
+		return map instanceof MarkedLinkedHashMap ? ((MarkedLinkedHashMap<?,?>) map).getMarker(key) : null;
 	}
 		
 	/**
@@ -261,7 +262,7 @@ public class Util {
 	 */
 	public static String mark(String prefix, Object source, String key) {
 		if (source instanceof MarkedLinkedHashMap) {
-			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@SuppressWarnings({"rawtypes" })
 			Marker marker = ((MarkedLinkedHashMap) source).getMarker(key);
 			if (marker != null) {
 				return (prefix == null ? "" : prefix) + marker.toString();
@@ -269,6 +270,61 @@ public class Util {
 		}
 		
 		return "";
+	}
+	
+	// --- Helper methods for loading configuration from maps
+
+	/**
+	 * Returns a {@link String} value or throws {@link ConfigurationException} if value is not null and not a string.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	public static String getString(Map<?,?> map, String key, String defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof String) {
+			return (String) val;
+		}
+		throw new ConfigurationException(key + " value must be a string", Util.getMarker(map, key));		
+	}
+
+	/**
+	 * Returns a {@link Collection} value or throws {@link ConfigurationException} if value is not null and not a collection.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Collection<T> getCollection(Map<String,?> map, String key, Collection<T> defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof Collection) {
+			return (Collection<T>) val;
+		}
+		throw new ConfigurationException(key + " value must be a collection", Util.getMarker(map, key));		
+	}
+
+	/**
+	 * Returns a {@link Map} value or throws {@link ConfigurationException} if value is not null and not a map.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K,V> Map<K,V> getMap(Map<String,?> map, String key, Map<K,V> defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof Map) {
+			return (Map<K,V>) val;
+		}
+		throw new ConfigurationException(key + " value must be a map", Util.getMarker(map, key));		
 	}
 		
 }

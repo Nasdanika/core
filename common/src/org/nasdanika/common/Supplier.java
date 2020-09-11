@@ -120,7 +120,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Supplier<V> {
 
 			protected Then(String name) {
-				super(name);
+				super(name, true);
 			}
 			
 			@Override
@@ -146,7 +146,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Command {
 
 			protected Then(String name) {
-				super(name);
+				super(name, true);
 			}
 			
 			@Override

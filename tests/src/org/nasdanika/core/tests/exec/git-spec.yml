@@ -1,0 +1,67 @@
+git:
+   origin: https://github.com/Nasdanika/git-supplier-test.git
+   branch: feature/test-component
+   credentials:
+      user: ${user}
+      password: ${auth-token}
+   commit-message: Test
+   author:
+     name: Pavel Vlasov 
+     e-mail: Pavel.Vlasov@nasdanika.org 
+   contents:
+      - source-folder:
+         name: src
+         contents:
+            - package:
+               name: org.nasdanika.test
+               contents:
+                  - compilation-unit:
+                     name: MyClass
+                     contents:
+                        interpolator:
+                           resource: java-template.txt
+                  - compilation-unit:
+                     name: MyOtherClass
+                     imports:
+                        - org.nasdanika.common.ConsumerFactory
+                     contents:
+                        interpolator:
+                           resource: java-template.txt
+                  - class:
+                     name: TopLevelClass
+                     imports:
+                        - org.nasdanika.common.SupplierFactory
+                        - java.io.InputStream
+                     modifiers: public
+                     super-types:
+                        - java.lang.Object
+                        - SupplierFactory<InputStream>                           
+                  - compilation-unit:
+                     name: FineGrainedClass
+                     contents:
+                        - class:
+                           name: FineGrainedClass
+                           modifiers: public
+                           super-types:
+                              - java.lang.Object
+                              - '${import/org.nasdanika.common.SupplierFactory}<${import/java.io.InputStream}>'
+                           body: 
+                              - field:
+                                 name: myImportantField
+                                 modifiers:
+                                    - private
+                                 comment: My rather important field
+                                 type: '${import/java.util.Collection}<${import/java.lang.String}>'
+                                 body: 'new ${import/java.util.ArrayList}<>()'
+                                 annotations: ${myFieldAnnotations}
+                              - field:
+                                 name: anotherField
+                                 modifiers:
+                                    - private
+                                 comment: Field with imports
+                                 type: ConsumerFactory<BinaryEntityContainer>
+                                 annotations: ${myFieldAnnotations}
+                                 imports:
+                                    - org.nasdanika.common.ConsumerFactory
+                                    - org.nasdanika.common.resources.BinaryEntityContainer
+                                 

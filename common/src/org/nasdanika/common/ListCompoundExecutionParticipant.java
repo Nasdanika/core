@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class ListCompoundExecutionParticipant<E extends ExecutionParticipant> extends CompoundExecutionParticipant<E> {
 
 	protected ListCompoundExecutionParticipant(String name) {
-		super(name);
+		super(name, false);
 	}
 
 	protected List<E> elements = new ArrayList<>();

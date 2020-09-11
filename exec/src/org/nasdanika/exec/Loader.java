@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.CompoundCommandFactory;
 import org.nasdanika.common.CompoundConsumerFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
@@ -42,6 +44,7 @@ import org.nasdanika.exec.java.SourceFolder;
 import org.nasdanika.exec.java.TypeAdapter;
 import org.nasdanika.exec.resources.Container;
 import org.nasdanika.exec.resources.File;
+import org.nasdanika.exec.resources.Git;
 import org.nasdanika.exec.resources.ZipResourceCollection;
 
 /**
@@ -77,16 +80,6 @@ public class Loader extends ObjectLoader {
 				return new Reference(loader, config, base, subMonitor, marker);
 			case "group": // Both resource and content, is it needed - iterator and map shall do?
 				throw new UnsupportedOperationException();
-			/*
-			 * Command taking resource generators - 
-			 * - pulls or clones a repo from git to a pre-defined or temporary folder, from a specific branch or creates a branch off a specific branch  
-			 * - executes resource generation, pushes to the repo
-			 * - if temporary folder - deletes it
-			 * 
-			 * Gist showing how to work with jGit - https://gist.github.com/pvlasov/48dc0178feca6e74fa1d99d489f4400c
-			 */
-			case "git": 
-				throw new UnsupportedOperationException();					
 			
 			// Resources
 			case "container":
@@ -95,7 +88,8 @@ public class Loader extends ObjectLoader {
 				return new File(loader, config, base, subMonitor, marker);
 			case "zip-resource-collection":
 				return new ZipResourceCollection(loader, config, base, subMonitor, marker);
-			
+			case "git":
+				return new Git(loader, config, base, subMonitor, marker);			
 			
 			// Content
 			case "resource":
@@ -238,7 +232,47 @@ public class Loader extends ObjectLoader {
 		
 		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", marker);
 	};		
-
+		
+	/**
+	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static CommandFactory asCommandFactory(Object obj) throws Exception {
+		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+	}	
+	
+	/**
+	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static CommandFactory asCommandFactory(Object obj, Marker marker) throws Exception {
+		if (obj instanceof Collection) {
+			CompoundCommandFactory ret = new CompoundCommandFactory("Command collection");
+			int idx = 0;
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asCommandFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
+			}
+			return ret;
+		}
+		
+		if (obj instanceof CommandFactory) {		
+			return (CommandFactory) obj;
+		}
+		
+		if (obj instanceof Adaptable) {
+			CommandFactory adapter = ((Adaptable) obj).adaptTo(CommandFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+				
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
+	};
+	
 	/**
 	 * Gets string configuration value.
 	 * @param configMap
@@ -299,8 +333,8 @@ public class Loader extends ObjectLoader {
 	 * @param supportedKeys Supported keys.
 	 * @param marker Map location.
 	 */
-	public static void checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
-		checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
+	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
+		return checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
 	}
 	
 	/**
@@ -309,11 +343,14 @@ public class Loader extends ObjectLoader {
 	 * @param supportedKeys Supported keys.
 	 * @param marker Map location.
 	 */
-	public static void checkUnsupportedKeys(Map<String,Object> config, Collection<String> supportedKeys) throws ConfigurationException {
+	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, Collection<String> supportedKeys) throws ConfigurationException {
+		if (config == null) {
+			return config;
+		}
 		Collection<String> unsupportedKeys = new ArrayList<String>(config.keySet());
 		unsupportedKeys.removeAll(supportedKeys);
 		if (unsupportedKeys.isEmpty()) {
-			return;
+			return config;
 		}		
 		
 		if (unsupportedKeys.size() == 1) {

@@ -7,6 +7,7 @@ Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.exec,
  org.nasdanika.exec.content,
+ org.nasdanika.exec.git,
  org.nasdanika.exec.java,
  org.nasdanika.exec.resources
 Bundle-ClassPath: .
@@ -17,7 +18,9 @@ Require-Bundle: org.nasdanika.common;visibility:=reexport,
  org.eclipse.jface.text,
  com.github.spullara.mustache.java.compiler;bundle-version="0.9.6",
  org.freemarker.freemarker;bundle-version="2.3.30",
- io.github.azagniotov.ant-style-path-matcher;bundle-version="1.0.0"
+ io.github.azagniotov.ant-style-path-matcher;bundle-version="1.0.0",
+ org.eclipse.jgit;bundle-version="5.8.0",
+ org.slf4j.api;bundle-version="1.7.2"
 Automatic-Module-Name: org.nasdanika.exec
 Bundle-ActivationPolicy: lazy
 

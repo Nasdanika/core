@@ -9,6 +9,7 @@ Loader supports the following types:
 * [Resources](../resources/index.html) - components which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> and can contribute elements to a container:
     * ``container`` - [Container](../resources/container.html) - Generates a container (folder).
     * ``file`` - [File](../resources/file.html) - Generates a file with contents provided by the content components (see below).
+    * ``git`` - [Git](../resources/git.html) - Pulls/clones remote repository, executes contents components, and commits/pushes changes.
     * ``zip-resource-collection`` - [ZipResourceCollection](../resources/zip-resource-collection.html) - Contributes resources loaded from a Zip archive.
 * [Content](../content/index.html) - components which implement ${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}> and can contribute contents to a file:
     * ``base64`` - [Base 64 Encoder](../content/base64.html) - Encodes binary stream with [Base64](https://en.wikipedia.org/wiki/Base64) encoding.

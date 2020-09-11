@@ -8,12 +8,17 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
 import org.junit.Test;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.Command;
 import org.nasdanika.common.Consumer;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.NasdanikaException;
@@ -42,7 +47,9 @@ import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Json;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.git.GitBinaryEntityContainerSupplierFactory;
 import org.nasdanika.exec.resources.Container;
+import org.nasdanika.exec.resources.Git;
 import org.yaml.snakeyaml.Yaml;
 
 public class TestExec {
@@ -207,6 +214,39 @@ public class TestExec {
 					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
 				}
 				if (consumer.splitAndRollback(progressMonitor)) {
+					fail("Exception " + e + ", rollback successful");
+				} else {
+					fail("Exception " + e + ", rollback failed");						
+				}
+			}
+		}
+	}
+
+	/**
+	 * Executes full command lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	static void callCommand(Context context, ProgressMonitor monitor, Object component) throws Exception {
+		try (Command command = Loader.asCommandFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				diagnostic.dump(System.err, 4);
+				fail("Diagnostic failed: " + diagnostic.getMessage());
+			}
+			
+			try {
+				command.splitAndExecute(progressMonitor);
+				command.splitAndCommit(progressMonitor);
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (e instanceof DiagnosticException) {
+					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+				}
+				if (command.splitAndRollback(progressMonitor)) {
 					fail("Exception " + e + ", rollback successful");
 				} else {
 					fail("Exception " + e + ", rollback failed");						
@@ -420,5 +460,85 @@ public class TestExec {
 		Supplier<InputStream> supplier = supplierFactory.create(context);
 		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}
+	
+	@Test
+	public void testGitSupplierFactory() throws Exception {
+		GitBinaryEntityContainerSupplierFactory gitSupplierFactory = new GitBinaryEntityContainerSupplierFactory(
+				"Test GIT supplier", 
+				null, 
+				"https://github.com/Nasdanika/git-supplier-test.git", 
+				"feature/test-2",
+				"${user}", 
+				"${auth-token}", 
+				false, 
+				Collections.singleton("."), 
+				"Test " + new Date(), 
+				"Pavel Vlasov", 
+				"Pavel.Vlasov@nasdanika.org", 
+				"my-tag", 
+				true);
+		
+		ConsumerFactory<BinaryEntityContainer> cf = context -> new Consumer<BinaryEntityContainer>() {
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return "Git consumer";
+			}
+
+			@Override
+			public void execute(BinaryEntityContainer repo, ProgressMonitor progressMonitor) throws Exception {
+				BinaryEntity readme = repo.get("README.md", progressMonitor);
+				readme.setState(DefaultConverter.INSTANCE.toInputStream("Readme " + new Date()), progressMonitor);
+			}
+			
+		};
+		
+		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key);
+
+		try (ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false)) {
+			try (Command command = gitSupplierFactory.then(cf).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling Git Supplier", 3)) {
+				Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);
+				if (diagnostic.getStatus() == Status.ERROR) {
+					diagnostic.dump(System.err, 4);
+					fail("Diagnostic failed: " + diagnostic.getMessage());
+				}
+				
+				try {
+					command.splitAndExecute(progressMonitor);
+					command.splitAndCommit(progressMonitor);
+				} catch (Exception e) {
+					e.printStackTrace();
+					if (e instanceof DiagnosticException) {
+						((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+					}
+					if (command.splitAndRollback(progressMonitor)) {
+						fail("Exception " + e + ", rollback successful");
+					} else {
+						fail("Exception " + e + ", rollback failed");						
+					}
+					throw new NasdanikaException("Never get here");
+				}
+			}
+		}
+	}
+	
+	@Test
+	public void testGitComponent() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object git = loader.loadYaml(TestExec.class.getResource("git-spec.yml"), monitor);
+		assertEquals(Git.class, git.getClass());
+
+		Collection<String> annotations = new ArrayList<>();
+		annotations.add("Override");
+		annotations.add("${import/org.nasdanika.TestAnnotation}");		
+		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key).compose(Context.singleton("myFieldAnnotations", annotations));
+		callCommand(context, monitor, git);
+	}	
 	
 }

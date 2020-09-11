@@ -8,7 +8,7 @@ import java.util.Map;
 public abstract class MapCompoundExecutionParticipant<K, E extends ExecutionParticipant> extends CompoundExecutionParticipant<E> {
 
 	protected MapCompoundExecutionParticipant(String name) {
-		super(name);
+		super(name, false);
 	}
 
 	protected Map<K,E> elements = new LinkedHashMap<>();

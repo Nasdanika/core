@@ -1,5 +1,6 @@
 package org.nasdanika.common;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -13,9 +14,18 @@ import java.util.concurrent.CancellationException;
 public abstract class CompoundExecutionParticipant<E extends ExecutionParticipant> implements ExecutionParticipant {
 		
 	private String name;
+	private boolean reverseCommitClose;
 
-	protected CompoundExecutionParticipant(String name) {
+	/**
+	 * 
+	 * @param name
+	 * @param reverseCommitClose If true commit and close are executed in reverse order. 
+	 * It can be required in participant chaining scenarios where one participant supplies arguments to another participant and
+	 * therefore the lifecycle of the second participant shall be enclosed into the lifecycle of the first paricipant.
+	 */
+	protected CompoundExecutionParticipant(String name, boolean reverseCommitClose) {
 		this.name = name;
+		this.reverseCommitClose = reverseCommitClose;
 	}
 
 	@Override
@@ -51,7 +61,11 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 			throw new CancellationException();
 		}
 		progressMonitor.setWorkRemaining(size());
-		for (E e: getElements()) {
+		List<E> elements = new ArrayList<E>(getElements());
+		if (reverseCommitClose) {
+			Collections.reverse(elements);
+		}
+		for (E e: elements) {
 			e.splitAndCommit(progressMonitor);
 		}
 	}
@@ -64,8 +78,8 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 		}
 		progressMonitor.setWorkRemaining(size());
 		boolean result = true;
-		List<E> elements = getElements();
-		Collections.reverse(getElements());
+		List<E> elements = new ArrayList<E>(getElements());
+		Collections.reverse(elements);
 		for (E e: elements) {
 			result = e.splitAndRollback(progressMonitor) && result; 
 		}
@@ -74,7 +88,11 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 	
 	@Override
 	public void close() throws Exception {
-		for (E e: getElements()) {
+		List<E> elements = new ArrayList<E>(getElements());
+		if (reverseCommitClose) {
+			Collections.reverse(elements);
+		}
+		for (E e: elements) {
 			e.close();
 		}
 	}

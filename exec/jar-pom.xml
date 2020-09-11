@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2020.9.0</version>
+	    <version>2020.9.1</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
 	<artifactId>exec</artifactId>
@@ -41,6 +41,11 @@
 		    <groupId>com.github.spullara.mustache.java</groupId>
 		    <artifactId>compiler</artifactId>
 		    <version>0.9.6</version>
+		</dependency>		
+		<dependency>
+		  <groupId>org.eclipse.jgit</groupId>
+		  <artifactId>org.eclipse.jgit</artifactId>
+		  <version>5.8.1.202007141445-r</version>
 		</dependency>		
 	</dependencies>
 </project>

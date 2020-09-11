@@ -14,13 +14,19 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class MarkedLinkedHashMap<K, V> extends LinkedHashMap<K, V> implements Marked, Markable {
 	
+	@Override
+		public V get(Object key) {
+			// TODO Auto-generated method stub
+			return super.get(key);
+		}
+	
 	private Map<K, Marker> markers = new HashMap<>();
 	
 	public void mark(K key, Marker marker) {
 		markers.put(key, marker);
 	}
 
-	public Marker getMarker(K key) {
+	public Marker getMarker(Object key) {
 		return markers.get(key);
 	}
 	

@@ -139,7 +139,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Function<T,V> {
 
 			protected Then(String name) {
-				super(name);
+				super(name, true);
 			}
 			
 			@Override
@@ -165,7 +165,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		class Then extends CompoundExecutionParticipant<ExecutionParticipant> implements Consumer<T> {
 
 			protected Then(String name) {
-				super(name);
+				super(name, true);
 			}
 			
 			@Override
