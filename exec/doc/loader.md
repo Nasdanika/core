@@ -19,6 +19,7 @@ Loader supports the following types:
     * ``interpolator`` - [Interpolator](../content/interpolator.html) - Interpolates content with context properties.
     * ``json`` - [JSON encoder](../content/json.html) - Encodes map or array as JSON.
     * ``mustache`` - [Mustache template processor](../content/mustache.html) - Processes Mustache template with context properties as input.
+    * ``replace`` - [Replace](../content/replace.html) - Matches and replaces patterns in the contents.
     * ``resource`` - [Resource](../content/resource.html) - Loads content from a resource identified by URL.
     * ``yaml`` - [YAML encoder](../content/yaml.html) - Encodes value as YAML.
     * ``zip-archive`` - [Zip archive](../content/resource.html) - Produces zip stream from contained resources.

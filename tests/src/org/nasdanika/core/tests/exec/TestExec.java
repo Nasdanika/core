@@ -46,6 +46,7 @@ import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Json;
 import org.nasdanika.exec.content.Mustache;
+import org.nasdanika.exec.content.Replace;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.git.GitBinaryEntityContainerSupplierFactory;
 import org.nasdanika.exec.resources.Container;
@@ -266,6 +267,19 @@ public class TestExec {
 		
 		String result = Util.toString(context, callSupplier(context, monitor, interpolator));
 		assertEquals("Hello, World!", result);
+	}
+	
+	@Test
+	public void testReplace() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object replace = loader.loadYaml(TestExec.class.getResource("replace-spec.yml"), monitor);
+		assertEquals(Replace.class, replace.getClass());
+		
+		Context context = Context.singleton("name", "Universe");		
+		
+		String result = Util.toString(context, callSupplier(context, monitor, replace));
+		assertEquals("Hello, Universe!", result);
 	}
 	
 	@Test

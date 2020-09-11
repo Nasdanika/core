@@ -30,6 +30,7 @@ import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Json;
 import org.nasdanika.exec.content.Mustache;
+import org.nasdanika.exec.content.Replace;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.ScriptEvaluator;
 import org.nasdanika.exec.content.Yaml;
@@ -100,6 +101,8 @@ public class Loader extends ObjectLoader {
 				return new Mustache(loader, config, base, subMonitor, marker);
 			case "free-marker":
 				return new FreeMarker(loader, config, base, subMonitor, marker);
+			case "replace":
+				return new Replace(loader, config, base, subMonitor, marker);
 			case "http":
 				return new HttpCall(loader, config, base, subMonitor, marker);
 			case "zip-archive":
