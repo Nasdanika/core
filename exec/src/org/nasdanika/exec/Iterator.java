@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.Command;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.CompoundCommand;
+import org.nasdanika.common.CompoundCommandFactory;
 import org.nasdanika.common.CompoundConsumer;
 import org.nasdanika.common.CompoundConsumerFactory;
 import org.nasdanika.common.Consumer;
@@ -144,6 +148,21 @@ public class Iterator implements Adaptable, Marked {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T adaptTo(Class<T> type) {
+		if (type == CommandFactory.class) {
+			if (iterators.size() == 1) {
+				for (Entry<String, Object> ie: iterators.entrySet()) {
+					CommandFactory ret = context -> createCommand(context, ie.getKey(), ie.getValue()); 
+					return (T) ret;															
+				}
+			}
+			CompoundCommandFactory ret = new CompoundCommandFactory("Iterator");
+			for (Entry<String, Object> ie: iterators.entrySet()) {
+				CommandFactory cf = context -> createCommand(context, ie.getKey(), ie.getValue());
+				ret.add(cf);
+			}
+			return (T) ret;									
+		}
+		
 		if (type == ConsumerFactory.class) {
 			if (iterators.size() == 1) {
 				for (Entry<String, Object> ie: iterators.entrySet()) {
@@ -180,6 +199,38 @@ public class Iterator implements Adaptable, Marked {
 	
 	// --- Consumer ---
 
+	public Command createCommand(Context context, String iterator, Object target) throws Exception {		
+		Collection<Context> iContexts = iterate(context, iterator);
+		if (iContexts.size() == 1) {
+			return createCommandElement(iContexts.iterator().next(), target);
+		}
+		CompoundCommand ret = new CompoundCommand("Iterator", null);
+		for (Context iContext: iContexts) {
+			ret.add(createCommandElement(iContext, target));
+		}
+		return ret;
+	}
+
+	/**
+	 * Invoked for each iterator element.
+	 * @param iContext Iterator element context mapped and injected with configuration entries.
+	 * @return
+	 * @throws Exception
+	 */
+	protected Command createCommandElement(Context iContext, Object target) throws Exception {
+		if (target instanceof Collection) {
+			CompoundCommand ret = new CompoundCommand("Target collection", null);
+			for (Object te: (Collection<?>) target) {
+				ret.add(Loader.asCommandFactory(te).create(iContext));
+			}
+			return ret;			
+		}
+		
+		return Loader.asCommandFactory(target).create(iContext);
+	}
+	
+	// --- Consumer ---
+
 	/**
 	 * Consumer factory method
 	 * @param context
@@ -204,12 +255,11 @@ public class Iterator implements Adaptable, Marked {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	protected Consumer<BinaryEntityContainer> createConsumerElement(Context iContext, Object target) throws Exception {
 		if (target instanceof Collection) {
 			CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
-			for (ConsumerFactory<BinaryEntityContainer> te: (Collection<ConsumerFactory<BinaryEntityContainer>>) target) {
-				ret.add(te.create(iContext));
+			for (Object te: (Collection<?>) target) {
+				ret.add(Loader.asConsumerFactory(te).create(iContext));
 			}
 			return ret;			
 		}

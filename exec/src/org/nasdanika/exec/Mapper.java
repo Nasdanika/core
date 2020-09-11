@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.Command;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.CompoundCommand;
 import org.nasdanika.common.CompoundConsumer;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
@@ -131,6 +134,33 @@ public class Mapper implements Adaptable, Marked {
 		
 	}
 	
+	// --- Command ---
+
+	protected Command configureCommand(Context context) throws Exception {
+		SupplierFactory<Context> contextSupplierFactory = this::createContextSupplier;
+		CommandFactory commandFactory = this::createCommand;
+		return commandFactory.contextify(contextSupplierFactory).create(context);
+	}
+
+	/**
+	 * Invoked for each iterator element.
+	 * @param iContext Iterator element context mapped and injected with configuration entries.
+	 * @return
+	 * @throws Exception
+	 */
+	protected Command createCommand(Context context) throws Exception {
+		if (targets.size() == 1) {
+			return Loader.asCommandFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
+		}
+		
+		CompoundCommand ret = new CompoundCommand("Target collection", null);
+		int idx = 0;
+		for (Object te: targets) {
+			ret.add(Loader.asCommandFactory(te, targetMarkers.get(idx++)).create(context));
+		}
+		return ret;			
+	}
+	
 	// --- Consumer ---
 
 	protected Consumer<BinaryEntityContainer> configureConsumer(Context context) throws Exception {
@@ -157,8 +187,7 @@ public class Mapper implements Adaptable, Marked {
 		}
 		return ret;			
 	}
-	
-	
+		
 	// --- Supplier ---
 	
 	protected Supplier<InputStream> configureSupplier(Context context) throws Exception {
@@ -197,6 +226,11 @@ public class Mapper implements Adaptable, Marked {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T adaptTo(Class<T> type) {
+		if (type == CommandFactory.class) {
+			CommandFactory ret = this::configureCommand; 
+			return (T) ret;															
+		}
+		
 		if (type == ConsumerFactory.class) {
 			ConsumerFactory<BinaryEntityContainer> ret = this::configureConsumer; 
 			return (T) ret;															

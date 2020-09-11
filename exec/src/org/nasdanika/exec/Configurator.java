@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.Command;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.CompoundCommand;
 import org.nasdanika.common.CompoundConsumer;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
@@ -122,7 +125,36 @@ public class Configurator implements Adaptable, Marked {
 		
 		return entriesFactory.then(contextFactory);
 	}
-	
+	// --- Consumer ---
+
+	protected Command configureCommand(Context context) throws Exception {
+		SupplierFactory<Context> contextSupplierFactory = createContextSupplierFactory();
+		CommandFactory commandFactory = this::createCommand;
+		if (contextSupplierFactory == null) {
+			return commandFactory.create(context);
+		}
+		
+		return commandFactory.contextify(contextSupplierFactory).create(context);
+	}
+
+	/**
+	 * Invoked for each iterator element.
+	 * @param iContext Iterator element context mapped and injected with configuration entries.
+	 * @return
+	 * @throws Exception
+	 */
+	protected Command createCommand(Context context) throws Exception {
+		if (targets.size() == 1) {
+			return Loader.asCommandFactory(targets.iterator().next()).create(context);
+		}
+		
+		CompoundCommand ret = new CompoundCommand("Target collection", null);
+		for (Object te: targets) {
+			ret.add(Loader.asCommandFactory(te).create(context));
+		}
+		return ret;			
+	}
+			
 	// --- Consumer ---
 
 	protected Consumer<BinaryEntityContainer> configureConsumer(Context context) throws Exception {
@@ -141,15 +173,14 @@ public class Configurator implements Adaptable, Marked {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	protected Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return ((ConsumerFactory<BinaryEntityContainer>) targets.iterator().next()).create(context);
+			return Loader.asConsumerFactory(targets.iterator().next()).create(context);
 		}
 		
 		CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
 		for (Object te: targets) {
-			ret.add(((ConsumerFactory<BinaryEntityContainer>) te).create(context));
+			ret.add(Loader.asConsumerFactory(te).create(context));
 		}
 		return ret;			
 	}
@@ -229,6 +260,11 @@ public class Configurator implements Adaptable, Marked {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T adaptTo(Class<T> type) {
+		if (type == CommandFactory.class) {
+			CommandFactory ret = this::configureCommand; 
+			return (T) ret;															
+		}
+		
 		if (type == ConsumerFactory.class) {
 			ConsumerFactory<BinaryEntityContainer> ret = this::configureConsumer; 
 			return (T) ret;															
