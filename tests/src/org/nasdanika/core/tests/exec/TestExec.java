@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.Command;
@@ -476,6 +477,7 @@ public class TestExec {
 	}
 	
 	@Test
+	@Ignore("Don't run as part of automated build")
 	public void testGitSupplierFactory() throws Exception {
 		GitBinaryEntityContainerSupplierFactory gitSupplierFactory = new GitBinaryEntityContainerSupplierFactory(
 				"Test GIT supplier", 
@@ -542,6 +544,7 @@ public class TestExec {
 	}
 	
 	@Test
+	@Ignore("Don't run as part of automated build")
 	public void testGitComponent() throws Exception {
 		ObjectLoader loader = new Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
