@@ -150,6 +150,7 @@
 		<module>party</module>		
 		<module>party.edit</module>		
 
+		<!--
 		<module>provisioning</module>		
 		<module>provisioning.edit</module>		
 
@@ -158,6 +159,7 @@
 
 		<module>decisioning</module>		
 		<module>decisioning.edit</module>		
+		-->
 
 		<module>feature</module>
 		<module>ui</module>

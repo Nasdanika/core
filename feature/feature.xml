@@ -404,6 +404,8 @@ version(s), and exceptions or additional permissions here}.&quot;
          version="0.0.0"
          unpack="false"/>
 
+<!--
+
    <plugin
          id="org.nasdanika.decisioning"
          download-size="0"
@@ -432,6 +434,8 @@ version(s), and exceptions or additional permissions here}.&quot;
          version="0.0.0"
          unpack="false"/>
 
+-->
+
    <plugin
          id="org.nasdanika.party"
          download-size="0"
@@ -446,6 +450,7 @@ version(s), and exceptions or additional permissions here}.&quot;
          version="0.0.0"
          unpack="false"/>
 
+<!--
    <plugin
          id="org.nasdanika.provisioning"
          download-size="0"
@@ -459,5 +464,7 @@ version(s), and exceptions or additional permissions here}.&quot;
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+-->
 
 </feature>
