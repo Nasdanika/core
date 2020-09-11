@@ -8,30 +8,30 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.party.Party;
+
+import org.nasdanika.party.OrganizationalUnit;
 import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.party.Party} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.OrganizationalUnit} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PartyItemProvider extends DirectoryElementItemProvider {
+public class OrganizationalUnitItemProvider extends PartyItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PartyItemProvider(AdapterFactory adapterFactory) {
+	public OrganizationalUnitItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -46,31 +46,8 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIdPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Id feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addIdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Entity_id_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_id_feature", "_UI_Entity_type"),
-				 NcorePackage.Literals.ENTITY__ID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -85,7 +62,8 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PartyPackage.Literals.PARTY__CONTACT_METHODS);
+			childrenFeatures.add(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS);
+			childrenFeatures.add(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES);
 		}
 		return childrenFeatures;
 	}
@@ -101,6 +79,17 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 		// adding (see {@link AddCommand}) it as a child.
 
 		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns OrganizationalUnit.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/OrganizationalUnit"));
 	}
 
 	/**
@@ -121,10 +110,10 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Party)object).getName();
+		String label = ((OrganizationalUnit)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Party_type") :
-			getString("_UI_Party_type") + " " + label;
+			getString("_UI_OrganizationalUnit_type") :
+			getString("_UI_OrganizationalUnit_type") + " " + label;
 	}
 
 
@@ -139,11 +128,9 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Party.class)) {
-			case PartyPackage.PARTY__ID:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case PartyPackage.PARTY__CONTACT_METHODS:
+		switch (notification.getFeatureID(OrganizationalUnit.class)) {
+			case PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS:
+			case PartyPackage.ORGANIZATIONAL_UNIT__ROLES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -163,28 +150,13 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createContactMethod()));
+				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
+				 PartyFactory.eINSTANCE.createOrganizationalUnit()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createEMail()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createPhone()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createPostalAddress()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.PARTY__CONTACT_METHODS,
-				 PartyFactory.eINSTANCE.createWebAddress()));
+				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
+				 PartyFactory.eINSTANCE.createOrganization()));
 	}
 
 }

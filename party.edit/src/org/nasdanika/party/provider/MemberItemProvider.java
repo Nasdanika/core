@@ -9,30 +9,25 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
-
 import org.nasdanika.party.PartyPackage;
-import org.nasdanika.party.Role;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.party.Role} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.Member} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RoleItemProvider extends NamedElementItemProvider {
+public class MemberItemProvider extends MemberDirectoryElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RoleItemProvider(AdapterFactory adapterFactory) {
+	public MemberItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -47,31 +42,42 @@ public class RoleItemProvider extends NamedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMembersPropertyDescriptor(object);
+			addPartyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Members feature.
+	 * This adds a property descriptor for the Party feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMembersPropertyDescriptor(Object object) {
+	protected void addPartyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Role_members_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Role_members_feature", "_UI_Role_type"),
-				 PartyPackage.Literals.ROLE__MEMBERS,
+				 getString("_UI_Member_party_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Member_party_feature", "_UI_Member_type"),
+				 PartyPackage.Literals.MEMBER__PARTY,
 				 true,
 				 false,
 				 true,
 				 null,
 				 null,
 				 null));
+	}
+
+	/**
+	 * This returns Member.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Member"));
 	}
 
 	/**
@@ -92,10 +98,7 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Role)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Role_type") :
-			getString("_UI_Role_type") + " " + label;
+		return getString("_UI_Member_type");
 	}
 
 
@@ -122,17 +125,6 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return PartyEditPlugin.INSTANCE;
 	}
 
 }

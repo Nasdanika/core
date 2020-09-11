@@ -11,28 +11,36 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemColorProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
-
-import org.nasdanika.party.PartyPackage;
-import org.nasdanika.party.Role;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.party.Role} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.MemberDirectoryElement} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RoleItemProvider extends NamedElementItemProvider {
+public class MemberDirectoryElementItemProvider 
+	extends PartyItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource,
+		IItemColorProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RoleItemProvider(AdapterFactory adapterFactory) {
+	public MemberDirectoryElementItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -47,31 +55,8 @@ public class RoleItemProvider extends NamedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMembersPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Members feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMembersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Role_members_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Role_members_feature", "_UI_Role_type"),
-				 PartyPackage.Literals.ROLE__MEMBERS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -92,10 +77,7 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Role)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Role_type") :
-			getString("_UI_Role_type") + " " + label;
+		return getString("_UI_MemberDirectoryElement_type");
 	}
 
 

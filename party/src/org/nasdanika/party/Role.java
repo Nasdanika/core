@@ -12,14 +12,14 @@ import org.nasdanika.ncore.NamedElement;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Parties can play roles, e.g. a person "Joe Doe" can play a role of an engineer of some flow activity.
+ * Organization members may play different roles in organizational units. For example, Joe Doe may be in a Developer role in the Research And Development organizational unit.
  * <!-- end-model-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.party.Role#getParties <em>Parties</em>}</li>
+ *   <li>{@link org.nasdanika.party.Role#getMembers <em>Members</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.party.PartyPackage#getRole()
@@ -28,18 +28,18 @@ import org.nasdanika.ncore.NamedElement;
  */
 public interface Role extends NamedElement {
 	/**
-	 * Returns the value of the '<em><b>Parties</b></em>' reference list.
-	 * The list contents are of type {@link org.nasdanika.party.Party}.
+	 * Returns the value of the '<em><b>Members</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.party.Member}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Parties in role. 
+	 * Organization members in the role.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Parties</em>' reference list.
-	 * @see org.nasdanika.party.PartyPackage#getRole_Parties()
+	 * @return the value of the '<em>Members</em>' reference list.
+	 * @see org.nasdanika.party.PartyPackage#getRole_Members()
 	 * @model
 	 * @generated
 	 */
-	EList<Party> getParties();
+	EList<Member> getMembers();
 
 } // Role

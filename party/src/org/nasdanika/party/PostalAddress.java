@@ -8,6 +8,10 @@ package org.nasdanika.party;
  * A representation of the model object '<em><b>Postal Address</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Postal Address.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -29,6 +33,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>Country</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Country.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Country</em>' attribute.
 	 * @see #setCountry(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Country()
@@ -51,6 +58,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>State Province</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * State or province or region
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>State Province</em>' attribute.
 	 * @see #setStateProvince(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_StateProvince()
@@ -73,6 +83,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>City</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * City/town
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>City</em>' attribute.
 	 * @see #setCity(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_City()
@@ -95,6 +108,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>Postal Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Postal/zip code.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Postal Code</em>' attribute.
 	 * @see #setPostalCode(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_PostalCode()
@@ -117,6 +133,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>Line1</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Address line 1.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Line1</em>' attribute.
 	 * @see #setLine1(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Line1()
@@ -139,6 +158,9 @@ public interface PostalAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>Line2</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Address line 2.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Line2</em>' attribute.
 	 * @see #setLine2(String)
 	 * @see org.nasdanika.party.PartyPackage#getPostalAddress_Line2()

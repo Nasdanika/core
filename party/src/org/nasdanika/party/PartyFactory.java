@@ -22,6 +22,60 @@ public interface PartyFactory extends EFactory {
 	PartyFactory eINSTANCE = org.nasdanika.party.impl.PartyFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Directory</em>'.
+	 * @generated
+	 */
+	Directory createDirectory();
+
+	/**
+	 * Returns a new object of class '<em>Organizational Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Organizational Unit</em>'.
+	 * @generated
+	 */
+	OrganizationalUnit createOrganizationalUnit();
+
+	/**
+	 * Returns a new object of class '<em>Organization</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Organization</em>'.
+	 * @generated
+	 */
+	Organization createOrganization();
+
+	/**
+	 * Returns a new object of class '<em>Member Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Member Directory</em>'.
+	 * @generated
+	 */
+	MemberDirectory createMemberDirectory();
+
+	/**
+	 * Returns a new object of class '<em>Member</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Member</em>'.
+	 * @generated
+	 */
+	Member createMember();
+
+	/**
+	 * Returns a new object of class '<em>Person</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Person</em>'.
+	 * @generated
+	 */
+	Person createPerson();
+
+	/**
 	 * Returns a new object of class '<em>Contact Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

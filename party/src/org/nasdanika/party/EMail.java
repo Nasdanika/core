@@ -8,6 +8,10 @@ package org.nasdanika.party;
  * A representation of the model object '<em><b>EMail</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * E-mail address.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -24,6 +28,9 @@ public interface EMail extends ContactMethod {
 	 * Returns the value of the '<em><b>EMail Address</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * E-Mail address.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>EMail Address</em>' attribute.
 	 * @see #setEMailAddress(String)
 	 * @see org.nasdanika.party.PartyPackage#getEMail_EMailAddress()

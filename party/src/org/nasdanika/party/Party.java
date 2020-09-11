@@ -4,12 +4,15 @@ package org.nasdanika.party;
 
 import org.eclipse.emf.common.util.EList;
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Party</b></em>'.
  * <!-- end-user-doc -->
+ *
+ * <!-- begin-model-doc -->
+ * A person or organizational unit/organization.
+ * <!-- end-model-doc -->
  *
  * <p>
  * The following features are supported:
@@ -22,7 +25,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model abstract="true"
  * @generated
  */
-public interface Party extends NamedElement, Entity {
+public interface Party extends DirectoryElement, Entity {
 	/**
 	 * Returns the value of the '<em><b>Contact Methods</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.party.ContactMethod}.

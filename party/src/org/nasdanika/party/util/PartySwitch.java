@@ -70,12 +70,94 @@ public class PartySwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case PartyPackage.DIRECTORY_ELEMENT: {
+				DirectoryElement directoryElement = (DirectoryElement)theEObject;
+				T result = caseDirectoryElement(directoryElement);
+				if (result == null) result = caseNamedElement(directoryElement);
+				if (result == null) result = caseModelElement(directoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.DIRECTORY: {
+				Directory directory = (Directory)theEObject;
+				T result = caseDirectory(directory);
+				if (result == null) result = caseDirectoryElement(directory);
+				if (result == null) result = caseNamedElement(directory);
+				if (result == null) result = caseModelElement(directory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PartyPackage.PARTY: {
 				Party party = (Party)theEObject;
 				T result = caseParty(party);
-				if (result == null) result = caseNamedElement(party);
+				if (result == null) result = caseDirectoryElement(party);
 				if (result == null) result = caseEntity(party);
+				if (result == null) result = caseNamedElement(party);
 				if (result == null) result = caseModelElement(party);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.ORGANIZATIONAL_UNIT: {
+				OrganizationalUnit organizationalUnit = (OrganizationalUnit)theEObject;
+				T result = caseOrganizationalUnit(organizationalUnit);
+				if (result == null) result = caseParty(organizationalUnit);
+				if (result == null) result = caseDirectoryElement(organizationalUnit);
+				if (result == null) result = caseEntity(organizationalUnit);
+				if (result == null) result = caseNamedElement(organizationalUnit);
+				if (result == null) result = caseModelElement(organizationalUnit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.ROLE: {
+				Role role = (Role)theEObject;
+				T result = caseRole(role);
+				if (result == null) result = caseNamedElement(role);
+				if (result == null) result = caseModelElement(role);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.ORGANIZATION: {
+				Organization organization = (Organization)theEObject;
+				T result = caseOrganization(organization);
+				if (result == null) result = caseOrganizationalUnit(organization);
+				if (result == null) result = caseParty(organization);
+				if (result == null) result = caseDirectoryElement(organization);
+				if (result == null) result = caseEntity(organization);
+				if (result == null) result = caseNamedElement(organization);
+				if (result == null) result = caseModelElement(organization);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MEMBER_DIRECTORY_ELEMENT: {
+				MemberDirectoryElement memberDirectoryElement = (MemberDirectoryElement)theEObject;
+				T result = caseMemberDirectoryElement(memberDirectoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MEMBER_DIRECTORY: {
+				MemberDirectory memberDirectory = (MemberDirectory)theEObject;
+				T result = caseMemberDirectory(memberDirectory);
+				if (result == null) result = caseNamedElement(memberDirectory);
+				if (result == null) result = caseMemberDirectoryElement(memberDirectory);
+				if (result == null) result = caseModelElement(memberDirectory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MEMBER: {
+				Member member = (Member)theEObject;
+				T result = caseMember(member);
+				if (result == null) result = caseMemberDirectoryElement(member);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.PERSON: {
+				Person person = (Person)theEObject;
+				T result = casePerson(person);
+				if (result == null) result = caseParty(person);
+				if (result == null) result = caseDirectoryElement(person);
+				if (result == null) result = caseEntity(person);
+				if (result == null) result = caseNamedElement(person);
+				if (result == null) result = caseModelElement(person);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -123,16 +205,38 @@ public class PartySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PartyPackage.ROLE: {
-				Role role = (Role)theEObject;
-				T result = caseRole(role);
-				if (result == null) result = caseNamedElement(role);
-				if (result == null) result = caseModelElement(role);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Directory Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Directory Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDirectoryElement(DirectoryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Directory</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDirectory(Directory object) {
+		return null;
 	}
 
 	/**
@@ -147,6 +251,21 @@ public class PartySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseParty(Party object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Organizational Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Organizational Unit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOrganizationalUnit(OrganizationalUnit object) {
 		return null;
 	}
 
@@ -237,6 +356,81 @@ public class PartySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRole(Role object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOrganization(Organization object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Member Directory Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Member Directory Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMemberDirectoryElement(MemberDirectoryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Member Directory</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Member Directory</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMemberDirectory(MemberDirectory object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Member</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Member</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMember(Member object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Person</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Person</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePerson(Person object) {
 		return null;
 	}
 

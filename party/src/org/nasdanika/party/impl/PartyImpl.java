@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.impl.NamedElementImpl;
 import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
@@ -33,7 +32,7 @@ import org.nasdanika.party.PartyPackage;
  *
  * @generated
  */
-public abstract class PartyImpl extends NamedElementImpl implements Party {
+public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -4,36 +4,39 @@ package org.nasdanika.party.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.nasdanika.party.Member;
+import org.nasdanika.party.Directory;
+import org.nasdanika.party.DirectoryElement;
 import org.nasdanika.party.PartyPackage;
-import org.nasdanika.party.Role;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Role</b></em>'.
+ * An implementation of the model object '<em><b>Directory</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.party.impl.RoleImpl#getMembers <em>Members</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.DirectoryImpl#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class RoleImpl extends NamedElementImpl implements Role {
+public class DirectoryImpl extends DirectoryElementImpl implements Directory {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RoleImpl() {
+	protected DirectoryImpl() {
 		super();
 	}
 
@@ -44,7 +47,7 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PartyPackage.Literals.ROLE;
+		return PartyPackage.Literals.DIRECTORY;
 	}
 
 	/**
@@ -54,8 +57,22 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Member> getMembers() {
-		return (EList<Member>)eDynamicGet(PartyPackage.ROLE__MEMBERS, PartyPackage.Literals.ROLE__MEMBERS, true, true);
+	public EList<DirectoryElement> getElements() {
+		return (EList<DirectoryElement>)eDynamicGet(PartyPackage.DIRECTORY__ELEMENTS, PartyPackage.Literals.DIRECTORY__ELEMENTS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PartyPackage.DIRECTORY__ELEMENTS:
+				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -66,8 +83,8 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				return getMembers();
+			case PartyPackage.DIRECTORY__ELEMENTS:
+				return getElements();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -81,9 +98,9 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				getMembers().clear();
-				getMembers().addAll((Collection<? extends Member>)newValue);
+			case PartyPackage.DIRECTORY__ELEMENTS:
+				getElements().clear();
+				getElements().addAll((Collection<? extends DirectoryElement>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -97,8 +114,8 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				getMembers().clear();
+			case PartyPackage.DIRECTORY__ELEMENTS:
+				getElements().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -112,10 +129,10 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				return !getMembers().isEmpty();
+			case PartyPackage.DIRECTORY__ELEMENTS:
+				return !getElements().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //RoleImpl
+} //DirectoryImpl

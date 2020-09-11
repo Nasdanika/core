@@ -10,9 +10,32 @@
   <foreignModel>party.ecore</foreignModel>
   <genPackages prefix="Party" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="party.ecore#/">
+    <genClasses image="false" ecoreClass="party.ecore#//DirectoryElement"/>
+    <genClasses ecoreClass="party.ecore#//Directory">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Directory/elements"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="party.ecore#//Party">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Party/contactMethods"/>
     </genClasses>
+    <genClasses ecoreClass="party.ecore#//OrganizationalUnit">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//OrganizationalUnit/organizationalUnits"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//OrganizationalUnit/roles"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="party.ecore#//Role">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/members"/>
+    </genClasses>
+    <genClasses ecoreClass="party.ecore#//Organization">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Organization/members"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Organization/directory"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="party.ecore#//MemberDirectoryElement"/>
+    <genClasses ecoreClass="party.ecore#//MemberDirectory">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//MemberDirectory/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="party.ecore#//Member">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Member/party"/>
+    </genClasses>
+    <genClasses ecoreClass="party.ecore#//Person"/>
     <genClasses ecoreClass="party.ecore#//ContactMethod"/>
     <genClasses ecoreClass="party.ecore#//EMail">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//EMail/eMailAddress"/>
@@ -33,9 +56,6 @@
     </genClasses>
     <genClasses ecoreClass="party.ecore#//WebAddress">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//WebAddress/url"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="party.ecore#//Role">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/parties"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

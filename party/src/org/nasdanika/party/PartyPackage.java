@@ -22,7 +22,17 @@ import org.nasdanika.ncore.NcorePackage;
  * </ul>
  * <!-- end-user-doc -->
  * <!-- begin-model-doc -->
- * Nasdanika party model
+ * Nasdanika party model allows to model parties - [persons](Person.html), [organizations](Organization.html), and [organizational units](OrganizationalUnit.html). 
+ * 
+ * Parties can have [contact methods](ContactMethod.html) and may be members of organizations. 
+ * Parties may be organized into a [directory](Directory.html).
+ * Organization is a subclass of organizational unit and has [members](Member.html). Organization member is a party.
+ * Organizations may contain a party directory or reference external directories.
+ * Organizational unit may have sub-units and [roles](Role.html). A role may have zero or more members in it.
+ * 
+ * For example, an organization may have a directory of parties and a directory of members with sub-directories for employees and contractors.
+ * It then may have organizational units such as Development, Marketing, Sales. 
+ * In the development group it may have roles such as Product Owner, Lead Developer, Junior Developer, etc. with different members in each role.
  * <!-- end-model-doc -->
  * @see org.nasdanika.party.PartyFactory
  * @model kind="package"
@@ -62,14 +72,14 @@ public interface PartyPackage extends EPackage {
 	PartyPackage eINSTANCE = org.nasdanika.party.impl.PartyPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.PartyImpl <em>Party</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.party.impl.DirectoryElementImpl <em>Directory Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.PartyImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getParty()
+	 * @see org.nasdanika.party.impl.DirectoryElementImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getDirectoryElement()
 	 * @generated
 	 */
-	int PARTY = 0;
+	int DIRECTORY_ELEMENT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -78,7 +88,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+	int DIRECTORY_ELEMENT__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -87,7 +97,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int DIRECTORY_ELEMENT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -96,7 +106,126 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int DIRECTORY_ELEMENT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+
+	/**
+	 * The number of structural features of the '<em>Directory Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Directory Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.DirectoryImpl <em>Directory</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.DirectoryImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getDirectory()
+	 * @generated
+	 */
+	int DIRECTORY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__TITLE = DIRECTORY_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__DESCRIPTION = DIRECTORY_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__NAME = DIRECTORY_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY__ELEMENTS = DIRECTORY_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_FEATURE_COUNT = DIRECTORY_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIRECTORY_OPERATION_COUNT = DIRECTORY_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.PartyImpl <em>Party</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.PartyImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getParty()
+	 * @generated
+	 */
+	int PARTY = 2;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTY__TITLE = DIRECTORY_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTY__DESCRIPTION = DIRECTORY_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTY__NAME = DIRECTORY_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -105,7 +234,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY__ID = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PARTY__ID = DIRECTORY_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
@@ -114,7 +243,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY__CONTACT_METHODS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int PARTY__CONTACT_METHODS = DIRECTORY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Party</em>' class.
@@ -123,7 +252,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int PARTY_FEATURE_COUNT = DIRECTORY_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Party</em>' class.
@@ -132,7 +261,98 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int PARTY_OPERATION_COUNT = DIRECTORY_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.OrganizationalUnitImpl <em>Organizational Unit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.OrganizationalUnitImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganizationalUnit()
+	 * @generated
+	 */
+	int ORGANIZATIONAL_UNIT = 3;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__TITLE = PARTY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__DESCRIPTION = PARTY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__NAME = PARTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__ID = PARTY__ID;
+
+	/**
+	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__CONTACT_METHODS = PARTY__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS = PARTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Roles</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__ROLES = PARTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT_FEATURE_COUNT = PARTY_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT_OPERATION_COUNT = PARTY_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.ContactMethodImpl <em>Contact Method</em>}' class.
@@ -142,7 +362,454 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getContactMethod()
 	 * @generated
 	 */
-	int CONTACT_METHOD = 1;
+	int CONTACT_METHOD = 10;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.EMailImpl <em>EMail</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.EMailImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getEMail()
+	 * @generated
+	 */
+	int EMAIL = 11;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.PhoneImpl <em>Phone</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.PhoneImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPhone()
+	 * @generated
+	 */
+	int PHONE = 12;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.PostalAddressImpl <em>Postal Address</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.PostalAddressImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPostalAddress()
+	 * @generated
+	 */
+	int POSTAL_ADDRESS = 13;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.WebAddressImpl <em>Web Address</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.WebAddressImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getWebAddress()
+	 * @generated
+	 */
+	int WEB_ADDRESS = 14;
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.DirectoryElement <em>Directory Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Directory Element</em>'.
+	 * @see org.nasdanika.party.DirectoryElement
+	 * @generated
+	 */
+	EClass getDirectoryElement();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Directory <em>Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Directory</em>'.
+	 * @see org.nasdanika.party.Directory
+	 * @generated
+	 */
+	EClass getDirectory();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Directory#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.nasdanika.party.Directory#getElements()
+	 * @see #getDirectory()
+	 * @generated
+	 */
+	EReference getDirectory_Elements();
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.RoleImpl <em>Role</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.RoleImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getRole()
+	 * @generated
+	 */
+	int ROLE = 4;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Members</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__MEMBERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Role</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Role</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.OrganizationImpl <em>Organization</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.OrganizationImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganization()
+	 * @generated
+	 */
+	int ORGANIZATION = 5;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__TITLE = ORGANIZATIONAL_UNIT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__DESCRIPTION = ORGANIZATIONAL_UNIT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__NAME = ORGANIZATIONAL_UNIT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__ID = ORGANIZATIONAL_UNIT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__CONTACT_METHODS = ORGANIZATIONAL_UNIT__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__ORGANIZATIONAL_UNITS = ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Roles</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__ROLES = ORGANIZATIONAL_UNIT__ROLES;
+
+	/**
+	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__MEMBERS = ORGANIZATIONAL_UNIT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Directory</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__DIRECTORY = ORGANIZATIONAL_UNIT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Organization</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION_FEATURE_COUNT = ORGANIZATIONAL_UNIT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Organization</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION_OPERATION_COUNT = ORGANIZATIONAL_UNIT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MemberDirectoryElementImpl <em>Member Directory Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MemberDirectoryElementImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectoryElement()
+	 * @generated
+	 */
+	int MEMBER_DIRECTORY_ELEMENT = 6;
+
+	/**
+	 * The number of structural features of the '<em>Member Directory Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY_ELEMENT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Member Directory Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MemberDirectoryImpl <em>Member Directory</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MemberDirectoryImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectory()
+	 * @generated
+	 */
+	int MEMBER_DIRECTORY = 7;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY__ELEMENTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Member Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Member Directory</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_DIRECTORY_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MemberImpl <em>Member</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MemberImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMember()
+	 * @generated
+	 */
+	int MEMBER = 8;
+
+	/**
+	 * The feature id for the '<em><b>Party</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__PARTY = MEMBER_DIRECTORY_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Member</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_FEATURE_COUNT = MEMBER_DIRECTORY_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Member</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER_OPERATION_COUNT = MEMBER_DIRECTORY_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.PersonImpl <em>Person</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.PersonImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPerson()
+	 * @generated
+	 */
+	int PERSON = 9;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__TITLE = PARTY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__DESCRIPTION = PARTY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__NAME = PARTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__ID = PARTY__ID;
+
+	/**
+	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__CONTACT_METHODS = PARTY__CONTACT_METHODS;
+
+	/**
+	 * The number of structural features of the '<em>Person</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON_FEATURE_COUNT = PARTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Person</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON_OPERATION_COUNT = PARTY_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -188,16 +855,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTACT_METHOD_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.EMailImpl <em>EMail</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.EMailImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getEMail()
-	 * @generated
-	 */
-	int EMAIL = 2;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -252,16 +909,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int EMAIL_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.PhoneImpl <em>Phone</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.PhoneImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPhone()
-	 * @generated
-	 */
-	int PHONE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -343,16 +990,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int PHONE_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.PostalAddressImpl <em>Postal Address</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.PostalAddressImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPostalAddress()
-	 * @generated
-	 */
-	int POSTAL_ADDRESS = 4;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -454,16 +1091,6 @@ public interface PartyPackage extends EPackage {
 	int POSTAL_ADDRESS_OPERATION_COUNT = CONTACT_METHOD_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.WebAddressImpl <em>Web Address</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.WebAddressImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getWebAddress()
-	 * @generated
-	 */
-	int WEB_ADDRESS = 5;
-
-	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -519,71 +1146,6 @@ public interface PartyPackage extends EPackage {
 
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.party.impl.RoleImpl <em>Role</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.party.impl.RoleImpl
-	 * @see org.nasdanika.party.impl.PartyPackageImpl#getRole()
-	 * @generated
-	 */
-	int ROLE = 6;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Parties</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE__PARTIES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Role</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Role</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
-
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Party <em>Party</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -603,6 +1165,38 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getParty_ContactMethods();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.OrganizationalUnit <em>Organizational Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Organizational Unit</em>'.
+	 * @see org.nasdanika.party.OrganizationalUnit
+	 * @generated
+	 */
+	EClass getOrganizationalUnit();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.OrganizationalUnit#getOrganizationalUnits <em>Organizational Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Organizational Units</em>'.
+	 * @see org.nasdanika.party.OrganizationalUnit#getOrganizationalUnits()
+	 * @see #getOrganizationalUnit()
+	 * @generated
+	 */
+	EReference getOrganizationalUnit_OrganizationalUnits();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.OrganizationalUnit#getRoles <em>Roles</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Roles</em>'.
+	 * @see org.nasdanika.party.OrganizationalUnit#getRoles()
+	 * @see #getOrganizationalUnit()
+	 * @generated
+	 */
+	EReference getOrganizationalUnit_Roles();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.ContactMethod <em>Contact Method</em>}'.
@@ -797,15 +1391,109 @@ public interface PartyPackage extends EPackage {
 	EClass getRole();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.party.Role#getParties <em>Parties</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.party.Role#getMembers <em>Members</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Parties</em>'.
-	 * @see org.nasdanika.party.Role#getParties()
+	 * @return the meta object for the reference list '<em>Members</em>'.
+	 * @see org.nasdanika.party.Role#getMembers()
 	 * @see #getRole()
 	 * @generated
 	 */
-	EReference getRole_Parties();
+	EReference getRole_Members();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Organization <em>Organization</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Organization</em>'.
+	 * @see org.nasdanika.party.Organization
+	 * @generated
+	 */
+	EClass getOrganization();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Organization#getMembers <em>Members</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Members</em>'.
+	 * @see org.nasdanika.party.Organization#getMembers()
+	 * @see #getOrganization()
+	 * @generated
+	 */
+	EReference getOrganization_Members();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Organization#getDirectory <em>Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Directory</em>'.
+	 * @see org.nasdanika.party.Organization#getDirectory()
+	 * @see #getOrganization()
+	 * @generated
+	 */
+	EReference getOrganization_Directory();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.MemberDirectoryElement <em>Member Directory Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Member Directory Element</em>'.
+	 * @see org.nasdanika.party.MemberDirectoryElement
+	 * @generated
+	 */
+	EClass getMemberDirectoryElement();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.MemberDirectory <em>Member Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Member Directory</em>'.
+	 * @see org.nasdanika.party.MemberDirectory
+	 * @generated
+	 */
+	EClass getMemberDirectory();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.MemberDirectory#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.nasdanika.party.MemberDirectory#getElements()
+	 * @see #getMemberDirectory()
+	 * @generated
+	 */
+	EReference getMemberDirectory_Elements();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Member <em>Member</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Member</em>'.
+	 * @see org.nasdanika.party.Member
+	 * @generated
+	 */
+	EClass getMember();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.party.Member#getParty <em>Party</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Party</em>'.
+	 * @see org.nasdanika.party.Member#getParty()
+	 * @see #getMember()
+	 * @generated
+	 */
+	EReference getMember_Party();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Person <em>Person</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Person</em>'.
+	 * @see org.nasdanika.party.Person
+	 * @generated
+	 */
+	EClass getPerson();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -831,6 +1519,34 @@ public interface PartyPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.DirectoryElementImpl <em>Directory Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.DirectoryElementImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getDirectoryElement()
+		 * @generated
+		 */
+		EClass DIRECTORY_ELEMENT = eINSTANCE.getDirectoryElement();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.DirectoryImpl <em>Directory</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.DirectoryImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getDirectory()
+		 * @generated
+		 */
+		EClass DIRECTORY = eINSTANCE.getDirectory();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIRECTORY__ELEMENTS = eINSTANCE.getDirectory_Elements();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.PartyImpl <em>Party</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -847,6 +1563,32 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PARTY__CONTACT_METHODS = eINSTANCE.getParty_ContactMethods();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationalUnitImpl <em>Organizational Unit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.OrganizationalUnitImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganizationalUnit()
+		 * @generated
+		 */
+		EClass ORGANIZATIONAL_UNIT = eINSTANCE.getOrganizationalUnit();
+
+		/**
+		 * The meta object literal for the '<em><b>Organizational Units</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS = eINSTANCE.getOrganizationalUnit_OrganizationalUnits();
+
+		/**
+		 * The meta object literal for the '<em><b>Roles</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORGANIZATIONAL_UNIT__ROLES = eINSTANCE.getOrganizationalUnit_Roles();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.ContactMethodImpl <em>Contact Method</em>}' class.
@@ -1005,12 +1747,94 @@ public interface PartyPackage extends EPackage {
 		EClass ROLE = eINSTANCE.getRole();
 
 		/**
-		 * The meta object literal for the '<em><b>Parties</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Members</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ROLE__PARTIES = eINSTANCE.getRole_Parties();
+		EReference ROLE__MEMBERS = eINSTANCE.getRole_Members();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationImpl <em>Organization</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.OrganizationImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganization()
+		 * @generated
+		 */
+		EClass ORGANIZATION = eINSTANCE.getOrganization();
+
+		/**
+		 * The meta object literal for the '<em><b>Members</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORGANIZATION__MEMBERS = eINSTANCE.getOrganization_Members();
+
+		/**
+		 * The meta object literal for the '<em><b>Directory</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORGANIZATION__DIRECTORY = eINSTANCE.getOrganization_Directory();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MemberDirectoryElementImpl <em>Member Directory Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MemberDirectoryElementImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectoryElement()
+		 * @generated
+		 */
+		EClass MEMBER_DIRECTORY_ELEMENT = eINSTANCE.getMemberDirectoryElement();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MemberDirectoryImpl <em>Member Directory</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MemberDirectoryImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectory()
+		 * @generated
+		 */
+		EClass MEMBER_DIRECTORY = eINSTANCE.getMemberDirectory();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MEMBER_DIRECTORY__ELEMENTS = eINSTANCE.getMemberDirectory_Elements();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MemberImpl <em>Member</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MemberImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMember()
+		 * @generated
+		 */
+		EClass MEMBER = eINSTANCE.getMember();
+
+		/**
+		 * The meta object literal for the '<em><b>Party</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MEMBER__PARTY = eINSTANCE.getMember_Party();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.PersonImpl <em>Person</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.PersonImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getPerson()
+		 * @generated
+		 */
+		EClass PERSON = eINSTANCE.getPerson();
 
 	}
 

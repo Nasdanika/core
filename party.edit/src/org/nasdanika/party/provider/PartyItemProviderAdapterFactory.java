@@ -74,6 +74,144 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.Directory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DirectoryItemProvider directoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.Directory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDirectoryAdapter() {
+		if (directoryItemProvider == null) {
+			directoryItemProvider = new DirectoryItemProvider(this);
+		}
+
+		return directoryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.OrganizationalUnit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OrganizationalUnitItemProvider organizationalUnitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.OrganizationalUnit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOrganizationalUnitAdapter() {
+		if (organizationalUnitItemProvider == null) {
+			organizationalUnitItemProvider = new OrganizationalUnitItemProvider(this);
+		}
+
+		return organizationalUnitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.Organization} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OrganizationItemProvider organizationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.Organization}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOrganizationAdapter() {
+		if (organizationItemProvider == null) {
+			organizationItemProvider = new OrganizationItemProvider(this);
+		}
+
+		return organizationItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.MemberDirectory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MemberDirectoryItemProvider memberDirectoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.MemberDirectory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMemberDirectoryAdapter() {
+		if (memberDirectoryItemProvider == null) {
+			memberDirectoryItemProvider = new MemberDirectoryItemProvider(this);
+		}
+
+		return memberDirectoryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.Member} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MemberItemProvider memberItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.Member}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMemberAdapter() {
+		if (memberItemProvider == null) {
+			memberItemProvider = new MemberItemProvider(this);
+		}
+
+		return memberItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.Person} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PersonItemProvider personItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.Person}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPersonAdapter() {
+		if (personItemProvider == null) {
+			personItemProvider = new PersonItemProvider(this);
+		}
+
+		return personItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.ContactMethod} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -293,6 +431,12 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 	 */
 	@Override
 	public void dispose() {
+		if (directoryItemProvider != null) directoryItemProvider.dispose();
+		if (organizationalUnitItemProvider != null) organizationalUnitItemProvider.dispose();
+		if (organizationItemProvider != null) organizationItemProvider.dispose();
+		if (memberDirectoryItemProvider != null) memberDirectoryItemProvider.dispose();
+		if (memberItemProvider != null) memberItemProvider.dispose();
+		if (personItemProvider != null) personItemProvider.dispose();
 		if (contactMethodItemProvider != null) contactMethodItemProvider.dispose();
 		if (eMailItemProvider != null) eMailItemProvider.dispose();
 		if (phoneItemProvider != null) phoneItemProvider.dispose();

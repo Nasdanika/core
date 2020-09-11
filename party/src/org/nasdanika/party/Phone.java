@@ -8,6 +8,10 @@ package org.nasdanika.party;
  * A representation of the model object '<em><b>Phone</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Phone.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -27,6 +31,9 @@ public interface Phone extends ContactMethod {
 	 * Returns the value of the '<em><b>Country Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Country code.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Country Code</em>' attribute.
 	 * @see #setCountryCode(int)
 	 * @see org.nasdanika.party.PartyPackage#getPhone_CountryCode()
@@ -49,6 +56,9 @@ public interface Phone extends ContactMethod {
 	 * Returns the value of the '<em><b>Area Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Area code.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Area Code</em>' attribute.
 	 * @see #setAreaCode(int)
 	 * @see org.nasdanika.party.PartyPackage#getPhone_AreaCode()
@@ -71,6 +81,9 @@ public interface Phone extends ContactMethod {
 	 * Returns the value of the '<em><b>Phone Number</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Phone number.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Phone Number</em>' attribute.
 	 * @see #setPhoneNumber(int)
 	 * @see org.nasdanika.party.PartyPackage#getPhone_PhoneNumber()
@@ -93,6 +106,9 @@ public interface Phone extends ContactMethod {
 	 * Returns the value of the '<em><b>Extension</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Optional extension.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Extension</em>' attribute.
 	 * @see #setExtension(int)
 	 * @see org.nasdanika.party.PartyPackage#getPhone_Extension()

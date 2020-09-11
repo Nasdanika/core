@@ -2,38 +2,32 @@
  */
 package org.nasdanika.party.impl;
 
-import java.util.Collection;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
 import org.nasdanika.party.Member;
+import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
-import org.nasdanika.party.Role;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Role</b></em>'.
+ * An implementation of the model object '<em><b>Member</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.party.impl.RoleImpl#getMembers <em>Members</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.MemberImpl#getParty <em>Party</em>}</li>
  * </ul>
  *
  * @generated
  */
-public abstract class RoleImpl extends NamedElementImpl implements Role {
+public class MemberImpl extends MemberDirectoryElementImpl implements Member {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RoleImpl() {
+	protected MemberImpl() {
 		super();
 	}
 
@@ -44,7 +38,7 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PartyPackage.Literals.ROLE;
+		return PartyPackage.Literals.MEMBER;
 	}
 
 	/**
@@ -52,10 +46,28 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Member> getMembers() {
-		return (EList<Member>)eDynamicGet(PartyPackage.ROLE__MEMBERS, PartyPackage.Literals.ROLE__MEMBERS, true, true);
+	public Party getParty() {
+		return (Party)eDynamicGet(PartyPackage.MEMBER__PARTY, PartyPackage.Literals.MEMBER__PARTY, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Party basicGetParty() {
+		return (Party)eDynamicGet(PartyPackage.MEMBER__PARTY, PartyPackage.Literals.MEMBER__PARTY, false, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setParty(Party newParty) {
+		eDynamicSet(PartyPackage.MEMBER__PARTY, PartyPackage.Literals.MEMBER__PARTY, newParty);
 	}
 
 	/**
@@ -66,8 +78,9 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				return getMembers();
+			case PartyPackage.MEMBER__PARTY:
+				if (resolve) return getParty();
+				return basicGetParty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -77,13 +90,11 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				getMembers().clear();
-				getMembers().addAll((Collection<? extends Member>)newValue);
+			case PartyPackage.MEMBER__PARTY:
+				setParty((Party)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -97,8 +108,8 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				getMembers().clear();
+			case PartyPackage.MEMBER__PARTY:
+				setParty((Party)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -112,10 +123,10 @@ public abstract class RoleImpl extends NamedElementImpl implements Role {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PartyPackage.ROLE__MEMBERS:
-				return !getMembers().isEmpty();
+			case PartyPackage.MEMBER__PARTY:
+				return basicGetParty() != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //RoleImpl
+} //MemberImpl

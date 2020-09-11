@@ -8,6 +8,10 @@ package org.nasdanika.party;
  * A representation of the model object '<em><b>Web Address</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * URL.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -24,6 +28,9 @@ public interface WebAddress extends ContactMethod {
 	 * Returns the value of the '<em><b>Url</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * URL.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Url</em>' attribute.
 	 * @see #setUrl(String)
 	 * @see org.nasdanika.party.PartyPackage#getWebAddress_Url()

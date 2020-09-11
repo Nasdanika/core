@@ -56,6 +56,12 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case PartyPackage.DIRECTORY: return createDirectory();
+			case PartyPackage.ORGANIZATIONAL_UNIT: return createOrganizationalUnit();
+			case PartyPackage.ORGANIZATION: return createOrganization();
+			case PartyPackage.MEMBER_DIRECTORY: return createMemberDirectory();
+			case PartyPackage.MEMBER: return createMember();
+			case PartyPackage.PERSON: return createPerson();
 			case PartyPackage.CONTACT_METHOD: return createContactMethod();
 			case PartyPackage.EMAIL: return createEMail();
 			case PartyPackage.PHONE: return createPhone();
@@ -64,6 +70,72 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Directory createDirectory() {
+		DirectoryImpl directory = new DirectoryImpl();
+		return directory;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OrganizationalUnit createOrganizationalUnit() {
+		OrganizationalUnitImpl organizationalUnit = new OrganizationalUnitImpl();
+		return organizationalUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Organization createOrganization() {
+		OrganizationImpl organization = new OrganizationImpl();
+		return organization;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MemberDirectory createMemberDirectory() {
+		MemberDirectoryImpl memberDirectory = new MemberDirectoryImpl();
+		return memberDirectory;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Member createMember() {
+		MemberImpl member = new MemberImpl();
+		return member;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Person createPerson() {
+		PersonImpl person = new PersonImpl();
+		return person;
 	}
 
 	/**

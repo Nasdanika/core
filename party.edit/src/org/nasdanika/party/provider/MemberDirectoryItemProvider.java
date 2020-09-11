@@ -11,28 +11,31 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.nasdanika.ncore.provider.NamedElementItemProvider;
 
+import org.nasdanika.party.MemberDirectory;
+import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
-import org.nasdanika.party.Role;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.party.Role} object.
+ * This is the item provider adapter for a {@link org.nasdanika.party.MemberDirectory} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class RoleItemProvider extends NamedElementItemProvider {
+public class MemberDirectoryItemProvider extends NamedElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RoleItemProvider(AdapterFactory adapterFactory) {
+	public MemberDirectoryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -47,31 +50,49 @@ public class RoleItemProvider extends NamedElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addMembersPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Members feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMembersPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Role_members_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Role_members_feature", "_UI_Role_type"),
-				 PartyPackage.Literals.ROLE__MEMBERS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(PartyPackage.Literals.MEMBER_DIRECTORY__ELEMENTS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns MemberDirectory.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/MemberDirectory"));
 	}
 
 	/**
@@ -92,10 +113,10 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Role)object).getName();
+		String label = ((MemberDirectory)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_Role_type") :
-			getString("_UI_Role_type") + " " + label;
+			getString("_UI_MemberDirectory_type") :
+			getString("_UI_MemberDirectory_type") + " " + label;
 	}
 
 
@@ -109,6 +130,12 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(MemberDirectory.class)) {
+			case PartyPackage.MEMBER_DIRECTORY__ELEMENTS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
@@ -122,6 +149,16 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PartyPackage.Literals.MEMBER_DIRECTORY__ELEMENTS,
+				 PartyFactory.eINSTANCE.createMemberDirectory()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PartyPackage.Literals.MEMBER_DIRECTORY__ELEMENTS,
+				 PartyFactory.eINSTANCE.createMember()));
 	}
 
 	/**

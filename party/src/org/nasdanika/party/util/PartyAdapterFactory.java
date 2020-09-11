@@ -72,8 +72,44 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 	protected PartySwitch<Adapter> modelSwitch =
 		new PartySwitch<Adapter>() {
 			@Override
+			public Adapter caseDirectoryElement(DirectoryElement object) {
+				return createDirectoryElementAdapter();
+			}
+			@Override
+			public Adapter caseDirectory(Directory object) {
+				return createDirectoryAdapter();
+			}
+			@Override
 			public Adapter caseParty(Party object) {
 				return createPartyAdapter();
+			}
+			@Override
+			public Adapter caseOrganizationalUnit(OrganizationalUnit object) {
+				return createOrganizationalUnitAdapter();
+			}
+			@Override
+			public Adapter caseRole(Role object) {
+				return createRoleAdapter();
+			}
+			@Override
+			public Adapter caseOrganization(Organization object) {
+				return createOrganizationAdapter();
+			}
+			@Override
+			public Adapter caseMemberDirectoryElement(MemberDirectoryElement object) {
+				return createMemberDirectoryElementAdapter();
+			}
+			@Override
+			public Adapter caseMemberDirectory(MemberDirectory object) {
+				return createMemberDirectoryAdapter();
+			}
+			@Override
+			public Adapter caseMember(Member object) {
+				return createMemberAdapter();
+			}
+			@Override
+			public Adapter casePerson(Person object) {
+				return createPersonAdapter();
 			}
 			@Override
 			public Adapter caseContactMethod(ContactMethod object) {
@@ -94,10 +130,6 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseWebAddress(WebAddress object) {
 				return createWebAddressAdapter();
-			}
-			@Override
-			public Adapter caseRole(Role object) {
-				return createRoleAdapter();
 			}
 			@Override
 			public Adapter caseModelElement(ModelElement object) {
@@ -132,6 +164,34 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.DirectoryElement <em>Directory Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.DirectoryElement
+	 * @generated
+	 */
+	public Adapter createDirectoryElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Directory <em>Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.Directory
+	 * @generated
+	 */
+	public Adapter createDirectoryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Party <em>Party</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -142,6 +202,20 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.OrganizationalUnit <em>Organizational Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.OrganizationalUnit
+	 * @generated
+	 */
+	public Adapter createOrganizationalUnitAdapter() {
 		return null;
 	}
 
@@ -226,6 +300,76 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createRoleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Organization <em>Organization</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.Organization
+	 * @generated
+	 */
+	public Adapter createOrganizationAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.MemberDirectoryElement <em>Member Directory Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.MemberDirectoryElement
+	 * @generated
+	 */
+	public Adapter createMemberDirectoryElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.MemberDirectory <em>Member Directory</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.MemberDirectory
+	 * @generated
+	 */
+	public Adapter createMemberDirectoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Member <em>Member</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.Member
+	 * @generated
+	 */
+	public Adapter createMemberAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Person <em>Person</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.Person
+	 * @generated
+	 */
+	public Adapter createPersonAdapter() {
 		return null;
 	}
 
