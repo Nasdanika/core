@@ -49,11 +49,11 @@ public class ContactMethodItemProvider extends NamedElementItemProvider {
 	 * This returns ContactMethod.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContactMethod"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ContactMethod.png"));
 	}
 
 	/**

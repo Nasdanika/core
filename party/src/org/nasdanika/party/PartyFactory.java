@@ -40,6 +40,15 @@ public interface PartyFactory extends EFactory {
 	OrganizationalUnit createOrganizationalUnit();
 
 	/**
+	 * Returns a new object of class '<em>Role</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Role</em>'.
+	 * @generated
+	 */
+	Role createRole();
+
+	/**
 	 * Returns a new object of class '<em>Organization</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

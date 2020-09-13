@@ -58,6 +58,7 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 		switch (eClass.getClassifierID()) {
 			case PartyPackage.DIRECTORY: return createDirectory();
 			case PartyPackage.ORGANIZATIONAL_UNIT: return createOrganizationalUnit();
+			case PartyPackage.ROLE: return createRole();
 			case PartyPackage.ORGANIZATION: return createOrganization();
 			case PartyPackage.MEMBER_DIRECTORY: return createMemberDirectory();
 			case PartyPackage.MEMBER: return createMember();
@@ -92,6 +93,17 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 	public OrganizationalUnit createOrganizationalUnit() {
 		OrganizationalUnitImpl organizationalUnit = new OrganizationalUnitImpl();
 		return organizationalUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Role createRole() {
+		RoleImpl role = new RoleImpl();
+		return role;
 	}
 
 	/**

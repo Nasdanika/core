@@ -74,11 +74,11 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	 * This returns WebAddress.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/WebAddress"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/WebAddress.png"));
 	}
 
 	/**

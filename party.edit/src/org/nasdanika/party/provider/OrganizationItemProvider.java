@@ -85,11 +85,11 @@ public class OrganizationItemProvider extends OrganizationalUnitItemProvider {
 	 * This returns Organization.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Organization"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Organization.png"));
 	}
 
 	/**

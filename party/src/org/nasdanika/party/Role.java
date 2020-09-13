@@ -23,7 +23,7 @@ import org.nasdanika.ncore.NamedElement;
  * </ul>
  *
  * @see org.nasdanika.party.PartyPackage#getRole()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface Role extends NamedElement {

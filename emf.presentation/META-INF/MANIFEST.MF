@@ -32,5 +32,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.databinding;bundle-version="1.7.400",
  org.eclipse.core.databinding.property;bundle-version="1.7.0",
  org.nasdanika.ncore;bundle-version="2020.12.0",
- org.nasdanika.ncore.edit
+ org.nasdanika.ncore.edit,
+ org.nasdanika.party.edit
 Bundle-ActivationPolicy: lazy

@@ -48,7 +48,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Role" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Organization members may play different roles in organizational units. For example, Joe Doe may be in a Developer role in the Research And Development organizational unit."/>
     </eAnnotations>

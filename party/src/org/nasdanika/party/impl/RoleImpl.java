@@ -27,7 +27,7 @@ import org.nasdanika.party.Role;
  *
  * @generated
  */
-public abstract class RoleImpl extends NamedElementImpl implements Role {
+public class RoleImpl extends NamedElementImpl implements Role {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -83,6 +83,17 @@ public class RoleItemProvider extends NamedElementItemProvider {
 	protected boolean shouldComposeCreationImage() {
 		return true;
 	}
+	
+	/**
+	 * This returns Phone.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Role.png"));
+	}	
 
 	/**
 	 * This returns the label text for the adapted class.

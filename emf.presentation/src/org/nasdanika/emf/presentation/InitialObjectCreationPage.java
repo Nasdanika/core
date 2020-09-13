@@ -50,7 +50,7 @@ public class InitialObjectCreationPage extends WizardPage {
 	private Object value;	
 	private List<InitialObjectConfigurator> configurators = new ArrayList<>();
 
-	private static final String WIZARD_EXTENSION_POINT_ID = "org.nasdanika.vinci.editor.wizard";
+	private static final String WIZARD_EXTENSION_POINT_ID = "org.nasdanika.emf.presentation.wizard";
 	
 	/**
 	 * @generated
@@ -89,7 +89,7 @@ public class InitialObjectCreationPage extends WizardPage {
 		
 		adapterFactory = NasdanikaEditorPlugin.createVinciAdapterFactory();
 		
-		palettes = Palette.Registry.INSTANCE.getPalettes();
+		palettes = Palette.Registry.INSTANCE.getPalettes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList());
 		
 		contentProvider = new ITreeContentProvider() {
 			

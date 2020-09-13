@@ -9,6 +9,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.nasdanika.ncore.provider.NcoreItemProviderAdapterFactory;
+import org.nasdanika.party.provider.PartyItemProviderAdapterFactory;
 
 /**
  * This is the central singleton for the App editor plugin.
@@ -99,7 +100,8 @@ public final class NasdanikaEditorPlugin extends EMFPlugin {
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
 		adapterFactory.addAdapterFactory(new NcoreItemProviderAdapterFactory());
-		// TODO - Party, Engineering, ...
+		adapterFactory.addAdapterFactory(new PartyItemProviderAdapterFactory());
+		// TODO - Engineering, ...
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		
 		return adapterFactory;
