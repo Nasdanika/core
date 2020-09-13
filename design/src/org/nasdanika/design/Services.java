@@ -1,4 +1,4 @@
-package org.nasdanika.codegen.design;
+package org.nasdanika.design;
 
 import org.nasdanika.sirius.CommonServices;
 
