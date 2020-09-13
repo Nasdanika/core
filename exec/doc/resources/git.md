@@ -19,7 +19,7 @@ If working directory was not specified and origin was specified then execution i
 
 All configuration values are interpolated with input.
 
-* ``add-pattern`` - Add file pattern(s). String or list.
+* ``add-pattern`` - Add file pattern(s). String or list. Defaults to ``.``.
 * ``author`` - Commit author. 
     * ``name`` - Author name.
     * ``e-mail`` - Author e-mail.
