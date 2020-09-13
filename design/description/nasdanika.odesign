@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:org.nasdanika.sirius.tree="urn:org.nasdanika.sirius.tree" xmlns:properties="http://www.eclipse.org/sirius/properties/1.0.0" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" name="codegen" version="12.0.0.2017041100">
-  <ownedViewpoints name="CodegenViewPoint" label="Codegen" modelFileExtension="codegen">
-    <ownedRepresentations xsi:type="org.nasdanika.sirius.tree:AdapterFactoryTreeDescription" documentation="Representation which uses Adapter Factory Tree Content Provider to represent model element content as a tree." name="codegenAdapterFactoryTree" label="Codegen Adapter Factory Tree" initialisation="true" editorId="org.nasdanika.codegen.presentation.CodegenAdapterFactoryTreeEditor.ID">
+  <ownedViewpoints name="NasdanikaViewPoint" label="Nasdanika" modelFileExtension="nsd">
+    <ownedRepresentations xsi:type="org.nasdanika.sirius.tree:AdapterFactoryTreeDescription" documentation="Representation which uses Adapter Factory Tree Content Provider to represent model element content as a tree." name="nasdanikaAdapterFactoryTree" label="Nasdanika Adapter Factory Tree" initialisation="true" editorId="org.nasdanika.emf.presentation.AdapterFactoryTreeEditor.ID">
       <metamodel href="urn:org.nasdanika.ncore#/"/>
-      <metamodel href="urn:org.nasdanika.codegen#/"/>
-      <metamodel href="urn:org.nasdanika.codegen.java#/"/>
+      <metamodel href="urn:org.nasdanika.party#/"/>
     </ownedRepresentations>
-    <ownedJavaExtensions qualifiedClassName="org.nasdanika.codegen.design.Services"/>
+    <ownedJavaExtensions qualifiedClassName="org.nasdanika.design.Services"/>
   </ownedViewpoints>
-  <extensions xsi:type="properties:ViewExtensionDescription" name="codegen_rules_properties">
-    <metamodels href="urn:org.nasdanika.codegen#/"/>
-    <metamodels href="urn:org.nasdanika.codegen.java#/"/>
+  <extensions xsi:type="properties:ViewExtensionDescription" name="nasdanika_rules_properties">
+    <metamodels href="urn:org.nasdanika.ncore#/"/>
+    <metamodels href="urn:org.nasdanika.party#/"/>
     <categories name="Default">
       <pages name="codegen_default_rules_defaultpage" labelExpression="aql:input.emfEditServices(self).getTabName()" semanticCandidateExpression="aql:input.getAllSemanticElements()" groups="//@extensions.0/@categories.0/@groups.0"/>
       <pages name="codegen_default_rules_description_page" labelExpression="Description" semanticCandidateExpression="aql:input.getAllSemanticElements()" preconditionExpression="service:hasDescription()" groups="//@extensions.0/@categories.0/@groups.1"/>
