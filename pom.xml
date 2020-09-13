@@ -150,6 +150,7 @@
 		<module>party</module>		
 		<module>party.edit</module>		
 
+		<module>design</module>		
 		<!--
 		<module>provisioning</module>		
 		<module>provisioning.edit</module>		
