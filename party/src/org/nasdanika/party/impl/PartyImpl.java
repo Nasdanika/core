@@ -3,6 +3,7 @@
 package org.nasdanika.party.impl;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -50,6 +51,7 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 	 */
 	protected PartyImpl() {
 		super();
+		setId(UUID.randomUUID().toString());		
 	}
 
 	/**
