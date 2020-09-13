@@ -70,16 +70,13 @@ public class ContactMethodItemProvider extends NamedElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((ContactMethod)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ContactMethod_type") :
-			getString("_UI_ContactMethod_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_ContactMethod_type") :	label;
 	}
-
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

@@ -3,16 +3,18 @@
 package org.nasdanika.party.provider;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyFactory;
@@ -55,22 +57,34 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 * This adds a property descriptor for the Id feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addIdPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Entity_id_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Entity_id_feature", "_UI_Entity_type"),
 				 NcorePackage.Literals.ENTITY__ID,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
+				 null,
 				 null));
+	}
+	
+	@Override
+	public Collection<?> getChildren(Object object) {
+		List<EReferenceItemProvider> children = eReferenceItemProviders.get(object);
+		if (children == null) {
+			children = new ArrayList<>();
+			eReferenceItemProviders.put(object, children);
+			children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.PARTY__CONTACT_METHODS));
+		}
+		Collection<Object> ret = new ArrayList<>(children);
+		ret.addAll(super.getChildren(object));
+		return ret;
 	}
 
 	/**
@@ -79,13 +93,14 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PartyPackage.Literals.PARTY__CONTACT_METHODS);
+			// Added as EReferenceItemProvider
+			// childrenFeatures.add(PartyPackage.Literals.PARTY__CONTACT_METHODS);
 		}
 		return childrenFeatures;
 	}
