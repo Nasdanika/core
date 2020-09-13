@@ -3,7 +3,7 @@
 package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
-import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.PartyPackage;
 
@@ -14,7 +14,7 @@ import org.nasdanika.party.PartyPackage;
  *
  * @generated
  */
-public class ContactMethodImpl extends NamedElementImpl implements ContactMethod {
+public class ContactMethodImpl extends ModelElementImpl implements ContactMethod {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -10,7 +10,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 import org.nasdanika.party.ContactMethod;
 
 /**
@@ -19,7 +19,7 @@ import org.nasdanika.party.ContactMethod;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ContactMethodItemProvider extends NamedElementItemProvider {
+public class ContactMethodItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -74,7 +74,7 @@ public class ContactMethodItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ContactMethod)object).getName();
+		String label = ((ContactMethod)object).getTitle();
 		return label == null || label.length() == 0 ? getString("_UI_ContactMethod_type") :	label;
 	}
 

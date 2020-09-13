@@ -92,7 +92,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Member" eSuperTypes="#//MemberDirectoryElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Member" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//MemberDirectoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A party may be a member of an organization."/>
     </eAnnotations>
@@ -107,7 +107,7 @@
       <details key="documentation" value="A human party."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ContactMethod" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="ContactMethod" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Generic contact method."/>
     </eAnnotations>

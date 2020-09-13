@@ -2,6 +2,8 @@
  */
 package org.nasdanika.party;
 
+import org.nasdanika.ncore.ModelElement;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +25,7 @@ package org.nasdanika.party;
  * @model
  * @generated
  */
-public interface Member extends MemberDirectoryElement {
+public interface Member extends ModelElement, MemberDirectoryElement {
 	/**
 	 * Returns the value of the '<em><b>Party</b></em>' reference.
 	 * <!-- begin-user-doc -->

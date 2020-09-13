@@ -2,7 +2,7 @@
  */
 package org.nasdanika.party;
 
-import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.ModelElement;
 
 
 /**
@@ -19,5 +19,5 @@ import org.nasdanika.ncore.NamedElement;
  * @model
  * @generated
  */
-public interface ContactMethod extends NamedElement {
+public interface ContactMethod extends ModelElement {
 } // ContactMethod

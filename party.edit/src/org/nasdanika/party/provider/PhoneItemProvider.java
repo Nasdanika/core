@@ -164,14 +164,12 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Phone)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Phone_type") :
-			getString("_UI_Phone_type") + " " + label;
+		String label = ((Phone)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Phone_type") :	label;
 	}
 
 

@@ -712,13 +712,31 @@ public interface PartyPackage extends EPackage {
 	int MEMBER = 8;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Party</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__PARTY = MEMBER_DIRECTORY_ELEMENT_FEATURE_COUNT + 0;
+	int MEMBER__PARTY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Member</em>' class.
@@ -727,7 +745,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = MEMBER_DIRECTORY_ELEMENT_FEATURE_COUNT + 1;
+	int MEMBER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Member</em>' class.
@@ -736,7 +754,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_OPERATION_COUNT = MEMBER_DIRECTORY_ELEMENT_OPERATION_COUNT + 0;
+	int MEMBER_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.PersonImpl <em>Person</em>}' class.
@@ -818,7 +836,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_METHOD__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+	int CONTACT_METHOD__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -827,16 +845,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_METHOD__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONTACT_METHOD__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int CONTACT_METHOD__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The number of structural features of the '<em>Contact Method</em>' class.
@@ -845,7 +854,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_METHOD_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int CONTACT_METHOD_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Contact Method</em>' class.
@@ -854,7 +863,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTACT_METHOD_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int CONTACT_METHOD_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -873,15 +882,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int EMAIL__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EMAIL__NAME = CONTACT_METHOD__NAME;
 
 	/**
 	 * The feature id for the '<em><b>EMail Address</b></em>' attribute.
@@ -927,15 +927,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int PHONE__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PHONE__NAME = CONTACT_METHOD__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Country Code</b></em>' attribute.
@@ -1008,15 +999,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int POSTAL_ADDRESS__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int POSTAL_ADDRESS__NAME = CONTACT_METHOD__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Country</b></em>' attribute.
@@ -1107,15 +1089,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int WEB_ADDRESS__DESCRIPTION = CONTACT_METHOD__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WEB_ADDRESS__NAME = CONTACT_METHOD__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Url</b></em>' attribute.

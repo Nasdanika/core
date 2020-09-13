@@ -4,6 +4,7 @@ package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
@@ -21,7 +22,7 @@ import org.nasdanika.party.PartyPackage;
  *
  * @generated
  */
-public class MemberImpl extends MemberDirectoryElementImpl implements Member {
+public class MemberImpl extends ModelElementImpl implements Member {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -686,9 +686,10 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		organizationEClass.getESuperTypes().add(this.getOrganizationalUnit());
 		memberDirectoryEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		memberDirectoryEClass.getESuperTypes().add(this.getMemberDirectoryElement());
+		memberEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		memberEClass.getESuperTypes().add(this.getMemberDirectoryElement());
 		personEClass.getESuperTypes().add(this.getParty());
-		contactMethodEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		contactMethodEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		eMailEClass.getESuperTypes().add(this.getContactMethod());
 		phoneEClass.getESuperTypes().add(this.getContactMethod());
 		postalAddressEClass.getESuperTypes().add(this.getContactMethod());

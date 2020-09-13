@@ -9,9 +9,13 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-
+import org.nasdanika.common.Util;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
+import org.nasdanika.party.Member;
+import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
 
 /**
@@ -20,7 +24,7 @@ import org.nasdanika.party.PartyPackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MemberItemProvider extends MemberDirectoryElementItemProvider {
+public class MemberItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -94,11 +98,19 @@ public class MemberItemProvider extends MemberDirectoryElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Member_type");
+		Member member = (Member)object;
+		String label = member.getTitle();
+		Party party = member.getParty();
+		if (Util.isBlank(label) && party != null) {
+			label = party.getName();
+		}
+		return label == null || label.length() == 0 ?
+			getString("_UI_Member_type") :
+			getString("_UI_Member_type") + " " + label;
 	}
 
 
@@ -125,6 +137,17 @@ public class MemberItemProvider extends MemberDirectoryElementItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return PartyEditPlugin.INSTANCE;
 	}
 
 }

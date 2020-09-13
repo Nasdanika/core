@@ -12,6 +12,7 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.common.Util;
 import org.nasdanika.party.PartyPackage;
 import org.nasdanika.party.WebAddress;
 
@@ -95,14 +96,16 @@ public class WebAddressItemProvider extends ContactMethodItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((WebAddress)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_WebAddress_type") :
-			getString("_UI_WebAddress_type") + " " + label;
+		WebAddress webAddress = (WebAddress)object;
+		String label = webAddress.getTitle();
+		if (Util.isBlank(label)) {
+			label = webAddress.getUrl();
+		}
+		return label == null || label.length() == 0 ? getString("_UI_WebAddress_type") : label;
 	}
 
 

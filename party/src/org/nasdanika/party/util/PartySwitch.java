@@ -146,6 +146,7 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.MEMBER: {
 				Member member = (Member)theEObject;
 				T result = caseMember(member);
+				if (result == null) result = caseModelElement(member);
 				if (result == null) result = caseMemberDirectoryElement(member);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -164,7 +165,6 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.CONTACT_METHOD: {
 				ContactMethod contactMethod = (ContactMethod)theEObject;
 				T result = caseContactMethod(contactMethod);
-				if (result == null) result = caseNamedElement(contactMethod);
 				if (result == null) result = caseModelElement(contactMethod);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -173,7 +173,6 @@ public class PartySwitch<T> extends Switch<T> {
 				EMail eMail = (EMail)theEObject;
 				T result = caseEMail(eMail);
 				if (result == null) result = caseContactMethod(eMail);
-				if (result == null) result = caseNamedElement(eMail);
 				if (result == null) result = caseModelElement(eMail);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -182,7 +181,6 @@ public class PartySwitch<T> extends Switch<T> {
 				Phone phone = (Phone)theEObject;
 				T result = casePhone(phone);
 				if (result == null) result = caseContactMethod(phone);
-				if (result == null) result = caseNamedElement(phone);
 				if (result == null) result = caseModelElement(phone);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -191,7 +189,6 @@ public class PartySwitch<T> extends Switch<T> {
 				PostalAddress postalAddress = (PostalAddress)theEObject;
 				T result = casePostalAddress(postalAddress);
 				if (result == null) result = caseContactMethod(postalAddress);
-				if (result == null) result = caseNamedElement(postalAddress);
 				if (result == null) result = caseModelElement(postalAddress);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -200,7 +197,6 @@ public class PartySwitch<T> extends Switch<T> {
 				WebAddress webAddress = (WebAddress)theEObject;
 				T result = caseWebAddress(webAddress);
 				if (result == null) result = caseContactMethod(webAddress);
-				if (result == null) result = caseNamedElement(webAddress);
 				if (result == null) result = caseModelElement(webAddress);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
