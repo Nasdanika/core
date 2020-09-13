@@ -74,13 +74,21 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 				 null));
 	}
 	
+	/**
+	 * Called from getChildren(), adds EReferenceItemProvider children.
+	 * @param children
+	 */
+	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.PARTY__CONTACT_METHODS));		
+	}
+	
 	@Override
-	public Collection<?> getChildren(Object object) {
+	public final Collection<?> getChildren(Object object) {
 		List<EReferenceItemProvider> children = eReferenceItemProviders.get(object);
 		if (children == null) {
 			children = new ArrayList<>();
 			eReferenceItemProviders.put(object, children);
-			children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.PARTY__CONTACT_METHODS));
+			addEReferenceItemProviderChildren(object, children);
 		}
 		Collection<Object> ret = new ArrayList<>(children);
 		ret.addAll(super.getChildren(object));

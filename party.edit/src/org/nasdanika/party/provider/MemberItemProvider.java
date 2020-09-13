@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.provider.ModelElementItemProvider;
@@ -77,10 +78,17 @@ public class MemberItemProvider extends ModelElementItemProvider {
 	 * This returns Member.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
+		Party party = ((Member) object).getParty();
+		if (party != null) {
+			IItemLabelProvider itemLabelProvider = (IItemLabelProvider) getRootAdapterFactory().adapt(party, IItemLabelProvider.class);
+			if (itemLabelProvider != null) {
+				return itemLabelProvider.getImage(party);
+			}
+		}
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/Member"));
 	}
 
@@ -108,11 +116,8 @@ public class MemberItemProvider extends ModelElementItemProvider {
 		if (Util.isBlank(label) && party != null) {
 			label = party.getName();
 		}
-		return label == null || label.length() == 0 ?
-			getString("_UI_Member_type") :
-			getString("_UI_Member_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_Member_type") : label;
 	}
-
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

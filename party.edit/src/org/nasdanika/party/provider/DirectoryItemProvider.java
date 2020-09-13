@@ -8,12 +8,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.nasdanika.party.Directory;
 import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
@@ -87,8 +85,8 @@ public class DirectoryItemProvider extends DirectoryElementItemProvider {
 	 * @generated NOT
 	 */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Directory.png"));
+	public Object getImage(Object object) {		
+		return overlayImage(object, getResourceLocator().getImage(((EObject) object).eContainer() instanceof Directory ? "full/obj16/folder.png" : "full/obj16/Directory.png"));
 	}
 
 	/**

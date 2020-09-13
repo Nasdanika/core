@@ -3,7 +3,6 @@
 package org.nasdanika.party.provider;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -11,7 +10,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.EReferenceItemProvider;
@@ -50,19 +48,16 @@ public class OrganizationalUnitItemProvider extends PartyItemProvider {
 		}
 		return itemPropertyDescriptors;
 	}
-		
+	
+	/**
+	 * Called from getChildren(), adds EReferenceItemProvider children.
+	 * @param children
+	 */
 	@Override
-	public Collection<?> getChildren(Object object) {
-		List<EReferenceItemProvider> children = eReferenceItemProviders.get(object);
-		if (children == null) {
-			children = new ArrayList<>();
-			eReferenceItemProviders.put(object, children);
-			children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS));
-			children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES));
-		}
-		Collection<Object> ret = new ArrayList<>(children);
-		ret.addAll(super.getChildren(object));
-		return ret;
+	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		super.addEReferenceItemProviderChildren(object, children);
+		children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS));
+		children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES));
 	}
 
 	/**

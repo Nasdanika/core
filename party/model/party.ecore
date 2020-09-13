@@ -61,7 +61,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Organization" eSuperTypes="#//OrganizationalUnit">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Organization extends Organizational Unit and a such it may have sub-units and roles. It also may have members and contain a directory of parties."/>
+      <details key="documentation" value="Organization extends Organizational Unit and as such it may have sub-units and roles. It also may have members and contain a directory of parties."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
         eType="#//MemberDirectoryElement" containment="true">
