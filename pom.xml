@@ -150,13 +150,13 @@
 		<module>party</module>		
 		<module>party.edit</module>		
 
+		<module>engineering</module>		
+		<module>engineering.edit</module>		
+
 		<module>design</module>		
 		<!--
 		<module>provisioning</module>		
 		<module>provisioning.edit</module>		
-
-		<module>engineering</module>		
-		<module>engineering.edit</module>		
 
 		<module>decisioning</module>		
 		<module>decisioning.edit</module>		

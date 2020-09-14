@@ -420,6 +420,8 @@ version(s), and exceptions or additional permissions here}.&quot;
          version="0.0.0"
          unpack="false"/>
 
+-->
+
    <plugin
          id="org.nasdanika.engineering"
          download-size="0"
@@ -433,8 +435,6 @@ version(s), and exceptions or additional permissions here}.&quot;
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-
--->
 
    <plugin
          id="org.nasdanika.design"
