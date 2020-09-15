@@ -438,10 +438,10 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		createResource(eNS_URI);
 
 		// Create annotations
-		// http://www.eclipse.org/emf/2002/GenModel
-		createGenModelAnnotations();
 		// urn:org.nasdanika
 		createUrnorgAnnotations();
+		// http://www.eclipse.org/emf/2002/GenModel
+		createGenModelAnnotations();
 	}
 
 	/**
@@ -452,12 +452,6 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 */
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
-		addAnnotation
-		  (this,
-		   source,
-		   new String[] {
-			   "documentation", "A model of engineering - a process of building something composite by resolving issues associated with solution components by engineers in increments and making the new functionality available in releases."
-		   });
 		addAnnotation
 		  (engineeredElementEClass,
 		   source,
@@ -600,6 +594,12 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 */
 	protected void createUrnorgAnnotations() {
 		String source = "urn:org.nasdanika";
+		addAnnotation
+		  (this,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/engineering.md"
+		   });
 		addAnnotation
 		  (getEngineeredElement_Issues(),
 		   source,

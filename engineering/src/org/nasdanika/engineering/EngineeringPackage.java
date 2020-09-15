@@ -22,11 +22,9 @@ import org.nasdanika.party.PartyPackage;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * <!-- begin-model-doc -->
- * A model of engineering - a process of building something composite by resolving issues associated with solution components by engineers in increments and making the new functionality available in releases.
- * <!-- end-model-doc -->
  * @see org.nasdanika.engineering.EngineeringFactory
  * @model kind="package"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/engineering.md'"
  * @generated
  */
 public interface EngineeringPackage extends EPackage {
@@ -147,13 +145,13 @@ public interface EngineeringPackage extends EPackage {
 	int ENGINEER__NAME = PartyPackage.ROLE__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Parties</b></em>' reference list.
+	 * The feature id for the '<em><b>Members</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENGINEER__PARTIES = PartyPackage.ROLE__PARTIES;
+	int ENGINEER__MEMBERS = PartyPackage.ROLE__MEMBERS;
 
 	/**
 	 * The number of structural features of the '<em>Engineer</em>' class.

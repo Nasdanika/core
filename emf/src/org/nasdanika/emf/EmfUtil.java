@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Util;
 import org.osgi.framework.Bundle;
 
 public class EmfUtil {
@@ -134,6 +136,29 @@ public class EmfUtil {
 			}
 		}
 		return ret;
+	}
+
+	/**
+	 * Loads element documentation from a documentation resource specified in documentation-reference nasdanika (urn:org.nasdanika) annotation resolved relative to the 
+	 * model element resource. 
+	 * @param modelElement
+	 * @return
+	 */
+	public static String getDocumentation(EModelElement modelElement) {
+		EAnnotation nasdanikaAnnotation = getNasdanikaAnnotation(modelElement);
+		if (nasdanikaAnnotation != null) {
+			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
+			if (!Util.isBlank(docRef)) {
+				try {
+					return DefaultConverter.INSTANCE.toString(resolveReference(modelElement.eResource(), docRef).openStream());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "Error loading documentation: " + e;
+				}
+			}
+		}
+		
+		return null;
 	}
 
 }

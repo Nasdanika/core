@@ -314,6 +314,38 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>copy-engineering-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/bundles/org.nasdanika.engineering/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../engineering/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-engineering-edit-javadoc</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/site/bundles/org.nasdanika.engineering.edit/apidocs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/../engineering.edit/target/site/apidocs</directory>
+									<filtering>false</filtering>
+								</resource>								
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-ui-javadoc</id>
 						<phase>pre-site</phase>
 						<goals>
