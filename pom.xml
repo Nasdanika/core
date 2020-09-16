@@ -22,7 +22,7 @@
 	<repositories>
 		<repository>
 			<id>foundation</id>
-			<url>https://www.nasdanika.org/builds/${env.RELEASE}/repositories/composite</url>
+			<url>https://nasdanika.org/builds/${env.RELEASE}/repositories/composite</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
@@ -176,7 +176,7 @@
 	</modules>
 	<organization>
 		<name>Nasdanika LLC</name>
-		<url>https://www.nasdanika.org</url>
+		<url>https://nasdanika.org</url>
 	</organization>
 	<developers>
 	    <developer>
@@ -184,7 +184,7 @@
 	      <name>Pavel Vlasov</name>
 	      <url>https://github.com/pvlasov</url>
 	      <organization>Nasdanika LLC</organization>
-	      <organizationUrl>https://www.nasdanika.org</organizationUrl>
+	      <organizationUrl>https://nasdanika.org</organizationUrl>
 	      <roles>
 	        <role>developer</role>
 	      </roles>
@@ -196,7 +196,7 @@
 	</developers>
 
 	<!-- For Javadoc cross-ref resolution -->
-	<url>https://www.nasdanika.org/builds/${env.RELEASE}/products/core/bundles</url>
+	<url>https://nasdanika.org/builds/${env.RELEASE}/products/core/bundles</url>
 
 	<scm>
 		<url>https://github.com/Nasdanika/core</url>

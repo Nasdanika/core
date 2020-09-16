@@ -113,20 +113,7 @@ public class Iterator implements Adaptable, Marked {
 		
 		if (value instanceof Map) {
 			// Interpolate the map and wrap into context
-			Context ctx = Context.wrap(context.interpolate((Map<String,Object>) value)::get).compose(new Context() {
-
-				@Override
-				public Object get(String key) {
-					// Not inheriting properties
-					return null;
-				}
-
-				@Override
-				public <S> S get(Class<S> type) {
-					return context.get(type);
-				}
-				
-			});
+			Context ctx = Context.wrap(context.interpolate((Map<String,Object>) value)::get).compose(context);
 			return Collections.singleton(ctx);
 		}
 		if (value instanceof Collection) {

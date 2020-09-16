@@ -22,6 +22,7 @@ public class GitBinaryEntityContainerSupplier extends GitExecutionParticipant im
 			File repoDir, 
 			String origin, 
 			String branch,
+			String branchStartPoint,
 			CredentialsProvider credentialsProvider, 
 			boolean clean, 
 			Collection<String> addPatterns, 
@@ -30,7 +31,7 @@ public class GitBinaryEntityContainerSupplier extends GitExecutionParticipant im
 			String tag, 
 			boolean forceTag) {
 		
-		super(name, repoDir, origin, branch, credentialsProvider, clean, addPatterns, commitMessage, author, tag, forceTag);
+		super(name, repoDir, origin, branch, branchStartPoint, credentialsProvider, clean, addPatterns, commitMessage, author, tag, forceTag);
 	}
 
 	@Override

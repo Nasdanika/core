@@ -1,6 +1,8 @@
 git:
    origin: https://github.com/Nasdanika/git-supplier-test.git
-   branch: feature/test-component
+   branch: 
+      name: feature/off-develop
+      start-point: origin/develop
    credentials:
       user: ${user}
       password: ${auth-token}

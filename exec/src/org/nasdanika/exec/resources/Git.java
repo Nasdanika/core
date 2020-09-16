@@ -60,6 +60,8 @@ public class Git implements CommandFactory, Marked {
 	private static final String ADD_PATTERN_KEY = "add-pattern";
 //	private static final String RECONCILE_ACTION_KEY = "reconcile-action";
 	private static final String BRANCH_KEY = "branch";
+	private static final String BRANCH_NAME_KEY = "name";
+	private static final String BRANCH_START_POINT_KEY = "start-point";
 	private static final String CONTENTS_KEY = "contents";
 	private static final String MERGER_KEY = "merger";
 	private static final String CLEAN_KEY = "clean";
@@ -118,11 +120,25 @@ public class Git implements CommandFactory, Marked {
 					addPatterns.add(".");
 				}
 				
+				Object branchConfig = configMap.get(BRANCH_KEY);
+				String branch = null;
+				String branchStartPoint = null;
+				if (branchConfig instanceof String) {
+					branch = (String) branchConfig;
+				} else if (branchConfig instanceof Map) {
+					Map<String, Object> branchConfigMap = Loader.checkUnsupportedKeys((Map<String,Object>) branchConfig, BRANCH_NAME_KEY, BRANCH_START_POINT_KEY);
+					branch = Util.getString(branchConfigMap, BRANCH_NAME_KEY, null);
+					branchStartPoint = Util.getString(branchConfigMap, BRANCH_START_POINT_KEY, null);
+				} else if (branchConfig != null) {
+					throw new ConfigurationException("Branch value shall be a string or map", Util.getMarker(configMap, BRANCH_KEY));
+				}
+				
 				SupplierFactory<BinaryEntityContainer> repoFactory = new GitBinaryEntityContainerSupplierFactory(
 						"Git", 
 						Util.getString(configMap, REPOSITORY_KEY, null), 
 						Util.getString(configMap, ORIGIN_KEY, null), 
-						Util.getString(configMap, BRANCH_KEY, null), 
+						branch,
+						branchStartPoint,
 						credentials == null ? null : Util.getString(credentials, USER_KEY, null), 
 						credentials == null ? null : Util.getString(credentials, PASSWORD_KEY, null), 
 						configMap.get(CLEAN_KEY), 

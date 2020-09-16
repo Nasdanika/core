@@ -34,6 +34,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 	private Collection<String> addPatterns;
 	private Object clean;
 	private String branch;
+	private String branchStartPoint;
 
 	/**
 	 * @return Temporary directory prefix. This implementation returns "git-supplier-", override if needed.
@@ -67,6 +68,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 			String repoDir, 
 			String origin, 
 			String branch,
+			String branchStartPoint,
 			String user,
 			String password,
 			Object clean,
@@ -81,6 +83,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 		this.repoDir = repoDir;
 		this.origin = origin;
 		this.branch = branch;
+		this.branchStartPoint = branchStartPoint;
 		this.user = user;
 		this.password = password;
 		this.clean = clean;
@@ -101,6 +104,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 				repoDir == null ? null : new File(repoDir), 
 				context.interpolateToString(origin), 
 				context.interpolateToString(branch), 
+				context.interpolateToString(branchStartPoint),
 				Util.isBlank(user) ? null : new UsernamePasswordCredentialsProvider(context.interpolateToString(user), context.interpolateToString(password)), 
 				Boolean.TRUE.equals(iClean) || "true".equals(iClean), 
 				addPatterns == null ? null : addPatterns.stream().map(context::interpolateToString).collect(Collectors.toList()), 

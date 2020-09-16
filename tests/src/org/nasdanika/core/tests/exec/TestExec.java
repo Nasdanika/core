@@ -74,6 +74,23 @@ public class TestExec {
 	}
 	
 	/**
+	 * Iteration over map values.
+	 */
+	@Test
+	public void testIteratorMap() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object iterator = loader.loadYaml(TestExec.class.getResource("iterator-map-spec.yml"), monitor);
+		assertEquals(Iterator.class, iterator.getClass());
+		
+		Map<String, Object> yaml = new Yaml().load(TestExec.class.getResourceAsStream("iterator-map-config.yml"));
+		Context context = Context.wrap(yaml::get);
+		
+		InputStream result = callSupplier(context, monitor, iterator);
+		assertEquals(" * v301-v302-w21 *  * v311-v312-w21 * ", Util.toString(context, result));
+	}
+	
+	/**
 	 * Tests injection of configuration.
 	 */
 	@SuppressWarnings("unchecked")
@@ -482,8 +499,9 @@ public class TestExec {
 		GitBinaryEntityContainerSupplierFactory gitSupplierFactory = new GitBinaryEntityContainerSupplierFactory(
 				"Test GIT supplier", 
 				null, 
-				"https://github.com/Nasdanika/git-supplier-test.git", 
+				"https://github.com/Nasdanika/git-supplier-test-2.git", 
 				"feature/test-2",
+				null,
 				"${user}", 
 				"${auth-token}", 
 				false, 
@@ -554,7 +572,9 @@ public class TestExec {
 		Collection<String> annotations = new ArrayList<>();
 		annotations.add("Override");
 		annotations.add("${import/org.nasdanika.TestAnnotation}");		
-		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key).compose(Context.singleton("myFieldAnnotations", annotations));
+		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key)
+				.compose(Context.singleton("myFieldAnnotations", annotations))
+				.compose(Context.singleton("date", new Date()));
 		callCommand(context, monitor, git);
 	}	
 	

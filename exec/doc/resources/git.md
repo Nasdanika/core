@@ -23,7 +23,11 @@ All configuration values are interpolated with input.
 * ``author`` - Commit author. 
     * ``name`` - Author name.
     * ``e-mail`` - Author e-mail.
-* ``branch`` - Branch to check out. If remote branch does not exist a new one is created off the current HEAD.
+* ``branch`` - Branch to check out. String or map. If a branch does not exist it will be created unless there is no current ``HEAD``, e.g. in the case of an empty repository. If a branch cannot be created a warning is issued and generated content is committed and pushed to the repository without branch creation. I.e. for an empty repository the content will be committed and pushed to the default branch, e.g. ``master``.
+    * If string - branch name. If remote branch does not exist a new one is created off the current ``HEAD``.
+    * If map - branch specification. Supports two keys:
+        * ``name`` - branch name, required.
+        * ``start-point`` - branch start point, optional. If not provided then it is the same as string branch specification and a new branch will be started off the current ``HEAD``. If provided, the interpolated value will be used as branch start point. Start point is ignored for existing branches.
 * ``clean`` - If true the repo directory is cleaned up before any other operation, i.e. it is always clone.
 * ``commit-message`` - Commit message.
 * ``contents`` - Resource components creating/modifying repository contents.
@@ -108,6 +112,17 @@ git:
                                  imports:
                                     - org.nasdanika.common.ConsumerFactory
                                     - org.nasdanika.common.resources.BinaryEntityContainer
+```
+
+##### Branch specification
+
+Below an example of a map branch specification:
+
+```yaml
+git:
+   branch: 
+      name: feature/off-develop
+      start-point: origin/develop
 ```
 
 #### Java code

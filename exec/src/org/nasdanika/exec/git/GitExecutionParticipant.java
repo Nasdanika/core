@@ -17,6 +17,8 @@ import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
@@ -55,6 +57,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 	protected Collection<String> addPatterns = new ArrayList<>();
 	protected boolean clean;
 	protected String branch;
+	protected String branchStartPoint;
 
 	/**
 	 * @return Temporary directory prefix. This implementation returns "git-supplier-", override if needed.
@@ -72,7 +75,8 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 	 * @param name Participant name
 	 * @param repoDir Git repository working directory. If null then a temporary directory is created. In this case origin must be provided for cloning.
 	 * @param origin Origin to pull from if repoDir is null or does not exist. If origin is not null then a push is performed after commit.
-	 * @param branch Branch to check out. If remote branch does not exist a new one is created off the current HEAD.
+	 * @param branch Branch to check out. If remote branch does not exist a new one is created off the current HEAD or branchStartPoint if it is not blank.
+	 * @param branchStartPoint Branch start point used to create a new branch. If it is blank then a new branch is created off the current HEAD.
 	 * @param credentialsProvider Credentials provider for clone/pull/push.
 	 * @param clean If true the repo directory is cleaned up before any other operation, i.e. it is always clone.
 	 * @param addPatterns Add file patterns.
@@ -86,6 +90,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 			File repoDir, 
 			String origin, 
 			String branch,
+			String branchStartPoint,
 			CredentialsProvider credentialsProvider,
 			boolean clean,
 			Collection<String> addPatterns,
@@ -99,6 +104,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 		this.repoDir = repoDir;
 		this.origin = origin;
 		this.branch = branch;
+		this.branchStartPoint = branchStartPoint;
 		this.credentialsProvider = credentialsProvider;
 		this.clean = clean;
 		if (addPatterns != null) {
@@ -230,18 +236,29 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 			}
 			
 			if (!Util.isBlank(branch)) {
+				boolean startingFromHead = Util.isBlank(branchStartPoint);
 				try (ProgressMonitor checkoutMonitor = progressMonitor.split("Checking out", 1, branch)) {
 					CheckoutCommand checkoutCommand = git.checkout()
 							.setProgressMonitor(wrap(checkoutMonitor))
 					        .setCreateBranch(true)
 					        .setName(branch);
 
+					if (!Util.isBlank(branchStartPoint)) {
+						checkoutCommand.setStartPoint(branchStartPoint);
+					}
 					List<Ref> branchList = git.branchList().setListMode(ListMode.REMOTE).call();
 					for (Ref remoteBranch: branchList) {
 						if (remoteBranch.getName().equals("refs/remotes/origin/"+branch)) {
 							checkoutCommand
 					        	.setUpstreamMode(SetupUpstreamMode.TRACK)
 					        	.setStartPoint("origin/" + branch);								
+						}
+					}
+					if (startingFromHead) {
+						ObjectId head = git.getRepository().resolve(Constants.HEAD);
+						if (head == null) {
+							// No current head, e.g. an empty repository. Can't create a branch.
+							return new BasicDiagnostic(Status.WARNING, "Could not create a branch as there is no current head");
 						}
 					}
 					Ref ref = checkoutCommand.call();
