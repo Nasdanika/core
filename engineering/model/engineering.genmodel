@@ -10,25 +10,18 @@
   <foreignModel>engineering.ecore</foreignModel>
   <genPackages prefix="Engineering" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="engineering.ecore#/">
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="engineering.ecore#//IssueStatus">
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueStatus/Open"/>
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueStatus/InProgress"/>
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueStatus/Done"/>
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueStatus/Cancelled"/>
-    </genEnums>
-    <genEnums typeSafeEnumCompatible="false" ecoreEnum="engineering.ecore#//IssueImportance">
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueImportance/Low"/>
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueImportance/Medium"/>
-      <genEnumLiterals ecoreEnumLiteral="engineering.ecore#//IssueImportance/High"/>
-    </genEnums>
-    <genClasses image="false" ecoreClass="engineering.ecore#//EngineeredElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//EngineeredElement/owners"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference engineering.ecore#//EngineeredElement/issues"/>
+    <genClasses image="false" ecoreClass="engineering.ecore#//AbstractComponent">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//AbstractComponent/owners"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference engineering.ecore#//AbstractComponent/issues"/>
     </genClasses>
+    <genClasses ecoreClass="engineering.ecore#//AbstractEngineer"/>
     <genClasses ecoreClass="engineering.ecore#//Engineer"/>
+    <genClasses ecoreClass="engineering.ecore#//IssueType"/>
+    <genClasses ecoreClass="engineering.ecore#//IssueResolution"/>
+    <genClasses ecoreClass="engineering.ecore#//IssueCategory"/>
+    <genClasses ecoreClass="engineering.ecore#//IssueStatus"/>
+    <genClasses ecoreClass="engineering.ecore#//IssueNote"/>
     <genClasses ecoreClass="engineering.ecore#//Issue">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Issue/importance"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Issue/status"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//Issue/assignedTo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Issue/size"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Issue/benefit"/>
@@ -40,5 +33,21 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Increment/start"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Increment/end"/>
     </genClasses>
+    <genClasses ecoreClass="engineering.ecore#//EngineeringOrganizationalUnit"/>
+    <genClasses ecoreClass="engineering.ecore#//Release"/>
+    <genClasses ecoreClass="engineering.ecore#//Objective"/>
+    <genClasses ecoreClass="engineering.ecore#//KeyResult"/>
+    <genClasses ecoreClass="engineering.ecore#//Product"/>
+    <genClasses ecoreClass="engineering.ecore#//Offering"/>
+    <genClasses ecoreClass="engineering.ecore#//Edition"/>
+    <genClasses ecoreClass="engineering.ecore#//Feature"/>
+    <genClasses ecoreClass="engineering.ecore#//Component"/>
+    <genClasses ecoreClass="engineering.ecore#//Persona"/>
+    <genClasses ecoreClass="engineering.ecore#//Need"/>
+    <genClasses ecoreClass="engineering.ecore#//Scenario"/>
+    <genClasses ecoreClass="engineering.ecore#//Portfolio"/>
+    <genClasses ecoreClass="engineering.ecore#//Criterion"/>
+    <genClasses ecoreClass="engineering.ecore#//Comparison"/>
+    <genClasses ecoreClass="engineering.ecore#//Risk"/>
   </genPackages>
 </genmodel:GenModel>

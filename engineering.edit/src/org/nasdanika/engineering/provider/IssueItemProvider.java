@@ -51,58 +51,12 @@ public class IssueItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addImportancePropertyDescriptor(object);
-			addStatusPropertyDescriptor(object);
 			addAssignedToPropertyDescriptor(object);
 			addSizePropertyDescriptor(object);
 			addBenefitPropertyDescriptor(object);
 			addPlannedForPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Importance feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addImportancePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Issue_importance_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_importance_feature", "_UI_Issue_type"),
-				 EngineeringPackage.Literals.ISSUE__IMPORTANCE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Status feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addStatusPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Issue_status_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_status_feature", "_UI_Issue_type"),
-				 EngineeringPackage.Literals.ISSUE__STATUS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -271,8 +225,6 @@ public class IssueItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Issue.class)) {
-			case EngineeringPackage.ISSUE__IMPORTANCE:
-			case EngineeringPackage.ISSUE__STATUS:
 			case EngineeringPackage.ISSUE__SIZE:
 			case EngineeringPackage.ISSUE__BENEFIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

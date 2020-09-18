@@ -22,7 +22,7 @@
 					<skipAssembly>false</skipAssembly>
 					<outputDirectory>${project.build.directory}/site</outputDirectory>
 					<formats>zip</formats>
-					<finalName>source</finalName>
+					<finalName>nasdanika-core-source</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptors>
 						<descriptor>src/assembly/workspace.xml</descriptor>

@@ -1,5 +1,5 @@
 * Converts source input stream to String using context charset, which defaults to ``UTF-8``, 
-* Iterates over the patterns map, matches key as Java Regex patterns in the contents and replaces them with the interpolated values.
+* Iterates over the patterns map, matches key as ${javadoc/java.util.regex Java Regex} ${javadoc/java.util.regex.Pattern patterns} in the contents and replaces them with the interpolated values.
 * Converts back to input stream using context charset.
 
 ### Configuration

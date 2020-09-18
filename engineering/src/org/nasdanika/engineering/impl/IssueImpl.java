@@ -12,12 +12,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.nasdanika.engineering.Engineer;
+import org.nasdanika.engineering.AbstractEngineer;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Increment;
 import org.nasdanika.engineering.Issue;
-import org.nasdanika.engineering.IssueImportance;
-import org.nasdanika.engineering.IssueStatus;
 import org.nasdanika.ncore.impl.EntityImpl;
 
 /**
@@ -28,8 +26,6 @@ import org.nasdanika.ncore.impl.EntityImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getImportance <em>Importance</em>}</li>
- *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getStatus <em>Status</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getAssignedTo <em>Assigned To</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getSize <em>Size</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getBenefit <em>Benefit</em>}</li>
@@ -40,26 +36,6 @@ import org.nasdanika.ncore.impl.EntityImpl;
  * @generated
  */
 public class IssueImpl extends EntityImpl implements Issue {
-	/**
-	 * The default value of the '{@link #getImportance() <em>Importance</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getImportance()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final IssueImportance IMPORTANCE_EDEFAULT = IssueImportance.MEDIUM;
-
-	/**
-	 * The default value of the '{@link #getStatus() <em>Status</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStatus()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final IssueStatus STATUS_EDEFAULT = IssueStatus.OPEN;
-
 	/**
 	 * The default value of the '{@link #getSize() <em>Size</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -104,68 +80,10 @@ public class IssueImpl extends EntityImpl implements Issue {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IssueImportance getImportance() {
-		return (IssueImportance)eDynamicGet(EngineeringPackage.ISSUE__IMPORTANCE, EngineeringPackage.Literals.ISSUE__IMPORTANCE, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setImportance(IssueImportance newImportance) {
-		eDynamicSet(EngineeringPackage.ISSUE__IMPORTANCE, EngineeringPackage.Literals.ISSUE__IMPORTANCE, newImportance);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IssueStatus getStatus() {
-		return (IssueStatus)eDynamicGet(EngineeringPackage.ISSUE__STATUS, EngineeringPackage.Literals.ISSUE__STATUS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStatus(IssueStatus newStatus) {
-		eDynamicSet(EngineeringPackage.ISSUE__STATUS, EngineeringPackage.Literals.ISSUE__STATUS, newStatus);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Engineer getAssignedTo() {
-		return (Engineer)eDynamicGet(EngineeringPackage.ISSUE__ASSIGNED_TO, EngineeringPackage.Literals.ISSUE__ASSIGNED_TO, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Engineer basicGetAssignedTo() {
-		return (Engineer)eDynamicGet(EngineeringPackage.ISSUE__ASSIGNED_TO, EngineeringPackage.Literals.ISSUE__ASSIGNED_TO, false, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setAssignedTo(Engineer newAssignedTo) {
-		eDynamicSet(EngineeringPackage.ISSUE__ASSIGNED_TO, EngineeringPackage.Literals.ISSUE__ASSIGNED_TO, newAssignedTo);
+	public EList<AbstractEngineer> getAssignedTo() {
+		return (EList<AbstractEngineer>)eDynamicGet(EngineeringPackage.ISSUE__ASSIGNED_TO, EngineeringPackage.Literals.ISSUE__ASSIGNED_TO, true, true);
 	}
 
 	/**
@@ -270,13 +188,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case EngineeringPackage.ISSUE__IMPORTANCE:
-				return getImportance();
-			case EngineeringPackage.ISSUE__STATUS:
-				return getStatus();
 			case EngineeringPackage.ISSUE__ASSIGNED_TO:
-				if (resolve) return getAssignedTo();
-				return basicGetAssignedTo();
+				return getAssignedTo();
 			case EngineeringPackage.ISSUE__SIZE:
 				return getSize();
 			case EngineeringPackage.ISSUE__BENEFIT:
@@ -299,14 +212,9 @@ public class IssueImpl extends EntityImpl implements Issue {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case EngineeringPackage.ISSUE__IMPORTANCE:
-				setImportance((IssueImportance)newValue);
-				return;
-			case EngineeringPackage.ISSUE__STATUS:
-				setStatus((IssueStatus)newValue);
-				return;
 			case EngineeringPackage.ISSUE__ASSIGNED_TO:
-				setAssignedTo((Engineer)newValue);
+				getAssignedTo().clear();
+				getAssignedTo().addAll((Collection<? extends AbstractEngineer>)newValue);
 				return;
 			case EngineeringPackage.ISSUE__SIZE:
 				setSize((Double)newValue);
@@ -333,14 +241,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case EngineeringPackage.ISSUE__IMPORTANCE:
-				setImportance(IMPORTANCE_EDEFAULT);
-				return;
-			case EngineeringPackage.ISSUE__STATUS:
-				setStatus(STATUS_EDEFAULT);
-				return;
 			case EngineeringPackage.ISSUE__ASSIGNED_TO:
-				setAssignedTo((Engineer)null);
+				getAssignedTo().clear();
 				return;
 			case EngineeringPackage.ISSUE__SIZE:
 				setSize(SIZE_EDEFAULT);
@@ -366,12 +268,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case EngineeringPackage.ISSUE__IMPORTANCE:
-				return getImportance() != IMPORTANCE_EDEFAULT;
-			case EngineeringPackage.ISSUE__STATUS:
-				return getStatus() != STATUS_EDEFAULT;
 			case EngineeringPackage.ISSUE__ASSIGNED_TO:
-				return basicGetAssignedTo() != null;
+				return !getAssignedTo().isEmpty();
 			case EngineeringPackage.ISSUE__SIZE:
 				return getSize() != SIZE_EDEFAULT;
 			case EngineeringPackage.ISSUE__BENEFIT:

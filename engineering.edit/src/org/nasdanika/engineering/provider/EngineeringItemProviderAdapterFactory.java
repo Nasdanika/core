@@ -72,6 +72,29 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.AbstractEngineer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected AbstractEngineerItemProvider abstractEngineerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.AbstractEngineer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createAbstractEngineerAdapter() {
+		if (abstractEngineerItemProvider == null) {
+			abstractEngineerItemProvider = new AbstractEngineerItemProvider(this);
+		}
+
+		return abstractEngineerItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Engineer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -92,6 +115,121 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		}
 
 		return engineerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueTypeItemProvider issueTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueTypeAdapter() {
+		if (issueTypeItemProvider == null) {
+			issueTypeItemProvider = new IssueTypeItemProvider(this);
+		}
+
+		return issueTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueResolution} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueResolutionItemProvider issueResolutionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueResolution}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueResolutionAdapter() {
+		if (issueResolutionItemProvider == null) {
+			issueResolutionItemProvider = new IssueResolutionItemProvider(this);
+		}
+
+		return issueResolutionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueCategory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueCategoryItemProvider issueCategoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueCategory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueCategoryAdapter() {
+		if (issueCategoryItemProvider == null) {
+			issueCategoryItemProvider = new IssueCategoryItemProvider(this);
+		}
+
+		return issueCategoryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueStatus} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueStatusItemProvider issueStatusItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueStatus}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueStatusAdapter() {
+		if (issueStatusItemProvider == null) {
+			issueStatusItemProvider = new IssueStatusItemProvider(this);
+		}
+
+		return issueStatusItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueNote} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueNoteItemProvider issueNoteItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueNote}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueNoteAdapter() {
+		if (issueNoteItemProvider == null) {
+			issueNoteItemProvider = new IssueNoteItemProvider(this);
+		}
+
+		return issueNoteItemProvider;
 	}
 
 	/**
@@ -138,6 +276,374 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		}
 
 		return incrementItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.EngineeringOrganizationalUnit} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EngineeringOrganizationalUnitItemProvider engineeringOrganizationalUnitItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.EngineeringOrganizationalUnit}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEngineeringOrganizationalUnitAdapter() {
+		if (engineeringOrganizationalUnitItemProvider == null) {
+			engineeringOrganizationalUnitItemProvider = new EngineeringOrganizationalUnitItemProvider(this);
+		}
+
+		return engineeringOrganizationalUnitItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Release} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ReleaseItemProvider releaseItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Release}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createReleaseAdapter() {
+		if (releaseItemProvider == null) {
+			releaseItemProvider = new ReleaseItemProvider(this);
+		}
+
+		return releaseItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Objective} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ObjectiveItemProvider objectiveItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Objective}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createObjectiveAdapter() {
+		if (objectiveItemProvider == null) {
+			objectiveItemProvider = new ObjectiveItemProvider(this);
+		}
+
+		return objectiveItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.KeyResult} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected KeyResultItemProvider keyResultItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.KeyResult}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createKeyResultAdapter() {
+		if (keyResultItemProvider == null) {
+			keyResultItemProvider = new KeyResultItemProvider(this);
+		}
+
+		return keyResultItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Product} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProductItemProvider productItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Product}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProductAdapter() {
+		if (productItemProvider == null) {
+			productItemProvider = new ProductItemProvider(this);
+		}
+
+		return productItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Offering} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OfferingItemProvider offeringItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Offering}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOfferingAdapter() {
+		if (offeringItemProvider == null) {
+			offeringItemProvider = new OfferingItemProvider(this);
+		}
+
+		return offeringItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Edition} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EditionItemProvider editionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Edition}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEditionAdapter() {
+		if (editionItemProvider == null) {
+			editionItemProvider = new EditionItemProvider(this);
+		}
+
+		return editionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Feature} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FeatureItemProvider featureItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Feature}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFeatureAdapter() {
+		if (featureItemProvider == null) {
+			featureItemProvider = new FeatureItemProvider(this);
+		}
+
+		return featureItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Component} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ComponentItemProvider componentItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Component}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createComponentAdapter() {
+		if (componentItemProvider == null) {
+			componentItemProvider = new ComponentItemProvider(this);
+		}
+
+		return componentItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Persona} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PersonaItemProvider personaItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Persona}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPersonaAdapter() {
+		if (personaItemProvider == null) {
+			personaItemProvider = new PersonaItemProvider(this);
+		}
+
+		return personaItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Need} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NeedItemProvider needItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Need}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNeedAdapter() {
+		if (needItemProvider == null) {
+			needItemProvider = new NeedItemProvider(this);
+		}
+
+		return needItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Scenario} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScenarioItemProvider scenarioItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Scenario}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScenarioAdapter() {
+		if (scenarioItemProvider == null) {
+			scenarioItemProvider = new ScenarioItemProvider(this);
+		}
+
+		return scenarioItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Portfolio} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortfolioItemProvider portfolioItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Portfolio}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortfolioAdapter() {
+		if (portfolioItemProvider == null) {
+			portfolioItemProvider = new PortfolioItemProvider(this);
+		}
+
+		return portfolioItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Criterion} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CriterionItemProvider criterionItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Criterion}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCriterionAdapter() {
+		if (criterionItemProvider == null) {
+			criterionItemProvider = new CriterionItemProvider(this);
+		}
+
+		return criterionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Comparison} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ComparisonItemProvider comparisonItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Comparison}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createComparisonAdapter() {
+		if (comparisonItemProvider == null) {
+			comparisonItemProvider = new ComparisonItemProvider(this);
+		}
+
+		return comparisonItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Risk} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RiskItemProvider riskItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.Risk}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRiskAdapter() {
+		if (riskItemProvider == null) {
+			riskItemProvider = new RiskItemProvider(this);
+		}
+
+		return riskItemProvider;
 	}
 
 	/**
@@ -245,9 +751,31 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	 */
 	@Override
 	public void dispose() {
+		if (abstractEngineerItemProvider != null) abstractEngineerItemProvider.dispose();
 		if (engineerItemProvider != null) engineerItemProvider.dispose();
+		if (issueTypeItemProvider != null) issueTypeItemProvider.dispose();
+		if (issueResolutionItemProvider != null) issueResolutionItemProvider.dispose();
+		if (issueCategoryItemProvider != null) issueCategoryItemProvider.dispose();
+		if (issueStatusItemProvider != null) issueStatusItemProvider.dispose();
+		if (issueNoteItemProvider != null) issueNoteItemProvider.dispose();
 		if (issueItemProvider != null) issueItemProvider.dispose();
 		if (incrementItemProvider != null) incrementItemProvider.dispose();
+		if (engineeringOrganizationalUnitItemProvider != null) engineeringOrganizationalUnitItemProvider.dispose();
+		if (releaseItemProvider != null) releaseItemProvider.dispose();
+		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
+		if (keyResultItemProvider != null) keyResultItemProvider.dispose();
+		if (productItemProvider != null) productItemProvider.dispose();
+		if (offeringItemProvider != null) offeringItemProvider.dispose();
+		if (editionItemProvider != null) editionItemProvider.dispose();
+		if (featureItemProvider != null) featureItemProvider.dispose();
+		if (componentItemProvider != null) componentItemProvider.dispose();
+		if (personaItemProvider != null) personaItemProvider.dispose();
+		if (needItemProvider != null) needItemProvider.dispose();
+		if (scenarioItemProvider != null) scenarioItemProvider.dispose();
+		if (portfolioItemProvider != null) portfolioItemProvider.dispose();
+		if (criterionItemProvider != null) criterionItemProvider.dispose();
+		if (comparisonItemProvider != null) comparisonItemProvider.dispose();
+		if (riskItemProvider != null) riskItemProvider.dispose();
 	}
 
 }

@@ -27,8 +27,6 @@ import org.nasdanika.ncore.Entity;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.engineering.Issue#getImportance <em>Importance</em>}</li>
- *   <li>{@link org.nasdanika.engineering.Issue#getStatus <em>Status</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getAssignedTo <em>Assigned To</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getSize <em>Size</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getBenefit <em>Benefit</em>}</li>
@@ -42,87 +40,19 @@ import org.nasdanika.ncore.Entity;
  */
 public interface Issue extends Entity {
 	/**
-	 * Returns the value of the '<em><b>Importance</b></em>' attribute.
-	 * The default value is <code>"Medium"</code>.
-	 * The literals are from the enumeration {@link org.nasdanika.engineering.IssueImportance}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Issue importance.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Importance</em>' attribute.
-	 * @see org.nasdanika.engineering.IssueImportance
-	 * @see #setImportance(IssueImportance)
-	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_Importance()
-	 * @model default="Medium"
-	 * @generated
-	 */
-	IssueImportance getImportance();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.engineering.Issue#getImportance <em>Importance</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Importance</em>' attribute.
-	 * @see org.nasdanika.engineering.IssueImportance
-	 * @see #getImportance()
-	 * @generated
-	 */
-	void setImportance(IssueImportance value);
-
-	/**
-	 * Returns the value of the '<em><b>Status</b></em>' attribute.
-	 * The default value is <code>"Open"</code>.
-	 * The literals are from the enumeration {@link org.nasdanika.engineering.IssueStatus}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Issue status.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Status</em>' attribute.
-	 * @see org.nasdanika.engineering.IssueStatus
-	 * @see #setStatus(IssueStatus)
-	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_Status()
-	 * @model default="Open"
-	 * @generated
-	 */
-	IssueStatus getStatus();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.engineering.Issue#getStatus <em>Status</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Status</em>' attribute.
-	 * @see org.nasdanika.engineering.IssueStatus
-	 * @see #getStatus()
-	 * @generated
-	 */
-	void setStatus(IssueStatus value);
-
-	/**
-	 * Returns the value of the '<em><b>Assigned To</b></em>' reference.
+	 * Returns the value of the '<em><b>Assigned To</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.AbstractEngineer}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Engineer this issue is assigned to. If this attribute is null the issue is assumed to be assigned to the owner of the containing element.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Assigned To</em>' reference.
-	 * @see #setAssignedTo(Engineer)
+	 * @return the value of the '<em>Assigned To</em>' reference list.
 	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_AssignedTo()
 	 * @model
 	 * @generated
 	 */
-	Engineer getAssignedTo();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.engineering.Issue#getAssignedTo <em>Assigned To</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assigned To</em>' reference.
-	 * @see #getAssignedTo()
-	 * @generated
-	 */
-	void setAssignedTo(Engineer value);
+	EList<AbstractEngineer> getAssignedTo();
 
 	/**
 	 * Returns the value of the '<em><b>Size</b></em>' attribute.
