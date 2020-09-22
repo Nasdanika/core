@@ -183,4 +183,8 @@ The team comes up with a list of product features and scenarios showing how thes
 They work with the internal customers to prioritize features, define issues/tasks to implement the features.
 Based on the effective weights computed by the model the team organizes issues into increments and features into releases.
 As they deliver product functionality they collect feedback and capture it as issues to make sure that everybody's voice is heard.
+Then they present result of their work to the project sponsors. The model provides analytical data supporting the team decisions. 
+The data is derived from feedback from the internal customers. 
+This gives the project sponsors confidence that the team has done the right thing and also has done in the right order.
+ 
 
