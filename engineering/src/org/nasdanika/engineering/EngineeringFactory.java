@@ -112,6 +112,15 @@ public interface EngineeringFactory extends EFactory {
 	EngineeringOrganizationalUnit createEngineeringOrganizationalUnit();
 
 	/**
+	 * Returns a new object of class '<em>Organization</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Organization</em>'.
+	 * @generated
+	 */
+	EngineeringOrganization createEngineeringOrganization();
+
+	/**
 	 * Returns a new object of class '<em>Release</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

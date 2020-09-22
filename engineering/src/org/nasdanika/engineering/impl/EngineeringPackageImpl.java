@@ -13,10 +13,13 @@ import org.nasdanika.engineering.AbstractComponent;
 import org.nasdanika.engineering.AbstractEngineer;
 import org.nasdanika.engineering.Comparison;
 import org.nasdanika.engineering.Component;
+import org.nasdanika.engineering.ComponentCategory;
+import org.nasdanika.engineering.ComponentReference;
 import org.nasdanika.engineering.Criterion;
 import org.nasdanika.engineering.Edition;
 import org.nasdanika.engineering.Engineer;
 import org.nasdanika.engineering.EngineeringFactory;
+import org.nasdanika.engineering.EngineeringOrganization;
 import org.nasdanika.engineering.EngineeringOrganizationalUnit;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Feature;
@@ -53,6 +56,20 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 * @generated
 	 */
 	private EClass abstractComponentEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass componentCategoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass componentReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -120,6 +137,13 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 * @generated
 	 */
 	private EClass engineeringOrganizationalUnitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass engineeringOrganizationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -327,6 +351,66 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 * @generated
 	 */
 	@Override
+	public EClass getComponentCategory() {
+		return componentCategoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentCategory_Owners() {
+		return (EReference)componentCategoryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentCategory_Issues() {
+		return (EReference)componentCategoryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getComponentReference() {
+		return componentReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentReference_Owners() {
+		return (EReference)componentReferenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComponentReference_Issues() {
+		return (EReference)componentReferenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getAbstractEngineer() {
 		return abstractEngineerEClass;
 	}
@@ -479,6 +563,16 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	@Override
 	public EClass getEngineeringOrganizationalUnit() {
 		return engineeringOrganizationalUnitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEngineeringOrganization() {
+		return engineeringOrganizationEClass;
 	}
 
 	/**
@@ -684,7 +778,19 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		createEReference(abstractComponentEClass, ABSTRACT_COMPONENT__OWNERS);
 		createEReference(abstractComponentEClass, ABSTRACT_COMPONENT__ISSUES);
 
+		componentCategoryEClass = createEClass(COMPONENT_CATEGORY);
+		createEReference(componentCategoryEClass, COMPONENT_CATEGORY__OWNERS);
+		createEReference(componentCategoryEClass, COMPONENT_CATEGORY__ISSUES);
+
+		componentReferenceEClass = createEClass(COMPONENT_REFERENCE);
+		createEReference(componentReferenceEClass, COMPONENT_REFERENCE__OWNERS);
+		createEReference(componentReferenceEClass, COMPONENT_REFERENCE__ISSUES);
+
 		abstractEngineerEClass = createEClass(ABSTRACT_ENGINEER);
+
+		engineeringOrganizationalUnitEClass = createEClass(ENGINEERING_ORGANIZATIONAL_UNIT);
+
+		engineeringOrganizationEClass = createEClass(ENGINEERING_ORGANIZATION);
 
 		engineerEClass = createEClass(ENGINEER);
 
@@ -709,8 +815,6 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		createEReference(incrementEClass, INCREMENT__CHILDREN);
 		createEAttribute(incrementEClass, INCREMENT__START);
 		createEAttribute(incrementEClass, INCREMENT__END);
-
-		engineeringOrganizationalUnitEClass = createEClass(ENGINEERING_ORGANIZATIONAL_UNIT);
 
 		releaseEClass = createEClass(RELEASE);
 
@@ -775,17 +879,31 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		engineeringOrganizationalUnitEClass.getESuperTypes().add(thePartyPackage.getOrganizationalUnit());
+		engineeringOrganizationEClass.getESuperTypes().add(thePartyPackage.getOrganization());
+		engineeringOrganizationEClass.getESuperTypes().add(this.getEngineeringOrganizationalUnit());
 		engineerEClass.getESuperTypes().add(thePartyPackage.getRole());
 		issueEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		incrementEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
-		engineeringOrganizationalUnitEClass.getESuperTypes().add(thePartyPackage.getOrganizationalUnit());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(abstractComponentEClass, AbstractComponent.class, "AbstractComponent", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAbstractComponent_Owners(), this.getEngineer(), null, "owners", null, 0, -1, AbstractComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractComponent_Issues(), this.getIssue(), null, "issues", null, 0, -1, AbstractComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(componentCategoryEClass, ComponentCategory.class, "ComponentCategory", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getComponentCategory_Owners(), this.getEngineer(), null, "owners", null, 0, -1, ComponentCategory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentCategory_Issues(), this.getIssue(), null, "issues", null, 0, -1, ComponentCategory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(componentReferenceEClass, ComponentReference.class, "ComponentReference", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getComponentReference_Owners(), this.getEngineer(), null, "owners", null, 0, -1, ComponentReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComponentReference_Issues(), this.getIssue(), null, "issues", null, 0, -1, ComponentReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(abstractEngineerEClass, AbstractEngineer.class, "AbstractEngineer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(engineeringOrganizationalUnitEClass, EngineeringOrganizationalUnit.class, "EngineeringOrganizationalUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(engineeringOrganizationEClass, EngineeringOrganization.class, "EngineeringOrganization", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(engineerEClass, Engineer.class, "Engineer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -810,8 +928,6 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		initEReference(getIncrement_Children(), this.getIncrement(), null, "children", null, 0, -1, Increment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIncrement_Start(), ecorePackage.getEDate(), "start", null, 0, 1, Increment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIncrement_End(), ecorePackage.getEDate(), "end", null, 0, 1, Increment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(engineeringOrganizationalUnitEClass, EngineeringOrganizationalUnit.class, "EngineeringOrganizationalUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(releaseEClass, Release.class, "Release", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -880,10 +996,58 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 			   "documentation", "Issues associated with the element - problems/pain points, improvement opportunities/enhancements."
 		   });
 		addAnnotation
+		  (componentCategoryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."
+		   });
+		addAnnotation
+		  (getComponentCategory_Owners(),
+		   source,
+		   new String[] {
+			   "documentation", "Engineer responsible for this element."
+		   });
+		addAnnotation
+		  (getComponentCategory_Issues(),
+		   source,
+		   new String[] {
+			   "documentation", "Issues associated with the element - problems/pain points, improvement opportunities/enhancements."
+		   });
+		addAnnotation
+		  (componentReferenceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."
+		   });
+		addAnnotation
+		  (getComponentReference_Owners(),
+		   source,
+		   new String[] {
+			   "documentation", "Engineer responsible for this element."
+		   });
+		addAnnotation
+		  (getComponentReference_Issues(),
+		   source,
+		   new String[] {
+			   "documentation", "Issues associated with the element - problems/pain points, improvement opportunities/enhancements."
+		   });
+		addAnnotation
 		  (abstractEngineerEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Base class for Engineer and EngineeringOrganizationalUnit. Can own engineered elements and be assigned to issues. Can also contain its own issues list."
+		   });
+		addAnnotation
+		  (engineeringOrganizationalUnitEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the\ncomponents organized into categories. Palette for components."
+		   });
+		addAnnotation
+		  (engineeringOrganizationEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the"
 		   });
 		addAnnotation
 		  (engineerEClass,
@@ -964,12 +1128,6 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 			   "documentation", "Increments can be organized into a hierarchy. E.g. Year - Quarters - Months."
 		   });
 		addAnnotation
-		  (engineeringOrganizationalUnitEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the"
-		   });
-		addAnnotation
 		  (releaseEClass,
 		   source,
 		   new String[] {
@@ -1021,13 +1179,13 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		  (personaEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Description from internet, e.g. Wikipedia. Abstraction of parties who benefit from organization offerings. Not necessarily pay for them or use them. Weight - manual or computed with decision analysis. Manual may be sales volume, budget contribution for internal customers, population, percentage in profit generation. E.g. a grant size is dependent on how many personas adopt a product. References parties are persona representatives. Such parties may be involved in need identification and prioritization. Defined at EngineeringOrgUnit level - may be internal personas and internal products. May have base personas and personas can be organized into a hierarchy. Base personas define common needs, what everybody needs. Base personas may be abstract - no representatives and no own weight."
+			   "documentation", "Description from internet, e.g. Wikipedia. Abstraction of parties who benefit from organization offerings. Not necessarily pay for them or use them. Weight - manual or computed with decision analysis. Manual may be sales volume, budget contribution for internal customers, population, percentage in profit generation. E.g. a grant size is dependent on how many personas adopt a product. References parties are persona representatives. Such parties may be involved in need identification and prioritization. Defined at EngineeringOrgUnit level - may be internal personas and internal products. May have base personas and personas can be organized into a hierarchy. Base personas define common needs, what everybody needs. Base personas may be abstract - no representatives and no own weight.\nReference roles in addition to representatives - internal clients.\n\n\nPersona benefits from engineering organization outputs (offerings). Not necessarily buys or uses.\nPersona is an engineered element - owner, issues, ... representatives\n\nResources reference and palette - markdown docs, rigel flows, ... - party level. Embedded and references. Folders\n\n\nRigel activities defined in roles (actor). Prof extensions report which flows role participates in.\n\nNeeds, scenarios, offerings\n\nCustomer value and strategic value/alignment - objectives.\n"
 		   });
 		addAnnotation
 		  (needEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied."
+			   "documentation", "Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.\n\nMust have, need to have, delighter - here or at the offering level?"
 		   });
 		addAnnotation
 		  (scenarioEClass,
@@ -1077,6 +1235,20 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		   });
 		addAnnotation
 		  (getAbstractComponent_Issues(),
+		   source,
+		   new String[] {
+			   "label_ru", "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b",
+			   "Documentation_ru", "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b, \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0441 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u043e\u043c - \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b / \u0431\u043e\u043b\u0435\u0432\u044b\u0435 \u0442\u043e\u0447\u043a\u0438, \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f / \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f."
+		   });
+		addAnnotation
+		  (getComponentCategory_Issues(),
+		   source,
+		   new String[] {
+			   "label_ru", "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b",
+			   "Documentation_ru", "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b, \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0441 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u043e\u043c - \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b / \u0431\u043e\u043b\u0435\u0432\u044b\u0435 \u0442\u043e\u0447\u043a\u0438, \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f / \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f."
+		   });
+		addAnnotation
+		  (getComponentReference_Issues(),
 		   source,
 		   new String[] {
 			   "label_ru", "\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b",

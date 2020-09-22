@@ -14,26 +14,26 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
 import org.nasdanika.engineering.EngineeringFactory;
-import org.nasdanika.engineering.EngineeringOrganizationalUnit;
+import org.nasdanika.engineering.EngineeringOrganization;
 
 import org.nasdanika.party.PartyPackage;
 
-import org.nasdanika.party.provider.OrganizationalUnitItemProvider;
+import org.nasdanika.party.provider.OrganizationItemProvider;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.engineering.EngineeringOrganizationalUnit} object.
+ * This is the item provider adapter for a {@link org.nasdanika.engineering.EngineeringOrganization} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUnitItemProvider {
+public class EngineeringOrganizationItemProvider extends OrganizationItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EngineeringOrganizationalUnitItemProvider(AdapterFactory adapterFactory) {
+	public EngineeringOrganizationItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -53,14 +53,14 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	}
 
 	/**
-	 * This returns EngineeringOrganizationalUnit.gif.
+	 * This returns EngineeringOrganization.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/EngineeringOrganizationalUnit"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EngineeringOrganization"));
 	}
 
 	/**
@@ -81,10 +81,10 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EngineeringOrganizationalUnit)object).getName();
+		String label = ((EngineeringOrganization)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_EngineeringOrganizationalUnit_type") :
-			getString("_UI_EngineeringOrganizationalUnit_type") + " " + label;
+			getString("_UI_EngineeringOrganization_type") :
+			getString("_UI_EngineeringOrganization_type") + " " + label;
 	}
 
 
@@ -126,6 +126,39 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 			(createChildParameter
 				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES,
 				 EngineeringFactory.eINSTANCE.createEngineer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PartyPackage.Literals.ORGANIZATION__DIRECTORY,
+				 EngineeringFactory.eINSTANCE.createEngineeringOrganizationalUnit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PartyPackage.Literals.ORGANIZATION__DIRECTORY,
+				 EngineeringFactory.eINSTANCE.createEngineeringOrganization()));
+	}
+
+	/**
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
+		Object childFeature = feature;
+		Object childObject = child;
+
+		boolean qualify =
+			childFeature == PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS ||
+			childFeature == PartyPackage.Literals.ORGANIZATION__DIRECTORY;
+
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

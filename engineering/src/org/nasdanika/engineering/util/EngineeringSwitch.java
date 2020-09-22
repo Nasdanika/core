@@ -12,6 +12,7 @@ import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.party.DirectoryElement;
+import org.nasdanika.party.Organization;
 import org.nasdanika.party.OrganizationalUnit;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.Role;
@@ -79,9 +80,47 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case EngineeringPackage.COMPONENT_CATEGORY: {
+				ComponentCategory componentCategory = (ComponentCategory)theEObject;
+				T result = caseComponentCategory(componentCategory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.COMPONENT_REFERENCE: {
+				ComponentReference componentReference = (ComponentReference)theEObject;
+				T result = caseComponentReference(componentReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EngineeringPackage.ABSTRACT_ENGINEER: {
 				AbstractEngineer abstractEngineer = (AbstractEngineer)theEObject;
 				T result = caseAbstractEngineer(abstractEngineer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: {
+				EngineeringOrganizationalUnit engineeringOrganizationalUnit = (EngineeringOrganizationalUnit)theEObject;
+				T result = caseEngineeringOrganizationalUnit(engineeringOrganizationalUnit);
+				if (result == null) result = caseOrganizationalUnit(engineeringOrganizationalUnit);
+				if (result == null) result = caseParty(engineeringOrganizationalUnit);
+				if (result == null) result = caseDirectoryElement(engineeringOrganizationalUnit);
+				if (result == null) result = caseEntity(engineeringOrganizationalUnit);
+				if (result == null) result = caseNamedElement(engineeringOrganizationalUnit);
+				if (result == null) result = caseModelElement(engineeringOrganizationalUnit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.ENGINEERING_ORGANIZATION: {
+				EngineeringOrganization engineeringOrganization = (EngineeringOrganization)theEObject;
+				T result = caseEngineeringOrganization(engineeringOrganization);
+				if (result == null) result = caseOrganization(engineeringOrganization);
+				if (result == null) result = caseEngineeringOrganizationalUnit(engineeringOrganization);
+				if (result == null) result = caseOrganizationalUnit(engineeringOrganization);
+				if (result == null) result = caseParty(engineeringOrganization);
+				if (result == null) result = caseDirectoryElement(engineeringOrganization);
+				if (result == null) result = caseEntity(engineeringOrganization);
+				if (result == null) result = caseNamedElement(engineeringOrganization);
+				if (result == null) result = caseModelElement(engineeringOrganization);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -137,18 +176,6 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				T result = caseIncrement(increment);
 				if (result == null) result = caseNamedElement(increment);
 				if (result == null) result = caseModelElement(increment);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: {
-				EngineeringOrganizationalUnit engineeringOrganizationalUnit = (EngineeringOrganizationalUnit)theEObject;
-				T result = caseEngineeringOrganizationalUnit(engineeringOrganizationalUnit);
-				if (result == null) result = caseOrganizationalUnit(engineeringOrganizationalUnit);
-				if (result == null) result = caseParty(engineeringOrganizationalUnit);
-				if (result == null) result = caseDirectoryElement(engineeringOrganizationalUnit);
-				if (result == null) result = caseEntity(engineeringOrganizationalUnit);
-				if (result == null) result = caseNamedElement(engineeringOrganizationalUnit);
-				if (result == null) result = caseModelElement(engineeringOrganizationalUnit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -258,6 +285,36 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAbstractComponent(AbstractComponent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Component Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Component Category</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComponentCategory(ComponentCategory object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Component Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Component Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComponentReference(ComponentReference object) {
 		return null;
 	}
 
@@ -408,6 +465,21 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEngineeringOrganizationalUnit(EngineeringOrganizationalUnit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEngineeringOrganization(EngineeringOrganization object) {
 		return null;
 	}
 
@@ -738,6 +810,21 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOrganizationalUnit(OrganizationalUnit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Organization</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOrganization(Organization object) {
 		return null;
 	}
 

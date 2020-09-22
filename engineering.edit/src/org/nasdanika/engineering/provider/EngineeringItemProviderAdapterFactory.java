@@ -302,6 +302,29 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.EngineeringOrganization} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EngineeringOrganizationItemProvider engineeringOrganizationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.EngineeringOrganization}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEngineeringOrganizationAdapter() {
+		if (engineeringOrganizationItemProvider == null) {
+			engineeringOrganizationItemProvider = new EngineeringOrganizationItemProvider(this);
+		}
+
+		return engineeringOrganizationItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Release} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -752,6 +775,8 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	@Override
 	public void dispose() {
 		if (abstractEngineerItemProvider != null) abstractEngineerItemProvider.dispose();
+		if (engineeringOrganizationalUnitItemProvider != null) engineeringOrganizationalUnitItemProvider.dispose();
+		if (engineeringOrganizationItemProvider != null) engineeringOrganizationItemProvider.dispose();
 		if (engineerItemProvider != null) engineerItemProvider.dispose();
 		if (issueTypeItemProvider != null) issueTypeItemProvider.dispose();
 		if (issueResolutionItemProvider != null) issueResolutionItemProvider.dispose();
@@ -760,7 +785,6 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		if (issueNoteItemProvider != null) issueNoteItemProvider.dispose();
 		if (issueItemProvider != null) issueItemProvider.dispose();
 		if (incrementItemProvider != null) incrementItemProvider.dispose();
-		if (engineeringOrganizationalUnitItemProvider != null) engineeringOrganizationalUnitItemProvider.dispose();
 		if (releaseItemProvider != null) releaseItemProvider.dispose();
 		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
 		if (keyResultItemProvider != null) keyResultItemProvider.dispose();

@@ -106,6 +106,98 @@ public interface EngineeringPackage extends EPackage {
 	int ABSTRACT_COMPONENT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.ComponentCategory <em>Component Category</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.ComponentCategory
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponentCategory()
+	 * @generated
+	 */
+	int COMPONENT_CATEGORY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Owners</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_CATEGORY__OWNERS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Issues</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_CATEGORY__ISSUES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Component Category</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_CATEGORY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Component Category</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_CATEGORY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.ComponentReference <em>Component Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.ComponentReference
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponentReference()
+	 * @generated
+	 */
+	int COMPONENT_REFERENCE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Owners</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_REFERENCE__OWNERS = 0;
+
+	/**
+	 * The feature id for the '<em><b>Issues</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_REFERENCE__ISSUES = 1;
+
+	/**
+	 * The number of structural features of the '<em>Component Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_REFERENCE_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Component Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPONENT_REFERENCE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.engineering.impl.AbstractEngineerImpl <em>Abstract Engineer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -113,7 +205,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getAbstractEngineer()
 	 * @generated
 	 */
-	int ABSTRACT_ENGINEER = 1;
+	int ABSTRACT_ENGINEER = 3;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Engineer</em>' class.
@@ -141,7 +233,534 @@ public interface EngineeringPackage extends EPackage {
 	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEngineer()
 	 * @generated
 	 */
-	int ENGINEER = 2;
+	int ENGINEER = 6;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueTypeImpl <em>Issue Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueTypeImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueType()
+	 * @generated
+	 */
+	int ISSUE_TYPE = 7;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueResolutionImpl <em>Issue Resolution</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueResolutionImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueResolution()
+	 * @generated
+	 */
+	int ISSUE_RESOLUTION = 8;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueCategoryImpl <em>Issue Category</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueCategoryImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueCategory()
+	 * @generated
+	 */
+	int ISSUE_CATEGORY = 9;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueImpl <em>Issue</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssue()
+	 * @generated
+	 */
+	int ISSUE = 12;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IncrementImpl <em>Increment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IncrementImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIncrement()
+	 * @generated
+	 */
+	int INCREMENT = 13;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.EngineeringOrganizationalUnitImpl <em>Organizational Unit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.EngineeringOrganizationalUnitImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEngineeringOrganizationalUnit()
+	 * @generated
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT = 4;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ReleaseImpl <em>Release</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ReleaseImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getRelease()
+	 * @generated
+	 */
+	int RELEASE = 14;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ObjectiveImpl <em>Objective</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ObjectiveImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getObjective()
+	 * @generated
+	 */
+	int OBJECTIVE = 15;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.KeyResultImpl <em>Key Result</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.KeyResultImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getKeyResult()
+	 * @generated
+	 */
+	int KEY_RESULT = 16;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ProductImpl <em>Product</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ProductImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getProduct()
+	 * @generated
+	 */
+	int PRODUCT = 17;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.OfferingImpl <em>Offering</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.OfferingImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getOffering()
+	 * @generated
+	 */
+	int OFFERING = 18;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.EditionImpl <em>Edition</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.EditionImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEdition()
+	 * @generated
+	 */
+	int EDITION = 19;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.FeatureImpl <em>Feature</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.FeatureImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getFeature()
+	 * @generated
+	 */
+	int FEATURE = 20;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ComponentImpl <em>Component</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ComponentImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponent()
+	 * @generated
+	 */
+	int COMPONENT = 21;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.PersonaImpl <em>Persona</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.PersonaImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getPersona()
+	 * @generated
+	 */
+	int PERSONA = 22;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.NeedImpl <em>Need</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.NeedImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getNeed()
+	 * @generated
+	 */
+	int NEED = 23;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ScenarioImpl <em>Scenario</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ScenarioImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getScenario()
+	 * @generated
+	 */
+	int SCENARIO = 24;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.PortfolioImpl <em>Portfolio</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.PortfolioImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getPortfolio()
+	 * @generated
+	 */
+	int PORTFOLIO = 25;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.CriterionImpl <em>Criterion</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.CriterionImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getCriterion()
+	 * @generated
+	 */
+	int CRITERION = 26;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ComparisonImpl <em>Comparison</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.ComparisonImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComparison()
+	 * @generated
+	 */
+	int COMPARISON = 27;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.RiskImpl <em>Risk</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.RiskImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getRisk()
+	 * @generated
+	 */
+	int RISK = 28;
+
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.engineering.AbstractComponent <em>Abstract Component</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Component</em>'.
+	 * @see org.nasdanika.engineering.AbstractComponent
+	 * @generated
+	 */
+	EClass getAbstractComponent();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.engineering.AbstractComponent#getOwners <em>Owners</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Owners</em>'.
+	 * @see org.nasdanika.engineering.AbstractComponent#getOwners()
+	 * @see #getAbstractComponent()
+	 * @generated
+	 */
+	EReference getAbstractComponent_Owners();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.engineering.AbstractComponent#getIssues <em>Issues</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Issues</em>'.
+	 * @see org.nasdanika.engineering.AbstractComponent#getIssues()
+	 * @see #getAbstractComponent()
+	 * @generated
+	 */
+	EReference getAbstractComponent_Issues();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.engineering.ComponentCategory <em>Component Category</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Component Category</em>'.
+	 * @see org.nasdanika.engineering.ComponentCategory
+	 * @generated
+	 */
+	EClass getComponentCategory();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.engineering.ComponentCategory#getOwners <em>Owners</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Owners</em>'.
+	 * @see org.nasdanika.engineering.ComponentCategory#getOwners()
+	 * @see #getComponentCategory()
+	 * @generated
+	 */
+	EReference getComponentCategory_Owners();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.engineering.ComponentCategory#getIssues <em>Issues</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Issues</em>'.
+	 * @see org.nasdanika.engineering.ComponentCategory#getIssues()
+	 * @see #getComponentCategory()
+	 * @generated
+	 */
+	EReference getComponentCategory_Issues();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.engineering.ComponentReference <em>Component Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Component Reference</em>'.
+	 * @see org.nasdanika.engineering.ComponentReference
+	 * @generated
+	 */
+	EClass getComponentReference();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.engineering.ComponentReference#getOwners <em>Owners</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Owners</em>'.
+	 * @see org.nasdanika.engineering.ComponentReference#getOwners()
+	 * @see #getComponentReference()
+	 * @generated
+	 */
+	EReference getComponentReference_Owners();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.engineering.ComponentReference#getIssues <em>Issues</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Issues</em>'.
+	 * @see org.nasdanika.engineering.ComponentReference#getIssues()
+	 * @see #getComponentReference()
+	 * @generated
+	 */
+	EReference getComponentReference_Issues();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.engineering.AbstractEngineer <em>Abstract Engineer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Engineer</em>'.
+	 * @see org.nasdanika.engineering.AbstractEngineer
+	 * @generated
+	 */
+	EClass getAbstractEngineer();
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueStatusImpl <em>Issue Status</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueStatusImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueStatus()
+	 * @generated
+	 */
+	int ISSUE_STATUS = 10;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueNoteImpl <em>Issue Note</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.IssueNoteImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueNote()
+	 * @generated
+	 */
+	int ISSUE_NOTE = 11;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__TITLE = PartyPackage.ORGANIZATIONAL_UNIT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__DESCRIPTION = PartyPackage.ORGANIZATIONAL_UNIT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__NAME = PartyPackage.ORGANIZATIONAL_UNIT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__ID = PartyPackage.ORGANIZATIONAL_UNIT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__CONTACT_METHODS = PartyPackage.ORGANIZATIONAL_UNIT__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS = PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Roles</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT__ROLES = PartyPackage.ORGANIZATIONAL_UNIT__ROLES;
+
+	/**
+	 * The number of structural features of the '<em>Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT_FEATURE_COUNT = PartyPackage.ORGANIZATIONAL_UNIT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATIONAL_UNIT_OPERATION_COUNT = PartyPackage.ORGANIZATIONAL_UNIT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl <em>Organization</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.engineering.impl.EngineeringOrganizationImpl
+	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEngineeringOrganization()
+	 * @generated
+	 */
+	int ENGINEERING_ORGANIZATION = 5;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__TITLE = PartyPackage.ORGANIZATION__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__DESCRIPTION = PartyPackage.ORGANIZATION__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__NAME = PartyPackage.ORGANIZATION__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__ID = PartyPackage.ORGANIZATION__ID;
+
+	/**
+	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__CONTACT_METHODS = PartyPackage.ORGANIZATION__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__ORGANIZATIONAL_UNITS = PartyPackage.ORGANIZATION__ORGANIZATIONAL_UNITS;
+
+	/**
+	 * The feature id for the '<em><b>Roles</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__ROLES = PartyPackage.ORGANIZATION__ROLES;
+
+	/**
+	 * The feature id for the '<em><b>Members</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__MEMBERS = PartyPackage.ORGANIZATION__MEMBERS;
+
+	/**
+	 * The feature id for the '<em><b>Directory</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION__DIRECTORY = PartyPackage.ORGANIZATION__DIRECTORY;
+
+	/**
+	 * The number of structural features of the '<em>Organization</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION_FEATURE_COUNT = PartyPackage.ORGANIZATION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Organization</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEERING_ORGANIZATION_OPERATION_COUNT = PartyPackage.ORGANIZATION_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -198,16 +817,6 @@ public interface EngineeringPackage extends EPackage {
 	int ENGINEER_OPERATION_COUNT = PartyPackage.ROLE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueTypeImpl <em>Issue Type</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueTypeImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueType()
-	 * @generated
-	 */
-	int ISSUE_TYPE = 3;
-
-	/**
 	 * The number of structural features of the '<em>Issue Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -224,16 +833,6 @@ public interface EngineeringPackage extends EPackage {
 	 * @ordered
 	 */
 	int ISSUE_TYPE_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueResolutionImpl <em>Issue Resolution</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueResolutionImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueResolution()
-	 * @generated
-	 */
-	int ISSUE_RESOLUTION = 4;
 
 	/**
 	 * The number of structural features of the '<em>Issue Resolution</em>' class.
@@ -254,16 +853,6 @@ public interface EngineeringPackage extends EPackage {
 	int ISSUE_RESOLUTION_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueCategoryImpl <em>Issue Category</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueCategoryImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueCategory()
-	 * @generated
-	 */
-	int ISSUE_CATEGORY = 5;
-
-	/**
 	 * The number of structural features of the '<em>Issue Category</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -282,239 +871,6 @@ public interface EngineeringPackage extends EPackage {
 	int ISSUE_CATEGORY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueImpl <em>Issue</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssue()
-	 * @generated
-	 */
-	int ISSUE = 8;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IncrementImpl <em>Increment</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IncrementImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIncrement()
-	 * @generated
-	 */
-	int INCREMENT = 9;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.EngineeringOrganizationalUnitImpl <em>Organizational Unit</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.EngineeringOrganizationalUnitImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEngineeringOrganizationalUnit()
-	 * @generated
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT = 10;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ReleaseImpl <em>Release</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ReleaseImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getRelease()
-	 * @generated
-	 */
-	int RELEASE = 11;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ObjectiveImpl <em>Objective</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ObjectiveImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getObjective()
-	 * @generated
-	 */
-	int OBJECTIVE = 12;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.KeyResultImpl <em>Key Result</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.KeyResultImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getKeyResult()
-	 * @generated
-	 */
-	int KEY_RESULT = 13;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ProductImpl <em>Product</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ProductImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getProduct()
-	 * @generated
-	 */
-	int PRODUCT = 14;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.OfferingImpl <em>Offering</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.OfferingImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getOffering()
-	 * @generated
-	 */
-	int OFFERING = 15;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.EditionImpl <em>Edition</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.EditionImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEdition()
-	 * @generated
-	 */
-	int EDITION = 16;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.FeatureImpl <em>Feature</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.FeatureImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getFeature()
-	 * @generated
-	 */
-	int FEATURE = 17;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ComponentImpl <em>Component</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ComponentImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponent()
-	 * @generated
-	 */
-	int COMPONENT = 18;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.PersonaImpl <em>Persona</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.PersonaImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getPersona()
-	 * @generated
-	 */
-	int PERSONA = 19;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.NeedImpl <em>Need</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.NeedImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getNeed()
-	 * @generated
-	 */
-	int NEED = 20;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ScenarioImpl <em>Scenario</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ScenarioImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getScenario()
-	 * @generated
-	 */
-	int SCENARIO = 21;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.PortfolioImpl <em>Portfolio</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.PortfolioImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getPortfolio()
-	 * @generated
-	 */
-	int PORTFOLIO = 22;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.CriterionImpl <em>Criterion</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.CriterionImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getCriterion()
-	 * @generated
-	 */
-	int CRITERION = 23;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.ComparisonImpl <em>Comparison</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.ComparisonImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComparison()
-	 * @generated
-	 */
-	int COMPARISON = 24;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.RiskImpl <em>Risk</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.RiskImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getRisk()
-	 * @generated
-	 */
-	int RISK = 25;
-
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.engineering.AbstractComponent <em>Abstract Component</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Abstract Component</em>'.
-	 * @see org.nasdanika.engineering.AbstractComponent
-	 * @generated
-	 */
-	EClass getAbstractComponent();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.engineering.AbstractComponent#getOwners <em>Owners</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Owners</em>'.
-	 * @see org.nasdanika.engineering.AbstractComponent#getOwners()
-	 * @see #getAbstractComponent()
-	 * @generated
-	 */
-	EReference getAbstractComponent_Owners();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.engineering.AbstractComponent#getIssues <em>Issues</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Issues</em>'.
-	 * @see org.nasdanika.engineering.AbstractComponent#getIssues()
-	 * @see #getAbstractComponent()
-	 * @generated
-	 */
-	EReference getAbstractComponent_Issues();
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.engineering.AbstractEngineer <em>Abstract Engineer</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Abstract Engineer</em>'.
-	 * @see org.nasdanika.engineering.AbstractEngineer
-	 * @generated
-	 */
-	EClass getAbstractEngineer();
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueStatusImpl <em>Issue Status</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueStatusImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueStatus()
-	 * @generated
-	 */
-	int ISSUE_STATUS = 6;
-
-	/**
 	 * The number of structural features of the '<em>Issue Status</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -531,16 +887,6 @@ public interface EngineeringPackage extends EPackage {
 	 * @ordered
 	 */
 	int ISSUE_STATUS_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.engineering.impl.IssueNoteImpl <em>Issue Note</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.engineering.impl.IssueNoteImpl
-	 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getIssueNote()
-	 * @generated
-	 */
-	int ISSUE_NOTE = 7;
 
 	/**
 	 * The number of structural features of the '<em>Issue Note</em>' class.
@@ -721,87 +1067,6 @@ public interface EngineeringPackage extends EPackage {
 	 * @ordered
 	 */
 	int INCREMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Title</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__TITLE = PartyPackage.ORGANIZATIONAL_UNIT__TITLE;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__DESCRIPTION = PartyPackage.ORGANIZATIONAL_UNIT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__NAME = PartyPackage.ORGANIZATIONAL_UNIT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__ID = PartyPackage.ORGANIZATIONAL_UNIT__ID;
-
-	/**
-	 * The feature id for the '<em><b>Contact Methods</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__CONTACT_METHODS = PartyPackage.ORGANIZATIONAL_UNIT__CONTACT_METHODS;
-
-	/**
-	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS = PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS;
-
-	/**
-	 * The feature id for the '<em><b>Roles</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT__ROLES = PartyPackage.ORGANIZATIONAL_UNIT__ROLES;
-
-	/**
-	 * The number of structural features of the '<em>Organizational Unit</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT_FEATURE_COUNT = PartyPackage.ORGANIZATIONAL_UNIT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>Organizational Unit</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENGINEERING_ORGANIZATIONAL_UNIT_OPERATION_COUNT = PartyPackage.ORGANIZATIONAL_UNIT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Release</em>' class.
@@ -1232,6 +1497,16 @@ public interface EngineeringPackage extends EPackage {
 	EClass getEngineeringOrganizationalUnit();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.engineering.EngineeringOrganization <em>Organization</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Organization</em>'.
+	 * @see org.nasdanika.engineering.EngineeringOrganization
+	 * @generated
+	 */
+	EClass getEngineeringOrganization();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.engineering.Release <em>Release</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1448,6 +1723,52 @@ public interface EngineeringPackage extends EPackage {
 		 */
 		EReference ABSTRACT_COMPONENT__ISSUES = eINSTANCE.getAbstractComponent_Issues();
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.engineering.ComponentCategory <em>Component Category</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.engineering.ComponentCategory
+		 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponentCategory()
+		 * @generated
+		 */
+		EClass COMPONENT_CATEGORY = eINSTANCE.getComponentCategory();
+		/**
+		 * The meta object literal for the '<em><b>Owners</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_CATEGORY__OWNERS = eINSTANCE.getComponentCategory_Owners();
+		/**
+		 * The meta object literal for the '<em><b>Issues</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_CATEGORY__ISSUES = eINSTANCE.getComponentCategory_Issues();
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.engineering.ComponentReference <em>Component Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.engineering.ComponentReference
+		 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getComponentReference()
+		 * @generated
+		 */
+		EClass COMPONENT_REFERENCE = eINSTANCE.getComponentReference();
+		/**
+		 * The meta object literal for the '<em><b>Owners</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_REFERENCE__OWNERS = eINSTANCE.getComponentReference_Owners();
+		/**
+		 * The meta object literal for the '<em><b>Issues</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMPONENT_REFERENCE__ISSUES = eINSTANCE.getComponentReference_Issues();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.engineering.impl.AbstractEngineerImpl <em>Abstract Engineer</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1575,6 +1896,15 @@ public interface EngineeringPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ENGINEERING_ORGANIZATIONAL_UNIT = eINSTANCE.getEngineeringOrganizationalUnit();
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl <em>Organization</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.engineering.impl.EngineeringOrganizationImpl
+		 * @see org.nasdanika.engineering.impl.EngineeringPackageImpl#getEngineeringOrganization()
+		 * @generated
+		 */
+		EClass ENGINEERING_ORGANIZATION = eINSTANCE.getEngineeringOrganization();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.engineering.impl.ReleaseImpl <em>Release</em>}' class.
 		 * <!-- begin-user-doc -->

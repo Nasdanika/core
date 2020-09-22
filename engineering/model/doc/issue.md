@@ -1,6 +1,6 @@
 assignees - roles (planning), members (execution). Maybe different names. Members must be in roles to be assigned. collections, the first in collection is primary - responsible.
 
-issue type, status - transitions/workflow.
+issue type, status - transitions/workflow. Status examples - new, assigned, groomed/ready for sprint.
 
 Issue extends Entity. May extend named element or define summary field or make title mandatory. Maybe hide title - will need to modify design for that so it doesn't show reflective title.
 
@@ -24,3 +24,4 @@ Attributes:
 * Severity - crash, ... 
 * Releases - releases affected by this issue.
 * Benefit explicit - some number to compare with other issues, effective benefit - computed from explicit benefit, dependent issues and contribution to features, contribution to features. issue -> feature because feature is defined at a higher level and before issues.
+* Duration - different from effort. E.g. to file for a passport may take a few hours of effort and a few weeks of duration.

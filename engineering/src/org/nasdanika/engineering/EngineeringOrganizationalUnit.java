@@ -11,6 +11,7 @@ import org.nasdanika.party.OrganizationalUnit;
  *
  * <!-- begin-model-doc -->
  * Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the
+ * components organized into categories. Palette for components.
  * <!-- end-model-doc -->
  *
  *

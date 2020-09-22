@@ -14,7 +14,17 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//AbstractComponent/owners"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference engineering.ecore#//AbstractComponent/issues"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="engineering.ecore#//ComponentCategory">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//ComponentCategory/owners"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference engineering.ecore#//ComponentCategory/issues"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="engineering.ecore#//ComponentReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference engineering.ecore#//ComponentReference/owners"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference engineering.ecore#//ComponentReference/issues"/>
+    </genClasses>
     <genClasses ecoreClass="engineering.ecore#//AbstractEngineer"/>
+    <genClasses ecoreClass="engineering.ecore#//EngineeringOrganizationalUnit"/>
+    <genClasses ecoreClass="engineering.ecore#//EngineeringOrganization"/>
     <genClasses ecoreClass="engineering.ecore#//Engineer"/>
     <genClasses ecoreClass="engineering.ecore#//IssueType"/>
     <genClasses ecoreClass="engineering.ecore#//IssueResolution"/>
@@ -33,7 +43,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Increment/start"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute engineering.ecore#//Increment/end"/>
     </genClasses>
-    <genClasses ecoreClass="engineering.ecore#//EngineeringOrganizationalUnit"/>
     <genClasses ecoreClass="engineering.ecore#//Release"/>
     <genClasses ecoreClass="engineering.ecore#//Objective"/>
     <genClasses ecoreClass="engineering.ecore#//KeyResult"/>

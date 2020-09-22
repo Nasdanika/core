@@ -25,9 +25,62 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentCategory" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
+        eType="#//Engineer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Engineer responsible for this element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
+        eType="#//Issue" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Issues associated with the element - problems/pain points, improvement opportunities/enhancements."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="label_ru" value="Проблемы"/>
+        <details key="Documentation_ru" value="Проблемы, связанные с элементом - проблемы / болевые точки, возможности улучшения / улучшения."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentReference" abstract="true"
+      interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
+        eType="#//Engineer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Engineer responsible for this element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
+        eType="#//Issue" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Issues associated with the element - problems/pain points, improvement opportunities/enhancements."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="label_ru" value="Проблемы"/>
+        <details key="Documentation_ru" value="Проблемы, связанные с элементом - проблемы / болевые точки, возможности улучшения / улучшения."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractEngineer">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Base class for Engineer and EngineeringOrganizationalUnit. Can own engineered elements and be assigned to issues. Can also contain its own issues list."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganizationalUnit" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//OrganizationalUnit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the&#xA;components organized into categories. Palette for components."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganization" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//Organization #//EngineeringOrganizationalUnit">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Engineer" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//Role">
@@ -101,11 +154,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganizationalUnit" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//OrganizationalUnit">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the"/>
-    </eAnnotations>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Release">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Release/version of an engineered element. Date, may include other releases of other engineered elements or depend on other releases - in either case a given release cannot be released before the included/dependency release."/>
@@ -148,12 +196,12 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Persona">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Description from internet, e.g. Wikipedia. Abstraction of parties who benefit from organization offerings. Not necessarily pay for them or use them. Weight - manual or computed with decision analysis. Manual may be sales volume, budget contribution for internal customers, population, percentage in profit generation. E.g. a grant size is dependent on how many personas adopt a product. References parties are persona representatives. Such parties may be involved in need identification and prioritization. Defined at EngineeringOrgUnit level - may be internal personas and internal products. May have base personas and personas can be organized into a hierarchy. Base personas define common needs, what everybody needs. Base personas may be abstract - no representatives and no own weight."/>
+      <details key="documentation" value="Description from internet, e.g. Wikipedia. Abstraction of parties who benefit from organization offerings. Not necessarily pay for them or use them. Weight - manual or computed with decision analysis. Manual may be sales volume, budget contribution for internal customers, population, percentage in profit generation. E.g. a grant size is dependent on how many personas adopt a product. References parties are persona representatives. Such parties may be involved in need identification and prioritization. Defined at EngineeringOrgUnit level - may be internal personas and internal products. May have base personas and personas can be organized into a hierarchy. Base personas define common needs, what everybody needs. Base personas may be abstract - no representatives and no own weight.&#xA;Reference roles in addition to representatives - internal clients.&#xA;&#xA;&#xA;Persona benefits from engineering organization outputs (offerings). Not necessarily buys or uses.&#xA;Persona is an engineered element - owner, issues, ... representatives&#xA;&#xA;Resources reference and palette - markdown docs, rigel flows, ... - party level. Embedded and references. Folders&#xA;&#xA;&#xA;Rigel activities defined in roles (actor). Prof extensions report which flows role participates in.&#xA;&#xA;Needs, scenarios, offerings&#xA;&#xA;Customer value and strategic value/alignment - objectives.&#xA;"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Need">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied."/>
+      <details key="documentation" value="Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.&#xA;&#xA;Must have, need to have, delighter - here or at the offering level?"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Scenario">

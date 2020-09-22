@@ -57,6 +57,8 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case EngineeringPackage.ABSTRACT_ENGINEER: return createAbstractEngineer();
+			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: return createEngineeringOrganizationalUnit();
+			case EngineeringPackage.ENGINEERING_ORGANIZATION: return createEngineeringOrganization();
 			case EngineeringPackage.ENGINEER: return createEngineer();
 			case EngineeringPackage.ISSUE_TYPE: return createIssueType();
 			case EngineeringPackage.ISSUE_RESOLUTION: return createIssueResolution();
@@ -65,7 +67,6 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 			case EngineeringPackage.ISSUE_NOTE: return createIssueNote();
 			case EngineeringPackage.ISSUE: return createIssue();
 			case EngineeringPackage.INCREMENT: return createIncrement();
-			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: return createEngineeringOrganizationalUnit();
 			case EngineeringPackage.RELEASE: return createRelease();
 			case EngineeringPackage.OBJECTIVE: return createObjective();
 			case EngineeringPackage.KEY_RESULT: return createKeyResult();
@@ -194,6 +195,17 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	public EngineeringOrganizationalUnit createEngineeringOrganizationalUnit() {
 		EngineeringOrganizationalUnitImpl engineeringOrganizationalUnit = new EngineeringOrganizationalUnitImpl();
 		return engineeringOrganizationalUnit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EngineeringOrganization createEngineeringOrganization() {
+		EngineeringOrganizationImpl engineeringOrganization = new EngineeringOrganizationImpl();
+		return engineeringOrganization;
 	}
 
 	/**

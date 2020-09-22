@@ -14,6 +14,7 @@ import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.party.DirectoryElement;
+import org.nasdanika.party.Organization;
 import org.nasdanika.party.OrganizationalUnit;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.Role;
@@ -79,8 +80,24 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 				return createAbstractComponentAdapter();
 			}
 			@Override
+			public Adapter caseComponentCategory(ComponentCategory object) {
+				return createComponentCategoryAdapter();
+			}
+			@Override
+			public Adapter caseComponentReference(ComponentReference object) {
+				return createComponentReferenceAdapter();
+			}
+			@Override
 			public Adapter caseAbstractEngineer(AbstractEngineer object) {
 				return createAbstractEngineerAdapter();
+			}
+			@Override
+			public Adapter caseEngineeringOrganizationalUnit(EngineeringOrganizationalUnit object) {
+				return createEngineeringOrganizationalUnitAdapter();
+			}
+			@Override
+			public Adapter caseEngineeringOrganization(EngineeringOrganization object) {
+				return createEngineeringOrganizationAdapter();
 			}
 			@Override
 			public Adapter caseEngineer(Engineer object) {
@@ -113,10 +130,6 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseIncrement(Increment object) {
 				return createIncrementAdapter();
-			}
-			@Override
-			public Adapter caseEngineeringOrganizationalUnit(EngineeringOrganizationalUnit object) {
-				return createEngineeringOrganizationalUnitAdapter();
 			}
 			@Override
 			public Adapter caseRelease(Release object) {
@@ -187,16 +200,12 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 				return createNamedElementAdapter();
 			}
 			@Override
-			public Adapter caseRole(Role object) {
-				return createRoleAdapter();
+			public Adapter caseDirectoryElement(DirectoryElement object) {
+				return createDirectoryElementAdapter();
 			}
 			@Override
 			public Adapter caseEntity(Entity object) {
 				return createEntityAdapter();
-			}
-			@Override
-			public Adapter caseDirectoryElement(DirectoryElement object) {
-				return createDirectoryElementAdapter();
 			}
 			@Override
 			public Adapter caseParty(Party object) {
@@ -205,6 +214,14 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseOrganizationalUnit(OrganizationalUnit object) {
 				return createOrganizationalUnitAdapter();
+			}
+			@Override
+			public Adapter caseOrganization(Organization object) {
+				return createOrganizationAdapter();
+			}
+			@Override
+			public Adapter caseRole(Role object) {
+				return createRoleAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -237,6 +254,34 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAbstractComponentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.engineering.ComponentCategory <em>Component Category</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.engineering.ComponentCategory
+	 * @generated
+	 */
+	public Adapter createComponentCategoryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.engineering.ComponentReference <em>Component Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.engineering.ComponentReference
+	 * @generated
+	 */
+	public Adapter createComponentReferenceAdapter() {
 		return null;
 	}
 
@@ -377,6 +422,20 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEngineeringOrganizationalUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.engineering.EngineeringOrganization <em>Organization</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.engineering.EngineeringOrganization
+	 * @generated
+	 */
+	public Adapter createEngineeringOrganizationAdapter() {
 		return null;
 	}
 
@@ -685,6 +744,20 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOrganizationalUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.Organization <em>Organization</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.Organization
+	 * @generated
+	 */
+	public Adapter createOrganizationAdapter() {
 		return null;
 	}
 
