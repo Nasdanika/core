@@ -4,6 +4,7 @@ package org.nasdanika.engineering.provider;
 
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -11,6 +12,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -18,7 +20,11 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
+import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.Release;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Release} object.
@@ -55,8 +61,100 @@ public class ReleaseItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addRequiresPropertyDescriptor(object);
+			addIncludesPropertyDescriptor(object);
+			addDatePropertyDescriptor(object);
+			addPlannedForPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Requires feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRequiresPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Release_requires_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Release_requires_feature", "_UI_Release_type"),
+				 EngineeringPackage.Literals.RELEASE__REQUIRES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Includes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIncludesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Release_includes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Release_includes_feature", "_UI_Release_type"),
+				 EngineeringPackage.Literals.RELEASE__INCLUDES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Date feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Release_date_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Release_date_feature", "_UI_Release_type"),
+				 EngineeringPackage.Literals.RELEASE__DATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Planned For feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPlannedForPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Release_plannedFor_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Release_plannedFor_feature", "_UI_Release_type"),
+				 EngineeringPackage.Literals.RELEASE__PLANNED_FOR,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -88,7 +186,11 @@ public class ReleaseItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Release_type");
+		Date labelValue = ((Release)object).getDate();
+		String label = labelValue == null ? null : labelValue.toString();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Release_type") :
+			getString("_UI_Release_type") + " " + label;
 	}
 
 
@@ -102,6 +204,12 @@ public class ReleaseItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(Release.class)) {
+			case EngineeringPackage.RELEASE__DATE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

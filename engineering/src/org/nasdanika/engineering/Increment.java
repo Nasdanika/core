@@ -14,7 +14,7 @@ import org.nasdanika.ncore.NamedElement;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * A time period in which engineers are working on issues.
+ * A time period in which engineers are working on issues. 
  * <!-- end-model-doc -->
  *
  * <p>
@@ -37,7 +37,7 @@ public interface Increment extends NamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Increments can be organized into a hierarchy. E.g. Year - Quarters - Months.
+	 * Increments can be organized into a hierarchy. E.g. Year - Quarter - Month - Week.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Children</em>' containment reference list.
 	 * @see org.nasdanika.engineering.EngineeringPackage#getIncrement_Children()

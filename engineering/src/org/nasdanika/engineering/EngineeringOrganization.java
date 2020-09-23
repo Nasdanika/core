@@ -10,7 +10,7 @@ import org.nasdanika.party.Organization;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the
+ * Engineering organization.
  * <!-- end-model-doc -->
  *
  *

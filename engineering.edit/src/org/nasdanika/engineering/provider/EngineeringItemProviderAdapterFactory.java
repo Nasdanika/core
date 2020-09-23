@@ -72,6 +72,29 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.ComponentCategoryElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ComponentCategoryElementItemProvider componentCategoryElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.ComponentCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createComponentCategoryElementAdapter() {
+		if (componentCategoryElementItemProvider == null) {
+			componentCategoryElementItemProvider = new ComponentCategoryElementItemProvider(this);
+		}
+
+		return componentCategoryElementItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.AbstractEngineer} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -230,6 +253,52 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		}
 
 		return issueNoteItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueRelationshipType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueRelationshipTypeItemProvider issueRelationshipTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueRelationshipType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueRelationshipTypeAdapter() {
+		if (issueRelationshipTypeItemProvider == null) {
+			issueRelationshipTypeItemProvider = new IssueRelationshipTypeItemProvider(this);
+		}
+
+		return issueRelationshipTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.IssueRelationship} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IssueRelationshipItemProvider issueRelationshipItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.IssueRelationship}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIssueRelationshipAdapter() {
+		if (issueRelationshipItemProvider == null) {
+			issueRelationshipItemProvider = new IssueRelationshipItemProvider(this);
+		}
+
+		return issueRelationshipItemProvider;
 	}
 
 	/**
@@ -463,6 +532,29 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.FeatureCategoryElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FeatureCategoryElementItemProvider featureCategoryElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.FeatureCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFeatureCategoryElementAdapter() {
+		if (featureCategoryElementItemProvider == null) {
+			featureCategoryElementItemProvider = new FeatureCategoryElementItemProvider(this);
+		}
+
+		return featureCategoryElementItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Feature} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -532,6 +624,29 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.NeedCategoryElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NeedCategoryElementItemProvider needCategoryElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.NeedCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNeedCategoryElementAdapter() {
+		if (needCategoryElementItemProvider == null) {
+			needCategoryElementItemProvider = new NeedCategoryElementItemProvider(this);
+		}
+
+		return needCategoryElementItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Need} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -575,29 +690,6 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		}
 
 		return scenarioItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.Portfolio} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PortfolioItemProvider portfolioItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link org.nasdanika.engineering.Portfolio}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPortfolioAdapter() {
-		if (portfolioItemProvider == null) {
-			portfolioItemProvider = new PortfolioItemProvider(this);
-		}
-
-		return portfolioItemProvider;
 	}
 
 	/**
@@ -774,6 +866,7 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	 */
 	@Override
 	public void dispose() {
+		if (componentCategoryElementItemProvider != null) componentCategoryElementItemProvider.dispose();
 		if (abstractEngineerItemProvider != null) abstractEngineerItemProvider.dispose();
 		if (engineeringOrganizationalUnitItemProvider != null) engineeringOrganizationalUnitItemProvider.dispose();
 		if (engineeringOrganizationItemProvider != null) engineeringOrganizationItemProvider.dispose();
@@ -783,20 +876,23 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		if (issueCategoryItemProvider != null) issueCategoryItemProvider.dispose();
 		if (issueStatusItemProvider != null) issueStatusItemProvider.dispose();
 		if (issueNoteItemProvider != null) issueNoteItemProvider.dispose();
+		if (issueRelationshipTypeItemProvider != null) issueRelationshipTypeItemProvider.dispose();
+		if (issueRelationshipItemProvider != null) issueRelationshipItemProvider.dispose();
 		if (issueItemProvider != null) issueItemProvider.dispose();
 		if (incrementItemProvider != null) incrementItemProvider.dispose();
 		if (releaseItemProvider != null) releaseItemProvider.dispose();
 		if (objectiveItemProvider != null) objectiveItemProvider.dispose();
 		if (keyResultItemProvider != null) keyResultItemProvider.dispose();
-		if (productItemProvider != null) productItemProvider.dispose();
-		if (offeringItemProvider != null) offeringItemProvider.dispose();
-		if (editionItemProvider != null) editionItemProvider.dispose();
-		if (featureItemProvider != null) featureItemProvider.dispose();
 		if (componentItemProvider != null) componentItemProvider.dispose();
+		if (offeringItemProvider != null) offeringItemProvider.dispose();
+		if (productItemProvider != null) productItemProvider.dispose();
+		if (editionItemProvider != null) editionItemProvider.dispose();
+		if (featureCategoryElementItemProvider != null) featureCategoryElementItemProvider.dispose();
+		if (featureItemProvider != null) featureItemProvider.dispose();
 		if (personaItemProvider != null) personaItemProvider.dispose();
+		if (needCategoryElementItemProvider != null) needCategoryElementItemProvider.dispose();
 		if (needItemProvider != null) needItemProvider.dispose();
 		if (scenarioItemProvider != null) scenarioItemProvider.dispose();
-		if (portfolioItemProvider != null) portfolioItemProvider.dispose();
 		if (criterionItemProvider != null) criterionItemProvider.dispose();
 		if (comparisonItemProvider != null) comparisonItemProvider.dispose();
 		if (riskItemProvider != null) riskItemProvider.dispose();

@@ -10,7 +10,7 @@ import org.nasdanika.party.Role;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Engineers own engineered elements and are assigned issues associated with these elements.
+ * Engineer is a role which can own components, be assigned to issues and has its own issues list.
  * <!-- end-model-doc -->
  *
  *
@@ -18,5 +18,5 @@ import org.nasdanika.party.Role;
  * @model
  * @generated
  */
-public interface Engineer extends Role {
+public interface Engineer extends Role, AbstractEngineer {
 } // Engineer

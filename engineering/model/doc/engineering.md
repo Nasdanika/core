@@ -59,7 +59,7 @@ Computing issue weight and priority is more involved.
 There are the following sources for computation of an issue **effective** weight:
 
 * Explicitly assigned weight. For example, a team decides that doing A is twice as important as doing B.
-* [Category](IssueCategory.html] weight. Issues may be assigned zero or more categories. Categories can be assigned weights. Also categories may compute their effective weights based on historical data, we may call it a category debt similar to [technical debt](https://en.wikipedia.org/wiki/Technical_debt). What it means is that closed and in-flight issue data is used to compute how many issues, effort-wise, have been already allocated to each category and an effective category weight is computed from that. This allows to keep track of situations where some things (like writing documentation) are never done because they are not as important as writing code.
+* [Category](IssueCategory.html) weight. Issues may be assigned zero or more categories. Categories can be assigned weights. Also categories may compute their effective weights based on historical data, we may call it a category debt similar to [technical debt](https://en.wikipedia.org/wiki/Technical_debt). What it means is that closed and in-flight issue data is used to compute how many issues, effort-wise, have been already allocated to each category and an effective category weight is computed from that. This allows to keep track of situations where some things (like writing documentation) are never done because they are not as important as writing code.
 * Objective weight. Issues can be linked to strategic objectives, which in turn can be linked to their parent objectives. Objectives are assigned weights and an effective weight of an objective it used in computing an effective weight of issues linked to it.
 * Customer benefit. An issue may be linked to [features](Feature.html). Feature benefit is computed from persona needs. Feature benefit value is used to compute issue benefit value.
 * Transient weights, i.e. weights of dependent issues. For example, an issue itself doesn't directly contribute to a feature. However, it is a pre-requisite/blocker for several issues which contribute to features and as such deliver customer value. In this case the issue customer benefit is computed from its dependent issues. The same applies to objectives.  
@@ -127,7 +127,7 @@ E.g. one persona may have a higher weight than another persona. Or one persona n
 
 The model will support the following ways to compute weights:
 
-* Manual - modelers just enter weights in the model. Such weights may be obtained in a number of ways e.g. team discussions, sales figures, surveys.
+* Manual - modelers just enter weights in the model. Such weights may be obtained in a number of ways e.g. team discussions and voting, sales figures, surveys.
 * [Multiple-criteria decision analysis](https://en.wikipedia.org/wiki/Multiple-criteria_decision_analysis) (MCDA) - weights are derived from criteria weights and how well an alternative meets the criteria.
     * [Weighted Sum Model](https://en.wikipedia.org/wiki/Weighted_sum_model) (WSM)
     * [Weighted Product Model](https://en.wikipedia.org/wiki/Weighted_product_model) (WPM)
@@ -135,6 +135,13 @@ The model will support the following ways to compute weights:
     
 If a modeler decides to use one of MCDA methodologies to compute, say, need weights, they select a methodology to use and then define [criteria](Criterion.html).
 For WSM and WPM criteria and alternative weights are entered directly into the model. For AHP they are computed from [pair-wise comparisons](Comparison.html).
+
+TODO - add model elements for a generic decision analysis - decision, alternative.
+
+### Competition analysis
+
+Can be done by creating a competitor organization or organizations with their offerings and modeling needs and scenarios. 
+Then comparing weights. To be elaborated. 
 
 ### Risk management
 

@@ -3,8 +3,7 @@
 package org.nasdanika.engineering;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -12,51 +11,34 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues.
+ * Grouping of components.
  * <!-- end-model-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.engineering.ComponentCategory#getOwners <em>Owners</em>}</li>
- *   <li>{@link org.nasdanika.engineering.ComponentCategory#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.ComponentCategory#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getComponentCategory()
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface ComponentCategory extends EObject {
+public interface ComponentCategory extends ModelElement, ComponentCategoryElement {
 	/**
-	 * Returns the value of the '<em><b>Owners</b></em>' reference list.
-	 * The list contents are of type {@link org.nasdanika.engineering.Engineer}.
+	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.ComponentCategoryElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Engineer responsible for this element.
+	 * Category elements.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Owners</em>' reference list.
-	 * @see org.nasdanika.engineering.EngineeringPackage#getComponentCategory_Owners()
-	 * @model
-	 * @generated
-	 */
-	EList<Engineer> getOwners();
-
-	/**
-	 * Returns the value of the '<em><b>Issues</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.engineering.Issue}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Issues associated with the element - problems/pain points, improvement opportunities/enhancements.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Issues</em>' containment reference list.
-	 * @see org.nasdanika.engineering.EngineeringPackage#getComponentCategory_Issues()
+	 * @return the value of the '<em>Elements</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getComponentCategory_Elements()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika label_ru='\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b' Documentation_ru='\u041f\u0440\u043e\u0431\u043b\u0435\u043c\u044b, \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u044b\u0435 \u0441 \u044d\u043b\u0435\u043c\u0435\u043d\u0442\u043e\u043c - \u043f\u0440\u043e\u0431\u043b\u0435\u043c\u044b / \u0431\u043e\u043b\u0435\u0432\u044b\u0435 \u0442\u043e\u0447\u043a\u0438, \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u0438 \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f / \u0443\u043b\u0443\u0447\u0448\u0435\u043d\u0438\u044f.'"
 	 * @generated
 	 */
-	EList<Issue> getIssues();
+	EList<ComponentCategoryElement> getElements();
 
 } // ComponentCategory

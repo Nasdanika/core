@@ -53,8 +53,14 @@ public class IssueItemProvider
 
 			addAssignedToPropertyDescriptor(object);
 			addSizePropertyDescriptor(object);
+			addCostPropertyDescriptor(object);
 			addBenefitPropertyDescriptor(object);
 			addPlannedForPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
+			addStatusPropertyDescriptor(object);
+			addResolutionPropertyDescriptor(object);
+			addCategoriesPropertyDescriptor(object);
+			addReleasesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -95,6 +101,28 @@ public class IssueItemProvider
 				 getString("_UI_Issue_size_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_size_feature", "_UI_Issue_type"),
 				 EngineeringPackage.Literals.ISSUE__SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_cost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_cost_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__COST,
 				 true,
 				 false,
 				 false,
@@ -148,6 +176,116 @@ public class IssueItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_type_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Status feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStatusPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_status_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_status_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__STATUS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Resolution feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addResolutionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_resolution_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_resolution_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__RESOLUTION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Categories feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCategoriesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_categories_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_categories_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__CATEGORIES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Releases feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReleasesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_releases_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_releases_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__RELEASES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -160,6 +298,8 @@ public class IssueItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(EngineeringPackage.Literals.ISSUE__CHILDREN);
+			childrenFeatures.add(EngineeringPackage.Literals.ISSUE__NOTES);
+			childrenFeatures.add(EngineeringPackage.Literals.ISSUE__RELATIONSHIPS);
 		}
 		return childrenFeatures;
 	}
@@ -226,10 +366,13 @@ public class IssueItemProvider
 
 		switch (notification.getFeatureID(Issue.class)) {
 			case EngineeringPackage.ISSUE__SIZE:
+			case EngineeringPackage.ISSUE__COST:
 			case EngineeringPackage.ISSUE__BENEFIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case EngineeringPackage.ISSUE__CHILDREN:
+			case EngineeringPackage.ISSUE__NOTES:
+			case EngineeringPackage.ISSUE__RELATIONSHIPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -251,6 +394,16 @@ public class IssueItemProvider
 			(createChildParameter
 				(EngineeringPackage.Literals.ISSUE__CHILDREN,
 				 EngineeringFactory.eINSTANCE.createIssue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.ISSUE__NOTES,
+				 EngineeringFactory.eINSTANCE.createIssueNote()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.ISSUE__RELATIONSHIPS,
+				 EngineeringFactory.eINSTANCE.createIssueRelationship()));
 	}
 
 	/**

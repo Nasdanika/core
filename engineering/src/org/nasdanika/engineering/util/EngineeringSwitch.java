@@ -74,21 +74,31 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case EngineeringPackage.COMPONENT_CATEGORY_ELEMENT: {
+				ComponentCategoryElement componentCategoryElement = (ComponentCategoryElement)theEObject;
+				T result = caseComponentCategoryElement(componentCategoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EngineeringPackage.ABSTRACT_COMPONENT: {
 				AbstractComponent abstractComponent = (AbstractComponent)theEObject;
 				T result = caseAbstractComponent(abstractComponent);
+				if (result == null) result = caseComponentCategoryElement(abstractComponent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case EngineeringPackage.COMPONENT_CATEGORY: {
 				ComponentCategory componentCategory = (ComponentCategory)theEObject;
 				T result = caseComponentCategory(componentCategory);
+				if (result == null) result = caseModelElement(componentCategory);
+				if (result == null) result = caseComponentCategoryElement(componentCategory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case EngineeringPackage.COMPONENT_REFERENCE: {
 				ComponentReference componentReference = (ComponentReference)theEObject;
 				T result = caseComponentReference(componentReference);
+				if (result == null) result = caseComponentCategoryElement(componentReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -102,6 +112,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				EngineeringOrganizationalUnit engineeringOrganizationalUnit = (EngineeringOrganizationalUnit)theEObject;
 				T result = caseEngineeringOrganizationalUnit(engineeringOrganizationalUnit);
 				if (result == null) result = caseOrganizationalUnit(engineeringOrganizationalUnit);
+				if (result == null) result = caseAbstractEngineer(engineeringOrganizationalUnit);
 				if (result == null) result = caseParty(engineeringOrganizationalUnit);
 				if (result == null) result = caseDirectoryElement(engineeringOrganizationalUnit);
 				if (result == null) result = caseEntity(engineeringOrganizationalUnit);
@@ -116,6 +127,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = caseOrganization(engineeringOrganization);
 				if (result == null) result = caseEngineeringOrganizationalUnit(engineeringOrganization);
 				if (result == null) result = caseOrganizationalUnit(engineeringOrganization);
+				if (result == null) result = caseAbstractEngineer(engineeringOrganization);
 				if (result == null) result = caseParty(engineeringOrganization);
 				if (result == null) result = caseDirectoryElement(engineeringOrganization);
 				if (result == null) result = caseEntity(engineeringOrganization);
@@ -128,6 +140,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				Engineer engineer = (Engineer)theEObject;
 				T result = caseEngineer(engineer);
 				if (result == null) result = caseRole(engineer);
+				if (result == null) result = caseAbstractEngineer(engineer);
 				if (result == null) result = caseNamedElement(engineer);
 				if (result == null) result = caseModelElement(engineer);
 				if (result == null) result = defaultCase(theEObject);
@@ -163,6 +176,18 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case EngineeringPackage.ISSUE_RELATIONSHIP_TYPE: {
+				IssueRelationshipType issueRelationshipType = (IssueRelationshipType)theEObject;
+				T result = caseIssueRelationshipType(issueRelationshipType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.ISSUE_RELATIONSHIP: {
+				IssueRelationship issueRelationship = (IssueRelationship)theEObject;
+				T result = caseIssueRelationship(issueRelationship);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EngineeringPackage.ISSUE: {
 				Issue issue = (Issue)theEObject;
 				T result = caseIssue(issue);
@@ -188,6 +213,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			case EngineeringPackage.OBJECTIVE: {
 				Objective objective = (Objective)theEObject;
 				T result = caseObjective(objective);
+				if (result == null) result = caseModelElement(objective);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -197,9 +223,11 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case EngineeringPackage.PRODUCT: {
-				Product product = (Product)theEObject;
-				T result = caseProduct(product);
+			case EngineeringPackage.COMPONENT: {
+				Component component = (Component)theEObject;
+				T result = caseComponent(component);
+				if (result == null) result = caseAbstractComponent(component);
+				if (result == null) result = caseComponentCategoryElement(component);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -209,21 +237,41 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case EngineeringPackage.PRODUCT: {
+				Product product = (Product)theEObject;
+				T result = caseProduct(product);
+				if (result == null) result = caseComponent(product);
+				if (result == null) result = caseOffering(product);
+				if (result == null) result = caseAbstractComponent(product);
+				if (result == null) result = caseComponentCategoryElement(product);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EngineeringPackage.EDITION: {
 				Edition edition = (Edition)theEObject;
 				T result = caseEdition(edition);
+				if (result == null) result = caseOffering(edition);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.FEATURE_CATEGORY_ELEMENT: {
+				FeatureCategoryElement featureCategoryElement = (FeatureCategoryElement)theEObject;
+				T result = caseFeatureCategoryElement(featureCategoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.FEATURE_CATEGORY: {
+				FeatureCategory featureCategory = (FeatureCategory)theEObject;
+				T result = caseFeatureCategory(featureCategory);
+				if (result == null) result = caseModelElement(featureCategory);
+				if (result == null) result = caseFeatureCategoryElement(featureCategory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case EngineeringPackage.FEATURE: {
 				Feature feature = (Feature)theEObject;
 				T result = caseFeature(feature);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case EngineeringPackage.COMPONENT: {
-				Component component = (Component)theEObject;
-				T result = caseComponent(component);
+				if (result == null) result = caseFeatureCategoryElement(feature);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -233,21 +281,30 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case EngineeringPackage.NEED_CATEGORY_ELEMENT: {
+				NeedCategoryElement needCategoryElement = (NeedCategoryElement)theEObject;
+				T result = caseNeedCategoryElement(needCategoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case EngineeringPackage.NEED_CATEGORY: {
+				NeedCategory needCategory = (NeedCategory)theEObject;
+				T result = caseNeedCategory(needCategory);
+				if (result == null) result = caseModelElement(needCategory);
+				if (result == null) result = caseNeedCategoryElement(needCategory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case EngineeringPackage.NEED: {
 				Need need = (Need)theEObject;
 				T result = caseNeed(need);
+				if (result == null) result = caseNeedCategoryElement(need);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case EngineeringPackage.SCENARIO: {
 				Scenario scenario = (Scenario)theEObject;
 				T result = caseScenario(scenario);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case EngineeringPackage.PORTFOLIO: {
-				Portfolio portfolio = (Portfolio)theEObject;
-				T result = casePortfolio(portfolio);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -271,6 +328,21 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Component Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Component Category Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComponentCategoryElement(ComponentCategoryElement object) {
+		return null;
 	}
 
 	/**
@@ -420,6 +492,36 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIssueNote(IssueNote object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Issue Relationship Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Issue Relationship Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIssueRelationshipType(IssueRelationshipType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Issue Relationship</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Issue Relationship</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIssueRelationship(IssueRelationship object) {
 		return null;
 	}
 
@@ -574,6 +676,36 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Feature Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Feature Category Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFeatureCategoryElement(FeatureCategoryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Feature Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Feature Category</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFeatureCategory(FeatureCategory object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Feature</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -619,6 +751,36 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Need Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Need Category Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNeedCategoryElement(NeedCategoryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Need Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Need Category</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNeedCategory(NeedCategory object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Need</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -645,21 +807,6 @@ public class EngineeringSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenario(Scenario object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Portfolio</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Portfolio</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePortfolio(Portfolio object) {
 		return null;
 	}
 

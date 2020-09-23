@@ -2,6 +2,7 @@
  */
 package org.nasdanika.engineering;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -28,10 +29,28 @@ import org.eclipse.emf.ecore.EObject;
  * 
  * <!-- end-model-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.nasdanika.engineering.Persona#getNeeds <em>Needs</em>}</li>
+ * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getPersona()
  * @model
  * @generated
  */
 public interface Persona extends EObject {
+
+	/**
+	 * Returns the value of the '<em><b>Needs</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.NeedCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Needs</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getPersona_Needs()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<NeedCategoryElement> getNeeds();
 } // Persona

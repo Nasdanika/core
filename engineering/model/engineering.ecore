@@ -4,99 +4,119 @@
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/engineering.md"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EClass" name="AbstractComponent" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."/>
+      <details key="documentation" value="Base class for model elements which can be contained by the component category - components and sub-categories."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractComponent" abstract="true" interface="true"
+      eSuperTypes="#//ComponentCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineers and may contain issues or be referenced by issues."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
-        eType="#//Engineer">
+        eType="#//AbstractEngineer">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Engineer responsible for this element."/>
+        <details key="documentation" value="Engineers responsible for this component."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
         eType="#//Issue" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Issues associated with the element - problems/pain points, improvement opportunities/enhancements."/>
-      </eAnnotations>
-      <eAnnotations source="urn:org.nasdanika">
-        <details key="label_ru" value="Проблемы"/>
-        <details key="Documentation_ru" value="Проблемы, связанные с элементом - проблемы / болевые точки, возможности улучшения / улучшения."/>
+        <details key="documentation" value="Issues associated with the component - problems/pain points, improvement opportunities/enhancements."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ComponentCategory" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentCategory" abstract="true" interface="true"
+      eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//ComponentCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."/>
+      <details key="documentation" value="Grouping of components."/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
-        eType="#//Engineer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//ComponentCategoryElement" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Engineer responsible for this element."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
-        eType="#//Issue" containment="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Issues associated with the element - problems/pain points, improvement opportunities/enhancements."/>
-      </eAnnotations>
-      <eAnnotations source="urn:org.nasdanika">
-        <details key="label_ru" value="Проблемы"/>
-        <details key="Documentation_ru" value="Проблемы, связанные с элементом - проблемы / болевые точки, возможности улучшения / улучшения."/>
+        <details key="documentation" value="Category elements."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentReference" abstract="true"
-      interface="true">
+      interface="true" eSuperTypes="#//ComponentCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Component is a unit of engineering. Base class for elements which have an owning engineer and may contain issues or be referenced by issues."/>
+      <details key="documentation" value="Reference to a component. Can be used to federate multiple model resources into a single logical model."/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
-        eType="#//Engineer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" upperBound="-1"
+        eType="#//AbstractComponent">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Engineer responsible for this element."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
-        eType="#//Issue" containment="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Issues associated with the element - problems/pain points, improvement opportunities/enhancements."/>
-      </eAnnotations>
-      <eAnnotations source="urn:org.nasdanika">
-        <details key="label_ru" value="Проблемы"/>
-        <details key="Documentation_ru" value="Проблемы, связанные с элементом - проблемы / болевые точки, возможности улучшения / улучшения."/>
+        <details key="documentation" value="Reference target."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractEngineer">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Base class for Engineer and EngineeringOrganizationalUnit. Can own engineered elements and be assigned to issues. Can also contain its own issues list."/>
+      <details key="documentation" value="Base class for Engineer and EngineeringOrganizationalUnit. Can own components and be assigned to issues. Can also contain its own issues list."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
+        eType="#//Issue" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Issues owned by this engineer. Issues related to a single component shall be defined at the component level. If an issue doesn't have a related component or has multiple related components it can be defined at the engineer level."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganizationalUnit" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//OrganizationalUnit">
+  <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganizationalUnit" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//OrganizationalUnit #//AbstractEngineer">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the&#xA;components organized into categories. Palette for components."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portfolio" upperBound="-1"
+        eType="#//ComponentCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Components and products owned by the organizational unit."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetAudiences" upperBound="-1"
+        eType="#//Persona" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueTypes" eType="#//IssueType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueResolutions" eType="#//IssueResolution"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueCategories" eType="#//IssueCategory"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueStatuses" eType="#//IssueStatus"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueRelationshipTypes"
+        eType="#//IssueRelationshipType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="increments" upperBound="-1"
+        eType="#//Increment" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EngineeringOrganization" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//Organization #//EngineeringOrganizationalUnit">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Defines engineering practice - issue types, priorities, categories, etc. Scope, if a flag is set, for engineers and issues - they can see only categories etc defined at the"/>
+      <details key="documentation" value="Engineering organization."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Engineer" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//Role">
+  <eClassifiers xsi:type="ecore:EClass" name="Engineer" eSuperTypes="../../org.nasdanika.party/model/party.ecore#//Role #//AbstractEngineer">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Engineers own engineered elements and are assigned issues associated with these elements."/>
+      <details key="documentation" value="Engineer is a role which can own components, be assigned to issues and has its own issues list."/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IssueType">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Issue type. E.g. feature or bug. Or epic/story/task. May define child type(s). E.g. epics may contain only stories, but not tasks. Defined at engineering org unit level and referenced by issues."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//IssueType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Issue type(s) which can be children of this issue type. E.g. epics may contain stories but not tasks."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IssueResolution">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Issue resolution. E.g. fixed, cancelled, wont fix."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If true, the issue is successfully completed and blocked issues can be worked on."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IssueCategory">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -107,11 +127,34 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Issue status. E.g. open, in progress, closed. May define transitions. If transitions are empty then can transition to any status. Defined at engineering org unit level. Visualization - statuses and transitions diagram."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//IssueStatus">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Statuses to which this status can transition. If empty then can transition to any status."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IssueNote">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Issue note - progress report or comment. Can contain time and expense information. Reporter, resources."/>
     </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IssueRelationshipType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Relationship type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blocks" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If true, source/owner must be completed in order to start working on the target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IssueRelationship">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Relationship between issues."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//IssueRelationshipType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Issue"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Issue" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -125,30 +168,62 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="An estimation of effort required to complete this issue in some units used consistently throughout the model - points, person hours, dollars."/>
+        <details key="documentation" value="An estimation of effort required to complete this issue in some units used consistently throughout the model - e.g. points or person hours."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An estimation of monetary expenditure required to complete this issue in some units used consistently throughout the model - e.g. dollars. "/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="benefit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="An estimation of reduction of the containing activity effort caused by completion of this issue. It can be used for cost/benefit analysis in order to prioritize issues."/>
+        <details key="documentation" value="Explicitly assigned issue benefit value. Used for computing effective benefit which in turn is used for prioritization."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plannedFor" eType="#//Increment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Interment in which issue is scheduled to be worked on."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
         eType="#//Issue" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Issues may be organized into a hierarchy."/>
+        <details key="documentation" value="Issues may be organized into a hierarchy, a [Work Breakdown Structure](https://en.wikipedia.org/wiki/Work_breakdown_structure). The parent issue is implicitly blocked by its children, i.e. it can be worked on and closed only after all of its children are closed."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="plannedFor" eType="#//Increment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//IssueType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="status" eType="#//IssueStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolution" eType="#//IssueResolution"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//IssueCategory">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An issue can be assigned zero or more categories."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notes" upperBound="-1"
+        eType="#//IssueNote" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Issue notes can be used for tracking work progress including time and expenditure reporting."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="releases" upperBound="-1"
+        eType="#//Release">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Modifications performed as part of the issue work may appear in zero or more component releases."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//IssueRelationship" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Increment" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="A time period in which engineers are working on issues."/>
+      <details key="documentation" value="A time period in which engineers are working on issues. "/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
         eType="#//Increment" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Increments can be organized into a hierarchy. E.g. Year - Quarters - Months."/>
+        <details key="documentation" value="Increments can be organized into a hierarchy. E.g. Year - Quarter - Month - Week."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
@@ -156,63 +231,142 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Release">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Release/version of an engineered element. Date, may include other releases of other engineered elements or depend on other releases - in either case a given release cannot be released before the included/dependency release."/>
+      <details key="documentation" value="Release/version of component. Date, may include other releases of other components or depend/require other releases - in either case a given release cannot be released before the included/dependency release."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//Release">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Releases required by this release. For example product B release 1.2.0 may require product or component A release 1.5.6"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="includes" upperBound="-1"
+        eType="#//Release">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Release included in this release. For example product release 2020-12 may include component release 1.2.0."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Release can be planned for a date, an increment, or both. In the latter case the date shall be within the increment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plannedFor" eType="#//Increment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Interment in which release is scheduled to be published."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Objective">
+  <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="increment" eType="#//Increment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Interment in which release is scheduled to be published."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Objective" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyResults" upperBound="-1"
+        eType="#//KeyResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Objective"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="KeyResult">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Owned by an objective. Weight in the objective."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Product">
+  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//AbstractComponent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Product is an offering and an engineered element. It has features which satisfy personas neeeds. It may have editions, which are collections of features offered at different prices and or to different personas"/>
+      <details key="documentation" value="Component is a concrete generic component, can be a part of a product. Components can be nested. They can also depend on other components. More precisely, component releases may depend on other releases."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ComponentCategoryElement" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Offering">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Offering is something which satisfied persona needs - product, edition, feature. Offerings can be nested - perhaps shall be handled at the concrete sub-types. Offerings may reference personas as their intended target audiences. Also offering benefit may be computed from needs and scenarios weights."/>
+      <details key="documentation" value="Offering is something which satisfies persona needs - product, edition, feature. Offerings may reference personas as their intended target audiences. Also offering benefit may be computed from needs and scenarios weights."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetAudiences" upperBound="-1"
+        eType="#//Persona"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Edition">
+  <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="#//Component #//Offering">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Product is an offering and a component. It has features which satisfy personas neeeds. It may have editions, which are collections of features offered at different prices and or to different personas"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editions" upperBound="-1"
+        eType="#//Edition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" eType="#//FeatureCategoryElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Edition" eSuperTypes="#//Offering">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A subset of product features offered to different personas at different prices to maximize value for a particular persona. For example, a beginner user may not get benefit from advanced product features and therefore does not need a professional edition. Editions may have bases, e.g. professional edition is based on community edition."/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bases" upperBound="-1"
+        eType="#//Edition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//Feature"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Feature">
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for model elements which can be contained by feature category - features and sub-categories."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureCategory" abstract="true" interface="true"
+      eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//FeatureCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Grouping of features."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//FeatureCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Category elements."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//FeatureCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Unit of product functionality which satisfies persona needs. Maybe included in multiple editions. Scheduled for a release. May depend on other features and on product components releases or issues. I.e. an issue is owned by an engineered element, but it contributes to a feature. Benefit - explicit value and computed from needs and scenarios etc."/>
     </eAnnotations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Component">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Component is a generic engineered element, part of a product. Components can be nested. They can also depend on other components. More precisely, component releases may depend on other releases."/>
-    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plannedFor" eType="#//Release"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Persona">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Description from internet, e.g. Wikipedia. Abstraction of parties who benefit from organization offerings. Not necessarily pay for them or use them. Weight - manual or computed with decision analysis. Manual may be sales volume, budget contribution for internal customers, population, percentage in profit generation. E.g. a grant size is dependent on how many personas adopt a product. References parties are persona representatives. Such parties may be involved in need identification and prioritization. Defined at EngineeringOrgUnit level - may be internal personas and internal products. May have base personas and personas can be organized into a hierarchy. Base personas define common needs, what everybody needs. Base personas may be abstract - no representatives and no own weight.&#xA;Reference roles in addition to representatives - internal clients.&#xA;&#xA;&#xA;Persona benefits from engineering organization outputs (offerings). Not necessarily buys or uses.&#xA;Persona is an engineered element - owner, issues, ... representatives&#xA;&#xA;Resources reference and palette - markdown docs, rigel flows, ... - party level. Embedded and references. Folders&#xA;&#xA;&#xA;Rigel activities defined in roles (actor). Prof extensions report which flows role participates in.&#xA;&#xA;Needs, scenarios, offerings&#xA;&#xA;Customer value and strategic value/alignment - objectives.&#xA;"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="needs" upperBound="-1"
+        eType="#//NeedCategoryElement" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Need">
+  <eClassifiers xsi:type="ecore:EClass" name="NeedCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for model elements which can be contained by need category - needs and sub-categories."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NeedCategory" abstract="true" interface="true"
+      eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//NeedCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Grouping of persona needs."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//NeedCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Category elements."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Need" eSuperTypes="#//NeedCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.&#xA;&#xA;Must have, need to have, delighter - here or at the offering level?"/>
     </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="#//Scenario" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Scenario">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Scenario explains how a need is satisfied by offerings. A scenario references offerings and can be assigned weight - manually or computed. Scenarios can be organized into a hierarchy. Generally scenarios may have steps/flow and include other scenarios, it needs to be understood whether this level of detalization is necessary."/>
     </eAnnotations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Portfolio">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="A group of products"/>
-    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offerings" upperBound="-1"
+        eType="#//Offering"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Criterion">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

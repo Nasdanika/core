@@ -2,6 +2,7 @@
  */
 package org.nasdanika.engineering;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -10,13 +11,34 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Base class for Engineer and EngineeringOrganizationalUnit. Can own engineered elements and be assigned to issues. Can also contain its own issues list.
+ * Base class for Engineer and EngineeringOrganizationalUnit. Can own components and be assigned to issues. Can also contain its own issues list.
  * <!-- end-model-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.nasdanika.engineering.AbstractEngineer#getIssues <em>Issues</em>}</li>
+ * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getAbstractEngineer()
  * @model
  * @generated
  */
 public interface AbstractEngineer extends EObject {
+
+	/**
+	 * Returns the value of the '<em><b>Issues</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Issue}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Issues owned by this engineer. Issues related to a single component shall be defined at the component level. If an issue doesn't have a related component or has multiple related components it can be defined at the engineer level.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Issues</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getAbstractEngineer_Issues()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Issue> getIssues();
 } // AbstractEngineer

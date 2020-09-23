@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -18,7 +19,11 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
+import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.IssueResolution;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.IssueResolution} object.
@@ -55,8 +60,31 @@ public class IssueResolutionItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addCompletedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Completed feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCompletedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_IssueResolution_completed_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_IssueResolution_completed_feature", "_UI_IssueResolution_type"),
+				 EngineeringPackage.Literals.ISSUE_RESOLUTION__COMPLETED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -88,7 +116,8 @@ public class IssueResolutionItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_IssueResolution_type");
+		IssueResolution issueResolution = (IssueResolution)object;
+		return getString("_UI_IssueResolution_type") + " " + issueResolution.isCompleted();
 	}
 
 
@@ -102,6 +131,12 @@ public class IssueResolutionItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(IssueResolution.class)) {
+			case EngineeringPackage.ISSUE_RESOLUTION__COMPLETED:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

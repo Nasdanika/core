@@ -2,7 +2,7 @@
  */
 package org.nasdanika.engineering;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -15,10 +15,28 @@ import org.eclipse.emf.ecore.EObject;
  * Must have, need to have, delighter - here or at the offering level?
  * <!-- end-model-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.nasdanika.engineering.Need#getScenarios <em>Scenarios</em>}</li>
+ * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getNeed()
  * @model
  * @generated
  */
-public interface Need extends EObject {
+public interface Need extends NeedCategoryElement {
+
+	/**
+	 * Returns the value of the '<em><b>Scenarios</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Scenario}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenarios</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getNeed_Scenarios()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Scenario> getScenarios();
 } // Need

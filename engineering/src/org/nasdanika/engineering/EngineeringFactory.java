@@ -22,6 +22,15 @@ public interface EngineeringFactory extends EFactory {
 	EngineeringFactory eINSTANCE = org.nasdanika.engineering.impl.EngineeringFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Component Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Component Category Element</em>'.
+	 * @generated
+	 */
+	ComponentCategoryElement createComponentCategoryElement();
+
+	/**
 	 * Returns a new object of class '<em>Abstract Engineer</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -83,6 +92,24 @@ public interface EngineeringFactory extends EFactory {
 	 * @generated
 	 */
 	IssueNote createIssueNote();
+
+	/**
+	 * Returns a new object of class '<em>Issue Relationship Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Issue Relationship Type</em>'.
+	 * @generated
+	 */
+	IssueRelationshipType createIssueRelationshipType();
+
+	/**
+	 * Returns a new object of class '<em>Issue Relationship</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Issue Relationship</em>'.
+	 * @generated
+	 */
+	IssueRelationship createIssueRelationship();
 
 	/**
 	 * Returns a new object of class '<em>Issue</em>'.
@@ -175,6 +202,15 @@ public interface EngineeringFactory extends EFactory {
 	Edition createEdition();
 
 	/**
+	 * Returns a new object of class '<em>Feature Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Feature Category Element</em>'.
+	 * @generated
+	 */
+	FeatureCategoryElement createFeatureCategoryElement();
+
+	/**
 	 * Returns a new object of class '<em>Feature</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -202,6 +238,15 @@ public interface EngineeringFactory extends EFactory {
 	Persona createPersona();
 
 	/**
+	 * Returns a new object of class '<em>Need Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Need Category Element</em>'.
+	 * @generated
+	 */
+	NeedCategoryElement createNeedCategoryElement();
+
+	/**
 	 * Returns a new object of class '<em>Need</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -218,15 +263,6 @@ public interface EngineeringFactory extends EFactory {
 	 * @generated
 	 */
 	Scenario createScenario();
-
-	/**
-	 * Returns a new object of class '<em>Portfolio</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Portfolio</em>'.
-	 * @generated
-	 */
-	Portfolio createPortfolio();
 
 	/**
 	 * Returns a new object of class '<em>Criterion</em>'.

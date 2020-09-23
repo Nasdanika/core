@@ -56,6 +56,7 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case EngineeringPackage.COMPONENT_CATEGORY_ELEMENT: return createComponentCategoryElement();
 			case EngineeringPackage.ABSTRACT_ENGINEER: return createAbstractEngineer();
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: return createEngineeringOrganizationalUnit();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION: return createEngineeringOrganization();
@@ -65,26 +66,40 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 			case EngineeringPackage.ISSUE_CATEGORY: return createIssueCategory();
 			case EngineeringPackage.ISSUE_STATUS: return createIssueStatus();
 			case EngineeringPackage.ISSUE_NOTE: return createIssueNote();
+			case EngineeringPackage.ISSUE_RELATIONSHIP_TYPE: return createIssueRelationshipType();
+			case EngineeringPackage.ISSUE_RELATIONSHIP: return createIssueRelationship();
 			case EngineeringPackage.ISSUE: return createIssue();
 			case EngineeringPackage.INCREMENT: return createIncrement();
 			case EngineeringPackage.RELEASE: return createRelease();
 			case EngineeringPackage.OBJECTIVE: return createObjective();
 			case EngineeringPackage.KEY_RESULT: return createKeyResult();
-			case EngineeringPackage.PRODUCT: return createProduct();
-			case EngineeringPackage.OFFERING: return createOffering();
-			case EngineeringPackage.EDITION: return createEdition();
-			case EngineeringPackage.FEATURE: return createFeature();
 			case EngineeringPackage.COMPONENT: return createComponent();
+			case EngineeringPackage.OFFERING: return createOffering();
+			case EngineeringPackage.PRODUCT: return createProduct();
+			case EngineeringPackage.EDITION: return createEdition();
+			case EngineeringPackage.FEATURE_CATEGORY_ELEMENT: return createFeatureCategoryElement();
+			case EngineeringPackage.FEATURE: return createFeature();
 			case EngineeringPackage.PERSONA: return createPersona();
+			case EngineeringPackage.NEED_CATEGORY_ELEMENT: return createNeedCategoryElement();
 			case EngineeringPackage.NEED: return createNeed();
 			case EngineeringPackage.SCENARIO: return createScenario();
-			case EngineeringPackage.PORTFOLIO: return createPortfolio();
 			case EngineeringPackage.CRITERION: return createCriterion();
 			case EngineeringPackage.COMPARISON: return createComparison();
 			case EngineeringPackage.RISK: return createRisk();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ComponentCategoryElement createComponentCategoryElement() {
+		ComponentCategoryElementImpl componentCategoryElement = new ComponentCategoryElementImpl();
+		return componentCategoryElement;
 	}
 
 	/**
@@ -162,6 +177,28 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	public IssueNote createIssueNote() {
 		IssueNoteImpl issueNote = new IssueNoteImpl();
 		return issueNote;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IssueRelationshipType createIssueRelationshipType() {
+		IssueRelationshipTypeImpl issueRelationshipType = new IssueRelationshipTypeImpl();
+		return issueRelationshipType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IssueRelationship createIssueRelationship() {
+		IssueRelationshipImpl issueRelationship = new IssueRelationshipImpl();
+		return issueRelationship;
 	}
 
 	/**
@@ -280,6 +317,17 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	 * @generated
 	 */
 	@Override
+	public FeatureCategoryElement createFeatureCategoryElement() {
+		FeatureCategoryElementImpl featureCategoryElement = new FeatureCategoryElementImpl();
+		return featureCategoryElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Feature createFeature() {
 		FeatureImpl feature = new FeatureImpl();
 		return feature;
@@ -313,6 +361,17 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	 * @generated
 	 */
 	@Override
+	public NeedCategoryElement createNeedCategoryElement() {
+		NeedCategoryElementImpl needCategoryElement = new NeedCategoryElementImpl();
+		return needCategoryElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Need createNeed() {
 		NeedImpl need = new NeedImpl();
 		return need;
@@ -327,17 +386,6 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	public Scenario createScenario() {
 		ScenarioImpl scenario = new ScenarioImpl();
 		return scenario;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Portfolio createPortfolio() {
-		PortfolioImpl portfolio = new PortfolioImpl();
-		return portfolio;
 	}
 
 	/**

@@ -7,22 +7,22 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.nasdanika.engineering.EngineeringPackage;
-import org.nasdanika.engineering.Portfolio;
+import org.nasdanika.engineering.NeedCategoryElement;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Portfolio</b></em>'.
+ * An implementation of the model object '<em><b>Need Category Element</b></em>'.
  * <!-- end-user-doc -->
  *
  * @generated
  */
-public class PortfolioImpl extends MinimalEObjectImpl.Container implements Portfolio {
+public class NeedCategoryElementImpl extends MinimalEObjectImpl.Container implements NeedCategoryElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected PortfolioImpl() {
+	protected NeedCategoryElementImpl() {
 		super();
 	}
 
@@ -33,7 +33,7 @@ public class PortfolioImpl extends MinimalEObjectImpl.Container implements Portf
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return EngineeringPackage.Literals.PORTFOLIO;
+		return EngineeringPackage.Literals.NEED_CATEGORY_ELEMENT;
 	}
 
 	/**
@@ -46,4 +46,4 @@ public class PortfolioImpl extends MinimalEObjectImpl.Container implements Portf
 		return 0;
 	}
 
-} //PortfolioImpl
+} //NeedCategoryElementImpl
