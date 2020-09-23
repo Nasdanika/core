@@ -611,8 +611,10 @@ public class TestExec {
 		assertEquals(Block.class, block.getClass());
 		Context context = Context.EMPTY_CONTEXT;
 		InputStream result = callSupplier(context, monitor, block);
-		String expected = "Errorneous org.nasdanika.common.NasdanikaException: HTTP Call to https://nasdanika.org/no-such-path has failed with response: 404 Not Found at file:/C:/Users/Pavel/git/core/tests/target/classes/org/nasdanika/core/tests/exec/block-supplier-catch-spec.yml 3:7World";
-		assertEquals(expected, Util.toString(context, result));
+		String prefix = "Errorneous org.nasdanika.common.NasdanikaException: HTTP Call to https://nasdanika.org/no-such-path has failed with response: 404 Not Found at ";
+		String suffix = "block-supplier-catch-spec.yml 3:7World";
+		String strResult = Util.toString(context, result);
+		assertTrue(strResult.startsWith(prefix) && strResult.endsWith(suffix));
 	}
 	
 	// fail - no catch block
