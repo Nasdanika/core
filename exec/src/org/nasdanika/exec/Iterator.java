@@ -184,7 +184,7 @@ public class Iterator implements Adaptable, Marked {
 		return Adaptable.super.adaptTo(type);
 	}	
 	
-	// --- Consumer ---
+	// --- Command ---
 
 	public Command createCommand(Context context, String iterator, Object target) throws Exception {		
 		Collection<Context> iContexts = iterate(context, iterator);

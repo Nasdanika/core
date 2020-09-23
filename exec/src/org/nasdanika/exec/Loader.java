@@ -16,6 +16,7 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
@@ -81,6 +82,22 @@ public class Loader extends ObjectLoader {
 				return new Reference(loader, config, base, subMonitor, marker);
 			case "group": // Both resource and content, is it needed - iterator and map shall do?
 				throw new UnsupportedOperationException();
+			case "block": 
+				return new Block(loader, config, base, subMonitor, marker);
+			case "info": 
+				return new Progress(loader, config, base, subMonitor, marker, Status.INFO);
+			case "warning": 
+				return new Progress(loader, config, base, subMonitor, marker, Status.WARNING);
+			case "error": 
+				return new Progress(loader, config, base, subMonitor, marker, Status.ERROR);
+			case "fail": 
+				return new Fail(loader, config, base, subMonitor, marker);
+			case "eval": 
+				return new Eval(loader, config, base, subMonitor, marker);
+			case "if": 
+				return new If(loader, config, base, subMonitor, marker);
+			case "switch": 
+				return new Switch(loader, config, base, subMonitor, marker);
 			
 			// Resources
 			case "container":

@@ -6,6 +6,15 @@ Loader supports the following types:
     * ``(map)`` - [Map cast](map-cast.html) - Forces content to be treated as a map even if there is a single entry, which by default is treated as an object definition.
     * ``map`` - [Mapper](mapper.html) - Replaces the current context with a new context loaded from a map and intepolated.
     * ``reference`` - [Reference](reference.html) - Loads object(s) from a YAML resource identified by the reference.
+    * ``block`` - [Block](block.html) - try-catch-finally block.
+    * ``info`` - [Info](info.html) - Reports an informational message to progress monitor.
+    * ``warning`` - [Warning](warning.html) - Reports a warning to progress monitor.
+    * ``error`` - [Error](error.html) - Reports an error to progress monitor.
+    * ``fail`` - [Fail](fail.html) - Fails execution with a specified message.
+    * ``eval`` - [Eval](eval.html) - Evaluates JavaScript code.
+    * ``if`` - [If](if.html) - if-then-else conditional execution.
+    * ``switch`` - [Switch](switch.html) - Select one of cases to be executed.
+    
 * [Resources](../resources/index.html) - components which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> and can contribute elements to a container:
     * ``container`` - [Container](../resources/container.html) - Generates a container (folder).
     * ``file`` - [File](../resources/file.html) - Generates a file with contents provided by the content components (see below).
