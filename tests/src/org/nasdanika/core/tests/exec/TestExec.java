@@ -35,6 +35,7 @@ import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.BinaryResource;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
+import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Loader;
@@ -576,6 +577,47 @@ public class TestExec {
 				.compose(Context.singleton("myFieldAnnotations", annotations))
 				.compose(Context.singleton("date", new Date()));
 		callCommand(context, monitor, git);
-	}	
+	}
+	
+	// Block tests
+		
+	@Test
+	public void testBlockSupplierSuccess() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object block = loader.loadYaml(TestExec.class.getResource("block-supplier-success-spec.yml"), monitor);
+		assertEquals(Block.class, block.getClass());
+		Context context = Context.EMPTY_CONTEXT;
+		InputStream result = callSupplier(context, monitor, block);
+		assertEquals("HelloWorld", Util.toString(context, result));
+	}
+	
+	@Test(expected = AssertionError.class)
+	public void testBlockSupplierFail() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object block = loader.loadYaml(TestExec.class.getResource("block-supplier-fail-spec.yml"), monitor);
+		assertEquals(Block.class, block.getClass());
+		Context context = Context.EMPTY_CONTEXT;
+		InputStream result = callSupplier(context, monitor, block);
+		assertEquals("HelloWorld", Util.toString(context, result));
+	}
+	
+	@Test
+	public void testBlockSupplierCatch() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object block = loader.loadYaml(TestExec.class.getResource("block-supplier-catch-spec.yml"), monitor);
+		assertEquals(Block.class, block.getClass());
+		Context context = Context.EMPTY_CONTEXT;
+		InputStream result = callSupplier(context, monitor, block);
+		String expected = "Errorneous org.nasdanika.common.NasdanikaException: HTTP Call to https://nasdanika.org/no-such-path has failed with response: 404 Not Found at file:/C:/Users/Pavel/git/core/tests/target/classes/org/nasdanika/core/tests/exec/block-supplier-catch-spec.yml 3:7World";
+		assertEquals(expected, Util.toString(context, result));
+	}
+	
+	// fail - no catch block
+	
+	// fail with catch block
+	
 	
 }

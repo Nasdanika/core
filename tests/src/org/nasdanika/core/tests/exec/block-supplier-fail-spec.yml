@@ -1,0 +1,4 @@
+block:
+   try: 
+      http: https://nasdanika.org/no-such-path      
+   finally: World

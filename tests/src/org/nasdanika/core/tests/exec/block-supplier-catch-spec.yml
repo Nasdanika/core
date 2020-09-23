@@ -1,0 +1,6 @@
+block:
+   try: 
+      http: https://nasdanika.org/no-such-path
+   catch: 
+      interpolator: Errorneous ${{error}}      
+   finally: World

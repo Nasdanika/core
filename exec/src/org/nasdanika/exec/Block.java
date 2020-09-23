@@ -17,6 +17,7 @@ import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.Reference;
 import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.Status;
@@ -41,8 +42,8 @@ public class Block implements Adaptable, Marked {
 	
 	// Error injected into the catch context.
 	private static final String ERROR_KEY = "error";
-	private static final String ERROR_MESSAGE_KEY = "error/message";
-	private static final String ERROR_STACK_TRACE_KEY = "error/stack-trace";
+//	private static final String ERROR_MESSAGE_KEY = "error/message";
+//	private static final String ERROR_STACK_TRACE_KEY = "error/stack-trace";
 	
 	private Marker marker;
 	private Object tryBlock;
@@ -232,18 +233,25 @@ public class Block implements Adaptable, Marked {
 
 			@Override
 			public Context execute(ProgressMonitor progressMonitor) throws Exception {
-				MutableContext ret = context.fork();
-				
-				ServiceComputer<Exception> sc = new ServiceComputer<Exception>() {
+				return new Context() {
 
 					@Override
-					public Exception compute(Context context, Class<Exception> type) {
-						return eRef.get();
+					public Object get(String key) {
+						if (ERROR_KEY.equals(key)) {
+							return eRef.get();
+						}
+						
+						return null;
+					}
+
+					@SuppressWarnings("unchecked")
+					@Override
+					public <T> T get(Class<T> type) {
+						return type == Exception.class ? (T) eRef.get() : null;
 					}
 					
-				};
-				ret.register(Exception.class, sc);
-				return ret;
+				}.compose(context);
+				
 			}
 			
 		};
