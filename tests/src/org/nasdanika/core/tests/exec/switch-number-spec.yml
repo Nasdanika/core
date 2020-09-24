@@ -1,0 +1,7 @@
+switch:
+   expression: ${number}
+   case:
+      1: uno
+      2: dos
+      3: tres      
+   default: no comprendo      

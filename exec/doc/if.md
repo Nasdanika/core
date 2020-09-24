@@ -2,7 +2,7 @@ Conditional execution.
 
 Supported keys:
 
-* ``condition`` - required. Boolean or string. If string then condition is interpolated and evaluated. If result is true, then the ``then`` block is executed. Otherwise the ``else`` block is executed if it is present.
+* ``condition`` - required. Boolean or string. If string then condition is interpolated and evaluated as JavaScript with ``context`` and ``progressMonitor`` bindings for the context and progress monitor respectively. If result is true, then the ``then`` block is executed. Otherwise the ``else`` block is executed if it is present. 
 * ``then`` - required. Executed if condition is evaluated to true.
 * ``else`` - optional. Executed if condition is evaluated to something other than true. 
 

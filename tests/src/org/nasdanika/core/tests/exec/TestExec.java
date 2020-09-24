@@ -672,4 +672,48 @@ public class TestExec {
 		assertEquals("HelloWorld", Util.toString(context, result));
 	}
 	
+	@Test
+	public void testSwitchString() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object progress = loader.loadYaml(TestExec.class.getResource("switch-string-spec.yml"), monitor);
+
+		Context context = Context.singleton("word", "one");
+		assertEquals("uno", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("word", "two");
+		assertEquals("dos", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("word", "three");
+		assertEquals("tres", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("word", "quatro");
+		assertEquals("no comprendo", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("word", "2");
+		assertEquals("dos", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("word", "3");
+		assertEquals("tres", Util.toString(context, callSupplier(context, monitor, progress)));		
+	}
+	
+	@Test
+	public void testSwitchNumber() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object progress = loader.loadYaml(TestExec.class.getResource("switch-number-spec.yml"), monitor);
+
+		Context context = Context.singleton("number", 1);
+		assertEquals("uno", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("number", 2);
+		assertEquals("dos", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("number", 3);
+		assertEquals("tres", Util.toString(context, callSupplier(context, monitor, progress)));
+
+		context = Context.singleton("number", 4);
+		assertEquals("no comprendo", Util.toString(context, callSupplier(context, monitor, progress)));		
+	}
+	
 }

@@ -289,4 +289,5 @@ public class If implements Adaptable, Marked {
 		Supplier<InputStream>  elseSupplier = elseBlock == null ? null : Loader.asSupplierFactory(elseBlock).create(context);
 		return new IfSupplier(context, thenSupplier, elseSupplier);		
 	}
+	
 }
