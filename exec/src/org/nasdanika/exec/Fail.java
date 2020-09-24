@@ -1,75 +1,129 @@
 package org.nasdanika.exec;
 
+import java.io.InputStream;
 import java.net.URL;
 
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.BiSupplier;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
+import org.nasdanika.common.Context;
+import org.nasdanika.common.Function;
+import org.nasdanika.common.FunctionFactory;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
- * Not interpolated reference resolved/loaded at load time.
- * TODO later - interpolated reference resolved/loaded at factory create time.
+ * Fails execution by throwing an exception with supplied message.
  * @author Pavel
  *
  */
 public class Fail implements Adaptable, Marked {
-	
-	protected Object target;
+		
+	protected SupplierFactory<InputStream> message;
 	private Marker marker;
 	
 	@Override
 	public Marker getMarker() {
 		return marker;
 	}
-
-	public Fail(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		if (config instanceof String) {
-			URL targetURL = new URL(base, (String) config);
-			target = loader.loadYaml(targetURL, progressMonitor);
-			this.marker = marker;
-		} else {
-			throw new ConfigurationException("Reference type must be a string", marker);
-		}
+	
+	protected Fail(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
+		message = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
-	public Fail(Marker marker, Object target) {
+	protected Fail(Marker marker, SupplierFactory<InputStream> message) {
 		this.marker = marker;
-		this.target = target;
+		this.message = message;
+	}
+		
+	private Consumer<InputStream> createConsumer(Context context) throws Exception {
+		return new Consumer<InputStream>() {
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return "Fail";
+			}
+
+			@Override
+			public void execute(InputStream msg, ProgressMonitor progressMonitor) throws Exception {
+				throw new NasdanikaException(Util.toString(context, msg));
+			}
+			
+		};
+	}
+		
+	private Consumer<BiSupplier<BinaryEntityContainer, InputStream>> createBiConsumer(Context context) throws Exception {
+		return new Consumer<BiSupplier<BinaryEntityContainer, InputStream>>() {
+	
+			@Override
+			public double size() {
+				return 1;
+			}
+	
+			@Override
+			public String name() {
+				return "Fail";
+			}
+	
+			@Override
+			public void execute(BiSupplier<BinaryEntityContainer, InputStream> input, ProgressMonitor progressMonitor) throws Exception {
+				throw new NasdanikaException(Util.toString(context, input.getSecond()));
+			}
+			
+		};
+	}	
+	
+	private Function<InputStream,InputStream> createFunction(Context context) throws Exception {
+		return new Function<InputStream,InputStream>() {
+	
+			@Override
+			public double size() {
+				return 1;
+			}
+	
+			@Override
+			public String name() {
+				return "Fail";
+			}
+	
+			@Override
+			public InputStream execute(InputStream msg, ProgressMonitor progressMonitor) throws Exception {
+				throw new NasdanikaException(Util.toString(context, msg));
+			}
+			
+		};
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T adaptTo(Class<T> type) {
-		if (type.isInstance(target)) {
-			return (T) target;
-		}
-		if (target instanceof Adaptable) {
-			return ((Adaptable) target).adaptTo(type);
+	public <T> T adaptTo(Class<T> type) {		
+		if (type == CommandFactory.class) {
+			return (T) message.then((ConsumerFactory<InputStream>) this::createConsumer);															
 		}
 		
-		// Handling collections etc by delegating to Loader utility methods for Consumer and Supplier factories
 		if (type == ConsumerFactory.class) {
-			try {
-				return (T) Loader.asConsumerFactory(target, marker);
-			} catch (Exception e) {
-				throw new ConfigurationException("Could not load " + target.getClass() + " as ConsumerFactory", e, marker);
-			}
+			return (T) message.<BinaryEntityContainer>asFunctionFactory().then((ConsumerFactory<BiSupplier<BinaryEntityContainer, InputStream>>) this::createBiConsumer);													
 		}
 		
 		if (type == SupplierFactory.class) {
-			try {
-				return (T) Loader.asSupplierFactory(target, marker);
-			} catch (Exception e) {
-				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
-			}
+			return (T) message.then((FunctionFactory<InputStream,InputStream>) this::createFunction);															
 		}
 		
-		throw new ConfigurationException("Target " + target.getClass() + " is not of requested type and cannot be adapted to it: " + type, marker);
+		return Adaptable.super.adaptTo(type);
 	}		
 
 }

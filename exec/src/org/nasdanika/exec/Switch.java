@@ -63,7 +63,7 @@ public class Switch implements Adaptable, Marked {
 		
 		if (type == SupplierFactory.class) {
 			try {
-				return (T) Loader.asSupplierFactory(target, marker);
+				return (T) Loader.asSupplierFactory(target);
 			} catch (Exception e) {
 				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
 			}

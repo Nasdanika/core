@@ -175,29 +175,22 @@ public class Loader extends ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
-		return asSupplierFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
-	}	
-	
-	/**
-	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
 	@SuppressWarnings("unchecked")
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj, Marker marker) throws Exception {
+	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
 		if (obj instanceof Collection) {
 			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
-			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
-				ret.add(asSupplierFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
+				ret.add(asSupplierFactory(e));
 			}
 			return ret.then(Util.JOIN_STREAMS_FACTORY);
 		}
 		
 		if (obj instanceof SupplierFactory) {		
 			return (SupplierFactory<InputStream>) obj;
+		}
+		
+		if (obj instanceof SupplierFactory.Provider) {
+			return ((SupplierFactory.Provider) obj).getFactory(InputStream.class);
 		}
 		
 		if (obj instanceof Adaptable) {
@@ -208,7 +201,25 @@ public class Loader extends ObjectLoader {
 		}
 		
 		// Converting to string, interpolating, streaming
-		SupplierFactory<String> textFactory = context -> Supplier.from(context.interpolateToString(String.valueOf(obj)), "Scalar");
+		SupplierFactory<String> textFactory = context -> new Supplier<String>() {
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return "Scalar";
+			}
+
+			@Override
+			public String execute(ProgressMonitor progressMonitor) throws Exception {
+				return context.interpolateToString(String.valueOf(obj));
+			}
+		
+		};
+		
 		return textFactory.then(Util.TO_STREAM);
 	};
 	

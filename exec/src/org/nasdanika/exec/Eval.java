@@ -1,75 +1,168 @@
 package org.nasdanika.exec;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
+import java.util.Map.Entry;
 
-import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.ConsumerFactory;
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
+import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Function;
+import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 
 /**
- * Not interpolated reference resolved/loaded at load time.
- * TODO later - interpolated reference resolved/loaded at factory create time.
+ * Evaluates script. 
  * @author Pavel
  *
  */
-public class Eval implements Adaptable, Marked {
+public class Eval implements SupplierFactory.Provider, Marked {
 	
-	protected Object target;
+	private static final String SCRIPT_KEY = "script";
+	private static final String BINDINGS_KEY = "bindings";
+	
+	private static final String CONTEXT_BINDING = "context";
+	private static final String PROGRESS_MONITOR_BINDING = "progressMonitor";
+	
 	private Marker marker;
+	private SupplierFactory<InputStream> scriptFactory;
+	private Map<String,Object> bindings;
+	private boolean interpolateScript;
 	
 	@Override
 	public Marker getMarker() {
 		return marker;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Eval(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;
 		if (config instanceof String) {
-			URL targetURL = new URL(base, (String) config);
-			target = loader.loadYaml(targetURL, progressMonitor);
-			this.marker = marker;
+			scriptFactory = Loader.asSupplierFactory(config);
+			interpolateScript = true;
+		} else if (config instanceof Map) {
+			Map<String,Object> configMap = (Map<String,Object>) config;
+			Loader.checkUnsupportedKeys(configMap, SCRIPT_KEY, BINDINGS_KEY);
+			if (configMap.containsKey(SCRIPT_KEY)) {
+				scriptFactory = Loader.asSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
+			} else {
+				throw new ConfigurationException("Script is required", marker);
+			}
+			if (configMap.containsKey(BINDINGS_KEY)) {
+				bindings = Util.getMap(configMap, BINDINGS_KEY, null);
+			}
 		} else {
-			throw new ConfigurationException("Reference type must be a string", marker);
+			throw new ConfigurationException(getClass().getName() + " configuration shall be a string or a map, got " + config.getClass(), marker);
 		}
 	}
 	
-	public Eval(Marker marker, Object target) {
+	public Eval(Marker marker, Object script, Map<String,Object> bindings) throws Exception {
 		this.marker = marker;
-		this.target = target;
+		this.scriptFactory = Loader.asSupplierFactory(script);
+		this.bindings = bindings;		
 	}
 	
+	protected Object eval(String script, Context context, ProgressMonitor progressMonitor) throws Exception {
+		ScriptEngine engine = new ScriptEngineManager().getEngineByMimeType("application/javascript");
+		Bindings bindings = engine.createBindings();
+		bindings.put(CONTEXT_BINDING, context);
+		bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);
+		if (this.bindings != null) {
+			for (Entry<String, Object> e: context.interpolate(this.bindings).entrySet()) {
+				bindings.put(e.getKey(), e.getValue());
+			}
+		}
+		return engine.eval(interpolateScript ? context.interpolateToString(script) : script, bindings);
+	}
+	
+
+	/**
+	 * {@link Object}, {@link InputStream}, {@link Boolean}.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T adaptTo(Class<T> type) {
-		if (type.isInstance(target)) {
-			return (T) target;
-		}
-		if (target instanceof Adaptable) {
-			return ((Adaptable) target).adaptTo(type);
-		}
-		
-		// Handling collections etc by delegating to Loader utility methods for Consumer and Supplier factories
-		if (type == ConsumerFactory.class) {
-			try {
-				return (T) Loader.asConsumerFactory(target, marker);
-			} catch (Exception e) {
-				throw new ConfigurationException("Could not load " + target.getClass() + " as ConsumerFactory", e, marker);
-			}
-		}
-		
-		if (type == SupplierFactory.class) {
-			try {
-				return (T) Loader.asSupplierFactory(target, marker);
-			} catch (Exception e) {
-				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
-			}
-		}
-		
-		throw new ConfigurationException("Target " + target.getClass() + " is not of requested type and cannot be adapted to it: " + type, marker);
-	}		
+	public <T> SupplierFactory<T> getFactory(Class<T> type) {
+		if (type == null || type == Object.class) {
+			FunctionFactory<InputStream, Object> functionFactory = context -> new Function<InputStream, Object>() {
 
+				@Override
+				public double size() {
+					return 1;
+				}
+
+				@Override
+				public String name() {
+					return "eval";
+				}
+
+				@Override
+				public Object execute(InputStream script, ProgressMonitor progressMonitor) throws Exception {
+					return eval(Util.toString(context, script), context, progressMonitor);
+				}
+			};
+			
+			return (SupplierFactory<T>) scriptFactory.then(functionFactory);
+		}
+		
+		if (type == Boolean.class) {
+			FunctionFactory<Object, Boolean> booleanFactory = context -> new Function<Object,Boolean>() {
+
+				@Override
+				public double size() {
+					return 1;
+				}
+
+				@Override
+				public String name() {
+					return "boolean";
+				}
+
+				@Override
+				public Boolean execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+					return Boolean.TRUE.equals(obj);
+				}
+			};
+			
+			return (SupplierFactory<T>) getFactory(Object.class).then(booleanFactory);			
+		}
+		
+		if (type == InputStream.class) {
+			FunctionFactory<Object, InputStream> booleanFactory = context -> new Function<Object,InputStream>() {
+
+				@Override
+				public double size() {
+					return 1;
+				}
+
+				@Override
+				public String name() {
+					return "stream";
+				}
+
+				@Override
+				public InputStream execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+					InputStream ret = DefaultConverter.INSTANCE.convert(obj, InputStream.class);
+					if (obj != null && ret == null) {
+						ret = Util.toStream(context, obj.toString());
+					}
+					return ret;
+				}
+			};
+			
+			return (SupplierFactory<T>) getFactory(Object.class).then(booleanFactory);			
+		}
+		
+		throw new IllegalArgumentException("Unsupported type: " + type);
+	}
+	
 }

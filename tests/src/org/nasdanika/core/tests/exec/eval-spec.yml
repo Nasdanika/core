@@ -1,0 +1,6 @@
+eval: 
+   script:
+      reference: script.js
+   bindings:
+      a: 2
+      b: ${age}

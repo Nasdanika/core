@@ -288,7 +288,7 @@ public class Util {
 		if (val instanceof String) {
 			return (String) val;
 		}
-		throw new ConfigurationException(key + " value must be a string", Util.getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a string", getMarker(map, key));		
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class Util {
 		if (val instanceof Collection) {
 			return (Collection<T>) val;
 		}
-		throw new ConfigurationException(key + " value must be a collection", Util.getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a collection", getMarker(map, key));		
 	}
 
 	/**
@@ -324,7 +324,7 @@ public class Util {
 		if (val instanceof Map) {
 			return (Map<K,V>) val;
 		}
-		throw new ConfigurationException(key + " value must be a map", Util.getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a map", getMarker(map, key));		
 	}
 		
 }

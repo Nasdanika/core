@@ -27,7 +27,7 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 	
 	protected Filter(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor), marker);
+		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Filter(Marker marker, SupplierFactory<InputStream> source) {
@@ -60,8 +60,7 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 		return source.then(filterFactory).create(context);
 	}
 	
-	protected abstract String filter(Context context, String input); 
-	
+	protected abstract String filter(Context context, String input); 	
 
 }
 

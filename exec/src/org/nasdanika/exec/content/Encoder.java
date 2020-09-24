@@ -61,11 +61,11 @@ public abstract class Encoder implements SupplierFactory<InputStream>, Marked {
 			ListCompoundSupplierFactory<InputStream> lcsf = new ListCompoundSupplierFactory<InputStream>("Collection " + (marker == null ? "" : " at " + marker));
 			int idx = 0;
 			for (Object mee: (Collection<?>) data) {
-				lcsf.add(Loader.asSupplierFactory(loader.load(mee, base, progressMonitor), Util.getMarker((Collection<?>) data, idx++)));
+				lcsf.add(Loader.asSupplierFactory(loader.load(mee, base, progressMonitor)));
 			}
 			return lcsf;
 		} else {
-			return Loader.asSupplierFactory(data, marker);
+			return Loader.asSupplierFactory(data);
 		}
 		
 	}

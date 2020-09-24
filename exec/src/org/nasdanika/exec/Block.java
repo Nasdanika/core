@@ -14,12 +14,9 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
-import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.Reference;
-import org.nasdanika.common.ServiceComputer;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -42,7 +39,8 @@ public class Block implements Adaptable, Marked {
 	
 	// Error injected into the catch context.
 	private static final String ERROR_KEY = "error";
-//	private static final String ERROR_MESSAGE_KEY = "error/message";
+	private static final String ERROR_TYPE_KEY = "error/type";
+	private static final String ERROR_MESSAGE_KEY = "error/message";
 //	private static final String ERROR_STACK_TRACE_KEY = "error/stack-trace";
 	
 	private Marker marker;
@@ -237,8 +235,18 @@ public class Block implements Adaptable, Marked {
 
 					@Override
 					public Object get(String key) {
+						Exception exception = eRef.get();
+
 						if (ERROR_KEY.equals(key)) {
-							return eRef.get();
+							return exception;
+						}
+						if (exception != null) {
+							if (ERROR_TYPE_KEY.equals(key)) {
+								return exception.getClass().getName();
+							}
+							if (ERROR_MESSAGE_KEY.equals(key)) {
+								return exception.getMessage();
+							}
 						}
 						
 						return null;
@@ -258,8 +266,7 @@ public class Block implements Adaptable, Marked {
 		
 	}
 	
-	// --- Command ---
-	
+	// --- Command ---	
 	
 	private static class BlockCommand extends BlockExecutionParticipant<Command> implements Command {
 
@@ -277,23 +284,24 @@ public class Block implements Adaptable, Marked {
 		@Override
 		public void execute(ProgressMonitor progressMonitor) throws Exception {
 			try {
-				tryParticipant.execute(progressMonitor);
+				tryParticipant.splitAndExecute(progressMonitor);
 			} catch (Exception e) {
+				tryParticipant.splitAndRollback(progressMonitor);
 				eRef.set(e);
 				if (catchParticipant == null) {
 					throw e;
 				}
-				catchParticipant.execute(progressMonitor);
+				catchParticipant.splitAndExecute(progressMonitor);
 			} finally {
 				if (finallyParticipant != null) {
-					finallyParticipant.execute(progressMonitor);
+					finallyParticipant.splitAndExecute(progressMonitor);
 				}
 			}			
 		}
 		
 	}	
 	
-	public Command createCommand(Context context) throws Exception {
+	private Command createCommand(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Command tryCommand = Loader.asCommandFactory(tryBlock).create(context);
 		Command catchCommand = catchBlock == null ? null : Loader.asCommandFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
@@ -319,23 +327,24 @@ public class Block implements Adaptable, Marked {
 		@Override
 		public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
 			try {
-				tryParticipant.execute(container, progressMonitor);
+				tryParticipant.splitAndExecute(container, progressMonitor);
 			} catch (Exception e) {
+				tryParticipant.splitAndRollback(progressMonitor);
 				eRef.set(e);
 				if (catchParticipant == null) {
 					throw e;
 				}
-				catchParticipant.execute(container, progressMonitor);
+				catchParticipant.splitAndExecute(container, progressMonitor);
 			} finally {
 				if (finallyParticipant != null) {
-					finallyParticipant.execute(container, progressMonitor);
+					finallyParticipant.splitAndExecute(container, progressMonitor);
 				}
 			}			
 		}
 		
 	}	
 	
-	public Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
+	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Consumer<BinaryEntityContainer> tryConsumer = Loader.asConsumerFactory(tryBlock).create(context);
 		Consumer<BinaryEntityContainer> catchConsumer = catchBlock == null ? null : Loader.asConsumerFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
@@ -360,13 +369,14 @@ public class Block implements Adaptable, Marked {
 
 		private InputStream executeTryCatch(ProgressMonitor progressMonitor) throws Exception {
 			try {
-				return tryParticipant.execute(progressMonitor);
+				return tryParticipant.splitAndExecute(progressMonitor);
 			} catch (Exception e) {
+				tryParticipant.splitAndRollback(progressMonitor);
 				eRef.set(e);
 				if (catchParticipant == null) {
 					throw e;
 				}
-				return catchParticipant.execute(progressMonitor);
+				return catchParticipant.splitAndExecute(progressMonitor);
 			}			
 		}
 
@@ -376,12 +386,25 @@ public class Block implements Adaptable, Marked {
 				return executeTryCatch(progressMonitor);
 			} 
 			
-			return Util.join(executeTryCatch(progressMonitor), finallyParticipant.execute(progressMonitor));
+			InputStream tcResult = null;
+			Exception ex = null;
+			InputStream finallyResult = null;
+			try {
+				tcResult = executeTryCatch(progressMonitor);
+			} catch (Exception e) {
+				ex = e;
+			} finally {
+				finallyResult = finallyParticipant.splitAndExecute(progressMonitor);
+			}
+			if (ex == null) {
+				return Util.join(tcResult, finallyResult);
+			}
+			throw ex;			
 		}
 		
 	}	
 	
-	public Supplier<InputStream> createSupplier(Context context) throws Exception {
+	private Supplier<InputStream> createSupplier(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Supplier<InputStream>  trySupplier = Loader.asSupplierFactory(tryBlock).create(context);
 		Supplier<InputStream> catchSupplier = catchBlock == null ? null : Loader.asSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 

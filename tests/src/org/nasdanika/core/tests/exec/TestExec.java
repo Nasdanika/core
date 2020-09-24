@@ -37,6 +37,8 @@ import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Configurator;
+import org.nasdanika.exec.Eval;
+import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.Mapper;
@@ -489,7 +491,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json, null);
+		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json);
 		Supplier<InputStream> supplier = supplierFactory.create(context);
 		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}
@@ -611,15 +613,39 @@ public class TestExec {
 		assertEquals(Block.class, block.getClass());
 		Context context = Context.EMPTY_CONTEXT;
 		InputStream result = callSupplier(context, monitor, block);
-		String prefix = "Errorneous org.nasdanika.common.NasdanikaException: HTTP Call to https://nasdanika.org/no-such-path has failed with response: 404 Not Found at ";
-		String suffix = "block-supplier-catch-spec.yml 3:7World";
-		String strResult = Util.toString(context, result);
-		assertTrue(strResult.startsWith(prefix) && strResult.endsWith(suffix));
+		assertEquals("Erroneous org.nasdanika.common.NasdanikaExceptionWorld", Util.toString(context, result));
+	}
+		
+	@Test(expected = AssertionError.class)
+	public void testFail() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object fail = loader.loadYaml(TestExec.class.getResource("fail-spec.yml"), monitor);
+		assertEquals(Fail.class, fail.getClass());
+		Context context = Context.singleton("message", "Life sucks");
+		callCommand(context, monitor, fail);
+	}	
+	
+	@Test
+	public void testEvalString() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object eval = loader.loadYaml(TestExec.class.getResource("eval-string-spec.yml"), monitor);
+		assertEquals(Eval.class, eval.getClass());
+		Context context = Context.singleton("age", 3);
+		InputStream result = callSupplier(context, monitor, eval);
+		assertEquals("8", Util.toString(context, result));
 	}
 	
-	// fail - no catch block
-	
-	// fail with catch block
-	
+	@Test
+	public void testEval() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object eval = loader.loadYaml(TestExec.class.getResource("eval-spec.yml"), monitor);
+		assertEquals(Eval.class, eval.getClass());
+		Context context = Context.singleton("age", 3);
+		InputStream result = callSupplier(context, monitor, eval);
+		assertEquals("true", Util.toString(context, result));
+	}
 	
 }

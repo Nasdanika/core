@@ -205,13 +205,13 @@ public class Mapper implements Adaptable, Marked {
 	@SuppressWarnings({ "resource" })
 	protected Supplier<InputStream> createSupplier(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Loader.asSupplierFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
+			return Loader.asSupplierFactory(targets.iterator().next()).create(context);
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
 		int idx = 0;
 		for (Object te: targets) {
-			ret.add(Loader.asSupplierFactory(te, targetMarkers.get(idx++)).create(context));
+			ret.add(Loader.asSupplierFactory(te).create(context));
 		}
 		return ret.then(Util.JOIN_STREAMS);
 	};		
