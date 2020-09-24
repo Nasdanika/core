@@ -1,19 +1,19 @@
 Loader supports the following types:
 
 * General - control flow and context manipulation components. Can be adapted to both supplier and consumer factories and as such can be used both as resource and as content generators:
+    * ``block`` - [Block](block.html) - try-catch-finally block.
     * ``configure`` - [Configurator](configurator.html) - Adds or overrides context properties.
+    * ``error`` - [Error](error.html) - Reports an error to progress monitor.
+    * ``eval`` - [Eval](eval.html) - Evaluates JavaScript code.
+    * ``fail`` - [Fail](fail.html) - Fails execution with a specified message.
     * ``for-each`` - [Iterator](iterator.html) - execute child components zero or more times with different contexts.
+    * ``if`` - [If](if.html) - if-then-else conditional execution.
+    * ``info`` - [Info](info.html) - Reports an informational message to progress monitor.
     * ``(map)`` - [Map cast](map-cast.html) - Forces content to be treated as a map even if there is a single entry, which by default is treated as an object definition.
     * ``map`` - [Mapper](mapper.html) - Replaces the current context with a new context loaded from a map and intepolated.
     * ``reference`` - [Reference](reference.html) - Loads object(s) from a YAML resource identified by the reference.
-    * ``block`` - [Block](block.html) - try-catch-finally block.
-    * ``info`` - [Info](info.html) - Reports an informational message to progress monitor.
-    * ``warning`` - [Warning](warning.html) - Reports a warning to progress monitor.
-    * ``error`` - [Error](error.html) - Reports an error to progress monitor.
-    * ``fail`` - [Fail](fail.html) - Fails execution with a specified message.
-    * ``eval`` - [Eval](eval.html) - Evaluates JavaScript code.
-    * ``if`` - [If](if.html) - if-then-else conditional execution.
     * ``switch`` - [Switch](switch.html) - Select one of cases to be executed.
+    * ``warning`` - [Warning](warning.html) - Reports a warning to progress monitor.
     
 * [Resources](../resources/index.html) - components which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> and can contribute elements to a container:
     * ``container`` - [Container](../resources/container.html) - Generates a container (folder).
