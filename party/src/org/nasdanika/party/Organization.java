@@ -10,7 +10,7 @@ import org.eclipse.emf.common.util.EList;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Organization extends Organizational Unit and a such it may have sub-units and roles. It also may have members and contain a directory of parties.
+ * Organization extends Organizational Unit and as such it may have sub-units and roles. It also may have members and contain a directory of parties.
  * <!-- end-model-doc -->
  *
  * <p>

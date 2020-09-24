@@ -23,6 +23,8 @@
     </genClasses>
     <genClasses image="false" ecoreClass="party.ecore#//Role">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/members"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/extends"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute party.ecore#//Role/abstract"/>
     </genClasses>
     <genClasses ecoreClass="party.ecore#//Organization">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Organization/members"/>

@@ -13,5 +13,6 @@ Export-Package: org.nasdanika.party.provider
 Require-Bundle: org.eclipse.core.runtime,
  org.nasdanika.party;visibility:=reexport,
  org.eclipse.emf.edit;visibility:=reexport,
+ org.nasdanika.ncore;visibility:=reexport,
  org.nasdanika.ncore.edit;bundle-version="1.0.0";visibility:=reexport
 Bundle-ActivationPolicy: lazy

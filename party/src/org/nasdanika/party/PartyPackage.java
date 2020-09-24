@@ -473,13 +473,40 @@ public interface PartyPackage extends EPackage {
 	int ROLE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__ID = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Members</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__MEMBERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ROLE__MEMBERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__EXTENDS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Abstract</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__ABSTRACT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Role</em>' class.
@@ -488,7 +515,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ROLE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Role</em>' class.
@@ -1375,6 +1402,28 @@ public interface PartyPackage extends EPackage {
 	EReference getRole_Members();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.party.Role#getExtends <em>Extends</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Extends</em>'.
+	 * @see org.nasdanika.party.Role#getExtends()
+	 * @see #getRole()
+	 * @generated
+	 */
+	EReference getRole_Extends();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.Role#isAbstract <em>Abstract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Abstract</em>'.
+	 * @see org.nasdanika.party.Role#isAbstract()
+	 * @see #getRole()
+	 * @generated
+	 */
+	EAttribute getRole_Abstract();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Organization <em>Organization</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1726,6 +1775,22 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ROLE__MEMBERS = eINSTANCE.getRole_Members();
+
+		/**
+		 * The meta object literal for the '<em><b>Extends</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROLE__EXTENDS = eINSTANCE.getRole_Extends();
+
+		/**
+		 * The meta object literal for the '<em><b>Abstract</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ROLE__ABSTRACT = eINSTANCE.getRole_Abstract();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationImpl <em>Organization</em>}' class.

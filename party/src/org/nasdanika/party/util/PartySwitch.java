@@ -112,6 +112,7 @@ public class PartySwitch<T> extends Switch<T> {
 				Role role = (Role)theEObject;
 				T result = caseRole(role);
 				if (result == null) result = caseNamedElement(role);
+				if (result == null) result = caseEntity(role);
 				if (result == null) result = caseModelElement(role);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

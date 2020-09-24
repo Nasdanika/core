@@ -481,6 +481,26 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getRole_Extends() {
+		return (EReference)roleEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRole_Abstract() {
+		return (EAttribute)roleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getOrganization() {
 		return organizationEClass;
 	}
@@ -608,6 +628,8 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		roleEClass = createEClass(ROLE);
 		createEReference(roleEClass, ROLE__MEMBERS);
+		createEReference(roleEClass, ROLE__EXTENDS);
+		createEAttribute(roleEClass, ROLE__ABSTRACT);
 
 		organizationEClass = createEClass(ORGANIZATION);
 		createEReference(organizationEClass, ORGANIZATION__MEMBERS);
@@ -683,6 +705,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		partyEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationalUnitEClass.getESuperTypes().add(this.getParty());
 		roleEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		roleEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationEClass.getESuperTypes().add(this.getOrganizationalUnit());
 		memberDirectoryEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		memberDirectoryEClass.getESuperTypes().add(this.getMemberDirectoryElement());
@@ -710,6 +733,8 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		initEClass(roleEClass, Role.class, "Role", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRole_Members(), this.getMember(), null, "members", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRole_Extends(), this.getRole(), null, "extends", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRole_Abstract(), ecorePackage.getEBoolean(), "abstract", null, 0, 1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(organizationEClass, Organization.class, "Organization", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOrganization_Members(), this.getMemberDirectoryElement(), null, "members", null, 0, -1, Organization.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -830,10 +855,22 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 			   "documentation", "Organization members in the role."
 		   });
 		addAnnotation
+		  (getRole_Extends(),
+		   source,
+		   new String[] {
+			   "documentation", "A role can extend other roles. For example a Developer role may extend Employee role. "
+		   });
+		addAnnotation
+		  (getRole_Abstract(),
+		   source,
+		   new String[] {
+			   "documentation", "An abstract role may be extended by may not have members. For example, an Employee role may be abstract and created to contain resources and provide description common for all employees. A concrete Developer role extends Employee role. "
+		   });
+		addAnnotation
 		  (organizationEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Organization extends Organizational Unit and a such it may have sub-units and roles. It also may have members and contain a directory of parties."
+			   "documentation", "Organization extends Organizational Unit and as such it may have sub-units and roles. It also may have members and contain a directory of parties."
 		   });
 		addAnnotation
 		  (getOrganization_Members(),

@@ -3,6 +3,7 @@ package org.nasdanika.sirius;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.sirius.properties.EditSupport;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
@@ -111,6 +112,11 @@ public class CommonServices {
     		}
     	}
     	return false;
+    }
+    
+    public boolean isResourceExtension(EObject self, String extension) {
+    	Resource resource = self.eResource();
+    	return resource != null && resource.getURI().toString().endsWith("."+extension); 
     }
 
 }
