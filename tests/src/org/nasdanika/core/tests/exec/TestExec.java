@@ -22,6 +22,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
+import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -39,6 +40,7 @@ import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.Fail;
+import org.nasdanika.exec.If;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.Mapper;
@@ -646,6 +648,18 @@ public class TestExec {
 		Context context = Context.singleton("age", 3);
 		InputStream result = callSupplier(context, monitor, eval);
 		assertEquals("true", Util.toString(context, result));
+	}
+	
+	@Test
+	public void testIf() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object _if = loader.loadYaml(TestExec.class.getResource("if-spec.yml"), monitor);
+		assertEquals(If.class, _if.getClass());
+		MutableContext context = Context.singleton("age", 3).fork();
+		context.put("male", true);
+		InputStream result = callSupplier(context, monitor, _if);
+		assertEquals("Good Bye", Util.toString(context, result));
 	}
 	
 }

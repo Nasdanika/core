@@ -85,7 +85,6 @@ public class Eval implements SupplierFactory.Provider, Marked {
 		return engine.eval(interpolateScript ? context.interpolateToString(script) : script, bindings);
 	}
 	
-
 	/**
 	 * {@link Object}, {@link InputStream}, {@link Boolean}.
 	 */
