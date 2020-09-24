@@ -662,4 +662,14 @@ public class TestExec {
 		assertEquals("Good Bye", Util.toString(context, result));
 	}
 	
+	@Test
+	public void testProgress() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object progress = loader.loadYaml(TestExec.class.getResource("progress-spec.yml"), monitor);
+		Context context = Context.EMPTY_CONTEXT;
+		InputStream result = callSupplier(context, monitor, progress);
+		assertEquals("HelloWorld", Util.toString(context, result));
+	}
+	
 }

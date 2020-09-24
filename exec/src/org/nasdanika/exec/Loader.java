@@ -85,11 +85,11 @@ public class Loader extends ObjectLoader {
 			case "block": 
 				return new Block(loader, config, base, subMonitor, marker);
 			case "info": 
-				return new Progress(loader, config, base, subMonitor, marker, Status.INFO);
+				return new Progress(Status.INFO, loader, config, base, subMonitor, marker);
 			case "warning": 
-				return new Progress(loader, config, base, subMonitor, marker, Status.WARNING);
+				return new Progress(Status.WARNING, loader, config, base, subMonitor, marker);
 			case "error": 
-				return new Progress(loader, config, base, subMonitor, marker, Status.ERROR);
+				return new Progress(Status.ERROR, loader, config, base, subMonitor, marker);
 			case "fail": 
 				return new Fail(loader, config, base, subMonitor, marker);
 			case "eval": 
