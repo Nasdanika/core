@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.nasdanika.ncore.NcorePackage;
 
+import org.nasdanika.party.AbstractOrganizationalUnit;
 import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.Directory;
 import org.nasdanika.party.DirectoryElement;
@@ -20,6 +21,7 @@ import org.nasdanika.party.MemberDirectory;
 import org.nasdanika.party.MemberDirectoryElement;
 import org.nasdanika.party.Organization;
 import org.nasdanika.party.OrganizationalUnit;
+import org.nasdanika.party.OrganizationalUnitReference;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
@@ -62,7 +64,21 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass abstractOrganizationalUnitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass organizationalUnitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass organizationalUnitReferenceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,6 +277,16 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getAbstractOrganizationalUnit() {
+		return abstractOrganizationalUnitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getOrganizationalUnit() {
 		return organizationalUnitEClass;
 	}
@@ -283,6 +309,26 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	@Override
 	public EReference getOrganizationalUnit_Roles() {
 		return (EReference)organizationalUnitEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getOrganizationalUnitReference() {
+		return organizationalUnitReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getOrganizationalUnitReference_Target() {
+		return (EReference)organizationalUnitReferenceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -622,9 +668,14 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		partyEClass = createEClass(PARTY);
 		createEReference(partyEClass, PARTY__CONTACT_METHODS);
 
+		abstractOrganizationalUnitEClass = createEClass(ABSTRACT_ORGANIZATIONAL_UNIT);
+
 		organizationalUnitEClass = createEClass(ORGANIZATIONAL_UNIT);
 		createEReference(organizationalUnitEClass, ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS);
 		createEReference(organizationalUnitEClass, ORGANIZATIONAL_UNIT__ROLES);
+
+		organizationalUnitReferenceEClass = createEClass(ORGANIZATIONAL_UNIT_REFERENCE);
+		createEReference(organizationalUnitReferenceEClass, ORGANIZATIONAL_UNIT_REFERENCE__TARGET);
 
 		roleEClass = createEClass(ROLE);
 		createEReference(roleEClass, ROLE__MEMBERS);
@@ -704,6 +755,8 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		partyEClass.getESuperTypes().add(this.getDirectoryElement());
 		partyEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationalUnitEClass.getESuperTypes().add(this.getParty());
+		organizationalUnitEClass.getESuperTypes().add(this.getAbstractOrganizationalUnit());
+		organizationalUnitReferenceEClass.getESuperTypes().add(this.getAbstractOrganizationalUnit());
 		roleEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		roleEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationEClass.getESuperTypes().add(this.getOrganizationalUnit());
@@ -727,9 +780,14 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		initEClass(partyEClass, Party.class, "Party", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getParty_ContactMethods(), this.getContactMethod(), null, "contactMethods", null, 0, -1, Party.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(abstractOrganizationalUnitEClass, AbstractOrganizationalUnit.class, "AbstractOrganizationalUnit", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(organizationalUnitEClass, OrganizationalUnit.class, "OrganizationalUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getOrganizationalUnit_OrganizationalUnits(), this.getOrganizationalUnit(), null, "organizationalUnits", null, 0, -1, OrganizationalUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getOrganizationalUnit_OrganizationalUnits(), this.getAbstractOrganizationalUnit(), null, "organizationalUnits", null, 0, -1, OrganizationalUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getOrganizationalUnit_Roles(), this.getRole(), null, "roles", null, 0, -1, OrganizationalUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(organizationalUnitReferenceEClass, OrganizationalUnitReference.class, "OrganizationalUnitReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOrganizationalUnitReference_Target(), this.getOrganizationalUnit(), null, "target", null, 0, 1, OrganizationalUnitReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(roleEClass, Role.class, "Role", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRole_Members(), this.getMember(), null, "members", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

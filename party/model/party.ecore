@@ -31,12 +31,13 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnit" eSuperTypes="#//Party">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractOrganizationalUnit" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnit" eSuperTypes="#//Party #//AbstractOrganizationalUnit">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A unit of organization or another organizational unit."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="organizationalUnits" upperBound="-1"
-        eType="#//OrganizationalUnit" containment="true">
+        eType="#//AbstractOrganizationalUnit" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Sub-units of this unit."/>
       </eAnnotations>
@@ -47,6 +48,9 @@
         <details key="documentation" value="Member roles in this organizational unit. For example, Product Owner, Scrum Master, Developers."/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnitReference" eSuperTypes="#//AbstractOrganizationalUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//OrganizationalUnit"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement ../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

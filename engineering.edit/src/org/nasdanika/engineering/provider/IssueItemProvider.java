@@ -61,6 +61,7 @@ public class IssueItemProvider
 			addResolutionPropertyDescriptor(object);
 			addCategoriesPropertyDescriptor(object);
 			addReleasesPropertyDescriptor(object);
+			addRequiresPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -277,6 +278,28 @@ public class IssueItemProvider
 				 getString("_UI_Issue_releases_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_releases_feature", "_UI_Issue_type"),
 				 EngineeringPackage.Literals.ISSUE__RELEASES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Requires feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRequiresPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Issue_requires_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Issue_requires_feature", "_UI_Issue_type"),
+				 EngineeringPackage.Literals.ISSUE__REQUIRES,
 				 true,
 				 false,
 				 true,

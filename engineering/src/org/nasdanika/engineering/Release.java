@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.engineering.Release#getIncludes <em>Includes</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Release#getDate <em>Date</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Release#getPlannedFor <em>Planned For</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.Release#isReleased <em>Released</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getRelease()
@@ -110,4 +111,26 @@ public interface Release extends EObject {
 	 * @generated
 	 */
 	void setPlannedFor(Increment value);
+
+	/**
+	 * Returns the value of the '<em><b>Released</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Released</em>' attribute.
+	 * @see #setReleased(boolean)
+	 * @see org.nasdanika.engineering.EngineeringPackage#getRelease_Released()
+	 * @model
+	 * @generated
+	 */
+	boolean isReleased();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.engineering.Release#isReleased <em>Released</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Released</em>' attribute.
+	 * @see #isReleased()
+	 * @generated
+	 */
+	void setReleased(boolean value);
 } // Release

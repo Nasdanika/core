@@ -968,6 +968,15 @@ public interface EngineeringPackage extends EPackage {
 	int ENGINEER__NAME = PartyPackage.ROLE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEER__ID = PartyPackage.ROLE__ID;
+
+	/**
 	 * The feature id for the '<em><b>Members</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -975,6 +984,24 @@ public interface EngineeringPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENGINEER__MEMBERS = PartyPackage.ROLE__MEMBERS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEER__EXTENDS = PartyPackage.ROLE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Abstract</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENGINEER__ABSTRACT = PartyPackage.ROLE__ABSTRACT;
 
 	/**
 	 * The feature id for the '<em><b>Issues</b></em>' containment reference list.
@@ -1348,13 +1375,22 @@ public interface EngineeringPackage extends EPackage {
 	int ISSUE__RELATIONSHIPS = NcorePackage.ENTITY_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Requires</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ISSUE__REQUIRES = NcorePackage.ENTITY_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Issue</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ISSUE_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 13;
+	int ISSUE_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of operations of the '<em>Issue</em>' class.
@@ -1474,13 +1510,22 @@ public interface EngineeringPackage extends EPackage {
 	int RELEASE__PLANNED_FOR = 3;
 
 	/**
+	 * The feature id for the '<em><b>Released</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELEASE__RELEASED = 4;
+
+	/**
 	 * The number of structural features of the '<em>Release</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RELEASE_FEATURE_COUNT = 4;
+	int RELEASE_FEATURE_COUNT = 5;
 
 	/**
 	 * The number of operations of the '<em>Release</em>' class.
@@ -2313,6 +2358,17 @@ public interface EngineeringPackage extends EPackage {
 	EReference getIssue_Relationships();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.engineering.Issue#getRequires <em>Requires</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Requires</em>'.
+	 * @see org.nasdanika.engineering.Issue#getRequires()
+	 * @see #getIssue()
+	 * @generated
+	 */
+	EReference getIssue_Requires();
+
+	/**
 	 * Returns the meta object for the reference '{@link org.nasdanika.engineering.Issue#getPlannedFor <em>Planned For</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2527,6 +2583,17 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRelease_PlannedFor();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.engineering.Release#isReleased <em>Released</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Released</em>'.
+	 * @see org.nasdanika.engineering.Release#isReleased()
+	 * @see #getRelease()
+	 * @generated
+	 */
+	EAttribute getRelease_Released();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.engineering.Objective <em>Objective</em>}'.
@@ -3205,6 +3272,13 @@ public interface EngineeringPackage extends EPackage {
 		 */
 		EReference ISSUE__RELATIONSHIPS = eINSTANCE.getIssue_Relationships();
 		/**
+		 * The meta object literal for the '<em><b>Requires</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ISSUE__REQUIRES = eINSTANCE.getIssue_Requires();
+		/**
 		 * The meta object literal for the '<em><b>Planned For</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3352,6 +3426,13 @@ public interface EngineeringPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RELEASE__PLANNED_FOR = eINSTANCE.getRelease_PlannedFor();
+		/**
+		 * The meta object literal for the '<em><b>Released</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RELEASE__RELEASED = eINSTANCE.getRelease_Released();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.engineering.impl.ObjectiveImpl <em>Objective</em>}' class.
 		 * <!-- begin-user-doc -->

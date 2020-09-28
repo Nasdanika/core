@@ -65,6 +65,7 @@ public class ReleaseItemProvider
 			addIncludesPropertyDescriptor(object);
 			addDatePropertyDescriptor(object);
 			addPlannedForPropertyDescriptor(object);
+			addReleasedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -158,6 +159,28 @@ public class ReleaseItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Released feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addReleasedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Release_released_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Release_released_feature", "_UI_Release_type"),
+				 EngineeringPackage.Literals.RELEASE__RELEASED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Release.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -207,6 +230,7 @@ public class ReleaseItemProvider
 
 		switch (notification.getFeatureID(Release.class)) {
 			case EngineeringPackage.RELEASE__DATE:
+			case EngineeringPackage.RELEASE__RELEASED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

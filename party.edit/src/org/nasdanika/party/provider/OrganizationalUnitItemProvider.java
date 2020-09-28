@@ -165,6 +165,11 @@ public class OrganizationalUnitItemProvider extends PartyItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
+				 PartyFactory.eINSTANCE.createOrganizationalUnitReference()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
 				 PartyFactory.eINSTANCE.createOrganization()));
 
 		newChildDescriptors.add

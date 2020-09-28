@@ -40,6 +40,7 @@ import org.nasdanika.ncore.Entity;
  *   <li>{@link org.nasdanika.engineering.Issue#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getReleases <em>Releases</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getRelationships <em>Relationships</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.Issue#getRequires <em>Requires</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getIssue()
@@ -274,6 +275,21 @@ public interface Issue extends Entity {
 	 * @generated
 	 */
 	EList<IssueRelationship> getRelationships();
+
+	/**
+	 * Returns the value of the '<em><b>Requires</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Release}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Releases required to start working on the issue. 
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Requires</em>' reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_Requires()
+	 * @model
+	 * @generated
+	 */
+	EList<Release> getRequires();
 
 	/**
 	 * Returns the value of the '<em><b>Planned For</b></em>' reference.

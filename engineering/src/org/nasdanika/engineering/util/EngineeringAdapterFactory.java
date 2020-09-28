@@ -13,6 +13,7 @@ import org.nasdanika.engineering.*;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.party.AbstractOrganizationalUnit;
 import org.nasdanika.party.DirectoryElement;
 import org.nasdanika.party.Organization;
 import org.nasdanika.party.OrganizationalUnit;
@@ -234,6 +235,10 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseParty(Party object) {
 				return createPartyAdapter();
+			}
+			@Override
+			public Adapter caseAbstractOrganizationalUnit(AbstractOrganizationalUnit object) {
+				return createAbstractOrganizationalUnitAdapter();
 			}
 			@Override
 			public Adapter caseOrganizationalUnit(OrganizationalUnit object) {
@@ -838,6 +843,20 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPartyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.AbstractOrganizationalUnit <em>Abstract Organizational Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.AbstractOrganizationalUnit
+	 * @generated
+	 */
+	public Adapter createAbstractOrganizationalUnitAdapter() {
 		return null;
 	}
 

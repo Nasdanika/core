@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.nasdanika.party.AbstractOrganizationalUnit;
 import org.nasdanika.party.OrganizationalUnit;
 import org.nasdanika.party.PartyPackage;
 import org.nasdanika.party.Role;
@@ -58,8 +59,8 @@ public class OrganizationalUnitImpl extends PartyImpl implements OrganizationalU
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<OrganizationalUnit> getOrganizationalUnits() {
-		return (EList<OrganizationalUnit>)eDynamicGet(PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS, true, true);
+	public EList<AbstractOrganizationalUnit> getOrganizationalUnits() {
+		return (EList<AbstractOrganizationalUnit>)eDynamicGet(PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS, PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS, true, true);
 	}
 
 	/**
@@ -116,7 +117,7 @@ public class OrganizationalUnitImpl extends PartyImpl implements OrganizationalU
 		switch (featureID) {
 			case PartyPackage.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS:
 				getOrganizationalUnits().clear();
-				getOrganizationalUnits().addAll((Collection<? extends OrganizationalUnit>)newValue);
+				getOrganizationalUnits().addAll((Collection<? extends AbstractOrganizationalUnit>)newValue);
 				return;
 			case PartyPackage.ORGANIZATIONAL_UNIT__ROLES:
 				getRoles().clear();

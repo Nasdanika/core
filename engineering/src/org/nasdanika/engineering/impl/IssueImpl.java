@@ -46,6 +46,7 @@ import org.nasdanika.ncore.impl.EntityImpl;
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getReleases <em>Releases</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getRelationships <em>Relationships</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getRequires <em>Requires</em>}</li>
  * </ul>
  *
  * @generated
@@ -318,6 +319,17 @@ public class IssueImpl extends EntityImpl implements Issue {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Release> getRequires() {
+		return (EList<Release>)eDynamicGet(EngineeringPackage.ISSUE__REQUIRES, EngineeringPackage.Literals.ISSUE__REQUIRES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Increment getPlannedFor() {
 		return (Increment)eDynamicGet(EngineeringPackage.ISSUE__PLANNED_FOR, EngineeringPackage.Literals.ISSUE__PLANNED_FOR, true, true);
@@ -398,6 +410,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 				return getReleases();
 			case EngineeringPackage.ISSUE__RELATIONSHIPS:
 				return getRelationships();
+			case EngineeringPackage.ISSUE__REQUIRES:
+				return getRequires();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -456,6 +470,10 @@ public class IssueImpl extends EntityImpl implements Issue {
 				getRelationships().clear();
 				getRelationships().addAll((Collection<? extends IssueRelationship>)newValue);
 				return;
+			case EngineeringPackage.ISSUE__REQUIRES:
+				getRequires().clear();
+				getRequires().addAll((Collection<? extends Release>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -507,6 +525,9 @@ public class IssueImpl extends EntityImpl implements Issue {
 			case EngineeringPackage.ISSUE__RELATIONSHIPS:
 				getRelationships().clear();
 				return;
+			case EngineeringPackage.ISSUE__REQUIRES:
+				getRequires().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -545,6 +566,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 				return !getReleases().isEmpty();
 			case EngineeringPackage.ISSUE__RELATIONSHIPS:
 				return !getRelationships().isEmpty();
+			case EngineeringPackage.ISSUE__REQUIRES:
+				return !getRequires().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

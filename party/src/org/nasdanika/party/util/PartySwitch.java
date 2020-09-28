@@ -97,14 +97,28 @@ public class PartySwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PartyPackage.ABSTRACT_ORGANIZATIONAL_UNIT: {
+				AbstractOrganizationalUnit abstractOrganizationalUnit = (AbstractOrganizationalUnit)theEObject;
+				T result = caseAbstractOrganizationalUnit(abstractOrganizationalUnit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PartyPackage.ORGANIZATIONAL_UNIT: {
 				OrganizationalUnit organizationalUnit = (OrganizationalUnit)theEObject;
 				T result = caseOrganizationalUnit(organizationalUnit);
 				if (result == null) result = caseParty(organizationalUnit);
+				if (result == null) result = caseAbstractOrganizationalUnit(organizationalUnit);
 				if (result == null) result = caseDirectoryElement(organizationalUnit);
 				if (result == null) result = caseEntity(organizationalUnit);
 				if (result == null) result = caseNamedElement(organizationalUnit);
 				if (result == null) result = caseModelElement(organizationalUnit);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.ORGANIZATIONAL_UNIT_REFERENCE: {
+				OrganizationalUnitReference organizationalUnitReference = (OrganizationalUnitReference)theEObject;
+				T result = caseOrganizationalUnitReference(organizationalUnitReference);
+				if (result == null) result = caseAbstractOrganizationalUnit(organizationalUnitReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -122,6 +136,7 @@ public class PartySwitch<T> extends Switch<T> {
 				T result = caseOrganization(organization);
 				if (result == null) result = caseOrganizationalUnit(organization);
 				if (result == null) result = caseParty(organization);
+				if (result == null) result = caseAbstractOrganizationalUnit(organization);
 				if (result == null) result = caseDirectoryElement(organization);
 				if (result == null) result = caseEntity(organization);
 				if (result == null) result = caseNamedElement(organization);
@@ -252,6 +267,21 @@ public class PartySwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Abstract Organizational Unit</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Abstract Organizational Unit</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAbstractOrganizationalUnit(AbstractOrganizationalUnit object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Organizational Unit</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -263,6 +293,21 @@ public class PartySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOrganizationalUnit(OrganizationalUnit object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Organizational Unit Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Organizational Unit Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOrganizationalUnitReference(OrganizationalUnitReference object) {
 		return null;
 	}
 

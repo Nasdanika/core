@@ -25,6 +25,7 @@ import org.nasdanika.engineering.Release;
  *   <li>{@link org.nasdanika.engineering.impl.ReleaseImpl#getIncludes <em>Includes</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.ReleaseImpl#getDate <em>Date</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.ReleaseImpl#getPlannedFor <em>Planned For</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.ReleaseImpl#isReleased <em>Released</em>}</li>
  * </ul>
  *
  * @generated
@@ -39,6 +40,16 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 	 * @ordered
 	 */
 	protected static final Date DATE_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isReleased() <em>Released</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isReleased()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RELEASED_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -146,6 +157,26 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 	 * @generated
 	 */
 	@Override
+	public boolean isReleased() {
+		return (Boolean)eDynamicGet(EngineeringPackage.RELEASE__RELEASED, EngineeringPackage.Literals.RELEASE__RELEASED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReleased(boolean newReleased) {
+		eDynamicSet(EngineeringPackage.RELEASE__RELEASED, EngineeringPackage.Literals.RELEASE__RELEASED, newReleased);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case EngineeringPackage.RELEASE__REQUIRES:
@@ -157,6 +188,8 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 			case EngineeringPackage.RELEASE__PLANNED_FOR:
 				if (resolve) return getPlannedFor();
 				return basicGetPlannedFor();
+			case EngineeringPackage.RELEASE__RELEASED:
+				return isReleased();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -184,6 +217,9 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 			case EngineeringPackage.RELEASE__PLANNED_FOR:
 				setPlannedFor((Increment)newValue);
 				return;
+			case EngineeringPackage.RELEASE__RELEASED:
+				setReleased((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -208,6 +244,9 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 			case EngineeringPackage.RELEASE__PLANNED_FOR:
 				setPlannedFor((Increment)null);
 				return;
+			case EngineeringPackage.RELEASE__RELEASED:
+				setReleased(RELEASED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -228,6 +267,8 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 				return DATE_EDEFAULT == null ? getDate() != null : !DATE_EDEFAULT.equals(getDate());
 			case EngineeringPackage.RELEASE__PLANNED_FOR:
 				return basicGetPlannedFor() != null;
+			case EngineeringPackage.RELEASE__RELEASED:
+				return isReleased() != RELEASED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

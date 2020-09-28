@@ -264,6 +264,34 @@ public interface PartyPackage extends EPackage {
 	int PARTY_OPERATION_COUNT = DIRECTORY_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.AbstractOrganizationalUnitImpl <em>Abstract Organizational Unit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.AbstractOrganizationalUnitImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getAbstractOrganizationalUnit()
+	 * @generated
+	 */
+	int ABSTRACT_ORGANIZATIONAL_UNIT = 3;
+
+	/**
+	 * The number of structural features of the '<em>Abstract Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ORGANIZATIONAL_UNIT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Abstract Organizational Unit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_ORGANIZATIONAL_UNIT_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.OrganizationalUnitImpl <em>Organizational Unit</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -271,7 +299,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganizationalUnit()
 	 * @generated
 	 */
-	int ORGANIZATIONAL_UNIT = 3;
+	int ORGANIZATIONAL_UNIT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -355,6 +383,43 @@ public interface PartyPackage extends EPackage {
 	int ORGANIZATIONAL_UNIT_OPERATION_COUNT = PARTY_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.OrganizationalUnitReferenceImpl <em>Organizational Unit Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.OrganizationalUnitReferenceImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganizationalUnitReference()
+	 * @generated
+	 */
+	int ORGANIZATIONAL_UNIT_REFERENCE = 5;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT_REFERENCE__TARGET = ABSTRACT_ORGANIZATIONAL_UNIT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Organizational Unit Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT_REFERENCE_FEATURE_COUNT = ABSTRACT_ORGANIZATIONAL_UNIT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Organizational Unit Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT_REFERENCE_OPERATION_COUNT = ABSTRACT_ORGANIZATIONAL_UNIT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.ContactMethodImpl <em>Contact Method</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -362,7 +427,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getContactMethod()
 	 * @generated
 	 */
-	int CONTACT_METHOD = 10;
+	int CONTACT_METHOD = 12;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.EMailImpl <em>EMail</em>}' class.
@@ -372,7 +437,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getEMail()
 	 * @generated
 	 */
-	int EMAIL = 11;
+	int EMAIL = 13;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.PhoneImpl <em>Phone</em>}' class.
@@ -382,7 +447,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPhone()
 	 * @generated
 	 */
-	int PHONE = 12;
+	int PHONE = 14;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.PostalAddressImpl <em>Postal Address</em>}' class.
@@ -392,7 +457,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPostalAddress()
 	 * @generated
 	 */
-	int POSTAL_ADDRESS = 13;
+	int POSTAL_ADDRESS = 15;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.WebAddressImpl <em>Web Address</em>}' class.
@@ -402,7 +467,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getWebAddress()
 	 * @generated
 	 */
-	int WEB_ADDRESS = 14;
+	int WEB_ADDRESS = 16;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.DirectoryElement <em>Directory Element</em>}'.
@@ -443,7 +508,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getRole()
 	 * @generated
 	 */
-	int ROLE = 4;
+	int ROLE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -535,7 +600,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganization()
 	 * @generated
 	 */
-	int ORGANIZATION = 5;
+	int ORGANIZATION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -644,7 +709,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectoryElement()
 	 * @generated
 	 */
-	int MEMBER_DIRECTORY_ELEMENT = 6;
+	int MEMBER_DIRECTORY_ELEMENT = 8;
 
 	/**
 	 * The number of structural features of the '<em>Member Directory Element</em>' class.
@@ -672,7 +737,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMemberDirectory()
 	 * @generated
 	 */
-	int MEMBER_DIRECTORY = 7;
+	int MEMBER_DIRECTORY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -736,7 +801,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMember()
 	 * @generated
 	 */
-	int MEMBER = 8;
+	int MEMBER = 10;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -791,7 +856,7 @@ public interface PartyPackage extends EPackage {
 	 * @see org.nasdanika.party.impl.PartyPackageImpl#getPerson()
 	 * @generated
 	 */
-	int PERSON = 9;
+	int PERSON = 11;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
@@ -1167,6 +1232,16 @@ public interface PartyPackage extends EPackage {
 	EReference getParty_ContactMethods();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.AbstractOrganizationalUnit <em>Abstract Organizational Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Abstract Organizational Unit</em>'.
+	 * @see org.nasdanika.party.AbstractOrganizationalUnit
+	 * @generated
+	 */
+	EClass getAbstractOrganizationalUnit();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.OrganizationalUnit <em>Organizational Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1197,6 +1272,27 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getOrganizationalUnit_Roles();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.OrganizationalUnitReference <em>Organizational Unit Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Organizational Unit Reference</em>'.
+	 * @see org.nasdanika.party.OrganizationalUnitReference
+	 * @generated
+	 */
+	EClass getOrganizationalUnitReference();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.party.OrganizationalUnitReference#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see org.nasdanika.party.OrganizationalUnitReference#getTarget()
+	 * @see #getOrganizationalUnitReference()
+	 * @generated
+	 */
+	EReference getOrganizationalUnitReference_Target();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.ContactMethod <em>Contact Method</em>}'.
@@ -1587,6 +1683,16 @@ public interface PartyPackage extends EPackage {
 		EReference PARTY__CONTACT_METHODS = eINSTANCE.getParty_ContactMethods();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.AbstractOrganizationalUnitImpl <em>Abstract Organizational Unit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.AbstractOrganizationalUnitImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getAbstractOrganizationalUnit()
+		 * @generated
+		 */
+		EClass ABSTRACT_ORGANIZATIONAL_UNIT = eINSTANCE.getAbstractOrganizationalUnit();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationalUnitImpl <em>Organizational Unit</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1611,6 +1717,24 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ORGANIZATIONAL_UNIT__ROLES = eINSTANCE.getOrganizationalUnit_Roles();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationalUnitReferenceImpl <em>Organizational Unit Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.OrganizationalUnitReferenceImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getOrganizationalUnitReference()
+		 * @generated
+		 */
+		EClass ORGANIZATIONAL_UNIT_REFERENCE = eINSTANCE.getOrganizationalUnitReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ORGANIZATIONAL_UNIT_REFERENCE__TARGET = eINSTANCE.getOrganizationalUnitReference_Target();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.ContactMethodImpl <em>Contact Method</em>}' class.

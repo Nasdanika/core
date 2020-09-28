@@ -25,10 +25,10 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface OrganizationalUnit extends Party {
+public interface OrganizationalUnit extends Party, AbstractOrganizationalUnit {
 	/**
 	 * Returns the value of the '<em><b>Organizational Units</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.party.OrganizationalUnit}.
+	 * The list contents are of type {@link org.nasdanika.party.AbstractOrganizationalUnit}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -39,7 +39,7 @@ public interface OrganizationalUnit extends Party {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<OrganizationalUnit> getOrganizationalUnits();
+	EList<AbstractOrganizationalUnit> getOrganizationalUnits();
 
 	/**
 	 * Returns the value of the '<em><b>Roles</b></em>' containment reference list.

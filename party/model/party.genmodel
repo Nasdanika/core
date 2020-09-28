@@ -17,9 +17,13 @@
     <genClasses image="false" ecoreClass="party.ecore#//Party">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//Party/contactMethods"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="party.ecore#//AbstractOrganizationalUnit"/>
     <genClasses ecoreClass="party.ecore#//OrganizationalUnit">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//OrganizationalUnit/organizationalUnits"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference party.ecore#//OrganizationalUnit/roles"/>
+    </genClasses>
+    <genClasses ecoreClass="party.ecore#//OrganizationalUnitReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//OrganizationalUnitReference/target"/>
     </genClasses>
     <genClasses image="false" ecoreClass="party.ecore#//Role">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference party.ecore#//Role/members"/>

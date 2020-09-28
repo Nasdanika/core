@@ -84,8 +84,16 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 				return createPartyAdapter();
 			}
 			@Override
+			public Adapter caseAbstractOrganizationalUnit(AbstractOrganizationalUnit object) {
+				return createAbstractOrganizationalUnitAdapter();
+			}
+			@Override
 			public Adapter caseOrganizationalUnit(OrganizationalUnit object) {
 				return createOrganizationalUnitAdapter();
+			}
+			@Override
+			public Adapter caseOrganizationalUnitReference(OrganizationalUnitReference object) {
+				return createOrganizationalUnitReferenceAdapter();
 			}
 			@Override
 			public Adapter caseRole(Role object) {
@@ -206,6 +214,20 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.AbstractOrganizationalUnit <em>Abstract Organizational Unit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.AbstractOrganizationalUnit
+	 * @generated
+	 */
+	public Adapter createAbstractOrganizationalUnitAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.OrganizationalUnit <em>Organizational Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -216,6 +238,20 @@ public class PartyAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createOrganizationalUnitAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.party.OrganizationalUnitReference <em>Organizational Unit Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.party.OrganizationalUnitReference
+	 * @generated
+	 */
+	public Adapter createOrganizationalUnitReferenceAdapter() {
 		return null;
 	}
 

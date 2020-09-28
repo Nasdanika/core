@@ -120,6 +120,29 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.OrganizationalUnitReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OrganizationalUnitReferenceItemProvider organizationalUnitReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.OrganizationalUnitReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOrganizationalUnitReferenceAdapter() {
+		if (organizationalUnitReferenceItemProvider == null) {
+			organizationalUnitReferenceItemProvider = new OrganizationalUnitReferenceItemProvider(this);
+		}
+
+		return organizationalUnitReferenceItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.Role} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -456,6 +479,7 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 	public void dispose() {
 		if (directoryItemProvider != null) directoryItemProvider.dispose();
 		if (organizationalUnitItemProvider != null) organizationalUnitItemProvider.dispose();
+		if (organizationalUnitReferenceItemProvider != null) organizationalUnitReferenceItemProvider.dispose();
 		if (roleItemProvider != null) roleItemProvider.dispose();
 		if (organizationItemProvider != null) organizationItemProvider.dispose();
 		if (memberDirectoryItemProvider != null) memberDirectoryItemProvider.dispose();
