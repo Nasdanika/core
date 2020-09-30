@@ -8,20 +8,15 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringOrganizationalUnit;
-
 import org.nasdanika.engineering.EngineeringPackage;
-import org.nasdanika.party.PartyPackage;
-
 import org.nasdanika.party.provider.OrganizationalUnitItemProvider;
 
 /**
@@ -183,26 +178,11 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 EngineeringFactory.eINSTANCE.createEngineeringOrganizationalUnit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 EngineeringFactory.eINSTANCE.createEngineeringOrganization()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES,
-				 EngineeringFactory.eINSTANCE.createEngineer()));
 
 		newChildDescriptors.add
 			(createChildParameter

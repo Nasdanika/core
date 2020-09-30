@@ -182,26 +182,11 @@ public class EngineeringOrganizationItemProvider extends OrganizationItemProvide
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 EngineeringFactory.eINSTANCE.createEngineeringOrganizationalUnit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 EngineeringFactory.eINSTANCE.createEngineeringOrganization()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES,
-				 EngineeringFactory.eINSTANCE.createEngineer()));
 
 		newChildDescriptors.add
 			(createChildParameter
