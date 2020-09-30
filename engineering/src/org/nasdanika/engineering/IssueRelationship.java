@@ -2,7 +2,7 @@
  */
 package org.nasdanika.engineering;
 
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface IssueRelationship extends EObject {
+public interface IssueRelationship extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' reference.
 	 * <!-- begin-user-doc -->

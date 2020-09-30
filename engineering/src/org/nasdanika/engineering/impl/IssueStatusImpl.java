@@ -5,11 +5,9 @@ package org.nasdanika.engineering.impl;
 import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.IssueStatus;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +22,7 @@ import org.nasdanika.engineering.IssueStatus;
  *
  * @generated
  */
-public class IssueStatusImpl extends MinimalEObjectImpl.Container implements IssueStatus {
+public class IssueStatusImpl extends ModelElementImpl implements IssueStatus {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -42,16 +40,6 @@ public class IssueStatusImpl extends MinimalEObjectImpl.Container implements Iss
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.ISSUE_STATUS;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

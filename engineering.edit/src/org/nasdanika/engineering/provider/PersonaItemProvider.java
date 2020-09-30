@@ -12,18 +12,13 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Persona;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Persona} object.
@@ -32,13 +27,7 @@ import org.nasdanika.engineering.Persona;
  * @generated
  */
 public class PersonaItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -60,8 +49,31 @@ public class PersonaItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addExtendsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Extends feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addExtendsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Persona_extends_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Persona_extends_feature", "_UI_Persona_type"),
+				 EngineeringPackage.Literals.PERSONA__EXTENDS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -98,11 +110,11 @@ public class PersonaItemProvider
 	 * This returns Persona.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Persona"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Persona.png"));
 	}
 
 	/**
@@ -119,11 +131,12 @@ public class PersonaItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Persona_type");
+		String label = ((Persona)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Persona_type") : label;
 	}
 
 
@@ -160,7 +173,7 @@ public class PersonaItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(EngineeringPackage.Literals.PERSONA__NEEDS,
-				 EngineeringFactory.eINSTANCE.createNeedCategoryElement()));
+				 EngineeringFactory.eINSTANCE.createNeedCategory()));
 
 		newChildDescriptors.add
 			(createChildParameter

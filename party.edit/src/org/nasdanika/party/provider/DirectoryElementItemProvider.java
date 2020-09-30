@@ -13,8 +13,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
-
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 import org.nasdanika.party.DirectoryElement;
 
 /**
@@ -23,7 +22,7 @@ import org.nasdanika.party.DirectoryElement;
  * <!-- end-user-doc -->
  * @generated
  */
-public class DirectoryElementItemProvider extends NamedElementItemProvider {
+public class DirectoryElementItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -67,7 +66,7 @@ public class DirectoryElementItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((DirectoryElement)object).getName();
+		String label = ((DirectoryElement)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_DirectoryElement_type") :
 			getString("_UI_DirectoryElement_type") + " " + label;

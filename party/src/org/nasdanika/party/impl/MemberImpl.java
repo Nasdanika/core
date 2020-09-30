@@ -2,12 +2,18 @@
  */
 package org.nasdanika.party.impl;
 
+import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.ResourceCategoryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,6 +24,7 @@ import org.nasdanika.party.PartyPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.party.impl.MemberImpl#getParty <em>Party</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.MemberImpl#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,12 +83,39 @@ public class MemberImpl extends ModelElementImpl implements Member {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<ResourceCategoryElement> getResources() {
+		return (EList<ResourceCategoryElement>)eDynamicGet(PartyPackage.MEMBER__RESOURCES, PartyPackage.Literals.MEMBER__RESOURCES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PartyPackage.MEMBER__RESOURCES:
+				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PartyPackage.MEMBER__PARTY:
 				if (resolve) return getParty();
 				return basicGetParty();
+			case PartyPackage.MEMBER__RESOURCES:
+				return getResources();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,11 +125,16 @@ public class MemberImpl extends ModelElementImpl implements Member {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case PartyPackage.MEMBER__PARTY:
 				setParty((Party)newValue);
+				return;
+			case PartyPackage.MEMBER__RESOURCES:
+				getResources().clear();
+				getResources().addAll((Collection<? extends ResourceCategoryElement>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -112,6 +151,9 @@ public class MemberImpl extends ModelElementImpl implements Member {
 			case PartyPackage.MEMBER__PARTY:
 				setParty((Party)null);
 				return;
+			case PartyPackage.MEMBER__RESOURCES:
+				getResources().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -126,6 +168,8 @@ public class MemberImpl extends ModelElementImpl implements Member {
 		switch (featureID) {
 			case PartyPackage.MEMBER__PARTY:
 				return basicGetParty() != null;
+			case PartyPackage.MEMBER__RESOURCES:
+				return !getResources().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

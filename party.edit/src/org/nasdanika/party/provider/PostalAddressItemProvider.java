@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -57,20 +56,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Country feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addCountryPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_country_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_country_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__COUNTRY,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -79,20 +77,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the State Province feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addStateProvincePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_stateProvince_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_stateProvince_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__STATE_PROVINCE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -101,20 +98,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the City feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addCityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_city_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_city_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__CITY,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -123,20 +119,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Postal Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addPostalCodePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_postalCode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_postalCode_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__POSTAL_CODE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -145,20 +140,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Line1 feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addLine1PropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_line1_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_line1_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__LINE1,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -167,20 +161,19 @@ public class PostalAddressItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Line2 feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addLine2PropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_PostalAddress_line2_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PostalAddress_line2_feature", "_UI_PostalAddress_type"),
 				 PartyPackage.Literals.POSTAL_ADDRESS__LINE2,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}

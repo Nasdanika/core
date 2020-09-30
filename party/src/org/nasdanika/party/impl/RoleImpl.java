@@ -4,16 +4,19 @@ package org.nasdanika.party.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
+import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.ResourceCategoryElement;
 import org.nasdanika.party.Role;
 
 /**
@@ -28,11 +31,12 @@ import org.nasdanika.party.Role;
  *   <li>{@link org.nasdanika.party.impl.RoleImpl#getMembers <em>Members</em>}</li>
  *   <li>{@link org.nasdanika.party.impl.RoleImpl#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.party.impl.RoleImpl#isAbstract <em>Abstract</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.RoleImpl#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RoleImpl extends NamedElementImpl implements Role {
+public class RoleImpl extends ModelElementImpl implements Role {
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -138,6 +142,31 @@ public class RoleImpl extends NamedElementImpl implements Role {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<ResourceCategoryElement> getResources() {
+		return (EList<ResourceCategoryElement>)eDynamicGet(PartyPackage.ROLE__RESOURCES, PartyPackage.Literals.ROLE__RESOURCES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PartyPackage.ROLE__RESOURCES:
+				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -149,6 +178,8 @@ public class RoleImpl extends NamedElementImpl implements Role {
 				return getExtends();
 			case PartyPackage.ROLE__ABSTRACT:
 				return isAbstract();
+			case PartyPackage.ROLE__RESOURCES:
+				return getResources();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,6 +207,10 @@ public class RoleImpl extends NamedElementImpl implements Role {
 			case PartyPackage.ROLE__ABSTRACT:
 				setAbstract((Boolean)newValue);
 				return;
+			case PartyPackage.ROLE__RESOURCES:
+				getResources().clear();
+				getResources().addAll((Collection<? extends ResourceCategoryElement>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -200,6 +235,9 @@ public class RoleImpl extends NamedElementImpl implements Role {
 			case PartyPackage.ROLE__ABSTRACT:
 				setAbstract(ABSTRACT_EDEFAULT);
 				return;
+			case PartyPackage.ROLE__RESOURCES:
+				getResources().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -220,6 +258,8 @@ public class RoleImpl extends NamedElementImpl implements Role {
 				return !getExtends().isEmpty();
 			case PartyPackage.ROLE__ABSTRACT:
 				return isAbstract() != ABSTRACT_EDEFAULT;
+			case PartyPackage.ROLE__RESOURCES:
+				return !getResources().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

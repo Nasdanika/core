@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.nasdanika.engineering.EngineeringPackage;
 
@@ -51,19 +50,18 @@ public class EditionItemProvider
 	 * This adds a property descriptor for the Bases feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addBasesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Edition_bases_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Edition_bases_feature", "_UI_Edition_type"),
 				 EngineeringPackage.Literals.EDITION__BASES,
 				 true,
 				 false,
 				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -73,19 +71,18 @@ public class EditionItemProvider
 	 * This adds a property descriptor for the Features feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addFeaturesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Edition_features_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Edition_features_feature", "_UI_Edition_type"),
 				 EngineeringPackage.Literals.EDITION__FEATURES,
 				 true,
 				 false,
 				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -95,11 +92,11 @@ public class EditionItemProvider
 	 * This returns Edition.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Edition"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Edition.png"));
 	}
 
 	/**

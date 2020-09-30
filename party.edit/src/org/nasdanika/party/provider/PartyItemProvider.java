@@ -80,6 +80,7 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 */
 	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
 		children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.PARTY__CONTACT_METHODS));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, PartyPackage.Literals.PARTY__RESOURCES));		
 	}
 	
 	@Override
@@ -89,6 +90,7 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 			children = new ArrayList<>();
 			eReferenceItemProviders.put(object, children);
 			addEReferenceItemProviderChildren(object, children);
+			children.sort((a,b) -> a.getText(object).compareTo(b.getText(object)));
 		}
 		Collection<Object> ret = new ArrayList<>(children);
 		ret.addAll(super.getChildren(object));
@@ -144,7 +146,7 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Party)object).getName();
+		String label = ((Party)object).getId();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Party_type") :
 			getString("_UI_Party_type") + " " + label;
@@ -167,6 +169,7 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PartyPackage.PARTY__CONTACT_METHODS:
+			case PartyPackage.PARTY__RESOURCES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -178,11 +181,16 @@ public class PartyItemProvider extends DirectoryElementItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+		
+		// --- Resources ---
+		for (EObject resource: org.nasdanika.party.util.Activator.RESOURCES_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.PARTY__RESOURCES, resource));						
+		}		
 
 		newChildDescriptors.add
 			(createChildParameter

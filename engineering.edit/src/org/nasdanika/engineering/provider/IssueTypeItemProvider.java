@@ -8,19 +8,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.IssueType;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.IssueType} object.
@@ -29,13 +21,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class IssueTypeItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -66,19 +52,18 @@ public class IssueTypeItemProvider
 	 * This adds a property descriptor for the Children feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addChildrenPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_IssueType_children_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IssueType_children_feature", "_UI_IssueType_type"),
 				 EngineeringPackage.Literals.ISSUE_TYPE__CHILDREN,
 				 true,
 				 false,
 				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -113,7 +98,10 @@ public class IssueTypeItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_IssueType_type");
+		String label = ((IssueType)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_IssueType_type") :
+			getString("_UI_IssueType_type") + " " + label;
 	}
 
 

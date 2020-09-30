@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getNeedCategoryElement()
- * @model
+ * @model interface="true" abstract="true"
  * @generated
  */
 public interface NeedCategoryElement extends EObject {

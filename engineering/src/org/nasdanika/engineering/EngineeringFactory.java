@@ -22,13 +22,13 @@ public interface EngineeringFactory extends EFactory {
 	EngineeringFactory eINSTANCE = org.nasdanika.engineering.impl.EngineeringFactoryImpl.init();
 
 	/**
-	 * Returns a new object of class '<em>Component Category Element</em>'.
+	 * Returns a new object of class '<em>Component Category</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Component Category Element</em>'.
+	 * @return a new object of class '<em>Component Category</em>'.
 	 * @generated
 	 */
-	ComponentCategoryElement createComponentCategoryElement();
+	ComponentCategory createComponentCategory();
 
 	/**
 	 * Returns a new object of class '<em>Abstract Engineer</em>'.
@@ -202,13 +202,22 @@ public interface EngineeringFactory extends EFactory {
 	Edition createEdition();
 
 	/**
-	 * Returns a new object of class '<em>Feature Category Element</em>'.
+	 * Returns a new object of class '<em>Feature Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Feature Category Element</em>'.
+	 * @return a new object of class '<em>Feature Type</em>'.
 	 * @generated
 	 */
-	FeatureCategoryElement createFeatureCategoryElement();
+	FeatureType createFeatureType();
+
+	/**
+	 * Returns a new object of class '<em>Feature Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Feature Category</em>'.
+	 * @generated
+	 */
+	FeatureCategory createFeatureCategory();
 
 	/**
 	 * Returns a new object of class '<em>Feature</em>'.
@@ -238,13 +247,13 @@ public interface EngineeringFactory extends EFactory {
 	Persona createPersona();
 
 	/**
-	 * Returns a new object of class '<em>Need Category Element</em>'.
+	 * Returns a new object of class '<em>Need Category</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Need Category Element</em>'.
+	 * @return a new object of class '<em>Need Category</em>'.
 	 * @generated
 	 */
-	NeedCategoryElement createNeedCategoryElement();
+	NeedCategory createNeedCategory();
 
 	/**
 	 * Returns a new object of class '<em>Need</em>'.

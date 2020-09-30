@@ -2,7 +2,7 @@
  */
 package org.nasdanika.engineering;
 
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface IssueResolution extends EObject {
+public interface IssueResolution extends ModelElement {
 
 	/**
 	 * Returns the value of the '<em><b>Completed</b></em>' attribute.

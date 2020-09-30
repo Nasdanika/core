@@ -10,15 +10,9 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
+import org.nasdanika.engineering.Risk;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Risk} object.
@@ -27,13 +21,7 @@ import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
  * @generated
  */
 public class RiskItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -88,7 +76,10 @@ public class RiskItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Risk_type");
+		String label = ((Risk)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Risk_type") :
+			getString("_UI_Risk_type") + " " + label;
 	}
 
 

@@ -2,6 +2,7 @@
  */
 package org.nasdanika.party;
 
+import org.eclipse.emf.common.util.EList;
 import org.nasdanika.ncore.ModelElement;
 
 
@@ -19,6 +20,7 @@ import org.nasdanika.ncore.ModelElement;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.party.Member#getParty <em>Party</em>}</li>
+ *   <li>{@link org.nasdanika.party.Member#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.party.PartyPackage#getMember()
@@ -50,5 +52,20 @@ public interface Member extends ModelElement, MemberDirectoryElement {
 	 * @generated
 	 */
 	void setParty(Party value);
+
+	/**
+	 * Returns the value of the '<em><b>Resources</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.party.ResourceCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resource/document library.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Resources</em>' containment reference list.
+	 * @see org.nasdanika.party.PartyPackage#getMember_Resources()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ResourceCategoryElement> getResources();
 
 } // Member

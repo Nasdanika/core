@@ -88,7 +88,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_ELEMENT__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+	int DIRECTORY_ELEMENT__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -97,16 +97,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_ELEMENT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTORY_ELEMENT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int DIRECTORY_ELEMENT__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The number of structural features of the '<em>Directory Element</em>' class.
@@ -115,7 +106,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int DIRECTORY_ELEMENT_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Directory Element</em>' class.
@@ -124,7 +115,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTORY_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int DIRECTORY_ELEMENT_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.DirectoryImpl <em>Directory</em>}' class.
@@ -153,15 +144,6 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int DIRECTORY__DESCRIPTION = DIRECTORY_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIRECTORY__NAME = DIRECTORY_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -219,15 +201,6 @@ public interface PartyPackage extends EPackage {
 	int PARTY__DESCRIPTION = DIRECTORY_ELEMENT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTY__NAME = DIRECTORY_ELEMENT__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -246,13 +219,22 @@ public interface PartyPackage extends EPackage {
 	int PARTY__CONTACT_METHODS = DIRECTORY_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTY__RESOURCES = DIRECTORY_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Party</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTY_FEATURE_COUNT = DIRECTORY_ELEMENT_FEATURE_COUNT + 2;
+	int PARTY_FEATURE_COUNT = DIRECTORY_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Party</em>' class.
@@ -320,15 +302,6 @@ public interface PartyPackage extends EPackage {
 	int ORGANIZATIONAL_UNIT__DESCRIPTION = PARTY__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ORGANIZATIONAL_UNIT__NAME = PARTY__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -345,6 +318,15 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int ORGANIZATIONAL_UNIT__CONTACT_METHODS = PARTY__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATIONAL_UNIT__RESOURCES = PARTY__RESOURCES;
 
 	/**
 	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
@@ -517,7 +499,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+	int ROLE__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -526,16 +508,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROLE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int ROLE__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -544,7 +517,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__ID = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ROLE__ID = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' reference list.
@@ -553,7 +526,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__MEMBERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ROLE__MEMBERS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -562,7 +535,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__EXTENDS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int ROLE__EXTENDS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Abstract</b></em>' attribute.
@@ -571,7 +544,16 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__ABSTRACT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
+	int ROLE__ABSTRACT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROLE__RESOURCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Role</em>' class.
@@ -580,7 +562,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int ROLE_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Role</em>' class.
@@ -589,7 +571,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int ROLE_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -621,15 +603,6 @@ public interface PartyPackage extends EPackage {
 	int ORGANIZATION__DESCRIPTION = ORGANIZATIONAL_UNIT__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ORGANIZATION__NAME = ORGANIZATIONAL_UNIT__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -646,6 +619,15 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int ORGANIZATION__CONTACT_METHODS = ORGANIZATIONAL_UNIT__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ORGANIZATION__RESOURCES = ORGANIZATIONAL_UNIT__RESOURCES;
 
 	/**
 	 * The feature id for the '<em><b>Organizational Units</b></em>' containment reference list.
@@ -746,7 +728,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_DIRECTORY__TITLE = NcorePackage.NAMED_ELEMENT__TITLE;
+	int MEMBER_DIRECTORY__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -755,16 +737,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_DIRECTORY__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MEMBER_DIRECTORY__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int MEMBER_DIRECTORY__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -773,7 +746,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_DIRECTORY__ELEMENTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int MEMBER_DIRECTORY__ELEMENTS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Member Directory</em>' class.
@@ -782,7 +755,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_DIRECTORY_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int MEMBER_DIRECTORY_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Member Directory</em>' class.
@@ -791,7 +764,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_DIRECTORY_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int MEMBER_DIRECTORY_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.MemberImpl <em>Member</em>}' class.
@@ -831,13 +804,22 @@ public interface PartyPackage extends EPackage {
 	int MEMBER__PARTY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__RESOURCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Member</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int MEMBER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Member</em>' class.
@@ -877,15 +859,6 @@ public interface PartyPackage extends EPackage {
 	int PERSON__DESCRIPTION = PARTY__DESCRIPTION;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PERSON__NAME = PARTY__NAME;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -902,6 +875,15 @@ public interface PartyPackage extends EPackage {
 	 * @ordered
 	 */
 	int PERSON__CONTACT_METHODS = PARTY__CONTACT_METHODS;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERSON__RESOURCES = PARTY__RESOURCES;
 
 	/**
 	 * The number of structural features of the '<em>Person</em>' class.
@@ -1211,6 +1193,574 @@ public interface PartyPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.party.ResourceCategoryElement <em>Resource Category Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.ResourceCategoryElement
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceCategoryElement()
+	 * @generated
+	 */
+	int RESOURCE_CATEGORY_ELEMENT = 17;
+
+	/**
+	 * The number of structural features of the '<em>Resource Category Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY_ELEMENT_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Resource Category Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.ResourceCategoryImpl <em>Resource Category</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.ResourceCategoryImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceCategory()
+	 * @generated
+	 */
+	int RESOURCE_CATEGORY = 18;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY__ELEMENTS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Resource Category</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Resource Category</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_CATEGORY_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.ResourceImpl <em>Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.ResourceImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getResource()
+	 * @generated
+	 */
+	int RESOURCE = 19;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__TITLE = NcorePackage.ENTITY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__DESCRIPTION = NcorePackage.ENTITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ID = NcorePackage.ENTITY__ID;
+
+	/**
+	 * The number of structural features of the '<em>Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_OPERATION_COUNT = NcorePackage.ENTITY_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MarkdownImpl <em>Markdown</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MarkdownImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdown()
+	 * @generated
+	 */
+	int MARKDOWN = 20;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__TITLE = RESOURCE__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__DESCRIPTION = RESOURCE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__ID = RESOURCE__ID;
+
+	/**
+	 * The number of structural features of the '<em>Markdown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_FEATURE_COUNT = RESOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Markdown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MarkdownTextImpl <em>Markdown Text</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MarkdownTextImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdownText()
+	 * @generated
+	 */
+	int MARKDOWN_TEXT = 21;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT__TITLE = MARKDOWN__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT__DESCRIPTION = MARKDOWN__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT__ID = MARKDOWN__ID;
+
+	/**
+	 * The feature id for the '<em><b>Markdown</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT__MARKDOWN = MARKDOWN_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Markdown Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT_FEATURE_COUNT = MARKDOWN_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Markdown Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_TEXT_OPERATION_COUNT = MARKDOWN_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.MarkdownResourceImpl <em>Markdown Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.MarkdownResourceImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdownResource()
+	 * @generated
+	 */
+	int MARKDOWN_RESOURCE = 22;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE__TITLE = MARKDOWN__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE__DESCRIPTION = MARKDOWN__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE__ID = MARKDOWN__ID;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE__LOCATION = MARKDOWN_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Markdown Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE_FEATURE_COUNT = MARKDOWN_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Markdown Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_RESOURCE_OPERATION_COUNT = MARKDOWN_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.ResourceReferenceImpl <em>Resource Reference</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.ResourceReferenceImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceReference()
+	 * @generated
+	 */
+	int RESOURCE_REFERENCE = 23;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE__TITLE = RESOURCE__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE__DESCRIPTION = RESOURCE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE__ID = RESOURCE__ID;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE__LOCATION = RESOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Resource Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE_FEATURE_COUNT = RESOURCE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Resource Reference</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE_REFERENCE_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.HtmlImpl <em>Html</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.HtmlImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtml()
+	 * @generated
+	 */
+	int HTML = 24;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__TITLE = RESOURCE__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__DESCRIPTION = RESOURCE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML__ID = RESOURCE__ID;
+
+	/**
+	 * The number of structural features of the '<em>Html</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_FEATURE_COUNT = RESOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Html</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.HtmlTextImpl <em>Html Text</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.HtmlTextImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtmlText()
+	 * @generated
+	 */
+	int HTML_TEXT = 25;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT__TITLE = HTML__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT__DESCRIPTION = HTML__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT__ID = HTML__ID;
+
+	/**
+	 * The feature id for the '<em><b>Content</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT__CONTENT = HTML_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Html Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT_FEATURE_COUNT = HTML_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Html Text</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_TEXT_OPERATION_COUNT = HTML_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.party.impl.HtmlResourceImpl <em>Html Resource</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.party.impl.HtmlResourceImpl
+	 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtmlResource()
+	 * @generated
+	 */
+	int HTML_RESOURCE = 26;
+
+	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE__TITLE = HTML__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE__DESCRIPTION = HTML__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE__ID = HTML__ID;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE__LOCATION = HTML_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Html Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE_FEATURE_COUNT = HTML_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Html Resource</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HTML_RESOURCE_OPERATION_COUNT = HTML_OPERATION_COUNT + 0;
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Party <em>Party</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1230,6 +1780,17 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getParty_ContactMethods();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Party#getResources <em>Resources</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Resources</em>'.
+	 * @see org.nasdanika.party.Party#getResources()
+	 * @see #getParty()
+	 * @generated
+	 */
+	EReference getParty_Resources();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.AbstractOrganizationalUnit <em>Abstract Organizational Unit</em>}'.
@@ -1477,6 +2038,172 @@ public interface PartyPackage extends EPackage {
 	EAttribute getWebAddress_Url();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.ResourceCategoryElement <em>Resource Category Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource Category Element</em>'.
+	 * @see org.nasdanika.party.ResourceCategoryElement
+	 * @generated
+	 */
+	EClass getResourceCategoryElement();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.ResourceCategory <em>Resource Category</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource Category</em>'.
+	 * @see org.nasdanika.party.ResourceCategory
+	 * @generated
+	 */
+	EClass getResourceCategory();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.ResourceCategory#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.nasdanika.party.ResourceCategory#getElements()
+	 * @see #getResourceCategory()
+	 * @generated
+	 */
+	EReference getResourceCategory_Elements();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Resource <em>Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource</em>'.
+	 * @see org.nasdanika.party.Resource
+	 * @generated
+	 */
+	EClass getResource();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Markdown <em>Markdown</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Markdown</em>'.
+	 * @see org.nasdanika.party.Markdown
+	 * @generated
+	 */
+	EClass getMarkdown();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.MarkdownText <em>Markdown Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Markdown Text</em>'.
+	 * @see org.nasdanika.party.MarkdownText
+	 * @generated
+	 */
+	EClass getMarkdownText();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.MarkdownText#getMarkdown <em>Markdown</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Markdown</em>'.
+	 * @see org.nasdanika.party.MarkdownText#getMarkdown()
+	 * @see #getMarkdownText()
+	 * @generated
+	 */
+	EAttribute getMarkdownText_Markdown();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.MarkdownResource <em>Markdown Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Markdown Resource</em>'.
+	 * @see org.nasdanika.party.MarkdownResource
+	 * @generated
+	 */
+	EClass getMarkdownResource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.MarkdownResource#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.party.MarkdownResource#getLocation()
+	 * @see #getMarkdownResource()
+	 * @generated
+	 */
+	EAttribute getMarkdownResource_Location();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.ResourceReference <em>Resource Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Resource Reference</em>'.
+	 * @see org.nasdanika.party.ResourceReference
+	 * @generated
+	 */
+	EClass getResourceReference();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.ResourceReference#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.party.ResourceReference#getLocation()
+	 * @see #getResourceReference()
+	 * @generated
+	 */
+	EAttribute getResourceReference_Location();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.Html <em>Html</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Html</em>'.
+	 * @see org.nasdanika.party.Html
+	 * @generated
+	 */
+	EClass getHtml();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.HtmlText <em>Html Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Html Text</em>'.
+	 * @see org.nasdanika.party.HtmlText
+	 * @generated
+	 */
+	EClass getHtmlText();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.HtmlText#getContent <em>Content</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Content</em>'.
+	 * @see org.nasdanika.party.HtmlText#getContent()
+	 * @see #getHtmlText()
+	 * @generated
+	 */
+	EAttribute getHtmlText_Content();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.party.HtmlResource <em>Html Resource</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Html Resource</em>'.
+	 * @see org.nasdanika.party.HtmlResource
+	 * @generated
+	 */
+	EClass getHtmlResource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.party.HtmlResource#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.party.HtmlResource#getLocation()
+	 * @see #getHtmlResource()
+	 * @generated
+	 */
+	EAttribute getHtmlResource_Location();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Role <em>Role</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1518,6 +2245,17 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getRole_Abstract();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Role#getResources <em>Resources</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Resources</em>'.
+	 * @see org.nasdanika.party.Role#getResources()
+	 * @see #getRole()
+	 * @generated
+	 */
+	EReference getRole_Resources();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Organization <em>Organization</em>}'.
@@ -1604,6 +2342,17 @@ public interface PartyPackage extends EPackage {
 	EReference getMember_Party();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.party.Member#getResources <em>Resources</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Resources</em>'.
+	 * @see org.nasdanika.party.Member#getResources()
+	 * @see #getMember()
+	 * @generated
+	 */
+	EReference getMember_Resources();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.party.Person <em>Person</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1681,6 +2430,14 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PARTY__CONTACT_METHODS = eINSTANCE.getParty_ContactMethods();
+
+		/**
+		 * The meta object literal for the '<em><b>Resources</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTY__RESOURCES = eINSTANCE.getParty_Resources();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.AbstractOrganizationalUnitImpl <em>Abstract Organizational Unit</em>}' class.
@@ -1883,6 +2640,154 @@ public interface PartyPackage extends EPackage {
 		EAttribute WEB_ADDRESS__URL = eINSTANCE.getWebAddress_Url();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.ResourceCategoryElement <em>Resource Category Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.ResourceCategoryElement
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceCategoryElement()
+		 * @generated
+		 */
+		EClass RESOURCE_CATEGORY_ELEMENT = eINSTANCE.getResourceCategoryElement();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.ResourceCategoryImpl <em>Resource Category</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.ResourceCategoryImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceCategory()
+		 * @generated
+		 */
+		EClass RESOURCE_CATEGORY = eINSTANCE.getResourceCategory();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE_CATEGORY__ELEMENTS = eINSTANCE.getResourceCategory_Elements();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.ResourceImpl <em>Resource</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.ResourceImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getResource()
+		 * @generated
+		 */
+		EClass RESOURCE = eINSTANCE.getResource();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MarkdownImpl <em>Markdown</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MarkdownImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdown()
+		 * @generated
+		 */
+		EClass MARKDOWN = eINSTANCE.getMarkdown();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MarkdownTextImpl <em>Markdown Text</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MarkdownTextImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdownText()
+		 * @generated
+		 */
+		EClass MARKDOWN_TEXT = eINSTANCE.getMarkdownText();
+
+		/**
+		 * The meta object literal for the '<em><b>Markdown</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKDOWN_TEXT__MARKDOWN = eINSTANCE.getMarkdownText_Markdown();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.MarkdownResourceImpl <em>Markdown Resource</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.MarkdownResourceImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getMarkdownResource()
+		 * @generated
+		 */
+		EClass MARKDOWN_RESOURCE = eINSTANCE.getMarkdownResource();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKDOWN_RESOURCE__LOCATION = eINSTANCE.getMarkdownResource_Location();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.ResourceReferenceImpl <em>Resource Reference</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.ResourceReferenceImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getResourceReference()
+		 * @generated
+		 */
+		EClass RESOURCE_REFERENCE = eINSTANCE.getResourceReference();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE_REFERENCE__LOCATION = eINSTANCE.getResourceReference_Location();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.HtmlImpl <em>Html</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.HtmlImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtml()
+		 * @generated
+		 */
+		EClass HTML = eINSTANCE.getHtml();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.HtmlTextImpl <em>Html Text</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.HtmlTextImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtmlText()
+		 * @generated
+		 */
+		EClass HTML_TEXT = eINSTANCE.getHtmlText();
+
+		/**
+		 * The meta object literal for the '<em><b>Content</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HTML_TEXT__CONTENT = eINSTANCE.getHtmlText_Content();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.party.impl.HtmlResourceImpl <em>Html Resource</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.party.impl.HtmlResourceImpl
+		 * @see org.nasdanika.party.impl.PartyPackageImpl#getHtmlResource()
+		 * @generated
+		 */
+		EClass HTML_RESOURCE = eINSTANCE.getHtmlResource();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute HTML_RESOURCE__LOCATION = eINSTANCE.getHtmlResource_Location();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.RoleImpl <em>Role</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1915,6 +2820,14 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ROLE__ABSTRACT = eINSTANCE.getRole_Abstract();
+
+		/**
+		 * The meta object literal for the '<em><b>Resources</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ROLE__RESOURCES = eINSTANCE.getRole_Resources();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.OrganizationImpl <em>Organization</em>}' class.
@@ -1987,6 +2900,14 @@ public interface PartyPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MEMBER__PARTY = eINSTANCE.getMember_Party();
+
+		/**
+		 * The meta object literal for the '<em><b>Resources</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MEMBER__RESOURCES = eINSTANCE.getMember_Resources();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.party.impl.PersonImpl <em>Person</em>}' class.

@@ -77,6 +77,7 @@ public class AbstractEngineerItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES);
+			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES);
 		}
 		return childrenFeatures;
 	}
@@ -140,6 +141,7 @@ public class AbstractEngineerItemProvider
 
 		switch (notification.getFeatureID(AbstractEngineer.class)) {
 			case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES:
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -161,6 +163,11 @@ public class AbstractEngineerItemProvider
 			(createChildParameter
 				(EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES,
 				 EngineeringFactory.eINSTANCE.createIssue()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES,
+				 EngineeringFactory.eINSTANCE.createObjective()));
 	}
 
 	/**

@@ -4,7 +4,7 @@ package org.nasdanika.party;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +26,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model
  * @generated
  */
-public interface MemberDirectory extends NamedElement, MemberDirectoryElement {
+public interface MemberDirectory extends ModelElement, MemberDirectoryElement {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.party.MemberDirectoryElement}.

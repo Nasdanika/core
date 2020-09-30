@@ -22,7 +22,7 @@ import org.nasdanika.ncore.ModelElement;
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getComponentCategory()
- * @model interface="true" abstract="true"
+ * @model
  * @generated
  */
 public interface ComponentCategory extends ModelElement, ComponentCategoryElement {

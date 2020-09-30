@@ -3,13 +3,11 @@
 package org.nasdanika.engineering.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Issue;
 import org.nasdanika.engineering.IssueRelationship;
 import org.nasdanika.engineering.IssueRelationshipType;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +23,7 @@ import org.nasdanika.engineering.IssueRelationshipType;
  *
  * @generated
  */
-public class IssueRelationshipImpl extends MinimalEObjectImpl.Container implements IssueRelationship {
+public class IssueRelationshipImpl extends ModelElementImpl implements IssueRelationship {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -43,16 +41,6 @@ public class IssueRelationshipImpl extends MinimalEObjectImpl.Container implemen
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.ISSUE_RELATIONSHIP;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

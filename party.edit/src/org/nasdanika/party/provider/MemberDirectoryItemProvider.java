@@ -16,8 +16,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
-
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 import org.nasdanika.party.MemberDirectory;
 import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
@@ -28,7 +27,7 @@ import org.nasdanika.party.PartyPackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MemberDirectoryItemProvider extends NamedElementItemProvider {
+public class MemberDirectoryItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -109,14 +108,12 @@ public class MemberDirectoryItemProvider extends NamedElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MemberDirectory)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_MemberDirectory_type") :
-			getString("_UI_MemberDirectory_type") + " " + label;
+		String label = ((MemberDirectory)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_MemberDirectory_type") : label;
 	}
 
 

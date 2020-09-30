@@ -47,6 +47,7 @@ import org.nasdanika.ncore.impl.EntityImpl;
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getReleases <em>Releases</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getRelationships <em>Relationships</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#getRequires <em>Requires</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.IssueImpl#isActionable <em>Actionable</em>}</li>
  * </ul>
  *
  * @generated
@@ -81,6 +82,16 @@ public class IssueImpl extends EntityImpl implements Issue {
 	 * @ordered
 	 */
 	protected static final double BENEFIT_EDEFAULT = 0.0;
+
+	/**
+	 * The default value of the '{@link #isActionable() <em>Actionable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isActionable()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ACTIONABLE_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -331,6 +342,16 @@ public class IssueImpl extends EntityImpl implements Issue {
 	 * @generated
 	 */
 	@Override
+	public boolean isActionable() {
+		return (Boolean)eDynamicGet(EngineeringPackage.ISSUE__ACTIONABLE, EngineeringPackage.Literals.ISSUE__ACTIONABLE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Increment getPlannedFor() {
 		return (Increment)eDynamicGet(EngineeringPackage.ISSUE__PLANNED_FOR, EngineeringPackage.Literals.ISSUE__PLANNED_FOR, true, true);
 	}
@@ -412,6 +433,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 				return getRelationships();
 			case EngineeringPackage.ISSUE__REQUIRES:
 				return getRequires();
+			case EngineeringPackage.ISSUE__ACTIONABLE:
+				return isActionable();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -568,6 +591,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 				return !getRelationships().isEmpty();
 			case EngineeringPackage.ISSUE__REQUIRES:
 				return !getRequires().isEmpty();
+			case EngineeringPackage.ISSUE__ACTIONABLE:
+				return isActionable() != ACTIONABLE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

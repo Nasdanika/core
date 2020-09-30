@@ -3,11 +3,9 @@
 package org.nasdanika.engineering.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Risk;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +14,7 @@ import org.nasdanika.engineering.Risk;
  *
  * @generated
  */
-public class RiskImpl extends MinimalEObjectImpl.Container implements Risk {
+public class RiskImpl extends ModelElementImpl implements Risk {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,16 +32,6 @@ public class RiskImpl extends MinimalEObjectImpl.Container implements Risk {
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.RISK;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 } //RiskImpl

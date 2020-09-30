@@ -72,26 +72,26 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.ComponentCategoryElement} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.ComponentCategory} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ComponentCategoryElementItemProvider componentCategoryElementItemProvider;
+	protected ComponentCategoryItemProvider componentCategoryItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.engineering.ComponentCategoryElement}.
+	 * This creates an adapter for a {@link org.nasdanika.engineering.ComponentCategory}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createComponentCategoryElementAdapter() {
-		if (componentCategoryElementItemProvider == null) {
-			componentCategoryElementItemProvider = new ComponentCategoryElementItemProvider(this);
+	public Adapter createComponentCategoryAdapter() {
+		if (componentCategoryItemProvider == null) {
+			componentCategoryItemProvider = new ComponentCategoryItemProvider(this);
 		}
 
-		return componentCategoryElementItemProvider;
+		return componentCategoryItemProvider;
 	}
 
 	/**
@@ -532,26 +532,49 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.FeatureCategoryElement} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.FeatureType} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FeatureCategoryElementItemProvider featureCategoryElementItemProvider;
+	protected FeatureTypeItemProvider featureTypeItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.engineering.FeatureCategoryElement}.
+	 * This creates an adapter for a {@link org.nasdanika.engineering.FeatureType}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createFeatureCategoryElementAdapter() {
-		if (featureCategoryElementItemProvider == null) {
-			featureCategoryElementItemProvider = new FeatureCategoryElementItemProvider(this);
+	public Adapter createFeatureTypeAdapter() {
+		if (featureTypeItemProvider == null) {
+			featureTypeItemProvider = new FeatureTypeItemProvider(this);
 		}
 
-		return featureCategoryElementItemProvider;
+		return featureTypeItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.FeatureCategory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FeatureCategoryItemProvider featureCategoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.engineering.FeatureCategory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFeatureCategoryAdapter() {
+		if (featureCategoryItemProvider == null) {
+			featureCategoryItemProvider = new FeatureCategoryItemProvider(this);
+		}
+
+		return featureCategoryItemProvider;
 	}
 
 	/**
@@ -624,26 +647,26 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.NeedCategoryElement} instances.
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.engineering.NeedCategory} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NeedCategoryElementItemProvider needCategoryElementItemProvider;
+	protected NeedCategoryItemProvider needCategoryItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link org.nasdanika.engineering.NeedCategoryElement}.
+	 * This creates an adapter for a {@link org.nasdanika.engineering.NeedCategory}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createNeedCategoryElementAdapter() {
-		if (needCategoryElementItemProvider == null) {
-			needCategoryElementItemProvider = new NeedCategoryElementItemProvider(this);
+	public Adapter createNeedCategoryAdapter() {
+		if (needCategoryItemProvider == null) {
+			needCategoryItemProvider = new NeedCategoryItemProvider(this);
 		}
 
-		return needCategoryElementItemProvider;
+		return needCategoryItemProvider;
 	}
 
 	/**
@@ -866,7 +889,7 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 	 */
 	@Override
 	public void dispose() {
-		if (componentCategoryElementItemProvider != null) componentCategoryElementItemProvider.dispose();
+		if (componentCategoryItemProvider != null) componentCategoryItemProvider.dispose();
 		if (abstractEngineerItemProvider != null) abstractEngineerItemProvider.dispose();
 		if (engineeringOrganizationalUnitItemProvider != null) engineeringOrganizationalUnitItemProvider.dispose();
 		if (engineeringOrganizationItemProvider != null) engineeringOrganizationItemProvider.dispose();
@@ -887,10 +910,11 @@ public class EngineeringItemProviderAdapterFactory extends EngineeringAdapterFac
 		if (offeringItemProvider != null) offeringItemProvider.dispose();
 		if (productItemProvider != null) productItemProvider.dispose();
 		if (editionItemProvider != null) editionItemProvider.dispose();
-		if (featureCategoryElementItemProvider != null) featureCategoryElementItemProvider.dispose();
+		if (featureTypeItemProvider != null) featureTypeItemProvider.dispose();
+		if (featureCategoryItemProvider != null) featureCategoryItemProvider.dispose();
 		if (featureItemProvider != null) featureItemProvider.dispose();
 		if (personaItemProvider != null) personaItemProvider.dispose();
-		if (needCategoryElementItemProvider != null) needCategoryElementItemProvider.dispose();
+		if (needCategoryItemProvider != null) needCategoryItemProvider.dispose();
 		if (needItemProvider != null) needItemProvider.dispose();
 		if (scenarioItemProvider != null) scenarioItemProvider.dispose();
 		if (criterionItemProvider != null) criterionItemProvider.dispose();

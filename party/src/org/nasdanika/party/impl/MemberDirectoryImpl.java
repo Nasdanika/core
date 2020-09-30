@@ -13,8 +13,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
+import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.MemberDirectory;
 import org.nasdanika.party.MemberDirectoryElement;
 import org.nasdanika.party.PartyPackage;
@@ -32,7 +31,7 @@ import org.nasdanika.party.PartyPackage;
  *
  * @generated
  */
-public class MemberDirectoryImpl extends NamedElementImpl implements MemberDirectory {
+public class MemberDirectoryImpl extends ModelElementImpl implements MemberDirectory {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

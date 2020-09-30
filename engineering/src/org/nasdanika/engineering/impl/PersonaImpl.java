@@ -8,12 +8,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.NeedCategoryElement;
 import org.nasdanika.engineering.Persona;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,11 +23,12 @@ import org.nasdanika.engineering.Persona;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.impl.PersonaImpl#getNeeds <em>Needs</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.PersonaImpl#getExtends <em>Extends</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona {
+public class PersonaImpl extends ModelElementImpl implements Persona {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -53,9 +53,10 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
+	public EList<NeedCategoryElement> getNeeds() {
+		return (EList<NeedCategoryElement>)eDynamicGet(EngineeringPackage.PERSONA__NEEDS, EngineeringPackage.Literals.PERSONA__NEEDS, true, true);
 	}
 
 	/**
@@ -65,8 +66,8 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<NeedCategoryElement> getNeeds() {
-		return (EList<NeedCategoryElement>)eDynamicGet(EngineeringPackage.PERSONA__NEEDS, EngineeringPackage.Literals.PERSONA__NEEDS, true, true);
+	public EList<Persona> getExtends() {
+		return (EList<Persona>)eDynamicGet(EngineeringPackage.PERSONA__EXTENDS, EngineeringPackage.Literals.PERSONA__EXTENDS, true, true);
 	}
 
 	/**
@@ -93,6 +94,8 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 		switch (featureID) {
 			case EngineeringPackage.PERSONA__NEEDS:
 				return getNeeds();
+			case EngineeringPackage.PERSONA__EXTENDS:
+				return getExtends();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,6 +113,10 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 				getNeeds().clear();
 				getNeeds().addAll((Collection<? extends NeedCategoryElement>)newValue);
 				return;
+			case EngineeringPackage.PERSONA__EXTENDS:
+				getExtends().clear();
+				getExtends().addAll((Collection<? extends Persona>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -125,6 +132,9 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 			case EngineeringPackage.PERSONA__NEEDS:
 				getNeeds().clear();
 				return;
+			case EngineeringPackage.PERSONA__EXTENDS:
+				getExtends().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -139,6 +149,8 @@ public class PersonaImpl extends MinimalEObjectImpl.Container implements Persona
 		switch (featureID) {
 			case EngineeringPackage.PERSONA__NEEDS:
 				return !getNeeds().isEmpty();
+			case EngineeringPackage.PERSONA__EXTENDS:
+				return !getExtends().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

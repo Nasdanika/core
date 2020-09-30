@@ -2,7 +2,7 @@
  */
 package org.nasdanika.party;
 
-import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,5 +18,5 @@ import org.nasdanika.ncore.NamedElement;
  * @model abstract="true"
  * @generated
  */
-public interface DirectoryElement extends NamedElement {
+public interface DirectoryElement extends ModelElement {
 } // DirectoryElement

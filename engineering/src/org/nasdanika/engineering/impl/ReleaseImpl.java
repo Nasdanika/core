@@ -6,12 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Increment;
 import org.nasdanika.engineering.Release;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +28,7 @@ import org.nasdanika.engineering.Release;
  *
  * @generated
  */
-public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release {
+public class ReleaseImpl extends ModelElementImpl implements Release {
 	/**
 	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -68,16 +66,6 @@ public class ReleaseImpl extends MinimalEObjectImpl.Container implements Release
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.RELEASE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

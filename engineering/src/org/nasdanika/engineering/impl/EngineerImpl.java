@@ -14,6 +14,7 @@ import org.nasdanika.engineering.Engineer;
 import org.nasdanika.engineering.EngineeringPackage;
 
 import org.nasdanika.engineering.Issue;
+import org.nasdanika.engineering.Objective;
 import org.nasdanika.party.impl.RoleImpl;
 
 /**
@@ -25,6 +26,7 @@ import org.nasdanika.party.impl.RoleImpl;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.impl.EngineerImpl#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.EngineerImpl#getObjectives <em>Objectives</em>}</li>
  * </ul>
  *
  * @generated
@@ -65,11 +67,24 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Objective> getObjectives() {
+		return (EList<Objective>)eDynamicGet(EngineeringPackage.ENGINEER__OBJECTIVES, EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case EngineeringPackage.ENGINEER__ISSUES:
 				return ((InternalEList<?>)getIssues()).basicRemove(otherEnd, msgs);
+			case EngineeringPackage.ENGINEER__OBJECTIVES:
+				return ((InternalEList<?>)getObjectives()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -84,6 +99,8 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 		switch (featureID) {
 			case EngineeringPackage.ENGINEER__ISSUES:
 				return getIssues();
+			case EngineeringPackage.ENGINEER__OBJECTIVES:
+				return getObjectives();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -101,6 +118,10 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 				getIssues().clear();
 				getIssues().addAll((Collection<? extends Issue>)newValue);
 				return;
+			case EngineeringPackage.ENGINEER__OBJECTIVES:
+				getObjectives().clear();
+				getObjectives().addAll((Collection<? extends Objective>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -116,6 +137,9 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 			case EngineeringPackage.ENGINEER__ISSUES:
 				getIssues().clear();
 				return;
+			case EngineeringPackage.ENGINEER__OBJECTIVES:
+				getObjectives().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -130,6 +154,8 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 		switch (featureID) {
 			case EngineeringPackage.ENGINEER__ISSUES:
 				return !getIssues().isEmpty();
+			case EngineeringPackage.ENGINEER__OBJECTIVES:
+				return !getObjectives().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -144,6 +170,7 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 		if (baseClass == AbstractEngineer.class) {
 			switch (derivedFeatureID) {
 				case EngineeringPackage.ENGINEER__ISSUES: return EngineeringPackage.ABSTRACT_ENGINEER__ISSUES;
+				case EngineeringPackage.ENGINEER__OBJECTIVES: return EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES;
 				default: return -1;
 			}
 		}
@@ -160,6 +187,7 @@ public class EngineerImpl extends RoleImpl implements Engineer {
 		if (baseClass == AbstractEngineer.class) {
 			switch (baseFeatureID) {
 				case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES: return EngineeringPackage.ENGINEER__ISSUES;
+				case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES: return EngineeringPackage.ENGINEER__OBJECTIVES;
 				default: return -1;
 			}
 		}

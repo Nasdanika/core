@@ -3,11 +3,9 @@
 package org.nasdanika.engineering.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.IssueResolution;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +20,7 @@ import org.nasdanika.engineering.IssueResolution;
  *
  * @generated
  */
-public class IssueResolutionImpl extends MinimalEObjectImpl.Container implements IssueResolution {
+public class IssueResolutionImpl extends ModelElementImpl implements IssueResolution {
 	/**
 	 * The default value of the '{@link #isCompleted() <em>Completed</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -50,16 +48,6 @@ public class IssueResolutionImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.ISSUE_RESOLUTION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

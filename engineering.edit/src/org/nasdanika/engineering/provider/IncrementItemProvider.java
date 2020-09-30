@@ -8,21 +8,15 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Increment;
-
-import org.nasdanika.ncore.provider.NamedElementItemProvider;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Increment} object.
@@ -30,7 +24,7 @@ import org.nasdanika.ncore.provider.NamedElementItemProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class IncrementItemProvider extends NamedElementItemProvider {
+public class IncrementItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -62,20 +56,19 @@ public class IncrementItemProvider extends NamedElementItemProvider {
 	 * This adds a property descriptor for the Start feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addStartPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Increment_start_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Increment_start_feature", "_UI_Increment_type"),
 				 EngineeringPackage.Literals.INCREMENT__START,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -84,20 +77,19 @@ public class IncrementItemProvider extends NamedElementItemProvider {
 	 * This adds a property descriptor for the End feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addEndPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Increment_end_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Increment_end_feature", "_UI_Increment_type"),
 				 EngineeringPackage.Literals.INCREMENT__END,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -161,7 +153,7 @@ public class IncrementItemProvider extends NamedElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Increment)object).getName();
+		String label = ((Increment)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Increment_type") :
 			getString("_UI_Increment_type") + " " + label;

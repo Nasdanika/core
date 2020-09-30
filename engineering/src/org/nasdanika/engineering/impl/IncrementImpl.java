@@ -17,7 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Increment;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,7 +34,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *
  * @generated
  */
-public class IncrementImpl extends NamedElementImpl implements Increment {
+public class IncrementImpl extends ModelElementImpl implements Increment {
 	/**
 	 * The default value of the '{@link #getStart() <em>Start</em>}' attribute.
 	 * <!-- begin-user-doc -->

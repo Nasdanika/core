@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.AbstractEngineer#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.AbstractEngineer#getObjectives <em>Objectives</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getAbstractEngineer()
@@ -41,4 +42,16 @@ public interface AbstractEngineer extends EObject {
 	 * @generated
 	 */
 	EList<Issue> getIssues();
+
+	/**
+	 * Returns the value of the '<em><b>Objectives</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Objective}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Objectives</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getAbstractEngineer_Objectives()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Objective> getObjectives();
 } // AbstractEngineer

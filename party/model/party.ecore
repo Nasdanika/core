@@ -4,7 +4,7 @@
   <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
     <details key="documentation" value="Nasdanika party model allows to model parties - [persons](Person.html), [organizations](Organization.html), and [organizational units](OrganizationalUnit.html). &#xA;&#xA;Parties can have [contact methods](ContactMethod.html) and may be members of organizations. &#xA;Parties may be organized into a [directory](Directory.html).&#xA;Organization is a subclass of organizational unit and has [members](Member.html). Organization member is a party.&#xA;Organizations may contain a party directory or reference external directories.&#xA;Organizational unit may have sub-units and [roles](Role.html). A role may have zero or more members in it.&#xA;&#xA;For example, an organization may have a directory of parties and a directory of members with sub-directories for employees and contractors.&#xA;It then may have organizational units such as Development, Marketing, Sales. &#xA;In the development group it may have roles such as Product Owner, Lead Developer, Junior Developer, etc. with different members in each role."/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EClass" name="DirectoryElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="DirectoryElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Base class for directory elements - parties and (sub) directories."/>
     </eAnnotations>
@@ -30,6 +30,12 @@
         <details key="documentation" value="Party can have zero or more contact methods."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//ResourceCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resource/document library."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractOrganizationalUnit" abstract="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnit" eSuperTypes="#//Party #//AbstractOrganizationalUnit">
@@ -52,7 +58,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnitReference" eSuperTypes="#//AbstractOrganizationalUnit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//OrganizationalUnit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement ../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement ../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Organization members may play different roles in organizational units. For example, Joe Doe may be in a Developer role in the Research And Development organizational unit."/>
     </eAnnotations>
@@ -71,6 +77,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="An abstract role may be extended by may not have members. For example, an Employee role may be abstract and created to contain resources and provide description common for all employees. A concrete Developer role extends Employee role. "/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//ResourceCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resource/document library."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -96,7 +108,7 @@
       <details key="documentation" value="Base class for member directory and member."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MemberDirectory" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement #//MemberDirectoryElement">
+  <eClassifiers xsi:type="ecore:EClass" name="MemberDirectory" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//MemberDirectoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A grouping of members and member directories."/>
     </eAnnotations>
@@ -114,6 +126,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="party" lowerBound="1" eType="#//Party">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Reference to a party."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//ResourceCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resource/document library."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -204,6 +222,99 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="URL."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceCategoryElement" abstract="true"
+      interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for model elements which can be contained by need category - needs and sub-categories."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceCategory" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//ResourceCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Grouping of persona needs."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//ResourceCategoryElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Category elements."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity #//ResourceCategoryElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.&#xA;&#xA;Must have, need to have, delighter - here or at the offering level?"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Markdown" abstract="true" eSuperTypes="#//Resource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for [Markdown](https://en.wikipedia.org/wiki/Markdown) resources."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarkdownText" eSuperTypes="#//Markdown">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) text."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="markdown" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Markdown text."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="content-type" value="text/markdown"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarkdownResource" eSuperTypes="#//Markdown">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Markdown resource location. The resource location is resolved relative to the model resource."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceReference" eSuperTypes="#//Resource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Reference to an external resource, e.g. a web page."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resource location resolved relative to the model resource."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Html" abstract="true" eSuperTypes="#//Resource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for HTML resources."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HtmlText" eSuperTypes="#//Html">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) text."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="HTML content."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="content-type" value="text/html"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HtmlResource" eSuperTypes="#//Html">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Loads HTML from a resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="HTML resource location resolved relative to the model resource."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

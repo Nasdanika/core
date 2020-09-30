@@ -8,12 +8,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.nasdanika.common.Util;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.ncore.provider.ModelElementItemProvider;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
@@ -56,22 +56,51 @@ public class MemberItemProvider extends ModelElementItemProvider {
 	 * This adds a property descriptor for the Party feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addPartyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Member_party_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Member_party_feature", "_UI_Member_type"),
 				 PartyPackage.Literals.MEMBER__PARTY,
 				 true,
 				 false,
 				 true,
 				 null,
 				 null,
+				 null,
 				 null));
+	}
+
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(PartyPackage.Literals.MEMBER__RESOURCES);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -113,9 +142,6 @@ public class MemberItemProvider extends ModelElementItemProvider {
 		Member member = (Member)object;
 		String label = member.getTitle();
 		Party party = member.getParty();
-		if (Util.isBlank(label) && party != null) {
-			label = party.getName();
-		}
 		return label == null || label.length() == 0 ? getString("_UI_Member_type") : label;
 	}
 
@@ -129,6 +155,12 @@ public class MemberItemProvider extends ModelElementItemProvider {
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(Member.class)) {
+			case PartyPackage.MEMBER__RESOURCES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
@@ -137,11 +169,16 @@ public class MemberItemProvider extends ModelElementItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+		
+		// --- Resources ---
+		for (EObject resource: org.nasdanika.party.util.Activator.RESOURCES_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.MEMBER__RESOURCES, resource));						
+		}		
 	}
 
 	/**

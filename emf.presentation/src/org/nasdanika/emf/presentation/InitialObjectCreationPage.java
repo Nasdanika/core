@@ -89,7 +89,7 @@ public class InitialObjectCreationPage extends WizardPage {
 		
 		adapterFactory = NasdanikaEditorPlugin.createVinciAdapterFactory();
 		
-		palettes = Palette.Registry.INSTANCE.getPalettes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList());
+		palettes = Palette.Registry.INSTANCE.getPalettes().stream().filter(Palette::isWizard).sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList());
 		
 		contentProvider = new ITreeContentProvider() {
 			

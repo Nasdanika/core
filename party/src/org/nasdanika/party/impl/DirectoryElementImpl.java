@@ -4,8 +4,7 @@ package org.nasdanika.party.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
+import org.nasdanika.ncore.impl.ModelElementImpl;
 import org.nasdanika.party.DirectoryElement;
 import org.nasdanika.party.PartyPackage;
 
@@ -16,7 +15,7 @@ import org.nasdanika.party.PartyPackage;
  *
  * @generated
  */
-public abstract class DirectoryElementImpl extends NamedElementImpl implements DirectoryElement {
+public abstract class DirectoryElementImpl extends ModelElementImpl implements DirectoryElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

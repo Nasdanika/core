@@ -16,6 +16,12 @@ import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.Directory;
 import org.nasdanika.party.DirectoryElement;
 import org.nasdanika.party.EMail;
+import org.nasdanika.party.Html;
+import org.nasdanika.party.HtmlResource;
+import org.nasdanika.party.HtmlText;
+import org.nasdanika.party.Markdown;
+import org.nasdanika.party.MarkdownResource;
+import org.nasdanika.party.MarkdownText;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.MemberDirectory;
 import org.nasdanika.party.MemberDirectoryElement;
@@ -28,6 +34,10 @@ import org.nasdanika.party.PartyPackage;
 import org.nasdanika.party.Person;
 import org.nasdanika.party.Phone;
 import org.nasdanika.party.PostalAddress;
+import org.nasdanika.party.Resource;
+import org.nasdanika.party.ResourceCategory;
+import org.nasdanika.party.ResourceCategoryElement;
+import org.nasdanika.party.ResourceReference;
 import org.nasdanika.party.Role;
 import org.nasdanika.party.WebAddress;
 
@@ -114,6 +124,76 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	private EClass webAddressEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceCategoryElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceCategoryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass markdownEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass markdownTextEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass markdownResourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass resourceReferenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass htmlEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass htmlTextEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass htmlResourceEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -269,6 +349,16 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	@Override
 	public EReference getParty_ContactMethods() {
 		return (EReference)partyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getParty_Resources() {
+		return (EReference)partyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -507,6 +597,166 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getResourceCategoryElement() {
+		return resourceCategoryElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getResourceCategory() {
+		return resourceCategoryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getResourceCategory_Elements() {
+		return (EReference)resourceCategoryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getResource() {
+		return resourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarkdown() {
+		return markdownEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarkdownText() {
+		return markdownTextEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarkdownText_Markdown() {
+		return (EAttribute)markdownTextEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarkdownResource() {
+		return markdownResourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarkdownResource_Location() {
+		return (EAttribute)markdownResourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getResourceReference() {
+		return resourceReferenceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getResourceReference_Location() {
+		return (EAttribute)resourceReferenceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getHtml() {
+		return htmlEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getHtmlText() {
+		return htmlTextEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHtmlText_Content() {
+		return (EAttribute)htmlTextEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getHtmlResource() {
+		return htmlResourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getHtmlResource_Location() {
+		return (EAttribute)htmlResourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getRole() {
 		return roleEClass;
 	}
@@ -539,6 +789,16 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	@Override
 	public EAttribute getRole_Abstract() {
 		return (EAttribute)roleEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRole_Resources() {
+		return (EReference)roleEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -627,6 +887,16 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getMember_Resources() {
+		return (EReference)memberEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPerson() {
 		return personEClass;
 	}
@@ -667,6 +937,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		partyEClass = createEClass(PARTY);
 		createEReference(partyEClass, PARTY__CONTACT_METHODS);
+		createEReference(partyEClass, PARTY__RESOURCES);
 
 		abstractOrganizationalUnitEClass = createEClass(ABSTRACT_ORGANIZATIONAL_UNIT);
 
@@ -681,6 +952,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		createEReference(roleEClass, ROLE__MEMBERS);
 		createEReference(roleEClass, ROLE__EXTENDS);
 		createEAttribute(roleEClass, ROLE__ABSTRACT);
+		createEReference(roleEClass, ROLE__RESOURCES);
 
 		organizationEClass = createEClass(ORGANIZATION);
 		createEReference(organizationEClass, ORGANIZATION__MEMBERS);
@@ -693,6 +965,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		memberEClass = createEClass(MEMBER);
 		createEReference(memberEClass, MEMBER__PARTY);
+		createEReference(memberEClass, MEMBER__RESOURCES);
 
 		personEClass = createEClass(PERSON);
 
@@ -717,6 +990,32 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		webAddressEClass = createEClass(WEB_ADDRESS);
 		createEAttribute(webAddressEClass, WEB_ADDRESS__URL);
+
+		resourceCategoryElementEClass = createEClass(RESOURCE_CATEGORY_ELEMENT);
+
+		resourceCategoryEClass = createEClass(RESOURCE_CATEGORY);
+		createEReference(resourceCategoryEClass, RESOURCE_CATEGORY__ELEMENTS);
+
+		resourceEClass = createEClass(RESOURCE);
+
+		markdownEClass = createEClass(MARKDOWN);
+
+		markdownTextEClass = createEClass(MARKDOWN_TEXT);
+		createEAttribute(markdownTextEClass, MARKDOWN_TEXT__MARKDOWN);
+
+		markdownResourceEClass = createEClass(MARKDOWN_RESOURCE);
+		createEAttribute(markdownResourceEClass, MARKDOWN_RESOURCE__LOCATION);
+
+		resourceReferenceEClass = createEClass(RESOURCE_REFERENCE);
+		createEAttribute(resourceReferenceEClass, RESOURCE_REFERENCE__LOCATION);
+
+		htmlEClass = createEClass(HTML);
+
+		htmlTextEClass = createEClass(HTML_TEXT);
+		createEAttribute(htmlTextEClass, HTML_TEXT__CONTENT);
+
+		htmlResourceEClass = createEClass(HTML_RESOURCE);
+		createEAttribute(htmlResourceEClass, HTML_RESOURCE__LOCATION);
 	}
 
 	/**
@@ -750,17 +1049,17 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		directoryElementEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		directoryElementEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		directoryEClass.getESuperTypes().add(this.getDirectoryElement());
 		partyEClass.getESuperTypes().add(this.getDirectoryElement());
 		partyEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationalUnitEClass.getESuperTypes().add(this.getParty());
 		organizationalUnitEClass.getESuperTypes().add(this.getAbstractOrganizationalUnit());
 		organizationalUnitReferenceEClass.getESuperTypes().add(this.getAbstractOrganizationalUnit());
-		roleEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		roleEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		roleEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		organizationEClass.getESuperTypes().add(this.getOrganizationalUnit());
-		memberDirectoryEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		memberDirectoryEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		memberDirectoryEClass.getESuperTypes().add(this.getMemberDirectoryElement());
 		memberEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		memberEClass.getESuperTypes().add(this.getMemberDirectoryElement());
@@ -770,6 +1069,17 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		phoneEClass.getESuperTypes().add(this.getContactMethod());
 		postalAddressEClass.getESuperTypes().add(this.getContactMethod());
 		webAddressEClass.getESuperTypes().add(this.getContactMethod());
+		resourceCategoryEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		resourceCategoryEClass.getESuperTypes().add(this.getResourceCategoryElement());
+		resourceEClass.getESuperTypes().add(theNcorePackage.getEntity());
+		resourceEClass.getESuperTypes().add(this.getResourceCategoryElement());
+		markdownEClass.getESuperTypes().add(this.getResource());
+		markdownTextEClass.getESuperTypes().add(this.getMarkdown());
+		markdownResourceEClass.getESuperTypes().add(this.getMarkdown());
+		resourceReferenceEClass.getESuperTypes().add(this.getResource());
+		htmlEClass.getESuperTypes().add(this.getResource());
+		htmlTextEClass.getESuperTypes().add(this.getHtml());
+		htmlResourceEClass.getESuperTypes().add(this.getHtml());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(directoryElementEClass, DirectoryElement.class, "DirectoryElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -779,6 +1089,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		initEClass(partyEClass, Party.class, "Party", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getParty_ContactMethods(), this.getContactMethod(), null, "contactMethods", null, 0, -1, Party.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getParty_Resources(), this.getResourceCategoryElement(), null, "resources", null, 0, -1, Party.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractOrganizationalUnitEClass, AbstractOrganizationalUnit.class, "AbstractOrganizationalUnit", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -793,6 +1104,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		initEReference(getRole_Members(), this.getMember(), null, "members", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRole_Extends(), this.getRole(), null, "extends", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRole_Abstract(), ecorePackage.getEBoolean(), "abstract", null, 0, 1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRole_Resources(), this.getResourceCategoryElement(), null, "resources", null, 0, -1, Role.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(organizationEClass, Organization.class, "Organization", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getOrganization_Members(), this.getMemberDirectoryElement(), null, "members", null, 0, -1, Organization.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -805,6 +1117,7 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 
 		initEClass(memberEClass, Member.class, "Member", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMember_Party(), this.getParty(), null, "party", null, 1, 1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMember_Resources(), this.getResourceCategoryElement(), null, "resources", null, 0, -1, Member.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(personEClass, Person.class, "Person", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -830,12 +1143,40 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		initEClass(webAddressEClass, WebAddress.class, "WebAddress", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getWebAddress_Url(), ecorePackage.getEString(), "url", null, 0, 1, WebAddress.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(resourceCategoryElementEClass, ResourceCategoryElement.class, "ResourceCategoryElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(resourceCategoryEClass, ResourceCategory.class, "ResourceCategory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getResourceCategory_Elements(), this.getResourceCategoryElement(), null, "elements", null, 0, -1, ResourceCategory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resourceEClass, Resource.class, "Resource", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(markdownEClass, Markdown.class, "Markdown", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(markdownTextEClass, MarkdownText.class, "MarkdownText", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarkdownText_Markdown(), ecorePackage.getEString(), "markdown", null, 1, 1, MarkdownText.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(markdownResourceEClass, MarkdownResource.class, "MarkdownResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarkdownResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, MarkdownResource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resourceReferenceEClass, ResourceReference.class, "ResourceReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getResourceReference_Location(), ecorePackage.getEString(), "location", null, 1, 1, ResourceReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(htmlEClass, Html.class, "Html", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(htmlTextEClass, HtmlText.class, "HtmlText", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getHtmlText_Content(), ecorePackage.getEString(), "content", null, 1, 1, HtmlText.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(htmlResourceEClass, HtmlResource.class, "HtmlResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getHtmlResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, HtmlResource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Create resource
 		createResource(eNS_URI);
 
 		// Create annotations
 		// http://www.eclipse.org/emf/2002/GenModel
 		createGenModelAnnotations();
+		// urn:org.nasdanika
+		createUrnorgAnnotations();
 	}
 
 	/**
@@ -883,6 +1224,12 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 			   "documentation", "Party can have zero or more contact methods."
 		   });
 		addAnnotation
+		  (getParty_Resources(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource/document library."
+		   });
+		addAnnotation
 		  (organizationalUnitEClass,
 		   source,
 		   new String[] {
@@ -923,6 +1270,12 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		   source,
 		   new String[] {
 			   "documentation", "An abstract role may be extended by may not have members. For example, an Employee role may be abstract and created to contain resources and provide description common for all employees. A concrete Developer role extends Employee role. "
+		   });
+		addAnnotation
+		  (getRole_Resources(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource/document library."
 		   });
 		addAnnotation
 		  (organizationEClass,
@@ -971,6 +1324,12 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Reference to a party."
+		   });
+		addAnnotation
+		  (getMember_Resources(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource/document library."
 		   });
 		addAnnotation
 		  (personEClass,
@@ -1079,6 +1438,124 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		   source,
 		   new String[] {
 			   "documentation", "URL."
+		   });
+		addAnnotation
+		  (resourceCategoryElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for model elements which can be contained by need category - needs and sub-categories."
+		   });
+		addAnnotation
+		  (resourceCategoryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Grouping of persona needs."
+		   });
+		addAnnotation
+		  (getResourceCategory_Elements(),
+		   source,
+		   new String[] {
+			   "documentation", "Category elements."
+		   });
+		addAnnotation
+		  (resourceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.\n\nMust have, need to have, delighter - here or at the offering level?"
+		   });
+		addAnnotation
+		  (markdownEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for [Markdown](https://en.wikipedia.org/wiki/Markdown) resources."
+		   });
+		addAnnotation
+		  (markdownTextEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) text."
+		   });
+		addAnnotation
+		  (getMarkdownText_Markdown(),
+		   source,
+		   new String[] {
+			   "documentation", "Markdown text."
+		   });
+		addAnnotation
+		  (markdownResourceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) resource."
+		   });
+		addAnnotation
+		  (getMarkdownResource_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "Markdown resource location. The resource location is resolved relative to the model resource."
+		   });
+		addAnnotation
+		  (resourceReferenceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Reference to an external resource, e.g. a web page."
+		   });
+		addAnnotation
+		  (getResourceReference_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource location resolved relative to the model resource."
+		   });
+		addAnnotation
+		  (htmlEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for HTML resources."
+		   });
+		addAnnotation
+		  (htmlTextEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown) text."
+		   });
+		addAnnotation
+		  (getHtmlText_Content(),
+		   source,
+		   new String[] {
+			   "documentation", "HTML content."
+		   });
+		addAnnotation
+		  (htmlResourceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Loads HTML from a resource."
+		   });
+		addAnnotation
+		  (getHtmlResource_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "HTML resource location resolved relative to the model resource."
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>urn:org.nasdanika</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createUrnorgAnnotations() {
+		String source = "urn:org.nasdanika";
+		addAnnotation
+		  (getMarkdownText_Markdown(),
+		   source,
+		   new String[] {
+			   "content-type", "text/markdown"
+		   });
+		addAnnotation
+		  (getHtmlText_Content(),
+		   source,
+		   new String[] {
+			   "content-type", "text/html"
 		   });
 	}
 

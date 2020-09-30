@@ -3,11 +3,9 @@
 package org.nasdanika.engineering.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.Criterion;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +14,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  *
  * @generated
  */
-public class CriterionImpl extends MinimalEObjectImpl.Container implements Criterion {
+public class CriterionImpl extends ModelElementImpl implements Criterion {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -34,16 +32,6 @@ public class CriterionImpl extends MinimalEObjectImpl.Container implements Crite
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.CRITERION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 } //CriterionImpl

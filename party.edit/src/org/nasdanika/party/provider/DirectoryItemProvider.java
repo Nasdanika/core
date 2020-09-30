@@ -107,7 +107,7 @@ public class DirectoryItemProvider extends DirectoryElementItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Directory)object).getName();
+		String label = ((Directory)object).getTitle();
 		return label == null || label.length() == 0 ? getString("_UI_Directory_type") :	label;
 	}
 
@@ -136,7 +136,7 @@ public class DirectoryItemProvider extends DirectoryElementItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
@@ -146,11 +146,11 @@ public class DirectoryItemProvider extends DirectoryElementItemProvider {
 			(createChildParameter
 				(PartyPackage.Literals.DIRECTORY__ELEMENTS,
 				 PartyFactory.eINSTANCE.createDirectory()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.DIRECTORY__ELEMENTS,
-				 PartyFactory.eINSTANCE.createOrganizationalUnit()));
+		
+		// --- Resources ---
+		for (EObject resource: org.nasdanika.party.util.Activator.ORG_UNITS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.DIRECTORY__ELEMENTS, resource));						
+		}		
 
 		newChildDescriptors.add
 			(createChildParameter

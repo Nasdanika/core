@@ -69,6 +69,12 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 			case PartyPackage.PHONE: return createPhone();
 			case PartyPackage.POSTAL_ADDRESS: return createPostalAddress();
 			case PartyPackage.WEB_ADDRESS: return createWebAddress();
+			case PartyPackage.RESOURCE_CATEGORY: return createResourceCategory();
+			case PartyPackage.MARKDOWN_TEXT: return createMarkdownText();
+			case PartyPackage.MARKDOWN_RESOURCE: return createMarkdownResource();
+			case PartyPackage.RESOURCE_REFERENCE: return createResourceReference();
+			case PartyPackage.HTML_TEXT: return createHtmlText();
+			case PartyPackage.HTML_RESOURCE: return createHtmlResource();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -215,6 +221,72 @@ public class PartyFactoryImpl extends EFactoryImpl implements PartyFactory {
 	public WebAddress createWebAddress() {
 		WebAddressImpl webAddress = new WebAddressImpl();
 		return webAddress;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceCategory createResourceCategory() {
+		ResourceCategoryImpl resourceCategory = new ResourceCategoryImpl();
+		return resourceCategory;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarkdownText createMarkdownText() {
+		MarkdownTextImpl markdownText = new MarkdownTextImpl();
+		return markdownText;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public MarkdownResource createMarkdownResource() {
+		MarkdownResourceImpl markdownResource = new MarkdownResourceImpl();
+		return markdownResource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceReference createResourceReference() {
+		ResourceReferenceImpl resourceReference = new ResourceReferenceImpl();
+		return resourceReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HtmlText createHtmlText() {
+		HtmlTextImpl htmlText = new HtmlTextImpl();
+		return htmlText;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HtmlResource createHtmlResource() {
+		HtmlResourceImpl htmlResource = new HtmlResourceImpl();
+		return htmlResource;
 	}
 
 	/**

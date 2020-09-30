@@ -41,6 +41,7 @@ import org.nasdanika.ncore.Entity;
  *   <li>{@link org.nasdanika.engineering.Issue#getReleases <em>Releases</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getRelationships <em>Relationships</em>}</li>
  *   <li>{@link org.nasdanika.engineering.Issue#getRequires <em>Requires</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.Issue#isActionable <em>Actionable</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getIssue()
@@ -290,6 +291,20 @@ public interface Issue extends Entity {
 	 * @generated
 	 */
 	EList<Release> getRequires();
+
+	/**
+	 * Returns the value of the '<em><b>Actionable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Computed attribute. True if the issue doesn't have blocking relationships with open issues and doesn't have unreleased releases in its requires list.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Actionable</em>' attribute.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_Actionable()
+	 * @model changeable="false" derived="true"
+	 * @generated
+	 */
+	boolean isActionable();
 
 	/**
 	 * Returns the value of the '<em><b>Planned For</b></em>' reference.

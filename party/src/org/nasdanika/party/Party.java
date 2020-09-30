@@ -19,6 +19,7 @@ import org.nasdanika.ncore.Entity;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.party.Party#getContactMethods <em>Contact Methods</em>}</li>
+ *   <li>{@link org.nasdanika.party.Party#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.party.PartyPackage#getParty()
@@ -40,5 +41,20 @@ public interface Party extends DirectoryElement, Entity {
 	 * @generated
 	 */
 	EList<ContactMethod> getContactMethods();
+
+	/**
+	 * Returns the value of the '<em><b>Resources</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.party.ResourceCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resource/document library.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Resources</em>' containment reference list.
+	 * @see org.nasdanika.party.PartyPackage#getParty_Resources()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ResourceCategoryElement> getResources();
 
 } // Party

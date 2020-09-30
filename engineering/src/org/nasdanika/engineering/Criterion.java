@@ -2,7 +2,7 @@
  */
 package org.nasdanika.engineering;
 
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -18,5 +18,5 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Criterion extends EObject {
+public interface Criterion extends ModelElement {
 } // Criterion

@@ -11,36 +11,31 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
-import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import org.nasdanika.engineering.EngineeringFactory;
+import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.NeedCategory;
+
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
- * This is the item provider adapter for a {@link org.nasdanika.engineering.ComponentCategoryElement} object.
+ * This is the item provider adapter for a {@link org.nasdanika.engineering.NeedCategory} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ComponentCategoryElementItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class NeedCategoryItemProvider extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ComponentCategoryElementItemProvider(AdapterFactory adapterFactory) {
+	public NeedCategoryItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,14 +55,33 @@ public class ComponentCategoryElementItemProvider
 	}
 
 	/**
-	 * This returns ComponentCategoryElement.gif.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ComponentCategoryElement"));
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(EngineeringPackage.Literals.NEED_CATEGORY__ELEMENTS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -88,7 +102,10 @@ public class ComponentCategoryElementItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ComponentCategoryElement_type");
+		String label = ((NeedCategory)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_NeedCategory_type") :
+			getString("_UI_NeedCategory_type") + " " + label;
 	}
 
 
@@ -102,6 +119,12 @@ public class ComponentCategoryElementItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(NeedCategory.class)) {
+			case EngineeringPackage.NEED_CATEGORY__ELEMENTS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
@@ -115,6 +138,16 @@ public class ComponentCategoryElementItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.NEED_CATEGORY__ELEMENTS,
+				 EngineeringFactory.eINSTANCE.createNeedCategory()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.NEED_CATEGORY__ELEMENTS,
+				 EngineeringFactory.eINSTANCE.createNeed()));
 	}
 
 	/**

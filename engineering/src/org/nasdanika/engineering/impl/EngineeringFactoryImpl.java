@@ -56,7 +56,7 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case EngineeringPackage.COMPONENT_CATEGORY_ELEMENT: return createComponentCategoryElement();
+			case EngineeringPackage.COMPONENT_CATEGORY: return createComponentCategory();
 			case EngineeringPackage.ABSTRACT_ENGINEER: return createAbstractEngineer();
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT: return createEngineeringOrganizationalUnit();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION: return createEngineeringOrganization();
@@ -77,10 +77,11 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 			case EngineeringPackage.OFFERING: return createOffering();
 			case EngineeringPackage.PRODUCT: return createProduct();
 			case EngineeringPackage.EDITION: return createEdition();
-			case EngineeringPackage.FEATURE_CATEGORY_ELEMENT: return createFeatureCategoryElement();
+			case EngineeringPackage.FEATURE_TYPE: return createFeatureType();
+			case EngineeringPackage.FEATURE_CATEGORY: return createFeatureCategory();
 			case EngineeringPackage.FEATURE: return createFeature();
 			case EngineeringPackage.PERSONA: return createPersona();
-			case EngineeringPackage.NEED_CATEGORY_ELEMENT: return createNeedCategoryElement();
+			case EngineeringPackage.NEED_CATEGORY: return createNeedCategory();
 			case EngineeringPackage.NEED: return createNeed();
 			case EngineeringPackage.SCENARIO: return createScenario();
 			case EngineeringPackage.CRITERION: return createCriterion();
@@ -97,9 +98,9 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	 * @generated
 	 */
 	@Override
-	public ComponentCategoryElement createComponentCategoryElement() {
-		ComponentCategoryElementImpl componentCategoryElement = new ComponentCategoryElementImpl();
-		return componentCategoryElement;
+	public ComponentCategory createComponentCategory() {
+		ComponentCategoryImpl componentCategory = new ComponentCategoryImpl();
+		return componentCategory;
 	}
 
 	/**
@@ -317,9 +318,20 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	 * @generated
 	 */
 	@Override
-	public FeatureCategoryElement createFeatureCategoryElement() {
-		FeatureCategoryElementImpl featureCategoryElement = new FeatureCategoryElementImpl();
-		return featureCategoryElement;
+	public FeatureType createFeatureType() {
+		FeatureTypeImpl featureType = new FeatureTypeImpl();
+		return featureType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public FeatureCategory createFeatureCategory() {
+		FeatureCategoryImpl featureCategory = new FeatureCategoryImpl();
+		return featureCategory;
 	}
 
 	/**
@@ -361,9 +373,9 @@ public class EngineeringFactoryImpl extends EFactoryImpl implements EngineeringF
 	 * @generated
 	 */
 	@Override
-	public NeedCategoryElement createNeedCategoryElement() {
-		NeedCategoryElementImpl needCategoryElement = new NeedCategoryElementImpl();
-		return needCategoryElement;
+	public NeedCategory createNeedCategory() {
+		NeedCategoryImpl needCategory = new NeedCategoryImpl();
+		return needCategory;
 	}
 
 	/**

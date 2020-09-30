@@ -3,7 +3,7 @@
 package org.nasdanika.engineering;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface IssueType extends EObject {
+public interface IssueType extends ModelElement {
 
 	/**
 	 * Returns the value of the '<em><b>Children</b></em>' reference list.

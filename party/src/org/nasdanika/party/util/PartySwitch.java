@@ -9,8 +9,6 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
-import org.nasdanika.ncore.NamedElement;
-
 import org.nasdanika.party.*;
 
 /**
@@ -73,7 +71,6 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.DIRECTORY_ELEMENT: {
 				DirectoryElement directoryElement = (DirectoryElement)theEObject;
 				T result = caseDirectoryElement(directoryElement);
-				if (result == null) result = caseNamedElement(directoryElement);
 				if (result == null) result = caseModelElement(directoryElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -82,7 +79,6 @@ public class PartySwitch<T> extends Switch<T> {
 				Directory directory = (Directory)theEObject;
 				T result = caseDirectory(directory);
 				if (result == null) result = caseDirectoryElement(directory);
-				if (result == null) result = caseNamedElement(directory);
 				if (result == null) result = caseModelElement(directory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -92,7 +88,6 @@ public class PartySwitch<T> extends Switch<T> {
 				T result = caseParty(party);
 				if (result == null) result = caseDirectoryElement(party);
 				if (result == null) result = caseEntity(party);
-				if (result == null) result = caseNamedElement(party);
 				if (result == null) result = caseModelElement(party);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -110,7 +105,6 @@ public class PartySwitch<T> extends Switch<T> {
 				if (result == null) result = caseAbstractOrganizationalUnit(organizationalUnit);
 				if (result == null) result = caseDirectoryElement(organizationalUnit);
 				if (result == null) result = caseEntity(organizationalUnit);
-				if (result == null) result = caseNamedElement(organizationalUnit);
 				if (result == null) result = caseModelElement(organizationalUnit);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -125,7 +119,6 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.ROLE: {
 				Role role = (Role)theEObject;
 				T result = caseRole(role);
-				if (result == null) result = caseNamedElement(role);
 				if (result == null) result = caseEntity(role);
 				if (result == null) result = caseModelElement(role);
 				if (result == null) result = defaultCase(theEObject);
@@ -139,7 +132,6 @@ public class PartySwitch<T> extends Switch<T> {
 				if (result == null) result = caseAbstractOrganizationalUnit(organization);
 				if (result == null) result = caseDirectoryElement(organization);
 				if (result == null) result = caseEntity(organization);
-				if (result == null) result = caseNamedElement(organization);
 				if (result == null) result = caseModelElement(organization);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -153,9 +145,8 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.MEMBER_DIRECTORY: {
 				MemberDirectory memberDirectory = (MemberDirectory)theEObject;
 				T result = caseMemberDirectory(memberDirectory);
-				if (result == null) result = caseNamedElement(memberDirectory);
-				if (result == null) result = caseMemberDirectoryElement(memberDirectory);
 				if (result == null) result = caseModelElement(memberDirectory);
+				if (result == null) result = caseMemberDirectoryElement(memberDirectory);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -173,7 +164,6 @@ public class PartySwitch<T> extends Switch<T> {
 				if (result == null) result = caseParty(person);
 				if (result == null) result = caseDirectoryElement(person);
 				if (result == null) result = caseEntity(person);
-				if (result == null) result = caseNamedElement(person);
 				if (result == null) result = caseModelElement(person);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -214,6 +204,103 @@ public class PartySwitch<T> extends Switch<T> {
 				T result = caseWebAddress(webAddress);
 				if (result == null) result = caseContactMethod(webAddress);
 				if (result == null) result = caseModelElement(webAddress);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.RESOURCE_CATEGORY_ELEMENT: {
+				ResourceCategoryElement resourceCategoryElement = (ResourceCategoryElement)theEObject;
+				T result = caseResourceCategoryElement(resourceCategoryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.RESOURCE_CATEGORY: {
+				ResourceCategory resourceCategory = (ResourceCategory)theEObject;
+				T result = caseResourceCategory(resourceCategory);
+				if (result == null) result = caseModelElement(resourceCategory);
+				if (result == null) result = caseResourceCategoryElement(resourceCategory);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.RESOURCE: {
+				Resource resource = (Resource)theEObject;
+				T result = caseResource(resource);
+				if (result == null) result = caseEntity(resource);
+				if (result == null) result = caseResourceCategoryElement(resource);
+				if (result == null) result = caseModelElement(resource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MARKDOWN: {
+				Markdown markdown = (Markdown)theEObject;
+				T result = caseMarkdown(markdown);
+				if (result == null) result = caseResource(markdown);
+				if (result == null) result = caseEntity(markdown);
+				if (result == null) result = caseResourceCategoryElement(markdown);
+				if (result == null) result = caseModelElement(markdown);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MARKDOWN_TEXT: {
+				MarkdownText markdownText = (MarkdownText)theEObject;
+				T result = caseMarkdownText(markdownText);
+				if (result == null) result = caseMarkdown(markdownText);
+				if (result == null) result = caseResource(markdownText);
+				if (result == null) result = caseEntity(markdownText);
+				if (result == null) result = caseResourceCategoryElement(markdownText);
+				if (result == null) result = caseModelElement(markdownText);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.MARKDOWN_RESOURCE: {
+				MarkdownResource markdownResource = (MarkdownResource)theEObject;
+				T result = caseMarkdownResource(markdownResource);
+				if (result == null) result = caseMarkdown(markdownResource);
+				if (result == null) result = caseResource(markdownResource);
+				if (result == null) result = caseEntity(markdownResource);
+				if (result == null) result = caseResourceCategoryElement(markdownResource);
+				if (result == null) result = caseModelElement(markdownResource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.RESOURCE_REFERENCE: {
+				ResourceReference resourceReference = (ResourceReference)theEObject;
+				T result = caseResourceReference(resourceReference);
+				if (result == null) result = caseResource(resourceReference);
+				if (result == null) result = caseEntity(resourceReference);
+				if (result == null) result = caseResourceCategoryElement(resourceReference);
+				if (result == null) result = caseModelElement(resourceReference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.HTML: {
+				Html html = (Html)theEObject;
+				T result = caseHtml(html);
+				if (result == null) result = caseResource(html);
+				if (result == null) result = caseEntity(html);
+				if (result == null) result = caseResourceCategoryElement(html);
+				if (result == null) result = caseModelElement(html);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.HTML_TEXT: {
+				HtmlText htmlText = (HtmlText)theEObject;
+				T result = caseHtmlText(htmlText);
+				if (result == null) result = caseHtml(htmlText);
+				if (result == null) result = caseResource(htmlText);
+				if (result == null) result = caseEntity(htmlText);
+				if (result == null) result = caseResourceCategoryElement(htmlText);
+				if (result == null) result = caseModelElement(htmlText);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PartyPackage.HTML_RESOURCE: {
+				HtmlResource htmlResource = (HtmlResource)theEObject;
+				T result = caseHtmlResource(htmlResource);
+				if (result == null) result = caseHtml(htmlResource);
+				if (result == null) result = caseResource(htmlResource);
+				if (result == null) result = caseEntity(htmlResource);
+				if (result == null) result = caseResourceCategoryElement(htmlResource);
+				if (result == null) result = caseModelElement(htmlResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -387,6 +474,156 @@ public class PartySwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource Category Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource Category Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResourceCategoryElement(ResourceCategoryElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource Category</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResourceCategory(ResourceCategory object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResource(Resource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Markdown</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Markdown</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarkdown(Markdown object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Markdown Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Markdown Text</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarkdownText(MarkdownText object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Markdown Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Markdown Resource</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarkdownResource(MarkdownResource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResourceReference(ResourceReference object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Html</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Html</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHtml(Html object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Html Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Html Text</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHtmlText(HtmlText object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Html Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Html Resource</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHtmlResource(HtmlResource object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Role</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -488,21 +725,6 @@ public class PartySwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseModelElement(ModelElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Named Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Named Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNamedElement(NamedElement object) {
 		return null;
 	}
 

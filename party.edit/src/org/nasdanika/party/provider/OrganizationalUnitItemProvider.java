@@ -14,7 +14,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.party.OrganizationalUnit;
-import org.nasdanika.party.PartyFactory;
 import org.nasdanika.party.PartyPackage;
 
 /**
@@ -121,7 +120,7 @@ public class OrganizationalUnitItemProvider extends PartyItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((OrganizationalUnit)object).getName();
+		String label = ((OrganizationalUnit)object).getTitle();
 		return label == null || label.length() == 0 ? getString("_UI_OrganizationalUnit_type") : label;
 	}
 
@@ -151,31 +150,22 @@ public class OrganizationalUnitItemProvider extends PartyItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+		
+		// --- Org units ---
+		for (EObject resource: org.nasdanika.party.util.Activator.ORG_UNITS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS, resource));						
+		}		
 
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 PartyFactory.eINSTANCE.createOrganizationalUnit()));
+		// --- Roles ---
+		for (EObject resource: org.nasdanika.party.util.Activator.ROLES_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES, resource));						
+		}		
 
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 PartyFactory.eINSTANCE.createOrganizationalUnitReference()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ORGANIZATIONAL_UNITS,
-				 PartyFactory.eINSTANCE.createOrganization()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATIONAL_UNIT__ROLES,
-				 PartyFactory.eINSTANCE.createRole()));
 	}
 
 }

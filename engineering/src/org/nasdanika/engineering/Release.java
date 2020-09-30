@@ -4,7 +4,7 @@ package org.nasdanika.engineering;
 
 import java.util.Date;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface Release extends EObject {
+public interface Release extends ModelElement {
 
 	/**
 	 * Returns the value of the '<em><b>Requires</b></em>' reference list.

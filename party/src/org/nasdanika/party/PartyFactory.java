@@ -139,6 +139,60 @@ public interface PartyFactory extends EFactory {
 	WebAddress createWebAddress();
 
 	/**
+	 * Returns a new object of class '<em>Resource Category</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Resource Category</em>'.
+	 * @generated
+	 */
+	ResourceCategory createResourceCategory();
+
+	/**
+	 * Returns a new object of class '<em>Markdown Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Markdown Text</em>'.
+	 * @generated
+	 */
+	MarkdownText createMarkdownText();
+
+	/**
+	 * Returns a new object of class '<em>Markdown Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Markdown Resource</em>'.
+	 * @generated
+	 */
+	MarkdownResource createMarkdownResource();
+
+	/**
+	 * Returns a new object of class '<em>Resource Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Resource Reference</em>'.
+	 * @generated
+	 */
+	ResourceReference createResourceReference();
+
+	/**
+	 * Returns a new object of class '<em>Html Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Html Text</em>'.
+	 * @generated
+	 */
+	HtmlText createHtmlText();
+
+	/**
+	 * Returns a new object of class '<em>Html Resource</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Html Resource</em>'.
+	 * @generated
+	 */
+	HtmlResource createHtmlResource();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

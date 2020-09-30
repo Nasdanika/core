@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.engineering.AbstractEngineer;
 import org.nasdanika.engineering.Component;
@@ -30,7 +31,7 @@ import org.nasdanika.engineering.Issue;
  *
  * @generated
  */
-public class ComponentImpl extends ComponentCategoryElementImpl implements Component {
+public class ComponentImpl extends MinimalEObjectImpl.Container implements Component {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -48,6 +49,16 @@ public class ComponentImpl extends ComponentCategoryElementImpl implements Compo
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.COMPONENT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return 0;
 	}
 
 	/**

@@ -12,16 +12,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
-
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.engineering.IssueRelationship;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.IssueRelationship} object.
@@ -30,13 +24,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class IssueRelationshipItemProvider 
-	extends NasdanikaItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -68,19 +56,18 @@ public class IssueRelationshipItemProvider
 	 * This adds a property descriptor for the Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_IssueRelationship_type_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_IssueRelationship_type_feature", "_UI_IssueRelationship_type"),
 				 EngineeringPackage.Literals.ISSUE_RELATIONSHIP__TYPE,
 				 true,
 				 false,
 				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -137,7 +124,10 @@ public class IssueRelationshipItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_IssueRelationship_type");
+		String label = ((IssueRelationship)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_IssueRelationship_type") :
+			getString("_UI_IssueRelationship_type") + " " + label;
 	}
 
 

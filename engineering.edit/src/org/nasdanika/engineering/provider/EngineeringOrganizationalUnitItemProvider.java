@@ -10,11 +10,12 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringOrganizationalUnit;
 
@@ -54,6 +55,25 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 		}
 		return itemPropertyDescriptors;
 	}
+	
+	/**
+	 * Called from getChildren(), adds EReferenceItemProvider children.
+	 * @param children
+	 */
+	@Override
+	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__TARGET_AUDIENCES));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES));
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS));
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES));
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES));
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES));
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES));		
+	}
 
 	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
@@ -61,21 +81,21 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__TARGET_AUDIENCES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES);
-			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS);
+//			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__TARGET_AUDIENCES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES);
+//			childrenFeatures.add(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS);
 		}
 		return childrenFeatures;
 	}
@@ -118,11 +138,11 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((EngineeringOrganizationalUnit)object).getName();
+		String label = ((EngineeringOrganizationalUnit)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_EngineeringOrganizationalUnit_type") :
 			getString("_UI_EngineeringOrganizationalUnit_type") + " " + label;
@@ -142,6 +162,7 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 
 		switch (notification.getFeatureID(EngineeringOrganizationalUnit.class)) {
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUES:
+			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__OBJECTIVES:
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO:
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__TARGET_AUDIENCES:
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES:
@@ -150,6 +171,7 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES:
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES:
 			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS:
+			case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -189,8 +211,13 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 
 		newChildDescriptors.add
 			(createChildParameter
+				(EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES,
+				 EngineeringFactory.eINSTANCE.createObjective()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO,
-				 EngineeringFactory.eINSTANCE.createComponentCategoryElement()));
+				 EngineeringFactory.eINSTANCE.createComponentCategory()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -236,6 +263,11 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 			(createChildParameter
 				(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS,
 				 EngineeringFactory.eINSTANCE.createIncrement()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES,
+				 EngineeringFactory.eINSTANCE.createFeatureType()));
 	}
 
 	/**

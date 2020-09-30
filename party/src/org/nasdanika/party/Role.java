@@ -5,7 +5,7 @@ package org.nasdanika.party;
 import org.eclipse.emf.common.util.EList;
 
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,13 +23,14 @@ import org.nasdanika.ncore.NamedElement;
  *   <li>{@link org.nasdanika.party.Role#getMembers <em>Members</em>}</li>
  *   <li>{@link org.nasdanika.party.Role#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.party.Role#isAbstract <em>Abstract</em>}</li>
+ *   <li>{@link org.nasdanika.party.Role#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.party.PartyPackage#getRole()
  * @model
  * @generated
  */
-public interface Role extends NamedElement, Entity {
+public interface Role extends ModelElement, Entity {
 	/**
 	 * Returns the value of the '<em><b>Members</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.party.Member}.
@@ -84,5 +85,20 @@ public interface Role extends NamedElement, Entity {
 	 * @generated
 	 */
 	void setAbstract(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Resources</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.party.ResourceCategoryElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resource/document library.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Resources</em>' containment reference list.
+	 * @see org.nasdanika.party.PartyPackage#getRole_Resources()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<ResourceCategoryElement> getResources();
 
 } // Role

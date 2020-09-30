@@ -121,7 +121,7 @@ public class OrganizationItemProvider extends OrganizationalUnitItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Organization)object).getName();
+		String label = ((Organization)object).getTitle();
 		return label == null || label.length() == 0 ? getString("_UI_Organization_type") : label;
 	}
 
@@ -151,7 +151,7 @@ public class OrganizationItemProvider extends OrganizationalUnitItemProvider {
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
@@ -171,16 +171,16 @@ public class OrganizationItemProvider extends OrganizationalUnitItemProvider {
 			(createChildParameter
 				(PartyPackage.Literals.ORGANIZATION__DIRECTORY,
 				 PartyFactory.eINSTANCE.createDirectory()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATION__DIRECTORY,
-				 PartyFactory.eINSTANCE.createOrganizationalUnit()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PartyPackage.Literals.ORGANIZATION__DIRECTORY,
-				 PartyFactory.eINSTANCE.createOrganization()));
+		
+		// --- Org units ---
+		for (EObject resource: org.nasdanika.party.util.Activator.ORG_UNITS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.ORGANIZATION__DIRECTORY, resource));						
+		}		
+				
+		// --- Organizations ---
+		for (EObject resource: org.nasdanika.party.util.Activator.ORGANIZATIONS_PALETTE.getElements()) {
+			newChildDescriptors.add(createChildParameter(PartyPackage.Literals.ORGANIZATION__DIRECTORY, resource));						
+		}
 
 		newChildDescriptors.add
 			(createChildParameter

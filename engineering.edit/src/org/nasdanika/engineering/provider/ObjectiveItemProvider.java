@@ -8,9 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -59,19 +57,18 @@ public class ObjectiveItemProvider
 	 * This adds a property descriptor for the Increment feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addIncrementPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Objective_increment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Objective_increment_feature", "_UI_Objective_type"),
 				 EngineeringPackage.Literals.OBJECTIVE__INCREMENT,
 				 true,
 				 false,
 				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -134,11 +131,11 @@ public class ObjectiveItemProvider
 	 * This returns Objective.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Objective"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Objective.png"));
 	}
 
 	/**
@@ -155,14 +152,12 @@ public class ObjectiveItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = ((Objective)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Objective_type") :
-			getString("_UI_Objective_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_Objective_type") :	label;
 	}
 
 

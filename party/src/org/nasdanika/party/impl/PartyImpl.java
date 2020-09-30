@@ -3,6 +3,8 @@
 package org.nasdanika.party.impl;
 
 import java.util.Collection;
+import java.util.UUID;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -16,6 +18,7 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.ResourceCategoryElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +30,7 @@ import org.nasdanika.party.PartyPackage;
  * <ul>
  *   <li>{@link org.nasdanika.party.impl.PartyImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.party.impl.PartyImpl#getContactMethods <em>Contact Methods</em>}</li>
+ *   <li>{@link org.nasdanika.party.impl.PartyImpl#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,6 +53,7 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 	 */
 	protected PartyImpl() {
 		super();
+		setId(UUID.randomUUID().toString());		
 	}
 
 	/**
@@ -97,11 +102,24 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<ResourceCategoryElement> getResources() {
+		return (EList<ResourceCategoryElement>)eDynamicGet(PartyPackage.PARTY__RESOURCES, PartyPackage.Literals.PARTY__RESOURCES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case PartyPackage.PARTY__CONTACT_METHODS:
 				return ((InternalEList<?>)getContactMethods()).basicRemove(otherEnd, msgs);
+			case PartyPackage.PARTY__RESOURCES:
+				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -118,6 +136,8 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 				return getId();
 			case PartyPackage.PARTY__CONTACT_METHODS:
 				return getContactMethods();
+			case PartyPackage.PARTY__RESOURCES:
+				return getResources();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -138,6 +158,10 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 				getContactMethods().clear();
 				getContactMethods().addAll((Collection<? extends ContactMethod>)newValue);
 				return;
+			case PartyPackage.PARTY__RESOURCES:
+				getResources().clear();
+				getResources().addAll((Collection<? extends ResourceCategoryElement>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -156,6 +180,9 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 			case PartyPackage.PARTY__CONTACT_METHODS:
 				getContactMethods().clear();
 				return;
+			case PartyPackage.PARTY__RESOURCES:
+				getResources().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -172,6 +199,8 @@ public abstract class PartyImpl extends DirectoryElementImpl implements Party {
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 			case PartyPackage.PARTY__CONTACT_METHODS:
 				return !getContactMethods().isEmpty();
+			case PartyPackage.PARTY__RESOURCES:
+				return !getResources().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

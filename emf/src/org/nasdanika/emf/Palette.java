@@ -30,7 +30,7 @@ public interface Palette extends EReferencePredicate {
 		
 		Collection<Palette> getPalettes();
 		
-		Palette create(String id, String name, String description);		
+		Palette create(String id, String name, String description, boolean isWizard);		
 		
 		/**
 		 * Returns a de-dupped list of elements from requested palettes.
@@ -59,11 +59,11 @@ public interface Palette extends EReferencePredicate {
 			
 			@Override
 			public Palette get(String id) {
-				return create(id, null, null);
+				return create(id, null, null, true);
 			}
 			
 			@Override
-			public Palette create(String id, String name, String description) {
+			public Palette create(String id, String name, String description, boolean isWizard) {
 				return palettes.computeIfAbsent(id, pid -> new Palette() {
 					
 					private List<Contributor> contributors = new ArrayList<>();
@@ -107,6 +107,11 @@ public interface Palette extends EReferencePredicate {
 					@Override
 					synchronized public void add(EReferencePredicate predicate) {
 						eReferencePredicates.add(predicate);
+					}
+
+					@Override
+					public boolean isWizard() {
+						return isWizard;
 					}
 					
 				});
@@ -290,5 +295,10 @@ public interface Palette extends EReferencePredicate {
 	String getName();
 	
 	String getDescription();
+	
+	/**
+	 * @return true if the palette shall be used by the Nasdanika Model Wizard.
+	 */
+	boolean isWizard();
 	
 }

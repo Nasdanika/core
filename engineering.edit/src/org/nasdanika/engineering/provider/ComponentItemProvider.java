@@ -3,15 +3,24 @@
 package org.nasdanika.engineering.provider;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
+import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.Component;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
@@ -23,7 +32,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class ComponentItemProvider 
-	extends ComponentCategoryElementItemProvider {
+	extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -54,22 +63,44 @@ public class ComponentItemProvider
 	 * This adds a property descriptor for the Owners feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addOwnersPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_AbstractComponent_owners_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AbstractComponent_owners_feature", "_UI_AbstractComponent_type"),
 				 EngineeringPackage.Literals.ABSTRACT_COMPONENT__OWNERS,
 				 true,
 				 false,
 				 true,
 				 null,
 				 null,
+				 null,
 				 null));
+	}
+	
+	/**
+	 * Called from getChildren(), adds EReferenceItemProvider children.
+	 * @param children
+	 */
+	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_COMPONENT__ISSUES));		
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.COMPONENT__COMPONENTS));		
+	}
+	
+	@Override
+	public final Collection<?> getChildren(Object object) {
+		List<EReferenceItemProvider> children = eReferenceItemProviders.get(object);
+		if (children == null) {
+			children = new ArrayList<>();
+			eReferenceItemProviders.put(object, children);
+			addEReferenceItemProviderChildren(object, children);
+			children.sort((a,b) -> a.getText(object).compareTo(b.getText(object)));
+		}
+		Collection<Object> ret = new ArrayList<>(children);
+		ret.addAll(super.getChildren(object));
+		return ret;
 	}
 
 	/**
@@ -161,7 +192,7 @@ public class ComponentItemProvider
 	 * that can be created under this object.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
@@ -175,17 +206,28 @@ public class ComponentItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
-				 EngineeringFactory.eINSTANCE.createComponentCategoryElement()));
+				 EngineeringFactory.eINSTANCE.createComponentCategory()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
 				 EngineeringFactory.eINSTANCE.createComponent()));
 
-		newChildDescriptors.add
-			(createChildParameter
-				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
-				 EngineeringFactory.eINSTANCE.createProduct()));
+//		newChildDescriptors.add
+//			(createChildParameter
+//				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
+//				 EngineeringFactory.eINSTANCE.createProduct()));
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return EngineeringEditPlugin.INSTANCE;
 	}
 
 }

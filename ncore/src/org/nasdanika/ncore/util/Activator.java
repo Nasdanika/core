@@ -19,7 +19,7 @@ public class Activator implements BundleActivator {
 	public static final Palette EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.create(
 			"org.nasdanika.ncore:expressions",
 			"General",
-			"General purpose elements");
+			"General purpose elements", true);
 
 	/**
 	 * Named model elements which compute results. 
@@ -27,7 +27,7 @@ public class Activator implements BundleActivator {
 	public static final Palette NAMED_EXPRESSIONS_PALETTE = Palette.Registry.INSTANCE.create(
 			"org.nasdanika.ncore:named-expressions",
 			"Named expressions",
-			"Named expressions can be members of maps and contexts");
+			"Named expressions can be members of maps and contexts", true);
 	
 	// TODO - Control flow
 

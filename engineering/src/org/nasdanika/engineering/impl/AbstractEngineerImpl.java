@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.engineering.AbstractEngineer;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Issue;
+import org.nasdanika.engineering.Objective;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +25,7 @@ import org.nasdanika.engineering.Issue;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.impl.AbstractEngineerImpl#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.AbstractEngineerImpl#getObjectives <em>Objectives</em>}</li>
  * </ul>
  *
  * @generated
@@ -74,11 +76,24 @@ public class AbstractEngineerImpl extends MinimalEObjectImpl.Container implement
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Objective> getObjectives() {
+		return (EList<Objective>)eDynamicGet(EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES, EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES:
 				return ((InternalEList<?>)getIssues()).basicRemove(otherEnd, msgs);
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
+				return ((InternalEList<?>)getObjectives()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -93,6 +108,8 @@ public class AbstractEngineerImpl extends MinimalEObjectImpl.Container implement
 		switch (featureID) {
 			case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES:
 				return getIssues();
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
+				return getObjectives();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -110,6 +127,10 @@ public class AbstractEngineerImpl extends MinimalEObjectImpl.Container implement
 				getIssues().clear();
 				getIssues().addAll((Collection<? extends Issue>)newValue);
 				return;
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
+				getObjectives().clear();
+				getObjectives().addAll((Collection<? extends Objective>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -125,6 +146,9 @@ public class AbstractEngineerImpl extends MinimalEObjectImpl.Container implement
 			case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES:
 				getIssues().clear();
 				return;
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
+				getObjectives().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -139,6 +163,8 @@ public class AbstractEngineerImpl extends MinimalEObjectImpl.Container implement
 		switch (featureID) {
 			case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES:
 				return !getIssues().isEmpty();
+			case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES:
+				return !getObjectives().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

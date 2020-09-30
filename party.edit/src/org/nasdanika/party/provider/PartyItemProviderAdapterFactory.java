@@ -373,6 +373,144 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.ResourceCategory} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResourceCategoryItemProvider resourceCategoryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.ResourceCategory}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResourceCategoryAdapter() {
+		if (resourceCategoryItemProvider == null) {
+			resourceCategoryItemProvider = new ResourceCategoryItemProvider(this);
+		}
+
+		return resourceCategoryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.MarkdownText} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarkdownTextItemProvider markdownTextItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.MarkdownText}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarkdownTextAdapter() {
+		if (markdownTextItemProvider == null) {
+			markdownTextItemProvider = new MarkdownTextItemProvider(this);
+		}
+
+		return markdownTextItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.MarkdownResource} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MarkdownResourceItemProvider markdownResourceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.MarkdownResource}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMarkdownResourceAdapter() {
+		if (markdownResourceItemProvider == null) {
+			markdownResourceItemProvider = new MarkdownResourceItemProvider(this);
+		}
+
+		return markdownResourceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.ResourceReference} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ResourceReferenceItemProvider resourceReferenceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.ResourceReference}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createResourceReferenceAdapter() {
+		if (resourceReferenceItemProvider == null) {
+			resourceReferenceItemProvider = new ResourceReferenceItemProvider(this);
+		}
+
+		return resourceReferenceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.HtmlText} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HtmlTextItemProvider htmlTextItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.HtmlText}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHtmlTextAdapter() {
+		if (htmlTextItemProvider == null) {
+			htmlTextItemProvider = new HtmlTextItemProvider(this);
+		}
+
+		return htmlTextItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.nasdanika.party.HtmlResource} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HtmlResourceItemProvider htmlResourceItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.nasdanika.party.HtmlResource}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHtmlResourceAdapter() {
+		if (htmlResourceItemProvider == null) {
+			htmlResourceItemProvider = new HtmlResourceItemProvider(this);
+		}
+
+		return htmlResourceItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -490,6 +628,12 @@ public class PartyItemProviderAdapterFactory extends PartyAdapterFactory impleme
 		if (phoneItemProvider != null) phoneItemProvider.dispose();
 		if (postalAddressItemProvider != null) postalAddressItemProvider.dispose();
 		if (webAddressItemProvider != null) webAddressItemProvider.dispose();
+		if (resourceCategoryItemProvider != null) resourceCategoryItemProvider.dispose();
+		if (markdownTextItemProvider != null) markdownTextItemProvider.dispose();
+		if (markdownResourceItemProvider != null) markdownResourceItemProvider.dispose();
+		if (resourceReferenceItemProvider != null) resourceReferenceItemProvider.dispose();
+		if (htmlTextItemProvider != null) htmlTextItemProvider.dispose();
+		if (htmlResourceItemProvider != null) htmlResourceItemProvider.dispose();
 	}
 
 }

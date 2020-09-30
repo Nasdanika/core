@@ -15,6 +15,7 @@ import org.nasdanika.engineering.EngineeringOrganization;
 import org.nasdanika.engineering.EngineeringOrganizationalUnit;
 import org.nasdanika.engineering.EngineeringPackage;
 
+import org.nasdanika.engineering.FeatureType;
 import org.nasdanika.engineering.Increment;
 import org.nasdanika.engineering.Issue;
 import org.nasdanika.engineering.IssueCategory;
@@ -22,6 +23,7 @@ import org.nasdanika.engineering.IssueRelationshipType;
 import org.nasdanika.engineering.IssueResolution;
 import org.nasdanika.engineering.IssueStatus;
 import org.nasdanika.engineering.IssueType;
+import org.nasdanika.engineering.Objective;
 import org.nasdanika.engineering.Persona;
 import org.nasdanika.party.impl.OrganizationImpl;
 
@@ -34,6 +36,7 @@ import org.nasdanika.party.impl.OrganizationImpl;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getObjectives <em>Objectives</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getPortfolio <em>Portfolio</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getTargetAudiences <em>Target Audiences</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getIssueTypes <em>Issue Types</em>}</li>
@@ -42,6 +45,7 @@ import org.nasdanika.party.impl.OrganizationImpl;
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getIssueStatuses <em>Issue Statuses</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getIssueRelationshipTypes <em>Issue Relationship Types</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getIncrements <em>Increments</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.EngineeringOrganizationImpl#getFeatureTypes <em>Feature Types</em>}</li>
  * </ul>
  *
  * @generated
@@ -84,6 +88,17 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<Objective> getObjectives() {
+		return (EList<Objective>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES, EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<ComponentCategoryElement> getPortfolio() {
 		return (EList<ComponentCategoryElement>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO, true, true);
 	}
@@ -104,9 +119,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IssueType getIssueTypes() {
-		return (IssueType)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES, true, true);
+	public EList<IssueType> getIssueTypes() {
+		return (EList<IssueType>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES, true, true);
 	}
 
 	/**
@@ -114,19 +130,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetIssueTypes(IssueType newIssueTypes, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newIssueTypes, EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setIssueTypes(IssueType newIssueTypes) {
-		eDynamicSet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_TYPES, newIssueTypes);
+	public EList<IssueResolution> getIssueResolutions() {
+		return (EList<IssueResolution>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS, true, true);
 	}
 
 	/**
@@ -134,9 +141,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IssueResolution getIssueResolutions() {
-		return (IssueResolution)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS, true, true);
+	public EList<IssueCategory> getIssueCategories() {
+		return (EList<IssueCategory>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES, true, true);
 	}
 
 	/**
@@ -144,19 +152,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetIssueResolutions(IssueResolution newIssueResolutions, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newIssueResolutions, EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setIssueResolutions(IssueResolution newIssueResolutions) {
-		eDynamicSet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RESOLUTIONS, newIssueResolutions);
+	public EList<IssueStatus> getIssueStatuses() {
+		return (EList<IssueStatus>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES, true, true);
 	}
 
 	/**
@@ -164,89 +163,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IssueCategory getIssueCategories() {
-		return (IssueCategory)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetIssueCategories(IssueCategory newIssueCategories, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newIssueCategories, EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setIssueCategories(IssueCategory newIssueCategories) {
-		eDynamicSet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_CATEGORIES, newIssueCategories);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IssueStatus getIssueStatuses() {
-		return (IssueStatus)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetIssueStatuses(IssueStatus newIssueStatuses, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newIssueStatuses, EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setIssueStatuses(IssueStatus newIssueStatuses) {
-		eDynamicSet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES, newIssueStatuses);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public IssueRelationshipType getIssueRelationshipTypes() {
-		return (IssueRelationshipType)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetIssueRelationshipTypes(IssueRelationshipType newIssueRelationshipTypes, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newIssueRelationshipTypes, EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setIssueRelationshipTypes(IssueRelationshipType newIssueRelationshipTypes) {
-		eDynamicSet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES, newIssueRelationshipTypes);
+	public EList<IssueRelationshipType> getIssueRelationshipTypes() {
+		return (EList<IssueRelationshipType>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES, true, true);
 	}
 
 	/**
@@ -265,27 +185,42 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<FeatureType> getFeatureTypes() {
+		return (EList<FeatureType>)eDynamicGet(EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES:
 				return ((InternalEList<?>)getIssues()).basicRemove(otherEnd, msgs);
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES:
+				return ((InternalEList<?>)getObjectives()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO:
 				return ((InternalEList<?>)getPortfolio()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__TARGET_AUDIENCES:
 				return ((InternalEList<?>)getTargetAudiences()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES:
-				return basicSetIssueTypes(null, msgs);
+				return ((InternalEList<?>)getIssueTypes()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS:
-				return basicSetIssueResolutions(null, msgs);
+				return ((InternalEList<?>)getIssueResolutions()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES:
-				return basicSetIssueCategories(null, msgs);
+				return ((InternalEList<?>)getIssueCategories()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES:
-				return basicSetIssueStatuses(null, msgs);
+				return ((InternalEList<?>)getIssueStatuses()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES:
-				return basicSetIssueRelationshipTypes(null, msgs);
+				return ((InternalEList<?>)getIssueRelationshipTypes()).basicRemove(otherEnd, msgs);
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS:
 				return ((InternalEList<?>)getIncrements()).basicRemove(otherEnd, msgs);
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES:
+				return ((InternalEList<?>)getFeatureTypes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -300,6 +235,8 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 		switch (featureID) {
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES:
 				return getIssues();
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES:
+				return getObjectives();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO:
 				return getPortfolio();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__TARGET_AUDIENCES:
@@ -316,6 +253,8 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				return getIssueRelationshipTypes();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS:
 				return getIncrements();
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES:
+				return getFeatureTypes();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -333,6 +272,10 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				getIssues().clear();
 				getIssues().addAll((Collection<? extends Issue>)newValue);
 				return;
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES:
+				getObjectives().clear();
+				getObjectives().addAll((Collection<? extends Objective>)newValue);
+				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO:
 				getPortfolio().clear();
 				getPortfolio().addAll((Collection<? extends ComponentCategoryElement>)newValue);
@@ -342,23 +285,32 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				getTargetAudiences().addAll((Collection<? extends Persona>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES:
-				setIssueTypes((IssueType)newValue);
+				getIssueTypes().clear();
+				getIssueTypes().addAll((Collection<? extends IssueType>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS:
-				setIssueResolutions((IssueResolution)newValue);
+				getIssueResolutions().clear();
+				getIssueResolutions().addAll((Collection<? extends IssueResolution>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES:
-				setIssueCategories((IssueCategory)newValue);
+				getIssueCategories().clear();
+				getIssueCategories().addAll((Collection<? extends IssueCategory>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES:
-				setIssueStatuses((IssueStatus)newValue);
+				getIssueStatuses().clear();
+				getIssueStatuses().addAll((Collection<? extends IssueStatus>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES:
-				setIssueRelationshipTypes((IssueRelationshipType)newValue);
+				getIssueRelationshipTypes().clear();
+				getIssueRelationshipTypes().addAll((Collection<? extends IssueRelationshipType>)newValue);
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS:
 				getIncrements().clear();
 				getIncrements().addAll((Collection<? extends Increment>)newValue);
+				return;
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES:
+				getFeatureTypes().clear();
+				getFeatureTypes().addAll((Collection<? extends FeatureType>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -375,6 +327,9 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES:
 				getIssues().clear();
 				return;
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES:
+				getObjectives().clear();
+				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO:
 				getPortfolio().clear();
 				return;
@@ -382,22 +337,25 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				getTargetAudiences().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES:
-				setIssueTypes((IssueType)null);
+				getIssueTypes().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS:
-				setIssueResolutions((IssueResolution)null);
+				getIssueResolutions().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES:
-				setIssueCategories((IssueCategory)null);
+				getIssueCategories().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES:
-				setIssueStatuses((IssueStatus)null);
+				getIssueStatuses().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES:
-				setIssueRelationshipTypes((IssueRelationshipType)null);
+				getIssueRelationshipTypes().clear();
 				return;
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS:
 				getIncrements().clear();
+				return;
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES:
+				getFeatureTypes().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -413,22 +371,26 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 		switch (featureID) {
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES:
 				return !getIssues().isEmpty();
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES:
+				return !getObjectives().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__PORTFOLIO:
 				return !getPortfolio().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__TARGET_AUDIENCES:
 				return !getTargetAudiences().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_TYPES:
-				return getIssueTypes() != null;
+				return !getIssueTypes().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RESOLUTIONS:
-				return getIssueResolutions() != null;
+				return !getIssueResolutions().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_CATEGORIES:
-				return getIssueCategories() != null;
+				return !getIssueCategories().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES:
-				return getIssueStatuses() != null;
+				return !getIssueStatuses().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES:
-				return getIssueRelationshipTypes() != null;
+				return !getIssueRelationshipTypes().isEmpty();
 			case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS:
 				return !getIncrements().isEmpty();
+			case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES:
+				return !getFeatureTypes().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -443,6 +405,7 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 		if (baseClass == AbstractEngineer.class) {
 			switch (derivedFeatureID) {
 				case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES: return EngineeringPackage.ABSTRACT_ENGINEER__ISSUES;
+				case EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES: return EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES;
 				default: return -1;
 			}
 		}
@@ -456,6 +419,7 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES: return EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES;
 				case EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES: return EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES;
 				case EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS: return EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS;
+				case EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES: return EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES;
 				default: return -1;
 			}
 		}
@@ -472,6 +436,7 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 		if (baseClass == AbstractEngineer.class) {
 			switch (baseFeatureID) {
 				case EngineeringPackage.ABSTRACT_ENGINEER__ISSUES: return EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUES;
+				case EngineeringPackage.ABSTRACT_ENGINEER__OBJECTIVES: return EngineeringPackage.ENGINEERING_ORGANIZATION__OBJECTIVES;
 				default: return -1;
 			}
 		}
@@ -485,6 +450,7 @@ public class EngineeringOrganizationImpl extends OrganizationImpl implements Eng
 				case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_STATUSES: return EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_STATUSES;
 				case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__ISSUE_RELATIONSHIP_TYPES: return EngineeringPackage.ENGINEERING_ORGANIZATION__ISSUE_RELATIONSHIP_TYPES;
 				case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__INCREMENTS: return EngineeringPackage.ENGINEERING_ORGANIZATION__INCREMENTS;
+				case EngineeringPackage.ENGINEERING_ORGANIZATIONAL_UNIT__FEATURE_TYPES: return EngineeringPackage.ENGINEERING_ORGANIZATION__FEATURE_TYPES;
 				default: return -1;
 			}
 		}

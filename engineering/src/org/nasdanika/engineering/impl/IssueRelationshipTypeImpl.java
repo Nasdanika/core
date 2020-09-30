@@ -3,11 +3,9 @@
 package org.nasdanika.engineering.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.IssueRelationshipType;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,7 +20,7 @@ import org.nasdanika.engineering.IssueRelationshipType;
  *
  * @generated
  */
-public class IssueRelationshipTypeImpl extends MinimalEObjectImpl.Container implements IssueRelationshipType {
+public class IssueRelationshipTypeImpl extends ModelElementImpl implements IssueRelationshipType {
 	/**
 	 * The default value of the '{@link #isBlocks() <em>Blocks</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -50,16 +48,6 @@ public class IssueRelationshipTypeImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.ISSUE_RELATIONSHIP_TYPE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

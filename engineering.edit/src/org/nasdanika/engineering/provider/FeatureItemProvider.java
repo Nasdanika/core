@@ -8,8 +8,14 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringPackage;
 
 /**
@@ -19,7 +25,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class FeatureItemProvider 
-	extends FeatureCategoryElementItemProvider {
+	extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -42,6 +48,8 @@ public class FeatureItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPlannedForPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
+			addRequiresPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -50,19 +58,60 @@ public class FeatureItemProvider
 	 * This adds a property descriptor for the Planned For feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addPlannedForPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Feature_plannedFor_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Feature_plannedFor_feature", "_UI_Feature_type"),
 				 EngineeringPackage.Literals.FEATURE__PLANNED_FOR,
 				 true,
 				 false,
 				 true,
+				 null,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	protected void addTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor(
+				 getResourceLocator(),
+				 getString("_UI_Feature_type_feature"),
+				 EngineeringPackage.Literals.FEATURE__TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Requires feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	protected void addRequiresPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor(
+				 getResourceLocator(),
+				 getString("_UI_Feature_requires_feature"),
+				 EngineeringPackage.Literals.FEATURE__REQUIRES,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null,
 				 null));
@@ -72,11 +121,11 @@ public class FeatureItemProvider
 	 * This returns Feature.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Feature"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Feature.png"));
 	}
 
 	/**
@@ -124,6 +173,17 @@ public class FeatureItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return EngineeringEditPlugin.INSTANCE;
 	}
 
 }

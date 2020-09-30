@@ -23,7 +23,7 @@ import org.nasdanika.ncore.ModelElement;
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getNeedCategory()
- * @model interface="true" abstract="true"
+ * @model
  * @generated
  */
 public interface NeedCategory extends ModelElement, NeedCategoryElement {

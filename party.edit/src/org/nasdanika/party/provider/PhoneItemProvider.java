@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
@@ -55,20 +54,19 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Country Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addCountryCodePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Phone_countryCode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_countryCode_feature", "_UI_Phone_type"),
 				 PartyPackage.Literals.PHONE__COUNTRY_CODE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -77,20 +75,19 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Area Code feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addAreaCodePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Phone_areaCode_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_areaCode_feature", "_UI_Phone_type"),
 				 PartyPackage.Literals.PHONE__AREA_CODE,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -99,20 +96,19 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Phone Number feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addPhoneNumberPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Phone_phoneNumber_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_phoneNumber_feature", "_UI_Phone_type"),
 				 PartyPackage.Literals.PHONE__PHONE_NUMBER,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}
@@ -121,20 +117,19 @@ public class PhoneItemProvider extends ContactMethodItemProvider {
 	 * This adds a property descriptor for the Extension feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void addExtensionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+			(createItemPropertyDescriptor(
 				 getResourceLocator(),
 				 getString("_UI_Phone_extension_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Phone_extension_feature", "_UI_Phone_type"),
 				 PartyPackage.Literals.PHONE__EXTENSION,
 				 true,
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
 				 null,
 				 null));
 	}

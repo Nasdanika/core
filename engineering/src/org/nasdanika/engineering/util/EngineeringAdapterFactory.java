@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.engineering.*;
 import org.nasdanika.ncore.Entity;
 import org.nasdanika.ncore.ModelElement;
-import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.party.AbstractOrganizationalUnit;
 import org.nasdanika.party.DirectoryElement;
 import org.nasdanika.party.Organization;
@@ -173,6 +172,10 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 				return createEditionAdapter();
 			}
 			@Override
+			public Adapter caseFeatureType(FeatureType object) {
+				return createFeatureTypeAdapter();
+			}
+			@Override
 			public Adapter caseFeatureCategoryElement(FeatureCategoryElement object) {
 				return createFeatureCategoryElementAdapter();
 			}
@@ -219,10 +222,6 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseModelElement(ModelElement object) {
 				return createModelElementAdapter();
-			}
-			@Override
-			public Adapter caseNamedElement(NamedElement object) {
-				return createNamedElementAdapter();
 			}
 			@Override
 			public Adapter caseDirectoryElement(DirectoryElement object) {
@@ -595,6 +594,20 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.engineering.FeatureType <em>Feature Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.engineering.FeatureType
+	 * @generated
+	 */
+	public Adapter createFeatureTypeAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.engineering.FeatureCategoryElement <em>Feature Category Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -773,20 +786,6 @@ public class EngineeringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createModelElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.NamedElement <em>Named Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.nasdanika.ncore.NamedElement
-	 * @generated
-	 */
-	public Adapter createNamedElementAdapter() {
 		return null;
 	}
 

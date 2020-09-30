@@ -2,6 +2,8 @@
  */
 package org.nasdanika.engineering;
 
+import org.eclipse.emf.common.util.EList;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Feature</b></em>'.
@@ -16,6 +18,8 @@ package org.nasdanika.engineering;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.Feature#getPlannedFor <em>Planned For</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.Feature#getType <em>Type</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.Feature#getRequires <em>Requires</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getFeature()
@@ -45,4 +49,41 @@ public interface Feature extends FeatureCategoryElement {
 	 * @generated
 	 */
 	void setPlannedFor(Release value);
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' reference.
+	 * @see #setType(FeatureType)
+	 * @see org.nasdanika.engineering.EngineeringPackage#getFeature_Type()
+	 * @model
+	 * @generated
+	 */
+	FeatureType getType();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.engineering.Feature#getType <em>Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' reference.
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(FeatureType value);
+
+	/**
+	 * Returns the value of the '<em><b>Requires</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Feature}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * One feature may require another feature to build on/extend.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Requires</em>' reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getFeature_Requires()
+	 * @model
+	 * @generated
+	 */
+	EList<Feature> getRequires();
 } // Feature

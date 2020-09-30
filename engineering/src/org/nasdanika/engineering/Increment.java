@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +30,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model
  * @generated
  */
-public interface Increment extends NamedElement {
+public interface Increment extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Children</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.engineering.Increment}.
