@@ -23,7 +23,6 @@ public class MapContainer<E> implements Container<E> {
 		
 	}
 	
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object find(String path, ProgressMonitor monitor) {
@@ -101,14 +100,16 @@ public class MapContainer<E> implements Container<E> {
 		if (existing == null) {
 			return null;
 		}
+		
+		int sPos = path.indexOf(SEPARATOR);
+		
+		if (sPos == -1) {
+			return children.remove(path);
+		}
+		
 		if (existing instanceof Container) {
 			((Container<E>) existing).delete(monitor.split("Removing container at "+path, 1, existing));
 			return existing;
-		}
-				
-		int sPos = path.indexOf(SEPARATOR);
-		if (sPos == -1) {
-			return children.remove(path);
 		}
 		
 		String firstSegment = path.substring(0, sPos);
