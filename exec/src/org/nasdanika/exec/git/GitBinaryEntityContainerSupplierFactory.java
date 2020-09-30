@@ -7,8 +7,11 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
@@ -35,6 +38,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 	private Object clean;
 	private String branch;
 	private String branchStartPoint;
+	private ConsumerFactory<BinaryEntityContainer> onPushConsumerFactory;
 
 	/**
 	 * @return Temporary directory prefix. This implementation returns "git-supplier-", override if needed.
@@ -62,6 +66,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 	 * @param authorEMail Commit author e-mail.
 	 * @param tag Optional tag for the commit.
 	 * @param forceTag If true the tag is forced and force pushed.
+	 * @param onPushConsumerFactory If not null creates onPush consumer executed after succesful push.
 	 */
 	public GitBinaryEntityContainerSupplierFactory(
 			String name, 
@@ -77,7 +82,8 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 			String authorName,
 			String authorEMail,
 			String tag, 
-			Object forceTag) {
+			Object forceTag,
+			ConsumerFactory<BinaryEntityContainer> onPushConsumerFactory) {
 
 		this.name = name;
 		this.repoDir = repoDir;
@@ -93,6 +99,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 		this.authorEMail = authorEMail;
 		this.tag = tag;
 		this.forceTag = forceTag;
+		this.onPushConsumerFactory = onPushConsumerFactory;
 	}
 
 	@Override
@@ -111,7 +118,27 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 				context.interpolateToString(commitMessage), 
 				Util.isBlank(authorName) ? null : new PersonIdent(context.interpolateToString(authorName), context.interpolateToString(authorEMail)), 
 				context.interpolateToString(tag), 
-				Boolean.TRUE.equals(iForceTag) || "true".equals(iForceTag));
+				Boolean.TRUE.equals(iForceTag) || "true".equals(iForceTag),
+				onPushConsumerFactory == null ? null : onPushConsumerFactory.create(context)) {
+			
+			@Override
+			protected void onPush(Iterable<PushResult> pushResults, Iterable<PushResult> tagPushResults, ProgressMonitor progressMonitor) throws Exception {
+				super.onPush(pushResults, tagPushResults, progressMonitor);
+				GitBinaryEntityContainerSupplierFactory.this.onPush(context, pushResults, tagPushResults, progressMonitor);
+			}
+		};
+	}
+	
+	/**
+	 * Override to add some logic to execute on-push in addition to on-push consumer.
+	 * @param context
+	 * @param pushResults
+	 * @param tagPushResults
+	 * @param progressMonitor
+	 * @throws Exception
+	 */
+	protected void onPush(Context context, Iterable<PushResult> pushResults, Iterable<PushResult> tagPushResults, ProgressMonitor progressMonitor) throws Exception {
+		
 	}
 
 }

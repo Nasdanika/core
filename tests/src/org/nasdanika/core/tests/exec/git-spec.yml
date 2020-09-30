@@ -10,6 +10,8 @@ git:
    author:
      name: Pavel Vlasov 
      e-mail: Pavel.Vlasov@nasdanika.org 
+   on-push:
+     my-on-push-component: {}
    contents:
       - source-folder:
          name: src

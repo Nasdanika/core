@@ -342,4 +342,13 @@ public class TestCommon {
 		assertEquals("v11", b11.get("../../../a/a1/a11"));		
 	}
 	
+	@Test 
+	public void testContainerDeletion() throws Exception {
+		EphemeralBinaryEntityContainer container = new EphemeralBinaryEntityContainer();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor();
+		BinaryEntity file = container.get("a/b/c/d.txt", monitor);
+		file.setState(Util.toStream(Context.EMPTY_CONTEXT, "Hello"), monitor);
+		container.getContainer("a/b", monitor).delete(monitor);
+	}
+	
 }

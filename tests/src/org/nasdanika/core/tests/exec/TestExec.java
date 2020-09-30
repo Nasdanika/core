@@ -501,6 +501,25 @@ public class TestExec {
 	@Test
 	@Ignore("Don't run as part of automated build")
 	public void testGitSupplierFactory() throws Exception {
+		ConsumerFactory<BinaryEntityContainer> onPushFactory = context -> new Consumer<BinaryEntityContainer>() {
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return "on push";
+			}
+
+			@Override
+			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+				System.out.println("*** On push: " + container);				
+			}
+			
+		};
+		
 		GitBinaryEntityContainerSupplierFactory gitSupplierFactory = new GitBinaryEntityContainerSupplierFactory(
 				"Test GIT supplier", 
 				null, 
@@ -515,7 +534,8 @@ public class TestExec {
 				"Pavel Vlasov", 
 				"Pavel.Vlasov@nasdanika.org", 
 				"my-tag", 
-				true);
+				true,
+				onPushFactory);
 		
 		ConsumerFactory<BinaryEntityContainer> cf = context -> new Consumer<BinaryEntityContainer>() {
 
@@ -569,7 +589,37 @@ public class TestExec {
 	@Test
 	@Ignore("Don't run as part of automated build")
 	public void testGitComponent() throws Exception {
-		ObjectLoader loader = new Loader();
+		ConsumerFactory<BinaryEntityContainer> onPushFactory = context -> new Consumer<BinaryEntityContainer>() {
+
+			@Override
+			public double size() {
+				return 1;
+			}
+
+			@Override
+			public String name() {
+				return "on push";
+			}
+
+			@Override
+			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+				System.out.println("*** On push: " + container);				
+			}
+			
+		};		
+		
+		ObjectLoader loader = new Loader() {
+			
+			public Object create(ObjectLoader loader, String type, Object config, java.net.URL base, ProgressMonitor progressMonitor, org.nasdanika.common.persistence.Marker marker) throws Exception {
+				
+				if ("my-on-push-component".equals(type)) {
+					return onPushFactory;
+				}
+				
+				return super.create(loader, type, config, base, progressMonitor, marker);
+			};
+			
+		};
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
 		Object git = loader.loadYaml(TestExec.class.getResource("git-spec.yml"), monitor);
 		assertEquals(Git.class, git.getClass());

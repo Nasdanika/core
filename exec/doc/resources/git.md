@@ -35,6 +35,8 @@ All configuration values are interpolated with input.
     * ``user`` - User name.
     * ``password`` - Password.
 * ``force-tag`` - If true the tag is forced and force pushed.
+* ``on-push`` - Optional content component or a list of content components to be executed after push and tag push. For example, a custom content component may trigger a build or some other action on the pushed code.
+On-push behavior can also be introduced via creating a custom Git component by sub-classing ${javadoc/org.nasdanika.exec.resources.Git} and overriding ``onPush()`` method.
 * ``origin`` - Origin to pull from if repoDir is null or does not exist. If origin is not null then a push is performed after commit.
 * ``repository`` - Git repository working directory. If null then a temporary directory is created. In this case origin must be provided for cloning.
 * ``tag`` - Optional tag for the commit.

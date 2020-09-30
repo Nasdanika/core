@@ -299,14 +299,16 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 				PushCommand pushCommand = git.push();
 				if (credentialsProvider != null) {
 					pushCommand.setCredentialsProvider(credentialsProvider);
-				}					
+				}		
+				Iterable<PushResult> pushResults = null;
 				try (ProgressMonitor pushMonitor = progressMonitor.split("Pushing changes", 1, origin, repositoryDirectory.getAbsolutePath())) {
 					pushCommand.setProgressMonitor(wrap(pushMonitor));
-					Iterable<PushResult> pushResults = pushCommand.call();
+					pushResults = pushCommand.call();
 					for (PushResult pushResult: pushResults) {
 						progressMonitor.worked(1, "Pushed", pushResult);
 					}
 				}
+				Iterable<PushResult> tagPushResults = null;
 				if (!Util.isBlank(tag)) {
 					PushCommand pushTagCommand = git.push();
 					pushTagCommand.setPushTags();
@@ -316,16 +318,31 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 					}					
 					try (ProgressMonitor pushMonitor = progressMonitor.split("Pushing tag", 1, origin, repositoryDirectory.getAbsolutePath())) {
 						pushTagCommand.setProgressMonitor(wrap(pushMonitor));
-						Iterable<PushResult> pushResults = pushTagCommand.call();
-						for (PushResult pushResult: pushResults) {
+						tagPushResults = pushTagCommand.call();
+						for (PushResult pushResult: tagPushResults) {
 							progressMonitor.worked(1, "Pushed tag", pushResult);
 						}
 					}
 				}
+				onPush(pushResults, tagPushResults, progressMonitor);
 			}
 		}
 	}
 	
+	/**
+	 * Invoked on successful push of code and tag, if tag is specified.
+	 * This implementation is does nothing, override as needed.
+	 * @param pushResults
+	 * @param tagPushResults
+	 * @param progressMonitor
+	 */
+	protected void onPush(
+			Iterable<PushResult> pushResults, 
+			Iterable<PushResult> tagPushResults,
+			ProgressMonitor progressMonitor) throws Exception {
+
+	}
+
 	@Override
 	public void close() throws Exception {
 		if (git != null) {

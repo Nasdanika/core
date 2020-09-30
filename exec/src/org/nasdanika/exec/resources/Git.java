@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.jgit.transport.PushResult;
 import org.nasdanika.common.Command;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
@@ -65,6 +66,7 @@ public class Git implements CommandFactory, Marked {
 	private static final String CONTENTS_KEY = "contents";
 	private static final String MERGER_KEY = "merger";
 	private static final String CLEAN_KEY = "clean";
+	private static final String ON_PUSH_KEY = "on-push";
 	
 	protected Collection<String> getSupportedKeys() {
 		Collection<String> ret = new ArrayList<>();
@@ -81,6 +83,7 @@ public class Git implements CommandFactory, Marked {
 		ret.add(CONTENTS_KEY);
 		ret.add(MERGER_KEY);
 		ret.add(CLEAN_KEY);
+		ret.add(ON_PUSH_KEY);
 		return ret;
 	}	
 		
@@ -133,6 +136,8 @@ public class Git implements CommandFactory, Marked {
 					throw new ConfigurationException("Branch value shall be a string or map", Util.getMarker(configMap, BRANCH_KEY));
 				}
 				
+				ConsumerFactory<BinaryEntityContainer> onPushFactory = configMap.containsKey(ON_PUSH_KEY) ? Loader.asConsumerFactory(loader.load(configMap.get(ON_PUSH_KEY), base, progressMonitor), Util.getMarker(configMap, ON_PUSH_KEY)) : null;
+								
 				SupplierFactory<BinaryEntityContainer> repoFactory = new GitBinaryEntityContainerSupplierFactory(
 						"Git", 
 						Util.getString(configMap, REPOSITORY_KEY, null), 
@@ -147,7 +152,15 @@ public class Git implements CommandFactory, Marked {
 						author == null ? null : Util.getString(credentials, AUTHOR_NAME_KEY, null), 
 						author == null ? null : Util.getString(credentials, AUTHOR_EMAIL_KEY, null), 
 						Util.getString(configMap, TAG_KEY, null), 
-						configMap.get(FORCE_TAG_KEY));
+						configMap.get(FORCE_TAG_KEY),
+						onPushFactory) {
+					
+					@Override
+					protected void onPush(Context context, Iterable<PushResult> pushResults, Iterable<PushResult> tagPushResults, ProgressMonitor progressMonitor) throws Exception {
+						super.onPush(context, pushResults, tagPushResults, progressMonitor);
+						Git.this.onPush(context, pushResults, tagPushResults, progressMonitor);
+					}
+				};
 						
 				this.factory = repoFactory.then(contentsFactory);
 			} else {
@@ -162,5 +175,17 @@ public class Git implements CommandFactory, Marked {
 	public Command create(Context context) throws Exception {
 		return factory.create(context);
 	}
+		
+	/**
+	 * Override to add some logic to execute on-push in addition to on-push consumer.
+	 * @param context
+	 * @param pushResults
+	 * @param tagPushResults
+	 * @param progressMonitor
+	 * @throws Exception
+	 */
+	protected void onPush(Context context, Iterable<PushResult> pushResults, Iterable<PushResult> tagPushResults, ProgressMonitor progressMonitor) throws Exception {
+		
+	}	
 
 }
