@@ -70,6 +70,7 @@
 					<linksource>true</linksource>	
 					<failOnError>false</failOnError>	
 			        	<useStandardDocletOptions>true</useStandardDocletOptions>	
+					<additionalJOption>--no-module-directories</additionalJOption>
 					<links>
 						<link>https://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/</link>
 						<link>https://picocli.info/apidocs/</link>
