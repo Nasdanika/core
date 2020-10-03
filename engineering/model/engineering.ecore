@@ -282,7 +282,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Objective" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?"/>
+      <details key="documentation" value="Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?&#xA;&#xA;TODO - risk to objectives as well as to issues. Affects effective importance and may be used for filtering based on org risk appetite/tolerance."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="increment" eType="#//Increment">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -422,7 +422,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Risk" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Probability of an adverse event which will affect effort, cost, or totally prevent issue implementation. Attributes such as probability, affect on effort and cost, show-stopper flag."/>
+      <details key="documentation" value="TODO - ISO 31000 definition. Positive flag, risk category, quantitative and qualitative.&#xA;For qualitatieve - likelihood and impact reference value in the engineering org with quantification in percents. E.g. High likelihood is 50%, High impact is 50%. &#xA;Qualitative risk is in numbers - percents for likelihood, absolute numbers for impact, e.g. 8 hours impact on effort, $1000 dollars impact on cost.&#xA;Risks affect effective value (benefit/cost). &#xA;&#xA;Probability of an adverse event which will affect effort, cost, or totally prevent issue implementation. Attributes such as probability, affect on effort and cost, show-stopper flag."/>
     </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>

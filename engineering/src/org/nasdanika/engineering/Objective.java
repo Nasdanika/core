@@ -12,6 +12,8 @@ import org.nasdanika.ncore.ModelElement;
  *
  * <!-- begin-model-doc -->
  * Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?
+ * 
+ * TODO - risk to objectives as well as to issues. Affects effective importance and may be used for filtering based on org risk appetite/tolerance.
  * <!-- end-model-doc -->
  *
  * <p>

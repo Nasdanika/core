@@ -2047,7 +2047,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		  (objectiveEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?"
+			   "documentation", "Strategic objective owned by an engineer or engineering org unit. Hierarchical, may reference a non-containing parent (only for top level?). References an increment. Parent shall be for the same or larger increment. Inherits increment from the parent if not set. Issue references objectives. Weight in the parent objective. Effective weight. Completion status - manually entered number? Effective completion - manually entered number plus computed from associated issues and key results. Status - open/closed? Or auto-closes when increment closes?\n\nTODO - risk to objectives as well as to issues. Affects effective importance and may be used for filtering based on org risk appetite/tolerance."
 		   });
 		addAnnotation
 		  (getObjective_Increment(),
@@ -2179,7 +2179,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		  (riskEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Probability of an adverse event which will affect effort, cost, or totally prevent issue implementation. Attributes such as probability, affect on effort and cost, show-stopper flag."
+			   "documentation", "TODO - ISO 31000 definition. Positive flag, risk category, quantitative and qualitative.\nFor qualitatieve - likelihood and impact reference value in the engineering org with quantification in percents. E.g. High likelihood is 50%, High impact is 50%. \nQualitative risk is in numbers - percents for likelihood, absolute numbers for impact, e.g. 8 hours impact on effort, $1000 dollars impact on cost.\nRisks affect effective value (benefit/cost). \n\nProbability of an adverse event which will affect effort, cost, or totally prevent issue implementation. Attributes such as probability, affect on effort and cost, show-stopper flag."
 		   });
 	}
 
