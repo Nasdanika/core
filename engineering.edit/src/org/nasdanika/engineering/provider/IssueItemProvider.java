@@ -3,6 +3,7 @@
 package org.nasdanika.engineering.provider;
 
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -434,7 +435,6 @@ public class IssueItemProvider
 		if (isResolved((Issue) object)) {
 			return new Function<Font, Object>() {
 	
-				@SuppressWarnings("restriction")
 				@Override
 				public Object apply(Font baseFont) {
 					FontData[] baseFontData = baseFont.getFontData();
@@ -442,7 +442,25 @@ public class IssueItemProvider
 	
 					for (int i = 0; i < baseFontData.length; ++i) {
 						fontData[i] = new FontData(baseFontData[i].getName(), baseFontData[i].getHeight(), baseFontData[i].getStyle());
-						fontData[i].data.lfStrikeOut = 1;
+						// Setting fontData[i].data.lfStrikeOut reflectively because doesn't compile otherwise
+						for (Field field: fontData[i].getClass().getDeclaredFields()) {
+							if (field.getName().equals("data")) {
+								try {
+									Object data = field.get(fontData[i]);
+									if (data != null) {
+										for (Field dataField: data.getClass().getDeclaredFields()) {
+											if (dataField.getName().equals("lfStrikeOut")) {
+												dataField.set(data, (byte) 1);
+												break;
+											}
+										}
+									}
+								} catch (Exception e) {
+									EngineeringEditPlugin.getPlugin().getLog().error("Could not strike out completed issue", e);
+								}
+								break;
+							}
+						}
 					}
 	
 					return FontDescriptor.createFrom(fontData);
