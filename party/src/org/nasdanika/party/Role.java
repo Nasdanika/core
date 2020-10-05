@@ -5,7 +5,6 @@ package org.nasdanika.party;
 import org.eclipse.emf.common.util.EList;
 
 import org.nasdanika.ncore.Entity;
-import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,7 +29,7 @@ import org.nasdanika.ncore.ModelElement;
  * @model
  * @generated
  */
-public interface Role extends ModelElement, Entity {
+public interface Role extends Entity {
 	/**
 	 * Returns the value of the '<em><b>Members</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.party.Member}.

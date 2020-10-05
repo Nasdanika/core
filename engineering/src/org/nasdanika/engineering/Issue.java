@@ -301,7 +301,7 @@ public interface Issue extends Entity {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Actionable</em>' attribute.
 	 * @see org.nasdanika.engineering.EngineeringPackage#getIssue_Actionable()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	boolean isActionable();

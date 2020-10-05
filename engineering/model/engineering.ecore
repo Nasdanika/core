@@ -27,6 +27,12 @@
         <details key="documentation" value="Issues associated with the component - problems/pain points, improvement opportunities/enhancements."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="releases" upperBound="-1"
+        eType="#//Release" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Component releases."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentCategory" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//ComponentCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -156,16 +162,16 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="blocks" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="If true, source/owner must be completed in order to start working on the target."/>
+        <details key="documentation" value="If true, source must be completed in order to start working on the target/container."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IssueRelationship" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Relationship between issues."/>
+      <details key="documentation" value="Relationship between issues. Contained by the target (dependent) issue, references the source issue. "/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//IssueRelationshipType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Issue"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Issue"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Issue" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -233,7 +239,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        changeable="false" derived="true">
+        changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Computed attribute. True if the issue doesn't have blocking relationships with open issues and doesn't have unreleased releases in its requires list."/>
       </eAnnotations>
@@ -300,7 +306,7 @@
       <details key="documentation" value="Owned by an objective. Weight in the objective."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//AbstractComponent">
+  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//AbstractComponent">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Component is a concrete generic component, can be a part of a product. Components can be nested. They can also depend on other components. More precisely, component releases may depend on other releases."/>
     </eAnnotations>

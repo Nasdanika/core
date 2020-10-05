@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -59,6 +60,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DecoratingColumLabelProvider;
 import org.eclipse.emf.edit.ui.provider.DiagnosticDecorator;
+import org.eclipse.emf.edit.ui.provider.ExtendedFontRegistry;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
@@ -101,6 +103,7 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -726,7 +729,20 @@ public class NasdanikaSiriusEditor
 		selectionViewer.setContentProvider(new AdapterFactoryContentProvider(getAdapterFactory()));
 		selectionViewer.setUseHashlookup(true);
 
-		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(new AdapterFactoryLabelProvider.ColorProvider(getAdapterFactory(), selectionViewer), new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
+		AdapterFactoryLabelProvider.FontAndColorProvider labelProvider = new AdapterFactoryLabelProvider.FontAndColorProvider(getAdapterFactory(), selectionViewer) {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected Font getFontFromObject(Object object) {
+				if (object instanceof Function) {
+					return ExtendedFontRegistry.INSTANCE.getFont(defaultFont, ((Function<Font,Object>) object).apply(defaultFont));
+				}
+				// TODO Auto-generated method stub
+				return super.getFontFromObject(object);
+			}
+			
+		};
+		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(labelProvider, new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
 
 		setSelectionViewerInput();
 		

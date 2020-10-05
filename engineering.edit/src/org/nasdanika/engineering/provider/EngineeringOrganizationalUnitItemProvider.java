@@ -57,6 +57,7 @@ public class EngineeringOrganizationalUnitItemProvider extends OrganizationalUni
 	 */
 	@Override
 	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		super.addEReferenceItemProviderChildren(object, children);
 		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_ENGINEER__ISSUES));		
 		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_ENGINEER__OBJECTIVES));		
 		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ENGINEERING_ORGANIZATIONAL_UNIT__PORTFOLIO));		

@@ -134,11 +134,11 @@ public class EngineerItemProvider extends RoleItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Engineer)object).getId();
+		String label = ((Engineer)object).getTitle();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Engineer_type") :
 			getString("_UI_Engineer_type") + " " + label;

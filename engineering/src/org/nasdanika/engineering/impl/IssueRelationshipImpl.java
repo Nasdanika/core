@@ -18,7 +18,7 @@ import org.nasdanika.ncore.impl.ModelElementImpl;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.engineering.impl.IssueRelationshipImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.nasdanika.engineering.impl.IssueRelationshipImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.impl.IssueRelationshipImpl#getSource <em>Source</em>}</li>
  * </ul>
  *
  * @generated
@@ -78,8 +78,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 	 * @generated
 	 */
 	@Override
-	public Issue getTarget() {
-		return (Issue)eDynamicGet(EngineeringPackage.ISSUE_RELATIONSHIP__TARGET, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__TARGET, true, true);
+	public Issue getSource() {
+		return (Issue)eDynamicGet(EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__SOURCE, true, true);
 	}
 
 	/**
@@ -87,8 +87,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Issue basicGetTarget() {
-		return (Issue)eDynamicGet(EngineeringPackage.ISSUE_RELATIONSHIP__TARGET, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__TARGET, false, true);
+	public Issue basicGetSource() {
+		return (Issue)eDynamicGet(EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__SOURCE, false, true);
 	}
 
 	/**
@@ -97,8 +97,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 	 * @generated
 	 */
 	@Override
-	public void setTarget(Issue newTarget) {
-		eDynamicSet(EngineeringPackage.ISSUE_RELATIONSHIP__TARGET, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__TARGET, newTarget);
+	public void setSource(Issue newSource) {
+		eDynamicSet(EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE, EngineeringPackage.Literals.ISSUE_RELATIONSHIP__SOURCE, newSource);
 	}
 
 	/**
@@ -112,9 +112,9 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 			case EngineeringPackage.ISSUE_RELATIONSHIP__TYPE:
 				if (resolve) return getType();
 				return basicGetType();
-			case EngineeringPackage.ISSUE_RELATIONSHIP__TARGET:
-				if (resolve) return getTarget();
-				return basicGetTarget();
+			case EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE:
+				if (resolve) return getSource();
+				return basicGetSource();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -130,8 +130,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 			case EngineeringPackage.ISSUE_RELATIONSHIP__TYPE:
 				setType((IssueRelationshipType)newValue);
 				return;
-			case EngineeringPackage.ISSUE_RELATIONSHIP__TARGET:
-				setTarget((Issue)newValue);
+			case EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE:
+				setSource((Issue)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -148,8 +148,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 			case EngineeringPackage.ISSUE_RELATIONSHIP__TYPE:
 				setType((IssueRelationshipType)null);
 				return;
-			case EngineeringPackage.ISSUE_RELATIONSHIP__TARGET:
-				setTarget((Issue)null);
+			case EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE:
+				setSource((Issue)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -165,8 +165,8 @@ public class IssueRelationshipImpl extends ModelElementImpl implements IssueRela
 		switch (featureID) {
 			case EngineeringPackage.ISSUE_RELATIONSHIP__TYPE:
 				return basicGetType() != null;
-			case EngineeringPackage.ISSUE_RELATIONSHIP__TARGET:
-				return basicGetTarget() != null;
+			case EngineeringPackage.ISSUE_RELATIONSHIP__SOURCE:
+				return basicGetSource() != null;
 		}
 		return super.eIsSet(featureID);
 	}

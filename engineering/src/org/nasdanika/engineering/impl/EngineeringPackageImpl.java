@@ -417,6 +417,16 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 * @generated
 	 */
 	@Override
+	public EReference getAbstractComponent_Releases() {
+		return (EReference)abstractComponentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getComponentCategory() {
 		return componentCategoryEClass;
 	}
@@ -1377,7 +1387,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 	 * @generated
 	 */
 	@Override
-	public EReference getIssueRelationship_Target() {
+	public EReference getIssueRelationship_Source() {
 		return (EReference)issueRelationshipEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1415,6 +1425,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		abstractComponentEClass = createEClass(ABSTRACT_COMPONENT);
 		createEReference(abstractComponentEClass, ABSTRACT_COMPONENT__OWNERS);
 		createEReference(abstractComponentEClass, ABSTRACT_COMPONENT__ISSUES);
+		createEReference(abstractComponentEClass, ABSTRACT_COMPONENT__RELEASES);
 
 		componentCategoryEClass = createEClass(COMPONENT_CATEGORY);
 		createEReference(componentCategoryEClass, COMPONENT_CATEGORY__ELEMENTS);
@@ -1461,7 +1472,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 
 		issueRelationshipEClass = createEClass(ISSUE_RELATIONSHIP);
 		createEReference(issueRelationshipEClass, ISSUE_RELATIONSHIP__TYPE);
-		createEReference(issueRelationshipEClass, ISSUE_RELATIONSHIP__TARGET);
+		createEReference(issueRelationshipEClass, ISSUE_RELATIONSHIP__SOURCE);
 
 		issueEClass = createEClass(ISSUE);
 		createEReference(issueEClass, ISSUE__ASSIGNED_TO);
@@ -1601,6 +1612,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		releaseEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		objectiveEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		keyResultEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		componentEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		componentEClass.getESuperTypes().add(this.getAbstractComponent());
 		productEClass.getESuperTypes().add(this.getComponent());
 		productEClass.getESuperTypes().add(this.getOffering());
@@ -1623,6 +1635,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		initEClass(abstractComponentEClass, AbstractComponent.class, "AbstractComponent", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAbstractComponent_Owners(), this.getAbstractEngineer(), null, "owners", null, 0, -1, AbstractComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAbstractComponent_Issues(), this.getIssue(), null, "issues", null, 0, -1, AbstractComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAbstractComponent_Releases(), this.getRelease(), null, "releases", null, 0, -1, AbstractComponent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(componentCategoryEClass, ComponentCategory.class, "ComponentCategory", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getComponentCategory_Elements(), this.getComponentCategoryElement(), null, "elements", null, 0, -1, ComponentCategory.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1669,7 +1682,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 
 		initEClass(issueRelationshipEClass, IssueRelationship.class, "IssueRelationship", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getIssueRelationship_Type(), this.getIssueRelationshipType(), null, "type", null, 0, 1, IssueRelationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getIssueRelationship_Target(), this.getIssue(), null, "target", null, 0, 1, IssueRelationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getIssueRelationship_Source(), this.getIssue(), null, "source", null, 0, 1, IssueRelationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(issueEClass, Issue.class, "Issue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getIssue_AssignedTo(), this.getAbstractEngineer(), null, "assignedTo", null, 0, -1, Issue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1686,7 +1699,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		initEReference(getIssue_Releases(), this.getRelease(), null, "releases", null, 0, -1, Issue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getIssue_Relationships(), this.getIssueRelationship(), null, "relationships", null, 0, -1, Issue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getIssue_Requires(), this.getRelease(), null, "requires", null, 0, -1, Issue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getIssue_Actionable(), ecorePackage.getEBoolean(), "actionable", null, 0, 1, Issue.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIssue_Actionable(), ecorePackage.getEBoolean(), "actionable", null, 0, 1, Issue.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		initEClass(incrementEClass, Increment.class, "Increment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getIncrement_Children(), this.getIncrement(), null, "children", null, 0, -1, Increment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1796,6 +1809,12 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		   source,
 		   new String[] {
 			   "documentation", "Issues associated with the component - problems/pain points, improvement opportunities/enhancements."
+		   });
+		addAnnotation
+		  (getAbstractComponent_Releases(),
+		   source,
+		   new String[] {
+			   "documentation", "Component releases."
 		   });
 		addAnnotation
 		  (componentCategoryEClass,
@@ -1921,13 +1940,13 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		  (getIssueRelationshipType_Blocks(),
 		   source,
 		   new String[] {
-			   "documentation", "If true, source/owner must be completed in order to start working on the target."
+			   "documentation", "If true, source must be completed in order to start working on the target/container."
 		   });
 		addAnnotation
 		  (issueRelationshipEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Relationship between issues."
+			   "documentation", "Relationship between issues. Contained by the target (dependent) issue, references the source issue. "
 		   });
 		addAnnotation
 		  (issueEClass,

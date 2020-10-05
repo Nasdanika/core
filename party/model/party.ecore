@@ -58,7 +58,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnitReference" eSuperTypes="#//AbstractOrganizationalUnit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//OrganizationalUnit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement ../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Organization members may play different roles in organizational units. For example, Joe Doe may be in a Developer role in the Research And Development organizational unit."/>
     </eAnnotations>

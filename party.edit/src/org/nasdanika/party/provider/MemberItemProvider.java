@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.common.Util;
 import org.nasdanika.ncore.provider.ModelElementItemProvider;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
@@ -141,7 +142,9 @@ public class MemberItemProvider extends ModelElementItemProvider {
 	public String getText(Object object) {
 		Member member = (Member)object;
 		String label = member.getTitle();
-		Party party = member.getParty();
+		if (Util.isBlank(label) && member.getParty() != null) {
+			label = member.getParty().getTitle();
+		}
 		return label == null || label.length() == 0 ? getString("_UI_Member_type") : label;
 	}
 

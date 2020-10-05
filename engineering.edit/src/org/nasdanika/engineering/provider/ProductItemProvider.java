@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Product;
@@ -91,6 +93,15 @@ public class ProductItemProvider
 				 null,
 				 null));
 	}
+		
+	/**
+	 * Called from getChildren(), adds EReferenceItemProvider children.
+	 * @param children
+	 */
+	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		super.addEReferenceItemProviderChildren(object, children);
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.PRODUCT__EDITIONS));		
+	}	
 
 	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
@@ -98,13 +109,13 @@ public class ProductItemProvider
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(EngineeringPackage.Literals.PRODUCT__EDITIONS);
+//			childrenFeatures.add(EngineeringPackage.Literals.PRODUCT__EDITIONS);
 		}
 		return childrenFeatures;
 	}
@@ -147,11 +158,12 @@ public class ProductItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Product_type");
+		String label = ((Product)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Product_type") : label;
 	}
 
 

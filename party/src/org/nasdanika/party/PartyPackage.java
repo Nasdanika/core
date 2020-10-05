@@ -499,7 +499,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
+	int ROLE__TITLE = NcorePackage.ENTITY__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -508,7 +508,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+	int ROLE__DESCRIPTION = NcorePackage.ENTITY__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -517,7 +517,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__ID = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int ROLE__ID = NcorePackage.ENTITY__ID;
 
 	/**
 	 * The feature id for the '<em><b>Members</b></em>' reference list.
@@ -526,7 +526,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__MEMBERS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int ROLE__MEMBERS = NcorePackage.ENTITY_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -535,7 +535,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__EXTENDS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int ROLE__EXTENDS = NcorePackage.ENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Abstract</b></em>' attribute.
@@ -544,7 +544,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__ABSTRACT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
+	int ROLE__ABSTRACT = NcorePackage.ENTITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
@@ -553,7 +553,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE__RESOURCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
+	int ROLE__RESOURCES = NcorePackage.ENTITY_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Role</em>' class.
@@ -562,7 +562,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
+	int ROLE_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Role</em>' class.
@@ -571,7 +571,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ROLE_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int ROLE_OPERATION_COUNT = NcorePackage.ENTITY_OPERATION_COUNT + 0;
 
 
 	/**

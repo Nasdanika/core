@@ -30,7 +30,7 @@ public interface IssueRelationshipType extends ModelElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * If true, source/owner must be completed in order to start working on the target.
+	 * If true, source must be completed in order to start working on the target/container.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Blocks</em>' attribute.
 	 * @see #setBlocks(boolean)

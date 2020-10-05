@@ -233,6 +233,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			case EngineeringPackage.COMPONENT: {
 				Component component = (Component)theEObject;
 				T result = caseComponent(component);
+				if (result == null) result = caseModelElement(component);
 				if (result == null) result = caseAbstractComponent(component);
 				if (result == null) result = caseComponentCategoryElement(component);
 				if (result == null) result = defaultCase(theEObject);
@@ -249,6 +250,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 				T result = caseProduct(product);
 				if (result == null) result = caseComponent(product);
 				if (result == null) result = caseOffering(product);
+				if (result == null) result = caseModelElement(product);
 				if (result == null) result = caseAbstractComponent(product);
 				if (result == null) result = caseComponentCategoryElement(product);
 				if (result == null) result = defaultCase(theEObject);

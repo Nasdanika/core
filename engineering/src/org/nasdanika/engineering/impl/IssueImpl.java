@@ -3,11 +3,9 @@
 package org.nasdanika.engineering.impl;
 
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -339,13 +337,27 @@ public class IssueImpl extends EntityImpl implements Issue {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public boolean isActionable() {
-		return (Boolean)eDynamicGet(EngineeringPackage.ISSUE__ACTIONABLE, EngineeringPackage.Literals.ISSUE__ACTIONABLE, true, true);
+		for (IssueRelationship rel: getRelationships()) {
+			if (rel.getType() != null && rel.getType().isBlocks()) {
+				Issue source = rel.getSource();
+				if (source.getResolution() == null || !source.getResolution().isCompleted()) {
+					return false;
+				}
+			}
+		}
+		for (Release rel: getRequires()) {
+			if (!rel.isReleased()) {
+				return false;
+			}
+		}
+		return true;
+//		return (Boolean)eDynamicGet(EngineeringPackage.ISSUE__ACTIONABLE, EngineeringPackage.Literals.ISSUE__ACTIONABLE, true, true);
 	}
-
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

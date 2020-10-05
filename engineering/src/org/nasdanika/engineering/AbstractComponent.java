@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.nasdanika.engineering.AbstractComponent#getOwners <em>Owners</em>}</li>
  *   <li>{@link org.nasdanika.engineering.AbstractComponent#getIssues <em>Issues</em>}</li>
+ *   <li>{@link org.nasdanika.engineering.AbstractComponent#getReleases <em>Releases</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.engineering.EngineeringPackage#getAbstractComponent()
@@ -55,5 +56,20 @@ public interface AbstractComponent extends ComponentCategoryElement {
 	 * @generated
 	 */
 	EList<Issue> getIssues();
+
+	/**
+	 * Returns the value of the '<em><b>Releases</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.engineering.Release}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Component releases.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Releases</em>' containment reference list.
+	 * @see org.nasdanika.engineering.EngineeringPackage#getAbstractComponent_Releases()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Release> getReleases();
 
 } // AbstractComponent

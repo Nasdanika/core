@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.nasdanika.common.Util;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Increment;
@@ -128,11 +129,11 @@ public class IncrementItemProvider extends ModelElementItemProvider {
 	 * This returns Increment.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Increment"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Increment.png"));
 	}
 
 	/**
@@ -149,14 +150,18 @@ public class IncrementItemProvider extends ModelElementItemProvider {
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Increment)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Increment_type") :
-			getString("_UI_Increment_type") + " " + label;
+		String label = "";
+		for (Increment increment = (Increment) object; increment != null; increment = increment.eContainer() instanceof Increment ? (Increment) increment.eContainer() : null) {
+			String title = increment.getTitle();
+			if (!Util.isBlank(title)) {
+				label = title + " " + label;
+			}
+		}
+		return Util.isBlank(label) ? getString("_UI_Increment_type") :	label;
 	}
 
 

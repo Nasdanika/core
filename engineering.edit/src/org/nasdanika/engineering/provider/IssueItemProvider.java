@@ -6,6 +6,7 @@ package org.nasdanika.engineering.provider;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -15,6 +16,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.jface.resource.FontDescriptor;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.nasdanika.emf.edit.EReferenceItemProvider;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
@@ -379,11 +383,11 @@ public class IssueItemProvider
 	 * This returns Issue.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Issue"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Issue.png"));
 	}
 
 	/**
@@ -400,16 +404,60 @@ public class IssueItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Issue)object).getId();
-		return label == null || label.length() == 0 ?
-			getString("_UI_Issue_type") :
-			getString("_UI_Issue_type") + " " + label;
+		String label = ((Issue)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Issue_type") : label;
 	}
 
+	@Override
+	public Object getForeground(Object object) {
+		return ((Issue) object).isActionable() ? super.getForeground(object) : GRAYED_OUT_COLOR;
+	}
+	
+	private boolean isResolved(Issue issue) {
+		if (issue.getResolution() == null) {
+			return false;
+		}
+		for (Issue child: issue.getChildren()) {
+			if (!isResolved(child)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public Object getFont(Object object) {
+		if (isResolved((Issue) object)) {
+			return new Function<Font, Object>() {
+	
+				@SuppressWarnings("restriction")
+				@Override
+				public Object apply(Font baseFont) {
+					FontData[] baseFontData = baseFont.getFontData();
+					FontData[] fontData = new FontData[baseFontData.length];
+	
+					for (int i = 0; i < baseFontData.length; ++i) {
+						fontData[i] = new FontData(baseFontData[i].getName(), baseFontData[i].getHeight(), baseFontData[i].getStyle());
+						fontData[i].data.lfStrikeOut = 1;
+					}
+	
+					return FontDescriptor.createFrom(fontData);
+				}
+				
+			};
+		}
+		return null;
+	}	
+//		
+//	@Override
+//	public Object getFont(Object object, int columnIndex) {
+//		// TODO Auto-generated method stub
+//		return super.getFont(object, columnIndex);
+//	}	
 
 	/**
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached

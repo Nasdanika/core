@@ -12,18 +12,13 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.emf.edit.EReferenceItemProvider;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.Component;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Component} object.
@@ -32,7 +27,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class ComponentItemProvider 
-	extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -85,6 +80,7 @@ public class ComponentItemProvider
 	 * @param children
 	 */
 	protected void addEReferenceItemProviderChildren(Object object, Collection<EReferenceItemProvider> children) {
+		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_COMPONENT__RELEASES));		
 		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.ABSTRACT_COMPONENT__ISSUES));		
 		children.add(new EReferenceItemProvider(this, (EObject) object, EngineeringPackage.Literals.COMPONENT__COMPONENTS));		
 	}
@@ -109,14 +105,14 @@ public class ComponentItemProvider
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_COMPONENT__ISSUES);
-			childrenFeatures.add(EngineeringPackage.Literals.COMPONENT__COMPONENTS);
+//			childrenFeatures.add(EngineeringPackage.Literals.ABSTRACT_COMPONENT__ISSUES);
+//			childrenFeatures.add(EngineeringPackage.Literals.COMPONENT__COMPONENTS);
 		}
 		return childrenFeatures;
 	}
@@ -159,11 +155,12 @@ public class ComponentItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Component_type");
+		String label = ((Component)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Component_type") :	label;
 	}
 
 
@@ -180,6 +177,7 @@ public class ComponentItemProvider
 
 		switch (notification.getFeatureID(Component.class)) {
 			case EngineeringPackage.COMPONENT__ISSUES:
+			case EngineeringPackage.COMPONENT__RELEASES:
 			case EngineeringPackage.COMPONENT__COMPONENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -213,10 +211,10 @@ public class ComponentItemProvider
 				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
 				 EngineeringFactory.eINSTANCE.createComponent()));
 
-//		newChildDescriptors.add
-//			(createChildParameter
-//				(EngineeringPackage.Literals.COMPONENT__COMPONENTS,
-//				 EngineeringFactory.eINSTANCE.createProduct()));
+		newChildDescriptors.add
+			(createChildParameter
+				(EngineeringPackage.Literals.ABSTRACT_COMPONENT__RELEASES,
+				 EngineeringFactory.eINSTANCE.createRelease()));
 	}
 
 	/**

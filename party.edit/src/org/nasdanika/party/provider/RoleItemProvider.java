@@ -15,7 +15,7 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.ncore.NcorePackage;
-import org.nasdanika.ncore.provider.ModelElementItemProvider;
+import org.nasdanika.ncore.provider.EntityItemProvider;
 import org.nasdanika.party.PartyPackage;
 import org.nasdanika.party.Role;
 
@@ -25,7 +25,7 @@ import org.nasdanika.party.Role;
  * <!-- end-user-doc -->
  * @generated
  */
-public class RoleItemProvider extends ModelElementItemProvider {
+public class RoleItemProvider extends EntityItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -47,7 +47,6 @@ public class RoleItemProvider extends ModelElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIdPropertyDescriptor(object);
 			addMembersPropertyDescriptor(object);
 			addExtendsPropertyDescriptor(object);
 			addAbstractPropertyDescriptor(object);
@@ -215,7 +214,6 @@ public class RoleItemProvider extends ModelElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Role.class)) {
-			case PartyPackage.ROLE__ID:
 			case PartyPackage.ROLE__ABSTRACT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

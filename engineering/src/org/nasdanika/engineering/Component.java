@@ -3,6 +3,7 @@
 package org.nasdanika.engineering;
 
 import org.eclipse.emf.common.util.EList;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +25,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Component extends AbstractComponent {
+public interface Component extends ModelElement, AbstractComponent {
 
 	/**
 	 * Returns the value of the '<em><b>Components</b></em>' containment reference list.
