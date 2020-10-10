@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.ncore.impl.ModelElementImpl;
+import org.nasdanika.ncore.impl.EntityImpl;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
@@ -29,7 +29,7 @@ import org.nasdanika.party.ResourceCategoryElement;
  *
  * @generated
  */
-public class MemberImpl extends ModelElementImpl implements Member {
+public class MemberImpl extends EntityImpl implements Member {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

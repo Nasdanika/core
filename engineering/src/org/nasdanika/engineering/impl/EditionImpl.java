@@ -8,6 +8,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.engineering.Edition;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Feature;
+import org.nasdanika.engineering.Offering;
+import org.nasdanika.engineering.Persona;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,13 +20,14 @@ import org.nasdanika.engineering.Feature;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.engineering.impl.EditionImpl#getTargetAudiences <em>Target Audiences</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EditionImpl#getBases <em>Bases</em>}</li>
  *   <li>{@link org.nasdanika.engineering.impl.EditionImpl#getFeatures <em>Features</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EditionImpl extends OfferingImpl implements Edition {
+public class EditionImpl extends ModelElementImpl implements Edition {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -41,6 +45,17 @@ public class EditionImpl extends OfferingImpl implements Edition {
 	@Override
 	protected EClass eStaticClass() {
 		return EngineeringPackage.Literals.EDITION;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Persona> getTargetAudiences() {
+		return (EList<Persona>)eDynamicGet(EngineeringPackage.EDITION__TARGET_AUDIENCES, EngineeringPackage.Literals.OFFERING__TARGET_AUDIENCES, true, true);
 	}
 
 	/**
@@ -73,6 +88,8 @@ public class EditionImpl extends OfferingImpl implements Edition {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case EngineeringPackage.EDITION__TARGET_AUDIENCES:
+				return getTargetAudiences();
 			case EngineeringPackage.EDITION__BASES:
 				return getBases();
 			case EngineeringPackage.EDITION__FEATURES:
@@ -90,6 +107,10 @@ public class EditionImpl extends OfferingImpl implements Edition {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case EngineeringPackage.EDITION__TARGET_AUDIENCES:
+				getTargetAudiences().clear();
+				getTargetAudiences().addAll((Collection<? extends Persona>)newValue);
+				return;
 			case EngineeringPackage.EDITION__BASES:
 				getBases().clear();
 				getBases().addAll((Collection<? extends Edition>)newValue);
@@ -110,6 +131,9 @@ public class EditionImpl extends OfferingImpl implements Edition {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case EngineeringPackage.EDITION__TARGET_AUDIENCES:
+				getTargetAudiences().clear();
+				return;
 			case EngineeringPackage.EDITION__BASES:
 				getBases().clear();
 				return;
@@ -128,12 +152,46 @@ public class EditionImpl extends OfferingImpl implements Edition {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case EngineeringPackage.EDITION__TARGET_AUDIENCES:
+				return !getTargetAudiences().isEmpty();
 			case EngineeringPackage.EDITION__BASES:
 				return !getBases().isEmpty();
 			case EngineeringPackage.EDITION__FEATURES:
 				return !getFeatures().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == Offering.class) {
+			switch (derivedFeatureID) {
+				case EngineeringPackage.EDITION__TARGET_AUDIENCES: return EngineeringPackage.OFFERING__TARGET_AUDIENCES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == Offering.class) {
+			switch (baseFeatureID) {
+				case EngineeringPackage.OFFERING__TARGET_AUDIENCES: return EngineeringPackage.EDITION__TARGET_AUDIENCES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //EditionImpl

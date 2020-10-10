@@ -328,7 +328,7 @@
         eType="#//Edition" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="features" eType="#//FeatureCategoryElement"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Edition" eSuperTypes="#//Offering">
+  <eClassifiers xsi:type="ecore:EClass" name="Edition" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement #//Offering">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A subset of product features offered to different personas at different prices to maximize value for a particular persona. For example, a beginner user may not get benefit from advanced product features and therefore does not need a professional edition. Editions may have bases, e.g. professional edition is based on community edition."/>
     </eAnnotations>

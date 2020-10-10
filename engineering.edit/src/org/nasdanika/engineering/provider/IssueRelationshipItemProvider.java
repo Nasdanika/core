@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.nasdanika.common.Util;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.IssueRelationship;
 import org.nasdanika.ncore.provider.ModelElementItemProvider;
@@ -120,14 +121,16 @@ public class IssueRelationshipItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((IssueRelationship)object).getTitle();
-		return label == null || label.length() == 0 ?
-			getString("_UI_IssueRelationship_type") :
-			getString("_UI_IssueRelationship_type") + " " + label;
+		IssueRelationship rel = (IssueRelationship)object;
+		String label = rel.getTitle();
+		if (Util.isBlank(label) && rel.getSource() != null) {
+			label = rel.getSource().getTitle();
+		}
+		return label == null || label.length() == 0 ? getString("_UI_IssueRelationship_type") : label;
 	}
 
 

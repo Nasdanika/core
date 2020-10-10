@@ -3,6 +3,7 @@
 package org.nasdanika.engineering;
 
 import org.eclipse.emf.common.util.EList;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Edition extends Offering {
+public interface Edition extends ModelElement, Offering {
 
 	/**
 	 * Returns the value of the '<em><b>Bases</b></em>' reference list.

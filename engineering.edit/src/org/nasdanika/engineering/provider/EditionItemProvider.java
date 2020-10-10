@@ -8,8 +8,11 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.nasdanika.engineering.Edition;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.ncore.provider.ModelElementItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Edition} object.
@@ -18,7 +21,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class EditionItemProvider 
-	extends OfferingItemProvider {
+	extends ModelElementItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -40,10 +43,32 @@ public class EditionItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addTargetAudiencesPropertyDescriptor(object);
 			addBasesPropertyDescriptor(object);
 			addFeaturesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Target Audiences feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	protected void addTargetAudiencesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor(
+				 getResourceLocator(),
+				 getString("_UI_Offering_targetAudiences_feature"),
+				 EngineeringPackage.Literals.OFFERING__TARGET_AUDIENCES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -113,11 +138,12 @@ public class EditionItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Edition_type");
+		String label = ((Edition)object).getTitle();
+		return label == null || label.length() == 0 ? getString("_UI_Edition_type") : label;
 	}
 
 
@@ -144,6 +170,17 @@ public class EditionItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return EngineeringEditPlugin.INSTANCE;
 	}
 
 }

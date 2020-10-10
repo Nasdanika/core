@@ -783,7 +783,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
+	int MEMBER__TITLE = NcorePackage.ENTITY__TITLE;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -792,7 +792,16 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+	int MEMBER__DESCRIPTION = NcorePackage.ENTITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MEMBER__ID = NcorePackage.ENTITY__ID;
 
 	/**
 	 * The feature id for the '<em><b>Party</b></em>' reference.
@@ -801,7 +810,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__PARTY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int MEMBER__PARTY = NcorePackage.ENTITY_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
@@ -810,7 +819,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER__RESOURCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int MEMBER__RESOURCES = NcorePackage.ENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Member</em>' class.
@@ -819,7 +828,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int MEMBER_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Member</em>' class.
@@ -828,7 +837,7 @@ public interface PartyPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MEMBER_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int MEMBER_OPERATION_COUNT = NcorePackage.ENTITY_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.party.impl.PersonImpl <em>Person</em>}' class.

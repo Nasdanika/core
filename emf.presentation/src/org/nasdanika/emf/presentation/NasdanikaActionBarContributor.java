@@ -151,6 +151,15 @@ public class NasdanikaActionBarContributor extends EditingDomainActionBarContrib
 	public void contributeToToolBar(IToolBarManager toolBarManager) {
 		super.contributeToToolBar(toolBarManager);
 		toolBarManager.add(new Separator("app-settings"));
+// TODO - from extensions		
+//		toolBarManager.add(new Action("Test toolbar contribution") {
+//			
+//			@Override
+//			public void run() {
+//				System.out.println("Editor: " +  getActiveEditor());
+//			}
+//			
+//		});
 		toolBarManager.add(new Separator("app-additions"));
 	}
 

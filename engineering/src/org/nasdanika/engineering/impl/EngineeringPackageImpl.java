@@ -1616,6 +1616,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		componentEClass.getESuperTypes().add(this.getAbstractComponent());
 		productEClass.getESuperTypes().add(this.getComponent());
 		productEClass.getESuperTypes().add(this.getOffering());
+		editionEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		editionEClass.getESuperTypes().add(this.getOffering());
 		featureTypeEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		featureCategoryEClass.getESuperTypes().add(theNcorePackage.getModelElement());

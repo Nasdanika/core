@@ -2092,13 +2092,31 @@ public interface EngineeringPackage extends EPackage {
 	int PRODUCT_OPERATION_COUNT = COMPONENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDITION__TITLE = NcorePackage.MODEL_ELEMENT__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EDITION__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
 	 * The feature id for the '<em><b>Target Audiences</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EDITION__TARGET_AUDIENCES = OFFERING__TARGET_AUDIENCES;
+	int EDITION__TARGET_AUDIENCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Bases</b></em>' reference list.
@@ -2107,7 +2125,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EDITION__BASES = OFFERING_FEATURE_COUNT + 0;
+	int EDITION__BASES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Features</b></em>' reference list.
@@ -2116,7 +2134,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EDITION__FEATURES = OFFERING_FEATURE_COUNT + 1;
+	int EDITION__FEATURES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Edition</em>' class.
@@ -2125,7 +2143,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EDITION_FEATURE_COUNT = OFFERING_FEATURE_COUNT + 2;
+	int EDITION_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Edition</em>' class.
@@ -2134,7 +2152,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EDITION_OPERATION_COUNT = OFFERING_OPERATION_COUNT + 0;
+	int EDITION_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.engineering.impl.FeatureTypeImpl <em>Feature Type</em>}' class.

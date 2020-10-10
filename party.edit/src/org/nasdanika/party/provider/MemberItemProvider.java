@@ -15,7 +15,7 @@ import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.common.Util;
-import org.nasdanika.ncore.provider.ModelElementItemProvider;
+import org.nasdanika.ncore.provider.EntityItemProvider;
 import org.nasdanika.party.Member;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
@@ -26,7 +26,7 @@ import org.nasdanika.party.PartyPackage;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MemberItemProvider extends ModelElementItemProvider {
+public class MemberItemProvider extends EntityItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

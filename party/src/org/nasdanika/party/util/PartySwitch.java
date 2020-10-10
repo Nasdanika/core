@@ -153,8 +153,9 @@ public class PartySwitch<T> extends Switch<T> {
 			case PartyPackage.MEMBER: {
 				Member member = (Member)theEObject;
 				T result = caseMember(member);
-				if (result == null) result = caseModelElement(member);
+				if (result == null) result = caseEntity(member);
 				if (result == null) result = caseMemberDirectoryElement(member);
+				if (result == null) result = caseModelElement(member);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

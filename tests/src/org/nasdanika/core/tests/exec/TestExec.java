@@ -603,7 +603,7 @@ public class TestExec {
 
 			@Override
 			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
-				System.out.println("*** On push: " + container);				
+				System.out.println("*** On push: " + container);	
 			}
 			
 		};		
@@ -630,6 +630,44 @@ public class TestExec {
 		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key)
 				.compose(Context.singleton("myFieldAnnotations", annotations))
 				.compose(Context.singleton("date", new Date()));
+		callCommand(context, monitor, git);
+	}
+	
+	/**
+	 * Demonstrates how to return value from on-push handler defined in YAML to the client code.
+	 * @throws Exception
+	 */
+	@Test
+	@Ignore("Don't run as part of automated build")
+	public void testGitOnPushResult() throws Exception {
+		
+		ObjectLoader loader = new Loader() {
+			
+			public Object create(ObjectLoader loader, String type, Object config, java.net.URL base, ProgressMonitor progressMonitor, org.nasdanika.common.persistence.Marker marker) throws Exception {
+				
+				if ("my-on-push-component".equals(type)) {
+					return new OnPushConsumerFactory(loader, config, base, progressMonitor, marker);
+				}
+				
+				return super.create(loader, type, config, base, progressMonitor, marker);
+			};
+			
+		};
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object git = loader.loadYaml(TestExec.class.getResource("git-spec-on-push-result.yml"), monitor);
+		assertEquals(Git.class, git.getClass());
+
+		Collection<String> annotations = new ArrayList<>();
+		annotations.add("Override");
+		annotations.add("${import/org.nasdanika.TestAnnotation}");
+		
+		// A sample result consumer which prints it to console.
+		java.util.function.Consumer<Object> onPushResultConsumer = System.out::println;
+		
+		Context context = Context.wrap(System.getenv()::get).map(key -> "test-git-supplier-" + key)
+				.compose(Context.singleton("myFieldAnnotations", annotations))
+				.compose(Context.singleton("date", new Date()))
+				.compose(Context.singleton("on-push-result-consumer", onPushResultConsumer));
 		callCommand(context, monitor, git);
 	}
 	

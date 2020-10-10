@@ -3,7 +3,7 @@
 package org.nasdanika.party;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.Entity;
 
 
 /**
@@ -27,7 +27,7 @@ import org.nasdanika.ncore.ModelElement;
  * @model
  * @generated
  */
-public interface Member extends ModelElement, MemberDirectoryElement {
+public interface Member extends Entity, MemberDirectoryElement {
 	/**
 	 * Returns the value of the '<em><b>Party</b></em>' reference.
 	 * <!-- begin-user-doc -->

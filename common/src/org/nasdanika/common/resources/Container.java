@@ -29,8 +29,8 @@ public interface Container<E> extends Resource<E> {
 	
 	/**
 	 * Finds an existing element or container with a given path.
-	 * @param path
-	 * @return
+	 * @param path Child resource path. 
+	 * @return Element if it exists or null.
 	 */
 	Object find(String path, ProgressMonitor monitor);
 	

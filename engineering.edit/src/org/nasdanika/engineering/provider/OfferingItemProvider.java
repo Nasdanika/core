@@ -15,8 +15,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Offering} object.
@@ -25,7 +25,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class OfferingItemProvider 
-	extends NasdanikaItemProviderAdapter
+	extends NcoreItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

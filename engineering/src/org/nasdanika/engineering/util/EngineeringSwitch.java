@@ -259,6 +259,7 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			case EngineeringPackage.EDITION: {
 				Edition edition = (Edition)theEObject;
 				T result = caseEdition(edition);
+				if (result == null) result = caseModelElement(edition);
 				if (result == null) result = caseOffering(edition);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

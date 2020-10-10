@@ -20,10 +20,10 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.AbstractEngineer;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
+import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.AbstractEngineer} object.
@@ -32,7 +32,7 @@ import org.nasdanika.engineering.EngineeringPackage;
  * @generated
  */
 public class AbstractEngineerItemProvider 
-	extends NasdanikaItemProviderAdapter
+	extends NcoreItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

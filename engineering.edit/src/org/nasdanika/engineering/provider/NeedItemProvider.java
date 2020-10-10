@@ -17,10 +17,10 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Need;
+import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Need} object.
@@ -29,7 +29,7 @@ import org.nasdanika.engineering.Need;
  * @generated
  */
 public class NeedItemProvider 
-	extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	extends NcoreItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->

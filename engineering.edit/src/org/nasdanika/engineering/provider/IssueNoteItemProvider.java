@@ -17,9 +17,9 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.nasdanika.emf.edit.NasdanikaItemProviderAdapter;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.IssueNote;
+import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.IssueNote} object.
@@ -28,7 +28,7 @@ import org.nasdanika.engineering.IssueNote;
  * @generated
  */
 public class IssueNoteItemProvider 
-	extends NasdanikaItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	extends NcoreItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -80,11 +80,11 @@ public class IssueNoteItemProvider
 	 * This returns IssueNote.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/IssueNote"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/IssueNote.png"));
 	}
 
 	/**
@@ -101,14 +101,12 @@ public class IssueNoteItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		String label = crop(((IssueNote)object).getDescription());
-		return label == null || label.length() == 0 ?
-			getString("_UI_IssueNote_type") :
-			getString("_UI_IssueNote_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_IssueNote_type") :	label;
 	}
 
 

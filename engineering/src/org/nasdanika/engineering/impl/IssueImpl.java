@@ -6,8 +6,11 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.engineering.AbstractEngineer;
@@ -341,6 +344,19 @@ public class IssueImpl extends EntityImpl implements Issue {
 	 */
 	@Override
 	public boolean isActionable() {
+		TreeIterator<EObject> tit = eAllContents();
+		while (tit.hasNext()) {
+			EObject next = tit.next();
+			if (next instanceof IssueRelationship) {
+				IssueRelationship rel = (IssueRelationship) next;
+				if (rel.getType() != null && rel.getType().isBlocks()) {
+					Issue source = rel.getSource();
+					if (source != null && !EcoreUtil.isAncestor(this, source) && (source.getResolution() == null || !source.getResolution().isCompleted())) {
+						return false;
+					}
+				}
+			}
+		}
 		for (IssueRelationship rel: getRelationships()) {
 			if (rel.getType() != null && rel.getType().isBlocks()) {
 				Issue source = rel.getSource();
@@ -354,8 +370,8 @@ public class IssueImpl extends EntityImpl implements Issue {
 				return false;
 			}
 		}
+		
 		return true;
-//		return (Boolean)eDynamicGet(EngineeringPackage.ISSUE__ACTIONABLE, EngineeringPackage.Literals.ISSUE__ACTIONABLE, true, true);
 	}
 	
 	/**

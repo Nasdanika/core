@@ -36,7 +36,7 @@ public class OrganizationImpl extends OrganizationalUnitImpl implements Organiza
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated 
 	 */
 	protected OrganizationImpl() {
 		super();
