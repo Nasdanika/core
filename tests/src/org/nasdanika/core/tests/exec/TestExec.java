@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
+import org.nasdanika.common.FilterProgressMonitor;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ObjectLoader;
@@ -31,6 +33,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.BinaryResource;
@@ -501,6 +504,11 @@ public class TestExec {
 	@Test
 	@Ignore("Don't run as part of automated build")
 	public void testGitSupplierFactory() throws Exception {
+		
+		// Effectively final results collector in enclosing scope
+		// We have single result, so just using array. Use something like beans for collecting multiple results.
+		String[] result = {null};
+		
 		ConsumerFactory<BinaryEntityContainer> onPushFactory = context -> new Consumer<BinaryEntityContainer>() {
 
 			@Override
@@ -515,7 +523,8 @@ public class TestExec {
 
 			@Override
 			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
-				System.out.println("*** On push: " + container);				
+				// Reporting result by assigning it to the result's collector only element.
+				result[0] = "*** On push: " + container;				
 			}
 			
 		};
@@ -584,6 +593,9 @@ public class TestExec {
 				}
 			}
 		}
+		
+		// We can access the result here.
+		System.out.println(result[0]);
 	}
 	
 	@Test
@@ -802,6 +814,172 @@ public class TestExec {
 
 		context = Context.singleton("number", 4);
 		assertEquals("no comprendo", Util.toString(context, callSupplier(context, monitor, progress)));		
+	}
+	
+	// Results collection
+	
+	/**
+	 * Demonstrates how to collect execution results using anonymous classes.
+	 * @throws Exception
+	 */
+	@Test
+	public void testResultCollectionAnonymousClass() throws Exception {		
+		// Results collector in enclosing scope.
+		String[] result = {null};
+		
+		ObjectLoader loader = new Loader() {
+
+			@Override
+			public Object create(ObjectLoader loader, String type, Object config, URL base,	ProgressMonitor progressMonitor, Marker marker) throws Exception {
+				
+				if ("custom-component".equals(type)) {
+					return new SupplierFactory<InputStream>() {
+
+						@Override
+						public Supplier<InputStream> create(Context context) throws Exception {
+							return new Supplier<InputStream>() {
+
+								@Override
+								public double size() {
+									return 1;
+								}
+
+								@Override
+								public String name() {
+									return "Custom content supplier";
+								}
+
+								@Override
+								public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
+									// Setting result value and returning the same value.
+									result[0] = new Date().toString(); 
+									return Util.toStream(context, result[0]);
+								}
+								
+							};
+						}
+						
+					};
+				}
+				
+				return super.create(loader, type, config, base, progressMonitor, marker);
+			}
+			
+		};
+		
+		// Execution
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("results-collection.yml"), monitor);
+				
+		File outDir = new File("target" + File.separator + "test-output" + File.separator + "results-collection" + File.separator + "anonymous");
+		outDir.mkdirs();
+		Context context = Context.EMPTY_CONTEXT;		
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		callConsumer(context, monitor, container, out);
+		
+		// Accessing result
+		System.out.println(result[0]);
+	}
+	
+	@Test
+	public void testResultCollectionCustomSupplierAndLoader() throws Exception {		
+		// Results consumer.
+		java.util.function.Consumer<String> resultsConsumer = System.out::println;
+		
+		ObjectLoader loader = new CustomLoader(resultsConsumer, new Loader());
+		
+		// Execution
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("results-collection.yml"), monitor);
+				
+		File outDir = new File("target" + File.separator + "test-output" + File.separator + "results-collection" + File.separator + "custom-supplier-and-loader");
+		outDir.mkdirs();
+		Context context = Context.EMPTY_CONTEXT;		
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		callConsumer(context, monitor, container, out);
+	}
+
+	@Test
+	public void testResultCollectionService() throws Exception {		
+		// Results collector.
+		ResultsCollector resultCollector = new ResultsCollector() {
+			
+			@Override
+			public void onMyResult(String result) {
+				System.out.println("*** My result: " + result);
+				
+			}
+		};
+		
+		ObjectLoader loader = new CustomLoaderTwo(new Loader());
+		
+		// Execution
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("results-collection.yml"), monitor);
+				
+		File outDir = new File("target" + File.separator + "test-output" + File.separator + "results-collection" + File.separator + "context-service");
+		outDir.mkdirs();
+		Context context = Context.singleton(ResultsCollector.class, resultCollector);		
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		callConsumer(context, monitor, container, out);
+	}
+
+	@Test
+	public void testResultCollectionProperty() throws Exception {				
+		ObjectLoader loader = new CustomLoaderThree(new Loader());
+		
+		// Execution
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("results-collection.yml"), monitor);
+				
+		File outDir = new File("target" + File.separator + "test-output" + File.separator + "results-collection" + File.separator + "context-property");
+		outDir.mkdirs();
+		Context context = Context.singleton("results-collector", (java.util.function.Consumer<String>) System.out::println);		
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		callConsumer(context, monitor, container, out);
+	}
+	
+
+	@Test
+	public void testResultCollectionProgressMonitor() throws Exception {				
+		ObjectLoader loader = new CustomLoaderFour(new Loader());
+		
+		// Execution
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object container = loader.loadYaml(TestExec.class.getResource("results-collection.yml"), monitor);
+				
+		File outDir = new File("target" + File.separator + "test-output" + File.separator + "results-collection" + File.separator + "progress-monitor");
+		outDir.mkdirs();
+		Context context = Context.EMPTY_CONTEXT;		
+		FileSystemContainer out = new FileSystemContainer(outDir);
+		
+		class FilterMonitor extends FilterProgressMonitor {
+			
+			public FilterMonitor(ProgressMonitor target) {
+				super(target);
+			}
+
+			@Override
+			public void worked(Status status, double work, String progressMessage, Object... data) {				
+				if (Status.SUCCESS == status 
+						&& data != null 
+						&& data.length == 2 
+						&& CustomSupplierFactoryFour.class.isInstance(data[0])) {
+					
+					System.out.println("Gotcha: " + data[1]);
+				}
+				super.worked(status, work, progressMessage, data);
+			}
+			
+			@Override
+			public ProgressMonitor split(String taskName, double size, Object... data) {
+				return new FilterMonitor(super.split(taskName, size, data));
+			}
+			
+		}
+		
+		// Filtering worked notification to get to what we need by analyzing arguments, e.g. data.
+		callConsumer(context, new FilterMonitor(monitor), container, out);
 	}
 	
 }

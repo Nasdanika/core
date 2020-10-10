@@ -1,0 +1,5 @@
+# Testing container and file
+file:
+   name: hello.txt
+   contents:
+      custom-component: {}
