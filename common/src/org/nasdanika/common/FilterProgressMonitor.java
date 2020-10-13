@@ -15,7 +15,9 @@ public class FilterProgressMonitor implements ProgressMonitor {
 	}
 
 	@Override
-	public void close() {}
+	public void close() {
+		target.close();
+	}
 
 	@Override
 	public boolean isCancelled() {
