@@ -1,9 +1,18 @@
 package org.nasdanika.sirius;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.sirius.business.api.session.Session;
 import org.eclipse.sirius.properties.EditSupport;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NcorePackage;
@@ -12,6 +21,30 @@ import org.nasdanika.ncore.NcorePackage;
  * Base class for Sirius services with common methods.
  */
 public class CommonServices {
+	
+	/**
+	 * Allows to hide features in property views by returning only features which have corresponding property descriptors.
+	 * @param self
+	 * @param features
+	 * @param session
+	 * @return Features which have corresponding property descriptors. 
+	 */
+	public List<EStructuralFeature> getProperties(EObject self, List<EStructuralFeature> features, Object session) {
+		if (session instanceof Session) {
+			TransactionalEditingDomain domain = ((Session) session).getTransactionalEditingDomain();
+			if (domain instanceof AdapterFactoryEditingDomain) {
+				AdapterFactory adapterFactory = ((AdapterFactoryEditingDomain) domain).getAdapterFactory();
+				Adapter propertySource = adapterFactory.adapt(self, IItemPropertySource.class);
+				if (propertySource instanceof IItemPropertySource) {
+					IItemPropertySource ps = (IItemPropertySource) propertySource;
+					List<Object> propertyFeatures = ps.getPropertyDescriptors(self).stream().map(pd -> pd.getFeature(self)).collect(Collectors.toList());
+					return features.stream().filter(propertyFeatures::contains).collect(Collectors.toList());
+				}
+			}
+		}
+		
+		return features;		
+	}
     
     public boolean isSelect(EObject self, EditSupport editSupport, EStructuralFeature feature) {
     	try {
