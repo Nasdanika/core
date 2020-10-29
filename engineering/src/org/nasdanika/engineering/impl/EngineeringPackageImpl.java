@@ -1625,6 +1625,7 @@ public class EngineeringPackageImpl extends EPackageImpl implements EngineeringP
 		personaEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		needCategoryEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		needCategoryEClass.getESuperTypes().add(this.getNeedCategoryElement());
+		needEClass.getESuperTypes().add(theNcorePackage.getEntity());
 		needEClass.getESuperTypes().add(this.getNeedCategoryElement());
 		scenarioEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		criterionEClass.getESuperTypes().add(theNcorePackage.getModelElement());

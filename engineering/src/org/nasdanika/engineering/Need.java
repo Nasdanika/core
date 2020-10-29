@@ -3,6 +3,7 @@
 package org.nasdanika.engineering;
 
 import org.eclipse.emf.common.util.EList;
+import org.nasdanika.ncore.Entity;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Need extends NeedCategoryElement {
+public interface Need extends Entity, NeedCategoryElement {
 
 	/**
 	 * Returns the value of the '<em><b>Scenarios</b></em>' containment reference list.

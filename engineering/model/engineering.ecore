@@ -402,7 +402,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Need" eSuperTypes="#//NeedCategoryElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Need" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Entity #//NeedCategoryElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Personas have needs which may be satisfied by organization offerings. Needs can be organized into a hierarchy and assigned weights either manually or using decision analysis techniques. Needs may be satisfied by offerings via scenarios explaining how a need is satisfied.&#xA;&#xA;Must have, need to have, delighter - here or at the offering level?"/>
     </eAnnotations>

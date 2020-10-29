@@ -10,17 +10,12 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.nasdanika.engineering.EngineeringFactory;
 import org.nasdanika.engineering.EngineeringPackage;
 import org.nasdanika.engineering.Need;
-import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
+import org.nasdanika.ncore.provider.EntityItemProvider;
 
 /**
  * This is the item provider adapter for a {@link org.nasdanika.engineering.Need} object.
@@ -29,7 +24,7 @@ import org.nasdanika.ncore.provider.NcoreItemProviderAdapter;
  * @generated
  */
 public class NeedItemProvider 
-	extends NcoreItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+	extends EntityItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -110,11 +105,14 @@ public class NeedItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_Need_type");
+		String label = ((Need)object).getTitle();
+		return label == null || label.length() == 0 ?
+			getString("_UI_Need_type") :
+			getString("_UI_Need_type") + " " + label;
 	}
 
 

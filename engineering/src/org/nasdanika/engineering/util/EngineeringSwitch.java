@@ -316,7 +316,9 @@ public class EngineeringSwitch<T> extends Switch<T> {
 			case EngineeringPackage.NEED: {
 				Need need = (Need)theEObject;
 				T result = caseNeed(need);
+				if (result == null) result = caseEntity(need);
 				if (result == null) result = caseNeedCategoryElement(need);
+				if (result == null) result = caseModelElement(need);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

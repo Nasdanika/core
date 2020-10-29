@@ -2446,13 +2446,40 @@ public interface EngineeringPackage extends EPackage {
 	int NEED_CATEGORY_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Title</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NEED__TITLE = NcorePackage.ENTITY__TITLE;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NEED__DESCRIPTION = NcorePackage.ENTITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NEED__ID = NcorePackage.ENTITY__ID;
+
+	/**
 	 * The feature id for the '<em><b>Scenarios</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NEED__SCENARIOS = NEED_CATEGORY_ELEMENT_FEATURE_COUNT + 0;
+	int NEED__SCENARIOS = NcorePackage.ENTITY_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Need</em>' class.
@@ -2461,7 +2488,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NEED_FEATURE_COUNT = NEED_CATEGORY_ELEMENT_FEATURE_COUNT + 1;
+	int NEED_FEATURE_COUNT = NcorePackage.ENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Need</em>' class.
@@ -2470,7 +2497,7 @@ public interface EngineeringPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NEED_OPERATION_COUNT = NEED_CATEGORY_ELEMENT_OPERATION_COUNT + 0;
+	int NEED_OPERATION_COUNT = NcorePackage.ENTITY_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Title</b></em>' attribute.
