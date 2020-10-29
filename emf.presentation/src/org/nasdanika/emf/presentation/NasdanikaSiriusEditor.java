@@ -14,7 +14,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -42,6 +46,7 @@ import org.eclipse.emf.common.ui.viewer.ColumnViewerInformationControlToolTipSup
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -70,6 +75,7 @@ import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.util.LocalSelectionTransfer;
@@ -106,9 +112,13 @@ import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
@@ -133,6 +143,9 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.nasdanika.common.Util;
+import org.nasdanika.emf.edit.EReferenceItemProvider;
+import org.nasdanika.emf.edit.SingleReferenceSelectionDialog;
 
 
 /**
@@ -707,6 +720,23 @@ public class NasdanikaSiriusEditor
 		// Creates the model from the editor input
 		//
 		createModel();
+		
+		Composite filterComposite = new Composite(getContainer(), SWT.NONE);
+
+		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
+		
+		filterComposite.setLayout(gridLayout);
+		filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		
+		Label lblFilter = new Label(filterComposite, SWT.NONE);
+		lblFilter.setText("Filter:");
+		
+		Text filterText = new Text(filterComposite, SWT.BORDER);
+		filterText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
+
+		IObservableValue<String> textModifyObservable = WidgetProperties.text(SWT.Modify).observeDelayed(700, filterText);		
 
 		viewerPane =
 			new ViewerPane(getSite().getPage(), NasdanikaSiriusEditor.this) {
@@ -722,7 +752,9 @@ public class NasdanikaSiriusEditor
 					setCurrentViewerPane(this);
 				}
 			};
-		viewerPane.createControl(getContainer());
+		viewerPane.createControl(filterComposite);
+		
+		viewerPane.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
 		selectionViewer = (TreeViewer)viewerPane.getViewer();
 		
@@ -742,7 +774,94 @@ public class NasdanikaSiriusEditor
 			}
 			
 		};
+		
 		selectionViewer.setLabelProvider(new DecoratingColumLabelProvider(labelProvider, new DiagnosticDecorator(getEditingDomain(), selectionViewer, NasdanikaEditorPlugin.getPlugin().getDialogSettings())));
+				
+		Predicate<Object> predicate = element -> {
+			String fText = textModifyObservable.getValue();
+			if (Util.isBlank(fText)) {
+				return true;
+			}
+			String eText = labelProvider.getText(element);
+			if (eText == null) {
+				return true;
+			}
+			if (eText.toLowerCase().contains(fText.trim().toLowerCase())) {
+				return true;
+			}
+			return false;
+		};		
+		
+		ViewerFilter filter = new ViewerFilter() {
+			
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (Util.isBlank(textModifyObservable.getValue())) {
+					return true;
+				}
+				
+				if (element instanceof Resource) {
+					return true;
+				}
+				
+				if (element instanceof EObject) {
+					if (predicate.test(element)) {
+						return true;
+					}
+					TreeIterator<EObject> tit = ((EObject) element).eAllContents();
+					while (tit.hasNext()) {
+						if (predicate.test(tit.next())) {
+							return true;
+						}
+					}
+				}
+				
+				if (element instanceof EReferenceItemProvider) {
+					EReferenceItemProvider eReferenceItemProvider = (EReferenceItemProvider) element;
+					if (predicate.test(eReferenceItemProvider.getTarget())) {
+						return true; // For editing convenience.
+					}
+					for (Object child: eReferenceItemProvider.getChildren(eReferenceItemProvider.getTarget())) {
+						if (select(viewer, element, child)) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			
+		};
+		
+		selectionViewer.addFilter(filter);
+		
+		IValueChangeListener<String> listener = new IValueChangeListener<String>() {
+			
+			@Override
+			public void handleValueChange(ValueChangeEvent<? extends String> event) {
+				selectionViewer.refresh();
+				Object input = selectionViewer.getInput();
+				if (!Util.isBlank(textModifyObservable.getValue())) {
+					TreeIterator<EObject> tit = null;
+					if (input instanceof Resource) {
+						tit = ((Resource) input).getAllContents();
+					} else if (input instanceof EObject) {
+						tit = ((EObject) input).eAllContents();
+					}
+					
+					if (tit != null) {
+						while (tit.hasNext()) {
+							EObject next = tit.next();
+							if (predicate.test(next)) {
+								selectionViewer.reveal(next);							
+							}
+						}
+					}
+				}
+			}
+			
+		};
+		
+		textModifyObservable.addValueChangeListener(listener);		
 
 		setSelectionViewerInput();
 		
@@ -753,8 +872,10 @@ public class NasdanikaSiriusEditor
 		new ColumnViewerInformationControlToolTipSupport(selectionViewer, new DiagnosticDecorator.EditingDomainLocationListener(getEditingDomain(), selectionViewer));
 
 		createContextMenuFor(selectionViewer);
-		int pageIndex = addPage(viewerPane.getControl());
+		int pageIndex = addPage(filterComposite); // Consider having an optional collapsible panel above the viewerPane filled out by contributors, e.g. filters or search.
 		setPageText(pageIndex, getString("_UI_SelectionPage_label"));
+			
+		// Contribute representation-specific pages here, e.g. filter configurations.
 
 		getSite().getShell().getDisplay().asyncExec
 			(new Runnable() {
