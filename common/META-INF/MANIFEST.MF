@@ -6,6 +6,7 @@ Bundle-Version: 2020.12.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.common,
+ org.nasdanika.common.descriptors,
  org.nasdanika.common.persistence,
  org.nasdanika.common.resources
 Bundle-ClassPath: .

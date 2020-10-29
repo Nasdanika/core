@@ -81,7 +81,7 @@ public class Loader extends ObjectLoader {
 			case "reference": // Referencing another spec to load
 				return new Reference(loader, config, base, subMonitor, marker);
 			case "group": // Both resource and content, is it needed - iterator and map shall do?
-				throw new UnsupportedOperationException();
+				return new Group(loader, config, base, subMonitor, marker);
 			case "block": 
 				return new Block(loader, config, base, subMonitor, marker);
 			case "info": 

@@ -209,7 +209,6 @@ public class Mapper implements Adaptable, Marked {
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
-		int idx = 0;
 		for (Object te: targets) {
 			ret.add(Loader.asSupplierFactory(te).create(context));
 		}

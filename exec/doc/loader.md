@@ -1,12 +1,13 @@
 Loader supports the following types:
 
-* General - control flow and context manipulation components. Can be adapted to both supplier and consumer factories and as such can be used both as resource and as content generators:
+* General - control flow, input validation, and context manipulation components. Can be adapted to both supplier and consumer factories and as such can be used both as resource and as content generators:
     * ``block`` - [Block](block.html) - try-catch-finally block.
     * ``configure`` - [Configurator](configurator.html) - Adds or overrides context properties.
     * ``error`` - [Error](error.html) - Reports an error to progress monitor.
     * ``eval`` - [Eval](eval.html) - Evaluates JavaScript code.
     * ``fail`` - [Fail](fail.html) - Fails execution with a specified message.
     * ``for-each`` - [Iterator](iterator.html) - execute child components zero or more times with different contexts.
+    * ``group`` - [Group](group.html) - a collection of components with input specification. Input specification is used for validating context entries and can also be used to generate UI for collecting user input.
     * ``if`` - [If](if.html) - if-then-else conditional execution.
     * ``info`` - [Info](info.html) - Reports an informational message to progress monitor.
     * ``(map)`` - [Map cast](map-cast.html) - Forces content to be treated as a map even if there is a single entry, which by default is treated as an object definition.

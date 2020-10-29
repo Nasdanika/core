@@ -43,6 +43,7 @@ import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.Fail;
+import org.nasdanika.exec.Group;
 import org.nasdanika.exec.If;
 import org.nasdanika.exec.Iterator;
 import org.nasdanika.exec.Loader;
@@ -939,7 +940,6 @@ public class TestExec {
 		callConsumer(context, monitor, container, out);
 	}
 	
-
 	@Test
 	public void testResultCollectionProgressMonitor() throws Exception {				
 		ObjectLoader loader = new CustomLoaderFour(new Loader());
@@ -981,5 +981,17 @@ public class TestExec {
 		// Filtering worked notification to get to what we need by analyzing arguments, e.g. data.
 		callConsumer(context, new FilterMonitor(monitor), container, out);
 	}
+	
+	@Test
+	public void testGroup() throws Exception {				
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object group = loader.loadYaml(TestExec.class.getResource("group-spec.yml"), monitor);
+		assertEquals(Group.class, group.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		
+		System.out.println(Util.toString(context, callSupplier(context, monitor, group)));
+	}	
 	
 }

@@ -1,0 +1,5 @@
+group: 
+   input:
+       properties:
+           name: {}
+   elements: Hello, ${name}!

@@ -59,8 +59,7 @@ public class BasicDiagnostic implements Diagnostic, DiagnosticChain, Composeable
 	public List<Diagnostic> getChildren() {
 		return children;
 	}
-	
-	
+		
 	/**
 	 * If the diagnostic has {@link Diagnostic#getChildren children}, {@link #addAll add}s those children, otherwise, {@link #add add}s the diagnostic.
 	 */
