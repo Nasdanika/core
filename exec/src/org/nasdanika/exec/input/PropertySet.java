@@ -10,8 +10,12 @@ import java.util.Map.Entry;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.MutableContext;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.descriptors.Descriptor;
+import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
@@ -42,7 +46,7 @@ public class PropertySet implements Marked {
 	private static final String VALIDATIONS_KEY = "validations";
 
 	@SuppressWarnings("unchecked")
-	public PropertySet(String name, Object config, URL base, Marker marker) {
+	public PropertySet(String prefix, String name, Object config, URL base, Marker marker) {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
@@ -59,7 +63,8 @@ public class PropertySet implements Marked {
 					VALIDATIONS_KEY);
 			
 			description = Util.getString(configMap, DESCRIPTION_KEY, null);
-			this.name = Util.getString(configMap, NAME_KEY, name);
+			String theName = Util.getString(configMap, NAME_KEY, name);
+			this.name = theName == null ? prefix : (prefix == null ? "" : prefix) + theName;
 			icon = Util.getString(configMap, ICON_KEY, null);
 			label = Util.getString(configMap, LABEL_KEY, null);
 			
@@ -86,24 +91,25 @@ public class PropertySet implements Marked {
 						if (pe.getValue() instanceof Map) {
 							Map<String, Object> propMap = (Map<String,Object>) pe.getValue();
 							if (propMap.containsKey(PROPERTIES_KEY)) {
-								properties.add(new PropertySet(pe.getKey(), propMap, base, propMarker));
+								properties.add(new PropertySet(name, pe.getKey(), propMap, base, propMarker));
 							} else {
-								properties.add(new Property(pe.getKey(), propMap, base, propMarker));
+								properties.add(new Property(name, pe.getKey(), propMap, base, propMarker));
 							}
 						} else {
 							throw new ConfigurationException("Properties values shall be maps, got " + props.getClass(), propMarker);							
 						}
 					}
 				} else if (props instanceof Collection) {
+					// TODO - detect duplicate property names.
 					int idx = 0;
 					for (Object pe: (Collection<Object>) props) {
 						Marker propMarker = Util.getMarker((Collection<Object>) props, idx++);
 						if (pe instanceof Map) {
 							Map<String, Object> propMap = (Map<String,Object>) pe;
 							if (propMap.containsKey(PROPERTIES_KEY)) {
-								properties.add(new PropertySet(null, pe, base, propMarker));
+								properties.add(new PropertySet(name, null, pe, base, propMarker));
 							} else {
-								properties.add(new Property(null, pe, base, propMarker));
+								properties.add(new Property(name, null, pe, base, propMarker));
 							}
 						} else {
 							throw new ConfigurationException("Properties values shall be maps, got " + props.getClass(), propMarker);							
@@ -136,9 +142,107 @@ public class PropertySet implements Marked {
 	public Marker getMarker() {
 		return marker;
 	}
+	
+	public Object getPropertyDefaultValue(Context context, String propertyName) {
+		// TODO - conditions?
+		// TODO - interpolation of the default value
+		for (Object p: properties) {
+			if (p instanceof Property) {
+				Property property = (Property) p;
+				if (property.getName().equals(propertyName)) {
+					return property.getDefaultValue();
+				}				
+			} else if (p instanceof PropertySet) {
+				PropertySet propertySet = (PropertySet) p;
+				String psn = propertySet.getName();
+				if (Util.isBlank(psn)) {
+					Object ret = propertySet.getPropertyDefaultValue(context, propertyName);
+					if (ret != null) {
+						return ret;
+					}
+				} else if (propertyName.startsWith(psn)) {
+					Object ret = propertySet.getPropertyDefaultValue(context, propertyName.substring(psn.length()));
+					if (ret != null) {
+						return ret;
+					}					
+				}
+			}
+		}
+		return null;
+	}
 
-	public Diagnostic diagnose(Context arg) {
-		return new BasicDiagnostic(Status.ERROR, "Diagnostic of "+this, this);
+	public String getName() {
+		return name;
+	}
+
+	public Diagnostic diagnose(Context context) {
+		BasicDiagnostic ret = new BasicDiagnostic(Status.SUCCESS, "Diagnostic of property set "+(name == null ? "" : name), this);
+		// TODO - conditions
+		
+		for (Object p: properties) {
+			if (p instanceof Property) {
+				ret.add(((Property) p).diagnose(context));				
+			} else if (p instanceof PropertySet) {
+				ret.add(((PropertySet) p).diagnose(context));
+			}
+		}
+		
+		// TODO - validations
+		
+		// TODO - services
+		
+		return ret;
+	}	
+	
+	/**
+	 * Creates a {@link DescriptorSet} from this property set backed by the {@link MutableContext} passed as an argument.
+	 * @param context
+	 * @return
+	 */
+	public DescriptorSet createDescriptorSet(MutableContext context) {
+		return new DescriptorSet() {
+			
+			@Override
+			public boolean isEnabled() {
+				// TODO evaluate conditions
+				return true;
+			}
+			
+			@Override
+			public String getLabel() {
+				return label;
+			}
+			
+			@Override
+			public String getIcon() {
+				return icon;
+			}
+			
+			@Override
+			public String getDescription() {
+				return description;
+			}
+			
+			@Override
+			public List<Descriptor> getDescriptors() {
+				List<Descriptor> ret = new ArrayList<>();
+				for (Object p: properties) {
+					if (p instanceof Property) {
+						ret.add(((Property) p).createPropertyDescriptor(context));				
+					} else if (p instanceof PropertySet) {
+						ret.add(((PropertySet) p).createDescriptorSet(context));
+					}
+				}
+				
+				return ret;
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return PropertySet.this.diagnose(context);
+			}
+			
+		};
 	}	
 
 }

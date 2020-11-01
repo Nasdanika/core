@@ -990,6 +990,7 @@ public class TestExec {
 		assertEquals(Group.class, group.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;
+//		Context context = Context.singleton("name", new String[] {"Universe", "Galaxy", "Quadrant", "Parsec"});
 		
 		System.out.println(Util.toString(context, callSupplier(context, monitor, group)));
 	}	

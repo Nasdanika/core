@@ -61,7 +61,7 @@ Supported keys:
 * ``choices`` - property value choices. List or map - see details below.    
 * ``conditions`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
-* ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Control may also evaluate to the UI-specific control generator, e.g. by using a context property. Supported string values:
+* ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Supported string values:
     * ``date`` - date control.
     * ``time`` - time control.
     * ``drop-down`` - for fixed arity properties with choices.
@@ -70,7 +70,8 @@ Supported keys:
     * ``number`` - for numeric properties.
     * ``password`` - single-line masked text.
     * ``radio`` - for fixed arity properties with choices.
-    * ``text`` - for fixed arity properties without choices. Optionally can specify number of lines after a dash. E.g. ``text-5``.
+    * ``text`` - single-line for fixed arity properties without choices. 
+    * ``text-area`` - multi-line for fixed arity properties without choices. 
 * ``default-value`` - property default value - a single value or a list.
 * ``description`` - optional property description.
 * ``editable`` - if ``false`` property control shall be rendered as read-only. Default is ``true``.      

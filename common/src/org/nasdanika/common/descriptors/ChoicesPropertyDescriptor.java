@@ -1,5 +1,5 @@
 package org.nasdanika.common.descriptors;
 
-public interface ChoicesPropertyDescriptor<T> extends PropertyDescriptor<T>, ChoicesValueDescriptor<T> {
+public interface ChoicesPropertyDescriptor extends PropertyDescriptor, ChoicesValueDescriptor {
 	
 }

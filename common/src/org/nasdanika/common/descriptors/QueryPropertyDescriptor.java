@@ -1,5 +1,5 @@
 package org.nasdanika.common.descriptors;
 
-public interface QueryPropertyDescriptor<T> extends PropertyDescriptor<T>, QueryValueDescriptor<T> {
+public interface QueryPropertyDescriptor extends PropertyDescriptor, QueryValueDescriptor {
 	
 }

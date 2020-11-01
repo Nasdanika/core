@@ -1,6 +1,6 @@
 package org.nasdanika.common.descriptors;
 
-public interface QueryValueDescriptor<T> extends ValueDescriptor<T> {
+public interface QueryValueDescriptor extends ValueDescriptor {
 	
 	/**
 	 * @return A _LegacyCommandToRemove descriptor to execute query/lookup _LegacyCommandToRemove returning a list of choices.

@@ -58,7 +58,7 @@ public class Group implements Adaptable, Marked {
 				throw new ConfigurationException("Elements key is missing", marker);
 			}
 			if (configMap.containsKey(INPUT_KEY)) {
-				input = new PropertySet(null, configMap.get(INPUT_KEY), base, marker);
+				input = new PropertySet(null, null, configMap.get(INPUT_KEY), base, marker);
 			}
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
@@ -97,66 +97,35 @@ public class Group implements Adaptable, Marked {
 		
 		return Adaptable.super.adaptTo(type);
 	}	
+	
+	private Context filterContext(Context context) {
+		if (input == null) {
+			return context;
+		}
 		
-	/**
-	 * Supplier of context with {@link Exception} "service" indicating that the catch block shall be executed. 
-	 * @param context
-	 * @param eRef
-	 * @return
-	 */
-	protected org.nasdanika.common.Supplier<Context> createInputContextSupplier(Context context) {
-		return new Supplier<Context>() {
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return "Input context";
-			}
-
-			@Override
-			public Context execute(ProgressMonitor progressMonitor) throws Exception {
-				return new Context() {
-
-					@Override
-					public Object get(String key) {
-						// TODO
-						return null;
-					}
-
-					@Override
-					public <T> T get(Class<T> type) {
-						// TODO?
-						return null;
-					}
-					
-				}.compose(context);
-				
-			}
-			
-		};
-		
+		// Referencing return value for interpolation in getPropertyDefaultValue in order to have access to 
+		// this input properties.
+		Context[] ret = {null};
+		ret[0] = context.compose(Context.wrap(name -> input.getPropertyDefaultValue(ret[0], name)));
+		return ret[0];
 	}
 	
 	// --- Command ---	
 		
 	private Command createCommand(Context context) throws Exception {
-		return Loader.asCommandFactory(elements).contextify(this::createInputContextSupplier).create(context);
+		return Loader.asCommandFactory(elements).create(filterContext(context));
 	}
 	
 	// --- Consumer ---	
 		
 	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
-		return Loader.asConsumerFactory(elements).contextify(this::createInputContextSupplier).create(context);
+		return Loader.asConsumerFactory(elements).create(filterContext(context));
 	}
 		
 	// --- Supplier ---	
 		
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
-		Supplier<InputStream> elementsSupplier = Loader.asSupplierFactory(elements).contextify(this::createInputContextSupplier).create(context);
+		Supplier<InputStream> elementsSupplier = Loader.asSupplierFactory(elements).create(filterContext(context));
 		return new FilterSupplier<InputStream>(elementsSupplier) {
 			
 			@Override
