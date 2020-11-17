@@ -9,7 +9,8 @@ Configuration keys:
 * ``success-code`` - Success code, defaults to ``200``.
 * ``connect-timeout`` - Connect timeout in seconds. Defaults to ``60``.
 * ``read-timeout`` - Read timeout in seconds. Defaults to ``60``.
-
+* ``trust-all-certificates`` - if ``true`` all SSL certificates are trusted. Default is ``false``. Can be used with self-signed certificates.
+* ``verify-host`` - if ``false`` host name is not verified when establishing an SSL connection. Default is ``true``. 
 
 ### Example
 

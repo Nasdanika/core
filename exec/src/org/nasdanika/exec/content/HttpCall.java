@@ -7,9 +7,18 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.cert.X509Certificate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
@@ -41,6 +50,8 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 	private static final String SUCCESS_CODE_KEY = "success-code";
 	private static final String CONNECT_TIMEOUT_KEY = "connect-timeout";
 	private static final String READ_TIMEOUT_KEY = "read-timeout";
+	private static final String VERIFY_HOST_KEY = "verify-host";
+	private static final String TRUST_ALL_CERTIFICATES_KEY = "trust-all-certificates";
 
 	protected String method = "GET";
 	protected SupplierFactory<InputStream> body;
@@ -52,6 +63,10 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 	protected int successCode = 200;
 	protected int connectTimeout = 60;
 	protected int readTimeout = 60;
+	
+	protected boolean verifyHost = true;
+	
+	private SSLSocketFactory sslSocketFactory;
 	
 	@Override
 	public Marker getMarker() {
@@ -66,7 +81,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			this.url = (String) config;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, METHOD_KEY, URL_KEY, HEADERS_KEY, BODY_KEY, SUCCESS_CODE_KEY, CONNECT_TIMEOUT_KEY, READ_TIMEOUT_KEY);			
+			Loader.checkUnsupportedKeys(configMap, METHOD_KEY, URL_KEY, HEADERS_KEY, BODY_KEY, SUCCESS_CODE_KEY, CONNECT_TIMEOUT_KEY, READ_TIMEOUT_KEY, VERIFY_HOST_KEY, TRUST_ALL_CERTIFICATES_KEY);			
 			if (configMap.containsKey(METHOD_KEY)) {
 				Object methodObj = configMap.get(METHOD_KEY);
 				if (methodObj instanceof String) {
@@ -130,6 +145,31 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 					throw new ConfigurationException(READ_TIMEOUT_KEY + " value must be a number", Util.getMarker(configMap, READ_TIMEOUT_KEY));
 				}
 			}			
+			
+			if (configMap.containsKey(VERIFY_HOST_KEY)) {
+				verifyHost = Boolean.TRUE.equals(configMap.get(VERIFY_HOST_KEY));
+			}
+			
+			if (configMap.containsKey(TRUST_ALL_CERTIFICATES_KEY) && Boolean.TRUE.equals(configMap.get(TRUST_ALL_CERTIFICATES_KEY))) {				
+				TrustManager[ ] trustAUCerts = new TrustManager[ ] { 
+						new X509TrustManager() {
+							public java.security.cert.X509Certificate[] getAcceptedIssuers() { 
+								return new X509Certificate[0]; 
+							}
+							
+							public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+							}
+							
+							public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
+							}
+						}
+					};
+					
+				SSLContext allTrustingSSLContext = SSLContext.getInstance("SSL");
+				allTrustingSSLContext.init(null, trustAUCerts, new java.security.SecureRandom());
+				sslSocketFactory = allTrustingSSLContext.getSocketFactory();				
+			}
+			
 		} else {
 			throw new ConfigurationException("HTTP call configuration shall be a string or a map, got " + config.getClass(), marker);
 		}
@@ -221,6 +261,19 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			httpConnection.setConnectTimeout(connectTimeout * 1000); 
 			httpConnection.setReadTimeout(readTimeout * 1000);
 			
+			if (httpConnection instanceof HttpsURLConnection) {
+				HttpsURLConnection httpsConnection = (HttpsURLConnection) httpConnection;
+				HostnameVerifier hostNameVerifier = getHostNameVerifier();
+				if (hostNameVerifier != null) {
+					httpsConnection.setHostnameVerifier(hostNameVerifier);
+				}
+				
+				SSLSocketFactory sslSocketFactory = getSSLSocketFactory();
+				if (sslSocketFactory != null) {
+					httpsConnection.setSSLSocketFactory(sslSocketFactory);
+				}
+			}
+			
 			subMonitor.worked(1, "Open connection");
 					
 			if (body != null) {
@@ -244,6 +297,24 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			String location = marker == null ? "" : " at " + marker;
 			throw new NasdanikaException("HTTP Call to "+theURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
 		}
+	}
+
+	protected SSLSocketFactory getSSLSocketFactory() throws Exception {
+		return sslSocketFactory;
+	}
+
+	protected HostnameVerifier getHostNameVerifier() {
+		if (verifyHost) {
+			return null;
+		}
+		return new HostnameVerifier() {
+			
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+			
+		};
 	}	
 
 }
