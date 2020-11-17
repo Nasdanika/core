@@ -30,6 +30,7 @@ All configuration values are interpolated with input.
         * ``start-point`` - branch start point, optional. If not provided then it is the same as string branch specification and a new branch will be started off the current ``HEAD``. If provided, the interpolated value will be used as branch start point. Start point is ignored for existing branches.
 * ``clean`` - If true the repo directory is cleaned up before any other operation, i.e. it is always clone.
 * ``commit-message`` - Commit message.
+* ``config`` - [Git configuration](https://git-scm.com/docs/git-config) 3-level map - section, sub-section, name. See example below.
 * ``contents`` - Resource components creating/modifying repository contents.
 * ``credentials`` - Credentials for clone/pull/push.
     * ``user`` - User name.
@@ -40,6 +41,15 @@ On-push behavior can also be introduced via creating a custom Git component by s
 * ``origin`` - Origin to pull from if repoDir is null or does not exist. If origin is not null then a push is performed after commit.
 * ``repository`` - Git repository working directory. If null then a temporary directory is created. In this case origin must be provided for cloning.
 * ``tag`` - Optional tag for the commit.
+
+#### Config example
+
+```yaml
+   config:
+      http:
+         "https://github.com": 
+            sslVerify: false            
+```
 
 ### Example
 

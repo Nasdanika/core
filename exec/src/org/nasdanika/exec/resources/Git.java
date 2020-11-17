@@ -3,8 +3,11 @@ package org.nasdanika.exec.resources;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.transport.PushResult;
 import org.nasdanika.common.Command;
 import org.nasdanika.common.CommandFactory;
@@ -67,6 +70,7 @@ public class Git implements CommandFactory, Marked {
 	private static final String MERGER_KEY = "merger";
 	private static final String CLEAN_KEY = "clean";
 	private static final String ON_PUSH_KEY = "on-push";
+	private static final String CONFIG_KEY = "config";
 	
 	protected Collection<String> getSupportedKeys() {
 		Collection<String> ret = new ArrayList<>();
@@ -84,6 +88,7 @@ public class Git implements CommandFactory, Marked {
 		ret.add(MERGER_KEY);
 		ret.add(CLEAN_KEY);
 		ret.add(ON_PUSH_KEY);
+		ret.add(CONFIG_KEY);
 		return ret;
 	}	
 		
@@ -137,6 +142,35 @@ public class Git implements CommandFactory, Marked {
 				}
 				
 				ConsumerFactory<BinaryEntityContainer> onPushFactory = configMap.containsKey(ON_PUSH_KEY) ? Loader.asConsumerFactory(loader.load(configMap.get(ON_PUSH_KEY), base, progressMonitor), Util.getMarker(configMap, ON_PUSH_KEY)) : null;
+				
+				java.util.function.Consumer<org.eclipse.jgit.api.Git> gitConfigurator = null;
+				
+				if (configMap.containsKey(CONFIG_KEY)) {
+					Map<String, Map<String, Map<String, Object>>> gitConfigMap = Util.getMap(configMap, CONFIG_KEY, null);
+					gitConfigurator = git -> {						
+						StoredConfig gitConfig = git.getRepository().getConfig();
+						for (Entry<String, Map<String, Map<String, Object>>> se: gitConfigMap.entrySet()) {							
+							for (Entry<String, Map<String, Object>> sse: se.getValue().entrySet()) {
+								for (Entry<String, Object> ne: sse.getValue().entrySet()) {
+									Object value = ne.getValue();
+									if (value instanceof Boolean) {
+										gitConfig.setBoolean(se.getKey(), sse.getKey(), ne.getKey(), (Boolean) value);
+									} else if (value instanceof Integer) {
+										gitConfig.setInt(se.getKey(), sse.getKey(), ne.getKey(), (Integer) value);										
+									} else if (value instanceof Long) {
+										gitConfig.setLong(se.getKey(), sse.getKey(), ne.getKey(), (Long) value);
+									} else if (value instanceof String) {
+										gitConfig.setString(se.getKey(), sse.getKey(), ne.getKey(), (String) value);										
+									} else if (value instanceof List) {
+										gitConfig.setStringList(se.getKey(), sse.getKey(), ne.getKey(), (List<String>) value);										
+									} else {
+										throw new ConfigurationException("Unsupported configuration value type: " + value.getClass(), Util.getMarker(sse.getValue(), ne.getKey()));
+									}
+								}
+							}
+						}						
+					};
+				}
 								
 				SupplierFactory<BinaryEntityContainer> repoFactory = new GitBinaryEntityContainerSupplierFactory(
 						"Git", 
@@ -153,6 +187,7 @@ public class Git implements CommandFactory, Marked {
 						author == null ? null : Util.getString(credentials, AUTHOR_EMAIL_KEY, null), 
 						Util.getString(configMap, TAG_KEY, null), 
 						configMap.get(FORCE_TAG_KEY),
+						gitConfigurator,
 						onPushFactory) {
 					
 					@Override

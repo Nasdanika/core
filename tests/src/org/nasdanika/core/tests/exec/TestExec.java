@@ -364,6 +364,19 @@ public class TestExec {
 	}
 	
 	@Test
+	public void testHttpsTrustAllNoVerifyHostCall() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object httpCall = loader.loadYaml(TestExec.class.getResource("https-call-trust-all-no-verify-host-spec.yml"), monitor);
+		assertEquals(HttpCall.class, httpCall.getClass());
+		
+		Context context = Context.singleton("nasdanika", "https://nasdanika.org");		
+		
+		InputStream response = callSupplier(context, monitor, httpCall);
+		assertEquals("Hello World!", Util.toString(context, response));
+	}
+	
+	@Test
 	public void testResources() throws Exception {
 		ObjectLoader loader = new Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
@@ -545,6 +558,7 @@ public class TestExec {
 				"Pavel.Vlasov@nasdanika.org", 
 				"my-tag", 
 				true,
+				null,
 				onPushFactory);
 		
 		ConsumerFactory<BinaryEntityContainer> cf = context -> new Consumer<BinaryEntityContainer>() {

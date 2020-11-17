@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -39,6 +41,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 	private String branch;
 	private String branchStartPoint;
 	private ConsumerFactory<BinaryEntityContainer> onPushConsumerFactory;
+	private Consumer<Git> gitConfigurator;
 
 	/**
 	 * @return Temporary directory prefix. This implementation returns "git-supplier-", override if needed.
@@ -66,6 +69,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 	 * @param authorEMail Commit author e-mail.
 	 * @param tag Optional tag for the commit.
 	 * @param forceTag If true the tag is forced and force pushed.
+	 * @param gitConfigurator if not null this consumer's accept() method is called with the Git instance. Allows to configure Git, e.g. set sslVerify to false.
 	 * @param onPushConsumerFactory If not null creates onPush consumer executed after succesful push.
 	 */
 	public GitBinaryEntityContainerSupplierFactory(
@@ -83,6 +87,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 			String authorEMail,
 			String tag, 
 			Object forceTag,
+			java.util.function.Consumer<Git> gitConfigurator,
 			ConsumerFactory<BinaryEntityContainer> onPushConsumerFactory) {
 
 		this.name = name;
@@ -99,6 +104,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 		this.authorEMail = authorEMail;
 		this.tag = tag;
 		this.forceTag = forceTag;
+		this.gitConfigurator = gitConfigurator;
 		this.onPushConsumerFactory = onPushConsumerFactory;
 	}
 
@@ -119,6 +125,7 @@ public class GitBinaryEntityContainerSupplierFactory implements SupplierFactory<
 				Util.isBlank(authorName) ? null : new PersonIdent(context.interpolateToString(authorName), context.interpolateToString(authorEMail)), 
 				context.interpolateToString(tag), 
 				Boolean.TRUE.equals(iForceTag) || "true".equals(iForceTag),
+				gitConfigurator,
 				onPushConsumerFactory == null ? null : onPushConsumerFactory.create(context)) {
 			
 			@Override

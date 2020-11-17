@@ -2,11 +2,13 @@ package org.nasdanika.exec.git;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.CheckoutCommand;
@@ -17,6 +19,15 @@ import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.PullCommand;
 import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.PushCommand;
+import org.eclipse.jgit.api.errors.CanceledException;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidConfigurationException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.api.errors.RefNotAdvertisedException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -26,6 +37,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
+import org.eclipse.jgit.transport.URIish;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
@@ -58,6 +70,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 	protected boolean clean;
 	protected String branch;
 	protected String branchStartPoint;
+	protected Consumer<Git> gitConfigurator;
 
 	/**
 	 * @return Temporary directory prefix. This implementation returns "git-supplier-", override if needed.
@@ -84,6 +97,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 	 * @param author Commit author. Can be null if execute() doesn't introduce changes to be committed.
 	 * @param tag Optional tag for the commit.
 	 * @param forceTag If true the tag is forced and force pushed.
+	 * @param gitConfigurator if not null this consumer's accept() method is called with the Git instance. Allows to configure Git, e.g. set sslVerify to false.
 	 */
 	protected GitExecutionParticipant(
 			String name, 
@@ -97,7 +111,8 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 			String commitMessage, 
 			PersonIdent author,
 			String tag, 
-			boolean forceTag) {
+			boolean forceTag,
+			Consumer<Git> gitConfigurator) {
 
 		// TODO Check for correct argument combinations
 		this.name = name;
@@ -114,6 +129,7 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 		this.author = author;
 		this.tag = tag;
 		this.forceTag = forceTag;
+		this.gitConfigurator = gitConfigurator;
 	}
 		
 	protected org.eclipse.jgit.lib.ProgressMonitor wrap(ProgressMonitor progressMonitor) {
@@ -206,33 +222,36 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 				        .build();
 				
 				git = new Git(repo);
+				
+				if (gitConfigurator != null) {
+					gitConfigurator.accept(git);
+				}
 
 				// Pull if origin is not blank.
-				if (!Util.isBlank(origin)) {
-					PullCommand pullCommand = git.pull();
-					if (credentialsProvider != null) {
-						pullCommand.setCredentialsProvider(credentialsProvider);
-					}
-					pullCommand.setRemote(origin);
-					try (ProgressMonitor cloneMonitor = progressMonitor.split("Pulling repository", 1, origin, repositoryDirectory.getAbsolutePath())) {
-						pullCommand.setProgressMonitor(wrap(progressMonitor));
-						PullResult pullResult = pullCommand.call();
-						progressMonitor.worked(1, "Pulled", pullResult);								
-					}
+				if (!Util.isBlank(origin)) {					
+					pullFromOrigin(progressMonitor);
 				}
 			} else {
-				// Clone
-				CloneCommand cloneCommand = Git.cloneRepository();
-				cloneCommand.setURI(origin);							
-				if (credentialsProvider != null) {
-					cloneCommand.setCredentialsProvider(credentialsProvider);
+				if (gitConfigurator == null) {
+					// Using clone command
+					CloneCommand cloneCommand = Git.cloneRepository();
+					cloneCommand.setURI(origin);				
+					if (credentialsProvider != null) {
+						cloneCommand.setCredentialsProvider(credentialsProvider);
+					}
+					cloneCommand.setDirectory(repositoryDirectory);
+					try (ProgressMonitor cloneMonitor = progressMonitor.split("Cloning repository", 1, origin, repositoryDirectory.getAbsolutePath())) {
+						cloneCommand.setProgressMonitor(wrap(progressMonitor));
+						git = cloneCommand.call();
+						progressMonitor.worked(1, "Cloned", git);								
+					}
+				} else {
+					// Using poor man's clone - init -> configure -> add remote -> pull
+					git = Git.init().setDirectory(repositoryDirectory).call();
+					gitConfigurator.accept(git);
+					
+					pullFromOrigin(progressMonitor);
 				}
-				cloneCommand.setDirectory(repositoryDirectory);
-				try (ProgressMonitor cloneMonitor = progressMonitor.split("Cloning repository", 1, origin, repositoryDirectory.getAbsolutePath())) {
-					cloneCommand.setProgressMonitor(wrap(progressMonitor));
-					git = cloneCommand.call();
-					progressMonitor.worked(1, "Cloned", git);								
-				}																		
 			}
 			
 			if (!Util.isBlank(branch)) {
@@ -269,6 +288,26 @@ public abstract class GitExecutionParticipant implements ExecutionParticipant {
 			return new BasicDiagnostic(Status.ERROR, "Could not clone or pull repository: "+ e, e);
 		}
 		return ExecutionParticipant.super.diagnose(progressMonitor);
+	}
+
+	private void pullFromOrigin(ProgressMonitor progressMonitor) throws GitAPIException, URISyntaxException,
+			WrongRepositoryStateException, InvalidConfigurationException, InvalidRemoteException, CanceledException,
+			RefNotFoundException, RefNotAdvertisedException, NoHeadException, TransportException {
+		git.remoteAdd()
+		        .setName("origin")
+		        .setUri(new URIish(origin))
+		        .call();
+		
+		PullCommand pullCommand = git.pull();
+		if (credentialsProvider != null) {
+			pullCommand.setCredentialsProvider(credentialsProvider);
+		}
+		pullCommand.setRemote("origin");
+		try (ProgressMonitor cloneMonitor = progressMonitor.split("Pulling repository", 1, origin, repositoryDirectory.getAbsolutePath())) {
+			pullCommand.setProgressMonitor(wrap(progressMonitor));
+			PullResult pullResult = pullCommand.call();
+			progressMonitor.worked(1, "Pulled", pullResult);								
+		}
 	}
 	
 	@Override

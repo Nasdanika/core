@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.concurrent.CancellationException;
 
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.PushResult;
@@ -40,6 +41,7 @@ public class GitBinaryEntityContainerSupplier extends GitExecutionParticipant im
 	 * @param author
 	 * @param tag
 	 * @param forceTag
+	 * @param gitConfigurator if not null this consumer's accept() method is called with the Git instance. Allows to configure Git, e.g. set sslVerify to false.
 	 * @param onPushConsumer Executed upon successful push with repository directory container argument.
 	 */
 	protected GitBinaryEntityContainerSupplier(
@@ -55,9 +57,10 @@ public class GitBinaryEntityContainerSupplier extends GitExecutionParticipant im
 			PersonIdent author, 
 			String tag, 
 			boolean forceTag,
+			java.util.function.Consumer<Git> gitConfigurator,
 			Consumer<BinaryEntityContainer> onPushConsumer) {
 		
-		super(name, repoDir, origin, branch, branchStartPoint, credentialsProvider, clean, addPatterns, commitMessage, author, tag, forceTag);
+		super(name, repoDir, origin, branch, branchStartPoint, credentialsProvider, clean, addPatterns, commitMessage, author, tag, forceTag, gitConfigurator);
 		this.onPushConsumer = onPushConsumer;
 	}
 

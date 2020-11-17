@@ -1,7 +1,7 @@
 git:
    origin: https://github.com/Nasdanika/git-supplier-test.git
    branch: 
-      name: feature/off-develop
+      name: feature/off-develop-6
       start-point: origin/develop
    credentials:
       user: ${user}
