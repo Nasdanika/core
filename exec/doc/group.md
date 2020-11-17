@@ -30,23 +30,25 @@ Input specification is interpolated. For example a list or map of choices for a 
 
 Group's ``input`` element is an implicit property set.
 
+**NOTE: Input feature is under development. Configuration keys marked with ``*`` are not supported yet.**
+
 #### Property set
 
 Supported keys:
 
-* ``conditions`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
+* ``conditions``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
     * This property set properties.
 * ``description`` - optional property set description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
-* ``include`` - single value or a list of relative URL's of property set specifications to include into this specification.
+* ``include``* - single value or a list of relative URL's of property set specifications to include into this specification.
 * ``label`` - optional property set label to display to the user.
 * ``name`` - optional property set name. If it is present it is used as a prefix for the names of contained properties and property sets.         
 * ``properties`` - a list or a map.
     * List - contains maps of properties and property set specifications. If an element map contains ``properties`` key it is treated as a property set.
     * Map - mapping of a property or proerty set name to a specification. If an element map contains ``properties`` key it is treated as a property set. This form does not support property sets without names. Also in this form spec maps shall not contain ``name`` keys.
-* ``services`` - fully qualified name(s) of services which have to be present in the context for successful group execution. String or list.
-* ``validations`` - a map or a list of maps containing cross-property validations. Map keys:
+* ``services``* - fully qualified name(s) of services which have to be present in the context for successful group execution. String or list.
+* ``validations``* - a map or a list of maps containing cross-property validations. Map keys:
     * ``condition`` - JavaScript condition which must evaluate to true for the validation to pass. Has the same bindings as ``conditions``.
     * ``severity`` - ``WARNING`` or ``ERROR``.
     * ``message`` - diagnostic message. 
@@ -58,8 +60,8 @@ Supported keys:
     * ``0..*`` or ``*`` - any number of values.
     * ``2..*`` - at least two values.
     * ``3..5`` - between three and five values.    
-* ``choices`` - property value choices. List or map - see details below.    
-* ``conditions`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property to be displayed, validated, and injected into the context. Script bindings:
+* ``choices``* - property value choices. List or map - see details below.    
+* ``conditions``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
 * ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Supported string values:
     * ``date`` - date control.
@@ -79,7 +81,7 @@ Supported keys:
 * ``label`` - optional property label to display to the user.
 * ``name`` - property name. Required if property is defined in a list.   
 * ``type`` - Fully qualified name of property class. Defaults to ``java.lang.String``.
-* ``validations`` - a map or a list of maps containing cross-property validations. Map keys:
+* ``validations``* - a map or a list of maps containing cross-property validations. Map keys:
     * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Has the same bindings as ``conditions`` plus ``value`` binding containing property value.
     * ``severity`` - ``WARNING`` or ``ERROR``.
     * ``message`` - diagnostic message. 
