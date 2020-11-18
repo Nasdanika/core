@@ -1003,8 +1003,9 @@ public class TestExec {
 		Object group = loader.loadYaml(TestExec.class.getResource("group-spec.yml"), monitor);
 		assertEquals(Group.class, group.getClass());
 		
-		Context context = Context.EMPTY_CONTEXT;
+//		Context context = Context.EMPTY_CONTEXT;
 //		Context context = Context.singleton("name", new String[] {"Universe", "Galaxy", "Quadrant", "Parsec"});
+		Context context = Context.singleton("name", "Universe");
 		
 		System.out.println(Util.toString(context, callSupplier(context, monitor, group)));
 	}	
