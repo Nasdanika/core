@@ -45,7 +45,7 @@ public class PropertySet implements Marked {
 
 	private Object factory;
 
-	private static final String CONDITIONS_KEY = "conditions";
+	private static final String CONDITION_KEY = "condition";
 	private static final String DESCRIPTION_KEY = "description";
 	private static final String ICON_KEY = "icon";
 	private static final String INCLUDE_KEY = "include";
@@ -75,7 +75,7 @@ public class PropertySet implements Marked {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(
 					configMap, 
-					CONDITIONS_KEY,
+					CONDITION_KEY,
 					DESCRIPTION_KEY,
 					ICON_KEY,
 					INCLUDE_KEY,
@@ -91,7 +91,7 @@ public class PropertySet implements Marked {
 			icon = Util.getString(configMap, ICON_KEY, null);
 			label = Util.getString(configMap, LABEL_KEY, null);
 			
-			if (configMap.containsKey(CONDITIONS_KEY)) {
+			if (configMap.containsKey(CONDITION_KEY)) {
 				//* ``conditions`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
 //			    * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
 //			    * This property set properties.

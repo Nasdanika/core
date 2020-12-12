@@ -36,7 +36,7 @@ Group's ``input`` element is an implicit property set.
 
 Supported keys:
 
-* ``conditions``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
+* ``condition``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
     * ``properties`` - a ${javadoc/java.util.Map map} of this property set's properties. ``name -> value``.
 * ``description`` - optional property set description.
@@ -61,7 +61,7 @@ Supported keys:
     * ``2..*`` - at least two values.
     * ``3..5`` - between three and five values.    
 * ``choices``* - property value choices. List or map - see details below.    
-* ``conditions``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property to be displayed, validated, and injected into the context. Script bindings:
+* ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to ``true`` for this property to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
 * ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Supported string values:
     * ``date`` - date control.
@@ -96,7 +96,9 @@ Choices list may contain scalars or maps.
 If a list element is a scalar then its value is used both as choice value and a choice label.
 If a list element is a map, then the following keys are supported in the map:
 
-* ``choices`` - If this key is present then the choice is actually a choice group. Mutually exclusive with ``value``.
+* ``choices`` - If this key is present then the choice is actually a choice group. Mutually exclusive with ``value``. List or map.
+* ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to ``true`` for this choice to be available. Script bindings:
+    * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
 * ``description`` - optional choice description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``label`` - optional choice label to display to the user.
@@ -107,6 +109,8 @@ If a list element is a map, then the following keys are supported in the map:
 Choices map uses choice values as keys and choice labels (if a scalar) or specifications (if a map) as values.
 Choice specification maps support the following keys:
 
+* ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to ``true`` for this choice to be available. Script bindings:
+    * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
 * ``description`` - optional choice description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``label`` - optional choice label to display to the user.

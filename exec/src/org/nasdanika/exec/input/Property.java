@@ -17,6 +17,7 @@ import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MutableContext;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
@@ -58,7 +59,7 @@ public class Property implements Marked {
 
 	private static final String ARITY_KEY = "arity";
 	private static final String CHOICES_KEY = "choices";
-	private static final String CONDITIONS_KEY = "conditions";
+	private static final String CONDITION_KEY = "condition";
 	private static final String CONTROL_KEY = "control";
 	private static final String DEFAULT_VALUE_KEY = "default-value";
 	private static final String DESCRIPTION_KEY = "description";
@@ -74,6 +75,8 @@ public class Property implements Marked {
 	private static final String VALIDATION_MESSAGE_KEY = "message";	
 	
 	private List<SupplierFactory<Diagnosable>> validations = new ArrayList<>();
+	private List<String> conditions = new ArrayList<>();
+	private List<Choice> choices;
 		
 	public Property(ObjectLoader loader, String prefix, String name, Object config, URL base, Marker marker, ProgressMonitor monitor) throws Exception {
 		if (config instanceof Map) {
@@ -84,7 +87,7 @@ public class Property implements Marked {
 					configMap,
 					ARITY_KEY,
 					CHOICES_KEY,
-					CONDITIONS_KEY,
+					CONDITION_KEY,
 					CONTROL_KEY,
 					DEFAULT_VALUE_KEY,
 					DESCRIPTION_KEY,
@@ -130,14 +133,11 @@ public class Property implements Marked {
 			} 
 			
 			if (configMap.containsKey(CHOICES_KEY)) {
-//				* ``choices`` - property value choices. List or map - see details below.    
-				throw new UnsupportedOperationException("Not yet supported");
+				choices = Choice.loadChoices(configMap.get(CHOICES_KEY), Util.getMarker(configMap, CHOICES_KEY));
 			} 
 			
-			if (configMap.containsKey(CONDITIONS_KEY)) {
-//				* ``conditions`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property to be displayed, validated, and injected into the context. Script bindings:
-//			    * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
-				throw new UnsupportedOperationException("Not yet supported");
+			if (configMap.containsKey(CONDITION_KEY)) {
+				Loader.loadMultiString(configMap, CONDITION_KEY, conditions::add);
 			} 
 			
 			if (configMap.containsKey(CONTROL_KEY)) {
@@ -227,8 +227,13 @@ public class Property implements Marked {
 										
 											@Override
 											public Diagnostic diagnose(ProgressMonitor progressMonitor) {
-												if (!isEnabled(dCtx)) {
-													return new BasicDiagnostic(Status.SUCCESS, String.valueOf(vSpecMap.get(VALIDATION_MESSAGE_KEY)), Property.this);													
+												try {
+													if (!isEnabled(dCtx)) {
+														return new BasicDiagnostic(Status.SUCCESS, String.valueOf(vSpecMap.get(VALIDATION_MESSAGE_KEY)), Property.this);													
+													}
+												} catch (Exception ex) {
+													monitor.worked(Status.ERROR, 1, "Exception while evaluating condition: " + ex, Property.this, ex); 
+													return new BasicDiagnostic(Status.ERROR, "Exception while evaluating condition", Property.this, ex);
 												}
 												Map<String, Object> bindings = new HashMap<>();
 												bindings.put("context", dCtx);
@@ -238,7 +243,7 @@ public class Property implements Marked {
 													return new BasicDiagnostic(Boolean.TRUE.equals(result) ? Status.SUCCESS : severity, String.valueOf(vSpecMap.get(VALIDATION_MESSAGE_KEY)), Property.this);
 												} catch (Exception e) {
 													monitor.worked(Status.ERROR, 1, "Exception while evaluating validation condition at " + (vSpecMap instanceof Marked ? ((Marked) vSpecMap).getMarker() : "") + ": " + e, Property.this, e); 
-													return new BasicDiagnostic(Status.ERROR, "Exception while evaluating validation condition", Property.this);
+													return new BasicDiagnostic(Status.ERROR, "Exception while evaluating validation condition", Property.this, e);
 												}
 											}
 											
@@ -328,8 +333,14 @@ public class Property implements Marked {
 		return name;
 	}
 	
-	protected boolean isEnabled(Context context) {
-		return true; // TODO - conditions
+	public boolean isEnabled(Context context) throws Exception {
+		Map<String,Object> bindings = Collections.singletonMap("context", context);
+		for (String condition: conditions) {
+			if (!Boolean.TRUE.equals(Util.eval(condition, bindings))) {
+				return false;
+			}
+		}
+		return true; 
 	}
 	
 	public ChoicesPropertyDescriptor createPropertyDescriptor(MutableContext context) {
@@ -337,22 +348,26 @@ public class Property implements Marked {
 
 			@Override
 			public String getIcon() {
-				return icon;
+				return context.interpolateToString(icon);
 			}
 
 			@Override
 			public String getLabel() {
-				return label;
+				return context.interpolateToString(label);
 			}
 
 			@Override
 			public String getDescription() {
-				return description;
+				return context.interpolateToString(description);
 			}
 
 			@Override
 			public boolean isEnabled() {
-				return Property.this.isEnabled(context);
+				try {
+					return Property.this.isEnabled(context);
+				} catch (Exception e) {
+					throw new NasdanikaException(e);
+				}
 			}
 
 			@Override
@@ -382,10 +397,27 @@ public class Property implements Marked {
 				return diagnostic;
 			}
 
+			@SuppressWarnings({ "unchecked" })
 			@Override
 			public Object get() {
 				Object ret = context.get(getName());
-				return ret == null ? defaultValue : ret;
+				if (ret != null) {
+					return ret;
+				}
+				
+				if (defaultValue instanceof String) {
+					return context.interpolate((String) defaultValue);
+				}
+				
+				if (defaultValue instanceof Map) {
+					return context.interpolate((Map<String,?>) defaultValue);
+				}
+				
+				if (defaultValue instanceof Collection) {
+					return context.interpolate((Collection<?>) defaultValue);
+				}
+				
+				return defaultValue;
 			}
 
 			@Override
