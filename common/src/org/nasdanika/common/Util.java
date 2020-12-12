@@ -9,16 +9,24 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
+
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
@@ -327,4 +335,125 @@ public class Util {
 		throw new ConfigurationException(key + " value must be a map", getMarker(map, key));		
 	}
 		
+	/**
+	 * Convenience method to evaluate Javascript
+	 * @param script Script
+	 * @param bindings Optional script bindings
+	 * @return Evaluation result
+	 * @throws ScriptException 
+	 */
+	public static Object eval(String script, Map<String,Object> bindings) throws Exception {
+		org.mozilla.javascript.Context scriptContext = org.mozilla.javascript.Context.enter();
+		try {
+			Scriptable scope = scriptContext.initStandardObjects();
+			for (Entry<String, Object> be: bindings.entrySet()) {
+				ScriptableObject.putProperty(scope, be.getKey(), org.mozilla.javascript.Context.javaToJS(be.getValue(), scope));
+			}
+
+			return scriptContext.evaluateString(scope, script, "script", 1, null);
+		} finally {
+			org.mozilla.javascript.Context.exit();
+		}
+	}
+	
+	/**
+	 * Convenience method to evaluate Javascript
+	 * @param script Script
+	 * @param bindings Optional script bindings
+	 * @return Evaluation result
+	 * @throws Exception 
+	 */
+	public static Object eval(InputStream script, Map<String,Object> bindings) throws Exception {
+		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
+	}
+	
+	/**
+	 * Convenience method to evaluate Javascript
+	 * @param script Script
+	 * @param bindings Optional script bindings
+	 * @return Evaluation result
+	 * @throws Exception 
+	 */
+	public static Object eval(URL script, Map<String,Object> bindings) throws Exception {
+		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
+	}
+		
+	/**
+	 * A convenience method to check for presence of required configuration keys
+	 * @param config Configuration map.
+	 * @param supportedKeys Supported keys.
+	 * @param marker Map location.
+	 * @return config argument
+	 */
+	public static Map<String,Object> checkRequiredKeys(Map<String,Object> config, String... requiredKeys) throws ConfigurationException {
+		return checkRequiredKeys(config, Arrays.asList(requiredKeys));
+	}
+	
+	/**
+	 * A convenience method to check for presence of required configuration keys
+	 * @param config Configuration map.
+	 * @param supportedKeys Supported keys.
+	 * @param marker Map location.
+	 * @return config argument
+	 */
+	public static Map<String,Object> checkRequiredKeys(Map<String,Object> config, Collection<String> requiredKeys) throws ConfigurationException {
+		StringBuilder missingKeyList = new StringBuilder();
+		for (String rk: requiredKeys) {
+			if (!config.containsKey(rk)) {
+				if (missingKeyList.length() > 0) {
+					missingKeyList.append(", ");
+				}
+				missingKeyList.append(rk);
+			}
+		}
+		
+		if (missingKeyList.length() == 0) {
+			return config;
+		}
+		throw new ConfigurationException("Missing required configuration keys: " + missingKeyList, config instanceof Marked ? ((Marked) config).getMarker() : null);
+	}
+
+	/**
+	 * A convenience method to check for presence of unsupported configuration keys
+	 * @param config Configuration map.
+	 * @param supportedKeys Supported keys.
+	 * @param marker Map location.
+	 * @return config argument.
+	 */
+	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, Collection<String> supportedKeys) throws ConfigurationException {
+		if (config == null) {
+			return config;
+		}
+		Collection<String> unsupportedKeys = new ArrayList<String>(config.keySet());
+		unsupportedKeys.removeAll(supportedKeys);
+		if (unsupportedKeys.isEmpty()) {
+			return config;
+		}		
+		
+		if (unsupportedKeys.size() == 1) {
+			String unsupportedKey = unsupportedKeys.iterator().next();
+			throw new ConfigurationException("Unsupported configuration key: " + unsupportedKey, getMarker(config, unsupportedKey));
+		}
+		
+		StringBuilder keyList = new StringBuilder();
+		for (String uk: unsupportedKeys) {
+			if (keyList.length() > 0) {
+				keyList.append(", ");
+			}
+			keyList.append(uk);
+		}
+		throw new ConfigurationException("Unsupported configuration keys: " + keyList, config instanceof Marked ? ((Marked) config).getMarker() : null);
+	}
+
+	/**
+	 * A convenience method to check for presence of unsupported configuration keys
+	 * @param config Configuration map.
+	 * @param supportedKeys Supported keys.
+	 * @param marker Map location.
+	 * @return config argument
+	 */
+	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
+		return checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
+	}
+			
 }

@@ -81,7 +81,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			this.url = (String) config;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, METHOD_KEY, URL_KEY, HEADERS_KEY, BODY_KEY, SUCCESS_CODE_KEY, CONNECT_TIMEOUT_KEY, READ_TIMEOUT_KEY, VERIFY_HOST_KEY, TRUST_ALL_CERTIFICATES_KEY);			
+			Util.checkUnsupportedKeys(configMap, METHOD_KEY, URL_KEY, HEADERS_KEY, BODY_KEY, SUCCESS_CODE_KEY, CONNECT_TIMEOUT_KEY, READ_TIMEOUT_KEY, VERIFY_HOST_KEY, TRUST_ALL_CERTIFICATES_KEY);			
 			if (configMap.containsKey(METHOD_KEY)) {
 				Object methodObj = configMap.get(METHOD_KEY);
 				if (methodObj instanceof String) {

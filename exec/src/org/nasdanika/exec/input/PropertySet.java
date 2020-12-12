@@ -7,19 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.BasicDiagnostic;
+import org.nasdanika.common.Command;
+import org.nasdanika.common.CommandFactory;
+import org.nasdanika.common.Consumer;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.MutableContext;
+import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
 
 public class PropertySet implements Marked {
 	
@@ -35,6 +43,8 @@ public class PropertySet implements Marked {
 	
 	private List<Object> properties = new ArrayList<>();
 
+	private Object factory;
+
 	private static final String CONDITIONS_KEY = "conditions";
 	private static final String DESCRIPTION_KEY = "description";
 	private static final String ICON_KEY = "icon";
@@ -45,12 +55,25 @@ public class PropertySet implements Marked {
 	private static final String SERVICES_KEY = "services";
 	private static final String VALIDATIONS_KEY = "validations";
 
+	/**
+	 * 
+	 * @param factory Factory to use when adapting {@link DescriptorSet} returned from createDescriptor() to {@link Supplier} or {@link ConsumerFactory} by binding the context.  
+	 * @param loader
+	 * @param prefix
+	 * @param name
+	 * @param config
+	 * @param base
+	 * @param marker
+	 * @param monitor
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
-	public PropertySet(String prefix, String name, Object config, URL base, Marker marker) {
+	public PropertySet(Object factory, ObjectLoader loader, String prefix, String name, Object config, URL base, Marker marker, ProgressMonitor monitor) throws Exception {
+		this.factory = factory;
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(
+			Util.checkUnsupportedKeys(
 					configMap, 
 					CONDITIONS_KEY,
 					DESCRIPTION_KEY,
@@ -91,9 +114,9 @@ public class PropertySet implements Marked {
 						if (pe.getValue() instanceof Map) {
 							Map<String, Object> propMap = (Map<String,Object>) pe.getValue();
 							if (propMap.containsKey(PROPERTIES_KEY)) {
-								properties.add(new PropertySet(name, pe.getKey(), propMap, base, propMarker));
+								properties.add(new PropertySet(null, loader, name, pe.getKey(), propMap, base, propMarker, monitor));
 							} else {
-								properties.add(new Property(name, pe.getKey(), propMap, base, propMarker));
+								properties.add(new Property(loader, name, pe.getKey(), propMap, base, propMarker, monitor));
 							}
 						} else {
 							throw new ConfigurationException("Properties values shall be maps, got " + props.getClass(), propMarker);							
@@ -107,9 +130,9 @@ public class PropertySet implements Marked {
 						if (pe instanceof Map) {
 							Map<String, Object> propMap = (Map<String,Object>) pe;
 							if (propMap.containsKey(PROPERTIES_KEY)) {
-								properties.add(new PropertySet(name, null, pe, base, propMarker));
+								properties.add(new PropertySet(null, loader, name, null, pe, base, propMarker, monitor));
 							} else {
-								properties.add(new Property(name, null, pe, base, propMarker));
+								properties.add(new Property(loader, name, null, pe, base, propMarker, monitor));
 							}
 						} else {
 							throw new ConfigurationException("Properties values shall be maps, got " + props.getClass(), propMarker);							
@@ -189,60 +212,126 @@ public class PropertySet implements Marked {
 		
 		// TODO - validations
 		
+		// Testing
+//		ret.add(new BasicDiagnostic(Status.WARNING, "Warning diagnostic", this));
+//		ret.add(new BasicDiagnostic(Status.ERROR, "Error diagnostic", this));
+		
 		// TODO - services
 		
 		return ret;
 	}	
 	
+	private class DescriptorSetImpl implements DescriptorSet, Adaptable {
+		
+		private MutableContext context;
+
+		public DescriptorSetImpl(MutableContext context) {
+			this.context = context;
+		}
+		
+		@Override
+		public boolean isEnabled() {
+			// TODO evaluate conditions
+			return true;
+		}
+		
+		@Override
+		public String getLabel() {
+			return label;
+		}
+		
+		@Override
+		public String getIcon() {
+			return icon;
+		}
+		
+		@Override
+		public String getDescription() {
+			return description;
+		}
+		
+		@Override
+		public List<Descriptor> getDescriptors() {
+			List<Descriptor> ret = new ArrayList<>();
+			for (Object p: properties) {
+				if (p instanceof Property) {
+					ret.add(((Property) p).createPropertyDescriptor(context));				
+				} else if (p instanceof PropertySet) {
+					ret.add(((PropertySet) p).createDescriptorSet(context));
+				}
+			}
+			
+			return ret;
+		}
+		
+		private void setSource(Diagnostic diagnostic) {
+			List<Object> data = diagnostic.getData();
+			data.replaceAll(e -> e == PropertySet.this ? this : e);
+			diagnostic.getChildren().forEach(this::setSource);			
+		}
+		
+		@Override
+		public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+			Diagnostic diagnostic = PropertySet.this.diagnose(context);
+			setSource(diagnostic);
+			return diagnostic;
+		}
+		
+		/**
+		 * This descriptor set can be adapted to execution participants if the owning property set was created with a factory which is an instance or can be adapted to 
+		 * corresponding execution participant factories.
+		 */
+		@SuppressWarnings("unchecked")
+		@Override
+		public <T> T adaptTo(Class<T> type) {
+			if (factory != null) {
+				if (type == Command.class) {
+					CommandFactory commandFactory = Adaptable.adaptTo(factory, CommandFactory.class);
+					if (commandFactory != null) {
+						try {
+							return (T) commandFactory.create(context);
+						} catch (Exception e) {
+							throw new NasdanikaException(e);
+						}		
+					}
+				}
+				
+				if (type == Consumer.class) {
+					ConsumerFactory<?> consumerFactory = Adaptable.adaptTo(factory, ConsumerFactory.class);
+					if (consumerFactory != null) {
+						try {
+							return (T) consumerFactory.create(context);
+						} catch (Exception e) {
+							throw new NasdanikaException(e);
+						}		
+					}
+				}
+				
+				if (type == Supplier.class) {
+					SupplierFactory<?> supplierFactory = Adaptable.adaptTo(factory, SupplierFactory.class);
+					if (supplierFactory != null) {
+						try {
+							return (T) supplierFactory.create(context);
+						} catch (Exception e) {
+							throw new NasdanikaException(e);
+						}		
+					}
+				}
+				
+			}
+			
+			return Adaptable.super.adaptTo(type);
+		}
+		
+	};
+		
 	/**
 	 * Creates a {@link DescriptorSet} from this property set backed by the {@link MutableContext} passed as an argument.
 	 * @param context
 	 * @return
 	 */
-	public DescriptorSet createDescriptorSet(MutableContext context) {
-		return new DescriptorSet() {
-			
-			@Override
-			public boolean isEnabled() {
-				// TODO evaluate conditions
-				return true;
-			}
-			
-			@Override
-			public String getLabel() {
-				return label;
-			}
-			
-			@Override
-			public String getIcon() {
-				return icon;
-			}
-			
-			@Override
-			public String getDescription() {
-				return description;
-			}
-			
-			@Override
-			public List<Descriptor> getDescriptors() {
-				List<Descriptor> ret = new ArrayList<>();
-				for (Object p: properties) {
-					if (p instanceof Property) {
-						ret.add(((Property) p).createPropertyDescriptor(context));				
-					} else if (p instanceof PropertySet) {
-						ret.add(((PropertySet) p).createDescriptorSet(context));
-					}
-				}
-				
-				return ret;
-			}
-			
-			@Override
-			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
-				return PropertySet.this.diagnose(context);
-			}
-			
-		};
+	public DescriptorSet createDescriptorSet(MutableContext context) {				
+		return new DescriptorSetImpl(context); 
 	}	
 
 }

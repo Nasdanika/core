@@ -63,7 +63,7 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, getSupportedKeys());
+			Util.checkUnsupportedKeys(configMap, getSupportedKeys());
 			name = Loader.getString(configMap, NAME_KEY, true, marker);
 			Loader.loadMultiString(configMap, MODIFIERS_KEY, modifiers::add);
 			Loader.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);

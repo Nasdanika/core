@@ -107,12 +107,12 @@ public class Git implements CommandFactory, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, getSupportedKeys());
+			Util.checkUnsupportedKeys(configMap, getSupportedKeys());
 			if (configMap.containsKey(CONTENTS_KEY)) {
 				ConsumerFactory<BinaryEntityContainer> contentsFactory = Loader.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
 				
-				Map<?, ?> credentials = Loader.checkUnsupportedKeys(Util.getMap(configMap, CREDENTIALS_KEY, null), USER_KEY, PASSWORD_KEY);
-				Map<?, ?> author = Loader.checkUnsupportedKeys(Util.getMap(configMap, AUTHOR_KEY, null), AUTHOR_NAME_KEY, AUTHOR_EMAIL_KEY);
+				Map<?, ?> credentials = Util.checkUnsupportedKeys(Util.getMap(configMap, CREDENTIALS_KEY, null), USER_KEY, PASSWORD_KEY);
+				Map<?, ?> author = Util.checkUnsupportedKeys(Util.getMap(configMap, AUTHOR_KEY, null), AUTHOR_NAME_KEY, AUTHOR_EMAIL_KEY);
 				
 				Collection<String> addPatterns = new ArrayList<>();
 				if (configMap.containsKey(ADD_PATTERN_KEY)) {
@@ -134,7 +134,7 @@ public class Git implements CommandFactory, Marked {
 				if (branchConfig instanceof String) {
 					branch = (String) branchConfig;
 				} else if (branchConfig instanceof Map) {
-					Map<String, Object> branchConfigMap = Loader.checkUnsupportedKeys((Map<String,Object>) branchConfig, BRANCH_NAME_KEY, BRANCH_START_POINT_KEY);
+					Map<String, Object> branchConfigMap = Util.checkUnsupportedKeys((Map<String,Object>) branchConfig, BRANCH_NAME_KEY, BRANCH_START_POINT_KEY);
 					branch = Util.getString(branchConfigMap, BRANCH_NAME_KEY, null);
 					branchStartPoint = Util.getString(branchConfigMap, BRANCH_START_POINT_KEY, null);
 				} else if (branchConfig != null) {

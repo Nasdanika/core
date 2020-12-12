@@ -2,14 +2,11 @@ package org.nasdanika.exec;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CancellationException;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.BasicDiagnostic;
@@ -57,7 +54,7 @@ public class Switch implements Adaptable, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, EXPRESSION_KEY, CASE_KEY, DEFAULT_KEY);
+			Util.checkUnsupportedKeys(configMap, EXPRESSION_KEY, CASE_KEY, DEFAULT_KEY);
 			if (configMap.containsKey(EXPRESSION_KEY)) {
 				expression = Util.getString(configMap, EXPRESSION_KEY, null);
 			} else {
@@ -103,11 +100,10 @@ public class Switch implements Adaptable, Marked {
 		}
 				
 		protected Object eval(ProgressMonitor progressMonitor) throws Exception {
-			ScriptEngine engine = new ScriptEngineManager().getEngineByMimeType("application/javascript");
-			Bindings bindings = engine.createBindings();
+			Map<String,Object> bindings = new HashMap<>();
 			bindings.put("context", context);
 			bindings.put("progressMonitor", progressMonitor);
-			return engine.eval(context.interpolateToString(expression), bindings);
+			return Util.eval(context.interpolateToString(expression), bindings);
 		}		
 
 		@Override

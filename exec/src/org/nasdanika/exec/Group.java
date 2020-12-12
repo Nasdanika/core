@@ -18,6 +18,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
@@ -51,14 +52,14 @@ public class Group implements Adaptable, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, INPUT_KEY, ELEMENTS_KEY);
+			Util.checkUnsupportedKeys(configMap, INPUT_KEY, ELEMENTS_KEY);
 			if (configMap.containsKey(ELEMENTS_KEY)) {
 				elements = loader.load(configMap.get(ELEMENTS_KEY), base, progressMonitor);
 			} else {
 				throw new ConfigurationException("Elements key is missing", marker);
 			}
 			if (configMap.containsKey(INPUT_KEY)) {
-				input = new PropertySet(null, null, configMap.get(INPUT_KEY), base, marker);
+				input = new PropertySet(this, loader, null, null, configMap.get(INPUT_KEY), base, marker, progressMonitor);
 			}
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
@@ -91,8 +92,8 @@ public class Group implements Adaptable, Marked {
 			return (T) (SupplierFactory<InputStream>) this::createSupplier;															
 		}
 		
-		if (type == Descriptor.class) {
-			// TODO
+		if (type == PropertySet.class) {
+			return (T) input;
 		}
 		
 		return Adaptable.super.adaptTo(type);

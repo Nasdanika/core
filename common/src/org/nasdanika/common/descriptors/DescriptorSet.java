@@ -16,7 +16,7 @@ import org.nasdanika.common.Status;
  *
  */
 public interface DescriptorSet extends Descriptor/*, Composeable<DescriptorSet> */ {
-	
+		
 	List<Descriptor> getDescriptors();
 	
 	@Override

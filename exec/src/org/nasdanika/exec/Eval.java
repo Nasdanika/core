@@ -2,12 +2,9 @@ package org.nasdanika.exec;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
@@ -52,7 +49,7 @@ public class Eval implements SupplierFactory.Provider, Marked {
 			interpolateScript = true;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, SCRIPT_KEY, BINDINGS_KEY);
+			Util.checkUnsupportedKeys(configMap, SCRIPT_KEY, BINDINGS_KEY);
 			if (configMap.containsKey(SCRIPT_KEY)) {
 				scriptFactory = Loader.asSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
 			} else {
@@ -73,8 +70,7 @@ public class Eval implements SupplierFactory.Provider, Marked {
 	}
 	
 	protected Object eval(String script, Context context, ProgressMonitor progressMonitor) throws Exception {
-		ScriptEngine engine = new ScriptEngineManager().getEngineByMimeType("application/javascript");
-		Bindings bindings = engine.createBindings();
+		Map<String,Object> bindings = new HashMap<>();
 		bindings.put(CONTEXT_BINDING, context);
 		bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);
 		if (this.bindings != null) {
@@ -82,7 +78,7 @@ public class Eval implements SupplierFactory.Provider, Marked {
 				bindings.put(e.getKey(), e.getValue());
 			}
 		}
-		return engine.eval(interpolateScript ? context.interpolateToString(script) : script, bindings);
+		return Util.eval(interpolateScript ? context.interpolateToString(script) : script, bindings);
 	}
 	
 	/**

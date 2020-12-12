@@ -2,8 +2,6 @@ package org.nasdanika.exec;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -356,47 +354,6 @@ public class Loader extends ObjectLoader {
 				throw new ConfigurationException(key + " value must be a string or list", Util.getMarker(configMap, key));
 			}
 		}		
-	}
-	
-	/**
-	 * A convenience method to check for presence of unsupported configuration keys
-	 * @param config Configuration map.
-	 * @param supportedKeys Supported keys.
-	 * @param marker Map location.
-	 */
-	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
-		return checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
-	}
-	
-	/**
-	 * A convenience method to check for presence of unsupported configuration keys
-	 * @param config Configuration map.
-	 * @param supportedKeys Supported keys.
-	 * @param marker Map location.
-	 */
-	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, Collection<String> supportedKeys) throws ConfigurationException {
-		if (config == null) {
-			return config;
-		}
-		Collection<String> unsupportedKeys = new ArrayList<String>(config.keySet());
-		unsupportedKeys.removeAll(supportedKeys);
-		if (unsupportedKeys.isEmpty()) {
-			return config;
-		}		
-		
-		if (unsupportedKeys.size() == 1) {
-			String unsupportedKey = unsupportedKeys.iterator().next();
-			throw new ConfigurationException("Unsupported configuration key: " + unsupportedKey, Util.getMarker(config, unsupportedKey));
-		}
-		
-		StringBuilder keyList = new StringBuilder();
-		for (String uk: unsupportedKeys) {
-			if (keyList.length() > 0) {
-				keyList.append(", ");
-			}
-			keyList.append(uk);
-		}
-		throw new ConfigurationException("Unsupported configuration keys: " + keyList, config instanceof Marked ? ((Marked) config).getMarker() : null);
-	}
+	}	
 		
 }

@@ -47,7 +47,6 @@ public class Form implements SupplierFactory<InputStream>, Marked {
 			for (Entry<String, Object> me: ((Map<String,Object>) data).entrySet()) {
 				if (me.getValue() instanceof Collection) {
 					ListCompoundSupplierFactory<InputStream> lcsf = new ListCompoundSupplierFactory<InputStream>("Collection at " + me.getKey());
-					int idx = 0;
 					for (Object mee: (Collection<?>) me.getValue()) {
 						lcsf.add(Loader.asSupplierFactory(loader.load(mee, base, progressMonitor)));
 					}

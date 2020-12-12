@@ -8,6 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.exec,
  org.nasdanika.exec.content,
  org.nasdanika.exec.git,
+ org.nasdanika.exec.input,
  org.nasdanika.exec.java,
  org.nasdanika.exec.resources
 Bundle-ClassPath: .

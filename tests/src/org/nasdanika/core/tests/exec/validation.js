@@ -1,0 +1,1 @@
+value != 'Galaxy'

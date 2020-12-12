@@ -57,7 +57,7 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			
-			Loader.checkUnsupportedKeys(configMap, 
+			Util.checkUnsupportedKeys(configMap, 
 					RECONCILE_ACTION_KEY, 
 					CONTENTS_KEY,
 					MERGER_KEY,

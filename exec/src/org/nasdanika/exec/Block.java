@@ -58,7 +58,7 @@ public class Block implements Adaptable, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, TRY_KEY, CATCH_KEY, FINALLY_KEY);
+			Util.checkUnsupportedKeys(configMap, TRY_KEY, CATCH_KEY, FINALLY_KEY);
 			if (configMap.containsKey(TRY_KEY)) {
 				tryBlock = loader.load(configMap.get(TRY_KEY), base, progressMonitor);
 			} else {

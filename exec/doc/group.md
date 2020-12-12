@@ -38,7 +38,7 @@ Supported keys:
 
 * ``conditions``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
-    * This property set properties.
+    * ``properties`` - a ${javadoc/java.util.Map map} of this property set's properties. ``name -> value``.
 * ``description`` - optional property set description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``include``* - single value or a list of relative URL's of property set specifications to include into this specification.
@@ -48,7 +48,7 @@ Supported keys:
     * List - contains maps of properties and property set specifications. If an element map contains ``properties`` key it is treated as a property set.
     * Map - mapping of a property or proerty set name to a specification. If an element map contains ``properties`` key it is treated as a property set. This form does not support property sets without names. Also in this form spec maps shall not contain ``name`` keys.
 * ``services``* - fully qualified name(s) of services which have to be present in the context for successful group execution. String or list.
-* ``validations``* - a map or a list of maps containing cross-property validations. Map keys:
+* ``validate``* - a map or a list of maps containing cross-property validations. Map keys:
     * ``condition`` - JavaScript condition which must evaluate to true for the validation to pass. Has the same bindings as ``conditions``.
     * ``severity`` - ``WARNING`` or ``ERROR``.
     * ``message`` - diagnostic message. 
@@ -81,9 +81,9 @@ Supported keys:
 * ``label`` - optional property label to display to the user.
 * ``name`` - property name. Required if property is defined in a list.   
 * ``type`` - Fully qualified name of property class. Defaults to ``java.lang.String``.
-* ``validations``* - a map or a list of maps containing cross-property validations. Map keys:
-    * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Has the same bindings as ``conditions`` plus ``value`` binding containing property value.
-    * ``severity`` - ``WARNING`` or ``ERROR``.
+* ``validate`` - a map or a list of maps containing cross-property validations. Map keys:
+    * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Has the same bindings as ``conditions`` plus ``value`` binding containing property value. Use nested ``reference`` to load condition script from a resource.
+    * ``severity`` - ``WARNING`` or ``ERROR``. Default is ``ERROR``.
     * ``message`` - diagnostic message. 
     
 #### Choices

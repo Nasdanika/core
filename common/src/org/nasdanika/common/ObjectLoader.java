@@ -25,7 +25,7 @@ import org.yaml.snakeyaml.Yaml;
  * pre-defined set of supported objects/components.  
  * * If config value is a multi-value map, then the result would be a map with each value instantiated as explained here.
  * * If config value is a list then the result would be a list with each element instantiated as explained here.
- * * Otherwise the value is returned as-is. * 
+ * * Otherwise the value is returned as-is. 
  * 
  * {@link ExecutionParticipant}'s factory loading methods cast instantiated objects to a specific execution participant type factory and wrap values. Lists, and maps are wrapped into compound execution participants of requested type.
  *   

@@ -12,7 +12,7 @@ Loader supports the following types:
     * ``info`` - [Info](info.html) - Reports an informational message to progress monitor.
     * ``(map)`` - [Map cast](map-cast.html) - Forces content to be treated as a map even if there is a single entry, which by default is treated as an object definition.
     * ``map`` - [Mapper](mapper.html) - Replaces the current context with a new context loaded from a map and intepolated.
-    * ``reference`` - [Reference](reference.html) - Loads object(s) from a YAML resource identified by the reference.
+    * ``reference`` - [Reference](reference.html) - Loads resource identified by a relative URL. E.g. an object(s) specification or a script.
     * ``switch`` - [Switch](switch.html) - Select one of cases to be executed.
     * ``warning`` - [Warning](warning.html) - Reports a warning to progress monitor.
     

@@ -1005,7 +1005,7 @@ public class TestExec {
 		
 //		Context context = Context.EMPTY_CONTEXT;
 //		Context context = Context.singleton("name", new String[] {"Universe", "Galaxy", "Quadrant", "Parsec"});
-		Context context = Context.singleton("name", "Universe");
+		Context context = Context.singleton("name", "Galaxy");
 		
 		System.out.println(Util.toString(context, callSupplier(context, monitor, group)));
 	}	

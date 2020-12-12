@@ -2,12 +2,9 @@ package org.nasdanika.exec;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.BasicDiagnostic;
@@ -55,7 +52,7 @@ public class If implements Adaptable, Marked {
 		if (config instanceof Map) {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
-			Loader.checkUnsupportedKeys(configMap, CONDITION_KEY, THEN_KEY, ELSE_KEY);
+			Util.checkUnsupportedKeys(configMap, CONDITION_KEY, THEN_KEY, ELSE_KEY);
 			if (configMap.containsKey(CONDITION_KEY)) {
 				condition = configMap.get(CONDITION_KEY);
 				if (!(condition instanceof Boolean || condition instanceof String)) {
@@ -109,11 +106,10 @@ public class If implements Adaptable, Marked {
 			if (Boolean.TRUE.equals(context.interpolate((String) condition))) {
 				return true;
 			}
-			ScriptEngine engine = new ScriptEngineManager().getEngineByMimeType("application/javascript");
-			Bindings bindings = engine.createBindings();
+			Map<String,Object> bindings = new HashMap<>();
 			bindings.put("context", context);
 			bindings.put("progressMonitor", progressMonitor);
-			return Boolean.TRUE.equals(engine.eval(context.interpolateToString((String) condition), bindings));
+			return Boolean.TRUE.equals(Util.eval(context.interpolateToString((String) condition), bindings));
 		}		
 
 		@Override
