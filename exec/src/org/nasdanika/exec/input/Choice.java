@@ -6,9 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.descriptors.ChoiceDescriptor;
+import org.nasdanika.common.descriptors.Descriptor;
+import org.nasdanika.common.descriptors.DescriptorSet;
+import org.nasdanika.common.descriptors.ValueDescriptor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
@@ -21,7 +29,7 @@ public class Choice implements Marked {
 	private String description;
 	private String icon;
 	private String label;
-	private String value;
+	private Object value;
 	private List<String> conditions = new ArrayList<>();
 
 	/**
@@ -29,9 +37,9 @@ public class Choice implements Marked {
 	 * @param marker
 	 * @param value
 	 */
-	public Choice(Marker marker, String value) {
+	public Choice(Marker marker, String value, Function<Object, Object> parser) {
 		this.marker = marker;
-		this.value = value;
+		this.value = parser.apply(value);
 		this.label = value;
 	}
 
@@ -40,7 +48,7 @@ public class Choice implements Marked {
 	 * @param marker
 	 * @param value
 	 */
-	public Choice(Marker marker, String value, String label) {
+	public Choice(Marker marker, String value, String label, Function<Object, Object> parser) {
 		this.marker = marker;
 		this.value = value;
 		this.label = label;
@@ -59,7 +67,7 @@ public class Choice implements Marked {
 	 * @param value Not null when constructed from value to spec map entry
 	 * @param config
 	 */
-	public Choice(Marker marker, String value, Map<String,Object> config) {
+	public Choice(Marker marker, String value, Map<String,Object> config, Function<Object, Object> parser) {
 		this.marker = marker;
 		Util.checkUnsupportedKeys(
 				config, 
@@ -72,16 +80,16 @@ public class Choice implements Marked {
 		
 		if (value == null) {
 			Util.checkRequiredKeys(config, VALUE_KEY);
-			this.value = Util.getString(config, VALUE_KEY, null);
+			this.value = parser.apply(config.get(VALUE_KEY));
 		} else {
 			if (config.containsKey(VALUE_KEY)) {
 				throw new ConfigurationException("Value key cannot be used in map choices", Util.getMarker(config, VALUE_KEY));
 			}
-			this.value = value;
+			this.value = parser.apply(value);
 		}
 		
 		icon = Util.getString(config, ICON_KEY, null);
-		label = Util.getString(config, LABEL_KEY, value);
+		label = Util.getString(config, LABEL_KEY, DefaultConverter.INSTANCE.convert(value, String.class));
 		description = Util.getString(config, DESCRIPTION_KEY, null);
 				
 		Loader.loadMultiString(config, CONDITION_KEY, conditions::add);
@@ -91,24 +99,22 @@ public class Choice implements Marked {
 			if (value != null) {
 				throw new ConfigurationException("Nested choices are not supported in choices with values", choicesMarker);				
 			}
-			choices = loadChoices(config.get(CHOICES_KEY), choicesMarker);
+			choices = loadChoices(config.get(CHOICES_KEY), choicesMarker, parser);
 		}		
 		
 	}
 	
 	@SuppressWarnings("unchecked")
-	static List<Choice> loadChoices(Object choicesConfig, Marker choicesMarker) {
+	static List<Choice> loadChoices(Object choicesConfig, Marker choicesMarker, Function<Object, Object> parser) {
 		List<Choice> ret = new ArrayList<>();
 		if (choicesConfig instanceof Collection) {
 			int index = 0;
 			for (Object che: (Collection<?>) choicesConfig) {
 				Marker eMarker = Util.getMarker((Collection<?>) choicesConfig, index);
-				if (che instanceof String) {
-					ret.add(new Choice(eMarker, (String) che));
-				} else if (che instanceof Map) {
-					ret.add(new Choice(eMarker, null, (Map<String,Object>) che));
+				if (che instanceof Map) {
+					ret.add(new Choice(eMarker, null, (Map<String,Object>) che, parser));
 				} else {
-					throw new ConfigurationException("Unsupported choices element: " + che, eMarker);														
+					ret.add(new Choice(eMarker, (String) che, parser));
 				}
 				++index;
 			}
@@ -119,9 +125,9 @@ public class Choice implements Marked {
 			for (Entry<String, Object> che: ((Map<String,Object>) choicesConfig).entrySet()) {
 				Marker eMarker = Util.getMarker((Map<String,Object>) choicesConfig, che.getKey());
 				if (che.getValue() instanceof String) {
-					ret.add(new Choice(eMarker, che.getKey(), (String) che.getValue()));
+					ret.add(new Choice(eMarker, che.getKey(), (String) che.getValue(), parser));
 				} else if (che.getValue() instanceof Map) {
-					ret.add(new Choice(eMarker, che.getKey(), (Map<String,Object>) che.getValue()));
+					ret.add(new Choice(eMarker, che.getKey(), (Map<String,Object>) che.getValue(), parser));
 				} else {
 					throw new ConfigurationException("Unsupported choices element: " + che, eMarker);														
 				}
@@ -166,5 +172,97 @@ public class Choice implements Marked {
 		}
 		return true; 
 	}	
+	
+	/**
+	 * @param context
+	 * @return Descriptor or null if not enabled. For choice with sub-choices {@link DescriptorSet} is returned, {@link ValueDescriptor} otherwise.
+	 */
+	public Descriptor toDescriptor(Context context) {
+		if (choices == null) {
+			return new DescriptorSet() {
+
+				@Override
+				public String getIcon() {
+					return context.interpolateToString(icon);
+				}
+
+				@Override
+				public String getLabel() {
+					return context.interpolateToString(label);
+				}
+
+				@Override
+				public String getDescription() {
+					return context.interpolateToString(description);
+				}
+
+				@Override
+				public boolean isEnabled() {
+					try {
+						return Choice.this.isEnabled(context);
+					} catch (Exception e) {
+						throw new NasdanikaException(e);
+					}
+				}
+
+				@Override
+				public List<Descriptor> getDescriptors() {
+					return choices.stream().map(c -> c.toDescriptor(context)).filter(d -> d.isEnabled()).collect(Collectors.toList());
+				}
+				
+			};
+		}
+		
+		return new ChoiceDescriptor() {
+
+			@Override
+			public String getIcon() {
+				return context.interpolateToString(icon);
+			}
+
+			@Override
+			public String getLabel() {
+				return context.interpolateToString(label);
+			}
+
+			@Override
+			public String getDescription() {
+				return context.interpolateToString(description);
+			}
+
+			@Override
+			public boolean isEnabled() {
+				try {
+					return Choice.this.isEnabled(context);
+				} catch (Exception e) {
+					throw new NasdanikaException(e);
+				}
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public Object get() {
+				Object ret = value;
+				if (ret != null) {
+					return ret;
+				}
+				
+				if (ret instanceof String) {
+					return context.interpolate((String) ret);
+				}
+				
+				if (ret instanceof Map) {
+					return context.interpolate((Map<String,?>) ret);
+				}
+				
+				if (ret instanceof Collection) {
+					return context.interpolate((Collection<?>) ret);
+				}
+				
+				return ret;
+			}
+			
+		};
+	}
 
 }

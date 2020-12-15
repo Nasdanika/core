@@ -3,15 +3,20 @@ package org.nasdanika.exec.input;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnosable;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Function;
@@ -53,7 +58,8 @@ public class Property implements Marked {
 
 	private Object defaultValue;
 
-	private String type;
+	private java.util.function.Function<Object,Object> parser = java.util.function.Function.identity();
+	private java.util.function.Function<Object,Object> formatter = java.util.function.Function.identity();
 	
 	private ValueDescriptor.Control controlHint;
 
@@ -103,7 +109,28 @@ public class Property implements Marked {
 			icon = Util.getString(configMap, ICON_KEY, null);
 			label = Util.getString(configMap, LABEL_KEY, Util.nameToLabel(name));
 			editable = !Boolean.FALSE.equals(configMap.get(EDITABLE_KEY));
-			type = Util.getString(configMap, TYPE_KEY, String.class.getName());
+			if (configMap.containsKey(TYPE_KEY)) {
+				String typeName = Util.getString(configMap, TYPE_KEY, null);				
+				if (typeName.startsWith("date(") && typeName.endsWith(")")) {
+					SimpleDateFormat format = new SimpleDateFormat(typeName.substring("date(".length(), typeName.length() -1));
+					parser = val -> {
+						try {
+							return val instanceof Date ? val : format.parse((String) val);
+						} catch (ParseException e) {
+							throw new NasdanikaException(e);
+						}
+					};
+					formatter = val -> format.format((Date) val);
+				} else {				
+					if ("int".equals(typeName)) {
+						typeName = Integer.class.getName();
+					} else if ("date".equals(typeName)) {
+						typeName = Date.class.getName();					
+					}
+					Class<?> type = getClass().getClassLoader().loadClass(typeName);
+					parser = val -> DefaultConverter.INSTANCE.convert(val, type);
+				}
+			}
 			defaultValue = configMap.get(DEFAULT_VALUE_KEY);
 	
 			if (configMap.containsKey(ARITY_KEY)) {
@@ -133,7 +160,7 @@ public class Property implements Marked {
 			} 
 			
 			if (configMap.containsKey(CHOICES_KEY)) {
-				choices = Choice.loadChoices(configMap.get(CHOICES_KEY), Util.getMarker(configMap, CHOICES_KEY));
+				choices = Choice.loadChoices(configMap.get(CHOICES_KEY), Util.getMarker(configMap, CHOICES_KEY), parser);
 			} 
 			
 			if (configMap.containsKey(CONDITION_KEY)) {
@@ -276,59 +303,90 @@ public class Property implements Marked {
 	
 	public Diagnostic diagnose(Context context) {
 		BasicDiagnostic ret = new BasicDiagnostic(Status.SUCCESS, "Diagnostic of property '"+name+"'", this);
-		
-		// TODO - conditions, validate only if true
-		
-		// Values as a list
-		List<Object> values = new ArrayList<>();
-		Object pv = context.get(name);
-		if (pv != null) {
-			if (pv.getClass().isArray()) {
-				for (int i=0; i < Array.getLength(pv); ++i) {
-					values.add(Array.get(pv, i));
+		try {
+			if (isEnabled(context)) {								
+				// Values as a list
+				List<Object> values = new ArrayList<>();
+				Object pv = context.get(name);
+				if (pv != null) {
+					if (pv.getClass().isArray()) {
+						for (int i=0; i < Array.getLength(pv); ++i) {
+							values.add(parser.apply(Array.get(pv, i)));
+						}
+					} else if (pv instanceof Collection) {
+						for (Object pvv: (Collection<?>) pv) {
+							values.add(parser.apply(pvv));							
+						}
+					} else {
+						values.add(parser.apply(pv));
+					}
 				}
-			} else if (pv instanceof Collection) {
-				values.addAll((Collection<?>) pv);
-			} else {
-				values.add(pv);
+				
+				// Arity
+				if (lowerBound == 1 && upperBound ==1 && values.isEmpty()) {
+					if (lowerBound > values.size()) {
+						ret.add(new BasicDiagnostic(Status.ERROR, "Required property", this));
+					}			
+				} else {
+					if (lowerBound > values.size()) {
+						ret.add(new BasicDiagnostic(Status.ERROR, "Number of values " + values.size() + " is less than the lower bound " + lowerBound, this));
+					}
+					
+					if (upperBound != -1 && upperBound < values.size()) {
+						ret.add(new BasicDiagnostic(Status.ERROR, "Number of values " + values.size() + " is greater than the upper bound " + upperBound, this));
+					}
+				}
+												
+				if (choices != null) {
+					for (Object value: values) {
+						boolean isValidChoice = false;
+						for (Choice cc: choices) {
+							if (cc.isEnabled(context) && isValidChoice(value, cc)) {
+								isValidChoice = true;
+								break;
+							}
+						}
+						if (!isValidChoice) {
+							ret.add(new BasicDiagnostic(Status.ERROR, "Invalid choice: " + formatter.apply(value), this));							
+						}
+					}
+					
+				}
+				
+				// Validations
+				NullProgressMonitor progressMonitor = new NullProgressMonitor();
+				for (SupplierFactory<Diagnosable> validation: validations) {
+					try {
+						ret.add(validation.create(context).execute(progressMonitor).diagnose(progressMonitor));
+					} catch (Exception e) {
+						ret.add(new BasicDiagnostic(Status.ERROR, "Could not create validation: " + e, this, e));				
+					}
+				}
+				
 			}
+		} catch (Exception e) {
+			ret.add(new BasicDiagnostic(Status.ERROR, "Exception in isEnabled(): " + e, this, e));				
 		}
-		
-		// Arity
-		if (lowerBound == 1 && upperBound ==1 && values.isEmpty()) {
-			if (lowerBound > values.size()) {
-				ret.add(new BasicDiagnostic(Status.ERROR, "Required property", this));
-			}			
-		} else {
-			if (lowerBound > values.size()) {
-				ret.add(new BasicDiagnostic(Status.ERROR, "Number of values " + values.size() + " is less than the lower bound " + lowerBound, this));
-			}
-			
-			if (upperBound != -1 && upperBound < values.size()) {
-				ret.add(new BasicDiagnostic(Status.ERROR, "Number of values " + values.size() + " is greater than the upper bound " + upperBound, this));
-			}
-		}		
-		
-		// TODO Type - convertable using context converter or default converter
-		
-		// TODO Choices
-		
-		
-		// Validations
-		NullProgressMonitor progressMonitor = new NullProgressMonitor();
-		for (SupplierFactory<Diagnosable> validation: validations) {
-			try {
-				ret.add(validation.create(context).execute(progressMonitor).diagnose(progressMonitor));
-			} catch (Exception e) {
-				ret.add(new BasicDiagnostic(Status.ERROR, "Could not create validation: " + e, this, e));				
-			}
-		}
-		
+				
 		return ret;
 	}
+	
+	private boolean isValidChoice(Object value, Choice choice) {
+		if (choice.getChoices() == null) {
+			return choice.getValue().equals(value);
+		}
+		for (Choice cc: choice.getChoices()) {
+			if (isValidChoice(value, cc)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public Object getDefaultValue() {
 		return defaultValue;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -377,10 +435,9 @@ public class Property implements Marked {
 
 			@Override
 			public Diagnostic set(Object value) {
-				Diagnostic diagnostic = Property.this.diagnose(Context.singleton(getName(), value).compose(context));
-//				if (diagnostic.getStatus() != Status.ERROR) {
-					context.put(getName(), value);
-//				}
+				Object parsedValue = parser.apply(value);
+				Diagnostic diagnostic = Property.this.diagnose(Context.singleton(getName(), parsedValue).compose(context));
+				context.put(getName(), parsedValue);
 				return diagnostic;
 			}
 						
@@ -402,7 +459,7 @@ public class Property implements Marked {
 			public Object get() {
 				Object ret = context.get(getName());
 				if (ret != null) {
-					return ret;
+					return formatter.apply(ret);
 				}
 				
 				if (defaultValue instanceof String) {
@@ -417,7 +474,7 @@ public class Property implements Marked {
 					return context.interpolate((Collection<?>) defaultValue);
 				}
 				
-				return defaultValue;
+				return formatter.apply(defaultValue);
 			}
 
 			@Override
@@ -437,8 +494,10 @@ public class Property implements Marked {
 
 			@Override
 			public List<Descriptor> getChoices() {
-				// TODO 
-				return null;
+				if (choices == null) {
+					return null;
+				}
+				return choices.stream().map(c -> c.toDescriptor(context)).filter(d -> d.isEnabled()).collect(Collectors.toList());
 			}
 
 			@Override

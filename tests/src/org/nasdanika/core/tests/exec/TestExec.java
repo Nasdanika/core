@@ -33,6 +33,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
@@ -59,6 +60,7 @@ import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Replace;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.git.GitBinaryEntityContainerSupplierFactory;
+import org.nasdanika.exec.input.PropertySet;
 import org.nasdanika.exec.resources.Container;
 import org.nasdanika.exec.resources.Git;
 import org.yaml.snakeyaml.Yaml;
@@ -214,6 +216,43 @@ public class TestExec {
 				}
 				throw new NasdanikaException("Never get here");
 			}
+		}
+	}
+	
+	/**
+	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	static InputStream callSupplier(Supplier<InputStream> supplier, ProgressMonitor monitor) throws Exception {
+		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				diagnostic.dump(System.err, 4);
+				fail("Diagnostic failed: " + diagnostic.getMessage());
+			}
+			
+			try {
+				InputStream result = supplier.splitAndExecute(progressMonitor);
+				supplier.splitAndCommit(progressMonitor);
+				return result;
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (e instanceof DiagnosticException) {
+					((DiagnosticException) e).getDiagnostic().dump(System.err, 4);
+				}
+				if (supplier.splitAndRollback(progressMonitor)) {
+					fail("Exception " + e + ", rollback successful");
+				} else {
+					fail("Exception " + e + ", rollback failed");						
+				}
+				throw new NasdanikaException("Never get here");
+			}
+		} finally {
+			supplier.close();
 		}
 	}
 
@@ -1008,6 +1047,25 @@ public class TestExec {
 		Context context = Context.singleton("name", "Quadrant");
 		
 		System.out.println(Util.toString(context, callSupplier(context, monitor, group)));
+	}	
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGroupChoices() throws Exception {				
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object group = loader.loadYaml(TestExec.class.getResource("group-choices-spec.yml"), monitor);
+		assertEquals(Group.class, group.getClass());
+		
+//		Context context = Context.EMPTY_CONTEXT;
+//		Context context = Context.singleton("name", new String[] {"Universe", "Galaxy", "Quadrant", "Parsec"});
+		MutableContext context = Context.EMPTY_CONTEXT.fork();
+		DescriptorSet descriptorSet = Adaptable.adaptTo(group, PropertySet.class).createDescriptorSet(context);
+		descriptorSet.setProperty("name", "Sun");
+		descriptorSet.setProperty("date", "2020-12-30");
+		descriptorSet.setProperty("type", "yellow-dwarth");
+		
+		System.out.println(Util.toString(context, callSupplier(Adaptable.adaptTo(descriptorSet, Supplier.class), monitor)));
 	}	
 	
 }

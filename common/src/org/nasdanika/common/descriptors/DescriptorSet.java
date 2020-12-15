@@ -2,10 +2,8 @@ package org.nasdanika.common.descriptors;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.nasdanika.common.BasicDiagnostic;
-import org.nasdanika.common.Composeable;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
@@ -51,5 +49,58 @@ public interface DescriptorSet extends Descriptor/*, Composeable<DescriptorSet> 
 //		// set value to both - also diagnose type compatibility, e.g. String and Map (or rely on conversion?).
 //		throw new UnsupportedOperationException("TODO - implement");
 //	}
+	
+	/**
+	 * Sets property value
+	 * @param name
+	 * @param value
+	 * @return Set diagnostic or null if property was not found.
+	 */
+	default Diagnostic setProperty(String name, Object value) {	
+		if (isEnabled()) {
+			for (Descriptor descriptor: getDescriptors()) {
+				if (descriptor.isEnabled()) {
+					if (descriptor instanceof PropertyDescriptor) {
+						PropertyDescriptor propertyDescriptor = (PropertyDescriptor) descriptor;
+						if (propertyDescriptor.getName().equals(name) 
+								&& propertyDescriptor.isEditable()) {
+							
+							return propertyDescriptor.set(value);					
+						}
+					} else if (descriptor instanceof DescriptorSet) {
+						Diagnostic diagnostic = ((DescriptorSet) descriptor).setProperty(name, value);
+						if (diagnostic != null) {
+							return diagnostic;
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Sets property values retrieved from the source
+	 * @param source Source of property values
+	 */
+	default void setProperties(Function<String,Object> source) {	
+		if (isEnabled()) {
+			for (Descriptor descriptor: getDescriptors()) {
+				if (descriptor.isEnabled()) {
+					if (descriptor instanceof PropertyDescriptor) {
+						PropertyDescriptor propertyDescriptor = (PropertyDescriptor) descriptor;
+						if (propertyDescriptor.isEditable()) {
+							Object value = source.apply(propertyDescriptor.getName());
+							if (value != null) {
+								propertyDescriptor.set(value);
+							}
+						}
+					} else if (descriptor instanceof DescriptorSet) {
+						((DescriptorSet) descriptor).setProperties(source);
+					}
+				}
+			}
+		}
+	}
 	
 }
