@@ -36,9 +36,8 @@ Group's ``input`` element is an implicit property set.
 
 Supported keys:
 
-* ``condition``* - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
+* ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to true for this property set to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
-    * ``properties`` - a ${javadoc/java.util.Map map} of this property set's properties. ``name -> value``.
 * ``description`` - optional property set description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``include``* - single value or a list of relative URL's of property set specifications to include into this specification.
@@ -60,23 +59,25 @@ Supported keys:
     * ``0..*`` or ``*`` - any number of values.
     * ``2..*`` - at least two values.
     * ``3..5`` - between three and five values.    
-* ``choices``* - property value choices. List or map - see details below.    
+* ``choices`` - property value choices. List or map - see details below.    
 * ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to ``true`` for this property to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
+    * ``values`` - property values ${javadoc/java.util.List list}.
 * ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Supported string values:
     * ``date`` - date control.
     * ``time`` - time control.
-    * ``drop-down`` - for fixed arity properties with choices.
+    * ``date-time`` - date and time control.
+    * ``drop-down`` - for properties with choices. Default for properties with choices.
     * ``checkbox`` - for boolean properties and for multi-value properties with choices.
     * ``file`` - file attachment.
     * ``number`` - for numeric properties.
     * ``password`` - single-line masked text.
-    * ``radio`` - for fixed arity properties with choices.
-    * ``text`` - single-line for fixed arity properties without choices. 
-    * ``text-area`` - multi-line for fixed arity properties without choices. 
+    * ``radio`` - for single value properties with choices.
+    * ``text`` - single-line text properties. Default for properties without choices.
+    * ``text-area`` - multi-line for fixed arity properties. 
 * ``default-value`` - property default value - a single value or a list.
 * ``description`` - optional property description.
-* ``editable`` - if ``false`` property control shall be rendered as read-only. Default is ``true``.      
+* ``editable`` - if boolean ``false`` property control shall be rendered as read-only. If the value is a string then it is evaluated as a JavaScript expression with ``context`` binding. Default is ``true``.      
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``label`` - optional property label to display to the user.
 * ``name`` - property name. Required if property is defined in a list.   
@@ -85,6 +86,7 @@ Supported keys:
     * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Has the same bindings as ``conditions`` plus ``value`` binding containing property value. Use nested ``reference`` to load condition script from a resource.
     * ``severity`` - ``WARNING`` or ``ERROR``. Default is ``ERROR``.
     * ``message`` - diagnostic message. 
+        
     
 #### Choices
 
@@ -115,4 +117,17 @@ Choice specification maps support the following keys:
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``label`` - optional choice label to display to the user.
 
+### Spring controller example
 
+TODO - description, spec, controller (partial), link to code on GitHub. Mention rendering by HTML view parts.
+
+#### Specification
+
+```yaml
+```
+
+#### Controller
+
+
+```java
+```

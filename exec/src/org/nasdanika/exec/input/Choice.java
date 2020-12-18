@@ -37,10 +37,10 @@ public class Choice implements Marked {
 	 * @param marker
 	 * @param value
 	 */
-	public Choice(Marker marker, String value, Function<Object, Object> parser) {
+	public Choice(Marker marker, Object value, Function<Object, Object> parser) {
 		this.marker = marker;
 		this.value = parser.apply(value);
-		this.label = value;
+		this.label = DefaultConverter.INSTANCE.convert(value, String.class);
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class Choice implements Marked {
 	 * @param marker
 	 * @param value
 	 */
-	public Choice(Marker marker, String value, String label, Function<Object, Object> parser) {
+	public Choice(Marker marker, Object value, String label, Function<Object, Object> parser) {
 		this.marker = marker;
 		this.value = value;
 		this.label = label;
@@ -124,12 +124,10 @@ public class Choice implements Marked {
 		if (choicesConfig instanceof Map) {
 			for (Entry<String, Object> che: ((Map<String,Object>) choicesConfig).entrySet()) {
 				Marker eMarker = Util.getMarker((Map<String,Object>) choicesConfig, che.getKey());
-				if (che.getValue() instanceof String) {
-					ret.add(new Choice(eMarker, che.getKey(), (String) che.getValue(), parser));
-				} else if (che.getValue() instanceof Map) {
+				if (che.getValue() instanceof Map) {
 					ret.add(new Choice(eMarker, che.getKey(), (Map<String,Object>) che.getValue(), parser));
 				} else {
-					throw new ConfigurationException("Unsupported choices element: " + che, eMarker);														
+					ret.add(new Choice(eMarker, che.getKey(), DefaultConverter.INSTANCE.convert(che.getValue(), String.class), parser));
 				}
 			}
 			return ret;
@@ -179,7 +177,7 @@ public class Choice implements Marked {
 	 */
 	public Descriptor toDescriptor(Context context) {
 		if (choices == null) {
-			return new DescriptorSet() {
+			return new ChoiceDescriptor() {
 
 				@Override
 				public String getIcon() {
@@ -205,15 +203,33 @@ public class Choice implements Marked {
 					}
 				}
 
+				@SuppressWarnings("unchecked")
 				@Override
-				public List<Descriptor> getDescriptors() {
-					return choices.stream().map(c -> c.toDescriptor(context)).filter(d -> d.isEnabled()).collect(Collectors.toList());
+				public Object get() {
+					Object ret = value;
+					if (ret != null) {
+						return ret;
+					}
+					
+					if (ret instanceof String) {
+						return context.interpolate((String) ret);
+					}
+					
+					if (ret instanceof Map) {
+						return context.interpolate((Map<String,?>) ret);
+					}
+					
+					if (ret instanceof Collection) {
+						return context.interpolate((Collection<?>) ret);
+					}
+					
+					return ret;
 				}
 				
 			};
 		}
 		
-		return new ChoiceDescriptor() {
+		return new DescriptorSet() {
 
 			@Override
 			public String getIcon() {
@@ -239,30 +255,13 @@ public class Choice implements Marked {
 				}
 			}
 
-			@SuppressWarnings("unchecked")
 			@Override
-			public Object get() {
-				Object ret = value;
-				if (ret != null) {
-					return ret;
-				}
-				
-				if (ret instanceof String) {
-					return context.interpolate((String) ret);
-				}
-				
-				if (ret instanceof Map) {
-					return context.interpolate((Map<String,?>) ret);
-				}
-				
-				if (ret instanceof Collection) {
-					return context.interpolate((Collection<?>) ret);
-				}
-				
-				return ret;
+			public List<Descriptor> getDescriptors() {
+				return choices.stream().map(c -> c.toDescriptor(context)).filter(d -> d.isEnabled()).collect(Collectors.toList());
 			}
 			
 		};
+		
 	}
 
 }

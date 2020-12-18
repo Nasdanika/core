@@ -248,7 +248,7 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
-	public static Marker getMarker(Map<?,?> map, String key) {
+	public static Marker getMarker(Map<?,?> map, Object key) {
 		return map instanceof MarkedLinkedHashMap ? ((MarkedLinkedHashMap<?,?>) map).getMarker(key) : null;
 	}
 		

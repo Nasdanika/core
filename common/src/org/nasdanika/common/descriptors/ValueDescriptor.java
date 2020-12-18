@@ -19,7 +19,7 @@ public interface ValueDescriptor extends Descriptor {
 	 *
 	 */
 	enum Control {
-		DATE, TIME, DROP_DOWN, CHECKBOX, RADIO, FILE, NUMBER, PASSWORD, TEXT, TEXT_AREA		
+		DATE, TIME, DATE_TIME, DROP_DOWN, CHECKBOX, RADIO, FILE, NUMBER, PASSWORD, TEXT, TEXT_AREA		
 	}
 	
 	/**
