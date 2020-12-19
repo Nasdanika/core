@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,13 +18,13 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnosable;
 import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
-import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.ChoicesPropertyDescriptor;
 import org.nasdanika.common.descriptors.Descriptor;
@@ -224,13 +225,19 @@ public class Property extends AbstractProperty {
 				}
 				
 				// Validations
+				Map<String, Object> bindings = new HashMap<>();
+				bindings.put("context", context);
+				bindings.put("values", values);
+				
 				NullProgressMonitor progressMonitor = new NullProgressMonitor();
-				Context validationContext = Context.singleton("values", values).compose(context);
-				for (SupplierFactory<Diagnosable> validation: validations) {
-					try {
-						ret.add(validation.create(validationContext).execute(progressMonitor).diagnose(progressMonitor));
-					} catch (Exception e) {
-						ret.add(new BasicDiagnostic(Status.ERROR, "Could not create validation: " + e, this, e));				
+				for (Object value: values) {
+					for (FunctionFactory<Map<String, Object>, Diagnosable> validation: validations) {
+						try {
+							bindings.put("value", value);
+							ret.add(validation.create(context).execute(bindings, progressMonitor).diagnose(progressMonitor));
+						} catch (Exception e) {
+							ret.add(new BasicDiagnostic(Status.ERROR, "Could not create validation: " + e, this, e));				
+						}
 					}
 				}
 				

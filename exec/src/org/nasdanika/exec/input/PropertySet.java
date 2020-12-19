@@ -1,10 +1,9 @@
 package org.nasdanika.exec.input;
 
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,6 +17,7 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnosable;
 import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.NullProgressMonitor;
@@ -30,7 +30,6 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 
 public class PropertySet extends AbstractProperty {
@@ -162,9 +161,12 @@ public class PropertySet extends AbstractProperty {
 			if (isEnabled(context)) {	
 				// Validations
 				NullProgressMonitor progressMonitor = new NullProgressMonitor();
-				for (SupplierFactory<Diagnosable> validation: validations) {
+				Map<String, Object> bindings = new HashMap<>();
+				bindings.put("context", context);
+				
+				for (FunctionFactory<Map<String, Object>, Diagnosable> validation: validations) {
 					try {
-						ret.add(validation.create(context).execute(progressMonitor).diagnose(progressMonitor));
+						ret.add(validation.create(context).execute(bindings, progressMonitor).diagnose(progressMonitor));
 					} catch (Exception e) {
 						ret.add(new BasicDiagnostic(Status.ERROR, "Could not create validation: " + e, this, e));				
 					}

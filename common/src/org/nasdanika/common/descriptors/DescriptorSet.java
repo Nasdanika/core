@@ -83,14 +83,14 @@ public interface DescriptorSet extends Descriptor/*, Composeable<DescriptorSet> 
 	 * Sets property values retrieved from the source
 	 * @param source Source of property values
 	 */
-	default void setProperties(Function<String,Object> source) {	
+	default void setProperties(Function<PropertyDescriptor,Object> source) {	
 		if (isEnabled()) {
 			for (Descriptor descriptor: getDescriptors()) {
 				if (descriptor.isEnabled()) {
 					if (descriptor instanceof PropertyDescriptor) {
 						PropertyDescriptor propertyDescriptor = (PropertyDescriptor) descriptor;
 						if (propertyDescriptor.isEditable()) {
-							Object value = source.apply(propertyDescriptor.getName());
+							Object value = source.apply(propertyDescriptor);
 							if (value != null) {
 								propertyDescriptor.set(value);
 							}

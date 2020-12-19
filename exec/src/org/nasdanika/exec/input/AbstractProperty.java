@@ -5,11 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.nasdanika.common.BasicDiagnostic;
+import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnosable;
 import org.nasdanika.common.Diagnostic;
@@ -49,7 +49,7 @@ public abstract class AbstractProperty implements Marked {
 	private static final String VALIDATION_SEVERITY_KEY = "severity";
 	private static final String VALIDATION_MESSAGE_KEY = "message";	
 	
-	protected List<SupplierFactory<Diagnosable>> validations = new ArrayList<>();
+	protected List<FunctionFactory<Map<String, Object>, Diagnosable>> validations = new ArrayList<>();
 	protected List<String> conditions = new ArrayList<>();
 		
 	public AbstractProperty(ObjectLoader loader, String prefix, String name, Object config, URL base, Marker marker, ProgressMonitor monitor) throws Exception {
@@ -93,12 +93,12 @@ public abstract class AbstractProperty implements Marked {
 						
 						SupplierFactory<InputStream> scriptFactory = Loader.asSupplierFactory(loader.load(vSpecMap.get(VALIDATION_CONDITION_KEY), base, monitor));
 						
-						FunctionFactory<String, Diagnosable> diagnosableFactory = new FunctionFactory<String, Diagnosable>() {
+						FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable> diagnosableFactory = new FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable>() {
 
 							@Override
-							public Function<String, Diagnosable> create(Context dCtx) throws Exception {
+							public Function<BiSupplier<Map<String, Object>, String>, Diagnosable> create(Context dCtx) throws Exception {
 								
-								return new Function<String, Diagnosable>() {
+								return new Function<BiSupplier<Map<String, Object>, String>, Diagnosable>() {
 
 									@Override
 									public double size() {
@@ -111,7 +111,7 @@ public abstract class AbstractProperty implements Marked {
 									}
 
 									@Override
-									public Diagnosable execute(String script, ProgressMonitor progressMonitor) throws Exception {
+									public Diagnosable execute(BiSupplier<Map<String, Object>, String> scriptAndBinding, ProgressMonitor progressMonitor) throws Exception {
 										return new Diagnosable() {
 										
 											@Override
@@ -124,11 +124,8 @@ public abstract class AbstractProperty implements Marked {
 													monitor.worked(Status.ERROR, 1, "Exception while evaluating condition: " + ex, AbstractProperty.this, ex); 
 													return new BasicDiagnostic(Status.ERROR, "Exception while evaluating condition", AbstractProperty.this, ex);
 												}
-												Map<String, Object> bindings = new HashMap<>();
-												bindings.put("context", dCtx);
-												bindings.put("value", dCtx.get(getName()));
 												try {
-													Object result = Util.eval(script, bindings);
+													Object result = Util.eval(scriptAndBinding.getSecond(), scriptAndBinding.getFirst());
 													return new BasicDiagnostic(Boolean.TRUE.equals(result) ? Status.SUCCESS : severity, String.valueOf(vSpecMap.get(VALIDATION_MESSAGE_KEY)), AbstractProperty.this);
 												} catch (Exception e) {
 													monitor.worked(Status.ERROR, 1, "Exception while evaluating validation condition at " + (vSpecMap instanceof Marked ? ((Marked) vSpecMap).getMarker() : "") + ": " + e, AbstractProperty.this, e); 
@@ -146,7 +143,8 @@ public abstract class AbstractProperty implements Marked {
 							
 						};
 																
-						validations.add(scriptFactory.then(Util.TO_STRING).then(diagnosableFactory));
+						FunctionFactory<Map<String, Object>, BiSupplier<Map<String, Object>, String>> scriptAndBindingsFactory = scriptFactory.then(Util.TO_STRING).asFunctionFactory();
+						validations.add(scriptAndBindingsFactory.then(diagnosableFactory));
 					} else {
 						throw new ConfigurationException("Validation specification shall be a map, got " + config.getClass(), Util.getMarker(vSpecs, index));						
 					}
@@ -158,6 +156,7 @@ public abstract class AbstractProperty implements Marked {
 			throw new ConfigurationException("Configuration shall be a map, got " + config.getClass(), marker);
 		}		
 	}
+	
 	@Override
 	public Marker getMarker() {
 		return marker;

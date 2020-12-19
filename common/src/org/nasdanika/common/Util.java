@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -32,6 +34,8 @@ import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
 
 public class Util {
+	
+	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 
 	private Util() {
 		// Singleton
@@ -455,5 +459,33 @@ public class Util {
 	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
 		return checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
 	}
+	
+	/**
+	 * Extracts first sentence from text
+	 * @param context
+	 * @param text
+	 * @return
+	 * @throws Exception
+	 */
+	public static String firstSentence(String text, int minSentenceLength, int maxSentenceLength, String... abbreviations) {
+		if (text == null || text.length() < minSentenceLength) {
+			return text;
+		}
+		Matcher matcher = SENTENCE_PATTERN.matcher(text);		
+		Z: while (matcher.find()) {
+			String group = matcher.group();
+			for (String abbr: abbreviations) {
+				if (group.trim().endsWith(abbr)) {
+					continue Z;
+				}
+			}
+			if (matcher.end() > minSentenceLength && matcher.end() < maxSentenceLength) {
+				return text.substring(0, matcher.end());
+			}
+		}
+		
+		return text.length() < maxSentenceLength ? text : text.substring(0, maxSentenceLength)+"...";
+	}
+	
 			
 }

@@ -19,6 +19,13 @@ group:
    elements: Hello ${name}      
 ```
 
+### Spring controller example
+
+In [spring-exec](https://github.com/Nasdanika/spring-exec) repository on GitHub you can find how to generate UI, validate input, and generate code using Group in a Spring application:
+
+* [YAML specification](https://github.com/Nasdanika/spring-exec/blob/main/src/main/resources/org/nasdanika/spring/exec/controllers/zip-generator.yml)
+* [Controller](https://github.com/Nasdanika/spring-exec/blob/main/src/main/java/org/nasdanika/spring/exec/controllers/ExecController.java)
+
 ### Input specification
 
 Input is a specification of a set of context properties and services. 
@@ -62,7 +69,6 @@ Supported keys:
 * ``choices`` - property value choices. List or map - see details below.    
 * ``condition`` - a single value or a list of JavaScript expressions which should all evaluate to ``true`` for this property to be displayed, validated, and injected into the context. Script bindings:
     * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
-    * ``values`` - property values ${javadoc/java.util.List list}.
 * ``control`` - an optional hint to the UI generator specifying which UI control to use to show and collect property value. Supported string values:
     * ``date`` - date control.
     * ``time`` - time control.
@@ -83,10 +89,12 @@ Supported keys:
 * ``name`` - property name. Required if property is defined in a list.   
 * ``type`` - Fully qualified name of property class. Defaults to ``java.lang.String``.
 * ``validate`` - a map or a list of maps containing cross-property validations. Map keys:
-    * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Has the same bindings as ``conditions`` plus ``value`` binding containing property value. Use nested ``reference`` to load condition script from a resource.
+    * ``condition`` - JavaScript condition which must evaluate to ``true`` for the validation to pass. Evaluated for each value in case of multi-value properties. Use nested ``reference`` to load condition script from a resource. Has the following bindings:
+        * ``context`` - ${javadoc/org.nasdanika.common.Context} constructed from the group context and user input collected so far.
+        * ``values`` - property values ${javadoc/java.util.List list}.
+        * ``value`` - individual value from values.
     * ``severity`` - ``WARNING`` or ``ERROR``. Default is ``ERROR``.
-    * ``message`` - diagnostic message. 
-        
+    * ``message`` - diagnostic message.         
     
 #### Choices
 
@@ -116,18 +124,3 @@ Choice specification maps support the following keys:
 * ``description`` - optional choice description.
 * ``icon`` - optional icon. Treated as a URL if contains a slash (``/``) or as a CSS class otherwise. E.g. ``fa fa-cog``.
 * ``label`` - optional choice label to display to the user.
-
-### Spring controller example
-
-TODO - description, spec, controller (partial), link to code on GitHub. Mention rendering by HTML view parts.
-
-#### Specification
-
-```yaml
-```
-
-#### Controller
-
-
-```java
-```

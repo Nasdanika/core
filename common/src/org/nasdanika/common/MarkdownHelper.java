@@ -1,8 +1,5 @@
 package org.nasdanika.common;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.jsoup.Jsoup;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -40,7 +37,6 @@ public class MarkdownHelper {
 	public static final String HIGHLIGHT_JS_SCRIPT_CDN = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js";
 	public static final String HIGHLIGHT_JS_INIT_SCRIPT = "hljs.initHighlightingOnLoad();";
 		
-	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 	public static final int MIN_FIRST_SENTENCE_LENGTH = 20;
 	public static final int MAX_FIRST_SENTENCE_LENGTH = 250;	
 	public static final String[] ABBREVIATIONS = { "e.g.", "i.e.", "etc." };
@@ -90,24 +86,7 @@ public class MarkdownHelper {
 	 * @throws Exception
 	 */
 	public String firstSentence(String text) {
-		if (text == null || text.length() < getMinFirstSentenceLength()) {
-			return text;
-		}
-		Matcher matcher = SENTENCE_PATTERN.matcher(text);		
-		Z: while (matcher.find()) {
-			String group = matcher.group();
-			String[] abbreviations = getAbbreviations();
-			for (String abbr: abbreviations) {
-				if (group.trim().endsWith(abbr)) {
-					continue Z;
-				}
-			}
-			if (matcher.end() > getMinFirstSentenceLength() && matcher.end() < getMaxFirstSentenceLength()) {
-				return text.substring(0, matcher.end());
-			}
-		}
-		
-		return text.length() < getMaxFirstSentenceLength() ? text : text.substring(0, getMaxFirstSentenceLength())+"...";
+		return Util.firstSentence(text, getMinFirstSentenceLength(), getMaxFirstSentenceLength(), getAbbreviations());
 	}
 	
 	protected int getMinFirstSentenceLength() {
