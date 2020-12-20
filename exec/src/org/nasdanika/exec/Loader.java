@@ -28,6 +28,7 @@ import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Json;
+import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Replace;
 import org.nasdanika.exec.content.Resource;
@@ -96,6 +97,8 @@ public class Loader extends ObjectLoader {
 				return new If(loader, config, base, subMonitor, marker);
 			case "switch": 
 				return new Switch(loader, config, base, subMonitor, marker);
+				
+			// TODO - call	
 			
 			// Resources
 			case "container":
@@ -114,6 +117,10 @@ public class Loader extends ObjectLoader {
 				return new Interpolator(loader, config, base, subMonitor, marker);
 			case "mustache":
 				return new Mustache(loader, config, base, subMonitor, marker);
+			case "markdown":
+				return new Markdown(loader, config, base, subMonitor, marker, false);
+			case "styled-markdown":
+				return new Markdown(loader, config, base, subMonitor, marker, true);
 			case "free-marker":
 				return new FreeMarker(loader, config, base, subMonitor, marker);
 			case "replace":

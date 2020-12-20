@@ -56,6 +56,7 @@ import org.nasdanika.exec.content.FreeMarker;
 import org.nasdanika.exec.content.HttpCall;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Json;
+import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Mustache;
 import org.nasdanika.exec.content.Replace;
 import org.nasdanika.exec.content.Resource;
@@ -373,6 +374,20 @@ public class TestExec {
 		
 		InputStream result = callSupplier(context, monitor, mustache);
 		assertEquals("Hello World!", Util.toString(context, result));
+	}
+	
+	@Test
+	public void testMarkdown() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object mustache = loader.loadYaml(TestExec.class.getResource("markdown-spec.yml"), monitor);
+		assertEquals(Markdown.class, mustache.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		InputStream result = supplier.execute(monitor);
+		assertEquals("<p>Hello, <code>World</code>!</p>", Util.toString(context, result).trim());
 	}
 	
 	@SuppressWarnings("unchecked")
