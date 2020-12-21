@@ -292,7 +292,7 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
-	public static String getString(Map<?,?> map, String key, String defaultValue) {
+	public static String getString(Map<?,?> map, Object key, String defaultValue) {
 		Object val = map.get(key);
 		if (val == null) {
 			return defaultValue;
@@ -304,13 +304,30 @@ public class Util {
 	}
 
 	/**
+	 * Returns a {@link String} value or throws {@link ConfigurationException} if value is not null and not a string.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
+	public static boolean getBoolean(Map<?,?> map, Object key, boolean defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof Boolean) {
+			return (Boolean) val;
+		}
+		throw new ConfigurationException(key + " value must be a boolean", getMarker(map, key));		
+	}
+
+	/**
 	 * Returns a {@link Collection} value or throws {@link ConfigurationException} if value is not null and not a collection.
 	 * @param map
 	 * @param key
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> Collection<T> getCollection(Map<String,?> map, String key, Collection<T> defaultValue) {
+	public static <T> Collection<T> getCollection(Map<String,?> map, Object key, Collection<T> defaultValue) {
 		Object val = map.get(key);
 		if (val == null) {
 			return defaultValue;
@@ -328,7 +345,7 @@ public class Util {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <K,V> Map<K,V> getMap(Map<String,?> map, String key, Map<K,V> defaultValue) {
+	public static <K,V> Map<K,V> getMap(Map<?,?> map, Object key, Map<K,V> defaultValue) {
 		Object val = map.get(key);
 		if (val == null) {
 			return defaultValue;

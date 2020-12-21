@@ -7,7 +7,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 
-public class CustomLoaderThree extends ObjectLoader {
+public class CustomLoaderThree implements ObjectLoader {
 
 	public CustomLoaderThree(ObjectLoader chain) {
 		this.chain = chain;

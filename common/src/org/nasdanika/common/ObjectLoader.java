@@ -32,7 +32,7 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public abstract class ObjectLoader {
+public interface ObjectLoader {
 	
 	/**
 	 * Creates an object of requested type with a given config.
@@ -45,10 +45,10 @@ public abstract class ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public abstract Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
+	Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
 	
 	@SuppressWarnings("unchecked")
-	public Object load(Object spec, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object load(Object spec, URL base, ProgressMonitor progressMonitor) throws Exception {
 		// map
 		if (spec instanceof Map) {
 			Map<String,Object> map = (Map<String,Object>) spec;
@@ -79,64 +79,64 @@ public abstract class ObjectLoader {
 		return spec;
 	}
 	
-	public Object loadYaml(String yamlString, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(String yamlString, URL base, ProgressMonitor progressMonitor) throws Exception {
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(yamlString), base, progressMonitor);
 	}
 	
-	public Object loadYaml(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(in), base, progressMonitor);
 	}
 	
-	public Object loadYaml(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(reader), base, progressMonitor);
 	}
 	
-	public Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading YAML from " + url);
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(url.toString());
 		return load(yaml.load(url.openStream()), url, progressMonitor);
 	}
 		
-	public Object loadJsonObject(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONObject jsonObject = new JSONObject(new JSONTokener(str));
 		return load(jsonObject.toMap(), base, progressMonitor);
 	}
 	
-	public Object loadJsonObject(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONObject jsonObject = new JSONObject(new JSONTokener(in));
 		return load(jsonObject.toMap(), base, progressMonitor);
 	}
 	
-	public Object loadJsonObject(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONObject jsonObject = new JSONObject(new JSONTokener(reader));
 		return load(jsonObject.toMap(), base, progressMonitor);
 	}
 	
-	public Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading JSON object from " + url);
 		JSONObject jsonObject = new JSONObject(new JSONTokener(url.openStream()));
 		return load(jsonObject.toMap(), url, progressMonitor);
 	}
 		
-	public Object loadJsonArray(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONArray jsonArray = new JSONArray(new JSONTokener(str));
 		return load(jsonArray.toList(), base, progressMonitor);
 	}
 	
-	public Object loadJsonArray(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONArray jsonArray = new JSONArray(new JSONTokener(in));
 		return load(jsonArray.toList(), base, progressMonitor);
 	}
 	
-	public Object loadJsonArray(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
 		JSONArray jsonArray = new JSONArray(new JSONTokener(reader));
 		return load(jsonArray.toList(), base, progressMonitor);
 	}
 	
-	public Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading JSON array from " + url);
 		JSONArray jsonArray = new JSONArray(new JSONTokener(url.openStream()));
 		return load(jsonArray.toList(), url, progressMonitor);

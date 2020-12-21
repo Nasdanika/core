@@ -8,7 +8,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 
-public class CustomLoader extends ObjectLoader {
+public class CustomLoader implements ObjectLoader {
 	
 	private Consumer<String> resultsCollector;
 

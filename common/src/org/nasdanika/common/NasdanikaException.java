@@ -23,7 +23,7 @@ public class NasdanikaException extends RuntimeException {
 	public NasdanikaException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
-	
+			
 	protected ProgressRecorder progressRecorder;
 	
 	/**

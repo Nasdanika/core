@@ -11,7 +11,7 @@ import org.nasdanika.common.persistence.Marker;
  * @author Pavel
  *
  */
-public class ClassLoaderObjectLoader extends ObjectLoader {
+public class ClassLoaderObjectLoader implements ObjectLoader {
 	
 	private ClassLoader classLoader;
 	private java.util.function.Function<String, String> resolver;

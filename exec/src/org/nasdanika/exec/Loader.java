@@ -53,7 +53,7 @@ import org.nasdanika.exec.resources.ZipResourceCollection;
  * @author Pavel
  *
  */
-public class Loader extends ObjectLoader {
+public class Loader implements ObjectLoader {
 	
 	private org.nasdanika.common.ObjectLoader chain;
 
