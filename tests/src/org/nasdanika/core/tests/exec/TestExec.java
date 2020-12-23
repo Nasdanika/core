@@ -390,6 +390,20 @@ public class TestExec {
 		assertEquals("<p>Hello, <code>World</code>!</p>", Util.toString(context, result).trim());
 	}
 	
+	@Test
+	public void testMarkdownClasspathResource() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object mustache = loader.loadYaml(TestExec.class.getResource("markdown-classpath-resource-spec.yml"), monitor);
+		assertEquals(Markdown.class, mustache.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;		
+		
+		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		String strResult = Util.toString(context, callSupplier(supplier,monitor)).trim();
+		assertTrue(strResult.contains("This is markdown test"));
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFreeMarker() throws Exception {
