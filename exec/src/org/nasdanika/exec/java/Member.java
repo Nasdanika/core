@@ -64,17 +64,17 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 			this.marker = marker;
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, getSupportedKeys());
-			name = Loader.getString(configMap, NAME_KEY, true, marker);
-			Loader.loadMultiString(configMap, MODIFIERS_KEY, modifiers::add);
-			Loader.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
-			Loader.loadMultiString(configMap, TYPE_PARAMETERS_KEY, typeParameters::add);
+			name = Util.getString(configMap, NAME_KEY, true, marker);
+			Util.loadMultiString(configMap, MODIFIERS_KEY, modifiers::add);
+			Util.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
+			Util.loadMultiString(configMap, TYPE_PARAMETERS_KEY, typeParameters::add);
 			if (configMap.containsKey(COMMENT_KEY)) {
 				comment = Loader.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
 			}
 			if (configMap.containsKey(BODY_KEY)) {
 				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
 			}
-			Loader.loadMultiString(configMap, CompilationUnit.IMPORTS_KEY, imports::add);			
+			Util.loadMultiString(configMap, CompilationUnit.IMPORTS_KEY, imports::add);			
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 		}

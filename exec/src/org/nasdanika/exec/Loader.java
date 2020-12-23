@@ -3,8 +3,6 @@ package org.nasdanika.exec;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Map;
-import java.util.function.Consumer;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.CommandFactory;
@@ -307,60 +305,6 @@ public class Loader implements ObjectLoader {
 		}
 				
 		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
-	};
-	
-	/**
-	 * Gets string configuration value.
-	 * @param configMap
-	 * @param key
-	 * @param required
-	 * @return
-	 */
-	public static String getString(Map<String, Object> configMap, String key, boolean required, Marker marker) {
-		if (configMap.containsKey(key)) {
-			Object val = configMap.get(key);
-			if (val == null && !required) {
-				return null;
-			}
-			if (val instanceof String) {
-				return (String) val;
-			} 
-			
-			throw new ConfigurationException(key + " value must be a string", Util.getMarker(configMap, key));
-		}
-		
-		if (required) {
-			throw new ConfigurationException(key + " is missing", marker);			
-		}
-		
-		return null;
-	}	
-
-	/**
-	 * Loads values from a key which can be either a string (single value) or a list of strings (multi-value)
-	 * @param configMap
-	 * @param key
-	 * @param consumer
-	 */
-	public static void loadMultiString(Map<String,Object> configMap, String key, Consumer<String> consumer) {
-		if (configMap.containsKey(key)) {
-			Object val = configMap.get(key);
-			if (val instanceof String) {
-				consumer.accept((String) val);
-			} else if (val instanceof Collection) {
-				int idx = 0;
-				for (Object ve: (Collection<?>) val) {
-					if (ve instanceof String) {
-						consumer.accept((String) ve);
-					} else {
-						throw new ConfigurationException(key + " element must be a string", Util.getMarker((Collection<?>) val, idx));							
-					}
-					++idx;
-				}
-			} else {
-				throw new ConfigurationException(key + " value must be a string or list", Util.getMarker(configMap, key));
-			}
-		}		
 	}	
 		
 }

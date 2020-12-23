@@ -20,7 +20,6 @@ import org.nasdanika.common.descriptors.ValueDescriptor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
 
 public class Choice implements Marked {
 	
@@ -92,7 +91,7 @@ public class Choice implements Marked {
 		label = Util.getString(config, LABEL_KEY, DefaultConverter.INSTANCE.convert(value, String.class));
 		description = Util.getString(config, DESCRIPTION_KEY, null);
 				
-		Loader.loadMultiString(config, CONDITION_KEY, conditions::add);
+		Util.loadMultiString(config, CONDITION_KEY, conditions::add);
 		
 		if (config.containsKey(CHOICES_KEY)) {
 			Marker choicesMarker = Util.getMarker(config, CHOICES_KEY);

@@ -53,8 +53,7 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 		}
 		
 	};
-	
-	
+		
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {
 		return source.then(filterFactory).create(context);

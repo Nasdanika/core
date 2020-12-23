@@ -12,7 +12,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
 
 public class Method extends Operation {
 		
@@ -22,7 +21,7 @@ public class Method extends Operation {
 	@SuppressWarnings("unchecked")
 	public Method(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
-		returnType = Loader.getString((Map<String, Object>) config, RETURN_TYPE_KEY, false, marker);
+		returnType = Util.getString((Map<String, Object>) config, RETURN_TYPE_KEY, false, marker);
 	}
 	
 	public Method(

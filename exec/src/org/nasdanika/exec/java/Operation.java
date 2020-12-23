@@ -12,8 +12,8 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
 
 public abstract class Operation extends Member {
 
@@ -26,8 +26,8 @@ public abstract class Operation extends Member {
 	@SuppressWarnings("unchecked")
 	protected Operation(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
-		Loader.loadMultiString((Map<String, Object>) config, PARAMETERS_KEY, parameters::add);
-		Loader.loadMultiString((Map<String, Object>) config, EXCEPTIONS_KEY, exceptions::add);
+		Util.loadMultiString((Map<String, Object>) config, PARAMETERS_KEY, parameters::add);
+		Util.loadMultiString((Map<String, Object>) config, EXCEPTIONS_KEY, exceptions::add);
 	}
 	
 	protected Operation(

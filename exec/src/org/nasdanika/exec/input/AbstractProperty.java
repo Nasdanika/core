@@ -64,7 +64,7 @@ public abstract class AbstractProperty implements Marked {
 			label = Util.getString(configMap, LABEL_KEY, Util.isBlank(name) ? name : Util.nameToLabel(name));
 			
 			if (configMap.containsKey(CONDITION_KEY)) {
-				Loader.loadMultiString(configMap, CONDITION_KEY, conditions::add);
+				Util.loadMultiString(configMap, CONDITION_KEY, conditions::add);
 			} 
 			
 			if (configMap.containsKey(VALIDATE_KEY)) {

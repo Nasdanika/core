@@ -19,6 +19,8 @@ import org.nasdanika.common.persistence.Marker;
  */
 public class Reference implements Adaptable, Marked {
 	
+	public static final String CLASSPATH_URL_PREFIX = "classpath://";
+	
 	protected Object target;
 	private Marker marker;
 	
@@ -29,7 +31,8 @@ public class Reference implements Adaptable, Marked {
 
 	public Reference(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof String) {
-			URL targetURL = new URL(base, (String) config);
+			String configStr = (String) config;			
+			URL targetURL = configStr.startsWith(CLASSPATH_URL_PREFIX) ? loader.getClass().getClassLoader().getResource(configStr.substring(CLASSPATH_URL_PREFIX.length())) : new URL(base, configStr);
 			target = loader.loadYaml(targetURL, progressMonitor);
 			this.marker = marker;
 		} else {

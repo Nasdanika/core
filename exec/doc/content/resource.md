@@ -1,4 +1,5 @@
 Loads resource from a URL specified as resource value. The value is interpolated and then is resolved relative to the base URL.
+Use ``classpath`` protocol to load classloader resources. E.g. ``classpath://org/nasdanika/exec/some-resource.md``
 
 ### Example
 

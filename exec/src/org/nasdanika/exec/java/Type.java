@@ -10,8 +10,8 @@ import java.util.Map;
 import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
 
 public abstract class Type extends Member {
 
@@ -28,7 +28,7 @@ public abstract class Type extends Member {
 	@SuppressWarnings("unchecked")
 	protected Type(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
-		Loader.loadMultiString((Map<String, Object>) config, SUPER_TYPES_KEY, superTypes::add);
+		Util.loadMultiString((Map<String, Object>) config, SUPER_TYPES_KEY, superTypes::add);
 	}
 
 	protected Type(

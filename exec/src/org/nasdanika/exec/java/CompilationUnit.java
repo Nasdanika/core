@@ -27,7 +27,6 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.Merger;
-import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.java.Package.PackageInfo;
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.ReconcileAction;
@@ -44,7 +43,7 @@ public class CompilationUnit extends File {
 	public CompilationUnit(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		super(loader, config, base, progressMonitor, marker);
 		Map<String, Object> configMap = (Map<String, Object>) config;
-		Loader.loadMultiString(configMap, IMPORTS_KEY, imports::add);
+		Util.loadMultiString(configMap, IMPORTS_KEY, imports::add);
 		if (configMap.containsKey(FORMAT_KEY)) {
 			format = Boolean.TRUE.equals(configMap.get(FORMAT_KEY));
 		}

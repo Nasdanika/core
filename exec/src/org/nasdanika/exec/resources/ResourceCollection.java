@@ -15,7 +15,6 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.Loader;
 
 import io.github.azagniotov.matcher.AntPathMatcher;
 
@@ -76,12 +75,12 @@ public abstract class ResourceCollection implements ConsumerFactory<BinaryEntity
 					throw new ConfigurationException(RECONCILE_ACTION_KEY + " value must be a string", Util.getMarker(configMap, RECONCILE_ACTION_KEY));
 				}
 			}
-			path = Loader.getString(configMap, PATH_KEY, false, marker);
-			prefix = Loader.getString(configMap, PREFIX_KEY, false, marker);
-			Loader.loadMultiString(configMap, INCLUDES_KEY, includes::add);
-			Loader.loadMultiString(configMap, EXCLUDES_KEY, excludes::add);
-			Loader.loadMultiString(configMap, INTERPOLATION_INCLUDES_KEY, interpolationIncludes::add);
-			Loader.loadMultiString(configMap, INTERPOLATION_EXCLUDES_KEY, interpolationExcludes::add);			
+			path = Util.getString(configMap, PATH_KEY, false, marker);
+			prefix = Util.getString(configMap, PREFIX_KEY, false, marker);
+			Util.loadMultiString(configMap, INCLUDES_KEY, includes::add);
+			Util.loadMultiString(configMap, EXCLUDES_KEY, excludes::add);
+			Util.loadMultiString(configMap, INTERPOLATION_INCLUDES_KEY, interpolationIncludes::add);
+			Util.loadMultiString(configMap, INTERPOLATION_EXCLUDES_KEY, interpolationExcludes::add);			
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 		}

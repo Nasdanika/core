@@ -15,6 +15,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.exec.Reference;
 
 /**
  * Loads content from URL resolved relative to the base url passed to the constructor.
@@ -27,6 +28,7 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 	protected URL base;
 	protected String url;
 	private Marker marker;
+	private ClassLoader classLoader;
 	
 	@Override
 	public Marker getMarker() {
@@ -38,6 +40,7 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 			this.marker = marker;
 			this.url = (String) config;
 			this.base = base;
+			this.classLoader = loader.getClass().getClassLoader();
 		} else {
 			throw new ConfigurationException("Resource value must be a string, got " + config.getClass(), marker);
 		}
@@ -62,7 +65,8 @@ public class Resource implements SupplierFactory<InputStream>, Marked {
 			@Override
 			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
 				try{
-					theURL = new URL(base, context.interpolateToString(url));
+					String iUrl = context.interpolateToString(url);
+					theURL = iUrl.startsWith(Reference.CLASSPATH_URL_PREFIX) ? classLoader.getResource(iUrl.substring(Reference.CLASSPATH_URL_PREFIX.length())) : new URL(base, iUrl);
 					return Supplier.super.diagnose(progressMonitor);
 				} catch (MalformedURLException e) {					
 					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (marker == null ? "" : " at " + marker));

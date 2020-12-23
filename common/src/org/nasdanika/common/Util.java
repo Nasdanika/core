@@ -18,15 +18,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
+import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.MarkedArrayList;
@@ -309,6 +311,30 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
+	public static int getInt(Map<?,?> map, Object key, int defaultValue) {
+		Object val = map.get(key);
+		if (val == null) {
+			return defaultValue;
+		}
+		if (val instanceof Number) {
+			return ((Number) val).intValue();
+		}
+		if (val instanceof String) {
+			try {
+				return Integer.parseInt((String) val);
+			} catch (NumberFormatException e) {
+				throw new ConfigurationException(e.getMessage(), e, getMarker(map, key));						
+			}
+		}
+		throw new ConfigurationException(key + " value must be a string", getMarker(map, key));		
+	}
+
+	/**
+	 * Returns a {@link String} value or throws {@link ConfigurationException} if value is not null and not a string.
+	 * @param map
+	 * @param key
+	 * @return
+	 */
 	public static boolean getBoolean(Map<?,?> map, Object key, boolean defaultValue) {
 		Object val = map.get(key);
 		if (val == null) {
@@ -503,6 +529,87 @@ public class Util {
 		
 		return text.length() < maxSentenceLength ? text : text.substring(0, maxSentenceLength)+"...";
 	}
-	
+
+	/**
+	 * Gets string configuration value.
+	 * @param configMap
+	 * @param key
+	 * @param required
+	 * @return
+	 */
+	public static String getString(Map<?, ?> configMap, Object key, boolean required, Marker marker) {
+		if (configMap.containsKey(key)) {
+			Object val = configMap.get(key);
+			if (val == null && !required) {
+				return null;
+			}
+			if (val instanceof String) {
+				return (String) val;
+			} 
 			
+			throw new ConfigurationException(key + " value must be a string", getMarker(configMap, key));
+		}
+		
+		if (required) {
+			throw new ConfigurationException(key + " is missing", marker);			
+		}
+		
+		return null;
+	}
+
+	/**
+	 * Loads values from a key which can be either a string (single value) or a list of strings (multi-value)
+	 * @param configMap
+	 * @param key
+	 * @param consumer
+	 */
+	public static void loadMultiString(Map<?,?> configMap, Object key, Consumer<String> consumer) {
+		if (configMap.containsKey(key)) {
+			Object val = configMap.get(key);
+			if (val instanceof String) {
+				consumer.accept((String) val);
+			} else if (val instanceof Collection) {
+				int idx = 0;
+				for (Object ve: (Collection<?>) val) {
+					if (ve instanceof String) {
+						consumer.accept((String) ve);
+					} else {
+						throw new ConfigurationException(key + " element must be a string", getMarker((Collection<?>) val, idx));							
+					}
+					++idx;
+				}
+			} else {
+				throw new ConfigurationException(key + " value must be a string or list", getMarker(configMap, key));
+			}
+		}		
+	}
+
+	/**
+	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> T callSupplier(Supplier<T> supplier, ProgressMonitor monitor) throws Exception {
+		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
+			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				throw new DiagnosticException(diagnostic);
+			}
+			
+			try {
+				T result = supplier.splitAndExecute(progressMonitor);
+				supplier.splitAndCommit(progressMonitor);
+				return result;
+			} catch (Exception e) {
+				supplier.splitAndRollback(progressMonitor);
+				throw e;
+			}
+		} finally {
+			supplier.close();
+		}
+	}
+				
 }
