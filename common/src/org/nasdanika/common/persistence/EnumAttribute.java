@@ -9,7 +9,7 @@ public class EnumAttribute<T extends Enum<T>> extends Attribute<T> {
 	private Class<T> type;
 
 	public EnumAttribute(Object key, Class<T> type, boolean required, T defaultValue, Object[] exclusiveWith) {
-		super(key, required, defaultValue, exclusiveWith);
+		super(key, false, required, defaultValue, null, exclusiveWith);
 		this.type = type;
 	}
 	

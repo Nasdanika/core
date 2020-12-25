@@ -1,12 +1,10 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.Map;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.MapCompoundSupplierFactory;
-import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 

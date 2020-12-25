@@ -17,7 +17,7 @@ import org.nasdanika.common.Util;
 public class MapAttribute<T> extends Attribute<Map<?, T>> {
 
 	public MapAttribute(Object key, boolean required, Map<?,T> defaultValue, Object... exclusiveWith) {
-		super(key, required, defaultValue, exclusiveWith);
+		super(key, false, required, defaultValue, null, exclusiveWith);
 	}
 	
 	@Override

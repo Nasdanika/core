@@ -14,7 +14,7 @@ public class FactoryFeature<T> extends Attribute<T> {
 	private ObjectFactory<T> factory;
 
 	public FactoryFeature(Object key, boolean required, T defaultValue, ObjectFactory<T> factory, Object... exclusiveWith) {
-		super(key, required, defaultValue, exclusiveWith);
+		super(key, false, required, defaultValue, null, exclusiveWith);
 		this.factory = factory;
 	}
 	

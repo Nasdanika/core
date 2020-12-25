@@ -2,8 +2,10 @@ package org.nasdanika.common.persistence;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -32,6 +34,9 @@ public class FeatureObject implements Marked {
 	 * @return
 	 */
 	protected <F extends Feature<?>> F addFeature(F feature) {
+		if (feature.isDefault() && features.stream().filter(Feature::isDefault).findFirst().isPresent()) {
+			throw new IllegalArgumentException("Duplicate default feature: " + feature.getKey());
+		}
 		features.add(feature);
 		return feature;
 	}
@@ -54,10 +59,17 @@ public class FeatureObject implements Marked {
 			for (Feature<?> feature: features) {
 				feature.load(loader, configMap, base, progressMonitor, marker);
 			}
-			return this;
 		} else {
-			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
+			Optional<Feature<?>> defaultFeatureOptional = features.stream().filter(Feature::isDefault).findFirst();
+			if (defaultFeatureOptional.isPresent()) {				
+				Feature<?> defaultFeature = defaultFeatureOptional.get();
+				// Singleton map with a single entry default feature key -> config.
+				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, marker);
+			} else {
+				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
+			}
 		}
+		return this;
 	}			
 
 }

@@ -18,7 +18,7 @@ import org.nasdanika.common.Util;
 public class ListAttribute<T> extends Attribute<List<T>> {
 
 	public ListAttribute(Object key, boolean required, List<T> defaultValue, Object... exclusiveWith) {
-		super(key, required, defaultValue, exclusiveWith);
+		super(key, false, required, defaultValue, null, exclusiveWith);
 	}
 	
 	@Override
