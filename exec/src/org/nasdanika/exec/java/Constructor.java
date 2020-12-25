@@ -5,10 +5,10 @@ import java.net.URL;
 import java.util.List;
 
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class Constructor extends Operation {
 

@@ -21,7 +21,6 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.ListCompoundSupplierFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -29,6 +28,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -208,12 +208,12 @@ public class Iterator implements Adaptable, Marked {
 		if (target instanceof Collection) {
 			CompoundCommand ret = new CompoundCommand("Target collection", null);
 			for (Object te: (Collection<?>) target) {
-				ret.add(Loader.asCommandFactory(te).create(iContext));
+				ret.add(Util.asCommandFactory(te).create(iContext));
 			}
 			return ret;			
 		}
 		
-		return Loader.asCommandFactory(target).create(iContext);
+		return Util.asCommandFactory(target).create(iContext);
 	}
 	
 	// --- Consumer ---
@@ -246,12 +246,12 @@ public class Iterator implements Adaptable, Marked {
 		if (target instanceof Collection) {
 			CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
 			for (Object te: (Collection<?>) target) {
-				ret.add(Loader.asConsumerFactory(te).create(iContext));
+				ret.add(Util.asConsumerFactory(te).create(iContext));
 			}
 			return ret;			
 		}
 		
-		return Loader.asConsumerFactory(target).create(iContext);
+		return Util.asConsumerFactory(target).create(iContext);
 	}
 		
 	// --- Supplier ---

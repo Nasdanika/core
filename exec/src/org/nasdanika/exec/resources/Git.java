@@ -13,15 +13,14 @@ import org.nasdanika.common.Command;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.Loader;
 import org.nasdanika.exec.git.GitBinaryEntityContainerSupplierFactory;
 
 /**
@@ -109,7 +108,7 @@ public class Git implements CommandFactory, Marked {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, getSupportedKeys());
 			if (configMap.containsKey(CONTENTS_KEY)) {
-				ConsumerFactory<BinaryEntityContainer> contentsFactory = Loader.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
+				ConsumerFactory<BinaryEntityContainer> contentsFactory = Util.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
 				
 				Map<?, ?> credentials = Util.checkUnsupportedKeys(Util.getMap(configMap, CREDENTIALS_KEY, null), USER_KEY, PASSWORD_KEY);
 				Map<?, ?> author = Util.checkUnsupportedKeys(Util.getMap(configMap, AUTHOR_KEY, null), AUTHOR_NAME_KEY, AUTHOR_EMAIL_KEY);
@@ -134,14 +133,14 @@ public class Git implements CommandFactory, Marked {
 				if (branchConfig instanceof String) {
 					branch = (String) branchConfig;
 				} else if (branchConfig instanceof Map) {
-					Map<String, Object> branchConfigMap = Util.checkUnsupportedKeys((Map<String,Object>) branchConfig, BRANCH_NAME_KEY, BRANCH_START_POINT_KEY);
+					Map<?, ?> branchConfigMap = Util.checkUnsupportedKeys((Map<String,Object>) branchConfig, BRANCH_NAME_KEY, BRANCH_START_POINT_KEY);
 					branch = Util.getString(branchConfigMap, BRANCH_NAME_KEY, null);
 					branchStartPoint = Util.getString(branchConfigMap, BRANCH_START_POINT_KEY, null);
 				} else if (branchConfig != null) {
 					throw new ConfigurationException("Branch value shall be a string or map", Util.getMarker(configMap, BRANCH_KEY));
 				}
 				
-				ConsumerFactory<BinaryEntityContainer> onPushFactory = configMap.containsKey(ON_PUSH_KEY) ? Loader.asConsumerFactory(loader.load(configMap.get(ON_PUSH_KEY), base, progressMonitor), Util.getMarker(configMap, ON_PUSH_KEY)) : null;
+				ConsumerFactory<BinaryEntityContainer> onPushFactory = configMap.containsKey(ON_PUSH_KEY) ? Util.asConsumerFactory(loader.load(configMap.get(ON_PUSH_KEY), base, progressMonitor), Util.getMarker(configMap, ON_PUSH_KEY)) : null;
 				
 				java.util.function.Consumer<org.eclipse.jgit.api.Git> gitConfigurator = null;
 				

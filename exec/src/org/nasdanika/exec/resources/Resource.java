@@ -6,12 +6,12 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**

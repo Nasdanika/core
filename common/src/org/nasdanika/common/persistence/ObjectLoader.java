@@ -1,4 +1,4 @@
-package org.nasdanika.common;
+package org.nasdanika.common.persistence;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -13,8 +13,9 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.persistence.MarkingYamlConstructor;
+import org.nasdanika.common.ExecutionParticipant;
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.Yaml;
 
 /**

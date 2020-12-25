@@ -26,7 +26,6 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -34,7 +33,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Config is either string (URL) or map.
@@ -108,7 +107,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 				Object headersObj = configMap.get(HEADERS_KEY);
 				if (headersObj instanceof Map) {
 					for (Entry<String, Object> he: ((Map<String,Object>) headersObj).entrySet()) {
-						headers.put(he.getKey(), Loader.asSupplierFactory(loader.load(he.getValue(), base, progressMonitor)));
+						headers.put(he.getKey(), Util.asSupplierFactory(loader.load(he.getValue(), base, progressMonitor)));
 					}
 				} else {
 					throw new ConfigurationException(HEADERS_KEY + " value must be a map", Util.getMarker(configMap, HEADERS_KEY));
@@ -116,7 +115,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			}			
 			
 			if (configMap.containsKey(BODY_KEY)) {
-				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
+				body = Util.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
 			}
 			
 			if (configMap.containsKey(SUCCESS_CODE_KEY)) {

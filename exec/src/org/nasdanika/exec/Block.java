@@ -14,7 +14,6 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reference;
 import org.nasdanika.common.Status;
@@ -24,6 +23,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -303,9 +303,9 @@ public class Block implements Adaptable, Marked {
 	
 	private Command createCommand(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
-		Command tryCommand = Loader.asCommandFactory(tryBlock).create(context);
-		Command catchCommand = catchBlock == null ? null : Loader.asCommandFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
-		Command finallyCommand = finallyBlock == null ? null : Loader.asCommandFactory(finallyBlock).create(context);
+		Command tryCommand = Util.asCommandFactory(tryBlock).create(context);
+		Command catchCommand = catchBlock == null ? null : Util.asCommandFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
+		Command finallyCommand = finallyBlock == null ? null : Util.asCommandFactory(finallyBlock).create(context);
 		return new BlockCommand(tryCommand, catchCommand, finallyCommand, eRef);		
 	}
 	
@@ -346,9 +346,9 @@ public class Block implements Adaptable, Marked {
 	
 	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
-		Consumer<BinaryEntityContainer> tryConsumer = Loader.asConsumerFactory(tryBlock).create(context);
-		Consumer<BinaryEntityContainer> catchConsumer = catchBlock == null ? null : Loader.asConsumerFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
-		Consumer<BinaryEntityContainer> finallyConsumer = finallyBlock == null ? null : Loader.asConsumerFactory(finallyBlock).create(context);
+		Consumer<BinaryEntityContainer> tryConsumer = Util.asConsumerFactory(tryBlock).create(context);
+		Consumer<BinaryEntityContainer> catchConsumer = catchBlock == null ? null : Util.asConsumerFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
+		Consumer<BinaryEntityContainer> finallyConsumer = finallyBlock == null ? null : Util.asConsumerFactory(finallyBlock).create(context);
 		return new BlockConsumer(tryConsumer, catchConsumer, finallyConsumer, eRef);		
 	}
 
@@ -406,9 +406,9 @@ public class Block implements Adaptable, Marked {
 	
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
-		Supplier<InputStream>  trySupplier = Loader.asSupplierFactory(tryBlock).create(context);
-		Supplier<InputStream> catchSupplier = catchBlock == null ? null : Loader.asSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
-		Supplier<InputStream>  finallySupplier = finallyBlock == null ? null : Loader.asSupplierFactory(finallyBlock).create(context);
+		Supplier<InputStream>  trySupplier = Util.asSupplierFactory(tryBlock).create(context);
+		Supplier<InputStream> catchSupplier = catchBlock == null ? null : Util.asSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
+		Supplier<InputStream>  finallySupplier = finallyBlock == null ? null : Util.asSupplierFactory(finallyBlock).create(context);
 		return new BlockSupplier(trySupplier, catchSupplier, finallySupplier, eRef);		
 	}
 

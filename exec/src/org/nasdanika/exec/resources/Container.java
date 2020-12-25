@@ -11,12 +11,11 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.FilterConsumer;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.Loader;
 
 public class Container extends Resource {
 	
@@ -27,7 +26,7 @@ public class Container extends Resource {
 		super(loader, config, base, progressMonitor, marker);
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(CONTENTS_KEY)) {
-			contents = Loader.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
+			contents = Util.asConsumerFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor), Util.getMarker(configMap, CONTENTS_KEY));
 		}
 	}
 	

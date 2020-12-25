@@ -5,10 +5,10 @@ import java.net.URL;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Markdown filter

@@ -2,10 +2,10 @@ package org.nasdanika.exec.content;
 
 import java.net.URL;
 
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class ScriptEvaluator implements Marked {
 	private Marker marker;

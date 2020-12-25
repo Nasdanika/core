@@ -11,13 +11,13 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -39,7 +39,7 @@ public class Progress implements Adaptable, Marked {
 	protected Progress(Status status, ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.status = status;
 		this.marker = marker;
-		message = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
+		message = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Progress(Status status, Marker marker, SupplierFactory<InputStream> message) {

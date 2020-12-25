@@ -13,7 +13,6 @@ import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -21,7 +20,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public abstract class Member implements SupplierFactory<InputStream>, Marked {
 	
@@ -69,10 +68,10 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 			Util.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
 			Util.loadMultiString(configMap, TYPE_PARAMETERS_KEY, typeParameters::add);
 			if (configMap.containsKey(COMMENT_KEY)) {
-				comment = Loader.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
+				comment = Util.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
 			}
 			if (configMap.containsKey(BODY_KEY)) {
-				body = Loader.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
+				body = Util.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
 			}
 			Util.loadMultiString(configMap, CompilationUnit.IMPORTS_KEY, imports::add);			
 		} else {

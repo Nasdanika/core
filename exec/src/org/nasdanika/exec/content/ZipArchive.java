@@ -10,15 +10,15 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
-import org.nasdanika.exec.Loader;
 
 public class ZipArchive implements SupplierFactory<InputStream>, Marked { 
 	
@@ -32,7 +32,7 @@ public class ZipArchive implements SupplierFactory<InputStream>, Marked {
 
 	public ZipArchive(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		consumer = Loader.asConsumerFactory(loader.load(config, base, progressMonitor), marker);
+		consumer = Util.asConsumerFactory(loader.load(config, base, progressMonitor), marker);
 	}	
 	
 	public ZipArchive(Marker marker, ConsumerFactory<BinaryEntityContainer> consumer) {

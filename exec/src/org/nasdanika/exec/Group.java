@@ -13,7 +13,6 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.FilterSupplier;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -23,6 +22,7 @@ import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.exec.input.PropertySet;
 
@@ -114,19 +114,19 @@ public class Group implements Adaptable, Marked {
 	// --- Command ---	
 		
 	private Command createCommand(Context context) throws Exception {
-		return Loader.asCommandFactory(elements).create(filterContext(context));
+		return Util.asCommandFactory(elements).create(filterContext(context));
 	}
 	
 	// --- Consumer ---	
 		
 	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
-		return Loader.asConsumerFactory(elements).create(filterContext(context));
+		return Util.asConsumerFactory(elements).create(filterContext(context));
 	}
 		
 	// --- Supplier ---	
 		
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
-		Supplier<InputStream> elementsSupplier = Loader.asSupplierFactory(elements).create(filterContext(context));
+		Supplier<InputStream> elementsSupplier = Util.asSupplierFactory(elements).create(filterContext(context));
 		return new FilterSupplier<InputStream>(elementsSupplier) {
 			
 			@Override

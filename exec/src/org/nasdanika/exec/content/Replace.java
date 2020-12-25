@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -18,7 +17,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class Replace implements SupplierFactory<InputStream>, Marked {
 	
@@ -40,7 +39,7 @@ public class Replace implements SupplierFactory<InputStream>, Marked {
 		if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, SOURCE_KEY, PATTERNS_KEY);
-			source = Loader.asSupplierFactory(loader.load(configMap.get(SOURCE_KEY), base, progressMonitor));
+			source = Util.asSupplierFactory(loader.load(configMap.get(SOURCE_KEY), base, progressMonitor));
 			patterns = Util.getMap(configMap, PATTERNS_KEY, null);
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);

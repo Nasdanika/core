@@ -7,7 +7,6 @@ import java.net.URL;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -15,6 +14,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.exec.Reference;
 
 /**

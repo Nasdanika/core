@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class Method extends Operation {
 		

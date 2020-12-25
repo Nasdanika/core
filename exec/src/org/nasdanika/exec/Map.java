@@ -4,11 +4,11 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Treats content as a map even if there is a single entry, which by default would be treated as an object declaration type to config. 

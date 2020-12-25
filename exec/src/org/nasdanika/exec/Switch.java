@@ -17,7 +17,6 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -26,6 +25,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -229,10 +229,10 @@ public class Switch implements Adaptable, Marked {
 	private Command createCommand(Context context) throws Exception {
 		Map<Object, Command> caseCommands = new LinkedHashMap<>();
 		for (Entry<Object, Object> ce: cases.entrySet()) {
-			caseCommands.put(ce.getKey(), Loader.asCommandFactory(ce.getValue()).create(context));			
+			caseCommands.put(ce.getKey(), Util.asCommandFactory(ce.getValue()).create(context));			
 		}
 		
-		Command defaultCommand = defaultBlock == null ? null : Loader.asCommandFactory(defaultBlock).create(context);
+		Command defaultCommand = defaultBlock == null ? null : Util.asCommandFactory(defaultBlock).create(context);
 		return new SwitchCommand(context, caseCommands, defaultCommand);		
 	}
 	
@@ -260,10 +260,10 @@ public class Switch implements Adaptable, Marked {
 	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		Map<Object, Consumer<BinaryEntityContainer>> caseConsumers = new LinkedHashMap<>();
 		for (Entry<Object, Object> ce: cases.entrySet()) {
-			caseConsumers.put(ce.getKey(), Loader.asConsumerFactory(ce.getValue()).create(context));			
+			caseConsumers.put(ce.getKey(), Util.asConsumerFactory(ce.getValue()).create(context));			
 		}
 		
-		Consumer<BinaryEntityContainer> defaultConsumer = defaultBlock == null ? null : Loader.asConsumerFactory(defaultBlock).create(context);
+		Consumer<BinaryEntityContainer> defaultConsumer = defaultBlock == null ? null : Util.asConsumerFactory(defaultBlock).create(context);
 		return new SwitchConsumer(context, caseConsumers, defaultConsumer);		
 	}
 
@@ -295,10 +295,10 @@ public class Switch implements Adaptable, Marked {
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
 		Map<Object, Supplier<InputStream>> caseSuppliers = new LinkedHashMap<>();
 		for (Entry<Object, Object> ce: cases.entrySet()) {
-			caseSuppliers.put(ce.getKey(), Loader.asSupplierFactory(ce.getValue()).create(context));			
+			caseSuppliers.put(ce.getKey(), Util.asSupplierFactory(ce.getValue()).create(context));			
 		}
 		
-		Supplier<InputStream> defaultSupplier = defaultBlock == null ? null : Loader.asSupplierFactory(defaultBlock).create(context);
+		Supplier<InputStream> defaultSupplier = defaultBlock == null ? null : Util.asSupplierFactory(defaultBlock).create(context);
 		return new SwitchSupplier(context, caseSuppliers, defaultSupplier);		
 	}
 

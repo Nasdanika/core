@@ -10,10 +10,10 @@ import org.json.JSONObject;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Encodes contained content as Json.  

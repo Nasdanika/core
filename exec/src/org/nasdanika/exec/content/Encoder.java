@@ -13,14 +13,13 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Base class for encoders.  
@@ -61,11 +60,11 @@ public abstract class Encoder implements SupplierFactory<InputStream>, Marked {
 			ListCompoundSupplierFactory<InputStream> lcsf = new ListCompoundSupplierFactory<InputStream>("Collection " + (marker == null ? "" : " at " + marker));
 			int idx = 0;
 			for (Object mee: (Collection<?>) data) {
-				lcsf.add(Loader.asSupplierFactory(loader.load(mee, base, progressMonitor)));
+				lcsf.add(Util.asSupplierFactory(loader.load(mee, base, progressMonitor)));
 			}
 			return lcsf;
 		} else {
-			return Loader.asSupplierFactory(data);
+			return Util.asSupplierFactory(data);
 		}
 		
 	}

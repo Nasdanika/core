@@ -15,7 +15,6 @@ import org.nasdanika.common.Diagnosable;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.SupplierFactory;
@@ -23,7 +22,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Base class for Property and PropertySet
@@ -91,7 +90,7 @@ public abstract class AbstractProperty implements Marked {
 						}
 						Util.checkRequiredKeys(vSpecMap, VALIDATION_CONDITION_KEY, VALIDATION_MESSAGE_KEY);
 						
-						SupplierFactory<InputStream> scriptFactory = Loader.asSupplierFactory(loader.load(vSpecMap.get(VALIDATION_CONDITION_KEY), base, monitor));
+						SupplierFactory<InputStream> scriptFactory = Util.asSupplierFactory(loader.load(vSpecMap.get(VALIDATION_CONDITION_KEY), base, monitor));
 						
 						FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable> diagnosableFactory = new FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable>() {
 

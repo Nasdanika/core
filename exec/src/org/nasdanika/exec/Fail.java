@@ -12,12 +12,12 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -37,7 +37,7 @@ public class Fail implements Adaptable, Marked {
 	
 	protected Fail(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		message = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
+		message = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Fail(Marker marker, SupplierFactory<InputStream> message) {

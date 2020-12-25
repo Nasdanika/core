@@ -3,10 +3,10 @@ package org.nasdanika.core.tests.exec;
 import java.net.URL;
 import java.util.function.Consumer;
 
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class CustomLoader implements ObjectLoader {
 	
@@ -17,7 +17,7 @@ public class CustomLoader implements ObjectLoader {
 		this.chain = chain;
 	}
 		
-	private org.nasdanika.common.ObjectLoader chain;
+	private org.nasdanika.common.persistence.ObjectLoader chain;
 
 	@Override
 	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {

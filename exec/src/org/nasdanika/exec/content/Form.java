@@ -14,7 +14,6 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -22,7 +21,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Encodes contained map as URL encoded form. The map may contain values and lists. Nested maps are not supported yet.  
@@ -48,11 +47,11 @@ public class Form implements SupplierFactory<InputStream>, Marked {
 				if (me.getValue() instanceof Collection) {
 					ListCompoundSupplierFactory<InputStream> lcsf = new ListCompoundSupplierFactory<InputStream>("Collection at " + me.getKey());
 					for (Object mee: (Collection<?>) me.getValue()) {
-						lcsf.add(Loader.asSupplierFactory(loader.load(mee, base, progressMonitor)));
+						lcsf.add(Util.asSupplierFactory(loader.load(mee, base, progressMonitor)));
 					}
 					this.dataFactory.put(me.getKey(), (SupplierFactory) lcsf);
 				} else {
-					this.dataFactory.put(me.getKey(), (SupplierFactory) Loader.asSupplierFactory(me.getValue()));
+					this.dataFactory.put(me.getKey(), (SupplierFactory) Util.asSupplierFactory(me.getValue()));
 				}
 			}
 		} else {

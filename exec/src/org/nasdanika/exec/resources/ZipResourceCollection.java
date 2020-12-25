@@ -18,14 +18,13 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.Loader;
 
 public class ZipResourceCollection extends ResourceCollection {
 	
@@ -39,10 +38,10 @@ public class ZipResourceCollection extends ResourceCollection {
 		if (contentsVal instanceof Collection) {
 			int idx = 0;
 			for (Object ce: (Collection<?>) contentsVal) {
-				contents.add(Loader.asSupplierFactory(loader.load(ce, base, progressMonitor)));
+				contents.add(Util.asSupplierFactory(loader.load(ce, base, progressMonitor)));
 			}
 		} else {
-			contents.add(Loader.asSupplierFactory(loader.load(contentsVal, base, progressMonitor)));
+			contents.add(Util.asSupplierFactory(loader.load(contentsVal, base, progressMonitor)));
 		} 
 	}	
 	

@@ -15,7 +15,6 @@ import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -24,6 +23,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -227,8 +227,8 @@ public class If implements Adaptable, Marked {
 	}	
 	
 	private Command createCommand(Context context) throws Exception {
-		Command thenCommand = Loader.asCommandFactory(thenBlock).create(context);
-		Command elseCommand = elseBlock == null ? null : Loader.asCommandFactory(elseBlock).create(context);
+		Command thenCommand = Util.asCommandFactory(thenBlock).create(context);
+		Command elseCommand = elseBlock == null ? null : Util.asCommandFactory(elseBlock).create(context);
 		return new IfCommand(context, thenCommand, elseCommand);		
 	}
 	
@@ -252,8 +252,8 @@ public class If implements Adaptable, Marked {
 	}	
 	
 	private Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
-		Consumer<BinaryEntityContainer> thenConsumer = Loader.asConsumerFactory(thenBlock).create(context);
-		Consumer<BinaryEntityContainer> elseConsumer = elseBlock == null ? null : Loader.asConsumerFactory(elseBlock).create(context);
+		Consumer<BinaryEntityContainer> thenConsumer = Util.asConsumerFactory(thenBlock).create(context);
+		Consumer<BinaryEntityContainer> elseConsumer = elseBlock == null ? null : Util.asConsumerFactory(elseBlock).create(context);
 		return new IfConsumer(context, thenConsumer, elseConsumer);		
 	}
 
@@ -281,8 +281,8 @@ public class If implements Adaptable, Marked {
 	}	
 	
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
-		Supplier<InputStream>  thenSupplier = Loader.asSupplierFactory(thenBlock).create(context);
-		Supplier<InputStream>  elseSupplier = elseBlock == null ? null : Loader.asSupplierFactory(elseBlock).create(context);
+		Supplier<InputStream>  thenSupplier = Util.asSupplierFactory(thenBlock).create(context);
+		Supplier<InputStream>  elseSupplier = elseBlock == null ? null : Util.asSupplierFactory(elseBlock).create(context);
 		return new IfSupplier(context, thenSupplier, elseSupplier);		
 	}
 	

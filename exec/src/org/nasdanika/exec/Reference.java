@@ -4,12 +4,13 @@ import java.net.URL;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Not interpolated reference resolved/loaded at load time.
@@ -58,7 +59,7 @@ public class Reference implements Adaptable, Marked {
 		// Handling collections etc by delegating to Loader utility methods for Consumer and Supplier factories
 		if (type == ConsumerFactory.class) {
 			try {
-				return (T) Loader.asConsumerFactory(target, marker);
+				return (T) Util.asConsumerFactory(target, marker);
 			} catch (Exception e) {
 				throw new ConfigurationException("Could not load " + target.getClass() + " as ConsumerFactory", e, marker);
 			}
@@ -66,7 +67,7 @@ public class Reference implements Adaptable, Marked {
 		
 		if (type == SupplierFactory.class) {
 			try {
-				return (T) Loader.asSupplierFactory(target);
+				return (T) Util.asSupplierFactory(target);
 			} catch (Exception e) {
 				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
 			}

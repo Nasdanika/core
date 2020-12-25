@@ -1,25 +1,12 @@
 package org.nasdanika.exec;
 
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Collection;
 
-import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.CommandFactory;
-import org.nasdanika.common.CompoundCommandFactory;
-import org.nasdanika.common.CompoundConsumerFactory;
-import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.ListCompoundSupplierFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
-import org.nasdanika.common.Supplier;
-import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.Form;
 import org.nasdanika.exec.content.FreeMarker;
@@ -53,7 +40,7 @@ import org.nasdanika.exec.resources.ZipResourceCollection;
  */
 public class Loader implements ObjectLoader {
 	
-	private org.nasdanika.common.ObjectLoader chain;
+	private org.nasdanika.common.persistence.ObjectLoader chain;
 
 	public Loader(ObjectLoader chain) {
 		this.chain = chain;
@@ -169,142 +156,5 @@ public class Loader implements ObjectLoader {
 			}
 		}
 	}
-	
-	// --- Utility methods ---
-	
-	/**
-	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) throws Exception {
-		if (obj instanceof Collection) {
-			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
-			for (Object e: (Collection<?>) obj) {
-				ret.add(asSupplierFactory(e));
-			}
-			return ret.then(Util.JOIN_STREAMS_FACTORY);
-		}
-		
-		if (obj instanceof SupplierFactory) {		
-			return (SupplierFactory<InputStream>) obj;
-		}
-		
-		if (obj instanceof SupplierFactory.Provider) {
-			return ((SupplierFactory.Provider) obj).getFactory(InputStream.class);
-		}
-		
-		if (obj instanceof Adaptable) {
-			SupplierFactory<InputStream> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
-			if (adapter != null) {
-				return adapter;
-			}
-		}
-		
-		// Converting to string, interpolating, streaming
-		SupplierFactory<String> textFactory = context -> new Supplier<String>() {
-
-			@Override
-			public double size() {
-				return 1;
-			}
-
-			@Override
-			public String name() {
-				return "Scalar";
-			}
-
-			@Override
-			public String execute(ProgressMonitor progressMonitor) throws Exception {
-				return context.interpolateToString(String.valueOf(obj));
-			}
-		
-		};
-		
-		return textFactory.then(Util.TO_STREAM);
-	};
-	
-	/**
-	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj) throws Exception {
-		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
-	}	
-		
-	/**
-	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj, Marker marker) throws Exception {
-		if (obj instanceof Collection) {
-			CompoundConsumerFactory<BinaryEntityContainer> ret = new CompoundConsumerFactory<>("Consumer collection");
-			int idx = 0;
-			for (Object e: (Collection<?>) obj) {
-				ret.add(asConsumerFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
-			}
-			return ret;
-		}
-		
-		if (obj instanceof ConsumerFactory) {		
-			return (ConsumerFactory<BinaryEntityContainer>) obj;
-		}		
-		
-		if (obj instanceof Adaptable) {
-			ConsumerFactory<BinaryEntityContainer> adapter = ((Adaptable) obj).adaptTo(ConsumerFactory.class);
-			if (adapter != null) {
-				return adapter;
-			}
-		}
-		
-		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", marker);
-	};		
-		
-	/**
-	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public static CommandFactory asCommandFactory(Object obj) throws Exception {
-		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
-	}	
-	
-	/**
-	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public static CommandFactory asCommandFactory(Object obj, Marker marker) throws Exception {
-		if (obj instanceof Collection) {
-			CompoundCommandFactory ret = new CompoundCommandFactory("Command collection");
-			int idx = 0;
-			for (Object e: (Collection<?>) obj) {
-				ret.add(asCommandFactory(e, Util.getMarker((Collection<?>) obj, idx++)));
-			}
-			return ret;
-		}
-		
-		if (obj instanceof CommandFactory) {		
-			return (CommandFactory) obj;
-		}
-		
-		if (obj instanceof Adaptable) {
-			CommandFactory adapter = ((Adaptable) obj).adaptTo(CommandFactory.class);
-			if (adapter != null) {
-				return adapter;
-			}
-		}
-				
-		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
-	}	
 		
 }

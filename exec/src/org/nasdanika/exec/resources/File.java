@@ -11,16 +11,15 @@ import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.Merger;
-import org.nasdanika.exec.Loader;
 
 public class File extends Resource {
 	
@@ -34,7 +33,7 @@ public class File extends Resource {
 		this.marker = marker;
 		Map<String,Object> configMap = (Map<String,Object>) config;
 		if (configMap.containsKey(CONTENTS_KEY)) {
-			contents = Loader.asSupplierFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor));
+			contents = Util.asSupplierFactory(loader.load(configMap.get(CONTENTS_KEY), base, progressMonitor));
 		} else {
 			throw new ConfigurationException("File contents is required", marker);
 		}

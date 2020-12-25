@@ -26,7 +26,6 @@ import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.FilterProgressMonitor;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
@@ -35,6 +34,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntity;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.BinaryResource;
@@ -194,7 +194,7 @@ public class TestExec {
 	 * @throws Exception
 	 */
 	static InputStream callSupplier(Context context, ProgressMonitor monitor, Object component) throws Exception {
-		try (Supplier<InputStream> supplier = Loader.asSupplierFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+		try (Supplier<InputStream> supplier = Util.asSupplierFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
 			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
 			if (diagnostic.getStatus() == Status.ERROR) {
 				diagnostic.dump(System.err, 4);
@@ -266,7 +266,7 @@ public class TestExec {
 	 * @throws Exception
 	 */
 	static void callConsumer(Context context, ProgressMonitor monitor, Object component, BinaryEntityContainer container) throws Exception {
-		try (Consumer<BinaryEntityContainer> consumer = Loader.asConsumerFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+		try (Consumer<BinaryEntityContainer> consumer = Util.asConsumerFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
 			Diagnostic diagnostic = consumer.splitAndDiagnose(progressMonitor);
 			if (diagnostic.getStatus() == Status.ERROR) {
 				diagnostic.dump(System.err, 4);
@@ -299,7 +299,7 @@ public class TestExec {
 	 * @throws Exception
 	 */
 	static void callCommand(Context context, ProgressMonitor monitor, Object component) throws Exception {
-		try (Command command = Loader.asCommandFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+		try (Command command = Util.asCommandFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
 			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);
 			if (diagnostic.getStatus() == Status.ERROR) {
 				diagnostic.dump(System.err, 4);
@@ -358,7 +358,7 @@ public class TestExec {
 		
 		Context context = Context.singleton("name", "World");		
 		
-		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
 		InputStream result = supplier.execute(monitor);
 		assertEquals("Hello, World!", Util.toString(context, result));
 	}
@@ -385,7 +385,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
 		InputStream result = supplier.execute(monitor);
 		assertEquals("<p>Hello, <code>World</code>!</p>", Util.toString(context, result).trim());
 	}
@@ -399,7 +399,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Supplier<InputStream> supplier = Loader.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
 		String strResult = Util.toString(context, callSupplier(supplier,monitor)).trim();
 		assertTrue(strResult.contains("This is markdown test"));
 	}
@@ -578,7 +578,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Loader.asSupplierFactory(json);
+		SupplierFactory<InputStream> supplierFactory = Util.asSupplierFactory(json);
 		Supplier<InputStream> supplier = supplierFactory.create(context);
 		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}

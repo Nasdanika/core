@@ -6,14 +6,13 @@ import java.net.URL;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.Loader;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 	
@@ -27,7 +26,7 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 	
 	protected Filter(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		source = Loader.asSupplierFactory(loader.load(config, base, progressMonitor));
+		source = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Filter(Marker marker, SupplierFactory<InputStream> source) {

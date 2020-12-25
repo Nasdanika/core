@@ -21,7 +21,6 @@ import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.NullProgressMonitor;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -31,6 +30,7 @@ import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.descriptors.DescriptorSet;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 public class PropertySet extends AbstractProperty {
 	

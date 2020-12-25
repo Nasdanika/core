@@ -10,13 +10,13 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Evaluates script. 
@@ -45,13 +45,13 @@ public class Eval implements SupplierFactory.Provider, Marked {
 	public Eval(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
 		if (config instanceof String) {
-			scriptFactory = Loader.asSupplierFactory(config);
+			scriptFactory = Util.asSupplierFactory(config);
 			interpolateScript = true;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, SCRIPT_KEY, BINDINGS_KEY);
 			if (configMap.containsKey(SCRIPT_KEY)) {
-				scriptFactory = Loader.asSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
+				scriptFactory = Util.asSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
 			} else {
 				throw new ConfigurationException("Script is required", marker);
 			}
@@ -65,7 +65,7 @@ public class Eval implements SupplierFactory.Provider, Marked {
 	
 	public Eval(Marker marker, Object script, Map<String,Object> bindings) throws Exception {
 		this.marker = marker;
-		this.scriptFactory = Loader.asSupplierFactory(script);
+		this.scriptFactory = Util.asSupplierFactory(script);
 		this.bindings = bindings;		
 	}
 	

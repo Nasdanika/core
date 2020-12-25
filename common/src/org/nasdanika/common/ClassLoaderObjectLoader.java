@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * Creates object instances with {@link ClassLoader}. Type shall resolve to fully qualified class name.

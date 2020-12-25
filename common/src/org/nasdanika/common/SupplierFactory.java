@@ -76,6 +76,26 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		};
 	}
 	
+	static <T> SupplierFactory<T> from(T value, String name) {
+		return from((c,p) -> value, name, 0);		
+	}	
+	
+	/**
+	 * If source is adaptable to SupplierFactory then adapter is returned. Otherwise it is wrapped into a supplier factory
+	 * @param <T>
+	 * @param value
+	 * @param name
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	static <T> SupplierFactory<T> adapt(Object source, String name) {
+		SupplierFactory<?> ret = Adaptable.adaptTo(source, SupplierFactory.class);
+		if (ret == null) {
+			ret = from((c,p) -> source, name, 0);
+		}
+		return (SupplierFactory<T>) ret;
+	}	
+	
 	/**
 	 * @param contextSupplierFactory Factory which creates a context to be passed to this factory to create supplier.
 	 * @return Supplier factory which creates a context using the context supplier factory and then uses that context and this factory to create a supplier.

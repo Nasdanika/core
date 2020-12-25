@@ -3,7 +3,7 @@ package org.nasdanika.common.persistence;
 import java.util.function.Consumer;
 
 /**
- * Creates a reference from source to target..
+ * Creates a reference from source to target.
  * @author Pavel Vlasov
  * 
  * @param <T> Persistent object type.

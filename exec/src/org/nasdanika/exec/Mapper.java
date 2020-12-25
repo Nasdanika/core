@@ -16,7 +16,6 @@ import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ListCompoundSupplier;
-import org.nasdanika.common.ObjectLoader;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -24,6 +23,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 /**
@@ -150,13 +150,13 @@ public class Mapper implements Adaptable, Marked {
 	 */
 	protected Command createCommand(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Loader.asCommandFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
+			return Util.asCommandFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
 		}
 		
 		CompoundCommand ret = new CompoundCommand("Target collection", null);
 		int idx = 0;
 		for (Object te: targets) {
-			ret.add(Loader.asCommandFactory(te, targetMarkers.get(idx++)).create(context));
+			ret.add(Util.asCommandFactory(te, targetMarkers.get(idx++)).create(context));
 		}
 		return ret;			
 	}
@@ -177,13 +177,13 @@ public class Mapper implements Adaptable, Marked {
 	 */
 	protected Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Loader.asConsumerFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
+			return Util.asConsumerFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
 		}
 		
 		CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
 		int idx = 0;
 		for (Object te: targets) {
-			ret.add(Loader.asConsumerFactory(te, targetMarkers.get(idx++)).create(context));
+			ret.add(Util.asConsumerFactory(te, targetMarkers.get(idx++)).create(context));
 		}
 		return ret;			
 	}
@@ -205,12 +205,12 @@ public class Mapper implements Adaptable, Marked {
 	@SuppressWarnings({ "resource" })
 	protected Supplier<InputStream> createSupplier(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Loader.asSupplierFactory(targets.iterator().next()).create(context);
+			return Util.asSupplierFactory(targets.iterator().next()).create(context);
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
 		for (Object te: targets) {
-			ret.add(Loader.asSupplierFactory(te).create(context));
+			ret.add(Util.asSupplierFactory(te).create(context));
 		}
 		return ret.then(Util.JOIN_STREAMS);
 	};		

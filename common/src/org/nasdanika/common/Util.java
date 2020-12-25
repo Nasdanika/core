@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 import org.nasdanika.common.persistence.ConfigurationException;
@@ -34,6 +35,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.resources.BinaryEntityContainer;
 
 public class Util {
 	
@@ -178,6 +180,44 @@ public class Util {
 		@Override
 		public String execute(InputStream stream, ProgressMonitor progressMonitor) throws Exception {
 			return Util.toString(context, stream);
+		}
+		
+	};
+	
+	public static FunctionFactory<String,String> INTERPOLATE_TO_STRING = context -> new Function<String,String>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "String interpolation";
+		}
+		
+		@Override
+		public String execute(String input, ProgressMonitor progressMonitor) throws Exception {
+			return context.interpolateToString(input);
+		}
+		
+	};
+	
+	public static FunctionFactory<String,Object> INTERPOLATE = context -> new Function<String,Object>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "Interpolation";
+		}
+		
+		@Override
+		public Object execute(String input, ProgressMonitor progressMonitor) throws Exception {
+			return context.interpolate(input);
 		}
 		
 	};
@@ -467,23 +507,23 @@ public class Util {
 	 * @param marker Map location.
 	 * @return config argument.
 	 */
-	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, Collection<String> supportedKeys) throws ConfigurationException {
+	public static Map<?,?> checkUnsupportedKeys(Map<?,?> config, Collection<?> supportedKeys) throws ConfigurationException {
 		if (config == null) {
 			return config;
 		}
-		Collection<String> unsupportedKeys = new ArrayList<String>(config.keySet());
+		Collection<?> unsupportedKeys = new ArrayList<Object>(config.keySet());
 		unsupportedKeys.removeAll(supportedKeys);
 		if (unsupportedKeys.isEmpty()) {
 			return config;
 		}		
 		
 		if (unsupportedKeys.size() == 1) {
-			String unsupportedKey = unsupportedKeys.iterator().next();
+			Object unsupportedKey = unsupportedKeys.iterator().next();
 			throw new ConfigurationException("Unsupported configuration key: " + unsupportedKey, getMarker(config, unsupportedKey));
 		}
 		
 		StringBuilder keyList = new StringBuilder();
-		for (String uk: unsupportedKeys) {
+		for (Object uk: unsupportedKeys) {
 			if (keyList.length() > 0) {
 				keyList.append(", ");
 			}
@@ -499,7 +539,7 @@ public class Util {
 	 * @param marker Map location.
 	 * @return config argument
 	 */
-	public static Map<String,Object> checkUnsupportedKeys(Map<String,Object> config, String... supportedKeys) throws ConfigurationException {
+	public static Map<?,?> checkUnsupportedKeys(Map<?,?> config, Object... supportedKeys) throws ConfigurationException {
 		return checkUnsupportedKeys(config, Arrays.asList(supportedKeys));
 	}
 	
@@ -529,6 +569,20 @@ public class Util {
 		
 		return text.length() < maxSentenceLength ? text : text.substring(0, maxSentenceLength)+"...";
 	}
+	
+	/**
+	 * Extracts first sentence from text
+	 * @param context
+	 * @param text
+	 * @return
+	 * @throws Exception
+	 */
+	public static String firstPlainTextSentence(String html, int minSentenceLength, int maxSentenceLength, String... abbreviations) {
+		if (html == null || html.length() < minSentenceLength) {
+			return html;
+		}
+		return firstSentence(Jsoup.parse(html).text(), minSentenceLength, maxSentenceLength, abbreviations);
+	}	
 
 	/**
 	 * Gets string configuration value.
@@ -610,6 +664,141 @@ public class Util {
 		} finally {
 			supplier.close();
 		}
+	}
+
+	/**
+	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) {
+		if (obj instanceof Collection) {
+			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asSupplierFactory(e));
+			}
+			return ret.then(JOIN_STREAMS_FACTORY);
+		}
+		
+		if (obj instanceof SupplierFactory) {		
+			return (SupplierFactory<InputStream>) obj;
+		}
+		
+		if (obj instanceof SupplierFactory.Provider) {
+			return ((SupplierFactory.Provider) obj).getFactory(InputStream.class);
+		}
+		
+		if (obj instanceof Adaptable) {
+			SupplierFactory<InputStream> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+		
+		// Converting to string, interpolating, streaming
+		SupplierFactory<String> textFactory = context -> new Supplier<String>() {
+	
+			@Override
+			public double size() {
+				return 1;
+			}
+	
+			@Override
+			public String name() {
+				return "Scalar";
+			}
+	
+			@Override
+			public String execute(ProgressMonitor progressMonitor) throws Exception {
+				return context.interpolateToString(String.valueOf(obj));
+			}
+		
+		};
+		
+		return textFactory.then(TO_STREAM);
+	}
+
+	/**
+	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj)  {
+		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+	}
+
+	/**
+	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj, Marker marker) {
+		if (obj instanceof Collection) {
+			CompoundConsumerFactory<BinaryEntityContainer> ret = new CompoundConsumerFactory<>("Consumer collection");
+			int idx = 0;
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asConsumerFactory(e, getMarker((Collection<?>) obj, idx++)));
+			}
+			return ret;
+		}
+		
+		if (obj instanceof ConsumerFactory) {		
+			return (ConsumerFactory<BinaryEntityContainer>) obj;
+		}		
+		
+		if (obj instanceof Adaptable) {
+			ConsumerFactory<BinaryEntityContainer> adapter = ((Adaptable) obj).adaptTo(ConsumerFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+		
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", marker);
+	}
+
+	/**
+	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static CommandFactory asCommandFactory(Object obj) {
+		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+	}
+
+	/**
+	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static CommandFactory asCommandFactory(Object obj, Marker marker) {
+		if (obj instanceof Collection) {
+			CompoundCommandFactory ret = new CompoundCommandFactory("Command collection");
+			int idx = 0;
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asCommandFactory(e, getMarker((Collection<?>) obj, idx++)));
+			}
+			return ret;
+		}
+		
+		if (obj instanceof CommandFactory) {		
+			return (CommandFactory) obj;
+		}
+		
+		if (obj instanceof Adaptable) {
+			CommandFactory adapter = ((Adaptable) obj).adaptTo(CommandFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+				
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
 	}
 				
 }
