@@ -47,11 +47,11 @@ public class Form implements SupplierFactory<InputStream>, Marked {
 				if (me.getValue() instanceof Collection) {
 					ListCompoundSupplierFactory<InputStream> lcsf = new ListCompoundSupplierFactory<InputStream>("Collection at " + me.getKey());
 					for (Object mee: (Collection<?>) me.getValue()) {
-						lcsf.add(Util.asSupplierFactory(loader.load(mee, base, progressMonitor)));
+						lcsf.add(Util.asInputStreamSupplierFactory(loader.load(mee, base, progressMonitor)));
 					}
 					this.dataFactory.put(me.getKey(), (SupplierFactory) lcsf);
 				} else {
-					this.dataFactory.put(me.getKey(), (SupplierFactory) Util.asSupplierFactory(me.getValue()));
+					this.dataFactory.put(me.getKey(), (SupplierFactory) Util.asInputStreamSupplierFactory(me.getValue()));
 				}
 			}
 		} else {

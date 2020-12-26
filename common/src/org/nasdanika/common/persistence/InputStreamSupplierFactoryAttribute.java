@@ -13,7 +13,7 @@ public class InputStreamSupplierFactoryAttribute extends AbstractFeatureDelegate
 
 	@Override
 	public SupplierFactory<InputStream> getValue() {
-		return Util.asSupplierFactory(delegate.getValue());
+		return Util.asInputStreamSupplierFactory(delegate.getValue());
 	}
 
 }

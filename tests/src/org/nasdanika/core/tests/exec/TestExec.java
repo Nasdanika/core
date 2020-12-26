@@ -194,7 +194,7 @@ public class TestExec {
 	 * @throws Exception
 	 */
 	static InputStream callSupplier(Context context, ProgressMonitor monitor, Object component) throws Exception {
-		try (Supplier<InputStream> supplier = Util.asSupplierFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
+		try (Supplier<InputStream> supplier = Util.asInputStreamSupplierFactory(component).create(context); ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling component", 3)) {
 			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
 			if (diagnostic.getStatus() == Status.ERROR) {
 				diagnostic.dump(System.err, 4);
@@ -358,7 +358,7 @@ public class TestExec {
 		
 		Context context = Context.singleton("name", "World");		
 		
-		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asInputStreamSupplierFactory(mustache).create(context);
 		InputStream result = supplier.execute(monitor);
 		assertEquals("Hello, World!", Util.toString(context, result));
 	}
@@ -385,7 +385,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asInputStreamSupplierFactory(mustache).create(context);
 		InputStream result = supplier.execute(monitor);
 		assertEquals("<p>Hello, <code>World</code>!</p>", Util.toString(context, result).trim());
 	}
@@ -399,7 +399,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;		
 		
-		Supplier<InputStream> supplier = Util.asSupplierFactory(mustache).create(context);
+		Supplier<InputStream> supplier = Util.asInputStreamSupplierFactory(mustache).create(context);
 		String strResult = Util.toString(context, callSupplier(supplier,monitor)).trim();
 		assertTrue(strResult.contains("This is markdown test"));
 	}
@@ -578,7 +578,7 @@ public class TestExec {
 		
 		Context context = Context.EMPTY_CONTEXT;
 		
-		SupplierFactory<InputStream> supplierFactory = Util.asSupplierFactory(json);
+		SupplierFactory<InputStream> supplierFactory = Util.asInputStreamSupplierFactory(json);
 		Supplier<InputStream> supplier = supplierFactory.create(context);
 		System.out.println(Util.toString(context, supplier.execute(monitor)));
 	}

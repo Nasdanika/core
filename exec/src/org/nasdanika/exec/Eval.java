@@ -45,13 +45,13 @@ public class Eval implements SupplierFactory.Provider, Marked {
 	public Eval(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
 		if (config instanceof String) {
-			scriptFactory = Util.asSupplierFactory(config);
+			scriptFactory = Util.asInputStreamSupplierFactory(config);
 			interpolateScript = true;
 		} else if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, SCRIPT_KEY, BINDINGS_KEY);
 			if (configMap.containsKey(SCRIPT_KEY)) {
-				scriptFactory = Util.asSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
+				scriptFactory = Util.asInputStreamSupplierFactory(loader.load(configMap.get(SCRIPT_KEY), base, progressMonitor));
 			} else {
 				throw new ConfigurationException("Script is required", marker);
 			}
@@ -65,7 +65,7 @@ public class Eval implements SupplierFactory.Provider, Marked {
 	
 	public Eval(Marker marker, Object script, Map<String,Object> bindings) throws Exception {
 		this.marker = marker;
-		this.scriptFactory = Util.asSupplierFactory(script);
+		this.scriptFactory = Util.asInputStreamSupplierFactory(script);
 		this.bindings = bindings;		
 	}
 	

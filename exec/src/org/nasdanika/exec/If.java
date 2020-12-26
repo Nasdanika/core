@@ -281,8 +281,8 @@ public class If implements Adaptable, Marked {
 	}	
 	
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
-		Supplier<InputStream>  thenSupplier = Util.asSupplierFactory(thenBlock).create(context);
-		Supplier<InputStream>  elseSupplier = elseBlock == null ? null : Util.asSupplierFactory(elseBlock).create(context);
+		Supplier<InputStream>  thenSupplier = Util.asInputStreamSupplierFactory(thenBlock).create(context);
+		Supplier<InputStream>  elseSupplier = elseBlock == null ? null : Util.asInputStreamSupplierFactory(elseBlock).create(context);
 		return new IfSupplier(context, thenSupplier, elseSupplier);		
 	}
 	

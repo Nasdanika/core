@@ -68,10 +68,10 @@ public abstract class Member implements SupplierFactory<InputStream>, Marked {
 			Util.loadMultiString(configMap, ANNOTATIONS_KEY, annotations::add);
 			Util.loadMultiString(configMap, TYPE_PARAMETERS_KEY, typeParameters::add);
 			if (configMap.containsKey(COMMENT_KEY)) {
-				comment = Util.asSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
+				comment = Util.asInputStreamSupplierFactory(loader.load(configMap.get(COMMENT_KEY), base, progressMonitor));
 			}
 			if (configMap.containsKey(BODY_KEY)) {
-				body = Util.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
+				body = Util.asInputStreamSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
 			}
 			Util.loadMultiString(configMap, CompilationUnit.IMPORTS_KEY, imports::add);			
 		} else {

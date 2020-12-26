@@ -295,10 +295,10 @@ public class Switch implements Adaptable, Marked {
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
 		Map<Object, Supplier<InputStream>> caseSuppliers = new LinkedHashMap<>();
 		for (Entry<Object, Object> ce: cases.entrySet()) {
-			caseSuppliers.put(ce.getKey(), Util.asSupplierFactory(ce.getValue()).create(context));			
+			caseSuppliers.put(ce.getKey(), Util.asInputStreamSupplierFactory(ce.getValue()).create(context));			
 		}
 		
-		Supplier<InputStream> defaultSupplier = defaultBlock == null ? null : Util.asSupplierFactory(defaultBlock).create(context);
+		Supplier<InputStream> defaultSupplier = defaultBlock == null ? null : Util.asInputStreamSupplierFactory(defaultBlock).create(context);
 		return new SwitchSupplier(context, caseSuppliers, defaultSupplier);		
 	}
 

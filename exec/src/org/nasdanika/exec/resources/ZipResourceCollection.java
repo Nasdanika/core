@@ -38,10 +38,10 @@ public class ZipResourceCollection extends ResourceCollection {
 		if (contentsVal instanceof Collection) {
 			int idx = 0;
 			for (Object ce: (Collection<?>) contentsVal) {
-				contents.add(Util.asSupplierFactory(loader.load(ce, base, progressMonitor)));
+				contents.add(Util.asInputStreamSupplierFactory(loader.load(ce, base, progressMonitor)));
 			}
 		} else {
-			contents.add(Util.asSupplierFactory(loader.load(contentsVal, base, progressMonitor)));
+			contents.add(Util.asInputStreamSupplierFactory(loader.load(contentsVal, base, progressMonitor)));
 		} 
 	}	
 	

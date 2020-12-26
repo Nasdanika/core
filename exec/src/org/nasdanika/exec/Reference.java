@@ -67,7 +67,7 @@ public class Reference implements Adaptable, Marked {
 		
 		if (type == SupplierFactory.class) {
 			try {
-				return (T) Util.asSupplierFactory(target);
+				return (T) Util.asInputStreamSupplierFactory(target);
 			} catch (Exception e) {
 				throw new ConfigurationException("Could not load " + target.getClass() + " as SupplierFactory", e, marker);
 			}

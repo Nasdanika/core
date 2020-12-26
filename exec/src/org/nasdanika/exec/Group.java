@@ -126,7 +126,7 @@ public class Group implements Adaptable, Marked {
 	// --- Supplier ---	
 		
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
-		Supplier<InputStream> elementsSupplier = Util.asSupplierFactory(elements).create(filterContext(context));
+		Supplier<InputStream> elementsSupplier = Util.asInputStreamSupplierFactory(elements).create(filterContext(context));
 		return new FilterSupplier<InputStream>(elementsSupplier) {
 			
 			@Override

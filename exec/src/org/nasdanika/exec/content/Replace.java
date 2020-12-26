@@ -39,7 +39,7 @@ public class Replace implements SupplierFactory<InputStream>, Marked {
 		if (config instanceof Map) {
 			Map<String,Object> configMap = (Map<String,Object>) config;
 			Util.checkUnsupportedKeys(configMap, SOURCE_KEY, PATTERNS_KEY);
-			source = Util.asSupplierFactory(loader.load(configMap.get(SOURCE_KEY), base, progressMonitor));
+			source = Util.asInputStreamSupplierFactory(loader.load(configMap.get(SOURCE_KEY), base, progressMonitor));
 			patterns = Util.getMap(configMap, PATTERNS_KEY, null);
 		} else {
 			throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);

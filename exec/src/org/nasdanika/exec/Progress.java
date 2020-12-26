@@ -39,7 +39,7 @@ public class Progress implements Adaptable, Marked {
 	protected Progress(Status status, ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.status = status;
 		this.marker = marker;
-		message = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
+		message = Util.asInputStreamSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Progress(Status status, Marker marker, SupplierFactory<InputStream> message) {

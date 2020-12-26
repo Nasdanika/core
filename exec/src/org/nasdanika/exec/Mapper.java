@@ -177,13 +177,13 @@ public class Mapper implements Adaptable, Marked {
 	 */
 	protected Consumer<BinaryEntityContainer> createConsumer(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Util.asConsumerFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
+			return Util.<BinaryEntityContainer>asConsumerFactory(targets.iterator().next(), targetMarkers.iterator().next()).create(context);
 		}
 		
 		CompoundConsumer<BinaryEntityContainer> ret = new CompoundConsumer<>("Target collection");
 		int idx = 0;
 		for (Object te: targets) {
-			ret.add(Util.asConsumerFactory(te, targetMarkers.get(idx++)).create(context));
+			ret.add(Util.<BinaryEntityContainer>asConsumerFactory(te, targetMarkers.get(idx++)).create(context));
 		}
 		return ret;			
 	}
@@ -205,12 +205,12 @@ public class Mapper implements Adaptable, Marked {
 	@SuppressWarnings({ "resource" })
 	protected Supplier<InputStream> createSupplier(Context context) throws Exception {
 		if (targets.size() == 1) {
-			return Util.asSupplierFactory(targets.iterator().next()).create(context);
+			return Util.asInputStreamSupplierFactory(targets.iterator().next()).create(context);
 		}
 		
 		ListCompoundSupplier<InputStream> ret = new ListCompoundSupplier<>("Target collection");
 		for (Object te: targets) {
-			ret.add(Util.asSupplierFactory(te).create(context));
+			ret.add(Util.asInputStreamSupplierFactory(te).create(context));
 		}
 		return ret.then(Util.JOIN_STREAMS);
 	};		

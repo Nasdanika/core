@@ -90,7 +90,7 @@ public abstract class AbstractProperty implements Marked {
 						}
 						Util.checkRequiredKeys(vSpecMap, VALIDATION_CONDITION_KEY, VALIDATION_MESSAGE_KEY);
 						
-						SupplierFactory<InputStream> scriptFactory = Util.asSupplierFactory(loader.load(vSpecMap.get(VALIDATION_CONDITION_KEY), base, monitor));
+						SupplierFactory<InputStream> scriptFactory = Util.asInputStreamSupplierFactory(loader.load(vSpecMap.get(VALIDATION_CONDITION_KEY), base, monitor));
 						
 						FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable> diagnosableFactory = new FunctionFactory<BiSupplier<Map<String, Object>, String>, Diagnosable>() {
 

@@ -37,7 +37,7 @@ public class Fail implements Adaptable, Marked {
 	
 	protected Fail(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		message = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
+		message = Util.asInputStreamSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Fail(Marker marker, SupplierFactory<InputStream> message) {

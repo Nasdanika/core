@@ -665,6 +665,50 @@ public class Util {
 			supplier.close();
 		}
 	}
+	
+	/**
+	 * Calls asSupplierFactory(obj, null, null)
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> SupplierFactory<T> asSupplierFactory(Object obj) {
+		return asSupplierFactory(obj, null, null);
+	}	
+
+	/**
+	 * Wraps object into a supplier factory. Handles adapters, and collections.
+	 * @param obj
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> SupplierFactory<T> asSupplierFactory(Object obj, Class<T> type, FunctionFactory<List<T>, T> joinFactory) {
+		if (obj instanceof Collection && joinFactory != null) {
+			ListCompoundSupplierFactory<T> ret = new ListCompoundSupplierFactory<>("Supplier collection");
+			for (Object e: (Collection<?>) obj) {
+				ret.add(asSupplierFactory(e, type, joinFactory));
+			}
+			return ret.then(joinFactory);
+		}
+		
+		if (obj instanceof SupplierFactory) {		
+			return (SupplierFactory<T>) obj;
+		}
+		
+		if (obj instanceof SupplierFactory.Provider && type != null) {
+			return ((SupplierFactory.Provider) obj).getFactory(type);
+		}
+		
+		if (obj instanceof Adaptable) {
+			SupplierFactory<T> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
+			if (adapter != null) {
+				return adapter;
+			}
+		}
+		
+		return null;
+	}
 
 	/**
 	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
@@ -672,29 +716,10 @@ public class Util {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	public static SupplierFactory<InputStream> asSupplierFactory(Object obj) {
-		if (obj instanceof Collection) {
-			ListCompoundSupplierFactory<InputStream> ret = new ListCompoundSupplierFactory<>("Supplier collection");
-			for (Object e: (Collection<?>) obj) {
-				ret.add(asSupplierFactory(e));
-			}
-			return ret.then(JOIN_STREAMS_FACTORY);
-		}
-		
-		if (obj instanceof SupplierFactory) {		
-			return (SupplierFactory<InputStream>) obj;
-		}
-		
-		if (obj instanceof SupplierFactory.Provider) {
-			return ((SupplierFactory.Provider) obj).getFactory(InputStream.class);
-		}
-		
-		if (obj instanceof Adaptable) {
-			SupplierFactory<InputStream> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
-			if (adapter != null) {
-				return adapter;
-			}
+	public static SupplierFactory<InputStream> asInputStreamSupplierFactory(Object obj) {
+		SupplierFactory<InputStream> ret = asSupplierFactory(obj, InputStream.class, JOIN_STREAMS_FACTORY);
+		if (ret != null) {
+			return ret;
 		}
 		
 		// Converting to string, interpolating, streaming
@@ -737,9 +762,9 @@ public class Util {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj, Marker marker) {
+	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, Marker marker) {
 		if (obj instanceof Collection) {
-			CompoundConsumerFactory<BinaryEntityContainer> ret = new CompoundConsumerFactory<>("Consumer collection");
+			CompoundConsumerFactory<T> ret = new CompoundConsumerFactory<>("Consumer collection");
 			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
 				ret.add(asConsumerFactory(e, getMarker((Collection<?>) obj, idx++)));
@@ -748,11 +773,11 @@ public class Util {
 		}
 		
 		if (obj instanceof ConsumerFactory) {		
-			return (ConsumerFactory<BinaryEntityContainer>) obj;
+			return (ConsumerFactory<T>) obj;
 		}		
 		
 		if (obj instanceof Adaptable) {
-			ConsumerFactory<BinaryEntityContainer> adapter = ((Adaptable) obj).adaptTo(ConsumerFactory.class);
+			ConsumerFactory<T> adapter = ((Adaptable) obj).adaptTo(ConsumerFactory.class);
 			if (adapter != null) {
 				return adapter;
 			}

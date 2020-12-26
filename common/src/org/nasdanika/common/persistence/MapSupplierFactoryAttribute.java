@@ -6,9 +6,9 @@ import java.util.Map.Entry;
 import org.nasdanika.common.MapCompoundSupplierFactory;
 import org.nasdanika.common.SupplierFactory;
 
-public class SupplierFactoryMapAttribute<K,V> extends AbstractFeatureDelegate<Feature<Map<K,V>>> implements SupplierFactoryFeature<Map<K,V>> {
+public class MapSupplierFactoryAttribute<K,V> extends AbstractFeatureDelegate<Feature<Map<K,V>>> implements SupplierFactoryFeature<Map<K,V>> {
 
-	public SupplierFactoryMapAttribute(Feature<Map<K,V>> delegate) {
+	public MapSupplierFactoryAttribute(Feature<Map<K,V>> delegate) {
 		super(delegate);
 	}
 

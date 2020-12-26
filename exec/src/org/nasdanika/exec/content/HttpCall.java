@@ -107,7 +107,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 				Object headersObj = configMap.get(HEADERS_KEY);
 				if (headersObj instanceof Map) {
 					for (Entry<String, Object> he: ((Map<String,Object>) headersObj).entrySet()) {
-						headers.put(he.getKey(), Util.asSupplierFactory(loader.load(he.getValue(), base, progressMonitor)));
+						headers.put(he.getKey(), Util.asInputStreamSupplierFactory(loader.load(he.getValue(), base, progressMonitor)));
 					}
 				} else {
 					throw new ConfigurationException(HEADERS_KEY + " value must be a map", Util.getMarker(configMap, HEADERS_KEY));
@@ -115,7 +115,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			}			
 			
 			if (configMap.containsKey(BODY_KEY)) {
-				body = Util.asSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
+				body = Util.asInputStreamSupplierFactory(loader.load(configMap.get(BODY_KEY), base, progressMonitor));
 			}
 			
 			if (configMap.containsKey(SUCCESS_CODE_KEY)) {

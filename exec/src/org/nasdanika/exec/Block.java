@@ -406,9 +406,9 @@ public class Block implements Adaptable, Marked {
 	
 	private Supplier<InputStream> createSupplier(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
-		Supplier<InputStream>  trySupplier = Util.asSupplierFactory(tryBlock).create(context);
-		Supplier<InputStream> catchSupplier = catchBlock == null ? null : Util.asSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
-		Supplier<InputStream>  finallySupplier = finallyBlock == null ? null : Util.asSupplierFactory(finallyBlock).create(context);
+		Supplier<InputStream>  trySupplier = Util.asInputStreamSupplierFactory(tryBlock).create(context);
+		Supplier<InputStream> catchSupplier = catchBlock == null ? null : Util.asInputStreamSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context); 
+		Supplier<InputStream>  finallySupplier = finallyBlock == null ? null : Util.asInputStreamSupplierFactory(finallyBlock).create(context);
 		return new BlockSupplier(trySupplier, catchSupplier, finallySupplier, eRef);		
 	}
 

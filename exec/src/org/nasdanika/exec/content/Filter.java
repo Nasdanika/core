@@ -26,7 +26,7 @@ public abstract class Filter implements SupplierFactory<InputStream>, Marked {
 	
 	protected Filter(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;
-		source = Util.asSupplierFactory(loader.load(config, base, progressMonitor));
+		source = Util.asInputStreamSupplierFactory(loader.load(config, base, progressMonitor));
 	}
 	
 	protected Filter(Marker marker, SupplierFactory<InputStream> source) {

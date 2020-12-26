@@ -31,7 +31,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 		this.description = description;
 		this.exclusiveWith = exclusiveWith;		
 	}
-	
+			
 	public Object getKey() {
 		return key;
 	}
