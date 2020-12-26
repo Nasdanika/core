@@ -19,7 +19,7 @@ public class ListSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Fea
 	@Override
 	public SupplierFactory<List<T>> getValue() {
 		ListCompoundSupplierFactory<T> ret = new ListCompoundSupplierFactory<>("Feature " + getKey());
-		if (delegate.isLoaded()) {
+		if (delegate.getValue() != null) {
 			int idx = 0;
 			for (T e: delegate.getValue()) {
 				if (e instanceof String && interpolate) {
