@@ -16,8 +16,14 @@ import org.nasdanika.common.Util;
  */
 public class MapAttribute<T> extends Attribute<Map<?, T>> {
 
-	public MapAttribute(Object key, boolean required, Map<?,T> defaultValue, Object... exclusiveWith) {
-		super(key, false, required, defaultValue, null, exclusiveWith);
+	public MapAttribute(
+			Object key, 
+			boolean isDefault,
+			boolean required, 
+			Map<?,T> defaultValue, 
+			String description, 
+			Object... exclusiveWith) {
+		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 	}
 	
 	@Override
@@ -25,7 +31,7 @@ public class MapAttribute<T> extends Attribute<Map<?, T>> {
 		if (config instanceof Map) {
 			Map<Object,T> ret = new LinkedHashMap<>();
 			for (Entry<?, ?> e: ((Map<?,?>) config).entrySet()) {
-				ret.put(e.getKey(), createValue(loader, e.getValue(), base, progressMonitor, Util.getMarker((Map<?,?>) config, e.getKey())));
+				ret.put(e.getKey(), createValue(loader, e.getKey(), e.getValue(), base, progressMonitor, Util.getMarker((Map<?,?>) config, e.getKey())));
 			}
 			return ret;
 		}
@@ -36,7 +42,7 @@ public class MapAttribute<T> extends Attribute<Map<?, T>> {
 	/**
 	 * Creates element list.
 	 * @param loader
-	 * @param element
+	 * @param value
 	 * @param base
 	 * @param progressMonitor
 	 * @param marker
@@ -44,8 +50,8 @@ public class MapAttribute<T> extends Attribute<Map<?, T>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createValue(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
-		return (T) element; 
+	protected T createValue(ObjectLoader loader, Object key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+		return (T) value; 
 	}
 	
 }

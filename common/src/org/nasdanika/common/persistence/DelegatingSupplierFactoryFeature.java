@@ -2,9 +2,9 @@ package org.nasdanika.common.persistence;
 
 import org.nasdanika.common.SupplierFactory;
 
-public class DelegatingSupplierFactoryFeature<T> extends AbstractFeatureDelegate<Feature<T>> implements SupplierFactoryFeature<T> {
+public class DelegatingSupplierFactoryFeature<T> extends AbstractFeatureDelegate<Feature<?>> implements SupplierFactoryFeature<T> {
 
-	public DelegatingSupplierFactoryFeature(Feature<T> delegate) {
+	public DelegatingSupplierFactoryFeature(Feature<?> delegate) {
 		super(delegate);
 	}
 

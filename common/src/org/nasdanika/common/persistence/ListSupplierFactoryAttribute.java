@@ -7,11 +7,18 @@ import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 
-public class ListSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Feature<List<T>>> implements SupplierFactoryFeature<List<T>> {
+/**
+ * 
+ * @author Pavel
+ *
+ * @param <T>
+ * @param <E> Not really required, but used to eliminate generics errors.
+ */
+public class ListSupplierFactoryAttribute<T,E> extends AbstractFeatureDelegate<Feature<List<E>>> implements SupplierFactoryFeature<List<T>> {
 
 	private boolean interpolate;
 
-	public ListSupplierFactoryAttribute(Feature<List<T>> delegate, boolean interpolate) {
+	public ListSupplierFactoryAttribute(Feature<List<E>> delegate, boolean interpolate) {
 		super(delegate);
 		this.interpolate = interpolate;
 	}
@@ -21,7 +28,7 @@ public class ListSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Fea
 		ListCompoundSupplierFactory<T> ret = new ListCompoundSupplierFactory<>("Feature " + getKey());
 		if (delegate.getValue() != null) {
 			int idx = 0;
-			for (T e: delegate.getValue()) {
+			for (Object e: delegate.getValue()) {
 				if (e instanceof String && interpolate) {
 					ret.add(new SupplierFactory<T>() {
 
