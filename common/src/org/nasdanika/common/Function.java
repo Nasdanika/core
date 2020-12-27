@@ -205,6 +205,10 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		};
 	}
 	
+	static <T,R> Function<T,R> fromFunction(java.util.function.Function<T, R> function, String name, double size) {
+		return fromBiFunction((arg, monitor) -> function.apply(arg), name, size);
+	}
+	
 	default R apply(T arg, ProgressMonitor progressMonitor) {
 		try {
 			progressMonitor.setWorkRemaining(size()*3); // diagnose, execute, commit or rollback
