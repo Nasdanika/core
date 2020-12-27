@@ -203,7 +203,7 @@ public class Util {
 		
 	};
 	
-	public static FunctionFactory<String,Object> INTERPOLATE = context -> new Function<String,Object>() {
+	public static FunctionFactory<Object,Object> INTERPOLATE = context -> new Function<Object,Object>() {
 		
 		@Override
 		public double size() {
@@ -216,7 +216,74 @@ public class Util {
 		}
 		
 		@Override
+		public Object execute(Object input, ProgressMonitor progressMonitor) throws Exception {
+			if (input instanceof String) {
+				return context.interpolate((String) input);
+			}
+			if (input instanceof Map) {
+				return context.interpolate((Map<?,?>) input);
+			}
+			if (input instanceof Collection) {
+				return context.interpolate((Collection<?>) input);
+			}
+			
+			throw new IllegalArgumentException("Cannot interpolate " + input);
+		}
+		
+	};
+	
+	public static FunctionFactory<String,Object> INTERPOLATE_STRING = context -> new Function<String,Object>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "String interpolation";
+		}
+		
+		@Override
 		public Object execute(String input, ProgressMonitor progressMonitor) throws Exception {
+			return context.interpolate(input);
+		}
+		
+	};
+	
+	public static FunctionFactory<Map<?,?>,Map<?,?>> INTERPOLATE_MAP = context -> new Function<Map<?,?>,Map<?,?>>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "Map interpolation";
+		}
+		
+		@Override
+		public Map<?,?> execute(Map<?,?> input, ProgressMonitor progressMonitor) throws Exception {
+			return context.interpolate(input);
+		}
+		
+	};
+	
+	public static FunctionFactory<Collection<?>,List<?>> INTERPOLATE_COLLECTION = context -> new Function<Collection<?>, List<?>>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "List interpolation";
+		}
+		
+		@Override
+		public List<?> execute(Collection<?> input, ProgressMonitor progressMonitor) throws Exception {
 			return context.interpolate(input);
 		}
 		
