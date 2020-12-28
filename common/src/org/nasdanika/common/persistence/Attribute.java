@@ -49,6 +49,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 		return marker;
 	}
 
+	@Override
 	public void load(ObjectLoader loader, Map<?,?> source, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (source.containsKey(getKey())) {
 			for (Object ek: exclusiveWith) {
@@ -75,6 +76,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
+	@Override
 	public T create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return (T) config;
 	}
