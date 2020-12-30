@@ -20,6 +20,9 @@ public class StringSupplierFactoryAttribute extends AbstractFeatureDelegate<Supp
 
 	@Override
 	public SupplierFactory<String> getValue() {
+		if (!delegate.isLoaded()) {
+			return SupplierFactory.from(null, "Null string from not loaded stream " + getKey()); 
+		}
 		SupplierFactory<String> ret = delegate.getValue().then(Util.TO_STRING);
 		return interpolate ? ret.then(Util.INTERPOLATE_TO_STRING) : ret;
 	}
