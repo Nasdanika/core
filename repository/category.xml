@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.nasdanika.core.feature_2020.12.0.qualifier.jar" id="org.nasdanika.core.feature" version="2020.12.0.qualifier">
+   <feature url="features/org.nasdanika.core.feature_2021.1.0.qualifier.jar" id="org.nasdanika.core.feature" version="2021.1.0.qualifier">
       <category name="org.nasdanika.runtime"/>
    </feature>
    <category-def name="org.nasdanika" label="Nasdanika">
