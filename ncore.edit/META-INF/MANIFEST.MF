@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.nasdanika.ncore.edit;singleton:=true
 Automatic-Module-Name: org.nasdanika.ncore.edit
-Bundle-Version: 2020.12.0.qualifier
+Bundle-Version: 2021.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nasdanika.ncore.provider.NcoreEditPlugin$Implementation
 Bundle-Vendor: %providerName
