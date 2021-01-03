@@ -28,6 +28,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.descriptors.Descriptor;
 import org.nasdanika.common.descriptors.DescriptorSet;
+import org.nasdanika.common.descriptors.NamedDescriptorSet;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -37,15 +38,9 @@ public class PropertySet extends AbstractProperty {
 	private List<AbstractProperty> properties = new ArrayList<>();
 	private Object factory;
 
-	private static final String CONDITION_KEY = "condition";
-	private static final String DESCRIPTION_KEY = "description";
-	private static final String ICON_KEY = "icon";
 	private static final String INCLUDE_KEY = "include";
-	private static final String LABEL_KEY = "label";
-	private static final String NAME_KEY = "name";
 	private static final String PROPERTIES_KEY = "properties";
 	private static final String SERVICES_KEY = "services";
-	private static final String VALIDATE_KEY = "validate";
 
 	/**
 	 * 
@@ -91,10 +86,11 @@ public class PropertySet extends AbstractProperty {
 					Marker propMarker = Util.getMarker((Map<?, ?>) props, pe.getKey());
 					if (pe.getValue() instanceof Map) {
 						Map<String, Object> propMap = (Map<String,Object>) pe.getValue();
+						String childPrefix = Util.isBlank(this.name) ? null : this.name + "-";
 						if (propMap.containsKey(PROPERTIES_KEY)) {
-							properties.add(new PropertySet(null, loader, name, pe.getKey(), propMap, base, propMarker, monitor));
+							properties.add(new PropertySet(null, loader, childPrefix , pe.getKey(), propMap, base, propMarker, monitor));
 						} else {
-							properties.add(new Property(loader, name, pe.getKey(), propMap, base, propMarker, monitor));
+							properties.add(new Property(loader, childPrefix, pe.getKey(), propMap, base, propMarker, monitor));
 						}
 					} else {
 						throw new ConfigurationException("Properties values shall be maps, got " + props.getClass(), propMarker);							
@@ -183,7 +179,7 @@ public class PropertySet extends AbstractProperty {
 		return ret;
 	}	
 	
-	private class DescriptorSetImpl implements DescriptorSet, Adaptable {
+	private class DescriptorSetImpl implements NamedDescriptorSet, Adaptable {
 		
 		private MutableContext context;
 
@@ -193,8 +189,11 @@ public class PropertySet extends AbstractProperty {
 		
 		@Override
 		public boolean isEnabled() {
-			// TODO evaluate conditions
-			return true;
+			try {
+				return PropertySet.this.isEnabled(context);
+			} catch (Exception e) {
+				throw new NasdanikaException(e);
+			}
 		}
 		
 		@Override
@@ -283,6 +282,11 @@ public class PropertySet extends AbstractProperty {
 			}
 			
 			return Adaptable.super.adaptTo(type);
+		}
+
+		@Override
+		public String getName() {
+			return name;
 		}
 		
 	};
