@@ -4,7 +4,7 @@ See [Execution model](${base-uri}reference/knowledge-base/core/common/execution-
 
 To use the loader in the OSGi environment add ``org.nasdanika.exec`` dependency to the manifest file.
 
-To use in the Maven environment search for the latest version on [Maven Central](https://search.maven.org/search?q=g:org.nasdanika.core%20AND%20a:exec) and copy/paste a dependency declaration to the ``pom.xml``.
+To use in the Maven environment search for the latest version on [Maven Central](https://search.maven.org/artifact/org.nasdanika.core/exec) and copy/paste a dependency declaration to the ``pom.xml``.
 
 ### Maven dependency
 
@@ -14,7 +14,7 @@ Example as of the time of writing:
 <dependency>
   <groupId>org.nasdanika.core</groupId>
   <artifactId>exec</artifactId>
-  <version>2020.9.3</version>
+  <version>2021.1.0</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -67,7 +67,7 @@ To load and execute [resource components](resource/index.html) which implement $
 
 ```java
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ObjectLoader;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Consumer;
