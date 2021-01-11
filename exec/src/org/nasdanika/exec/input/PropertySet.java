@@ -152,7 +152,7 @@ public class PropertySet extends AbstractProperty {
 	}
 
 	public Diagnostic diagnose(Context context) {
-		BasicDiagnostic ret = new BasicDiagnostic(Status.SUCCESS, "Diagnostic of property set "+(name == null ? "" : name), this);
+		BasicDiagnostic ret = new BasicDiagnostic(Status.SUCCESS, "Diagnostic of property set " + (name == null ? "" : name), this);
 		try {
 			if (isEnabled(context)) {	
 				// Validations
