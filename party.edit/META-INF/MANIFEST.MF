@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.nasdanika.party.edit;singleton:=true
 Automatic-Module-Name: org.nasdanika.party.edit
-Bundle-Version: 2021.1.0.qualifier
+Bundle-Version: 2021.3.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nasdanika.party.provider.PartyEditPlugin$Implementation
 Bundle-Vendor: %providerName

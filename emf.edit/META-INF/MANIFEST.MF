@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Nasdanika EMF Edit
 Bundle-SymbolicName: org.nasdanika.emf.edit
-Bundle-Version: 2021.1.0.qualifier
+Bundle-Version: 2021.3.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.emf.edit

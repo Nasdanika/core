@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.nasdanika.sirius.tree.edit;singleton:=true
 Automatic-Module-Name: org.nasdanika.sirius.tree.edit
-Bundle-Version: 2021.1.0.qualifier
+Bundle-Version: 2021.3.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: org.nasdanika.sirius.tree.provider.TreeEditPlugin$Implementation
 Bundle-Vendor: %providerName
