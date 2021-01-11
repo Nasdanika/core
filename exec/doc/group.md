@@ -54,7 +54,7 @@ Supported keys:
     * List - contains maps of properties and property set specifications. If an element map contains ``properties`` key it is treated as a property set.
     * Map - mapping of a property or proerty set name to a specification. If an element map contains ``properties`` key it is treated as a property set. This form does not support property sets without names. Also in this form spec maps shall not contain ``name`` keys.
 * ``services``* - fully qualified name(s) of services which have to be present in the context for successful group execution. String or list.
-* ``validate``* - a map or a list of maps containing cross-property validations. Map keys:
+* ``validate`` - a map or a list of maps containing cross-property validations. Map keys:
     * ``condition`` - JavaScript condition which must evaluate to true for the validation to pass. Has the same bindings as ``conditions``.
     * ``severity`` - ``WARNING`` or ``ERROR``.
     * ``message`` - diagnostic message. 
