@@ -393,7 +393,8 @@ public class TestExec {
 	
 	@Test
 	public void testMarkdownClasspathResource() throws Exception {
-		ObjectLoader loader = new Loader();
+		// Anonymous sub-class is a trick in order to use this bundle's classloader to make the classpath resource available in the OSGi environment
+		ObjectLoader loader = new Loader() {}; 
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
 		Object mustache = loader.loadYaml(TestExec.class.getResource("markdown-classpath-resource-spec.yml"), monitor);
 		assertEquals(Markdown.class, mustache.getClass());
