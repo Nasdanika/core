@@ -11,4 +11,5 @@ Require-Bundle: org.junit,
  org.nasdanika.exec;bundle-version="1.0.0",
  org.apache.commons.lang3
 Automatic-Module-Name: org.nasdanika.core.tests
-Export-Package: org.nasdanika.core.tests
+Export-Package: org.nasdanika.core.tests,
+ org.nasdanika.core.tests.exec
