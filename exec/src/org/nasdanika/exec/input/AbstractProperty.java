@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
@@ -60,7 +61,8 @@ public abstract class AbstractProperty implements Marked {
 			description = Util.getString(configMap, DESCRIPTION_KEY, null);
 			this.name = (prefix == null ? "" : prefix) + Util.getString(configMap, NAME_KEY, name);
 			icon = Util.getString(configMap, ICON_KEY, null);
-			label = Util.getString(configMap, LABEL_KEY, Util.isBlank(name) ? name : Util.nameToLabel(name));
+			
+			label = Util.getString(configMap, LABEL_KEY, Util.isBlank(name) ? name : defaultLabel(name));
 			
 			if (configMap.containsKey(CONDITION_KEY)) {
 				Util.loadMultiString(configMap, CONDITION_KEY, conditions::add);
@@ -154,6 +156,23 @@ public abstract class AbstractProperty implements Marked {
 		} else {
 			throw new ConfigurationException("Configuration shall be a map, got " + config.getClass(), marker);
 		}		
+	}
+
+	private String defaultLabel(String name) {
+		if (name == null) {
+			return null;
+		}
+		
+		if (name.contains("-")) {
+			String[] cca = name.split("-");
+			cca[0] = StringUtils.capitalize(cca[0]);
+			for (int i=1; i<cca.length; ++i) {
+				cca[i] = cca[i].toLowerCase();
+			}
+			return StringUtils.join(cca, " ");			
+		}
+		
+		return Util.nameToLabel(name);
 	}
 	
 	@Override
