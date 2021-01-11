@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.common.Adaptable;
@@ -1095,6 +1096,18 @@ public class TestExec {
 		descriptorSet.setProperty("type", "yellow-dwarth");
 		
 		System.out.println(Util.toString(context, callSupplier(Adaptable.adaptTo(descriptorSet, Supplier.class), monitor)));
-	}	
+	}
+	
+	@Test
+	public void testKebabCaseToLabel() {
+		String name = "mama-mia";
+		String[] cca = name.split("-");
+		cca[0] = StringUtils.capitalize(cca[0]);
+		for (int i=1; i<cca.length; ++i) {
+			cca[i] = cca[i].toLowerCase();
+		}
+		assertEquals("Mama mia", StringUtils.join(cca, " "));			
+		
+	}
 	
 }
