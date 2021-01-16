@@ -76,7 +76,9 @@ public class MarkingYamlConstructor extends Constructor {
 	 * @return Yaml which uses this {@link MarkingYamlConstructor} to create collections with markers.
 	 */
 	public static Yaml createMarkingYaml(String location) {
-		return new Yaml(new MarkingYamlConstructor(location), new Representer(), new DumperOptions(), new LoaderOptions(), new Resolver());
+		LoaderOptions loaderOptions = new LoaderOptions();
+		loaderOptions.setAllowDuplicateKeys(false);
+		return new Yaml(new MarkingYamlConstructor(location), new Representer(), new DumperOptions(), loaderOptions, new Resolver());
 	}
 
 }
