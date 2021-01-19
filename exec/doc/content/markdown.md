@@ -1,4 +1,4 @@
-Generates HTML from markdown. Use ``styled-markdown`` to wrap HTML into a DIV with ``markdown-body`` class.
+Generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown). Use ``styled-markdown`` to wrap HTML into a DIV with ``markdown-body`` class.
 
 ### Example
 

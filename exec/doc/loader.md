@@ -28,6 +28,7 @@ Loader supports the following types:
     * ``http`` - [HTTP Call](../content/http-call.html) - Performs an HTTP request and returns a response.
     * ``interpolator`` - [Interpolator](../content/interpolator.html) - Interpolates content with context properties.
     * ``json`` - [JSON encoder](../content/json.html) - Encodes map or array as JSON.
+    * ``markdown`` and ``styled-markdown`` - generates HTML from [Markdown](https://en.wikipedia.org/wiki/Markdown).
     * ``mustache`` - [Mustache template processor](../content/mustache.html) - Processes Mustache template with context properties as input.
     * ``replace`` - [Replace](../content/replace.html) - Matches and replaces patterns in the contents.
     * ``resource`` - [Resource](../content/resource.html) - Loads content from a resource identified by URL.
