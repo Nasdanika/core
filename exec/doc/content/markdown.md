@@ -5,14 +5,20 @@ Generates HTML from markdown. Use ``styled-markdown`` to wrap HTML into a DIV wi
 #### YAML specification
 
 ```yaml
-mustache: 'Hello, {{name}}!'
+markdown: |+2 
+  An example of inline markdown.
+  
+  ### List 
+  
+  * Bullet 1
+  * Bullet 2 
 ```
 
-The above specification uses an in-line template. Templates can also be loaded from [resources](resource.html) or other sources, e.g. by making an [HTTP call](http-call.html), e.g.:
+The above specification uses in-line markdown. Markdown source can also be loaded from [resources](resource.html) or other sources, e.g. by making an [HTTP call](http-call.html), e.g.:
 
 ```yaml
-mustache: 
-    resource: https://nasdanika.org/hello-mustache-template.txt
+markdown: 
+    resource: https://nasdanika.org/hello.md
 ```
 
 #### Java code
@@ -20,10 +26,10 @@ mustache:
 ```java
 ObjectLoader loader = new Loader();
 ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-Object mustache = loader.loadYaml(specURL, monitor);
+Object markdown = loader.loadYaml(specURL, monitor);
 		
-Context context = Context.singleton("name", "World");		
+Context context = Context.EMPTY_CONTEXT;
 		
-InputStream result = callSupplier(context, monitor, mustache);
-assertEquals("Hello, World!", Util.toString(context, result));
+InputStream streamResult = callSupplier(context, monitor, markdown);
+String stringResult = Util.toString(context, result);
 ```                
