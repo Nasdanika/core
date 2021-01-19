@@ -392,6 +392,7 @@ public class TestExec {
 	}
 	
 	@Test
+	@Ignore
 	public void testMarkdownClasspathResource() throws Exception {
 		// Anonymous sub-class is a trick in order to use this bundle's classloader to make the classpath resource available in the OSGi environment
 		ObjectLoader loader = new Loader() {}; 
