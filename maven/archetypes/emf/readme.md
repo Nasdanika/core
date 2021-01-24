@@ -1,1 +1,0 @@
-Maven archetype for generation of EMF projects and workspaces.
