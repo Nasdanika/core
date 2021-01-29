@@ -17,6 +17,7 @@ import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.MarkedYAMLException;
 
 /**
  * Loads objects from configuration, e.g. YAML or JSON.
@@ -98,7 +99,11 @@ public interface ObjectLoader {
 	default Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading YAML from " + url);
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(url.toString());
-		return load(yaml.load(url.openStream()), url, progressMonitor);
+		try {
+			return load(yaml.load(url.openStream()), url, progressMonitor);
+		} catch (MarkedYAMLException e) {
+			throw new ConfigurationException(e.getMessage(), e, new MarkerImpl(url.toString(), e.getProblemMark()));
+		}
 	}
 		
 	default Object loadJsonObject(String str, URL base, ProgressMonitor progressMonitor) throws Exception {

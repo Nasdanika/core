@@ -21,7 +21,7 @@ public class MarkerImpl implements Marker {
 	}
 	
 	public MarkerImpl(String location, Mark mark) {
-		this(location, mark.getLine() + 1, mark.getColumn() + 1);
+		this(location, mark == null ? 0 : mark.getLine() + 1, mark == null ? 0 : mark.getColumn() + 1);
 	}
 
 	@Override
