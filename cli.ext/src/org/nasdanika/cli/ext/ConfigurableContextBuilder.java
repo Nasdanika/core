@@ -1,4 +1,4 @@
-package org.nasdanika.cli;
+package org.nasdanika.cli.ext;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -8,13 +8,15 @@ import org.nasdanika.common.ProgressMonitor;
  * @author Pavel
  *
  */
-public interface ContextBuilder {
+public interface ConfigurableContextBuilder {
 	
 	/**
+	 * 
+	 * @param config Context builder configuration loaded from YAML
 	 * @param context Context built so far, can be used for interpolation
 	 * @param progressMonitor Progress monitor
-	 * @return New context built or the context passed as an argument.
+	 * @return
 	 */
-	Context build(Context context, ProgressMonitor progressMonitor) throws Exception;
+	Context build(Object config, Context context, ProgressMonitor progressMonitor);
 
 }

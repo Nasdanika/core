@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ import picocli.CommandLine.Option;
  *
  */
 public abstract class ContextCommand extends CommandBase {
-	
+			
 	@Option(			
 			names = {"-c", "--context-entry"},
 			description = {
@@ -73,6 +74,14 @@ public abstract class ContextCommand extends CommandBase {
 	}
 	
 	/**
+	 * Override to contribute to context building. E.g. declare a mix-in and return it from here.
+	 * @return
+	 */
+	protected Collection<ContextBuilder> getContextBuilders() {
+		return new ArrayList<>();
+	}
+	
+	/**
 	 * Creates and configures context by adding mounts, contexts and calling context builders.
 	 * @param progressMonitor
 	 * @return
@@ -87,27 +96,11 @@ public abstract class ContextCommand extends CommandBase {
 			ret = ret.compose(load(location));
 		}
 		
-		return Context.wrap(entries::get).compose(ret);
-	}
-		
-	/**
-	 * Builds context. Processes mounts first and then passes the result to the context builder if id is present.
-	 * @param config
-	 * @param ret
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	protected Context buildContext(Map<String, Object> config, Context context, ProgressMonitor progressMonitor) throws Exception {
-		Map<String, Map<String, Object>> cbMounts = (Map<String, Map<String, Object>>) config.get("mounts");
-		double size = (config.get("id") == null ? 0 : 1) + (cbMounts == null ? 0 : cbMounts.size());
-		progressMonitor.setWorkRemaining(size);
-		if (cbMounts != null) {			
-			for (Entry<String, Map<String, Object>> me: cbMounts.entrySet()) {
-				context = context.mount(buildContext(me.getValue(), context, progressMonitor.split("Building context for mount "+me.getKey(), 1)), me.getKey());
-			}
+		ret = Context.wrap(entries::get).compose(ret);
+		for (ContextBuilder contextBuilder: getContextBuilders()) {
+			ret = contextBuilder.build(ret, progressMonitor);
 		}
-		
-		return context;
+		return ret;
 	}
 
 	/**
