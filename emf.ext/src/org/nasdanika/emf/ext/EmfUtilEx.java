@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.AdapterFactory;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.EObject;
@@ -45,14 +44,7 @@ public class EmfUtilEx {
 			return bundle.getEntry(bp.substring(slashIdx));
 		}
 		
-		if (resource != null) {
-			URI resUri = resource.getURI();
-			URI refUri = URI.createURI(reference);
-			URI resolvedUri = refUri.resolve(resUri);
-			return new URL(resolvedUri.toString());			
-		}
-		
-		return new URL(reference);
+		return EmfUtil.resolveReference(resource, reference);
 	}
 	
 	/**
