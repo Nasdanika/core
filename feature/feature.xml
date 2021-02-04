@@ -439,4 +439,18 @@ version(s), and exceptions or additional permissions here}.&quot;
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.nasdanika.cli.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.nasdanika.emf.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

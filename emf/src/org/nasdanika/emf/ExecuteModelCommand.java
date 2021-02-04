@@ -7,8 +7,7 @@ import picocli.CommandLine.Command;
 
 @Command(
 		description = "Loads a model, adapts to CommandFactory, then creates and executes a command",
-		name = "execute-model",
-		versionProvider = EmfBundleVersionProvider.class)
+		name = "execute-model")
 public class ExecuteModelCommand extends AdapterModelCommand<EObject,CommandFactory> {
 
 	@Override

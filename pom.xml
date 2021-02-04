@@ -131,10 +131,12 @@
 		<module>common</module>		
 
 		<module>cli</module>		
+		<module>cli.ext</module>		
 
 		<module>exec</module>		
 
 		<module>emf</module>		
+		<module>emf.ext</module>		
 		<module>emf.edit</module>		
 		<module>emf.presentation</module>		
 

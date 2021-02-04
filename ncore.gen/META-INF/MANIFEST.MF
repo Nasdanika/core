@@ -8,6 +8,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.ncore.gen
-Require-Bundle: org.nasdanika.ncore
+Require-Bundle: org.nasdanika.ncore,
+ org.nasdanika.emf.ext;bundle-version="2021.3.0"
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.nasdanika.ncore.gen

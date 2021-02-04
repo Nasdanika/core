@@ -23,8 +23,7 @@ import picocli.CommandLine.Option;
 
 @Command(
 		description = "Outputs usage for all registred commands to console or file as plain text or HTML",
-		name = "help",
-		versionProvider = BundleVersionProvider.class)
+		name = "help")
 public class HelpCommand extends CommandBase {
 	
 	private CommandLine root;

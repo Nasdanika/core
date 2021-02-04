@@ -92,7 +92,7 @@ Development of new context builders includes the following steps:
 
 * Implementation of ${javadoc/org.nasdanika.cli.ContextBuilder} interface.
 * Documenting the new implementation in markdown.  
-* Registration of a ``context-builder`` extension for ``org.nasdanika.cli.cli`` extension point.
+* Registration of a ``context-builder`` extension for ``org.nasdanika.cli.ext.cli`` extension point.
 * Generation of context builders documentation model to include into the documentation system.
 
 #### Implementation
@@ -167,7 +167,7 @@ The below snippet shows registration of two context builders:
 
 ```xml
 <plugin>
-   <extension point="org.nasdanika.cli.cli">
+   <extension point="org.nasdanika.cli.ext.cli">
       <context-builder
             class="org.nasdanika.vinci.cli.JavadocContextBuilder"
             description="Resolves fully qualified class names to links to class Javadoc."

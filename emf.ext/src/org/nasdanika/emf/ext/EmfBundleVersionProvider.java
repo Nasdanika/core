@@ -1,6 +1,6 @@
-package org.nasdanika.emf;
+package org.nasdanika.emf.ext;
 
-import org.nasdanika.cli.BundleVersionProvider;
+import org.nasdanika.cli.ext.BundleVersionProvider;
 
 public class EmfBundleVersionProvider extends BundleVersionProvider {
 	

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nasdanika EMF Extensions
+Bundle-SymbolicName: org.nasdanika.emf.ext;singleton:=true
+Bundle-Version: 2021.3.0.qualifier
+Bundle-Vendor: Nasdanika LLC
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.nasdanika.emf.ext
+Bundle-ClassPath: .
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.15.300",
+ org.nasdanika.emf;visibility:=reexport,
+ org.nasdanika.cli.ext;bundle-version="2021.3.0";visibility:=reexport
+Automatic-Module-Name: org.nasdanika.emf.ext
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.nasdanika.emf.ext.Activator
+

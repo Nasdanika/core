@@ -1,4 +1,4 @@
-package org.nasdanika.cli;
+package org.nasdanika.cli.ext;
 
 import java.io.InputStream;
 import java.util.ArrayList;

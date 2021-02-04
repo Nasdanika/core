@@ -1,12 +1,9 @@
 package org.nasdanika.emf;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -17,10 +14,6 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.nasdanika.common.DefaultConverter;
-import org.nasdanika.common.Util;
-import org.osgi.framework.Bundle;
 
 public class EmfUtil {
 
@@ -40,33 +33,6 @@ public class EmfUtil {
 		}
 		EAnnotation na = getNasdanikaAnnotation(modelElement);
 		return na == null ? null : na.getDetails().get("category");		
-	}
-	
-	public static final String BUNDLE_PROTOCOL = "bundle://";
-	
-	/**
-	 * Resolves reference relative to the resource. <code>bundle://</code> protocol can be used to reference resources in OSGi bundles similarly to <code>plugin://</code> protocol.  
-	 * @param resource Used to resolve relative references if not null.
-	 * @param reference Reference.
-	 * @return
-	 * @throws Exception
-	 */
-	public static URL resolveReference(Resource resource, String reference) throws Exception {
-		if (reference.startsWith(BUNDLE_PROTOCOL)) {
-			String bp = reference.substring(BUNDLE_PROTOCOL.length());
-			int slashIdx = bp.indexOf("/");
-			Bundle bundle = Platform.getBundle(bp.substring(0, slashIdx));
-			return bundle.getEntry(bp.substring(slashIdx));
-		}
-		
-		if (resource != null) {
-			URI resUri = resource.getURI();
-			URI refUri = URI.createURI(reference);
-			URI resolvedUri = refUri.resolve(resUri);
-			return new URL(resolvedUri.toString());			
-		}
-		
-		return new URL(reference);
 	}
 
 	/**
@@ -136,29 +102,6 @@ public class EmfUtil {
 			}
 		}
 		return ret;
-	}
-
-	/**
-	 * Loads element documentation from a documentation resource specified in documentation-reference nasdanika (urn:org.nasdanika) annotation resolved relative to the 
-	 * model element resource. 
-	 * @param modelElement
-	 * @return
-	 */
-	public static String getDocumentation(EModelElement modelElement) {
-		EAnnotation nasdanikaAnnotation = getNasdanikaAnnotation(modelElement);
-		if (nasdanikaAnnotation != null) {
-			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
-			if (!Util.isBlank(docRef)) {
-				try {
-					return DefaultConverter.INSTANCE.toString(resolveReference(modelElement.eResource(), docRef).openStream());
-				} catch (Exception e) {
-					e.printStackTrace();
-					return "Error loading documentation: " + e;
-				}
-			}
-		}
-		
-		return null;
 	}
 
 }

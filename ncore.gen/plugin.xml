@@ -6,7 +6,7 @@
 
 <plugin>
    <extension
-         point="org.nasdanika.emf.adapterFactories">
+         point="org.nasdanika.emf.ext.adapterFactories">
       <factory
             class="org.nasdanika.ncore.gen.NcoreGenerationAdapterFactory">
       </factory>

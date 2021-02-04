@@ -6,7 +6,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Supplier;
-import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.emf.ext.EmfUtilEx;
 import org.nasdanika.ncore.Resource;
 
 public class ResourceSupplierFactory extends ServiceSupplierFactory<Resource> {
@@ -19,7 +19,7 @@ public class ResourceSupplierFactory extends ServiceSupplierFactory<Resource> {
 	@Override
 	public Supplier<Object> create(Context context) throws Exception {
 		return Supplier.<Object>fromCallable(() -> {
-			URL url = EmfUtil.resolveReference(target.eResource(), context.interpolateToString(target.getLocation()));
+			URL url = EmfUtilEx.resolveReference(target.eResource(), context.interpolateToString(target.getLocation()));
 			if (org.nasdanika.common.Util.isBlank(target.getType())) {
 				return url;
 			}

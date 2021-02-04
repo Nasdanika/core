@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2021.1.2</version>
+	<version>2021.2.0</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -135,6 +135,8 @@
 	<modules>
 		<module>common/jar-pom.xml</module>
 		<module>exec/jar-pom.xml</module>
+		<module>cli/jar-pom.xml</module>
+		<module>emf/jar-pom.xml</module>
 		<!-- <module>cli/jar-pom.xml</module> -->
 		<!--
 		<module>emf/jar-pom.xml</module>

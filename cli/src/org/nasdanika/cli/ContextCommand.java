@@ -12,16 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.Yaml;
 
 import picocli.CommandLine.Option;
@@ -64,15 +60,6 @@ public abstract class ContextCommand extends CommandBase {
 					+ "later context entries shadowing the former"
 			})
 	private List<String> contexts = new ArrayList<>();
-		
-	@Option(			
-			names = {"-B", "--context-builders"},
-			paramLabel = "URL",
-			description = {
-					"Context builders configuration resource URL relative to the current directory.  "
-					+ "See online documentation at https://www.nasdanika.org/builds/develop/doc/reference/cli/context-builders.html for details."
-			})
-	private List<String> contextBuilders = new ArrayList<>();
 	
 	/**
 	 * Called by createContext to obtain an instance of context to be configured.
@@ -100,18 +87,7 @@ public abstract class ContextCommand extends CommandBase {
 			ret = ret.compose(load(location));
 		}
 		
-		ret = Context.wrap(entries::get).compose(ret);
-		for (String cb: contextBuilders) {
-			URL url = new File(".").toURI().resolve(cb).toURL();
-			URLConnection connection = url.openConnection();
-			try (InputStream in = connection.getInputStream()) {
-				Yaml yaml = new Yaml();
-				@SuppressWarnings("unchecked")
-				Map<String, Object> config = (Map<String,Object>) yaml.load(in);
-				ret = buildContext(config, ret, progressMonitor);
-			}			
-		}
-		return ret;
+		return Context.wrap(entries::get).compose(ret);
 	}
 		
 	/**
@@ -130,36 +106,9 @@ public abstract class ContextCommand extends CommandBase {
 				context = context.mount(buildContext(me.getValue(), context, progressMonitor.split("Building context for mount "+me.getKey(), 1)), me.getKey());
 			}
 		}
-		String id = (String) config.get("id");
-		if (id != null) {
-			ContextBuilder contextBuilder = createContextBuilder(id);
-			context = contextBuilder.build(config.get("config"), context, progressMonitor.split("Building context for id: " +id, 1));
-		}
 		
 		return context;
 	}
-	
-	/**
-	 * Collects subcommands from extensions 
-	 * @param command
-	 * @param id
-	 */
-	@SuppressWarnings("unchecked")
-	private ContextBuilder createContextBuilder(String id) throws Exception {
-		for (IConfigurationElement ce: Platform.getExtensionRegistry().getConfigurationElementsFor(Application.CLI_EXTENSION_POINT_ID)) {
-			String ceId = ce.getAttribute("id");
-			if ("context-builder".equals(ce.getName())
-					&& !Util.isBlank(ceId)
-					&& Application.equal(id, ce.getContributor().getName()+"/"+ceId)) {
-				ContextBuilder contextBuilder = (ContextBuilder) ce.createExecutableExtension("class");
-				for (IConfigurationElement parameter: ce.getChildren("parameter")) {
-					((BiConsumer<String, String>) contextBuilder).accept(parameter.getAttribute("name"), parameter.getAttribute("value"));
-				}
-				return contextBuilder;
-			}
-		}
-		throw new IllegalArgumentException("Context builder not found: " + id);
-	}	
 
 	/**
 	 * Loads context from a location resolved relative to the current directory.

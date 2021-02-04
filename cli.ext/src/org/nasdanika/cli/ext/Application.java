@@ -1,4 +1,4 @@
-package org.nasdanika.cli;
+package org.nasdanika.cli.ext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.fusesource.jansi.AnsiConsole;
+import org.nasdanika.cli.CommandGroup;
+import org.nasdanika.cli.HelpCommand;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -34,7 +36,7 @@ public class Application implements IApplication {
 		
 	}
 	
-	public static final String CLI_EXTENSION_POINT_ID = "org.nasdanika.cli.cli";
+	public static final String CLI_EXTENSION_POINT_ID = "org.nasdanika.cli.ext.cli";
 	
 	static boolean equal(String a, String b) {
 		if (a == null) {
