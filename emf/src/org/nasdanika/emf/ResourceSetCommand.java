@@ -63,7 +63,6 @@ public abstract class ResourceSetCommand extends DelegatingCommand {
 	protected ResourceSet createEmptyResourceSet() {
 		ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-		ComposedAdapterFactory.registerGlobalFactory(resourceSet);
 		for (EPackage ePackage: getEPackages()) {
 			resourceSet.getPackageRegistry().put(ePackage.getNsURI(), ePackage);
 		}

@@ -13,7 +13,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 
 /**
  * Composed factory delegates to its child factories. It uses inheritance ordering to delegate -
@@ -23,28 +22,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
  *
  */
 public class ComposedAdapterFactory implements ComposeableAdapterFactory {
-	
-	private static final ComposedAdapterFactory GLOBAL_FACTORY = new ComposedAdapterFactory();
-		
-	public static final String ADAPTER_FACTORIES_EXTENSION_POINT_ID = "org.nasdanika.emf.ext.adapterFactories";
-				
-	/**
-	 * Returns global instance of {@link ComposedAdapterFactory} with {@link ComposeableAdapterFactory} children loaded from extensions.
-	 */
-	public static ComposedAdapterFactory getGlobalFactory() {
-		return GLOBAL_FACTORY;
-	}
-	
-	/**
-	 * Adds the global factory to the list or {@link ResourceSet} adapter factories if it is not yet there, so this method is idempotent.
-	 * @param resourceSet
-	 */
-	public static void registerGlobalFactory(ResourceSet resourceSet) {
-		ComposedAdapterFactory gf = getGlobalFactory();
-		if (!resourceSet.getAdapterFactories().contains(gf)) {
-			resourceSet.getAdapterFactories().add(gf);
-		}
-	}
 	
 	private ComposedAdapterFactory parentAdapterFactory;
 
