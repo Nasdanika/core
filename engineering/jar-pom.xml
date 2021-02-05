@@ -7,9 +7,9 @@
 	    <version>2021.2.0</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
-	<artifactId>party</artifactId>
+	<artifactId>engineering</artifactId>
 	<packaging>jar</packaging>
-	<name>Nasdanika Party Model</name>
+	<name>Nasdanika Engineering Model</name>
 	
 	<build>
 		<plugins>
@@ -18,7 +18,7 @@
 			  <artifactId>maven-compiler-plugin</artifactId>
 			  <configuration>
 			    <excludes>
-			      <exclude>org/nasdanika/party/util/Activator.java</exclude>
+			      <exclude>org/nasdanika/engineering/util/Activator.java</exclude>
 			    </excludes>
 			  </configuration>
 			</plugin>
@@ -28,7 +28,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>ncore</artifactId>
+			<artifactId>party</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

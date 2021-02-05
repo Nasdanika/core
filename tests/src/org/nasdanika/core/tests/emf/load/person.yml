@@ -1,0 +1,14 @@
+party-person:
+   id: pv
+   title: Pavel
+   description: Some description 
+   contact-methods:
+      - party-email: pavel@vlasov.us
+      
+      # Known type - the target contains just a map without type qualifier
+      - party-web-address: 
+          href: web-address.yml
+          
+      # Unknown type for heterogenous references - the target contains a singleton map with type qualifier as the key and feature map as the value
+      # Known type for homogenous references      
+      - postal-address.yml    

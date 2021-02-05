@@ -34,7 +34,7 @@ public interface WebAddress extends ContactMethod {
 	 * @return the value of the '<em>Url</em>' attribute.
 	 * @see #setUrl(String)
 	 * @see org.nasdanika.party.PartyPackage#getWebAddress_Url()
-	 * @model
+	 * @model annotation="urn:org.nasdanika default='true'"
 	 * @generated
 	 */
 	String getUrl();

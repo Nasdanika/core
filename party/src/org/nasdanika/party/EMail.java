@@ -34,7 +34,7 @@ public interface EMail extends ContactMethod {
 	 * @return the value of the '<em>EMail Address</em>' attribute.
 	 * @see #setEMailAddress(String)
 	 * @see org.nasdanika.party.PartyPackage#getEMail_EMailAddress()
-	 * @model
+	 * @model annotation="urn:org.nasdanika default='true'"
 	 * @generated
 	 */
 	String getEMailAddress();

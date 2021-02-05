@@ -6,7 +6,8 @@ Bundle-Version: 2021.3.0.qualifier
 Bundle-Vendor: Nasdanika LLC
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.nasdanika.emf,
- org.nasdanika.emf.localization
+ org.nasdanika.emf.localization,
+ org.nasdanika.emf.persistence
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.emf.ecore;bundle-version="2.17.0";visibility:=reexport,
  org.nasdanika.common;bundle-version="1.0.0";visibility:=reexport,

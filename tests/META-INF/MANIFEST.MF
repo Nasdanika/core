@@ -9,7 +9,8 @@ Require-Bundle: org.junit,
  org.nasdanika.emf;bundle-version="1.0.0",
  org.nasdanika.common;bundle-version="1.0.0",
  org.nasdanika.exec;bundle-version="1.0.0",
- org.apache.commons.lang3
+ org.apache.commons.lang3,
+ org.nasdanika.party;bundle-version="2021.3.0"
 Automatic-Module-Name: org.nasdanika.core.tests
 Export-Package: org.nasdanika.core.tests,
  org.nasdanika.core.tests.exec

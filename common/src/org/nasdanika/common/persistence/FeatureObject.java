@@ -16,7 +16,7 @@ import org.nasdanika.common.Util;
  * @author Pavel
  *
  */
-public class FeatureObject implements Marked {
+public class FeatureObject implements Marked, Loadable {
 	
 	private Marker marker;
 	
@@ -51,7 +51,7 @@ public class FeatureObject implements Marked {
 	 * @return this object.
 	 * @throws Exception
 	 */
-	public FeatureObject load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public void load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		if (config instanceof Map) {
 			this.marker = marker;			
 			Map<?,?> configMap = (Map<?,?>) config;
@@ -69,7 +69,6 @@ public class FeatureObject implements Marked {
 				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
 			}
 		}
-		return this;
 	}			
 
 }

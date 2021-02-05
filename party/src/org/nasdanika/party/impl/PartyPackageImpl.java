@@ -1545,6 +1545,18 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 	protected void createUrnorgAnnotations() {
 		String source = "urn:org.nasdanika";
 		addAnnotation
+		  (getEMail_EMailAddress(),
+		   source,
+		   new String[] {
+			   "default", "true"
+		   });
+		addAnnotation
+		  (getWebAddress_Url(),
+		   source,
+		   new String[] {
+			   "default", "true"
+		   });
+		addAnnotation
 		  (getMarkdownText_Markdown(),
 		   source,
 		   new String[] {

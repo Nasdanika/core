@@ -2,30 +2,34 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	  <parent>
-	    <artifactId>org.nasdanika.core.parent</artifactId>
+	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2020.9.0</version>
+	    <version>2021.2.0</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
-	<artifactId>org.nasdanika.ncore</artifactId>
+	<artifactId>ncore</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Core Model</name>
+	
+	<build>
+		<plugins>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-compiler-plugin</artifactId>
+			  <configuration>
+			    <excludes>
+			      <exclude>org/nasdanika/ncore/util/Activator.java</exclude>
+			    </excludes>
+			  </configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>org.nasdanika.commmon</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>org.nasdanika.emf</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore</artifactId>
-		    <version>2.20.0</version>
+			<artifactId>emf</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

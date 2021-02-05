@@ -153,6 +153,9 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="E-Mail address."/>
       </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="default" value="true"/>
+      </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Phone" eSuperTypes="#//ContactMethod">
@@ -222,6 +225,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="URL."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="default" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

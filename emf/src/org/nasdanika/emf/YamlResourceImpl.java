@@ -3,16 +3,26 @@ package org.nasdanika.emf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.common.persistence.Storable;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Loads EMF classes from YAML using {@link ObjectLoader}s. 
@@ -26,10 +36,12 @@ public class YamlResourceImpl extends ResourceImpl {
 	
 	private ObjectLoader loader;
 	private ProgressMonitor progressMonitor;
+	private Context context;
 
-	public YamlResourceImpl(URI uri, ObjectLoader loader, ProgressMonitor progressMonitor) {
+	public YamlResourceImpl(URI uri, ObjectLoader loader, Context context, ProgressMonitor progressMonitor) {
 		super(uri);
 		this.loader = loader;
+		this.context = context;
 		this.progressMonitor = progressMonitor;
 	}
 
@@ -41,7 +53,14 @@ public class YamlResourceImpl extends ResourceImpl {
 			if (data instanceof Collection) {
 				getContents().addAll((Collection<EObject>) data);
 			} else {
-				getContents().add((EObject) data);
+				if (data instanceof SupplierFactory) {
+					EObject eObject = Util.callSupplier(((SupplierFactory<EObject>) data).create(context), progressMonitor);
+					getContents().add(eObject);
+				} else if (data instanceof EObject) {
+					getContents().add((EObject) data);
+				} else {
+					throw new IOException("Not an instance of EObject: " + data);
+				}
 			}
 		} catch (RuntimeException | IOException e) {
 			throw e;
@@ -52,7 +71,26 @@ public class YamlResourceImpl extends ResourceImpl {
 	
 	@Override
 	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
-		throw new UnsupportedOperationException("Saving is not supported");
+		List<Object> data = new ArrayList<>();
+		for (EObject e: getContents()) {
+			Storable storable = EObjectAdaptable.adaptTo(e, Storable.class);
+			if (storable == null) {
+				throw new IOException("Cannot adapt " + e + " to " + Storable.class.getName());
+			}
+			try {
+				data.add(storable.store(new URL(getURI().toString()), progressMonitor));
+			} catch (RuntimeException | IOException ex) {
+				throw ex;
+			} catch (Exception ex) {
+				throw new NasdanikaException(ex);
+			}
+		}
+		
+		DumperOptions dumperOptions = new DumperOptions();
+		dumperOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+		dumperOptions.setIndent(4);
+		Yaml yaml = new Yaml(dumperOptions);
+		yaml.dump(data.size() == 1 ? data.get(0) : data, new OutputStreamWriter(outputStream));		
 	}
 
 }

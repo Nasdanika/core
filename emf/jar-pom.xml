@@ -7,7 +7,7 @@
 	    <version>2021.2.0</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
-	<artifactId>org.nasdanika.emf</artifactId>
+	<artifactId>emf</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika EMF</name>
 	
