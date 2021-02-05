@@ -25,7 +25,7 @@ import picocli.CommandLine.Option;
  * @author Pavel
  *
  */
-public abstract class ConfigurableContextBuildersMixIn implements ContextBuilder {
+public class ConfigurableContextBuildersMixIn implements ContextBuilder {
 		
 	@Option(			
 			names = {"-B", "--context-builders"},
