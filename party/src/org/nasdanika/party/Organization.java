@@ -36,7 +36,7 @@ public interface Organization extends OrganizationalUnit {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Members</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getOrganization_Members()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<MemberDirectoryElement> getMembers();
@@ -51,7 +51,7 @@ public interface Organization extends OrganizationalUnit {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Directory</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getOrganization_Directory()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<DirectoryElement> getDirectory();

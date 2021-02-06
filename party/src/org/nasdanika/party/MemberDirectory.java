@@ -37,7 +37,7 @@ public interface MemberDirectory extends ModelElement, MemberDirectoryElement {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getMemberDirectory_Elements()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<MemberDirectoryElement> getElements();

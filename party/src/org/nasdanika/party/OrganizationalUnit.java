@@ -36,7 +36,7 @@ public interface OrganizationalUnit extends Party, AbstractOrganizationalUnit {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Organizational Units</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getOrganizationalUnit_OrganizationalUnits()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<AbstractOrganizationalUnit> getOrganizationalUnits();
@@ -51,7 +51,7 @@ public interface OrganizationalUnit extends Party, AbstractOrganizationalUnit {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Roles</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getOrganizationalUnit_Roles()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<Role> getRoles();

@@ -63,7 +63,7 @@ public interface Member extends Entity, MemberDirectoryElement {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getMember_Resources()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ResourceCategoryElement> getResources();

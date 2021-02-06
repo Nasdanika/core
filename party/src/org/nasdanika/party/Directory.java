@@ -35,7 +35,7 @@ public interface Directory extends DirectoryElement {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getDirectory_Elements()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<DirectoryElement> getElements();

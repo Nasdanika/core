@@ -94,4 +94,15 @@ public class YamlResource extends ResourceImpl {
 		yaml.dump(data.size() == 1 ? data.get(0) : data, new OutputStreamWriter(outputStream));		
 	}
 
+	/**
+	 * If fragment is null returns the first content element.
+	 */
+	@Override
+	public EObject getEObject(String uriFragment) {
+		if (uriFragment == null) {
+			return getContents().get(0);
+		}
+		return super.getEObject(uriFragment);
+	}
+
 }

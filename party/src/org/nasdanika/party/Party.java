@@ -37,7 +37,7 @@ public interface Party extends DirectoryElement, Entity {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Contact Methods</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getParty_ContactMethods()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ContactMethod> getContactMethods();
@@ -52,7 +52,7 @@ public interface Party extends DirectoryElement, Entity {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getParty_Resources()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ResourceCategoryElement> getResources();

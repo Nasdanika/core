@@ -37,7 +37,7 @@ public interface ResourceCategory extends ModelElement, ResourceCategoryElement 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.party.PartyPackage#getResourceCategory_Elements()
-	 * @model containment="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<ResourceCategoryElement> getElements();
