@@ -1548,13 +1548,13 @@ public class PartyPackageImpl extends EPackageImpl implements PartyPackage {
 		  (getEMail_EMailAddress(),
 		   source,
 		   new String[] {
-			   "default", "true"
+			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getWebAddress_Url(),
 		   source,
 		   new String[] {
-			   "default", "true"
+			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getMarkdownText_Markdown(),

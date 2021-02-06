@@ -2,11 +2,14 @@ package org.nasdanika.core.tests.emf.load;
 
 import java.net.URL;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.PrintStreamProgressMonitor;
@@ -14,13 +17,14 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.emf.persistence.EObjectLoader;
 import org.nasdanika.emf.persistence.YamlResourceFactory;
-import org.nasdanika.party.Party;
+import org.nasdanika.party.ContactMethod;
 import org.nasdanika.party.PartyPackage;
+import org.nasdanika.party.Person;
 
 public class TestEmfLoad {
 	
 	/**
-	 * Tests loading of {@link Party} from YAML.
+	 * Tests loading of {@link Person} from YAML.
 	 */
 	@Test
 	public void testPerson() throws Exception {
@@ -35,7 +39,11 @@ public class TestEmfLoad {
 		URL resourceURL = getClass().getResource("person.yml");
 		URI uri = URI.createURI(resourceURL.toString());
 		Resource resource = resourceSet.getResource(uri, true);
-		System.out.println(resource.getContents());
+		Person person = (Person) resource.getContents().get(0);
+		System.out.println(person);
+		for (ContactMethod cm: person.getContactMethods()) {
+			System.out.println("\t" + cm);
+		}		
 	}
 	
 }

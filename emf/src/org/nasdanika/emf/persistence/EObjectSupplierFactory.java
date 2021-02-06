@@ -3,7 +3,6 @@ package org.nasdanika.emf.persistence;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -11,13 +10,13 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListAttribute;
+import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.emf.EmfUtil;
 
@@ -29,13 +28,14 @@ import org.nasdanika.emf.EmfUtil;
 public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject> {
 	
 	private Map<String, EStructuralFeature> featureMap = new LinkedHashMap<>();
+
 	private EClass eClass;
 
 	public EObjectSupplierFactory(EObjectLoader loader, EClass eClass, java.util.function.Function<ENamedElement,String> keyProvider) {
-		this.eClass = eClass;
+		this.eClass = eClass;		
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
-		}
+		}		
 		for (EStructuralFeature feature: eClass.getEAllStructuralFeatures()) {
 			if (!feature.isChangeable()) {
 				continue;
@@ -46,7 +46,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			featureMap.put(featureKey, feature);
 			addFeature(wrapFeature(featureKey, feature, loader, keyProvider));
-		}		
+		}			
+		
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		if (feature instanceof EReference) {
 			boolean isHomogenous = na != null && na.getDetails().containsKey(EObjectLoader.IS_HOMOGEONUS) && "true".equals(na.getDetails().get(EObjectLoader.IS_HOMOGEONUS));
 			if (feature.isMany()) {
-				
+				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation), true);
 				
 			}
 

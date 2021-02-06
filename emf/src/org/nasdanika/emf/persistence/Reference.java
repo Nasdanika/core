@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.persistence.ListAttribute;
 import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
@@ -13,11 +14,11 @@ import org.nasdanika.common.persistence.ObjectLoader;
  *
  * @param <T>
  */
-public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAttribute<T> {
+public class Reference extends ListAttribute<EObjectSupplierFactory> {
 
 	private Supplier<T> elementFactory;
 
-	public FeatureObjectListAttribute(
+	public Reference(
 			Object key, 
 			Supplier<T> elementFactory,
 			boolean isDefault, 

@@ -3,7 +3,7 @@ party-person:
    title: Pavel
    description: Some description 
    contact-methods:
-      - party-email: pavel@vlasov.us
+      - party-e-mail: pavel@vlasov.us
       
       # Known type - the target contains just a map without type qualifier
       - party-web-address: 

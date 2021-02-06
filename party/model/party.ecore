@@ -154,7 +154,7 @@
         <details key="documentation" value="E-Mail address."/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="default" value="true"/>
+        <details key="default-feature" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -227,7 +227,7 @@
         <details key="documentation" value="URL."/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="default" value="true"/>
+        <details key="default-feature" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

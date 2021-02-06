@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -15,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -29,6 +31,8 @@ import org.nasdanika.emf.EmfUtil;
 
 public class EObjectLoader implements ObjectLoader {
 	
+	static final String HREF_KEY = "href";
+
 	public static final String LOAD_KEY = "load-key";
 	
 	/**
@@ -172,6 +176,27 @@ public class EObjectLoader implements ObjectLoader {
 		
 		Class<?> instanceClass = eClass.getInstanceClass();
 		EFactory factory = eClass.getEPackage().getEFactoryInstance();
+		
+		// Proxy
+		if (config instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<Object,Object> configMap = (Map<Object,Object>) config;
+			if (configMap.size() == 1 
+					&& configMap.containsKey(HREF_KEY) 
+					&& configMap.get(HREF_KEY) instanceof String) {
+				EObject eObject = factory.create(eClass);
+				if (eObject instanceof MinimalEObjectImpl) {
+					URI proxyURI = URI.createURI((String) configMap.get(HREF_KEY));
+					if (base != null) {
+						URI baseURI = URI.createURI(base.toString());
+						proxyURI = proxyURI.resolve(baseURI);
+					}
+					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
+					return eObject;
+				}
+			}
+		}			
+		
 		if (Loadable.class.isAssignableFrom(instanceClass)) {
 			EObject eObject = factory.create(eClass);
 			((Loadable) eObject).load(loader, config, base, progressMonitor, marker);

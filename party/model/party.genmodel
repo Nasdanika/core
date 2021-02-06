@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.party/src" creationIcons="false"
     creationSubmenus="true" modelPluginID="org.nasdanika.party" modelName="Party"
     rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
-    featureDelegation="Dynamic" complianceLevel="8.0" suppressGenModelAnnotations="false"
+    featureDelegation="Dynamic" containmentProxies="true" complianceLevel="8.0" suppressGenModelAnnotations="false"
     copyrightFields="false" providerRootExtendsClass="org.nasdanika.party.provider.PartyItemProviderAdapter"
     colorProviders="true" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
     operationReflection="true" importOrganizing="true" decoration="Live">

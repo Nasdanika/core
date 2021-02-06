@@ -37,6 +37,9 @@ public class FeatureObject implements Marked, Loadable {
 		if (feature.isDefault() && features.stream().filter(Feature::isDefault).findFirst().isPresent()) {
 			throw new IllegalArgumentException("Duplicate default feature: " + feature.getKey());
 		}
+		if (features.stream().filter(o -> feature.getKey().equals(o.getKey())).findFirst().isPresent()) {
+			throw new IllegalArgumentException("Duplicate feature: " + feature.getKey());
+		}
 		features.add(feature);
 		return feature;
 	}

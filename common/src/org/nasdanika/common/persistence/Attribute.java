@@ -60,7 +60,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 			this.marker = Util.getMarker(source, getKey());
 			value = create(loader, source.get(getKey()), base, progressMonitor, this.marker);						
 			loaded = true;
-		} else if (required) {
+		} else if (isRequired()) {
 			throw new ConfigurationException("Missing required feature: " + getKey(), marker);
 		}		
 	}	
