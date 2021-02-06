@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -69,8 +70,9 @@ public class EObjectLoader implements ObjectLoader {
 		return String.join("-", ns);
 	};
 	
-
 	private org.nasdanika.common.persistence.ObjectLoader chain;
+	
+	private java.util.function.Function<ENamedElement,String> keyProvider;
 	
 	private class EPackageEntry {
 
@@ -87,23 +89,38 @@ public class EObjectLoader implements ObjectLoader {
 	
 	private Map<String,EPackageEntry> registry = new HashMap<>();
 
-	public EObjectLoader(ObjectLoader chain, EPackage... ePackages) {
+	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, EPackage... ePackages) {
 		this.chain = chain;
+		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
 		for (EPackage ePackage: ePackages) {
 			register(ePackage);
 		}
 	}
 	
 	public EObjectLoader(EPackage... ePackages) {
-		this(null, ePackages);
+		this(null, null, ePackages);
+	}
+
+	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, ResourceSet resourceSet) {
+		this(chain, keyProvider, resourceSet.getPackageRegistry().values().toArray(new EPackage[0]));
 	}
 	
-	public void register(EPackage ePackage, String prefix, java.util.function.Function<ENamedElement,String> keyProvider) {
-		registry.put(prefix, new EPackageEntry(ePackage, keyProvider));
+	public EObjectLoader(ResourceSet resourceSet) {
+		this(null, null, resourceSet);
+	}
+	
+	public void register(EPackage ePackage, java.util.function.Function<ENamedElement,String> keyProvider) {
+		if (keyProvider == null) {
+			keyProvider = this.keyProvider;
+		}
+		String packageKey = keyProvider.apply(ePackage);
+		if (packageKey != null) {
+			registry.put(packageKey + "-", new EPackageEntry(ePackage, keyProvider == null ? this.keyProvider : keyProvider));
+		}
 	}
 	
 	public void register(EPackage ePackage) {
-		register(ePackage, ePackage.getName() + "-", null);
+		register(ePackage, null);
 	}
 
 	@Override

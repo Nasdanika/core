@@ -13,7 +13,7 @@ import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.emf.persistence.EObjectLoader;
-import org.nasdanika.emf.YamlResourceFactoryImpl;
+import org.nasdanika.emf.persistence.YamlResourceFactory;
 import org.nasdanika.party.Party;
 import org.nasdanika.party.PartyPackage;
 
@@ -26,10 +26,11 @@ public class TestEmfLoad {
 	public void testPerson() throws Exception {
 		ResourceSet resourceSet = new ResourceSetImpl();		
 		Resource.Factory.Registry resourceFactoryRegistry = new ResourceFactoryRegistryImpl();
-		ObjectLoader loader = new EObjectLoader(PartyPackage.eINSTANCE);		
+		resourceSet.getPackageRegistry().put(PartyPackage.eNS_URI, PartyPackage.eINSTANCE);
+		ObjectLoader loader = new EObjectLoader(resourceSet);		
 		Context context = Context.EMPTY_CONTEXT;
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		resourceFactoryRegistry.getExtensionToFactoryMap().put("yml", new YamlResourceFactoryImpl(loader, context, progressMonitor));
+		resourceFactoryRegistry.getExtensionToFactoryMap().put("yml", new YamlResourceFactory(loader, context, progressMonitor));
 		resourceSet.setResourceFactoryRegistry(resourceFactoryRegistry);
 		URL resourceURL = getClass().getResource("person.yml");
 		URI uri = URI.createURI(resourceURL.toString());

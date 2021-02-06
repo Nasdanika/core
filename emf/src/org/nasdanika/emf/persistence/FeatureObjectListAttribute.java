@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
  * If config is a list loads each element creating elements using element factory and then loading them, otherwise creates a singleton in the same way as explained before.

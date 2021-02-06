@@ -1,4 +1,4 @@
-package org.nasdanika.emf;
+package org.nasdanika.emf.persistence;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +20,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.persistence.Storable;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -32,13 +33,13 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public class YamlResourceImpl extends ResourceImpl {
+public class YamlResource extends ResourceImpl {
 	
 	private ObjectLoader loader;
 	private ProgressMonitor progressMonitor;
 	private Context context;
 
-	public YamlResourceImpl(URI uri, ObjectLoader loader, Context context, ProgressMonitor progressMonitor) {
+	public YamlResource(URI uri, ObjectLoader loader, Context context, ProgressMonitor progressMonitor) {
 		super(uri);
 		this.loader = loader;
 		this.context = context;
