@@ -3,6 +3,8 @@ package org.nasdanika.emf.persistence;
 import java.net.URL;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ListAttribute;
 import org.nasdanika.common.persistence.Marker;
@@ -15,13 +17,31 @@ import org.nasdanika.common.persistence.ObjectLoader;
  */
 public class ReferenceList<T> extends ListAttribute<T> {
 
+	private EObjectLoader resolver;
+	private EClass referenceType;
+
+	/**
+	 * 
+	 * @param key
+	 * @param isDefault
+	 * @param required
+	 * @param defaultValue
+	 * @param description
+	 * @param resolver
+	 * @param referenceType Reference type if the reference is homogenous, i.e. its type is known beforehand.
+	 * @param exclusiveWith
+	 */
 	public ReferenceList(Object key, 
 			boolean isDefault, 
 			boolean required, 
 			List<T> defaultValue, 
 			String description, 
+			EObjectLoader resolver,
+			EClass referenceType,
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);				
+		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		this.resolver = resolver;
+		this.referenceType = referenceType;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -36,7 +56,11 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			}
 			return (T) loader.loadYaml(refURL, progressMonitor);
 		}
-		return (T) loader.load(element, base, progressMonitor);
+		Object ret = loader.load(element, base, progressMonitor);
+		if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
+			return (T) resolver.resolve((EObject) ret);
+		}
+		return (T) ret;
 	}
 
 }

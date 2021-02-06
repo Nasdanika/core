@@ -14,6 +14,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Attribute;
+import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListAttribute;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
@@ -31,8 +32,12 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 
 	private EClass eClass;
 
-	public EObjectSupplierFactory(EObjectLoader loader, EClass eClass, java.util.function.Function<ENamedElement,String> keyProvider) {
-		this.eClass = eClass;		
+	public EObjectSupplierFactory(
+			EObjectLoader loader, 
+			EClass eClass, 
+			java.util.function.Function<ENamedElement,String> keyProvider) {
+		
+		this.eClass = eClass;	
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
 		}		
@@ -73,23 +78,31 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		}
 		
 		if (feature instanceof EReference) {
-			boolean isHomogenous = na != null && na.getDetails().containsKey(EObjectLoader.IS_HOMOGEONUS) && "true".equals(na.getDetails().get(EObjectLoader.IS_HOMOGEONUS));
+			EReference eReference = (EReference) feature;
+			boolean isHomogenous = !eReference.getEReferenceType().isAbstract() && na != null && na.getDetails().containsKey(EObjectLoader.IS_HOMOGEONUS) && "true".equals(na.getDetails().get(EObjectLoader.IS_HOMOGEONUS));			
 			if (feature.isMany()) {
-				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation), true);
-				
+				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
+						featureKey, 
+						isDefault, 
+						feature.isRequired(), 
+						null, 
+						documentation, 
+						eReference.isResolveProxies() ? null : loader,
+						isHomogenous ? eReference.getEReferenceType() : null), true);
 			}
-
-//			Proxies if reference resolves proxies.
-//			((MinimalEObjectImpl) ret).eSetProxyURI(URI.createURI("purum"));
 			
+			return new DelegatingSupplierFactoryFeature<>(new Reference<>(
+					featureKey, 
+					isDefault, 
+					feature.isRequired(), 
+					null, 
+					documentation, 
+					eReference.isResolveProxies() ? null : loader,
+					isHomogenous ? eReference.getEReferenceType() : null));
 			
 		}
-
-		// Fallback for testing
-		return new Attribute<Object>(featureKey, isDefault, feature.isRequired(), null, documentation);			
 		
-		// TODO - required, interpolated, list, description, and other stuff...
-//		throw new UnsupportedOperationException("Unusupported feature type: " + feature);
+		throw new UnsupportedOperationException("Unusupported feature type: " + feature);
 	}
 
 	@Override

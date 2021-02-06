@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
@@ -93,6 +94,8 @@ public class EObjectLoader implements ObjectLoader {
 	
 	private Map<String,EPackageEntry> registry = new HashMap<>();
 
+	private ResourceSet resourceSet;
+
 	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, EPackage... ePackages) {
 		this.chain = chain;
 		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
@@ -107,6 +110,7 @@ public class EObjectLoader implements ObjectLoader {
 
 	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, ResourceSet resourceSet) {
 		this(chain, keyProvider, resourceSet.getPackageRegistry().values().toArray(new EPackage[0]));
+		this.resourceSet = resourceSet;
 	}
 	
 	public EObjectLoader(ResourceSet resourceSet) {
@@ -174,28 +178,14 @@ public class EObjectLoader implements ObjectLoader {
 			Marker marker, 
 			java.util.function.Function<ENamedElement,String> keyProvider) throws Exception {
 		
+		// Proxy
+		Object proxy = createProxy(eClass, config, base);
+		if (proxy != null) {
+			return proxy;
+		}
+		
 		Class<?> instanceClass = eClass.getInstanceClass();
 		EFactory factory = eClass.getEPackage().getEFactoryInstance();
-		
-		// Proxy
-		if (config instanceof Map) {
-			@SuppressWarnings("unchecked")
-			Map<Object,Object> configMap = (Map<Object,Object>) config;
-			if (configMap.size() == 1 
-					&& configMap.containsKey(HREF_KEY) 
-					&& configMap.get(HREF_KEY) instanceof String) {
-				EObject eObject = factory.create(eClass);
-				if (eObject instanceof MinimalEObjectImpl) {
-					URI proxyURI = URI.createURI((String) configMap.get(HREF_KEY));
-					if (base != null) {
-						URI baseURI = URI.createURI(base.toString());
-						proxyURI = proxyURI.resolve(baseURI);
-					}
-					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
-					return eObject;
-				}
-			}
-		}			
 		
 		if (Loadable.class.isAssignableFrom(instanceClass)) {
 			EObject eObject = factory.create(eClass);
@@ -234,5 +224,48 @@ public class EObjectLoader implements ObjectLoader {
 		eObjectSupplierFactory.load(loader, config, base, progressMonitor, marker);
 		return eObjectSupplierFactory;
 	}
+
+	/**
+	 * Creates a proxy object if config is a singleton map with "href" key.
+	 * @param eClass
+	 * @param config
+	 * @param base
+	 * @return Proxy object or null if config is not a proxy config.
+	 */
+	public static EObject createProxy(EClass eClass, Object config, URL base) {
+		if (config instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<Object,Object> configMap = (Map<Object,Object>) config;
+			if (configMap.size() == 1 
+					&& configMap.containsKey(HREF_KEY) 
+					&& configMap.get(HREF_KEY) instanceof String) {
+				EObject eObject = eClass.getEPackage().getEFactoryInstance().create(eClass);
+				if (eObject instanceof MinimalEObjectImpl) {
+					URI proxyURI = URI.createURI((String) configMap.get(HREF_KEY));
+					if (base != null) {
+						URI baseURI = URI.createURI(base.toString());
+						proxyURI = proxyURI.resolve(baseURI);
+					}
+					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
+					return eObject;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Resolves proxy using the loader's resource set.
+	 * Does not suppress exceptions. 
+	 */
+	public EObject resolve(EObject proxy) {
+		if (!proxy.eIsProxy()) {
+			return proxy;
+		}
+
+		URI proxyURI = ((InternalEObject) proxy).eProxyURI();
+		EObject ret = resourceSet.getEObject(proxyURI, true);
+		return ret == null || ret == proxy ? ret : resolve(ret);
+	}	
 
 }
