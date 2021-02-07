@@ -2,14 +2,11 @@ package org.nasdanika.core.tests.emf.load;
 
 import java.net.URL;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.PrintStreamProgressMonitor;

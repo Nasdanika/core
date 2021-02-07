@@ -109,6 +109,6 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 			}
 			
 		};
-	}
+	}	
 	
 }

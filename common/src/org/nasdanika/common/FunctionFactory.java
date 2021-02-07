@@ -51,6 +51,42 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 			}
 			
 		};
-	}	
+	}
+	
+	/**
+	 * Creates a function factry which adapts source to target type.
+	 * @param <S>
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	static <S,T> FunctionFactory<S,T> adapter(Class<T> type) {
+		return new FunctionFactory<S,T>() {
+
+			@Override
+			public Function<S,T> create(Context context) throws Exception {
+				return new Function<S,T>() {
+
+					@Override
+					public double size() {
+						return 1;
+					}
+
+					@Override
+					public String name() {
+						return "Adapting to " + type.getName();
+					}
+
+					@Override
+					public T execute(S source, ProgressMonitor progressMonitor) throws Exception {
+						return Adaptable.adaptTo(source, type);
+					}
+					
+				};
+			}
+			
+		};
+		
+	}
 	
 }

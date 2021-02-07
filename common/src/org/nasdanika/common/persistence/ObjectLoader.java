@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
@@ -104,6 +105,10 @@ public interface ObjectLoader {
 		} catch (MarkedYAMLException e) {
 			throw new ConfigurationException(e.getMessage(), e, new MarkerImpl(url.toString(), e.getProblemMark()));
 		}
+	}
+	
+	default Object loadYaml(File file, ProgressMonitor progressMonitor) throws Exception {
+		return loadYaml(file.toURI().toURL(), progressMonitor);
 	}
 		
 	default Object loadJsonObject(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
