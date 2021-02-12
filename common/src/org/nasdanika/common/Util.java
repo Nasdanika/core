@@ -57,6 +57,18 @@ public class Util {
 		}
 		return StringUtils.join(cca, " ");
 	}
+		
+	/**
+	 * Converts string in camel case, e.g. <code>firstName</code> to kebab case, e.g. <code>first-name</code>
+	 * @return
+	 */
+	public static String camelToKebab(String str) {
+		String[] ns = StringUtils.splitByCharacterTypeCamelCase(str);
+		for (int i = 0; i < ns.length; ++i) {
+			ns[i] = ns[i].toLowerCase();
+		}
+		return String.join("-", ns);
+	}
 	
 	public static boolean isBlank(String str) {
 		return str == null || str.trim().length() == 0;

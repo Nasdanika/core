@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
@@ -23,6 +22,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.ContextLoadable;
 import org.nasdanika.common.persistence.Loadable;
@@ -49,9 +49,14 @@ public class EObjectLoader implements ObjectLoader {
 	
 	/**
 	 * If this Nasdanika annotation details is set to "true" on a {@link EReference} with a concrete element type then reference element(s) are loaded using the reference type
-	 * and they shall be a maps of features as opposed of a map of type to a map of features.. 
+	 * and they shall be a maps of features as opposed of a map of type to a map of features.
 	 */
-	public static final String IS_HOMOGEONUS = "homogenous";
+	public static final String IS_HOMOGENOUS = "homogenous";
+	
+	/**
+	 * If this Nasdanika annotation details is set to "true" on a homogenous {@link EReference} then string values are treated as default features, not as object references. 
+	 */
+	public static final String IS_STRICT_CONTAINMENT = "strict-containment";
 	
 	/**
 	 * Default implementation of load key provider - gets load key from the Nasdanika annotation (urn:org.nasdanika) <code>load-key</code> details if it is present.
@@ -68,11 +73,7 @@ public class EObjectLoader implements ObjectLoader {
 			}
 		}
 		
-		String[] ns = StringUtils.splitByCharacterTypeCamelCase(ne.getName());
-		for (int i = 0; i < ns.length; ++i) {
-			ns[i] = ns[i].toLowerCase();
-		}
-		return String.join("-", ns);
+		return Util.camelToKebab(ne.getName());
 	};
 	
 	private org.nasdanika.common.persistence.ObjectLoader chain;
@@ -169,7 +170,7 @@ public class EObjectLoader implements ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	private Object create(
+	public Object create(
 			ObjectLoader loader, 
 			EClass eClass, 
 			Object config, 
@@ -268,4 +269,7 @@ public class EObjectLoader implements ObjectLoader {
 		return ret == null || ret == proxy ? ret : resolve(ret);
 	}	
 
+	public ResourceSet getResourceSet() {
+		return resourceSet;
+	}
 }

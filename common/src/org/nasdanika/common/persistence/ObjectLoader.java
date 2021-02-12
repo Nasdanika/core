@@ -153,4 +153,12 @@ public interface ObjectLoader {
 		return load(jsonArray.toList(), url, progressMonitor);
 	}
 	
+	/*
+	 * TODO - loading from Excel using Apache POI - https://search.maven.org/artifact/org.apache.poi/poi/5.0.0/jar
+	 * Use URL fragment to address Sheets and ranges. E.g. myworkbook.xslx#Sheet1:A1:C100
+	 * If no fragment - a map of sheet names to lists of maps with first row as key names and subsequent rows as data.
+	 * For streams - pass sheet and range as method parameters.
+	 * Figure out how to get the type, e.g. if the type is known beforehand.
+	 */
+	
 }

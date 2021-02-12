@@ -3,7 +3,6 @@ package org.nasdanika.emf.persistence;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -67,8 +66,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			java.util.function.Function<ENamedElement,String> keyProvider) {
 		
-		EAnnotation na = EmfUtil.getNasdanikaAnnotation(feature);
-		boolean isDefault = na != null && na.getDetails().containsKey(EObjectLoader.IS_DEFAULT_FEATURE) && "true".equals(na.getDetails().get(EObjectLoader.IS_DEFAULT_FEATURE));
+		boolean isDefault = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE));;
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
@@ -79,7 +77,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		
 		if (feature instanceof EReference) {
 			EReference eReference = (EReference) feature;
-			boolean isHomogenous = !eReference.getEReferenceType().isAbstract() && na != null && na.getDetails().containsKey(EObjectLoader.IS_HOMOGEONUS) && "true".equals(na.getDetails().get(EObjectLoader.IS_HOMOGEONUS));			
+			boolean isHomogenous = !eReference.getEReferenceType().isAbstract() && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_HOMOGENOUS));			
+			boolean isStrictContainment = isHomogenous && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_STRICT_CONTAINMENT));			
 			if (feature.isMany()) {
 				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
 						featureKey, 
@@ -88,7 +87,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						null, 
 						documentation, 
 						eReference.isResolveProxies() ? null : loader,
-						isHomogenous ? eReference.getEReferenceType() : null), true);
+						isHomogenous ? eReference.getEReferenceType() : null,
+						isStrictContainment,
+						keyProvider), true);
 			}
 			
 			return new DelegatingSupplierFactoryFeature<>(new Reference<>(
@@ -98,7 +99,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					null, 
 					documentation, 
 					eReference.isResolveProxies() ? null : loader,
-					isHomogenous ? eReference.getEReferenceType() : null));
+					isHomogenous ? eReference.getEReferenceType() : null,
+					isStrictContainment,
+					keyProvider));
 			
 		}
 		
@@ -122,6 +125,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
+				if (getMarker() != null) {
+					ret.eAdapters().add(new MarkedAdapter(getMarker()));
+				}
 				for (Feature<?> feature: features) {
 					if (feature.isLoaded()) {
 						ret.eSet(featureMap.get(feature.getKey()), feature.get(data));

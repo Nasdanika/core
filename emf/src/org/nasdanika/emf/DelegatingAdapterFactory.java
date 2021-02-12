@@ -135,7 +135,14 @@ public abstract class DelegatingAdapterFactory<T> extends ComposeableAdapterFact
 			
 			@Override
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				Object target = method.getDeclaringClass() == Adapter.class ? da : da.delegate;
+				Class<?> declaringClass = method.getDeclaringClass();
+				if (declaringClass == Object.class) {
+					// Handling equals
+					if (method.getName().equals("equals") && method.getParameterCount() == 1 && method.getParameterTypes()[0] == Object.class) {
+						return args[0] == proxy;
+					}
+				}
+				Object target = declaringClass == Adapter.class ? da : da.delegate;
 				return  method.invoke(target, args);
 			}
 			

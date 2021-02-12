@@ -2,8 +2,11 @@ package org.nasdanika.emf.persistence;
 
 import java.net.URL;
 import java.util.List;
+import java.util.function.Function;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ListAttribute;
@@ -19,6 +22,8 @@ public class ReferenceList<T> extends ListAttribute<T> {
 
 	private EObjectLoader resolver;
 	private EClass referenceType;
+	private Function<ENamedElement, String> keyProvider;
+	private boolean isStrictContainment;
 
 	/**
 	 * 
@@ -38,25 +43,26 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			String description, 
 			EObjectLoader resolver,
 			EClass referenceType,
+			boolean isStrictContainment,
+			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		this.resolver = resolver;
 		this.referenceType = referenceType;
+		this.isStrictContainment = isStrictContainment;
+		this.keyProvider = keyProvider;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected T createElement(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		// Strings are references. Always with the type?
-		if (element instanceof String) {
+		// Strings are references if not strict containment.
+		if (element instanceof String && !isStrictContainment) {
 			String ref = (String) element;
 			URL refURL = new URL(base, ref);
-			if (ref.endsWith(".json")) {
-				return (T) loader.loadJsonObject(refURL, progressMonitor);
-			}
-			return (T) loader.loadYaml(refURL, progressMonitor);
+			return (T) resolver.getResourceSet().getEObject(URI.createURI(refURL.toString()), true);
 		}
-		Object ret = loader.load(element, base, progressMonitor);
+		Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
 		if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 			return (T) resolver.resolve((EObject) ret);
 		}

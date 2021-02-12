@@ -32,12 +32,20 @@ public class EmfUtil {
 		return modelElement == null ? null : modelElement.getEAnnotation(NASDANIKA_ANNOTATION_SOURCE);
 	}
 	
-	public static String getCategory(EModelElement modelElement) {
-		if (modelElement == null) {
-			return null;
-		}
+	public static String getNasdanikaAnnotationDetail(EModelElement modelElement, String key) {
+		return getNasdanikaAnnotationDetail(modelElement, key, null);
+	}
+	
+	public static String getNasdanikaAnnotationDetail(EModelElement modelElement, String key, String defaultValue) {
 		EAnnotation na = getNasdanikaAnnotation(modelElement);
-		return na == null ? null : na.getDetails().get("category");		
+		if (na == null || !na.getDetails().containsKey(key)) {
+			return defaultValue;
+		}
+		return na.getDetails().get(key);
+	}
+	
+	public static String getCategory(EModelElement modelElement) {
+		return getNasdanikaAnnotationDetail(modelElement, "category");
 	}
 
 	/**
