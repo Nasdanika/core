@@ -12,11 +12,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.common.persistence.Feature;
-import org.nasdanika.common.persistence.ListAttribute;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
+import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.emf.EmfUtil;
 
@@ -70,9 +69,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
-				return new ListAttribute<Object>(featureKey, isDefault, feature.isRequired(), null, documentation);
+				return new ListSupplierFactoryAttribute<>(new org.nasdanika.common.persistence.ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation), true);
 			}
-			return new Attribute<Object>(featureKey, isDefault, feature.isRequired(), null, documentation);			
+			
+			return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), true);
 		}
 		
 		if (feature instanceof EReference) {

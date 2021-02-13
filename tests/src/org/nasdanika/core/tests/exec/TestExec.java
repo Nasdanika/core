@@ -404,6 +404,7 @@ public class TestExec {
 		
 		Supplier<InputStream> supplier = Util.asInputStreamSupplierFactory(mustache).create(context);
 		String strResult = Util.toString(context, callSupplier(supplier,monitor)).trim();
+		System.out.println(strResult);
 		assertTrue(strResult.contains("This is markdown test"));
 	}
 	

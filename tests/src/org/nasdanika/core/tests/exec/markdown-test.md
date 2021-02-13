@@ -3,3 +3,7 @@
 - Test, test, test...
 
 * Another test line
+
+```uml
+Alice -> Bob
+```
