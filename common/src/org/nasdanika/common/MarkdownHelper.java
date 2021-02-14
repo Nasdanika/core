@@ -90,7 +90,7 @@ public class MarkdownHelper {
 					.append("    <div style='display:none;white-space:pre-wrap' title='UML diagram definition for search'>").append(System.lineSeparator())
 					.append("        ").append(escapedBareSpec).append(System.lineSeparator()) 
 					.append("    </div>").append(System.lineSeparator())
-					.append("<div>").append(System.lineSeparator());
+					.append("</div>").append(System.lineSeparator());
 				
 				try {
 					output.append(Util.generateDiagram(bareSpec)).append(System.lineSeparator());
