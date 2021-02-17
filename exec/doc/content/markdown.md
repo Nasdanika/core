@@ -32,7 +32,7 @@ markdown:
     * [Activity](https://plantuml.com/activity-diagram-beta), 
     * [Component](https://plantuml.com/component-diagram), 
     * [State](https://plantuml.com/state-diagram), 
-    * [object](https://plantuml.com/object-diagram), 
+    * [Object](https://plantuml.com/object-diagram), 
     * [Deployment](https://plantuml.com/deployment-diagram), 
     * [Timing](https://plantuml.com/timing-diagram), 
     * [Network](https://plantuml.com/nwdiag).
