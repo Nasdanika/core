@@ -1,6 +1,10 @@
 package org.nasdanika.common;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,14 +81,23 @@ public class MarkdownHelper {
 	protected String[] getAbbreviations() {
 		return ABBREVIATIONS;
 	}	
+	
+	protected String nextToken() {
+		return "diagram_token_"+UUID.randomUUID().toString().replace("-", "_");
+	}
 		
-	protected String preProcessMarkdown(String markdown) {
+	/**
+	 * @param markdown Markdown to pre-process
+	 * @param replacements Accumulator of post-processing replacements token -&gt; HTML to replace the token with.
+	 * @return
+	 */
+	protected String preProcessMarkdown(String markdown, Map<String,String> replacements) {
 		if (isProcessFendedBlocks()) {
-			String ret = processFencedBlocks(markdown, Util.DiagramDialect.UML, START_UML_PATTERN);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.SALT,  START_WIREFRAME_PATTERN);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.GANTT,  START_GANTT_PATTERN);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.MINDMAP,  START_MINDMAP_PATTERN);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.WBS,  START_WBS_PATTERN);
+			String ret = processFencedBlocks(markdown, Util.DiagramDialect.UML, START_UML_PATTERN, replacements);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.SALT,  START_WIREFRAME_PATTERN, replacements);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.GANTT,  START_GANTT_PATTERN, replacements);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.MINDMAP,  START_MINDMAP_PATTERN, replacements);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.WBS,  START_WBS_PATTERN, replacements);
 					
 			// TODO - resource blocks
 					
@@ -93,12 +106,12 @@ public class MarkdownHelper {
 		return markdown;
 	}
 	
-	private String processUmlResourceBlocks(String markdown) {
-		// TODO
-		return markdown;
-	}
+//	private String processUmlResourceBlocks(String markdown) {
+//		// TODO
+//		return markdown;
+//	}
 
-	private String processFencedBlocks(String input, Util.DiagramDialect dialect, Pattern startPattern) {
+	private String processFencedBlocks(String input, Util.DiagramDialect dialect, Pattern startPattern, Map<String,String> replacements) {
 		StringBuilder output = new StringBuilder();
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
@@ -110,19 +123,30 @@ public class MarkdownHelper {
 
 				String bareSpec = input.substring(startMatcher.end(), startMatcher.end() + endMatcher.start());
 
-// TODO - when search is available implement "around advice" so the markdown process does not mess with DIV nesting.				
-//				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
-//				output
-//					.append(System.lineSeparator())
-//					.append(System.lineSeparator()) 
-//					.append("<div> ").append(System.lineSeparator())
-//					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
-//					.append(escapedBareSpec).append(System.lineSeparator()) 
-//					.append("    </div>").append(System.lineSeparator())
-//					.append("</div> ").append(System.lineSeparator());
+				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
+				
+				StringBuilder replacementBuilder = new StringBuilder();
+				replacementBuilder
+					.append(System.lineSeparator())
+					.append("<div> ").append(System.lineSeparator())
+					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
+					.append(escapedBareSpec).append(System.lineSeparator()) 
+					.append("    </div>").append(System.lineSeparator())
+					.append("</div> ").append(System.lineSeparator());
 				
 				try {
-					output.append(Util.generateDiagram(bareSpec, dialect)).append(System.lineSeparator());
+					String token = nextToken();
+					replacementBuilder
+						.append(Util.generateDiagram(bareSpec, dialect))
+						.append(System.lineSeparator());
+					
+					replacements.put(token, replacementBuilder.toString());
+					output
+						.append(System.lineSeparator())
+						.append(System.lineSeparator())
+						.append(token)
+						.append(System.lineSeparator())
+						.append(System.lineSeparator());
 				} catch (IOException e) {
 					output.append("Error during diagram rendering: " + e);
 				}
@@ -162,8 +186,13 @@ public class MarkdownHelper {
 		if (Util.isBlank(markdown)) {
 			return "";
 		}
-		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown));
-		return createMarkdownHtmlRenderer().render(document);
+		Map<String,String> replacements = new HashMap<>();
+		Document document = createMarkdownParser().parse(preProcessMarkdown(markdown, replacements));
+		String html = createMarkdownHtmlRenderer().render(document);
+		for (Entry<String, String> te: replacements.entrySet()) {
+			html = html.replace(te.getKey(), te.getValue());
+		}
+		return html;
 	}
 	
 	/**
