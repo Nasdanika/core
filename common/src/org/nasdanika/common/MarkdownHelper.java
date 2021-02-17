@@ -109,22 +109,23 @@ public class MarkdownHelper {
 			    output.append(input.substring(i, startMatcher.start()));
 
 				String bareSpec = input.substring(startMatcher.end(), startMatcher.end() + endMatcher.start());
-				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
-				output
-					.append(System.lineSeparator())
-					.append(System.lineSeparator()) 
-					.append("<div>").append(System.lineSeparator())
-					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
-					.append("        ").append(escapedBareSpec).append(System.lineSeparator()) 
-					.append("    </div>").append(System.lineSeparator())
-					.append("</div>").append(System.lineSeparator());
+
+// TODO - when search is available implement "around advice" so the markdown process does not mess with DIV nesting.				
+//				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
+//				output
+//					.append(System.lineSeparator())
+//					.append(System.lineSeparator()) 
+//					.append("<div> ").append(System.lineSeparator())
+//					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
+//					.append(escapedBareSpec).append(System.lineSeparator()) 
+//					.append("    </div>").append(System.lineSeparator())
+//					.append("</div> ").append(System.lineSeparator());
 				
 				try {
 					output.append(Util.generateDiagram(bareSpec, dialect)).append(System.lineSeparator());
 				} catch (IOException e) {
 					output.append("Error during diagram rendering: " + e);
 				}
-//				output.append("</div>").append(System.lineSeparator());
 				
 				i = startMatcher.end()+endMatcher.end();
 			}
