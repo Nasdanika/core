@@ -18,11 +18,14 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.MarkerImpl;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.persistence.Storable;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -63,6 +66,8 @@ public class YamlResource extends ResourceImpl {
 					throw new IOException("Not an instance of EObject: " + data);
 				}
 			}
+		} catch (MarkedYAMLException e) {
+			throw new ConfigurationException(e.getMessage(), e, new MarkerImpl(getURI().toString(), e.getProblemMark()));
 		} catch (RuntimeException | IOException e) {
 			throw e;
 		} catch (Exception e) {
