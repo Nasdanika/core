@@ -914,19 +914,55 @@ public class Util {
 				
 		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
 	}
+	
+	/**
+	 * PlantUML diagram dialect
+	 * @author Pavel
+	 *
+	 */
+	public static enum DiagramDialect {
+
+		/**
+		 * For sequence, use case, class, activity, component, state, object, deployment, timing, and network diagrams.
+		 */
+		UML,
+		
+		/**
+		 * For wireframe diagrams - https://plantuml.com/salt
+		 */
+		SALT,
+		
+		/**
+		 * For Gantt charts - https://plantuml.com/gantt-diagram
+		 */
+		GANTT,
+		
+		/**
+		 * For mind maps - https://plantuml.com/mindmap-diagram
+		 */
+		MINDMAP,
+		
+		/**
+		 * For work breakdown structures - https://plantuml.com/wbs-diagram
+		 */
+		WBS
+		
+	}
 		
 	/**
-	 * Generates a PlantUML diagram with an image map from text definition. The definition shall not contain start uml and end uml tags.
+	 * Generates a PlantUML diagram with an image map from text definition. The definition shall not contain start and end tags.
 	 * @return
 	 * @throws IOException 
 	 */
-	public static String generateDiagram(String spec) throws IOException {
+	public static String generateDiagram(String spec, DiagramDialect dialect) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		StringBuilder sb = new StringBuilder("@startuml")
+		StringBuilder sb = new StringBuilder("@start")
+				.append(dialect.name().toLowerCase())
 				.append(System.lineSeparator())
 				.append(spec)
 				.append(System.lineSeparator())
-				.append("@enduml")
+				.append("@end")
+				.append(dialect.name().toLowerCase())
 				.append(System.lineSeparator());
 		
 		SourceStringReader reader = new SourceStringReader(sb.toString());
@@ -972,5 +1008,24 @@ public class Util {
 		return ret.toString();
 	}
 	
-				
+	public static String generateUmlDiagram(String spec) throws IOException {
+		return generateDiagram(spec, DiagramDialect.UML);
+	}
+		
+	public static String generateWireframeDiagram(String spec) throws IOException {
+		return generateDiagram(spec, DiagramDialect.SALT);
+	}
+	
+	public static String generateGanttDiagram(String spec) throws IOException {
+		return generateDiagram(spec, DiagramDialect.GANTT);
+	}
+	
+	public static String generateMindmapDiagram(String spec) throws IOException {
+		return generateDiagram(spec, DiagramDialect.MINDMAP);
+	}
+	
+	public static String generateWbsDiagram(String spec) throws IOException {
+		return generateDiagram(spec, DiagramDialect.WBS);
+	}
+	
 }

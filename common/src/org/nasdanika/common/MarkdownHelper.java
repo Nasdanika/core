@@ -48,20 +48,47 @@ public class MarkdownHelper {
 		
 	private static final String START_UML_BLOCK = "```uml";
 	private static final String START_UML_RESOURCE_BLOCK = "```uml-resource";
-	private static final String FENCED_BLOCK = "```";
-
-	// We can't use a single pattern - it drives the matcher crazy if tags are misplaced - stack overflow
 	private static final Pattern START_UML_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_BLOCK+"(\\s)*\\R");
 	private static final Pattern START_UML_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_BLOCK+"(\\s)*\\R");
+
+	private static final String START_WIREFRAME_BLOCK = "```wireframe";
+	private static final String START_WIREFRAME_RESOURCE_BLOCK = "```wireframe-resource";
+	private static final Pattern START_WIREFRAME_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WIREFRAME_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_BLOCK+"(\\s)*\\R");
+
+	private static final String START_GANTT_BLOCK = "```gantt";
+	private static final String START_GANTT_RESOURCE_BLOCK = "```gantt-resource";
+	private static final Pattern START_GANTT_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_GANTT_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_BLOCK+"(\\s)*\\R");
+
+	private static final String START_MINDMAP_BLOCK = "```mindmap";
+	private static final String START_MINDMAP_RESOURCE_BLOCK = "```mindmap-resource";
+	private static final Pattern START_MINDMAP_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_MINDMAP_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_BLOCK+"(\\s)*\\R");
+
+	private static final String START_WBS_BLOCK = "```wbs";
+	private static final String START_WBS_RESOURCE_BLOCK = "```wbs-resource";
+	private static final Pattern START_WBS_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WBS_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_BLOCK+"(\\s)*\\R");
+
+	private static final String FENCED_BLOCK = "```";
 	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");	
-		
+
 	protected String[] getAbbreviations() {
 		return ABBREVIATIONS;
 	}	
 		
 	protected String preProcessMarkdown(String markdown) {
-		if (isProcessUMLFendedBlocks()) {
-			return processUmlResourceBlocks(processUmlBlocks(markdown));
+		if (isProcessFendedBlocks()) {
+			String ret = processFencedBlocks(markdown, START_UML_PATTERN);
+			ret = processFencedBlocks(ret, START_WIREFRAME_PATTERN);
+			ret = processFencedBlocks(ret, START_GANTT_PATTERN);
+			ret = processFencedBlocks(ret, START_MINDMAP_PATTERN);
+			ret = processFencedBlocks(ret, START_WBS_PATTERN);
+					
+			// TODO - resource blocks
+					
+			return ret;		
 		}
 		return markdown;
 	}
@@ -71,9 +98,9 @@ public class MarkdownHelper {
 		return markdown;
 	}
 
-	private String processUmlBlocks(String input) {
+	private String processFencedBlocks(String input, Pattern startPattern) {
 		StringBuilder output = new StringBuilder();
-		Matcher startMatcher = START_UML_PATTERN.matcher(input);
+		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
 		while (startMatcher.find()) {
 			String endMatcherContent = input.substring(startMatcher.end());
@@ -93,7 +120,7 @@ public class MarkdownHelper {
 					.append("</div>").append(System.lineSeparator());
 				
 				try {
-					output.append(Util.generateDiagram(bareSpec)).append(System.lineSeparator());
+					output.append(Util.generateUmlDiagram(bareSpec)).append(System.lineSeparator());
 				} catch (IOException e) {
 					output.append("Error during diagram rendering: " + e);
 				}
@@ -114,7 +141,7 @@ public class MarkdownHelper {
 		return null;
 	}
 	
-	protected boolean isProcessUMLFendedBlocks() {
+	protected boolean isProcessFendedBlocks() {
 		return true;
 	}
 		
