@@ -80,11 +80,11 @@ public class MarkdownHelper {
 		
 	protected String preProcessMarkdown(String markdown) {
 		if (isProcessFendedBlocks()) {
-			String ret = processFencedBlocks(markdown, START_UML_PATTERN);
-			ret = processFencedBlocks(ret, START_WIREFRAME_PATTERN);
-			ret = processFencedBlocks(ret, START_GANTT_PATTERN);
-			ret = processFencedBlocks(ret, START_MINDMAP_PATTERN);
-			ret = processFencedBlocks(ret, START_WBS_PATTERN);
+			String ret = processFencedBlocks(markdown, Util.DiagramDialect.UML, START_UML_PATTERN);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.SALT,  START_WIREFRAME_PATTERN);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.GANTT,  START_GANTT_PATTERN);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.MINDMAP,  START_MINDMAP_PATTERN);
+			ret = processFencedBlocks(ret, Util.DiagramDialect.WBS,  START_WBS_PATTERN);
 					
 			// TODO - resource blocks
 					
@@ -98,7 +98,7 @@ public class MarkdownHelper {
 		return markdown;
 	}
 
-	private String processFencedBlocks(String input, Pattern startPattern) {
+	private String processFencedBlocks(String input, Util.DiagramDialect dialect, Pattern startPattern) {
 		StringBuilder output = new StringBuilder();
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
@@ -114,17 +114,17 @@ public class MarkdownHelper {
 					.append(System.lineSeparator())
 					.append(System.lineSeparator()) 
 					.append("<div>").append(System.lineSeparator())
-					.append("    <div style='display:none;white-space:pre-wrap' title='UML diagram definition for search'>").append(System.lineSeparator())
+					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
 					.append("        ").append(escapedBareSpec).append(System.lineSeparator()) 
 					.append("    </div>").append(System.lineSeparator())
 					.append("</div>").append(System.lineSeparator());
 				
 				try {
-					output.append(Util.generateUmlDiagram(bareSpec)).append(System.lineSeparator());
+					output.append(Util.generateDiagram(bareSpec, dialect)).append(System.lineSeparator());
 				} catch (IOException e) {
 					output.append("Error during diagram rendering: " + e);
 				}
-				output.append("</div>").append(System.lineSeparator());
+//				output.append("</div>").append(System.lineSeparator());
 				
 				i = startMatcher.end()+endMatcher.end();
 			}
