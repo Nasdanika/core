@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.Marker;
@@ -24,6 +25,7 @@ public class Reference<T> extends Attribute<T> {
 	private EClass referenceType;
 	private Function<ENamedElement, String> keyProvider;
 	private boolean isStrictContainment;
+	private ResourceSet resourceSet;
 
 	/**
 	 * 
@@ -41,12 +43,14 @@ public class Reference<T> extends Attribute<T> {
 			boolean required, 
 			T defaultValue, 
 			String description, 
+			ResourceSet resourceSet,
 			EObjectLoader resolver,
 			EClass referenceType,
 			boolean isStrictContainment,
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		this.resourceSet = resourceSet;
 		this.resolver = resolver;
 		this.referenceType = referenceType;
 		this.isStrictContainment = isStrictContainment;
@@ -60,7 +64,7 @@ public class Reference<T> extends Attribute<T> {
 		if (element instanceof String && !isStrictContainment) {
 			String ref = (String) element;
 			URL refURL = new URL(base, ref);
-			return (T) resolver.getResourceSet().getEObject(URI.createURI(refURL.toString()), true);
+			return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
 		}
 		Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
 		if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
