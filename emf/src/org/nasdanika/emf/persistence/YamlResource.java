@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.Yaml;
 
 /**
  * Loads EMF classes from YAML using {@link ObjectLoader}s. 
- * Load-only, saving is not supported. 
+ * Saving is supported if the resource content implements or is adaptable to {@link Storable}. 
  * The idea of this resource is to load models from manually created YAML files or YAML files generated 
  * by some other means. 
  * @author Pavel
