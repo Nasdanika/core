@@ -36,7 +36,7 @@ public class Markdown extends Filter {
 
 	@Override
 	protected String filter(Context context, String input) {
-		String html = MarkdownHelper.INSTANCE.markdownToHtml(input);
+		String html = context.get(MarkdownHelper.class).markdownToHtml(input);
 		return style ? "<div class=\"markdown-body\">" + html + "</div>" : html;
 	}
 
