@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,8 +41,21 @@ public interface Context extends Composeable<Context> {
 	 */
 	static final Context EMPTY_CONTEXT = new Context() {
 		
+		/**
+		 * For types with static INSTANCE field of compatible type returns field value.
+		 */
+		@SuppressWarnings("unchecked")
 		@Override
 		public <T> T get(Class<T> type) {
+			for (Field f: type.getFields()) {
+				if ("INSTANCE".equals(f.getName()) && Modifier.isStatic(f.getModifiers()) && type.isAssignableFrom(f.getType())) {
+					try {
+						return (T) f.get(null);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						throw new NasdanikaException("Error accessing INSTANCE field of " + type.getName(), e);
+					}
+				}
+			}
 			return null;
 		}
 		

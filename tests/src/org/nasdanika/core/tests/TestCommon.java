@@ -9,10 +9,9 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -22,10 +21,12 @@ import java.util.zip.ZipOutputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.JavaExpressionPropertyComputer;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.MutableContext;
@@ -54,6 +55,11 @@ public class TestCommon {
 		Context c = Context.wrap(m::get);
 		Assert.assertEquals("** mom", c.get("f/mom"));
 	}
+	
+	@Test
+	public void testServiceInstance() throws Exception {
+		Assert.assertEquals(DefaultConverter.INSTANCE, Context.EMPTY_CONTEXT.get(DefaultConverter.class));
+	}		
 	
 	@Test
 	public void testSingleTokenInterpolation() throws Exception {
@@ -349,6 +355,13 @@ public class TestCommon {
 		BinaryEntity file = container.get("a/b/c/d.txt", monitor);
 		file.setState(Util.toStream(Context.EMPTY_CONTEXT, "Hello"), monitor);
 		container.getContainer("a/b", monitor).delete(monitor);
+	}
+	
+	@Test
+	@Ignore
+	public void testRemoteDiagramming() throws Exception {
+		DiagramGenerator generator = DiagramGenerator.createClient(new URL("http://localhost:8090/spring-exec/api/v1/exec/diagram/"));
+		System.out.println(generator.generateUmlDiagram("Alice -> Bob"));
 	}
 	
 }

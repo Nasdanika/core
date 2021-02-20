@@ -14,14 +14,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,10 +36,6 @@ import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-
-import net.sourceforge.plantuml.FileFormat;
-import net.sourceforge.plantuml.FileFormatOption;
-import net.sourceforge.plantuml.SourceStringReader;
 
 public class Util {
 	
@@ -913,119 +907,6 @@ public class Util {
 		}
 				
 		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
-	}
-	
-	/**
-	 * PlantUML diagram dialect
-	 * @author Pavel
-	 *
-	 */
-	public static enum DiagramDialect {
-
-		/**
-		 * For sequence, use case, class, activity, component, state, object, deployment, timing, and network diagrams.
-		 */
-		UML,
-		
-		/**
-		 * For wireframe diagrams - https://plantuml.com/salt
-		 */
-		SALT,
-		
-		/**
-		 * For Gantt charts - https://plantuml.com/gantt-diagram
-		 */
-		GANTT,
-		
-		/**
-		 * For mind maps - https://plantuml.com/mindmap-diagram
-		 */
-		MINDMAP,
-		
-		/**
-		 * For work breakdown structures - https://plantuml.com/wbs-diagram
-		 */
-		WBS
-		
-	}
-		
-	/**
-	 * Generates a PlantUML diagram with an image map from text definition. The definition shall not contain start and end tags.
-	 * @return
-	 * @throws IOException 
-	 */
-	public static String generateDiagram(String spec, DiagramDialect dialect) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		StringBuilder sb = new StringBuilder("@start")
-				.append(dialect.name().toLowerCase())
-				.append(System.lineSeparator())
-				.append(spec)
-				.append(System.lineSeparator())
-				.append("@end")
-				.append(dialect.name().toLowerCase())
-				.append(System.lineSeparator());
-		
-		SourceStringReader reader = new SourceStringReader(sb.toString());
-		
-		FileFormatOption fileFormatOption = new FileFormatOption(FileFormat.PNG);
-		reader.outputImage(baos, 0, fileFormatOption);		
-		String diagramCMap = reader.getCMapData(0, fileFormatOption);
-		baos.close();
-
-		StringBuilder ret = new StringBuilder("<img src=\"data:image/png;base64, ");
-		ret
-			.append(Base64.getEncoder().encodeToString(baos.toByteArray()))
-			.append("\"");
-		
-		if (Util.isBlank(diagramCMap)) {
-			ret.append("/>");
-			return ret.toString();			
-		}
-		
-		String openingTag = "<map id=\"plantuml_map\" name=\"plantuml_map\">";
-		if (diagramCMap.startsWith(openingTag)) {
-			String mapId = "plantuml_map_" + UUID.randomUUID().toString();
-			ret			
-			.append(" usemap=\"#")
-			.append(mapId)
-			.append("\"/>")
-			.append(System.lineSeparator())
-			.append("<map id=\"")
-			.append(mapId)
-			.append("\" name=\"")
-			.append(mapId)
-			.append("\">")
-			.append(diagramCMap.substring(openingTag.length()));
-			
-		} else {				
-			ret			
-				.append(" usemap=\"#plant_uml_map\"/>")
-				.append(System.lineSeparator())
-				.append(diagramCMap);
-			return ret.toString();
-		}
-				
-		return ret.toString();
-	}
-	
-	public static String generateUmlDiagram(String spec) throws IOException {
-		return generateDiagram(spec, DiagramDialect.UML);
-	}
-		
-	public static String generateWireframeDiagram(String spec) throws IOException {
-		return generateDiagram(spec, DiagramDialect.SALT);
-	}
-	
-	public static String generateGanttDiagram(String spec) throws IOException {
-		return generateDiagram(spec, DiagramDialect.GANTT);
-	}
-	
-	public static String generateMindmapDiagram(String spec) throws IOException {
-		return generateDiagram(spec, DiagramDialect.MINDMAP);
-	}
-	
-	public static String generateWbsDiagram(String spec) throws IOException {
-		return generateDiagram(spec, DiagramDialect.WBS);
 	}
 	
 }

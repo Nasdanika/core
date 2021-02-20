@@ -36,7 +36,7 @@ public class MarkdownHelper {
 	protected MarkdownHelper() {
 		
 	}
-	
+
 	/**
 	 * CDN URL of the Github Markdown CSS (https://github.com/sindresorhus/github-markdown-css)
 	 */
@@ -85,6 +85,10 @@ public class MarkdownHelper {
 	protected String nextToken() {
 		return "diagram_token_"+UUID.randomUUID().toString().replace("-", "_");
 	}
+	
+	protected DiagramGenerator getDiagramGenerator() {
+		return DiagramGenerator.INSTANCE;
+	}
 		
 	/**
 	 * @param markdown Markdown to pre-process
@@ -93,11 +97,11 @@ public class MarkdownHelper {
 	 */
 	protected String preProcessMarkdown(String markdown, Map<String,String> replacements) {
 		if (isProcessFendedBlocks()) {
-			String ret = processFencedBlocks(markdown, Util.DiagramDialect.UML, START_UML_PATTERN, replacements);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.SALT,  START_WIREFRAME_PATTERN, replacements);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.GANTT,  START_GANTT_PATTERN, replacements);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.MINDMAP,  START_MINDMAP_PATTERN, replacements);
-			ret = processFencedBlocks(ret, Util.DiagramDialect.WBS,  START_WBS_PATTERN, replacements);
+			String ret = processFencedBlocks(markdown, DiagramGenerator.Dialect.UML, START_UML_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT,  START_WIREFRAME_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT,  START_GANTT_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP,  START_MINDMAP_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS,  START_WBS_PATTERN, replacements);
 					
 			// TODO - resource blocks
 					
@@ -111,7 +115,7 @@ public class MarkdownHelper {
 //		return markdown;
 //	}
 
-	private String processFencedBlocks(String input, Util.DiagramDialect dialect, Pattern startPattern, Map<String,String> replacements) {
+	private String processFencedBlocks(String input, DiagramGenerator.Dialect dialect, Pattern startPattern, Map<String,String> replacements) {
 		StringBuilder output = new StringBuilder();
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
@@ -137,7 +141,7 @@ public class MarkdownHelper {
 				try {
 					String token = nextToken();
 					replacementBuilder
-						.append(Util.generateDiagram(bareSpec, dialect))
+						.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
 						.append(System.lineSeparator());
 					
 					replacements.put(token, replacementBuilder.toString());
