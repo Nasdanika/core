@@ -2,6 +2,7 @@ package org.nasdanika.exec.content;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -25,7 +26,6 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
@@ -294,7 +294,7 @@ public class HttpCall implements SupplierFactory<InputStream>, Marked {
 			}
 			
 			String location = marker == null ? "" : " at " + marker;
-			throw new NasdanikaException("HTTP Call to "+theURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
+			throw new IOException("HTTP Call to "+theURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage() + location);
 		}
 	}
 
