@@ -506,7 +506,7 @@ public class TestExec {
 		assertEquals("Hello ${name}!", Util.toString(context, ((BinaryEntity) testFile).getState(monitor)));
 	}
 		
-	@Test
+	@Test	
 	public void testJava() throws Exception {
 		ObjectLoader loader = new Loader();
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
@@ -802,7 +802,7 @@ public class TestExec {
 		assertEquals(Block.class, block.getClass());
 		Context context = Context.EMPTY_CONTEXT;
 		InputStream result = callSupplier(context, monitor, block);
-		assertEquals("Erroneous org.nasdanika.common.NasdanikaExceptionWorld", Util.toString(context, result));
+		assertEquals("Erroneous java.io.IOExceptionWorld", Util.toString(context, result));
 	}
 		
 	@Test(expected = AssertionError.class)
