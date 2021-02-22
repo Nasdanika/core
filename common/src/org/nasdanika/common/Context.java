@@ -699,7 +699,19 @@ public interface Context extends Composeable<Context> {
 				if (svc instanceof ServiceComputer) {
 					return ((ServiceComputer<T>) svc).compute(this, type);
 				}
-				return svc;
+				if (svc != null) {
+					return svc;
+				}
+				for (Field f: type.getFields()) {
+					if ("INSTANCE".equals(f.getName()) && Modifier.isStatic(f.getModifiers()) && type.isAssignableFrom(f.getType())) {
+						try {
+							return (T) f.get(null);
+						} catch (IllegalArgumentException | IllegalAccessException e) {
+							throw new NasdanikaException("Error accessing INSTANCE field of " + type.getName(), e);
+						}
+					}
+				}
+				return null;				
 			}
 			
 			@Override
