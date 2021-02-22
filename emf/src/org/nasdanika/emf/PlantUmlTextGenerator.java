@@ -27,7 +27,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.DependencyTracer;
+import org.nasdanika.common.Util;
 
 /**
  * Generates PlantUML text from Ecore models.
@@ -41,7 +43,10 @@ import org.nasdanika.common.DependencyTracer;
  */
 public class PlantUmlTextGenerator {
 	
+	private static final String DIAGRAM_STYLE_KEY = "diagram-style";
 	private static final String RELATED_BACKGROUND = "#DDDDDD";
+	
+	// Default background: #FEFECE
 
 	public enum RelationshipDirection { in, out, both } 
 	
@@ -60,23 +65,23 @@ public class PlantUmlTextGenerator {
 		this.eModelElementFirstDocSentenceProvider = eModelElementFirstDocSentenceProvider;
 	}
 	
-	private static final String RELATION_LINE = "--";
-	private static final String ASSOCIATION_RELATION = RELATION_LINE + ">";
-	private static final String EXTENDS_RELATION = "<|" + RELATION_LINE, IMPLEMENTS_RELATION = "<|..";
+	private static final String EXTENDS_RELATION = "<|--"; 
+	private static final String IMPLEMENTS_RELATION = "<|..";
 	private static final String DEPENDENCY_RELATION = "..>";	
 	private static final String CLASS_COMPARTMENT_SEPARATOR_LINE = "\t__\n";
 
-	protected void appendClassStart(String modifiers, String classType, String name, String link, String background) throws IOException {
+	protected void appendClassStart(String modifiers, String classType, String name, String link, String style) throws IOException {
 		if (modifiers != null) {
 			collector.append(modifiers);
 			collector.append(" ");
 		}
+		
 		collector
 			.append(classType)
 			.append(" ")
 			.append(name)
 			.append(link == null ? "" : " [[" + link + "]]")
-			.append(background == null ? "" : " " + background)
+			.append(style == null ? "" : " " + style)
 			.append(" {\n");
 	}
 	
@@ -259,7 +264,14 @@ public class PlantUmlTextGenerator {
 		
 		for (EClassifier rc: relatedSet) {
 			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
-				appendEClassifier(rc, RELATED_BACKGROUND, allClassifiers);
+				String style = EmfUtil.getNasdanikaAnnotationDetail(rc, DIAGRAM_STYLE_KEY);
+				if (style == null) {
+					style = RELATED_BACKGROUND;
+				} else {
+					style = Context.singleton("background", RELATED_BACKGROUND).interpolateToString(style);
+				}
+				
+				appendEClassifier(rc, style, allClassifiers);
 			}
 		}		
 		
@@ -330,10 +342,14 @@ public class PlantUmlTextGenerator {
 			collector.append("\" ");
 		}
 		
+		String diagramStyle = EmfUtil.getNasdanikaAnnotationDetail(ref, DIAGRAM_STYLE_KEY);
+		String relationLine = Util.isBlank(diagramStyle) ? "--" : "-[" + diagramStyle + "]-";
+		String associationRelation = relationLine + ">";
+		
 		if (opposite == null) {
-			collector.append(ASSOCIATION_RELATION);
+			collector.append(associationRelation);
 		} else {
-			collector.append(RELATION_LINE);
+			collector.append(relationLine);
 			if (opposite.isContainment()) {
 				collector.append("*");
 			}
@@ -458,16 +474,17 @@ public class PlantUmlTextGenerator {
 	}
 		
 	public void appendEClassifier(EClassifier eClassifier, Set<EClassifier> allClassifiers) throws IOException {
-		appendEClassifier(eClassifier, null, allClassifiers);
+		String style = Context.EMPTY_CONTEXT.interpolateToString(EmfUtil.getNasdanikaAnnotationDetail(eClassifier, DIAGRAM_STYLE_KEY));
+		appendEClassifier(eClassifier, style, allClassifiers);
 	}
 	
-	public void appendEClassifier(EClassifier eClassifier, String background, Set<EClassifier> allClassifiers) throws IOException {
+	public void appendEClassifier(EClassifier eClassifier, String style, Set<EClassifier> allClassifiers) throws IOException {
 		if (eClassifier instanceof EClass) {
-			appendEClass((EClass) eClassifier, background, allClassifiers);
+			appendEClass((EClass) eClassifier, style, allClassifiers);
 		} else if (eClassifier instanceof EEnum) {
-			appendEEnum((EEnum) eClassifier, background, allClassifiers);			
+			appendEEnum((EEnum) eClassifier, style, allClassifiers);			
 		} else if (eClassifier instanceof EDataType) {
-			appendEDataType((EDataType) eClassifier, background, allClassifiers);
+			appendEDataType((EDataType) eClassifier, style, allClassifiers);
 		}
 	}
 	
@@ -542,9 +559,9 @@ public class PlantUmlTextGenerator {
 		appendEClass(eClass, null, allClassifiers);
 	}
 	
-	public void appendEClass(EClass eClass, String background, Set<EClassifier> allClassifiers) throws IOException {
+	public void appendEClass(EClass eClass, String style, Set<EClassifier> allClassifiers) throws IOException {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
-		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), background);
+		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), style);
 		if (isAppendAttributes(eClass)) {
 			for (EAttribute attribute: eClass.getEAttributes()) {			
 				EGenericType eGenericType = attribute.getEGenericType();
