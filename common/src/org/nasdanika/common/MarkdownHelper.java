@@ -98,15 +98,17 @@ public class MarkdownHelper {
 	protected String preProcessMarkdown(String markdown, Map<String,String> replacements) {
 		if (isProcessFendedBlocks()) {
 			String ret = processFencedBlocks(markdown, DiagramGenerator.Dialect.UML, START_UML_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT,  START_WIREFRAME_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT,  START_GANTT_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP,  START_MINDMAP_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS,  START_WBS_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements);
 					
 			// TODO - resource blocks
 					
 			return ret;		
 		}
+		
+		
 		return markdown;
 	}
 	
