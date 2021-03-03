@@ -69,7 +69,7 @@ public class FeatureObject implements Marked, Loadable {
 				// Singleton map with a single entry default feature key -> config.
 				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, marker);
 			} else {
-				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config.getClass(), marker);
+				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config, marker);
 			}
 		}
 	}			
