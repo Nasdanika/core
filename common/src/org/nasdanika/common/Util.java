@@ -767,7 +767,6 @@ public class Util {
 			ListCompoundSupplierFactory<T> ret = new ListCompoundSupplierFactory<>("Supplier collection");
 			for (Object e: (Collection<?>) obj) {
 				SupplierFactory<T> esp = type == InputStream.class ? (SupplierFactory<T>) asInputStreamSupplierFactory(e) : asSupplierFactory(e, type, joinFactory);
-				System.out.println(e);
 				if (esp != null) {
 					ret.add(esp);
 				}

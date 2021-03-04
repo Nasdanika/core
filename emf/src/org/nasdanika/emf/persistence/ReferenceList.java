@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.ListAttribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -60,17 +61,26 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected T createElement(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		// Strings are references if not strict containment.
-		if (element instanceof String && !isStrictContainment) {
-			String ref = (String) element;
-			URL refURL = new URL(base, ref);
-			return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
+		try {
+			// Strings are references if not strict containment.
+			if (element instanceof String && !isStrictContainment) {
+				String ref = (String) element;
+				URL refURL = new URL(base, ref);
+				return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
+			}
+			Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
+			if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
+				return (T) resolver.resolve((EObject) ret);
+			}
+			return (T) ret;
+		} catch (ConfigurationException e) {
+			throw e;
+		} catch (Exception e) {
+			if (marker == null) {
+				throw e;
+			}
+			throw new ConfigurationException("Error loading reference list: " + e, e, marker);
 		}
-		Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
-		if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
-			return (T) resolver.resolve((EObject) ret);
-		}
-		return (T) ret;
 	}
 
 }

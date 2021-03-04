@@ -109,7 +109,7 @@ public class Interpolator extends Filter {
 				URL includeURL = new URL(base, path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
 				String markdown = converter.convert(includeURL.openStream(), String.class);
-				String html = context.get(MarkdownHelper.class, MarkdownHelper.INSTANCE).markdownToHtml(markdown);
+				String html = context.computingContext().get(MarkdownHelper.class, MarkdownHelper.INSTANCE).markdownToHtml(markdown);
 				return (T) context.interpolateToString(html);
 			} catch (Exception e) {
 				throw new ConfigurationException("Error including markdown '" + path + "': " + e, e, getMarker());
