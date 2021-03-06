@@ -1140,7 +1140,8 @@ public class TestExec {
 	
 	@Test
 	public void testCallInstanceMethod() throws Exception {
-		ObjectLoader loader = new Loader();
+		// Anonymous class to have it loaded by this bundle classloader so it can "see" CustomMarkdownHelper.
+		ObjectLoader loader = new Loader() {};
 		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
 		Object call = loader.loadYaml(TestExec.class.getResource("call-instance-method-spec.yml"), monitor);
 		assertEquals(Call.class, call.getClass());
