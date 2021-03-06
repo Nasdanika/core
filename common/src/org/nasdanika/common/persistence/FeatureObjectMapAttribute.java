@@ -7,15 +7,15 @@ import java.util.function.Function;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
- * If config is a list loads each element creating elements using element factory and then loading them, otherwise creates a singleton in the same way as explained before.
+ * If config is a map loads each entry value creating elements using value factory and then loading them.
  * @author Pavel
  *
- * @param <T>
+ * @param <V>
  */
-public class FeatureObjectMapAttribute<T extends FeatureObject> extends MapAttribute<T> {
+public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAttribute<K,V> {
 
 
-	private Function<Object, T> valueFactory;
+	private Function<K, V> valueFactory;
 
 	/**
 	 * 
@@ -29,10 +29,10 @@ public class FeatureObjectMapAttribute<T extends FeatureObject> extends MapAttri
 	 */
 	public FeatureObjectMapAttribute(
 			Object key, 
-			Function<Object,T> valueFactory,
+			Function<K,V> valueFactory,
 			boolean isDefault, 
 			boolean required, 
-			Map<?,T> defaultValue, 
+			Map<K,V> defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
@@ -50,8 +50,8 @@ public class FeatureObjectMapAttribute<T extends FeatureObject> extends MapAttri
 	 * @throws Exception
 	 */
 	@Override
-	protected T createValue(ObjectLoader loader, Object key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
-		T ret = valueFactory.apply(key);
+	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+		V ret = valueFactory.apply(key);
 		ret.load(loader, value, base, progressMonitor, marker);
 		return ret;
 	}

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -42,6 +43,7 @@ import org.nasdanika.common.resources.BinaryResource;
 import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.common.resources.FileSystemContainer;
 import org.nasdanika.exec.Block;
+import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.Fail;
@@ -1109,8 +1111,69 @@ public class TestExec {
 		for (int i=1; i<cca.length; ++i) {
 			cca[i] = cca[i].toLowerCase();
 		}
-		assertEquals("Mama mia", StringUtils.join(cca, " "));			
-		
+		assertEquals("Mama mia", StringUtils.join(cca, " "));					
 	}
 	
+	@Test
+	public void testCallString() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object call = loader.loadYaml(TestExec.class.getResource("call-string-spec.yml"), monitor);
+		assertEquals(Call.class, call.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		assertTrue(result instanceof LinkedHashMap);
+	}
+	
+	@Test
+	public void testCallStaticMethod() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object call = loader.loadYaml(TestExec.class.getResource("call-static-method-spec.yml"), monitor);
+		assertEquals(Call.class, call.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		assertEquals("my-method", result);
+	}
+	
+	@Test
+	public void testCallInstanceMethod() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object call = loader.loadYaml(TestExec.class.getResource("call-instance-method-spec.yml"), monitor);
+		assertEquals(Call.class, call.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
+	}
+	
+	@Test
+	public void testCallServiceMethod() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object call = loader.loadYaml(TestExec.class.getResource("call-service-method-spec.yml"), monitor);
+		assertEquals(Call.class, call.getClass());
+		
+		Context context = Context.EMPTY_CONTEXT;
+		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
+	}
+	
+	@Test
+	public void testCallPropertyMethod() throws Exception {
+		ObjectLoader loader = new Loader();
+		ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
+		Object call = loader.loadYaml(TestExec.class.getResource("call-property-method-spec.yml"), monitor);
+		assertEquals(Call.class, call.getClass());
+		
+		Map<String,Object> map = new LinkedHashMap<>();
+		map.put("age", 33);
+		Context context = Context.singleton("person", map);
+		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		assertEquals(33, result);
+	}
+
 }

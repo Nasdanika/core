@@ -56,6 +56,10 @@ public class Loader implements ObjectLoader {
 			// General
 			case "for-each":
 				return new Iterator(loader, config, base, subMonitor, marker);
+			case "call":
+				Call call = new Call();
+				call.load(loader, config, base, progressMonitor, marker);
+				return call;
 			case "configure":
 				return new Configurator(loader, config, base, subMonitor, marker);
 			case "map":

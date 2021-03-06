@@ -9,38 +9,44 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
 /**
- * If config is a list loads each element using createElement(), otherwise creates a singleton loaded with createElement()
+ * If config is a map loads each entry value using createValue().
  * @author Pavel
  *
- * @param <T>
+ * @param <V>
  */
-public class MapAttribute<T> extends Attribute<Map<?, T>> {
+public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 
 	public MapAttribute(
 			Object key, 
 			boolean isDefault,
 			boolean required, 
-			Map<?,T> defaultValue, 
+			Map<K,V> defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 	}
 	
 	@Override
-	public Map<?,T> create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public Map<K,V> create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
 		if (config instanceof Map) {
-			Map<Object,T> ret = new LinkedHashMap<>();
+			Map<K,V> ret = new LinkedHashMap<>();
 			for (Entry<?, ?> e: ((Map<?,?>) config).entrySet()) {
-				ret.put(e.getKey(), createValue(loader, e.getKey(), e.getValue(), base, progressMonitor, Util.getMarker((Map<?,?>) config, e.getKey())));
+				K key = createKey(e.getKey());
+				ret.put(key, createValue(loader, key, e.getValue(), base, progressMonitor, Util.getMarker((Map<?,?>) config, e.getKey())));
 			}
 			return ret;
 		}
 		
 		throw new ConfigurationException("Config should be a map: " + config, marker);
 	}
+	
+	@SuppressWarnings("unchecked")
+	protected K createKey(Object key) {
+		return (K) key;
+	}
 
 	/**
-	 * Creates element list.
+	 * Creates entry value.
 	 * @param loader
 	 * @param value
 	 * @param base
@@ -50,8 +56,8 @@ public class MapAttribute<T> extends Attribute<Map<?, T>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createValue(ObjectLoader loader, Object key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
-		return (T) value; 
+	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+		return (V) value; 
 	}
 	
 }

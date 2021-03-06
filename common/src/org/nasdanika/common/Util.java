@@ -75,16 +75,6 @@ public class Util {
 	}
 	
 	/**
-	 * Processes a path (string separated by slashes) by removing <code>segment/..</code> pieces. E.g. <code>../a/../b</code> would be compacted to <code>../b</code>    
-	 * @param str
-	 * @return
-	 */
-	public static String compact(String path) {
-//		path
-		return null;
-	}
-	
-	/**
 	 * Creates a function for context mapping which recognizes path navigation with ..
 	 * @param prefix
 	 * @return

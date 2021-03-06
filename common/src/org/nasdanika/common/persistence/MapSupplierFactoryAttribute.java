@@ -31,8 +31,7 @@ public class MapSupplierFactoryAttribute<K,V,U> extends AbstractFeatureDelegate<
 							return SupplierFactory.<V>adapt(ie, "Interpolated feature " + getKey() + "[" + e.getKey() + "]").create(context);							
 						}
 						
-					});
-					
+					});					
 				} else {
 					ret.put(e.getKey(), SupplierFactory.<V>adapt(e, "Feature " + getKey() + "[" + e.getKey() + "]"));
 				}
