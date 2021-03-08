@@ -33,7 +33,7 @@ public class MapSupplierFactoryAttribute<K,V,U> extends AbstractFeatureDelegate<
 						
 					});					
 				} else {
-					ret.put(e.getKey(), SupplierFactory.<V>adapt(e, "Feature " + getKey() + "[" + e.getKey() + "]"));
+					ret.put(e.getKey(), SupplierFactory.<V>adapt(e.getValue(), "Feature " + getKey() + "[" + e.getKey() + "]"));
 				}
 			}
 		}		

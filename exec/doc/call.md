@@ -29,13 +29,24 @@ call: java.util.LinkedHashMap
 ##### Map configuration
 
 ```yaml
-call:
-   class: org.nasdanika...
+call: 
+   class: org.nasdanika.core.tests.exec.CustomMarkdownHelper
+   method: markdownToHtml
+   arguments: This ``is`` important
+   properties:
+      name: Joe
+      age: 33
 ```
 #### Java code
  
 ```java
-ObjectLoader loader = new org.nasdanika.exec.Loader();
+// Anonymous class to have it loaded by this bundle classloader so it can "see" CustomMarkdownHelper.
+ObjectLoader loader = new Loader() {};
 ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-... TODO ...
+Object call = loader.loadYaml(TestExec.class.getResource("call-instance-method-spec.yml"), monitor);
+assertEquals(Call.class, call.getClass());
+		
+Context context = Context.EMPTY_CONTEXT;
+Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
 ``` 

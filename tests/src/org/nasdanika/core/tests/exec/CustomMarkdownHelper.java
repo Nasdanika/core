@@ -1,5 +1,7 @@
 package org.nasdanika.core.tests.exec;
 
+import java.util.function.BiConsumer;
+
 import org.nasdanika.common.MarkdownHelper;
 
 /**
@@ -7,10 +9,15 @@ import org.nasdanika.common.MarkdownHelper;
  * @author Pavel
  *
  */
-public class CustomMarkdownHelper extends MarkdownHelper {
+public class CustomMarkdownHelper extends MarkdownHelper implements BiConsumer<String, Object> {
 	
 	public CustomMarkdownHelper() {
 		super();
+	}
+
+	@Override
+	public void accept(String key, Object value) {
+		System.out.println(key + " : " + value);		
 	}
 	
 }

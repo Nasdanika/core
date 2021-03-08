@@ -19,7 +19,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Marker;
@@ -55,7 +54,7 @@ public class Call extends SupplierFactoryFeatureObject<Object> {
 		method = addFeature(new StringSupplierFactoryAttribute(new Attribute<String>("method", false, false, null, null), true));
 		init = addFeature(new ListSupplierFactoryAttribute<>(new ReferenceList<>("init", false, false, null, null, "property", "service"), false));
 		args = addFeature(new ListSupplierFactoryAttribute<>(new ReferenceList<>("arguments", false, false, null, null), false));
-		properties = addFeature(new MapSupplierFactoryAttribute<Object,Object,Object>((Feature<Map<Object, Object>>) new ReferenceMap<>("properties", false, false, null, null), false));
+		properties = addFeature(new MapSupplierFactoryAttribute<Object,Object,Object>(new ReferenceMap<>("properties", false, false, null, null), false));
 	}
 	
 	@Override
