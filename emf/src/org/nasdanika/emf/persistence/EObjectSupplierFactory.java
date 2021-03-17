@@ -84,7 +84,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
 			}
 			
-			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);			
+			Function converter = null; // TODO: From annotations for, say, dates - parse pattern - SimpleDateFormat?
+			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate, converter);			
 		}
 		
 		if (feature instanceof EReference) {

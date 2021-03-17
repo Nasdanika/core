@@ -14,15 +14,17 @@ public class TypedSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Su
 
 	private boolean interpolate;
 	private Class<T> type;
+	private Function<Object, T> converter;
 
-	public TypedSupplierFactoryAttribute(Class<T> type, SupplierFactoryFeature<?> delegate, boolean interpolate) {
+	public TypedSupplierFactoryAttribute(Class<T> type, SupplierFactoryFeature<?> delegate, boolean interpolate, Function<Object,T> converter) {
 		super(delegate);
 		this.type = type;
 		this.interpolate = interpolate;
+		this.converter = converter;
 	}
 
-	public TypedSupplierFactoryAttribute(Class<T> type, Feature<?> delegate, boolean interpolate) {
-		this(type, interpolate ? new InputStreamSupplierFactoryAttribute(delegate) : new DelegatingSupplierFactoryFeature<>(delegate), interpolate);
+	public TypedSupplierFactoryAttribute(Class<T> type, Feature<?> delegate, boolean interpolate, Function<Object,T> converter) {
+		this(type, interpolate ? new InputStreamSupplierFactoryAttribute(delegate) : new DelegatingSupplierFactoryFeature<>(delegate), interpolate, converter);
 	}
 
 	@Override
@@ -46,7 +48,11 @@ public class TypedSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Su
 				}
 
 				@Override
-				public T execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+				public T execute(Object obj, ProgressMonitor progressMonitor) throws Exception {					
+					if (TypedSupplierFactoryAttribute.this.converter != null) {
+						return TypedSupplierFactoryAttribute.this.converter.apply(obj, progressMonitor);
+					}
+					
 					if (obj == null) {
 						return null;
 					}
