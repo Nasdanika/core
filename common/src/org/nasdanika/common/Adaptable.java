@@ -36,6 +36,5 @@ public interface Adaptable {
 		}
 		return null;
 	}
-	
 
 }
