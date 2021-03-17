@@ -15,6 +15,37 @@ public class ReflectiveConverter implements Converter {
 	public String toString(Object value) {
 		return String.valueOf(value);
 	}
+	
+	public static Class<?> box(Class<?> primitive) {
+		if (primitive == boolean.class) {
+			return Boolean.class;
+		}
+		if (primitive == byte.class) {
+			return Byte.class;
+		}
+		if (primitive == char.class) {
+			return Character.class;
+		}
+		if (primitive == double.class) {
+			return Double.class;
+		}
+		if (primitive == float.class) {
+			return Float.class;
+		}
+		if (primitive == int.class) {
+			return Integer.class;
+		}
+		if (primitive == long.class) {
+			return Long.class;
+		}
+		if (primitive == short.class) {
+			return Short.class;
+		}
+		if (primitive == void.class) {
+			return Void.class;
+		}
+		return primitive;
+	}
 
 	/**
 	 * Performs conversion using methods annotated with {@link ConverterMethod} first. A method with a more specific compatible parameter type take precedence over a method with more general type.
@@ -50,7 +81,7 @@ public class ReflectiveConverter implements Converter {
 		
 		if (acceptConstructorConversionTargetType(type)) {
 			// Constructor conversion
-			Optional<Constructor<?>> co = Arrays.stream(type.getConstructors())
+			Optional<Constructor<?>> co = Arrays.stream(box(type).getConstructors())
 				.filter(c -> c.getParameterCount() == 1 && c.getParameterTypes()[0].isInstance(source))
 				.sorted((c1, c2) -> compare(c1.getParameterTypes()[0], c2.getParameterTypes()[0]))
 				.findFirst();
