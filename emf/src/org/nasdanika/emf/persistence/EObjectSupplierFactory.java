@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -12,11 +13,14 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
+import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
 import org.nasdanika.emf.EmfUtil;
 
 /**
@@ -59,6 +63,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	 * @param feature
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Feature<?> wrapFeature(
 			String featureKey, 
 			EStructuralFeature feature, 
@@ -72,7 +77,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				return new ListSupplierFactoryAttribute<>(new org.nasdanika.common.persistence.ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation), true);
 			}
 			
-			return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), true);
+			EClassifier featureType = feature.getEType();
+			Class<?> featureClass = featureType.getInstanceClass();
+			boolean interpolate = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
+			if (String.class == featureClass) {
+				return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
+			}
+			
+			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);			
 		}
 		
 		if (feature instanceof EReference) {
@@ -127,12 +139,20 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
-				if (getMarker() != null) {
-					ret.eAdapters().add(new MarkedAdapter(getMarker()));
+				Marker marker = getMarker();
+				if (marker != null) {
+					ret.eAdapters().add(new MarkedAdapter(marker));
 				}
 				for (Feature<?> feature: features) {
 					if (feature.isLoaded()) {
-						ret.eSet(featureMap.get(feature.getKey()), feature.get(data));
+						try {
+							EStructuralFeature structuralFeature = featureMap.get(feature.getKey());
+							ret.eSet(structuralFeature, feature.get(data));
+						} catch (ConfigurationException e) {
+							throw e;
+						} catch (Exception e) {
+							throw marker == null ? e : new ConfigurationException("Error setting feature " + feature.getKey() + ": " + e, e, marker);
+						}
 					}
 				}
 				return ret;
