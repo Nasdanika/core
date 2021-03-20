@@ -55,8 +55,8 @@ public class FeatureObject implements Marked, Loadable {
 	 * @throws Exception
 	 */
 	public void load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		this.marker = marker;			
 		if (config instanceof Map) {
-			this.marker = marker;			
 			Map<?,?> configMap = (Map<?,?>) config;
 			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).collect(Collectors.toList()));
 			for (Feature<?> feature: features) {
