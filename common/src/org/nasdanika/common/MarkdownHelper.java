@@ -1,6 +1,5 @@
 package org.nasdanika.common;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -153,7 +152,7 @@ public class MarkdownHelper {
 						.append(token)
 						.append(System.lineSeparator())
 						.append(System.lineSeparator());
-				} catch (IOException e) {
+				} catch (Exception e) {
 					output.append("Error during diagram rendering: " + e);
 				}
 				

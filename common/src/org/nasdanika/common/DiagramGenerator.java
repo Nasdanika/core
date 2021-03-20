@@ -7,8 +7,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.UUID;
+
+import org.apache.commons.codec.binary.Hex;
+import org.nasdanika.common.resources.Container;
 
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
@@ -164,26 +168,51 @@ public interface DiagramGenerator {
 	 * @return
 	 * @throws IOException 
 	 */
-	String generateDiagram(String spec, Dialect dialect) throws IOException;
+	String generateDiagram(String spec, Dialect dialect) throws Exception;
 			
-	default String generateUmlDiagram(String spec) throws IOException {
+	default String generateUmlDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.UML);
 	}
 		
-	default String generateWireframeDiagram(String spec) throws IOException {
+	default String generateWireframeDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.SALT);
 	}
 	
-	default String generateGanttDiagram(String spec) throws IOException {
+	default String generateGanttDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.GANTT);
 	}
 	
-	default String generateMindmapDiagram(String spec) throws IOException {
+	default String generateMindmapDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.MINDMAP);
 	}
 	
-	default String generateWbsDiagram(String spec) throws IOException {
+	default String generateWbsDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.WBS);
+	}
+	
+	/**
+	 * Creates a diagram generator facading this one and cacheing generated diagrams by dialect and diagram text SHA-256 digest.
+	 * @param container
+	 * @param progressMonitor
+	 * @return
+	 */
+	default DiagramGenerator cachingDiagramGenerator(Container<String> container, ProgressMonitor progressMonitor) {
+		
+		return new DiagramGenerator() {
+
+			@Override
+			public String generateDiagram(String spec, Dialect dialect) throws Exception {
+				String cachePath = dialect.name() + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
+				Object ret = container.find(cachePath, progressMonitor);
+				if (ret instanceof String) {
+					return (String) ret;
+				}
+				String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
+				container.put(cachePath, diagram, progressMonitor);
+				return diagram;
+			}
+			
+		};
 	}
 	
 }
