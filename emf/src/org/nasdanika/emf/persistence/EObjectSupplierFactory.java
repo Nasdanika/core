@@ -70,7 +70,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			java.util.function.Function<ENamedElement,String> keyProvider) {
 		
-		boolean isDefault = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE));;
+		boolean isDefault = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE));
+		// TODO - exclusive with - space-separated list of keys.
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
