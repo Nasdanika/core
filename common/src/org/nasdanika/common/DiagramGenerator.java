@@ -199,17 +199,27 @@ public interface DiagramGenerator {
 	default DiagramGenerator cachingDiagramGenerator(Container<String> container, ProgressMonitor progressMonitor) {
 		
 		return new DiagramGenerator() {
+			
+			private int hits;
+			private int misses;
 
 			@Override
 			public String generateDiagram(String spec, Dialect dialect) throws Exception {
 				String cachePath = dialect.name() + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
 				Object ret = container.find(cachePath, progressMonitor);
 				if (ret instanceof String) {
+					++hits;
 					return (String) ret;
 				}
 				String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
 				container.put(cachePath, diagram, progressMonitor);
+				++misses;
 				return diagram;
+			}
+			
+			@Override
+			public String toString() {
+				return super.toString() + " hits: " + hits + ", misses: " + misses;
 			}
 			
 		};
