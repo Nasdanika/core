@@ -8,7 +8,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
@@ -27,6 +30,8 @@ public class Reference<T> extends Attribute<T> {
 	private Function<ENamedElement, String> keyProvider;
 	private boolean isStrictContainment;
 	private ResourceSet resourceSet;
+	private boolean referenceSupplierFactory;
+	private boolean resolveProxies;
 
 	/**
 	 * 
@@ -48,6 +53,8 @@ public class Reference<T> extends Attribute<T> {
 			EObjectLoader resolver,
 			EClass referenceType,
 			boolean isStrictContainment,
+			boolean referenceSupplierFactory,
+			boolean resolveProxies,
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
@@ -55,7 +62,9 @@ public class Reference<T> extends Attribute<T> {
 		this.resolver = resolver;
 		this.referenceType = referenceType;
 		this.isStrictContainment = isStrictContainment;
-		this.keyProvider = keyProvider;
+		this.referenceSupplierFactory = referenceSupplierFactory;
+		this.resolveProxies = resolveProxies;
+		this.keyProvider = keyProvider;		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,12 +73,46 @@ public class Reference<T> extends Attribute<T> {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
+				if (referenceSupplierFactory) {
+					return (T) new SupplierFactory<EObject>() {
+	
+						@Override
+						public Supplier<EObject> create(Context context) throws Exception {
+							String ref = context.interpolateToString((String) element);
+							return new Supplier<EObject>() {
+	
+								@Override
+								public double size() {
+									return 1;
+								}
+	
+								@Override
+								public String name() {
+									return "Loading " + ref;
+								}
+	
+								@Override
+								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
+									URI refURI = URI.createURI(ref);
+									ConfigurationException.pushThreadMarker(marker);
+									try {
+										return resourceSet.getEObject(base == null ? refURI : refURI.resolve(URI.createURI(base.toString())), true);
+									} finally {
+										ConfigurationException.popThreadMarker();
+									}
+								}
+								
+							};
+						}
+						
+					};
+				}
 				String ref = (String) element;
 				URL refURL = new URL(base, ref);
 				return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
 			}
 			Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
-			if (resolver != null && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
+			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return (T) resolver.resolve((EObject) ret);
 			}
 			return (T) ret;
