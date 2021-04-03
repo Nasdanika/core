@@ -139,7 +139,6 @@
 		<module>emf/jar-pom.xml</module>
 		<module>ncore/jar-pom.xml</module>
 		<module>party/jar-pom.xml</module>
-		<module>engineering/jar-pom.xml</module>
 	</modules>	
 
 	<distributionManagement>

@@ -153,9 +153,6 @@
 		<module>party</module>		
 		<module>party.edit</module>		
 
-		<module>engineering</module>		
-		<module>engineering.edit</module>		
-
 		<module>design</module>		
 		<!--
 		<module>provisioning</module>		
