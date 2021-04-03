@@ -1,5 +1,7 @@
 package org.nasdanika.common.persistence;
 
+import java.util.Stack;
+
 import org.nasdanika.common.NasdanikaException;
 
 /**
@@ -32,6 +34,39 @@ public class ConfigurationException extends NasdanikaException {
 	
 	public Marker getMarker() {
 		return marker;
+	}
+	
+	private static ThreadLocal<Stack<Marker>> threadMarkerStack = new ThreadLocal<Stack<Marker>>() {
+
+		protected java.util.Stack<Marker> initialValue() {
+			return new Stack<>();
+		};
+		
+	};
+	
+	public static void pushThreadMarker(Marker marker) {
+		threadMarkerStack.get().push(marker);
+	}
+	
+	public static void popThreadMarker() {
+		threadMarkerStack.get().pop();
+	}	
+	
+	public static void pushThreadMarked(Marked marked) {
+		pushThreadMarker(marked == null ? null : marked.getMarker());
+	}
+	
+	public static Marker peekThreadMarker() {
+		Stack<Marker> stack = threadMarkerStack.get();
+		return stack.isEmpty() ? null : stack.peek(); 
+	}
+
+	public ConfigurationException(String message) {
+		this(message, peekThreadMarker());
+	}
+
+	public ConfigurationException(String message, Throwable cause) {
+		this(message, cause, peekThreadMarker());
 	}
 
 }
