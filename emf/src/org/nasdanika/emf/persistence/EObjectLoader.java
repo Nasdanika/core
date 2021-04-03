@@ -238,11 +238,18 @@ public class EObjectLoader implements ObjectLoader {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
 			if (configMap.size() == 1 
-					&& configMap.containsKey(HREF_KEY) 
-					&& configMap.get(HREF_KEY) instanceof String) {
+					&& configMap.containsKey(HREF_KEY)) {
 				EObject eObject = eClass.getEPackage().getEFactoryInstance().create(eClass);
 				if (eObject instanceof MinimalEObjectImpl) {
-					URI proxyURI = URI.createURI((String) configMap.get(HREF_KEY));
+					Object href = configMap.get(HREF_KEY);					
+					URI proxyURI;
+					if (href instanceof URI) {
+						proxyURI = (URI) href;
+					} else if (href instanceof String) {
+						proxyURI = URI.createURI((String) configMap.get(HREF_KEY));
+					} else {
+						return null;
+					}
 					if (base != null) {
 						URI baseURI = URI.createURI(base.toString());
 						proxyURI = proxyURI.resolve(baseURI);

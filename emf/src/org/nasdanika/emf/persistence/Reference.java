@@ -1,6 +1,7 @@
 package org.nasdanika.emf.persistence;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -93,23 +94,14 @@ public class Reference<T> extends Attribute<T> {
 	
 								@Override
 								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
-									URI refURI = URI.createURI(ref);
-									ConfigurationException.pushThreadMarker(marker);
-									try {
-										return resourceSet.getEObject(base == null ? refURI : refURI.resolve(URI.createURI(base.toString())), true);
-									} finally {
-										ConfigurationException.popThreadMarker();
-									}
+									return loadReference(ref, base, marker);
 								}
-								
 							};
 						}
 						
 					};
 				}
-				String ref = (String) element;
-				URL refURL = new URL(base, ref);
-				return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
+				return (T) loadReference((String) element, base, marker);
 			}
 			Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
@@ -125,5 +117,23 @@ public class Reference<T> extends Attribute<T> {
 			throw new ConfigurationException("Error loading reference: " + e, e, marker);
 		}
 	}
+	
+	protected EObject loadReference(String ref, URL base, Marker marker) {
+		URI refURI = URI.createURI(ref);
+		if (base != null) {
+			refURI = refURI.resolve(URI.createURI(base.toString()));
+		}
+		ConfigurationException.pushThreadMarker(marker);
+		try {
+			if (referenceType != null && !resolveProxies) {
+				// Can create proxy instead of loading object
+				return EObjectLoader.createProxy(referenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
+			}
+			return resourceSet.getEObject(refURI, true);
+		} finally {
+			ConfigurationException.popThreadMarker();
+		}
+	}
+	
 
 }

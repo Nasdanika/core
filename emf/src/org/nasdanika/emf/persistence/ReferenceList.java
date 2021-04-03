@@ -1,6 +1,7 @@
 package org.nasdanika.emf.persistence;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -93,8 +94,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	
 								@Override
 								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
-									URL refURL = new URL(base, ref);
-									return resourceSet.getEObject(URI.createURI(refURL.toString()), true);
+									return loadReference(ref, base, marker);
 								}
 								
 							};
@@ -102,9 +102,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 						
 					};
 				}
-				String ref = (String) element;
-				URL refURL = new URL(base, ref);
-				return (T) resourceSet.getEObject(URI.createURI(refURL.toString()), true);
+				return (T) loadReference((String) element, base, marker);
 			}
 			Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
@@ -118,6 +116,22 @@ public class ReferenceList<T> extends ListAttribute<T> {
 				throw e;
 			}
 			throw new ConfigurationException("Error loading reference list: " + e, e, marker);
+		}
+	}
+	protected EObject loadReference(String ref, URL base, Marker marker) {
+		URI refURI = URI.createURI(ref);
+		if (base != null) {
+			refURI = refURI.resolve(URI.createURI(base.toString()));
+		}
+		ConfigurationException.pushThreadMarker(marker);
+		try {
+			if (referenceType != null && !resolveProxies) {
+				// Can create proxy instead of loading object
+				return EObjectLoader.createProxy(referenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
+			}
+			return resourceSet.getEObject(refURI, true);
+		} finally {
+			ConfigurationException.popThreadMarker();
 		}
 	}
 
