@@ -33,6 +33,7 @@ public class Reference<T> extends Attribute<T> {
 	private ResourceSet resourceSet;
 	private boolean referenceSupplierFactory;
 	private boolean resolveProxies;
+	private boolean isHomogenous;
 
 	/**
 	 * 
@@ -53,6 +54,7 @@ public class Reference<T> extends Attribute<T> {
 			ResourceSet resourceSet,
 			EObjectLoader resolver,
 			EClass referenceType,
+			boolean isHomogenous,
 			boolean isStrictContainment,
 			boolean referenceSupplierFactory,
 			boolean resolveProxies,
@@ -62,6 +64,7 @@ public class Reference<T> extends Attribute<T> {
 		this.resourceSet = resourceSet;
 		this.resolver = resolver;
 		this.referenceType = referenceType;
+		this.isHomogenous = isHomogenous;
 		this.isStrictContainment = isStrictContainment;
 		this.referenceSupplierFactory = referenceSupplierFactory;
 		this.resolveProxies = resolveProxies;
@@ -96,6 +99,7 @@ public class Reference<T> extends Attribute<T> {
 								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
 									return loadReference(ref, base, marker);
 								}
+								
 							};
 						}
 						
@@ -103,7 +107,7 @@ public class Reference<T> extends Attribute<T> {
 				}
 				return (T) loadReference((String) element, base, marker);
 			}
-			Object ret = referenceType == null ? loader.load(element, base, progressMonitor) : resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider);
+			Object ret = isHomogenous ? resolver.create(loader, referenceType, element, base, progressMonitor, marker, keyProvider) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return (T) resolver.resolve((EObject) ret);
 			}
@@ -125,7 +129,7 @@ public class Reference<T> extends Attribute<T> {
 		}
 		ConfigurationException.pushThreadMarker(marker);
 		try {
-			if (referenceType != null && !resolveProxies) {
+			if (!referenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy instead of loading object
 				return EObjectLoader.createProxy(referenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
 			}

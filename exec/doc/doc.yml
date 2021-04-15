@@ -1,0 +1,8 @@
+app-action:
+   text: General
+   role: navigation    
+   location: doc/index.html
+   content:
+      #- component-list-of-contents: {}
+      - TODO - list of contents
+      

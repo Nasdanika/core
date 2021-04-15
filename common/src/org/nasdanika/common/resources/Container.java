@@ -174,7 +174,7 @@ public interface Container<E> extends Resource<E> {
 	 * @param converter Converts element F to E on put and get with a factory. Takes element path and the element itself. 
 	 * @return
 	 */
-	default <F> Container<F> adapt(BiFunction<String,E,F> adapter, BiFunction<String,F,E> converter) {
+	default <F> Container<F> adapt(BiFunction<String,? super E,F> adapter, BiFunction<String,? super F,E> converter) {
 		return new Container<F>() {
 
 			@SuppressWarnings("unchecked")

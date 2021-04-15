@@ -92,7 +92,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		
 		if (feature instanceof EReference) {
 			EReference eReference = (EReference) feature;
-			boolean isHomogenous = !eReference.getEReferenceType().isAbstract() && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_HOMOGENOUS));			
+			boolean isHomogenous = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_HOMOGENOUS));			
 			boolean isStrictContainment = isHomogenous && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_STRICT_CONTAINMENT));			
 			if (feature.isMany()) {
 				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
@@ -103,7 +103,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						documentation, 
 						loader.getResourceSet(),
 						eReference.isResolveProxies() ? null : loader,
-						isHomogenous ? eReference.getEReferenceType() : null,
+						eReference.getEReferenceType(),
+						isHomogenous,
 						isStrictContainment,
 						true,
 						!eReference.isResolveProxies(),
@@ -118,7 +119,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					documentation, 
 					loader.getResourceSet(),
 					loader,
-					isHomogenous ? eReference.getEReferenceType() : null,
+					eReference.getEReferenceType(),
+					isHomogenous,
 					isStrictContainment,
 					true,
 					!eReference.isResolveProxies(),
