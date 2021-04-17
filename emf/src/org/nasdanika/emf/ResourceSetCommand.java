@@ -21,7 +21,7 @@ import picocli.CommandLine.Option;
 /**
  * Base class for command which use {@link ResourceSet}. This command creates a resource set,
  * registers all known packages, 
- * loads resources specified with -r option, and registers the global nasdanika adapter factory.
+ * loads resources specified with -r option.
  * @author Pavel
  *
  */
