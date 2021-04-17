@@ -17,7 +17,10 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
 
 public class EmfUtil {
@@ -157,6 +160,34 @@ public class EmfUtil {
 		}
 		
 		return null;
+	}
+	
+	public static Diagnostic wrap(org.eclipse.emf.common.util.Diagnostic diagnostic) {
+		Status status;
+		switch (diagnostic.getSeverity()) {
+		case org.eclipse.emf.common.util.Diagnostic.CANCEL:
+			status = Status.CANCEL;
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.INFO:
+			status = Status.INFO;
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.OK:
+			status = Status.SUCCESS;
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.WARNING:
+			status = Status.WARNING;
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.ERROR:
+		default:
+			status = Status.ERROR;
+			break;
+			
+		}
+		BasicDiagnostic ret = new BasicDiagnostic(status, diagnostic.getMessage(), diagnostic);
+		for (org.eclipse.emf.common.util.Diagnostic child: diagnostic.getChildren()) {
+			ret.add(wrap(child));
+		}
+		return ret;
 	}
 
 }
