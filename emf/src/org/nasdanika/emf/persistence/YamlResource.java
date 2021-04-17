@@ -58,7 +58,7 @@ public class YamlResource extends ResourceImpl {
 				getContents().addAll((Collection<EObject>) data);
 			} else {
 				if (data instanceof SupplierFactory) {
-					EObject eObject = Util.callSupplier(((SupplierFactory<EObject>) data).create(context), progressMonitor);
+					EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(context), progressMonitor);
 					getContents().add(eObject);
 				} else if (data instanceof EObject) {
 					getContents().add((EObject) data);

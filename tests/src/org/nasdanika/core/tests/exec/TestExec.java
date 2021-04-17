@@ -1122,7 +1122,7 @@ public class TestExec {
 		assertEquals(Call.class, call.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;
-		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		Object result = Util.call(((Call) call).create(context), monitor);		
 		assertTrue(result instanceof LinkedHashMap);
 	}
 	
@@ -1134,7 +1134,7 @@ public class TestExec {
 		assertEquals(Call.class, call.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;
-		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		Object result = Util.call(((Call) call).create(context), monitor);		
 		assertEquals("my-method", result);
 	}
 	
@@ -1147,7 +1147,7 @@ public class TestExec {
 		assertEquals(Call.class, call.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;
-		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		Object result = Util.call(((Call) call).create(context), monitor);		
 		assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
 	}
 	
@@ -1159,7 +1159,7 @@ public class TestExec {
 		assertEquals(Call.class, call.getClass());
 		
 		Context context = Context.EMPTY_CONTEXT;
-		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		Object result = Util.call(((Call) call).create(context), monitor);		
 		assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
 	}
 	
@@ -1173,7 +1173,7 @@ public class TestExec {
 		Map<String,Object> map = new LinkedHashMap<>();
 		map.put("age", 33);
 		Context context = Context.singleton("person", map);
-		Object result = Util.callSupplier(((Call) call).create(context), monitor);		
+		Object result = Util.call(((Call) call).create(context), monitor);		
 		assertEquals(33, result);
 	}
 

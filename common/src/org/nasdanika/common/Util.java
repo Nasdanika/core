@@ -727,7 +727,7 @@ public class Util {
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T> T callSupplier(Supplier<T> supplier, ProgressMonitor monitor) throws Exception {
+	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor) throws Exception {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
 			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
 			if (diagnostic.getStatus() == Status.ERROR) {
@@ -744,6 +744,33 @@ public class Util {
 			}
 		} finally {
 			supplier.close();
+		}
+	}
+	
+	/**
+	 * Executes full command lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @return
+	 * @throws Exception
+	 */
+	public static void call(Command command, ProgressMonitor monitor) throws Exception {
+		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling command", 3)) {
+			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);
+			if (diagnostic.getStatus() == Status.ERROR) {
+				throw new DiagnosticException(diagnostic);
+			}
+			
+			try {
+				command.splitAndExecute(progressMonitor);
+				command.splitAndCommit(progressMonitor);
+			} catch (Exception e) {
+				command.splitAndRollback(progressMonitor);
+				throw e;
+			}
+		} finally {
+			command.close();
 		}
 	}
 	
