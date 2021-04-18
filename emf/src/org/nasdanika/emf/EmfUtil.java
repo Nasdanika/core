@@ -1,9 +1,13 @@
 package org.nasdanika.emf;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -12,9 +16,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.BasicDiagnostic;
@@ -188,6 +194,21 @@ public class EmfUtil {
 			ret.add(wrap(child));
 		}
 		return ret;
+	}
+
+	public static <K, V extends EObject> Map<K, List<V>> groupBy(Collection<V> elements, EStructuralFeature... keyFeatures) {
+		@SuppressWarnings("unchecked")
+		Function<EObject,K> classifier = e -> {
+			if (keyFeatures.length == 1) {
+				return (K) e.eGet(keyFeatures[0]);
+			}
+			List<Object> key = new ArrayList<>();
+			for (EStructuralFeature keyFeature: keyFeatures) {
+				key.add(e.eGet(keyFeature));
+			}
+			return (K) key;
+		};
+		return Util.groupBy(elements, classifier);
 	}
 
 }

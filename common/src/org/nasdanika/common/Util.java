@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -936,5 +937,22 @@ public class Util {
 				
 		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
 	}
+	
+	/**
+	 * Grouping by with support of null keys.
+	 * @param <K>
+	 * @param <T>
+	 * @param elements
+	 * @param keyFeature
+	 * @return
+	 */
+	public static <K, T> Map<K, List<T>> groupBy(Collection<T> elements, java.util.function.Function<? super T, ? extends K> classifier) {
+		Map<K, List<T>> ret = new LinkedHashMap<>();
+		for (T e: elements) {
+			K k = classifier.apply(e);
+			ret.computeIfAbsent(k, key -> new ArrayList<>()).add(e);
+		}
+		return ret;
+	}	
 	
 }
