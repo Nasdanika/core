@@ -21,5 +21,10 @@ public class MarkedAdapter extends AdapterImpl implements Marked {
 	public boolean isAdapterForType(Object type) {
 		return Marked.class == type;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + marker;
+	}
 
 }

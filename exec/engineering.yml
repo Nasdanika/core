@@ -1,5 +1,5 @@
 engineering-module:
    name: Exec
    path: exec
-   actions: ../doc/doc.yml
+   actions: doc/doc.yml
    

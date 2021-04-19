@@ -1,0 +1,5 @@
+engineering-module:
+  name: EMF
+  path: emf
+  issues:
+     - name: Support of mutually exclusive features                         

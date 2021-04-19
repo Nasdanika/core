@@ -1,0 +1,8 @@
+engineering-product:
+   name: Core
+   path: core
+   modules:
+      - common/engineering.yml
+      - cli/engineering.yml
+      - emf/engineering.yml
+      - exec/engineering.yml

@@ -131,7 +131,11 @@ public class Reference<T> extends Attribute<T> {
 		try {
 			if (!referenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy instead of loading object
-				return EObjectLoader.createProxy(referenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
+				EObject proxy = EObjectLoader.createProxy(referenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
+				if (marker != null) {
+					proxy.eAdapters().add(new MarkedAdapter(marker));
+				}
+				return proxy;
 			}
 			return resourceSet.getEObject(refURI, true);
 		} finally {
