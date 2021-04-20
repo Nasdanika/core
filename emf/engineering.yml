@@ -3,3 +3,6 @@ engineering-module:
   path: emf
   issues:
      - name: Support of mutually exclusive features                         
+     - name: EClass descriptor
+       description: From annotations. Choices from overriden methods. Use in UI and CLI. May also be constructed from EObject - values, choices from resource set.                         
+     
