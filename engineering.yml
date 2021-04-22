@@ -6,3 +6,7 @@ engineering-product:
       - cli/engineering.yml
       - emf/engineering.yml
       - exec/engineering.yml
+      - ncore/engineering.yml
+   issues:
+     - name: Diagramming model       
+       description: EMF model or API for PlantUML diagramming. Start with state diagrams. Consider support of multiple outputs for the same model, e.g. state or sequence or activity. In  
