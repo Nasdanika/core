@@ -9,4 +9,6 @@ engineering-product:
       - ncore/engineering.yml
    issues:
      - name: Diagramming model       
-       description: EMF model or API for PlantUML diagramming. Start with state diagrams. Consider support of multiple outputs for the same model, e.g. state or sequence or activity. In  
+       description: EMF model or API for PlantUML diagramming. Start with state diagrams. Consider support of multiple outputs for the same model, e.g. state or sequence or activity. 
+     - name: MongoDB EMF Resource       
+       description: YAML file with connection and collection details and reserved name or extension for the resource set to recognize. 
