@@ -35,38 +35,46 @@ public interface Diagnostic {
 		return ret;
 	}
 	
-	default void dump(PrintStream out, int indent) {
+	default void dump(PrintStream out, int indent, Status... statuses) {
 		for (int i=0; i < indent; ++i) {
 			out.print("    ");
 		}
-		
+				
 		Status status = getStatus();
-		if (status != null) {
-			// TODO - ANSI coloring of statuses
-			out.print(status.name());
-			out.print(' ');
-		}
-
-		out.print(getMessage());
-
-		List<Object> data = getData();
-		if (data != null) {
-			out.print(" data=");
-			out.print(getData());
-			for (Object de: data) {
-				if (de instanceof Throwable) {
-					((Throwable) de).printStackTrace(out);
-				}
+		boolean match = statuses.length == 0;
+		for (Status s: statuses) {
+			if (s == status) {
+				match = true;
+				break;
 			}
+		}
+		if (match) {
+			if (status != null) {
+				// TODO - ANSI coloring of statuses
+				out.print(status.name());
+				out.print(' ');
+			}
+	
+			out.print(getMessage());
+	
+			List<Object> data = getData();
+			if (data != null) {
+				out.print(" data=");
+				out.print(getData());
+				for (Object de: data) {
+					if (de instanceof Throwable) {
+						((Throwable) de).printStackTrace(out);
+					}
+				}
+			}		
+			
+			out.println();
+			
+		    List<Diagnostic> children = getChildren();
+			if (children != null) {
+		    	children.forEach(c -> c.dump(out, indent + 1, statuses));
+		    }
 		}		
-		
-		out.println();
-		
-	    List<Diagnostic> children = getChildren();
-		if (children != null) {
-	    	children.forEach(c -> c.dump(out, indent + 1));
-	    }
-		
 	}
 	
 }

@@ -722,17 +722,30 @@ public class Util {
 
 	/**
 	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
-	 * @param context
 	 * @param monitor
+	 * @param diagnosticConsumer TODO
+	 * @param context
 	 * @param component
 	 * @return
 	 * @throws Exception
 	 */
-	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor) throws Exception {
+	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor, Consumer<Diagnostic> diagnosticConsumer, Status... failOnStatuses) throws Exception {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
 			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
-			if (diagnostic.getStatus() == Status.ERROR) {
-				throw new DiagnosticException(diagnostic);
+			if (diagnosticConsumer != null) {
+				diagnosticConsumer.accept(diagnostic);
+			}
+			Status status = diagnostic.getStatus();
+			if (failOnStatuses.length == 0) {
+				if (status == Status.FAIL) {
+					throw new DiagnosticException(diagnostic);
+				}
+			} else {
+				for (Status failStatus: failOnStatuses) {
+					if (status == failStatus) {
+						throw new DiagnosticException(diagnostic);
+					}					
+				}
 			}
 			
 			try {
@@ -753,14 +766,24 @@ public class Util {
 	 * @param context
 	 * @param monitor
 	 * @param component
+	 * @param failOnStatuses Status on which to throw {@link DiagnosticException}. Defaults to FAIL.
 	 * @return
 	 * @throws Exception
 	 */
-	public static void call(Command command, ProgressMonitor monitor) throws Exception {
+	public static Diagnostic call(Command command, ProgressMonitor monitor, Status... failOnStatuses) throws Exception {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling command", 3)) {
-			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);
-			if (diagnostic.getStatus() == Status.ERROR) {
-				throw new DiagnosticException(diagnostic);
+			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);			
+			Status status = diagnostic.getStatus();
+			if (failOnStatuses.length == 0) {
+				if (status == Status.FAIL) {
+					throw new DiagnosticException(diagnostic);
+				}
+			} else {
+				for (Status failStatus: failOnStatuses) {
+					if (status == failStatus) {
+						throw new DiagnosticException(diagnostic);
+					}					
+				}
 			}
 			
 			try {
@@ -770,6 +793,7 @@ public class Util {
 				command.splitAndRollback(progressMonitor);
 				throw e;
 			}
+			return diagnostic;
 		} finally {
 			command.close();
 		}

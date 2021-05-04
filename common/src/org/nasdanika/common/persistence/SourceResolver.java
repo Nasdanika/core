@@ -3,14 +3,13 @@ package org.nasdanika.common.persistence;
 /**
  * Resolves marker to a URL in the source repository.
  * @author Pavel
- *
  */
 public interface SourceResolver {
 	
 	/**
 	 * Link to source location
 	 * @author Pavel
-	 *
+	 * @since 2015.4.2
 	 */
 	interface Link {
 		

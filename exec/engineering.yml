@@ -2,4 +2,9 @@ engineering-module:
    name: Exec
    path: exec
    actions: doc/doc.yml
+   issues:
+     - name: Migrate to EMF
+       description: Consistency with approach, generated documentation, ability to load from a multitude of sources. May need Reference classes for resources etc - to load shared specs.
+       effort: 16                         
+     
    
