@@ -1,7 +1,9 @@
 app-action:
    text: General
    role: navigation    
-   location: doc/index.html
+   location: ${base-uri}doc/index.html
+   children:
+     - content/content.yml
    content:
       #- component-list-of-contents: {}
       - TODO - list of contents
