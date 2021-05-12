@@ -177,7 +177,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						} catch (ConfigurationException e) {
 							throw e;
 						} catch (Exception e) {
-							throw marker == null ? e : new ConfigurationException("Error setting feature " + feature.getKey() + ": " + e, e, marker);
+							throw marker == null ? e : new ConfigurationException("Error setting feature " + feature.getKey() + " in " + ret + ": " + e, e, marker);
 						}
 					}
 				}
