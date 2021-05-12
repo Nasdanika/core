@@ -32,6 +32,8 @@ import org.nasdanika.common.Util;
 public class EmfUtil {
 
 	private static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";
+	public static final String ICON_KEY = "icon";
+	public static final String LABEL_KEY = "label";
 
 	private EmfUtil() {
 		// Singleton
