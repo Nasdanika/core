@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.5.1</version>
+	    <version>2021.5.2</version>
 	    <relativePath>../jar-pom.xml</relativePath>
 	  </parent>
 	<artifactId>common</artifactId>
@@ -32,7 +32,7 @@
 		<dependency>
 		    <groupId>org.yaml</groupId>
 		    <artifactId>snakeyaml</artifactId>
-		    <version>1.25</version>
+		    <version>1.28</version>
 		</dependency>		
 
 		<dependency>
@@ -44,7 +44,7 @@
 		<dependency>
 		    <groupId>com.vladsch.flexmark</groupId>
 		    <artifactId>flexmark-all</artifactId>
-		    <version>0.60.2</version>
+		    <version>0.62.2</version>
 		</dependency>
 		
 		<dependency>
@@ -74,7 +74,7 @@
 		<dependency>
 		    <groupId>net.sourceforge.plantuml</groupId>
 		    <artifactId>plantuml</artifactId>
-		    <version>1.2021.1</version>
+		    <version>1.2021.6</version>
 		</dependency>		
 
 		<dependency>

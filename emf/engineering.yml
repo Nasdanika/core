@@ -5,4 +5,10 @@ engineering-module:
      - name: Support of mutually exclusive features                         
      - name: EClass descriptor
        description: From annotations. Choices from overriden methods. Use in UI and CLI. May also be constructed from EObject - values, choices from resource set.                         
+     - name: load-default annotation
+       markdown-description: |+2
+         YAML to load if configuration key is not present. E.g. if representations key is not present use a particular representation. 
+         In this case to suppress representations just provide an empty list of representations.
+         Maybe load-default-yaml and load-default-json.
+         This would alow allow to load defaults from external locations using exec-resource, for example.                          
      

@@ -37,13 +37,18 @@ public class EObjectLoader implements ObjectLoader {
 	public static final String LOAD_KEY = "load-key";
 	
 	/**
+	 * Information about how element is loaded in markdown. For {@link EStructuralFeature}s overrides feature documentation if present.  
+	 */
+	public static final String LOAD_DOC = "load-doc";
+	
+	/**
 	 * If this Nasdanika annotation details is set to "true" on a {@link EStructuralFeature} and configuration object is not a map
 	 * then the configuration object is loaded into this feature. 
 	 */
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
 	
 	/**
-	 * If this Nasdanika annotation details is set to "false" on a {@link EStructuralFeature} then this feature is not loaded from configuration. 
+	 * If this Nasdanika annotation details is set to "false" on a {@link EStructuralFeature} or {@link EClass} then this feature or class is not loaded from configuration. 
 	 */
 	public static final String IS_LOADABLE = "loadable";
 	
@@ -60,7 +65,7 @@ public class EObjectLoader implements ObjectLoader {
 	
 	/**
 	 * Default implementation of load key provider - gets load key from the Nasdanika annotation (urn:org.nasdanika) <code>load-key</code> details if it is present.
-	 * If it is not converts {@link ENamedElement} element name from camel case to lower-cased kebab case. E.g. firstName is converted first-name.
+	 * Otherwise converts {@link ENamedElement} element name from camel case to lower-cased kebab case. E.g. firstName is converted first-name.
 	 */
 	public static final java.util.function.Function<ENamedElement,String> LOAD_KEY_PROVIDER = ne -> {
 		EAnnotation na = EmfUtil.getNasdanikaAnnotation(ne);
@@ -138,7 +143,7 @@ public class EObjectLoader implements ObjectLoader {
 			if (type.startsWith(re.getKey())) {
 				EPackageEntry ePackageEntry = re.getValue();
 				for (EClassifier eClassifier: ePackageEntry.ePackage.getEClassifiers()) {
-					if (eClassifier instanceof EClass) {
+					if (eClassifier instanceof EClass && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(eClassifier, IS_LOADABLE, "true"))) {
 						String eClassifierKey = ePackageEntry.keyProvider.apply(eClassifier);
 						if (eClassifierKey != null && type.equals(re.getKey() + eClassifierKey)) {
 							return create(loader, (EClass) eClassifier, config, base, progressMonitor, marker, ePackageEntry.keyProvider);
