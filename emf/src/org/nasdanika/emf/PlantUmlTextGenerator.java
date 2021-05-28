@@ -80,8 +80,8 @@ public class PlantUmlTextGenerator {
 			.append(classType)
 			.append(" ")
 			.append(name)
-			.append(link == null ? "" : " [[" + link + "]]")
-			.append(style == null ? "" : " " + style)
+			.append(Util.isBlank(link) ? "" : " [[" + link + "]]")
+			.append(Util.isBlank(style) ? "" : " " + style)
 			.append(" {\n");
 	}
 	
