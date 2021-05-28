@@ -47,6 +47,23 @@ public class EObjectLoader implements ObjectLoader {
 	 */
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
 	
+	public static boolean isDefaultFeature(EClass eClass, EStructuralFeature feature) {
+		if ("true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE))) {
+			return true;
+		}
+		String dfName = EmfUtil.getNasdanikaAnnotationDetail(eClass, EObjectLoader.IS_DEFAULT_FEATURE);
+		if (!Util.isBlank(dfName)) {
+			return feature.getName().equals(dfName);
+		}
+		for (EClass st: eClass.getEAllSuperTypes()) {
+			dfName = EmfUtil.getNasdanikaAnnotationDetail(st, EObjectLoader.IS_DEFAULT_FEATURE);
+			if (!Util.isBlank(dfName)) {
+				return feature.getName().equals(dfName);
+			}			
+		}
+		return false;
+	}
+	
 	/**
 	 * If this Nasdanika annotation details is set to "false" on a {@link EStructuralFeature} or {@link EClass} then this feature or class is not loaded from configuration. 
 	 */

@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.common.persistence.Feature;
@@ -71,7 +70,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			java.util.function.Function<ENamedElement,String> keyProvider) {
 		
-		boolean isDefault = isDefaultFeature(feature);
+		boolean isDefault = EObjectLoader.isDefaultFeature(eClass, feature);
 		// TODO - exclusive with - space-separated list of keys.
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
@@ -129,23 +128,6 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		}
 		
 		throw new UnsupportedOperationException("Unusupported feature type: " + feature);
-	}
-
-	private boolean isDefaultFeature(EStructuralFeature feature) {
-		if ("true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE))) {
-			return true;
-		}
-		String dfName = EmfUtil.getNasdanikaAnnotationDetail(eClass, EObjectLoader.IS_DEFAULT_FEATURE);
-		if (!Util.isBlank(dfName)) {
-			return feature.getName().equals(dfName);
-		}
-		for (EClass st: eClass.getEAllSuperTypes()) {
-			dfName = EmfUtil.getNasdanikaAnnotationDetail(st, EObjectLoader.IS_DEFAULT_FEATURE);
-			if (!Util.isBlank(dfName)) {
-				return feature.getName().equals(dfName);
-			}			
-		}
-		return false;
 	}
 
 	@Override
