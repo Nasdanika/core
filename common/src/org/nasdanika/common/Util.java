@@ -661,7 +661,7 @@ public class Util {
 	 */
 	public static String firstPlainTextSentence(String html, int minSentenceLength, int maxSentenceLength, String... abbreviations) {
 		if (html == null || html.length() < minSentenceLength) {
-			return html;
+			return Jsoup.parse(html).text();
 		}
 		return firstSentence(Jsoup.parse(html).text(), minSentenceLength, maxSentenceLength, abbreviations);
 	}	
