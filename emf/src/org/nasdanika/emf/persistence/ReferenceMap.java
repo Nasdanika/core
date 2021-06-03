@@ -1,26 +1,27 @@
 package org.nasdanika.emf.persistence;
 
 import java.net.URL;
+import java.util.Map;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.persistence.Attribute;
+import org.nasdanika.common.persistence.MapAttribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
- * If config is a list loads each element creating elements using element factory and then loading them, otherwise creates a singleton in the same way as explained before.
+ * Loads {@link EMap} of references using loader.
  * @author Pavel
  *
- * @param <T>
  */
-public class Reference<T> extends Attribute<T> {
-	
-	private ReferenceFactory<T> referenceFactory;
+public class ReferenceMap<K,V> extends MapAttribute<K,V> {
+
+	private ReferenceFactory<V> valueFactory;
 	
 	/**
-	 * 
 	 * @param key
 	 * @param isDefault
 	 * @param required
@@ -30,11 +31,11 @@ public class Reference<T> extends Attribute<T> {
 	 * @param referenceType Reference type if the reference is homogenous, i.e. its type is known beforehand.
 	 * @param exclusiveWith
 	 */
-	public Reference(
+	public ReferenceMap(
 			Object key, 
 			boolean isDefault, 
 			boolean required, 
-			T defaultValue, 
+			Map<K,V> defaultValue, 
 			String description, 
 			EReference eReference,
 			EObjectLoader resolver,
@@ -42,12 +43,15 @@ public class Reference<T> extends Attribute<T> {
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
-		this.referenceFactory = new ReferenceFactory<>(eReference, resolver, referenceSupplierFactory, keyProvider);
+		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");
+		if (valueFeature instanceof EReference) {
+			this.valueFactory = new ReferenceFactory<>((EReference) valueFeature, resolver, referenceSupplierFactory, keyProvider);
+		}
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return referenceFactory.create(loader, element, base, progressMonitor, marker);
+	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		return valueFactory == null ? super.createValue(loader, key, value, base, progressMonitor, marker) : valueFactory.create(loader, value, base, progressMonitor, marker);
 	}
-
+	
 }

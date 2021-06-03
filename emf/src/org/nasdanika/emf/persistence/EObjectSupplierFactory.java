@@ -3,6 +3,7 @@ package org.nasdanika.emf.persistence;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -17,6 +18,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
+import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
@@ -56,22 +58,39 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		}			
 		
 	}
-
+	
 	/**
 	 * Wraps {@link EStructuralFeature} into {@link Feature}
 	 * @param featureKey
 	 * @param feature
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Feature<?> wrapFeature(
 			String featureKey, 
 			EStructuralFeature feature, 
 			EObjectLoader loader, 
 			java.util.function.Function<ENamedElement,String> keyProvider) {
 		
-		boolean isDefault = EObjectLoader.isDefaultFeature(eClass, feature);
+		return wrapFeature(featureKey, feature, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, feature));
+	}
+
+	/**
+	 * Wraps {@link EStructuralFeature} into {@link Feature}. 
+	 * Static version is needed for {@link EMap} support. 
+	 * @param featureKey
+	 * @param feature
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static Feature<?> wrapFeature(
+			String featureKey, 
+			EStructuralFeature feature, 
+			EObjectLoader loader, 
+			java.util.function.Function<ENamedElement,String> keyProvider,
+			boolean isDefault) {
+
 		// TODO - exclusive with - space-separated list of keys.
+		
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
@@ -91,22 +110,29 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		
 		if (feature instanceof EReference) {
 			EReference eReference = (EReference) feature;
-			boolean isHomogenous = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_HOMOGENOUS));			
-			boolean isStrictContainment = isHomogenous && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_STRICT_CONTAINMENT));			
 			if (feature.isMany()) {
+				// EMap
+				if (feature.getEType().getInstanceClass() == Map.Entry.class) {
+					return new MapSupplierFactoryAttribute<>(new ReferenceMap<>(
+							featureKey, 
+							isDefault, 
+							feature.isRequired(), 
+							null, 
+							documentation,
+							eReference,
+							loader,
+							true,
+							keyProvider), true);
+				}
 				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
 						featureKey, 
 						isDefault, 
 						feature.isRequired(), 
 						null, 
-						documentation, 
-						loader.getResourceSet(),
-						eReference.isResolveProxies() ? null : loader,
-						eReference.getEReferenceType(),
-						isHomogenous,
-						isStrictContainment,
+						documentation,
+						eReference,
+						loader,
 						true,
-						!eReference.isResolveProxies(),
 						keyProvider), true);
 			}
 			
@@ -115,14 +141,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					isDefault, 
 					feature.isRequired(), 
 					null, 
-					documentation, 
-					loader.getResourceSet(),
+					documentation,
+					eReference,
 					loader,
-					eReference.getEReferenceType(),
-					isHomogenous,
-					isStrictContainment,
-					true,
-					!eReference.isResolveProxies(),
+					true,					
 					keyProvider));
 			
 		}

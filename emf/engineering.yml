@@ -2,7 +2,8 @@ engineering-module:
   name: EMF
   path: emf
   issues:
-     - name: Support of mutually exclusive features                         
+     - name: Support of mutually exclusive features   
+       markdown-description: Annotation exclusive-with - space-separated list of keys.                                    
      - name: EClass descriptor
        description: From annotations. Choices from overriden methods. Use in UI and CLI. May also be constructed from EObject - values, choices from resource set.                         
      - name: load-default annotation
