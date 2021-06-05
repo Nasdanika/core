@@ -170,8 +170,6 @@ public class EObjectLoader implements ObjectLoader {
 			}
 		}
 		
-		try (ProgressMonitor subMonitor = progressMonitor.setWorkRemaining(10).split("Creating " + type, 1, marker)) {
-		}
 		if (chain == null) {
 			throw new ConfigurationException("Unsupported type: " + type, marker);
 		}
