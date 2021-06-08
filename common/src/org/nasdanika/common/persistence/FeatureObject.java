@@ -68,7 +68,7 @@ public class FeatureObject implements Marked, Loadable {
 				Feature<?> defaultFeature = defaultFeatureOptional.get();
 				// Singleton map with a single entry default feature key -> config.
 				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, marker);
-			} else {
+			} else if (!Boolean.TRUE.equals(config)) {
 				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config, marker);
 			}
 		}
