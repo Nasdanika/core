@@ -212,5 +212,23 @@ public class EmfUtil {
 		};
 		return Util.groupBy(elements, classifier);
 	}
+	
+	/**
+	 * Flattened inheritance hierarchy from the argument class to all of its supertypes in the order of inheritance.
+	 * @param eClass
+	 * @return
+	 */
+	public static List<EClass> lineage(EClass eClass) {
+		List<EClass> ret = new ArrayList<>();
+		ret.add(eClass);
+		for (EClass sc: eClass.getESuperTypes()) {
+			for (EClass scLineage: lineage(sc)) {
+				if (!ret.contains(scLineage)) {
+					ret.add(scLineage);
+				}
+			}
+		}
+		return ret;
+	}
 
 }
