@@ -16,6 +16,7 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.DelegatingSupplierFactoryFeature;
+import org.nasdanika.common.persistence.EnumSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
@@ -102,6 +103,11 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			boolean interpolate = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
 			if (String.class == featureClass) {
 				return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
+			}
+			
+			if (featureClass.isEnum()) {
+				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
+				return new EnumSupplierFactoryAttribute(stringAttribute, featureClass, null);
 			}
 			
 			Function converter = null; // TODO: From annotations for, say, dates - parse pattern - SimpleDateFormat?
