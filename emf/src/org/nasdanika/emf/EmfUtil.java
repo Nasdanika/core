@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -23,6 +25,8 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
@@ -225,6 +229,37 @@ public class EmfUtil {
 			for (EClass scLineage: lineage(sc)) {
 				if (!ret.contains(scLineage)) {
 					ret.add(scLineage);
+				}
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Finds objects referencing the argument object (target) via the specified reference.
+	 * @param <T>
+	 * @param target Referenced object
+	 * @param eReference Reference
+	 * @return Object referencing this one via the specified reference.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends EObject> EList<T> getReferrers(EObject target, EReference eReference) {
+		EList<T> ret = new BasicInternalEList<>(EObject.class);
+		Resource res = target.eResource(); 
+		if (res != null) {
+			ResourceSet rSet = res.getResourceSet();
+			TreeIterator<?> cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
+			while (cit.hasNext()) {
+				Object next = cit.next(); 
+				if (eReference.getEContainingClass().isInstance(next)) {
+					Object value = ((EObject) next).eGet(eReference);
+					if (eReference.isMany()) {
+						if (((Collection<?>) value).contains(target)) {
+							ret.add((T) next);
+						}
+					} else if (value == target) {
+						ret.add((T) next);
+					}					
 				}
 			}
 		}
