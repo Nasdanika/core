@@ -199,6 +199,11 @@ public class EObjectLoader implements ObjectLoader {
 			Marker marker, 
 			java.util.function.Function<ENamedElement,String> keyProvider) throws Exception {
 		
+		// Nulls are nulls
+		if (config == null) {
+			return null;
+		}
+		
 		// Proxy
 		Object proxy = createProxy(eClass, config, base);
 		if (proxy != null) {
