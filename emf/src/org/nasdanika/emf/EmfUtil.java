@@ -205,6 +205,9 @@ public class EmfUtil {
 	public static <K, V extends EObject> Map<K, List<V>> groupBy(Collection<V> elements, EStructuralFeature... keyFeatures) {
 		@SuppressWarnings("unchecked")
 		Function<EObject,K> classifier = e -> {
+			if (e == null) {
+				return null;
+			}
 			if (keyFeatures.length == 1) {
 				return (K) e.eGet(keyFeatures[0]);
 			}
