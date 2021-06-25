@@ -1,204 +1,156 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<artifactId>org.nasdanika.core.parent</artifactId>
-	<name>Core Parent</name>
-	<version>2021.3.0-SNAPSHOT</version>
+	<version>2021.6.2</version>
+	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
+	<name>Nasdanika Core Parent</name>
+	<description>Parent pom.</description>
 
-	<!-- tycho requires maven >= 3.0 -->
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
-
-	<properties>
-		<tycho-version>2.1.0</tycho-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<repositories>
-		<repository>
-			<id>foundation</id>
-			<url>https://nasdanika.org/builds/${env.RELEASE}/repositories/composite</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<version>4.0.0</version>
-				<executions>
-					<execution>
-						<id>get-the-git-infos</id>
-						<goals>
-							<goal>revision</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<generateGitPropertiesFile>true</generateGitPropertiesFile>
-					<generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/git.properties</generateGitPropertiesFilename>
-					<includeOnlyProperties>    
-						<includeOnlyProperty>git.commit.id</includeOnlyProperty>
-						<includeOnlyProperty>git.commit.id.abbrev</includeOnlyProperty>
-						<includeOnlyProperty>git.branch</includeOnlyProperty>
-						<includeOnlyProperty>git.commit.time</includeOnlyProperty>
-						<includeOnlyProperty>git.total.commit.count</includeOnlyProperty>
-					</includeOnlyProperties>
-				</configuration>
-			</plugin>
-			<plugin>	
-				<groupId>org.apache.maven.plugins</groupId>	
-			    <artifactId>maven-site-plugin</artifactId>	
-			    <version>3.9.0</version>	
-			    <configuration>	
-			        <skip>true</skip>	
-			        <skipDeploy>true</skipDeploy>	
-			    </configuration>	
-			</plugin>		
-			<plugin>	
-				<groupId>org.apache.maven.plugins</groupId>	
-				<artifactId>maven-javadoc-plugin</artifactId>	
-				<version>3.2.0</version>	
-				<configuration>	
-					<linksource>true</linksource>	
-					<failOnError>false</failOnError>	
-			        	<useStandardDocletOptions>true</useStandardDocletOptions>	
-					<additionalJOption>--no-module-directories</additionalJOption>
-					<links>
-						<link>https://download.eclipse.org/modeling/emf/emf/javadoc/2.9.0/</link>
-						<link>https://picocli.info/apidocs/</link>
-					</links>
-				</configuration>					
-			</plugin>	
-
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-document-bundle-plugin</artifactId>
-				<version>${tycho-version}</version>
-			</plugin>			
-			<plugin>
-				<!-- enable tycho build extension -->
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<pomDependencies>consider</pomDependencies>
-					<!-- configure the p2 target environments for multi-platform build -->
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
-			<!-- enable source bundle generation -->
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>plugin-source</id>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-	<modules>
-		<module>common</module>		
-
-		<module>cli</module>		
-		<module>cli.ext</module>		
-
-		<module>exec</module>		
-
-		<module>emf</module>		
-		<module>emf.ext</module>		
-		<module>emf.edit</module>		
-		<module>emf.presentation</module>		
-
-		<module>sirius</module>		
-		<module>sirius.tree</module>		
-		<module>sirius.tree.edit</module>		
-
-		<module>eclipse</module>		
-
-		<module>ncore</module>		
-		<module>ncore.edit</module>		
-		<module>ncore.gen</module>		
-
-		<module>party</module>		
-		<module>party.edit</module>		
-
-		<module>design</module>		
-		<!--
-		<module>provisioning</module>		
-		<module>provisioning.edit</module>		
-
-		<module>decisioning</module>		
-		<module>decisioning.edit</module>		
-		-->
-
-		<module>feature</module>
-		<module>ui</module>
-		<module>help</module>
-
-		<module>http</module>
-		<module>repo</module>
-
-		<module>texttospeech</module>
-
-		<module>tests</module>
-		<module>repository</module>
-	</modules>
-	<organization>
-		<name>Nasdanika LLC</name>
-		<url>https://nasdanika.org</url>
-	</organization>
-	<developers>
-	    <developer>
-	      <id>pvlasov</id>
-	      <name>Pavel Vlasov</name>
-	      <url>https://github.com/pvlasov</url>
-	      <organization>Nasdanika LLC</organization>
-	      <organizationUrl>https://nasdanika.org</organizationUrl>
-	      <roles>
-	        <role>developer</role>
-	      </roles>
-	      <timezone>America/New_York</timezone>
-	      <properties>
-	        <picUrl>https://avatars0.githubusercontent.com/u/5733654?s=460&amp;v=4</picUrl>
-	      </properties>
-	    </developer>
-	</developers>
-
-	<!-- For Javadoc cross-ref resolution -->
-	<url>https://nasdanika.org/builds/${env.RELEASE}/products/core/bundles</url>
+	<url>https://nasdanika.org</url>
+		
+	<licenses>
+		<license>
+			<name>Eclipse Public License 2.0</name>
+			<url>https://nasdanika.org/builds/master/eclipse-public-license-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<scm>
 		<url>https://github.com/Nasdanika/core</url>
 	</scm>
+
+	<build>
+	    <extensions>
+	      <extension>
+	        <groupId>org.apache.maven.wagon</groupId>
+	         <artifactId>wagon-ssh</artifactId>
+	         <version>3.4.1</version>
+	      </extension>
+	    </extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>	
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>								
+                        <plugin>
+                              <groupId>pl.project13.maven</groupId>
+                              <artifactId>git-commit-id-plugin</artifactId>
+                              <version>3.0.1</version>
+                        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.1.0</version>
+			
+				<configuration>
+					<doclet>ch.raffael.mddoclet.MarkdownDoclet</doclet>
+					<docletArtifact>
+						<groupId>ch.raffael.markdown-doclet</groupId>
+						<artifactId>markdown-doclet</artifactId>
+						<version>1.4</version>
+					</docletArtifact>
+					<useStandardDocletOptions>true</useStandardDocletOptions>
+				</configuration>
+
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<failOnError>false</failOnError>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
+
+	<organization>
+		<name>Nasdanika</name>
+		<url>https://github.com/Nasdanika</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>pvlasov</id>
+			<name>Pavel Vlasov</name>
+			<email>Pavel.Vlasov@nasdanika.org</email>
+			<roles>
+				<role>Lead Developer</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+	</developers>
+	
+	<modules>
+		<module>common</module>
+		<module>exec</module>
+		<module>cli</module>
+		<module>emf</module>
+		<module>ncore</module>
+		<!--
+		<module>party/jar-pom.xml</module>
+		-->
+	</modules>	
+
+	<distributionManagement>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>	
 </project>

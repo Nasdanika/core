@@ -5,33 +5,27 @@
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
 	    <version>2021.6.2</version>
-	    <relativePath>../jar-pom.xml</relativePath>
+	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>emf</artifactId>
+	<artifactId>cli</artifactId>
 	<packaging>jar</packaging>
-	<name>Nasdanika EMF</name>
-	
-	<properties>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>	
+	<name>Nasdanika Command Line</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>cli</artifactId>
+			<artifactId>common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore</artifactId>
-		    <version>2.20.0</version>
+			<groupId>info.picocli</groupId>
+			<artifactId>picocli</artifactId>
+			<version>4.5.1</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-		    <version>2.16.0</version>
-		</dependency>
-		
+			<groupId>org.fusesource.jansi</groupId>
+			<artifactId>jansi</artifactId>
+			<version>1.18</version>
+		</dependency>				
 	</dependencies>
 </project>

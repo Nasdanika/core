@@ -5,7 +5,7 @@
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
 	    <version>2021.6.2</version>
-	    <relativePath>../jar-pom.xml</relativePath>
+	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>ncore</artifactId>
 	<packaging>jar</packaging>
