@@ -1,8 +1,3 @@
 engineering-module:
   name: Common
   path: common
-  actions:
-     - app-action:
-        text: JavaDoc
-        role: navigation    
-        location: javadoc/index.html           
