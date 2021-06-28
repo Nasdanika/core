@@ -5,5 +5,7 @@ engineering-module:
      - name: Migrate to EMF
        description: Consistency with approach, generated documentation, ability to load from a multitude of sources. May need Reference classes for resources etc - to load shared specs.
        effort: 16                         
+     - name: Expose existing docs as sub-modules documentation
+       description: Define sub-modules for packages and classes.
      
    
