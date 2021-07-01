@@ -1,6 +1,10 @@
 engineering-module:
   name: EMF
   path: emf
+  representations:
+    - representation-component-diagram: true
+  dependencies:
+    - nasdanika:modules/core/modules/common
   issues:
      - name: Support of mutually exclusive features   
        markdown-description: Annotation exclusive-with - space-separated list of keys.                                    

@@ -1,3 +1,6 @@
 engineering-module:
   name: Common
   path: common
+  representations:
+    - representation-component-diagram: true
+  

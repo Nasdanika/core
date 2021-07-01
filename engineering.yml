@@ -1,6 +1,8 @@
 engineering-product:
    name: Core
    path: core
+   representations:
+     - representation-component-diagram: true
    appearance:
      features:
        modules:
