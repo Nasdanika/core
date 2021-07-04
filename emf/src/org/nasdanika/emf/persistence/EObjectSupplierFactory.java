@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EAttribute;
@@ -90,12 +91,13 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			boolean isDefault) {
 
-		// TODO - exclusive with - space-separated list of keys.
+		String exclusiveWithStr = EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.EXCLUSIVE_WITH);
+		Object[] exclusiveWith = exclusiveWithStr == null ? new String[0] : exclusiveWithStr.split("\\s");
 		
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
-				return new ListSupplierFactoryAttribute<>(new org.nasdanika.common.persistence.ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation), true);
+				return new ListSupplierFactoryAttribute<>(new org.nasdanika.common.persistence.ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation, exclusiveWith), true);
 			}
 			
 			EClassifier featureType = feature.getEType();
@@ -106,12 +108,12 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			
 			if (featureClass.isEnum()) {
-				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
+				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation, exclusiveWith), interpolate);
 				return new EnumSupplierFactoryAttribute(stringAttribute, featureClass, null);
 			}
 			
 			Function converter = null; // TODO: From annotations for, say, dates - parse pattern - SimpleDateFormat?
-			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate, converter);			
+			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation, exclusiveWith), interpolate, converter);			
 		}
 		
 		if (feature instanceof EReference) {
@@ -128,7 +130,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							eReference,
 							loader,
 							true,
-							keyProvider), true);
+							keyProvider,
+							exclusiveWith), true);
 				}
 				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
 						featureKey, 
@@ -139,7 +142,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						eReference,
 						loader,
 						true,
-						keyProvider), true);
+						keyProvider,
+						exclusiveWith), true);
 			}
 			
 			return new DelegatingSupplierFactoryFeature<>(new Reference<>(
@@ -151,7 +155,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					eReference,
 					loader,
 					true,					
-					keyProvider));
+					keyProvider,
+					exclusiveWith));
 			
 		}
 		
@@ -178,6 +183,23 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				Marker marker = getMarker();
 				if (marker != null) {
 					ret.eAdapters().add(new MarkedAdapter(marker));
+					ret.eAdapters().add(new LoadTrackerAdapter() {
+
+						@Override
+						public boolean isLoaded(EStructuralFeature feature) {
+							for (Entry<String, EStructuralFeature> fe: featureMap.entrySet()) {
+								if (fe.getValue() == feature) {
+									for (Feature<?> f: features) {
+										if (f.getKey().equals(fe.getKey())) {
+											return f.isLoaded();
+										}
+									}
+								}
+							}
+							return false;
+						}
+						
+					});
 				}
 				for (Feature<?> feature: features) {
 					if (feature.isLoaded()) {

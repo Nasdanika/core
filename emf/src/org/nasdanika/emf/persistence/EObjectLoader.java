@@ -47,6 +47,11 @@ public class EObjectLoader implements ObjectLoader {
 	 */
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
 	
+	/**
+	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.
+	 */
+	public static final String EXCLUSIVE_WITH = "exclusive-with";
+	
 	public static boolean isDefaultFeature(EClass eClass, EStructuralFeature feature) {
 		if ("true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_DEFAULT_FEATURE))) {
 			return true;
