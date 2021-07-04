@@ -4,7 +4,7 @@ engineering-module:
   representations:
     - representation-component-diagram: true
   dependencies:
-    - nasdanika:modules/core/modules/common
+    - nasdanika:modules/core/modules/cli
   issues:
      - name: Support of mutually exclusive features   
        markdown-description: Annotation exclusive-with - space-separated list of keys.                                    
