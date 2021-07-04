@@ -176,7 +176,13 @@ public class MarkdownHelper {
 	}
 		
 	protected DataHolder getFlexmarkOptions() {
-	    return PegdownOptionsAdapter.flexmarkOptions(Extensions.ALL ^ Extensions.HARDWRAPS ^ Extensions.SUPPRESS_HTML_BLOCKS ^ Extensions.SUPPRESS_ALL_HTML);
+	    return PegdownOptionsAdapter.flexmarkOptions(
+	    		Extensions.FOOTNOTES 
+	    		| Extensions.SUBSCRIPT 
+	    		| Extensions.STRIKETHROUGH 
+	    		| Extensions.SUPERSCRIPT 
+	    		| Extensions.TOC 
+	    		| (Extensions.ALL ^ Extensions.HARDWRAPS ^ Extensions.SUPPRESS_HTML_BLOCKS ^ Extensions.SUPPRESS_ALL_HTML));
 	}	
 	
 	protected Parser createMarkdownParser() {
