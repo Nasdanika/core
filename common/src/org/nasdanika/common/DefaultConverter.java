@@ -13,6 +13,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Period;
 import java.util.List;
 import java.util.Map;
 
@@ -272,4 +274,23 @@ public class DefaultConverter extends ReflectiveConverter {
 		Object data = MarkingYamlConstructor.createMarkingYaml(url.toString()).load(url.openStream());
 		return data instanceof List ? (List<Object>) data : null;
 	}
+	
+	/**
+	 * @param text
+	 * @return parsed duration.
+	 */
+	@ConverterMethod
+	public Duration toDuration(CharSequence text) {
+		return Duration.parse(text);
+	}
+
+	/**
+	 * @param text
+	 * @return parsed duration.
+	 */
+	@ConverterMethod
+	public Period toPeriod(CharSequence text) {
+		return Period.parse(text);
+	}
+	
 }
