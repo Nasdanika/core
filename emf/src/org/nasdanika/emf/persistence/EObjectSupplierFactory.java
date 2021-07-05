@@ -1,8 +1,9 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EAttribute;
@@ -181,22 +182,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
 				Marker marker = getMarker();
+				Set<EStructuralFeature> loadedFeatures = new HashSet<>();
 				if (marker != null) {
 					ret.eAdapters().add(new MarkedAdapter(marker));
 					ret.eAdapters().add(new LoadTrackerAdapter() {
 
 						@Override
 						public boolean isLoaded(EStructuralFeature feature) {
-							for (Entry<String, EStructuralFeature> fe: featureMap.entrySet()) {
-								if (fe.getValue() == feature) {
-									for (Feature<?> f: features) {
-										if (f.getKey().equals(fe.getKey())) {
-											return f.isLoaded();
-										}
-									}
-								}
-							}
-							return false;
+							return loadedFeatures.contains(feature);
 						}
 						
 					});
@@ -206,6 +199,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						try {
 							EStructuralFeature structuralFeature = featureMap.get(feature.getKey());
 							ret.eSet(structuralFeature, feature.get(data));
+							loadedFeatures.add(structuralFeature);
 						} catch (ConfigurationException e) {
 							throw e;
 						} catch (Exception e) {
