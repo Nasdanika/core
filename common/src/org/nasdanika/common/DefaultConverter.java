@@ -14,7 +14,9 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.Period;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -286,11 +288,37 @@ public class DefaultConverter extends ReflectiveConverter {
 
 	/**
 	 * @param text
-	 * @return parsed duration.
+	 * @return parsed period.
 	 */
 	@ConverterMethod
 	public Period toPeriod(CharSequence text) {
 		return Period.parse(text);
+	}
+
+	/**
+	 * @param text
+	 * @return parsed duration.
+	 */
+	@ConverterMethod
+	public Instant toInstant(String text) {
+		if (text == null) {
+			return null;
+		}
+		if (text.contains("Z")) {
+			return Instant.parse(text);
+		}
+		// Parsing via Date for convenience
+		Date date = convert(text, Date.class);
+		return date == null ? null : date.toInstant();
+	}
+
+	/**
+	 * @param text
+	 * @return parsed duration.
+	 */
+	@ConverterMethod
+	public Instant toInstant(Date date) {
+		return Instant.ofEpochMilli(date.getTime());
 	}
 	
 }
