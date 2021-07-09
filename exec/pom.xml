@@ -4,12 +4,37 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.7.0</version>
+	    <version>2021.7.1</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>exec</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Execution Participants Library</name>
+
+	<build>
+	    <plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+	    </plugins>
+	</build>
 
 	<dependencies>
 		<dependency>
@@ -47,5 +72,12 @@
 		  <artifactId>org.eclipse.jgit</artifactId>
 		  <version>5.12.0.202106070339-r</version>
 		</dependency>		
+		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>

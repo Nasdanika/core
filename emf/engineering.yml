@@ -16,4 +16,10 @@ engineering-module:
          In this case to suppress representations just provide an empty list of representations.
          Maybe load-default-yaml and load-default-json.
          This would alow allow to load defaults from external locations using exec-resource, for example.                          
+     - name: Computed features (mostly attributes)
+       description: |+2
+         Some way to indicate that value is computed. 
+         If so, wrap value being set into function taking the object as argument (this) and returing computed value.
+         Support calling Java and JavaScript.
+         Perhaps support for derived values which are not loaded by default - load them and access raw value in getters.  
      

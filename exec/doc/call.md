@@ -30,7 +30,7 @@ call: java.util.LinkedHashMap
 
 ```yaml
 call: 
-   class: org.nasdanika.core.tests.exec.CustomMarkdownHelper
+   class: org.nasdanika.exec.tests.CustomMarkdownHelper
    method: markdownToHtml
    arguments: This ``is`` important
    properties:

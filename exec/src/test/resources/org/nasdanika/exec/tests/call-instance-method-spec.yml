@@ -1,0 +1,7 @@
+call: 
+   class: org.nasdanika.exec.tests.CustomMarkdownHelper
+   method: markdownToHtml
+   arguments: This ``is`` important
+   properties:
+      name: Joe
+      age: 33
