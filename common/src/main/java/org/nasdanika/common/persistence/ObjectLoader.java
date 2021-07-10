@@ -2,8 +2,10 @@ package org.nasdanika.common.persistence;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -88,8 +90,9 @@ public interface ObjectLoader {
 	}
 	
 	default Object loadYaml(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
-		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
-		return load(yaml.load(in), base, progressMonitor);
+		try (Reader reader = new InputStreamReader(in, getCharset())) {
+			return loadYaml(reader, base, progressMonitor);
+		}
 	}
 	
 	default Object loadYaml(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -100,8 +103,8 @@ public interface ObjectLoader {
 	default Object loadYaml(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading YAML from " + url);
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(url.toString());
-		try {
-			return load(yaml.load(url.openStream()), url, progressMonitor);
+		try (Reader reader = new InputStreamReader(url.openStream(), getCharset())) {
+			return load(yaml.load(reader), url, progressMonitor);
 		} catch (MarkedYAMLException e) {
 			throw new ConfigurationException(e.getMessage(), e, new MarkerImpl(url.toString(), e.getProblemMark()));
 		}
@@ -117,8 +120,9 @@ public interface ObjectLoader {
 	}
 	
 	default Object loadJsonObject(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
-		JSONObject jsonObject = new JSONObject(new JSONTokener(in));
-		return load(jsonObject.toMap(), base, progressMonitor);
+		try (Reader reader = new InputStreamReader(in, getCharset())) {	
+			return loadJsonObject(reader, base, progressMonitor);
+		}
 	}
 	
 	default Object loadJsonObject(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -128,8 +132,7 @@ public interface ObjectLoader {
 	
 	default Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading JSON object from " + url);
-		JSONObject jsonObject = new JSONObject(new JSONTokener(url.openStream()));
-		return load(jsonObject.toMap(), url, progressMonitor);
+		return loadJsonObject(url.openStream(), url, progressMonitor);
 	}
 		
 	default Object loadJsonArray(String str, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -138,8 +141,9 @@ public interface ObjectLoader {
 	}
 	
 	default Object loadJsonArray(InputStream in, URL base, ProgressMonitor progressMonitor) throws Exception {
-		JSONArray jsonArray = new JSONArray(new JSONTokener(in));
-		return load(jsonArray.toList(), base, progressMonitor);
+		try (Reader reader = new InputStreamReader(in, getCharset())) {
+			return loadJsonArray(reader,  base, progressMonitor);
+		}
 	}
 	
 	default Object loadJsonArray(Reader reader, URL base, ProgressMonitor progressMonitor) throws Exception {
@@ -149,8 +153,15 @@ public interface ObjectLoader {
 	
 	default Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.worked(1, "Loading JSON array from " + url);
-		JSONArray jsonArray = new JSONArray(new JSONTokener(url.openStream()));
-		return load(jsonArray.toList(), url, progressMonitor);
+		return loadJsonArray(url.openStream(), url, progressMonitor);
+	}
+	
+	/**
+	 * Override to customize charset.
+	 * @return
+	 */
+	default Charset getCharset() {
+		return Charset.defaultCharset();
 	}
 	
 	/*

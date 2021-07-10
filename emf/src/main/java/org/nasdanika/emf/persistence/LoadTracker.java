@@ -31,9 +31,8 @@ public interface LoadTracker {
 	boolean isLoading(EStructuralFeature feature);
 	
 	/**
-	 * Returns "raw" value for non-changeable (derived) features.
-	 * This value can be used to derive (compute) feature value.
-	 * For changeable features returns null because the value has already been injected into the object.
+	 * Returns loaded value which was provided to feature setter for changeable features.
+	 * This value can be used to derive (compute) feature value for non-changeable derived features which have computed annotation set to true.
 	 * @param feature
 	 * @return
 	 */

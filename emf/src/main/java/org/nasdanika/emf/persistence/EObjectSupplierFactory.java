@@ -249,9 +249,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							Object value = feature.get(data);
 							if (structuralFeature.isChangeable()) {
 								ret.eSet(structuralFeature, value);
-							} else {
-								loadedFeatures.put(structuralFeature, value);
 							}
+							loadedFeatures.put(structuralFeature, value);
 						} catch (ConfigurationException e) {
 							throw e;
 						} catch (Exception e) {
