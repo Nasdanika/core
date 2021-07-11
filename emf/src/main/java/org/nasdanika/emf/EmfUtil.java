@@ -1,5 +1,6 @@
 package org.nasdanika.emf;
 
+import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -245,28 +246,99 @@ public class EmfUtil {
 	 * @param eReference Reference
 	 * @return Object referencing this one via the specified reference.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T extends EObject> EList<T> getReferrers(EObject target, EReference eReference) {
 		EList<T> ret = new BasicInternalEList<>(EObject.class);
+		
 		Resource res = target.eResource(); 
-		if (res != null) {
-			ResourceSet rSet = res.getResourceSet();
-			TreeIterator<?> cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
-			while (cit.hasNext()) {
-				Object next = cit.next(); 
-				if (eReference.getEContainingClass().isInstance(next)) {
-					Object value = ((EObject) next).eGet(eReference);
-					if (eReference.isMany()) {
-						if (((Collection<?>) value).contains(target)) {
-							ret.add((T) next);
-						}
-					} else if (value == target) {
-						ret.add((T) next);
-					}					
-				}
+		TreeIterator<?> cit = null;
+		if (res == null) {
+			EObject root = target;
+			EObject rc;
+			while ((rc = root.eContainer()) != null) {
+				root = rc;
 			}
+			if (root != null) {
+				collect(root, target, eReference, ret);
+				cit = root.eAllContents();
+			}			
+		} else {
+			ResourceSet rSet = res.getResourceSet();
+			cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
+		}
+		if (cit != null) {
+			while (cit.hasNext()) {
+				collect(cit.next(), target, eReference, ret);
+			}			
 		}
 		return ret;
 	}
+
+	@SuppressWarnings("unchecked")
+	protected static <T extends EObject> void collect(
+			Object source, 
+			EObject target, 
+			EReference eReference,
+			EList<T> accumulator) {
+		if (eReference.getEContainingClass().isInstance(source)) {
+			Object value = ((EObject) source).eGet(eReference);
+			if (eReference.isMany()) {
+				if (((Collection<?>) value).contains(target)) {
+					accumulator.add((T) source);
+				}
+			} else if (value == target) {
+				accumulator.add((T) source);
+			}					
+		}
+	}
+	
+	public static void dumpDiagnostic(org.eclipse.emf.common.util.Diagnostic d, int indent, PrintStream out) {
+		for (int i=0; i < indent; ++i) {
+			out.print("    ");
+		}
+		out.println(toString(d));
+	    if (d.getChildren() != null) {
+	    	d.getChildren().forEach(c -> dumpDiagnostic(c, indent + 1, out));
+	    }		
+	}
+	
+	static String toString(org.eclipse.emf.common.util.Diagnostic d) {
+		StringBuilder result = new StringBuilder();
+		switch (d.getSeverity()) {
+		case org.eclipse.emf.common.util.Diagnostic.OK:
+			result.append("OK");
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.INFO:
+			result.append("INFO");
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.WARNING:
+			result.append("WARNING");
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.ERROR:
+			result.append("ERROR");
+			break;
+		case org.eclipse.emf.common.util.Diagnostic.CANCEL:
+			result.append("CANCEL");
+			break;
+		default:
+			result.append(Integer.toHexString(d.getSeverity()));
+			break;
+		}
+
+		result.append(" source=");
+		result.append(d.getSource());
+
+		result.append(" code=");
+		result.append(d.getCode());
+
+		result.append(' ');
+		result.append(d.getMessage());
+
+		if (d.getData() != null) {
+			result.append(" data=");
+			result.append(d.getData());
+		}
+
+		return result.toString();
+	}		
 
 }

@@ -24,14 +24,14 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.ContextLoadable;
+import org.nasdanika.common.persistence.DispatchingLoader;
 import org.nasdanika.common.persistence.Loadable;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.emf.EmfUtil;
 
-public class EObjectLoader implements ObjectLoader {
+public class EObjectLoader extends DispatchingLoader {
 	
 	static final String HREF_KEY = "href";
 
@@ -110,8 +110,6 @@ public class EObjectLoader implements ObjectLoader {
 		return Util.camelToKebab(ne.getName());
 	};
 	
-	private org.nasdanika.common.persistence.ObjectLoader chain;
-	
 	private java.util.function.Function<ENamedElement,String> keyProvider;
 	
 	private class EPackageEntry {
@@ -132,7 +130,7 @@ public class EObjectLoader implements ObjectLoader {
 	private ResourceSet resourceSet;
 
 	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, EPackage... ePackages) {
-		this.chain = chain;
+		super(chain);
 		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
 		for (EPackage ePackage: ePackages) {
 			register(ePackage);
@@ -173,11 +171,7 @@ public class EObjectLoader implements ObjectLoader {
 			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond());
 		}
 		
-		if (chain == null) {
-			throw new ConfigurationException("Unsupported type: " + type, marker);
-		}
-		
-		return chain.create(loader, type, config, base, progressMonitor, marker);		
+		return super.create(loader, type, config, base, progressMonitor, marker);
 	}
 	
 	/**
