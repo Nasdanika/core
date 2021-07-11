@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
 
@@ -17,6 +18,10 @@ import org.nasdanika.common.persistence.ObjectLoader;
  *
  */
 public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionParticipant {
+
+	public YamlLoadingExecutionParticipant(Context context) {
+		super(context);
+	}
 
 	@Override
 	protected ResourceSet createResourceSet(ProgressMonitor progressMonitor) {

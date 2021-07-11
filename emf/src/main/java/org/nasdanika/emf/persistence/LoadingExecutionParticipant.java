@@ -22,7 +22,6 @@ import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
-import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.persistence.Marked;
@@ -39,10 +38,14 @@ import org.nasdanika.emf.EmfUtil;
  */
 public abstract class LoadingExecutionParticipant implements ExecutionParticipant {
 	
-	protected MutableContext context;
+	protected Context context;
 	protected List<EObject> roots;
 	protected ResourceSet resourceSet;
 	protected Map<EObject, org.eclipse.emf.common.util.Diagnostic> diagnosticMap = new LinkedHashMap<>();
+	
+	public LoadingExecutionParticipant(Context context) {
+		this.context = context;
+	}
 	
 	@Override
 	public double size() {
@@ -52,15 +55,6 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	@Override
 	public String name() {
 		return "Loading resources";
-	}
-	
-	/**
-	 * Override to create custom context.
-	 * @param progressMonitor
-	 * @return
-	 */
-	protected MutableContext createContext(ProgressMonitor progressMonitor) {
-		return Context.EMPTY_CONTEXT.fork();
 	}
 	
 	protected boolean matchURI(EObject obj, URI uri) {
@@ -165,7 +159,6 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	 */
 	@Override
 	public Diagnostic diagnose(ProgressMonitor progressMonitor) {
-		context = createContext(progressMonitor);
 		resourceSet = createResourceSet(progressMonitor);
 		
 		// Pre-loading
@@ -179,7 +172,7 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		Diagnostician diagnostician = new Diagnostician();
 		if (ret.getStatus() != Status.FAIL) {				
 			roots = new ArrayList<>();
-			Map<Class<Context>, MutableContext> diagnosticContext = Collections.singletonMap(Context.class, context);
+			Map<Class<Context>, Context> diagnosticContext = Collections.singletonMap(Context.class, context);
 			for (Resource resource: resourceSet.getResources()) {
 				for (EObject e: resource.getContents()) {
 					org.eclipse.emf.common.util.Diagnostic diagnostic = diagnostician.validate(e, diagnosticContext);
