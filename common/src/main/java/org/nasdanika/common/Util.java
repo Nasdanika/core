@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -978,5 +979,135 @@ public class Util {
 		}
 		return ret;
 	}	
+
+	// --- Property computers
+	
+	public static PropertyComputer createEmbeddedImagePropertyComputer(java.util.function.Function<String,URL> resolver) {
+		return new PropertyComputer() {
+			
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				return computeEmbeddedImage(context, key, path, type, resolver);
+			}
+			
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <U> U computeEmbeddedImage(Context context, String key, String path, Class<U> type, java.util.function.Function<String,URL> resolver) { 
+		if (type == null || type == String.class) { 
+			int idx = path.indexOf("/"); 
+			if (idx == -1) { 
+				return null;
+			}
+			StringBuilder imageTag = new StringBuilder("<img src=\"");
+			imageTag.append(computeEmbeddedImageData(context, key, path, type, resolver));
+			imageTag.append("\"/>"); 
+			String imagePath = path.substring(idx + 1).trim(); 
+			int spaceIdx = imagePath.indexOf(' ');
+			if (spaceIdx == -1) {
+				return (U) imageTag.toString();
+			}
+			
+			StringBuilder tableBuilder = new StringBuilder("<table style=\"width:auto\" class=\"table\">").append(System.lineSeparator())
+					.append("  <tbody>").append(System.lineSeparator())
+					.append("    <tr>").append(System.lineSeparator())
+					.append("      <td>").append(imageTag).append("</td>").append(System.lineSeparator())
+					.append("    </tr>").append(System.lineSeparator())
+					.append("    <tr class=\"bg-light\">").append(System.lineSeparator())
+					.append("      <td>").append(imagePath.substring(spaceIdx + 1)).append("</td>").append(System.lineSeparator())
+					.append("    </tr>").append(System.lineSeparator())
+					.append("  </tbody>").append(System.lineSeparator())
+					.append("</table>").append(System.lineSeparator());
+			return (U) tableBuilder.toString();
+		}
+		return null;
+	}
+	
+	public static PropertyComputer createEmbeddedImageDataPropertyComputer(java.util.function.Function<String,URL> resolver) {
+		return new PropertyComputer() {
+			
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				return computeEmbeddedImageData(context, key, path, type, resolver);
+			}
+			
+		};
+	}
+		
+	@SuppressWarnings("unchecked")
+	public static <U> U computeEmbeddedImageData(Context context, String key, String path, Class<U> type, java.util.function.Function<String,URL> resolver) { 
+		if (type == null || type == String.class) { 
+			int idx = path.indexOf("/"); 
+			if (idx == -1) { 
+				return null;
+			}
+			try {
+				StringBuilder imageData = new StringBuilder("data:image/" + path.substring(0, idx) + ";base64,");
+				String imagePath = path.substring(idx + 1).trim(); 
+				int spaceIdx = imagePath.indexOf(' ');
+				URL imageURL = resolver.apply(spaceIdx == -1 ? imagePath : imagePath.substring(0, spaceIdx));
+				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE); 
+				byte[] imageBytes = converter.convert(imageURL.openStream(), byte[].class); 
+				imageData.append(Base64.getEncoder().encodeToString(imageBytes)); 
+				return (U) imageData.toString();
+			} catch (Exception e) {
+				throw new NasdanikaException("Error embedding image data '" + path + "': " + e, e);
+			}
+		}
+		return null;
+	}
+	
+	public static PropertyComputer createIncludePropertyComputer(java.util.function.Function<String,URL> resolver) {
+		return new PropertyComputer() {
+			
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				return computeInclude(context, key, path, type, resolver);
+			}
+			
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <U> U computeInclude(Context context, String key, String path, Class<U> type, java.util.function.Function<String,URL> resolver) { 
+		if (type == null || type == String.class) { 
+			try {
+				URL includeURL = resolver.apply(path);
+				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
+				String includeContent = converter.convert(includeURL.openStream(), String.class); 
+				return (U) context.interpolateToString(includeContent);
+			} catch (Exception e) {
+				throw new NasdanikaException("Error including '" + path +	"': " + e, e);
+			}
+		}
+		return null;
+	}
+	
+	public static PropertyComputer createIncludeMarkdownPropertyComputer(java.util.function.Function<String,URL> resolver) {
+		return new PropertyComputer() {
+			
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				return computeIncludeMarkdown(context, key, path, type, resolver);
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <U> U computeIncludeMarkdown(Context context, String key, String path, Class<U> type, java.util.function.Function<String,URL> resolver) { 
+		if (type == null || type == String.class) {
+			try {
+				URL includeURL = resolver.apply(path);
+				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
+				String markdown = converter.convert(includeURL.openStream(), String.class);
+				String html = context.get(MarkdownHelper.class, MarkdownHelper.INSTANCE).markdownToHtml(markdown);
+				return (U) context. interpolateToString(html) ;
+			} catch (Exception e) {
+				throw new NasdanikaException("Error including markdown '" + path + "': " + e, e);
+			}
+		}
+		return null;
+	}
 	
 }

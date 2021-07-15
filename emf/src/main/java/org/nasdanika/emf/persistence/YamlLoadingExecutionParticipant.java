@@ -33,10 +33,14 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 		}		
 		
 		Resource.Factory.Registry resourceFactoryRegistry = new ResourceFactoryRegistryImpl();				
-		resourceFactoryRegistry.getExtensionToFactoryMap().put("yml", new YamlResourceFactory(createLoader(ret), context, progressMonitor));
+		resourceFactoryRegistry.getExtensionToFactoryMap().put("yml", createYamlResorceFactory(ret, progressMonitor));
 		ret.setResourceFactoryRegistry(resourceFactoryRegistry);
 		
 		return ret;
+	}
+
+	protected YamlResourceFactory createYamlResorceFactory(ResourceSet ret, ProgressMonitor progressMonitor) {
+		return new YamlResourceFactory(createLoader(ret), context, progressMonitor);
 	}
 	
 	protected abstract Collection<EPackage> getEPackages();

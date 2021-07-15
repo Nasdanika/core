@@ -219,28 +219,28 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
 				Marker marker = getMarker();
 				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
-				EStructuralFeature[] loadingFeature = { null };
 				if (marker != null) {
 					ret.eAdapters().add(new MarkedAdapter(marker));
-					ret.eAdapters().add(new LoadTrackerAdapter() {
-
-						@Override
-						public boolean isLoaded(EStructuralFeature feature) {
-							return loadedFeatures.containsKey(feature);
-						}
-
-						@Override
-						public boolean isLoading(EStructuralFeature feature) {
-							return feature == loadingFeature[0];
-						}
-						
-						@Override
-						public Object get(EStructuralFeature feature) {
-							return loadedFeatures.get(feature);
-						}
-						
-					});
 				}
+				EStructuralFeature[] loadingFeature = { null };
+				ret.eAdapters().add(new LoadTrackerAdapter() {
+
+					@Override
+					public boolean isLoaded(EStructuralFeature feature) {
+						return loadedFeatures.containsKey(feature);
+					}
+
+					@Override
+					public boolean isLoading(EStructuralFeature feature) {
+						return feature == loadingFeature[0];
+					}
+					
+					@Override
+					public Object get(EStructuralFeature feature) {
+						return loadedFeatures.get(feature);
+					}
+					
+				});
 				for (Feature<?> feature: features) {
 					if (feature.isLoaded()) {
 						try {

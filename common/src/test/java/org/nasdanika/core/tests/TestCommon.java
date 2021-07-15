@@ -205,7 +205,7 @@ public class TestCommon {
 					}					
 				}
 				
-				System.out.println(pe.toJSON().toString(4));
+				System.out.println(pe);
 			}
 		}
 	}

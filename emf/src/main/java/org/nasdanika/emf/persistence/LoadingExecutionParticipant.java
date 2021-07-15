@@ -166,7 +166,10 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 			resourceSet.getResource(uri, true);
 		}
 		
-		EcoreUtil.resolveAll(resourceSet);		
+		// Resolving all proxies and clearing all caches
+		EcoreUtil.resolveAll(resourceSet);
+		resourceSet.getAllContents().forEachRemaining(notifier -> notifier.eNotify(FeatureCacheAdapter.CLEAR_CACHE));
+		
 		BasicDiagnostic ret = diagnose();
 		
 		Diagnostician diagnostician = new Diagnostician();

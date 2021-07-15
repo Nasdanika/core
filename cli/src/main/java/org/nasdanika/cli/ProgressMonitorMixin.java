@@ -32,7 +32,7 @@ public class ProgressMonitorMixin {
 					
 					@Override
 					public void close() {
-						System.out.println(toJSON().toString(4));
+						System.out.println(toString());
 						super.close();
 					}
 					
@@ -47,7 +47,7 @@ public class ProgressMonitorMixin {
 				@Override
 				public void close() {
 					try (Writer w = new FileWriter(progressOutput)) {
-						toJSON().write(w, 4, 0);
+						toJSON(0, true).write(w, 4, 0);
 					} catch (IOException e) {
 						System.err.println("Error closing progress writer");
 						e.printStackTrace();

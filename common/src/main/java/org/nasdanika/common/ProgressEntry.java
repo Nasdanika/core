@@ -79,8 +79,9 @@ public class ProgressEntry extends ProgressRecorder {
 	 * Outputs to JSON.
 	 * @return
 	 */
-	public JSONObject toJSON() {
-		JSONObject ret = super.toJSON();
+	@Override
+	public JSONObject toJSON(int depth, boolean withData) {
+		JSONObject ret = super.toJSON(depth, withData);
 		ret.put("name", getName());
 		ret.put("totalWork", totalWork);
 		if (start > 0) {
@@ -90,7 +91,7 @@ public class ProgressEntry extends ProgressRecorder {
 			ret.put("finish", finish);
 		}
 		
-		if (getData() != null && getData().size() > 0) {
+		if (withData && getData() != null && getData().size() > 0) {
 			JSONArray jd = new JSONArray();
 			for (Object d: getData()) {
 				jd.put(detailToJSON(d));
@@ -101,17 +102,14 @@ public class ProgressEntry extends ProgressRecorder {
 		return ret;
 	}
 	
-	@Override
-	public String toString() {
-		return toJSON().toString(4);
-	}
-	
 	/**
 	 * Outputs to Map, which can be then used to output to YAML.
+	 * @param depth Output depth, 0 means infinite depth.
 	 * @return
 	 */
-	public Map<String, Object> toMap() {
-		Map<String,Object> ret = super.toMap();
+	@Override
+	public Map<String, Object> toMap(int depth, boolean withData) {
+		Map<String,Object> ret = super.toMap(depth, withData);
 		ret.put("name", getName());
 		ret.put("totalWork", totalWork);
 		if (start > 0) {
@@ -120,10 +118,21 @@ public class ProgressEntry extends ProgressRecorder {
 		if (finish > 0) {
 			ret.put("finish", finish);
 		}
+		if (start > 0 && finish > 0) {
+			ret.put("duration", finish - start);
+		}
 		
-		ret.put("data", getData()); 					
+		if (withData) {
+			ret.put("data", getData());
+		}
 		
 		return ret;
+	}
+	
+	@Override
+	public void close() {
+		finish = System.currentTimeMillis();
+		super.close();
 	}
 
 }

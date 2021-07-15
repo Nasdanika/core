@@ -128,14 +128,17 @@ public class ProgressRecorder implements ProgressMonitor {
 	 * Outputs to JSON.
 	 * @return
 	 */
-	public JSONObject toJSON() {
+	public JSONObject toJSON(int depth, boolean withData) {
 		JSONObject ret = new JSONObject();
 
-		List<ProgressEntry> children = getChildren();
-		if (!children.isEmpty()) {
-			JSONArray jChildren = new JSONArray();
-			children.forEach(child -> jChildren.put(child.toJSON()));
-			ret.put("children", jChildren);
+		if (depth != 1) {
+			List<ProgressEntry> children = getChildren();
+			if (!children.isEmpty()) {
+				JSONArray jChildren = new JSONArray();
+				int cDepth = depth - 1;
+				children.forEach(child -> jChildren.put(child.toJSON(cDepth, withData)));
+				ret.put("children", jChildren);
+			}
 		}
 		
 		List<Step> steps = getSteps();
@@ -147,7 +150,7 @@ public class ProgressRecorder implements ProgressMonitor {
 				jwe.put("worked", we.getWorked());
 				jwe.put("time", we.getTime());
 				jwe.put("message", we.getMessage());
-				if (we.getData().size() > 0) {
+				if (withData && we.getData().size() > 0) {
 					JSONArray jd = new JSONArray();
 					for (Object d: we.getData()) {
 						jd.put(detailToJSON(d));
@@ -174,21 +177,25 @@ public class ProgressRecorder implements ProgressMonitor {
 
 	@Override
 	public String toString() {
-		return toJSON().toString(4);
+		return toJSON(0, true).toString(4);
 	}
 	
 	/**
 	 * Outputs to Map, which can be then used to output to YAML.
-	 * @return
+	 * @param depth output depth. 0 means infinite.
+	 * @return 
 	 */
-	public Map<String, Object> toMap() {
+	public Map<String, Object> toMap(int depth, boolean withData) {
 		Map<String,Object> ret = new LinkedHashMap<>();
 
-		List<ProgressEntry> children = getChildren();
-		if (!children.isEmpty()) {
-			List<Map<String, Object>> mChildren = new ArrayList<>();
-			children.forEach(child -> mChildren.add(child.toMap()));
-			ret.put("children", mChildren);
+		if (depth != 1) {
+			List<ProgressEntry> children = getChildren();
+			if (!children.isEmpty()) {
+				List<Map<String, Object>> mChildren = new ArrayList<>();
+				int cDepth = depth - 1;
+				children.forEach(child -> mChildren.add(child.toMap(cDepth, withData)));
+				ret.put("children", mChildren);
+			}
 		}
 		
 		List<Step> steps = getSteps();
@@ -200,7 +207,7 @@ public class ProgressRecorder implements ProgressMonitor {
 				mwe.put("worked", we.getWorked());
 				mwe.put("time", we.getTime());
 				mwe.put("message", we.getMessage());
-				if (we.getData().size() > 0) {
+				if (withData && we.getData().size() > 0) {
 					mwe.put("data", we.getData());					
 				}
 			});
