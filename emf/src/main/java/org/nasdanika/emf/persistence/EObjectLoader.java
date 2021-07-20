@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EFactory;
@@ -47,6 +48,12 @@ public class EObjectLoader extends DispatchingLoader {
 	 * then the configuration object is loaded into this feature. 
 	 */
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
+	
+	/**
+	 * If this Nasdanika annotation details is set to "true" on a {@link EAttribute} and configuration object is a {@link String}
+	 * then the configuration object is parsed to {@link URL} and then resolved relative to the model resource URL. 
+	 */
+	public static final String IS_RESOLVE_URL = "resolve-url";
 	
 	/**
 	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.

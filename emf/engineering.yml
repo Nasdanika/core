@@ -22,4 +22,10 @@ engineering-module:
          If so, wrap value being set into function taking the object as argument (this) and returing computed value.
          Support calling Java and JavaScript.
          Perhaps support for derived values which are not loaded by default - load them and access raw value in getters.  
+     - name: ResourceManager
+       description: |+2
+         YAMLResourceFactory. Resource tokens replaced if there is resource manager. E.g. image or video link.
+         DiagramGenerator which stores to resource manager. One option is to recognize data URI, decode, and replace.
+         Image tags - an option to use resource manager if present and embed if not.
+      
      

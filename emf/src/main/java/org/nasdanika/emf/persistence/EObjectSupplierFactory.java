@@ -1,5 +1,7 @@
 package org.nasdanika.emf.persistence;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,6 +27,7 @@ import org.nasdanika.common.persistence.FunctionSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
@@ -107,7 +110,23 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			Class<?> featureClass = featureType.getInstanceClass();
 			boolean interpolate = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
 			if (String.class == featureClass) {
-				return new StringSupplierFactoryAttribute(new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation), interpolate);
+				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation) {
+					
+					@Override
+					public Object create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
+						Object ret = super.create(loader, config, base, progressMonitor, marker);
+						if (ret instanceof String && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URL))) {
+							try {
+								return new URL(base, (String) ret).toString();
+							} catch (MalformedURLException e) {
+								throw new ConfigurationException("Cannot resolve URL '" + ret + "': " + e, e, marker);
+							}
+						}
+						return ret;
+					}
+					
+				};
+				return new StringSupplierFactoryAttribute(delegate, interpolate);
 			}
 			
 			if (featureClass.isEnum()) {
