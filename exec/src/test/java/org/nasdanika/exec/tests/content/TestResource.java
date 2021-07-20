@@ -1,6 +1,7 @@
 package org.nasdanika.exec.tests.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 import org.nasdanika.common.Status;
@@ -48,12 +49,10 @@ public class TestResource extends TestBase {
 		load(
 				"resource-no-location.yml", 
 				obj -> {
-					Resource resource = (Resource) obj;
-					assertThat(resource.getDescription()).isEqualTo("Resource definition missing location");
-					assertThat(resource.getLocation()).isNull();
+					fail("Should not be called");
 				},
 				diagnostic -> {
-					assertThat(diagnostic.getStatus()).isEqualTo(Status.ERROR);
+					fail("Should not be called");
 				});		
 	}
 	

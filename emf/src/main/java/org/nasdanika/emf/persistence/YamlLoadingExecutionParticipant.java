@@ -39,8 +39,8 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 		return ret;
 	}
 
-	protected YamlResourceFactory createYamlResorceFactory(ResourceSet ret, ProgressMonitor progressMonitor) {
-		return new YamlResourceFactory(createLoader(ret), context, progressMonitor);
+	protected YamlResourceFactory createYamlResorceFactory(ResourceSet resourceSet, ProgressMonitor progressMonitor) {
+		return new YamlResourceFactory(createLoader(resourceSet), context, progressMonitor);
 	}
 	
 	protected abstract Collection<EPackage> getEPackages();
