@@ -1,5 +1,0 @@
-block:
-   try: 
-      http: https://nasdanika.org/no-such-path
-   catch: Erroneous ${error/type}      
-   finally: World

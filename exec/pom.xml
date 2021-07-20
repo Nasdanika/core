@@ -1,18 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	  <parent>
-	    <artifactId>parent</artifactId>
-	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.7.3</version>
-	    <relativePath>..</relativePath>
-	  </parent>
+	<parent>
+		<artifactId>parent</artifactId>
+		<groupId>org.nasdanika.core</groupId>
+		<version>2021.8.0</version>
+		<relativePath>..</relativePath>
+	</parent>
 	<artifactId>exec</artifactId>
 	<packaging>jar</packaging>
-	<name>Nasdanika Execution Participants Library</name>
+	<name>Nasdanika Execution Model</name>
 
 	<build>
-	    <plugins>
+		<plugins>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -33,50 +34,25 @@
 					</execution>
 				</executions>
 			</plugin>
-	    </plugins>
+		</plugins>
 	</build>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>emf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.codegen</artifactId>
-			<version>2.22.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
-			<version>2.26.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>io.github.azagniotov</groupId>
-		    <artifactId>ant-style-path-matcher</artifactId>
-		    <version>1.0.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.freemarker</groupId>
-		    <artifactId>freemarker</artifactId>
-		    <version>2.3.31</version>
-		</dependency>
-		<dependency>
-		    <groupId>com.github.spullara.mustache.java</groupId>
-		    <artifactId>compiler</artifactId>
-		    <version>0.9.10</version>
-		</dependency>		
-		<dependency>
-		  <groupId>org.eclipse.jgit</groupId>
-		  <artifactId>org.eclipse.jgit</artifactId>
-		  <version>5.12.0.202106070339-r</version>
-		</dependency>		
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.20.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

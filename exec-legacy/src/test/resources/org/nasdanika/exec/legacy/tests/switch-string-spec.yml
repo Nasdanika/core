@@ -1,0 +1,9 @@
+switch:
+   expression: "\"${word}\""
+   case:
+      one: uno
+      two: dos
+      three: tres
+      "2": dos
+      "3": tres
+   default: no comprendo      

@@ -1,7 +1,0 @@
-/**
- * Generated on ${date}
- * @generated
- */
-public class MyClass implements ${import/org.nasdanika.common.SupplierFactory}<${import/java.io.InputStream}> {
-
-}

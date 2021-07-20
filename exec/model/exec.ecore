@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="exec" nsURI="urn:org.nasdanika.exec" nsPrefix="org.nasdanika.exec">
+  <eAnnotations source="urn:org.nasdanika">
+    <details key="documentation-reference" value="doc/exec.md"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/model-element.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Element description for documentation purposes. Not used in generation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eSubpackages name="content" nsURI="urn:org.nasdanika.exec.content" nsPrefix="org.nasdanika.exec.content">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/content/package-summary.md"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//ModelElement">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/content/resource.md"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Resource location resolved relative to the model resource location."/>
+        </eAnnotations>
+        <eAnnotations source="urn:org.nasdanika">
+          <details key="default-feature" value="true"/>
+          <details key="resolve-url" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

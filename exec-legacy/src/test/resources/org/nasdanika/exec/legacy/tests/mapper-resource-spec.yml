@@ -1,0 +1,3 @@
+map:
+   map: map.yml
+   target: ' * ${p1} -- ${p2} * '

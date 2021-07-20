@@ -1,4 +1,0 @@
-if: 
-   condition: ${age} >= 21
-   then: Hello
-   else: Good Bye

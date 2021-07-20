@@ -1,0 +1,9 @@
+yaml:
+    name: icon.gif
+    data:
+        base64:
+            resource: https://www.nasdanika.org/resources/images/ecore/EClass.gif
+    custom-multi-value-attribute:
+        - value-one
+        - value-two
+                

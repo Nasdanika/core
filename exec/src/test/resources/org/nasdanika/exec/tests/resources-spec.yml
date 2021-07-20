@@ -1,8 +1,0 @@
-# Testing container and file
-
-container:
-   name: test-container
-   contents:
-      - file:
-         name: test-file
-         contents: Hello, world!

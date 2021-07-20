@@ -1,3 +1,0 @@
-free-marker:
-   base: free-marker-templates/
-   template: hello.ftl

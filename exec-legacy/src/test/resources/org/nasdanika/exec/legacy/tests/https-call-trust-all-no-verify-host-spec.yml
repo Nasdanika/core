@@ -1,0 +1,4 @@
+http: 
+   url: ${nasdanika}/hello-world.txt
+   trust-all-certificates: true
+   verify-host: false
