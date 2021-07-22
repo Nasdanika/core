@@ -1,4 +1,4 @@
-package org.nasdanika.exec.input;
+package org.nasdanika.exec.legacy.input;
 
 import java.net.URL;
 import java.util.ArrayList;

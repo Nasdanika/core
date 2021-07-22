@@ -1,4 +1,4 @@
-package org.nasdanika.exec.content;
+package org.nasdanika.exec.legacy.content;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package org.nasdanika.exec.content;
+package org.nasdanika.exec.legacy.content;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -15,7 +15,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
-import org.nasdanika.exec.Reference;
+import org.nasdanika.exec.legacy.Reference;
 
 /**
  * Loads content from URL resolved relative to the base url passed to the constructor.

@@ -1,4 +1,4 @@
-package org.nasdanika.exec.input;
+package org.nasdanika.exec.legacy.input;
 
 import java.util.ArrayList;
 import java.util.Collection;

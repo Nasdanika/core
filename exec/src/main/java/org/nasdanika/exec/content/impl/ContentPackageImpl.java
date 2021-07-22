@@ -123,6 +123,16 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getResource_Interpolate() {
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ContentFactory getContentFactory() {
 		return (ContentFactory)getEFactoryInstance();
 	}
@@ -148,6 +158,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		// Create classes and their features
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
+		createEAttribute(resourceEClass, RESOURCE__INTERPOLATE);
 	}
 
 	/**
@@ -186,6 +197,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		// Initialize classes, features, and operations; add parameters
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getResource_Interpolate(), ecorePackage.getEBoolean(), "interpolate", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create annotations
 		// urn:org.nasdanika
@@ -236,6 +248,12 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Resource location resolved relative to the model resource location."
+		   });
+		addAnnotation
+		  (getResource_Interpolate(),
+		   source,
+		   new String[] {
+			   "documentation", "If true, location is interpolated. Default is false."
 		   });
 	}
 

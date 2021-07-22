@@ -18,6 +18,7 @@ import org.nasdanika.exec.impl.ModelElementImpl;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.exec.content.impl.ResourceImpl#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.nasdanika.exec.content.impl.ResourceImpl#isInterpolate <em>Interpolate</em>}</li>
  * </ul>
  *
  * @generated
@@ -32,6 +33,16 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 	 * @ordered
 	 */
 	protected static final String LOCATION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isInterpolate() <em>Interpolate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isInterpolate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean INTERPOLATE_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -78,10 +89,32 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 	 * @generated
 	 */
 	@Override
+	public boolean isInterpolate() {
+		return (Boolean)eDynamicGet(ContentPackage.RESOURCE__INTERPOLATE, ContentPackage.Literals.RESOURCE__INTERPOLATE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setInterpolate(boolean newInterpolate) {
+		eDynamicSet(ContentPackage.RESOURCE__INTERPOLATE, ContentPackage.Literals.RESOURCE__INTERPOLATE, newInterpolate);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ContentPackage.RESOURCE__LOCATION:
 				return getLocation();
+			case ContentPackage.RESOURCE__INTERPOLATE:
+				return isInterpolate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -96,6 +129,9 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 		switch (featureID) {
 			case ContentPackage.RESOURCE__LOCATION:
 				setLocation((String)newValue);
+				return;
+			case ContentPackage.RESOURCE__INTERPOLATE:
+				setInterpolate((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -112,6 +148,9 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 			case ContentPackage.RESOURCE__LOCATION:
 				setLocation(LOCATION_EDEFAULT);
 				return;
+			case ContentPackage.RESOURCE__INTERPOLATE:
+				setInterpolate(INTERPOLATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -126,6 +165,8 @@ public class ResourceImpl extends ModelElementImpl implements Resource {
 		switch (featureID) {
 			case ContentPackage.RESOURCE__LOCATION:
 				return LOCATION_EDEFAULT == null ? getLocation() != null : !LOCATION_EDEFAULT.equals(getLocation());
+			case ContentPackage.RESOURCE__INTERPOLATE:
+				return isInterpolate() != INTERPOLATE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

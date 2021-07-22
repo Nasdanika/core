@@ -1,7 +1,7 @@
-package org.nasdanika.exec.resources;
+package org.nasdanika.exec.legacy.resources;
 
 import org.nasdanika.common.resources.Merger;
-import org.nasdanika.exec.java.CompilationUnit;
+import org.nasdanika.exec.legacy.java.CompilationUnit;
 
 /**
  * What to do if a resource being generated already exists

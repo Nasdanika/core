@@ -1,4 +1,4 @@
-package org.nasdanika.exec.git;
+package org.nasdanika.exec.legacy.git;
 
 import java.io.File;
 import java.util.Collection;

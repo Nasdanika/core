@@ -1,4 +1,4 @@
-package org.nasdanika.exec.input;
+package org.nasdanika.exec.legacy.input;
 
 import java.lang.reflect.Array;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package org.nasdanika.exec.resources;
+package org.nasdanika.exec.legacy.resources;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.git.GitBinaryEntityContainerSupplierFactory;
+import org.nasdanika.exec.legacy.git.GitBinaryEntityContainerSupplierFactory;
 
 /**
  * Git component executes resource components in the context of a Git repository.

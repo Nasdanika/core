@@ -1,4 +1,4 @@
-package org.nasdanika.exec;
+package org.nasdanika.exec.legacy;
 
 import java.net.URL;
 import java.util.LinkedHashMap;

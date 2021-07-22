@@ -1,4 +1,4 @@
-package org.nasdanika.exec;
+package org.nasdanika.exec.legacy;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -24,7 +24,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.input.PropertySet;
+import org.nasdanika.exec.legacy.input.PropertySet;
 
 /**
  * Group is a collection of components with input specification and validation.

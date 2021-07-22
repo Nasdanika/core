@@ -1,4 +1,4 @@
-package org.nasdanika.exec.content;
+package org.nasdanika.exec.legacy.content;
 
 import java.io.InputStream;
 import java.net.URL;

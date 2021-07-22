@@ -1,4 +1,4 @@
-package org.nasdanika.exec.resources;
+package org.nasdanika.exec.legacy.resources;
 
 import java.net.URL;
 import java.util.ArrayList;

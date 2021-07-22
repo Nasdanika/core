@@ -1,4 +1,4 @@
-package org.nasdanika.exec.java;
+package org.nasdanika.exec.legacy.java;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -27,9 +27,9 @@ import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.common.resources.Merger;
-import org.nasdanika.exec.java.Package.PackageInfo;
-import org.nasdanika.exec.resources.File;
-import org.nasdanika.exec.resources.ReconcileAction;
+import org.nasdanika.exec.legacy.java.Package.PackageInfo;
+import org.nasdanika.exec.legacy.resources.File;
+import org.nasdanika.exec.legacy.resources.ReconcileAction;
 
 public class CompilationUnit extends File {
 

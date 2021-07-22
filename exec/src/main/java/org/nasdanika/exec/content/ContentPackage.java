@@ -87,13 +87,22 @@ public interface ContentPackage extends EPackage {
 	int RESOURCE__LOCATION = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Interpolate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__INTERPOLATE = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE_FEATURE_COUNT = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -125,6 +134,17 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getResource_Location();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.content.Resource#isInterpolate <em>Interpolate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Interpolate</em>'.
+	 * @see org.nasdanika.exec.content.Resource#isInterpolate()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EAttribute getResource_Interpolate();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -166,6 +186,14 @@ public interface ContentPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute RESOURCE__LOCATION = eINSTANCE.getResource_Location();
+
+		/**
+		 * The meta object literal for the '<em><b>Interpolate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RESOURCE__INTERPOLATE = eINSTANCE.getResource_Interpolate();
 
 	}
 

@@ -1,4 +1,4 @@
-package org.nasdanika.exec.java;
+package org.nasdanika.exec.legacy.java;
 
 import java.net.URL;
 import java.util.Collection;
@@ -12,8 +12,8 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.exec.resources.Container;
-import org.nasdanika.exec.resources.ReconcileAction;
+import org.nasdanika.exec.legacy.resources.Container;
+import org.nasdanika.exec.legacy.resources.ReconcileAction;
 
 public class SourceFolder extends Container {
 	

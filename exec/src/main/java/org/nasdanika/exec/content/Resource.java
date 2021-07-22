@@ -14,6 +14,7 @@ import org.nasdanika.exec.ModelElement;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.exec.content.Resource#getLocation <em>Location</em>}</li>
+ *   <li>{@link org.nasdanika.exec.content.Resource#isInterpolate <em>Interpolate</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.exec.content.ContentPackage#getResource()
@@ -46,5 +47,30 @@ public interface Resource extends ModelElement {
 	 * @generated
 	 */
 	void setLocation(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Interpolate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * If true, location is interpolated. Default is false.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Interpolate</em>' attribute.
+	 * @see #setInterpolate(boolean)
+	 * @see org.nasdanika.exec.content.ContentPackage#getResource_Interpolate()
+	 * @model
+	 * @generated
+	 */
+	boolean isInterpolate();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.exec.content.Resource#isInterpolate <em>Interpolate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Interpolate</em>' attribute.
+	 * @see #isInterpolate()
+	 * @generated
+	 */
+	void setInterpolate(boolean value);
 
 } // Resource

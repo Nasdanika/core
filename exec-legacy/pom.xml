@@ -7,7 +7,7 @@
 	    <version>2021.8.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>exec</artifactId>
+	<artifactId>exec-legacy</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Execution Participants Library</name>
 

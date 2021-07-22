@@ -18,6 +18,13 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/content/package-summary.md"/>
     </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Base64">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/content/base-64.md"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+    </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//ModelElement">
       <eAnnotations source="urn:org.nasdanika">
         <details key="documentation-reference" value="doc/content/resource.md"/>
@@ -30,6 +37,11 @@
         <eAnnotations source="urn:org.nasdanika">
           <details key="default-feature" value="true"/>
           <details key="resolve-url" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="interpolate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If true, location is interpolated. Default is false."/>
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>

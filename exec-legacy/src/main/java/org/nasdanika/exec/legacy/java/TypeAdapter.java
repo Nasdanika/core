@@ -1,11 +1,11 @@
-package org.nasdanika.exec.java;
+package org.nasdanika.exec.legacy.java;
 
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.exec.resources.ReconcileAction;
+import org.nasdanika.exec.legacy.resources.ReconcileAction;
 
 /**
  * Allows type duality - as a resource and as content. 

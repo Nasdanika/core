@@ -43,8 +43,8 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
 				try {
 					Resource resource = (Resource) getTarget();
-					String iUrl = context.interpolateToString(resource.getLocation()); // TODO - configurable interpolation.
-					theURL = new URL(iUrl); //iUrl.startsWith(Reference.CLASSPATH_URL_PREFIX) ? classLoader.getResource(iUrl.substring(Reference.CLASSPATH_URL_PREFIX.length())) : new URL(base, iUrl);
+					String iUrl = resource.isInterpolate() ? context.interpolateToString(resource.getLocation()) : resource.getLocation(); 
+					theURL = new URL(iUrl); 
 					return Supplier.super.diagnose(progressMonitor);
 				} catch (MalformedURLException e) {					
 					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (marker == null ? "" : " at " + marker));

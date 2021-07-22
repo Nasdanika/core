@@ -14,6 +14,7 @@
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Resource">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/location"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/interpolate"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

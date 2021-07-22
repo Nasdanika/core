@@ -1,4 +1,4 @@
-package org.nasdanika.exec.java;
+package org.nasdanika.exec.legacy.java;
 
 import java.util.Collection;
 import java.util.function.Function;
