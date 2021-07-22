@@ -1,8 +1,0 @@
-engineering-module:
-  name: Ncore
-  path: ncore
-  representations:
-    - representation-component-diagram: true
-  dependencies:
-    - nasdanika:modules/core/modules/emf
-  
