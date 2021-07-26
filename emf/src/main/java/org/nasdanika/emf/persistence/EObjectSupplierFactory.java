@@ -1,6 +1,5 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -115,12 +114,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					@Override
 					public Object create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
 						Object ret = super.create(loader, config, base, progressMonitor, marker);
-						if (ret instanceof String && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URL))) {
-							try {
-								return new URL(base, (String) ret).toString();
-							} catch (MalformedURLException e) {
-								throw new ConfigurationException("Cannot resolve URL '" + ret + "': " + e, e, marker);
-							}
+						if (ret instanceof String && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
+							return base.toURI().resolve((String) ret).toString();
 						}
 						return ret;
 					}

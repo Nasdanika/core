@@ -51,9 +51,9 @@ public class EObjectLoader extends DispatchingLoader {
 	
 	/**
 	 * If this Nasdanika annotation details is set to "true" on a {@link EAttribute} and configuration object is a {@link String}
-	 * then the configuration object is parsed to {@link URL} and then resolved relative to the model resource URL. 
+	 * then the configuration object is resolved relative to the model resource {@link URI} (base). 
 	 */
-	public static final String IS_RESOLVE_URL = "resolve-url";
+	public static final String IS_RESOLVE_URI = "resolve-uri";
 	
 	/**
 	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.
