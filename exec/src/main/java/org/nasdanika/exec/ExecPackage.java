@@ -5,6 +5,7 @@ package org.nasdanika.exec;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,7 +21,7 @@ import org.eclipse.emf.ecore.EPackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.ExecFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/exec.md'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md'"
  * @generated
  */
 public interface ExecPackage extends EPackage {
@@ -95,6 +96,218 @@ public interface ExecPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.BlockImpl <em>Block</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.BlockImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getBlock()
+	 * @generated
+	 */
+	int BLOCK = 1;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__TRY = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Catch</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__CATCH = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Finally</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__FINALLY = MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Block</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.CallImpl <em>Call</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.CallImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getCall()
+	 * @generated
+	 */
+	int CALL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__TYPE = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Property</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__PROPERTY = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Service</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__SERVICE = MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Method</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__METHOD = MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__PROPERTIES = MODEL_ELEMENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Init</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__INIT = MODEL_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__ARGUMENTS = MODEL_ELEMENT_FEATURE_COUNT + 6;
+
+	/**
+	 * The number of structural features of the '<em>Call</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 7;
+
+	/**
+	 * The number of operations of the '<em>Call</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.PropertyImpl <em>Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.PropertyImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getProperty()
+	 * @generated
+	 */
+	int PROPERTY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -114,6 +327,170 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getModelElement_Description();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.Block <em>Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Block</em>'.
+	 * @see org.nasdanika.exec.Block
+	 * @generated
+	 */
+	EClass getBlock();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.Block#getTry <em>Try</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Try</em>'.
+	 * @see org.nasdanika.exec.Block#getTry()
+	 * @see #getBlock()
+	 * @generated
+	 */
+	EReference getBlock_Try();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.Block#getCatch <em>Catch</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Catch</em>'.
+	 * @see org.nasdanika.exec.Block#getCatch()
+	 * @see #getBlock()
+	 * @generated
+	 */
+	EReference getBlock_Catch();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.Block#getFinally <em>Finally</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Finally</em>'.
+	 * @see org.nasdanika.exec.Block#getFinally()
+	 * @see #getBlock()
+	 * @generated
+	 */
+	EReference getBlock_Finally();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.Call <em>Call</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Call</em>'.
+	 * @see org.nasdanika.exec.Call
+	 * @generated
+	 */
+	EClass getCall();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.Call#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.nasdanika.exec.Call#getType()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EAttribute getCall_Type();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.Call#getProperty <em>Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Property</em>'.
+	 * @see org.nasdanika.exec.Call#getProperty()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EAttribute getCall_Property();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.Call#getService <em>Service</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service</em>'.
+	 * @see org.nasdanika.exec.Call#getService()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EAttribute getCall_Service();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.Call#getMethod <em>Method</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Method</em>'.
+	 * @see org.nasdanika.exec.Call#getMethod()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EAttribute getCall_Method();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.exec.Call#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Properties</em>'.
+	 * @see org.nasdanika.exec.Call#getProperties()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EReference getCall_Properties();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.Call#getInit <em>Init</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Init</em>'.
+	 * @see org.nasdanika.exec.Call#getInit()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EReference getCall_Init();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.Call#getArguments <em>Arguments</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Arguments</em>'.
+	 * @see org.nasdanika.exec.Call#getArguments()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EReference getCall_Arguments();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Property</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 *        valueType="org.eclipse.emf.ecore.EObject" valueContainment="true" valueRequired="true"
+	 * @generated
+	 */
+	EClass getProperty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getProperty()
+	 * @generated
+	 */
+	EAttribute getProperty_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getProperty()
+	 * @generated
+	 */
+	EReference getProperty_Value();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -155,6 +532,132 @@ public interface ExecPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_ELEMENT__DESCRIPTION = eINSTANCE.getModelElement_Description();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.BlockImpl <em>Block</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.BlockImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getBlock()
+		 * @generated
+		 */
+		EClass BLOCK = eINSTANCE.getBlock();
+
+		/**
+		 * The meta object literal for the '<em><b>Try</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BLOCK__TRY = eINSTANCE.getBlock_Try();
+
+		/**
+		 * The meta object literal for the '<em><b>Catch</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BLOCK__CATCH = eINSTANCE.getBlock_Catch();
+
+		/**
+		 * The meta object literal for the '<em><b>Finally</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BLOCK__FINALLY = eINSTANCE.getBlock_Finally();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.CallImpl <em>Call</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.CallImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getCall()
+		 * @generated
+		 */
+		EClass CALL = eINSTANCE.getCall();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL__TYPE = eINSTANCE.getCall_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Property</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL__PROPERTY = eINSTANCE.getCall_Property();
+
+		/**
+		 * The meta object literal for the '<em><b>Service</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL__SERVICE = eINSTANCE.getCall_Service();
+
+		/**
+		 * The meta object literal for the '<em><b>Method</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL__METHOD = eINSTANCE.getCall_Method();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CALL__PROPERTIES = eINSTANCE.getCall_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Init</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CALL__INIT = eINSTANCE.getCall_Init();
+
+		/**
+		 * The meta object literal for the '<em><b>Arguments</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CALL__ARGUMENTS = eINSTANCE.getCall_Arguments();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.PropertyImpl <em>Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.PropertyImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getProperty()
+		 * @generated
+		 */
+		EClass PROPERTY = eINSTANCE.getProperty();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROPERTY__KEY = eINSTANCE.getProperty_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROPERTY__VALUE = eINSTANCE.getProperty_Value();
 
 	}
 

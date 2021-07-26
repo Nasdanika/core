@@ -1,0 +1,5 @@
+exec-call:
+  class: org.nasdanika.exec.gen.tests.TestCall$CallTarget
+  method: greet
+  arguments:
+    content-text: Hi

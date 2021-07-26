@@ -16,10 +16,13 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
+import org.nasdanika.emf.persistence.LoadingExecutionParticipant;
 import org.nasdanika.exec.content.Resource;
 
 public class ResourceSupplierFactoryAdapter extends AdapterImpl implements SupplierFactory<InputStream> {
 
+	private static final String CLASSPATH_URI_PREFIX = LoadingExecutionParticipant.CLASSPATH_SCHEME + ":";
+	
 	private Marker marker;
 	
 	public ResourceSupplierFactoryAdapter(Resource resource) {
@@ -44,7 +47,10 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 				try {
 					Resource resource = (Resource) getTarget();
 					String iUrl = resource.isInterpolate() ? context.interpolateToString(resource.getLocation()) : resource.getLocation(); 
-					theURL = new URL(iUrl); 
+					theURL = iUrl.startsWith(CLASSPATH_URI_PREFIX) ? getClass().getClassLoader().getResource(iUrl.substring(CLASSPATH_URI_PREFIX.length())) : new URL(iUrl);
+					if (theURL == null) {
+						return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, marker);						
+					}
 					return Supplier.super.diagnose(progressMonitor);
 				} catch (MalformedURLException e) {					
 					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (marker == null ? "" : " at " + marker));

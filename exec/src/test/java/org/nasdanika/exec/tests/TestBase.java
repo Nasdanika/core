@@ -2,6 +2,8 @@ package org.nasdanika.exec.tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +15,8 @@ import java.util.function.Consumer;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 import org.nasdanika.common.Command;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagnosticException;
@@ -72,6 +76,20 @@ public class TestBase {
 	}
 	
 	// TODO - supplier, consumer, command tests - chaining with then
+	/**
+	 * Loads resource and passes its root to the consumer.
+	 * @param resource Resource location relative to the test class.
+	 * @param consumer Consumer of the resource root - typically with assertions.
+	 * @param diagnosticConsumer Consumer of diagnostic to validate status.
+	 * @throws Exception
+	 */
+	protected void load(
+			String resource, 
+			Consumer<EObject> consumer, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		
+		load(resource, Context.EMPTY_CONTEXT, consumer, diagnosticConsumer);
+	}
 
 	/**
 	 * Loads resource and passes its root to the consumer.
@@ -80,7 +98,11 @@ public class TestBase {
 	 * @param diagnosticConsumer Consumer of diagnostic to validate status.
 	 * @throws Exception
 	 */
-	protected void load(String resource, Consumer<EObject> consumer, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {	
+	protected void load(
+			String resource,
+			Context context, 
+			Consumer<EObject> consumer, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {	
 		// Outputs to console, send to file if desired.
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		
@@ -91,8 +113,27 @@ public class TestBase {
 			}
 
 			@Override
-			protected Collection<URI> getResources() {
+			protected Collection<URI> getResources() {				
 				return Collections.singleton(URI.createURI(TestBase.this.getClass().getResource(resource).toString()));
+			}
+
+			@Override
+			protected ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
+				ResourceSet rs = super.createResourceSet(progressMonitor);
+				rs.getURIConverter().getURIHandlers().add(new URIHandlerImpl() {
+
+					@Override
+					public boolean canHandle(URI uri) {
+						return uri != null && "classpath".equals(uri.scheme());
+					}
+
+					@Override
+					public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException {
+						return getClass().getClassLoader().getResourceAsStream(uri.path());
+					}
+					
+				});
+				return rs;
 			}
 
 			@Override
@@ -107,7 +148,7 @@ public class TestBase {
 		
 		// Diagnosing loaded resources. 
 		try {
-			org.nasdanika.common.Diagnostic diagnostic = Util.call(new TestCommand(Context.EMPTY_CONTEXT), progressMonitor);
+			org.nasdanika.common.Diagnostic diagnostic = Util.call(new TestCommand(context), progressMonitor);
 			if (diagnosticConsumer != null) {
 				diagnosticConsumer.accept(diagnostic);
 			}

@@ -2,6 +2,7 @@
  */
 package org.nasdanika.exec.impl;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -56,9 +57,44 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ExecPackage.BLOCK: return createBlock();
+			case ExecPackage.CALL: return createCall();
+			case ExecPackage.PROPERTY: return (EObject)createProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Block createBlock() {
+		BlockImpl block = new BlockImpl();
+		return block;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Call createCall() {
+		CallImpl call = new CallImpl();
+		return call;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, EObject> createProperty() {
+		PropertyImpl property = new PropertyImpl();
+		return property;
 	}
 
 	/**

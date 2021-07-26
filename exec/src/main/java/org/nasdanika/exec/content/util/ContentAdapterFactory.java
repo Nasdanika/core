@@ -70,8 +70,16 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 	protected ContentSwitch<Adapter> modelSwitch =
 		new ContentSwitch<Adapter>() {
 			@Override
+			public Adapter caseBase64(Base64 object) {
+				return createBase64Adapter();
+			}
+			@Override
 			public Adapter caseResource(Resource object) {
 				return createResourceAdapter();
+			}
+			@Override
+			public Adapter caseText(Text object) {
+				return createTextAdapter();
 			}
 			@Override
 			public Adapter caseModelElement(ModelElement object) {
@@ -98,6 +106,20 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.content.Base64 <em>Base64</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.exec.content.Base64
+	 * @generated
+	 */
+	public Adapter createBase64Adapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.content.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -108,6 +130,20 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createResourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.content.Text <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.exec.content.Text
+	 * @generated
+	 */
+	public Adapter createTextAdapter() {
 		return null;
 	}
 

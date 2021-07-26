@@ -6,14 +6,17 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.nasdanika.exec.ExecPackage;
 
+import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Resource;
 
+import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.impl.ExecPackageImpl;
 
 /**
@@ -28,7 +31,20 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass base64EClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass resourceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass textEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -103,6 +119,26 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getBase64() {
+		return base64EClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBase64_Sources() {
+		return (EReference)base64EClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getResource() {
 		return resourceEClass;
 	}
@@ -125,6 +161,36 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	@Override
 	public EAttribute getResource_Interpolate() {
 		return (EAttribute)resourceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getText() {
+		return textEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Content() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getText_Interpolate() {
+		return (EAttribute)textEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -156,9 +222,16 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		base64EClass = createEClass(BASE64);
+		createEReference(base64EClass, BASE64__SOURCES);
+
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
 		createEAttribute(resourceEClass, RESOURCE__INTERPOLATE);
+
+		textEClass = createEClass(TEXT);
+		createEAttribute(textEClass, TEXT__CONTENT);
+		createEAttribute(textEClass, TEXT__INTERPOLATE);
 	}
 
 	/**
@@ -192,12 +265,21 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		base64EClass.getESuperTypes().add(theExecPackage.getModelElement());
 		resourceEClass.getESuperTypes().add(theExecPackage.getModelElement());
+		textEClass.getESuperTypes().add(theExecPackage.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
+		initEClass(base64EClass, Base64.class, "Base64", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBase64_Sources(), ecorePackage.getEObject(), null, "sources", null, 0, -1, Base64.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResource_Interpolate(), ecorePackage.getEBoolean(), "interpolate", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 1, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getText_Interpolate(), ecorePackage.getEBoolean(), "interpolate", "true", 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create annotations
 		// urn:org.nasdanika
@@ -221,6 +303,12 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 			   "documentation-reference", "doc/content/package-summary.md"
 		   });
 		addAnnotation
+		  (base64EClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/content/base-64.md"
+		   });
+		addAnnotation
 		  (resourceEClass,
 		   source,
 		   new String[] {
@@ -231,7 +319,19 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "default-feature", "true",
-			   "resolve-url", "true"
+			   "resolve-uri", "true"
+		   });
+		addAnnotation
+		  (textEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/content/text.md"
+		   });
+		addAnnotation
+		  (getText_Content(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
 		   });
 	}
 
@@ -254,6 +354,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "documentation", "If true, location is interpolated. Default is false."
+		   });
+		addAnnotation
+		  (getText_Content(),
+		   source,
+		   new String[] {
+			   "documentation", "Text content."
+		   });
+		addAnnotation
+		  (getText_Interpolate(),
+		   source,
+		   new String[] {
+			   "documentation", "If ``true`` (default), content is interpolated."
 		   });
 	}
 

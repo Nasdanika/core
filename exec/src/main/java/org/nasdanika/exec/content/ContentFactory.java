@@ -22,6 +22,15 @@ public interface ContentFactory extends EFactory {
 	ContentFactory eINSTANCE = org.nasdanika.exec.content.impl.ContentFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Base64</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base64</em>'.
+	 * @generated
+	 */
+	Base64 createBase64();
+
+	/**
 	 * Returns a new object of class '<em>Resource</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -29,6 +38,15 @@ public interface ContentFactory extends EFactory {
 	 * @generated
 	 */
 	Resource createResource();
+
+	/**
+	 * Returns a new object of class '<em>Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Text</em>'.
+	 * @generated
+	 */
+	Text createText();
 
 	/**
 	 * Returns the package supported by this factory.

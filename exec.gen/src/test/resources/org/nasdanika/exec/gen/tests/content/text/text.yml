@@ -1,0 +1,5 @@
+content-text:
+   description: Full text definition
+   interpolate: false
+   content: Hello ${token}.
+   

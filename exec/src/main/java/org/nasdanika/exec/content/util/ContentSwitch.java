@@ -68,6 +68,13 @@ public class ContentSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case ContentPackage.BASE64: {
+				Base64 base64 = (Base64)theEObject;
+				T result = caseBase64(base64);
+				if (result == null) result = caseModelElement(base64);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ContentPackage.RESOURCE: {
 				Resource resource = (Resource)theEObject;
 				T result = caseResource(resource);
@@ -75,8 +82,30 @@ public class ContentSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ContentPackage.TEXT: {
+				Text text = (Text)theEObject;
+				T result = caseText(text);
+				if (result == null) result = caseModelElement(text);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base64</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base64</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBase64(Base64 object) {
+		return null;
 	}
 
 	/**
@@ -91,6 +120,21 @@ public class ContentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseResource(Resource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseText(Text object) {
 		return null;
 	}
 

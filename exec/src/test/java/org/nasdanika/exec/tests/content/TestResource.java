@@ -19,11 +19,11 @@ public class TestResource extends TestBase {
 	@Test
 	public void testFullDefinition() throws Exception {	
 		load(
-				"resource.yml", 
+				"resource/resource.yml", 
 				obj -> {
 					Resource resource = (Resource) obj;
 					assertThat(resource.getDescription()).isEqualTo("Full resource definition");
-					assertThat(resource.getLocation()).isEqualTo(getClass().getResource("hello.txt").toString());
+					assertThat(resource.getLocation()).isEqualTo(getClass().getResource("resource/hello.txt").toString());
 				},
 				diagnostic -> {
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
@@ -33,11 +33,11 @@ public class TestResource extends TestBase {
 	@Test
 	public void testDefaultFeature() throws Exception {	
 		load(
-				"resource-default-feature.yml", 
+				"resource/resource-default-feature.yml", 
 				obj -> {
 					Resource resource = (Resource) obj;
 					assertThat(resource.getDescription()).isNull();
-					assertThat(resource.getLocation()).isEqualTo(getClass().getResource("hello.txt").toString());
+					assertThat(resource.getLocation()).isEqualTo(getClass().getResource("resource/hello.txt").toString());
 				}, 
 				diagnostic -> {
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
@@ -47,7 +47,7 @@ public class TestResource extends TestBase {
 	@Test(expected = ConfigurationException.class)	
 	public void testMissingLocation() throws Exception {	
 		load(
-				"resource-no-location.yml", 
+				"resource/resource-no-location.yml", 
 				obj -> {
 					fail("Should not be called");
 				},

@@ -2,12 +2,17 @@
  */
 package org.nasdanika.exec.impl;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.nasdanika.exec.Block;
+import org.nasdanika.exec.Call;
 import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.ModelElement;
@@ -15,6 +20,7 @@ import org.nasdanika.exec.ModelElement;
 import org.nasdanika.exec.content.ContentPackage;
 
 import org.nasdanika.exec.content.impl.ContentPackageImpl;
+import org.nasdanika.exec.util.ExecValidator;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +35,27 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	private EClass modelElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass blockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass callEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass propertyEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -89,6 +116,16 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		theExecPackage.initializePackageContents();
 		theContentPackage.initializePackageContents();
 
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(theExecPackage,
+			 new EValidator.Descriptor() {
+				 @Override
+				 public EValidator getEValidator() {
+					 return ExecValidator.INSTANCE;
+				 }
+			 });
+
 		// Mark meta-data to indicate it can't be changed
 		theExecPackage.freeze();
 
@@ -123,6 +160,156 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getBlock() {
+		return blockEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBlock_Try() {
+		return (EReference)blockEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBlock_Catch() {
+		return (EReference)blockEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getBlock_Finally() {
+		return (EReference)blockEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getCall() {
+		return callEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCall_Type() {
+		return (EAttribute)callEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCall_Property() {
+		return (EAttribute)callEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCall_Service() {
+		return (EAttribute)callEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCall_Method() {
+		return (EAttribute)callEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCall_Properties() {
+		return (EReference)callEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCall_Init() {
+		return (EReference)callEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCall_Arguments() {
+		return (EReference)callEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getProperty() {
+		return propertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProperty_Key() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getProperty_Value() {
+		return (EReference)propertyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -148,6 +335,24 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Create classes and their features
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
+
+		blockEClass = createEClass(BLOCK);
+		createEReference(blockEClass, BLOCK__TRY);
+		createEReference(blockEClass, BLOCK__CATCH);
+		createEReference(blockEClass, BLOCK__FINALLY);
+
+		callEClass = createEClass(CALL);
+		createEAttribute(callEClass, CALL__TYPE);
+		createEAttribute(callEClass, CALL__PROPERTY);
+		createEAttribute(callEClass, CALL__SERVICE);
+		createEAttribute(callEClass, CALL__METHOD);
+		createEReference(callEClass, CALL__PROPERTIES);
+		createEReference(callEClass, CALL__INIT);
+		createEReference(callEClass, CALL__ARGUMENTS);
+
+		propertyEClass = createEClass(PROPERTY);
+		createEAttribute(propertyEClass, PROPERTY__KEY);
+		createEReference(propertyEClass, PROPERTY__VALUE);
 	}
 
 	/**
@@ -184,10 +389,30 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		blockEClass.getESuperTypes().add(this.getModelElement());
+		callEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(blockEClass, Block.class, "Block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBlock_Try(), ecorePackage.getEObject(), null, "try", null, 1, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBlock_Catch(), ecorePackage.getEObject(), null, "catch", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBlock_Finally(), ecorePackage.getEObject(), null, "finally", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(callEClass, Call.class, "Call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCall_Type(), ecorePackage.getEString(), "type", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCall_Property(), ecorePackage.getEString(), "property", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCall_Service(), ecorePackage.getEString(), "service", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCall_Method(), ecorePackage.getEString(), "method", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCall_Properties(), this.getProperty(), null, "properties", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCall_Init(), ecorePackage.getEObject(), null, "init", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCall_Arguments(), ecorePackage.getEObject(), null, "arguments", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(propertyEClass, Map.Entry.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -197,6 +422,8 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		createUrnorgAnnotations();
 		// http://www.eclipse.org/emf/2002/GenModel
 		createGenModelAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
 	}
 
 	/**
@@ -211,13 +438,50 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/exec.md"
+			   "documentation-reference", "doc/package-summary.md"
 		   });
 		addAnnotation
 		  (modelElementEClass,
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/model-element.md"
+		   });
+		addAnnotation
+		  (blockEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/block.md"
+		   });
+		addAnnotation
+		  (callEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/call.md"
+		   });
+		addAnnotation
+		  (getCall_Type(),
+		   source,
+		   new String[] {
+			   "load-key", "class",
+			   "exclusive-with", "service property"
+		   });
+		addAnnotation
+		  (getCall_Property(),
+		   source,
+		   new String[] {
+			   "exclusive-with", "class service"
+		   });
+		addAnnotation
+		  (getCall_Service(),
+		   source,
+		   new String[] {
+			   "exclusive-with", "class property"
+		   });
+		addAnnotation
+		  (getCall_Init(),
+		   source,
+		   new String[] {
+			   "exclusive-with", "service property"
 		   });
 	}
 
@@ -234,6 +498,64 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Element description for documentation purposes. Not used in generation."
+		   });
+		addAnnotation
+		  (getCall_Type(),
+		   source,
+		   new String[] {
+			   "documentation", "Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required."
+		   });
+		addAnnotation
+		  (getCall_Property(),
+		   source,
+		   new String[] {
+			   "documentation", "Context property name. Mutually exclusive with ``class`` and ``service``. One of ``class``, ``property``, or ``service`` is required."
+		   });
+		addAnnotation
+		  (getCall_Service(),
+		   source,
+		   new String[] {
+			   "documentation", "Fully qualified context service class name. Mutually exclusive with ``class`` and ``property``. One of ``class``, ``property``, or ``service`` is required."
+		   });
+		addAnnotation
+		  (getCall_Method(),
+		   source,
+		   new String[] {
+			   "documentation", "An optional method to call. In the ``class`` case the method can be static. If the method is static the class is not instantiated and if ``init`` or ``properties`` are present it results in an exception."
+		   });
+		addAnnotation
+		  (getCall_Properties(),
+		   source,
+		   new String[] {
+			   "documentation", "A map injected into the instance in the ``class`` case if the instance implements ${javadoc/java.util.function.BiConsumer} or in the service or property case if they implement SupplierFactory. If elements implement SupplierFactory then the supplier factory is used to produce value to be injected. Otherwise elements are injected AS-IS."
+		   });
+		addAnnotation
+		  (getCall_Init(),
+		   source,
+		   new String[] {
+			   "documentation", "An optional array of constructor arguments for the ``class``. Not applicable for ``property`` and ``service``. If elements implement SupplierFactory then the factory is used to produce argument values. Then arguments get converted to constructor parameter types if conversion is available. If conversion is not available, an exception is thrown."
+		   });
+		addAnnotation
+		  (getCall_Arguments(),
+		   source,
+		   new String[] {
+			   "documentation", "An optional array of method arguments. If elements implement SupplierFactory, then the factory is used to produce argument value. Then arguments get converted to method parameter types if conversion is available. If conversion is not available, an exception is thrown."
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore";
+		addAnnotation
+		  (callEClass,
+		   source,
+		   new String[] {
+			   "constraints", "service_property_class method_arguments"
 		   });
 	}
 

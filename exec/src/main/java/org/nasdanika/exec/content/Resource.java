@@ -33,7 +33,7 @@ public interface Resource extends ModelElement {
 	 * @see #setLocation(String)
 	 * @see org.nasdanika.exec.content.ContentPackage#getResource_Location()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika default-feature='true' resolve-url='true'"
+	 *        annotation="urn:org.nasdanika default-feature='true' resolve-uri='true'"
 	 * @generated
 	 */
 	String getLocation();

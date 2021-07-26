@@ -1,0 +1,1 @@
+Content classes are adapted to ``SupplierFactory<InputStream>`` to supply content for files, HTTP Call bodies etc. in a form of input streams.

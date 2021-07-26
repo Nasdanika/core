@@ -56,7 +56,9 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ContentPackage.BASE64: return createBase64();
 			case ContentPackage.RESOURCE: return createResource();
+			case ContentPackage.TEXT: return createText();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -68,9 +70,31 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 	 * @generated
 	 */
 	@Override
+	public Base64 createBase64() {
+		Base64Impl base64 = new Base64Impl();
+		return base64;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Resource createResource() {
 		ResourceImpl resource = new ResourceImpl();
 		return resource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Text createText() {
+		TextImpl text = new TextImpl();
+		return text;
 	}
 
 	/**

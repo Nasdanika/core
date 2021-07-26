@@ -11,10 +11,35 @@
     <genClasses image="false" ecoreClass="exec.ecore#//ModelElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//ModelElement/description"/>
     </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Block">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Block/try"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Block/catch"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Block/finally"/>
+    </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Call">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Call/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Call/property"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Call/service"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Call/method"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Call/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Call/init"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Call/arguments"/>
+    </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Property/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Property/value"/>
+    </genClasses>
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
+      <genClasses ecoreClass="exec.ecore#//content/Base64">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>
+      </genClasses>
       <genClasses ecoreClass="exec.ecore#//content/Resource">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/location"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/interpolate"/>
+      </genClasses>
+      <genClasses ecoreClass="exec.ecore#//content/Text">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/content"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/interpolate"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

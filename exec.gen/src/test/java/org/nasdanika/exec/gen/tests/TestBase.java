@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -91,7 +92,12 @@ public class TestBase {
 
 			@Override
 			protected Collection<URI> getResources() {
-				return Collections.singleton(URI.createURI(TestBase.this.getClass().getResource(resource).toString()));
+				Class<? extends TestBase> clazz = TestBase.this.getClass();
+				URL resourceURL = clazz.getResource(resource);
+				if (resourceURL == null) {
+					throw new IllegalArgumentException("Classloader resource not found: " + resource + " by " + clazz); 
+				}
+				return Collections.singleton(URI.createURI(resourceURL.toString()));
 			}
 
 			@Override
@@ -137,19 +143,35 @@ public class TestBase {
 	protected InputStream loadInputStream(
 			String resource, 
 			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
-			Context context,
+			Context modelContext,
+			Context generationContext,
 			ProgressMonitor progressMonitor) throws Exception {
-		EObject eObject = Objects.requireNonNull(loadObject(resource, diagnosticConsumer, context, progressMonitor), "Loaded null from " + resource);
-		return loadInputStream(eObject, diagnosticConsumer, context, progressMonitor);
+		EObject eObject = Objects.requireNonNull(loadObject(resource, diagnosticConsumer, modelContext, progressMonitor), "Loaded null from " + resource);
+		return loadInputStream(eObject, diagnosticConsumer, generationContext, progressMonitor);
 	}
 	
-	
-	protected InputStream loadInputStream(String resource, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+	protected InputStream loadInputStream(
+			String resource, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
+			Context modelContext,
+			Context generationContext) throws Exception {
 		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
-			return loadInputStream(resource, diagnosticConsumer, Context.EMPTY_CONTEXT, progressMonitor);
+			return loadInputStream(resource, diagnosticConsumer, modelContext, generationContext, progressMonitor);
 		}
 	}
 	
+	/**
+	 * Loads input stream with empty context and {@link PrintStreamProgressMonitor} outputting to System.out
+	 * @param resource
+	 * @param diagnosticConsumer
+	 * @return
+	 * @throws Exception
+	 */
+	protected InputStream loadInputStream(String resource, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return loadInputStream(resource, diagnosticConsumer, Context.EMPTY_CONTEXT, Context.EMPTY_CONTEXT, progressMonitor);
+		}
+	}	
 	
 //	protected InputStream loadInputStream(String resource, Consumer<EObject> consumer, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {	
 

@@ -1,0 +1,6 @@
+# Test of references - relative and classpath:
+exec-block:
+   try: ../content/resource/resource.yml # Relative reference 
+   catch: classpath:org/nasdanika/exec/tests/content/resource/resource-default-feature.yml
+   finally: 
+     content-text: World

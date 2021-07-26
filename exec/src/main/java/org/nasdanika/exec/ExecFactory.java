@@ -22,6 +22,24 @@ public interface ExecFactory extends EFactory {
 	ExecFactory eINSTANCE = org.nasdanika.exec.impl.ExecFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Block</em>'.
+	 * @generated
+	 */
+	Block createBlock();
+
+	/**
+	 * Returns a new object of class '<em>Call</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Call</em>'.
+	 * @generated
+	 */
+	Call createCall();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
