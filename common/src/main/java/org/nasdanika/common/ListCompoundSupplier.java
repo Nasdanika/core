@@ -5,17 +5,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Supplier<E>> implements Supplier<List<E>>  {
+public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Supplier<? extends E>> implements Supplier<List<E>>  {
 
-	public ListCompoundSupplier(String name, Collection<Supplier<E>> suppliers) {
+	public ListCompoundSupplier(String name, Collection<Supplier<? extends E>> suppliers) {
 		super(name);
-		for (Supplier<E> supplier: suppliers) {
+		for (Supplier<? extends E> supplier: suppliers) {
 			add(supplier);
 		}
 	}
 	
 	@SafeVarargs
-	public ListCompoundSupplier(String name, Supplier<E>... suppliers) {
+	public ListCompoundSupplier(String name, Supplier<? extends E>... suppliers) {
 		this(name, Arrays.asList(suppliers));
 	}
 
@@ -23,7 +23,7 @@ public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Su
 	public List<E> execute(ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());
 		List<E> result = new ArrayList<>();
-		for (Supplier<E> e: getElements()) {
+		for (Supplier<? extends E> e: getElements()) {
 			result.add(e.splitAndExecute(progressMonitor));			
 		}
 		return result;

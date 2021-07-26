@@ -4,13 +4,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,Supplier<T>> implements Supplier<Map<K,T>>  {
+public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,Supplier<? extends T>> implements Supplier<Map<K,T>>  {
 
 	public MapCompoundSupplier(String name) {
 		super(name);
 	}
 
-	public MapCompoundSupplier(String name, Map<K,Supplier<T>> suppliers) {
+	public MapCompoundSupplier(String name, Map<K,Supplier<? extends T>> suppliers) {
 		super(name);
 		suppliers.forEach(this::put);
 	}
@@ -19,7 +19,7 @@ public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,
 	public Map<K,T> execute(ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());
 		Map<K,T> result = new LinkedHashMap<>();
-		for (Entry<K, Supplier<T>> e: elements.entrySet()) {
+		for (Entry<K, Supplier<? extends T>> e: elements.entrySet()) {
 			result.put(e.getKey(), e.getValue().splitAndExecute(progressMonitor));			
 		}
 		return result;

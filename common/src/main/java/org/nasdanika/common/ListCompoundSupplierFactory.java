@@ -9,29 +9,29 @@ import java.util.Objects;
 public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> {
 
 	private String name;
-	private List<SupplierFactory<T>> elements = new ArrayList<>();
+	private List<SupplierFactory<? extends T>> elements = new ArrayList<>();
 
-	public ListCompoundSupplierFactory(String name, Collection<? extends SupplierFactory<T>> elements) {
+	public ListCompoundSupplierFactory(String name, Collection<? extends SupplierFactory<? extends T>> elements) {
 		this.name = name;
 		elements.stream().forEach(Objects::requireNonNull);
 		this.elements.addAll(elements);
 	}
 	
 	@SafeVarargs
-	public ListCompoundSupplierFactory(String name, SupplierFactory<T>... elements) {
+	public ListCompoundSupplierFactory(String name, SupplierFactory<? extends T>... elements) {
 		this(name, Arrays.asList(elements));
 	}
 
 	@Override
 	public Supplier<List<T>> create(Context context) throws Exception {
-		ListCompoundSupplier<T> ret = new ListCompoundSupplier<T>(name);
-		for (SupplierFactory<T> e: elements) {
+		ListCompoundSupplier<T> ret = new ListCompoundSupplier<>(name);
+		for (SupplierFactory<? extends T> e: elements) {
 			ret.add(e.create(context));
 		}
 		return ret;
 	}
 	
-	public void add(SupplierFactory<T> element) {
+	public void add(SupplierFactory<? extends T> element) {
 		elements.add(Objects.requireNonNull(element));
 	}
 
