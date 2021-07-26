@@ -1,12 +1,11 @@
 package org.nasdanika.emf.persistence;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -32,9 +31,8 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 			packageRegistry.put(ePackage.getNsURI(), ePackage);
 		}		
 		
-		Resource.Factory.Registry resourceFactoryRegistry = new ResourceFactoryRegistryImpl();				
-		resourceFactoryRegistry.getExtensionToFactoryMap().put("yml", createYamlResorceFactory(ret, progressMonitor));
-		ret.setResourceFactoryRegistry(resourceFactoryRegistry);
+		Map<String, Object> extensionToFactoryMap = ret.getResourceFactoryRegistry().getExtensionToFactoryMap();
+		extensionToFactoryMap.put("yml", createYamlResorceFactory(ret, progressMonitor));
 		
 		return ret;
 	}
