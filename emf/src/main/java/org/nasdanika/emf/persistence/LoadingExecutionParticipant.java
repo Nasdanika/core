@@ -1,5 +1,6 @@
 package org.nasdanika.emf.persistence;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -38,10 +40,13 @@ import org.nasdanika.emf.EmfUtil;
  */
 public abstract class LoadingExecutionParticipant implements ExecutionParticipant {
 	
+	public static final String CLASSPATH_SCHEME = "classpath";		
+	
 	protected Context context;
 	protected List<EObject> roots;
 	protected ResourceSet resourceSet;
 	protected Map<EObject, org.eclipse.emf.common.util.Diagnostic> diagnosticMap = new LinkedHashMap<>();
+//	protected ClassLoader classLoader;
 	
 	public LoadingExecutionParticipant(Context context) {
 		this.context = context;
@@ -95,6 +100,22 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 			}
 			
 		};
+		
+		// replacing URI and delegating to resource set so it loads using extension factories.
+		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(CLASSPATH_SCHEME, new ResourceFactoryImpl() {
+			
+			@Override
+			public Resource createResource(URI uri) {
+				ClassLoader classLoader = getClassLoader();
+				String resourcePath = uri.toString().substring(CLASSPATH_SCHEME.length() + 1);
+				URL resource = classLoader.getResource(resourcePath);
+				if (resource == null) {
+					throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);
+				}
+				return ret.createResource(URI.createURI(resource.toString()));
+			}
+			
+		});
 		
 		return ret;
 	}
@@ -187,6 +208,14 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		}
 		
 		return ret;
+	}
+
+	/**
+	 * @return Classloader for loading classpath resources (URI's with <code>classpath</code> scheme).
+	 * This implementation returns this class classloader.
+	 */
+	protected ClassLoader getClassLoader() {
+		return getClass().getClassLoader();
 	}
 	
 }
