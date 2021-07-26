@@ -27,5 +27,8 @@ engineering-module:
          YAMLResourceFactory. Resource tokens replaced if there is resource manager. E.g. image or video link.
          DiagramGenerator which stores to resource manager. One option is to recognize data URI, decode, and replace.
          Image tags - an option to use resource manager if present and embed if not.
+     - name: Handle nested collections, e.g. lists as map values
+       description: |+2
+         Perhaps at MapSupplierFactoryAttribute - check type of value and wrap in List or Map compound factory for lists/maps. Do the same for list elements.
       
      
