@@ -463,7 +463,8 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "load-key", "class",
-			   "exclusive-with", "service property"
+			   "exclusive-with", "service property",
+			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getCall_Property(),

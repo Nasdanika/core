@@ -1,52 +1,41 @@
-Calls a Java method and returns the result. Can be used as content, consumer, or command.
+Calls a Java method and returns the result. Currently can be used as content. Support of consumer and command will be implemented in the future releases.
 
 Can be configured with a String or a Map. 
 
-In the first case the string is a fully qualified class name. The class is loaded using the classloader of the top-level loader and then is instantiated using the default constructor.
+In the first case the string is a fully qualified class name. The class is loaded and then is instantiated using the default constructor.
 
-In the second case the following configuration keys are supported:
+See the "Load specification" for the second case. 
 
-* ``class`` - fully qualified class name. The class is loaded using the classloader of the top-level loader as in the case of String configuration. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required.
-* ``property`` - property name. Mutually exclusive with ``class`` and ``service``.
-* ``service`` - fully qualified service class name. Mutually exclusive with ``class`` and ``property``. 
-* ``init`` - an optional array of constructor arguments for the ``class``. Not applicable for ``property`` and ``service``. Arguments get converted to constructor parameter types if conversion is available. If conversion is not available, an exception is thrown.
-* ``properties`` - a map injected into the instance in the ``class`` case if the instance implements ${javadoc/java.util.function.BiConsumer}.
-* ``method`` - an optional method to call. In the ``class`` case the method can be static. If the method is static the class is not instantiated and if ``init`` or ``properties`` are present it results in an exception.
-* ``arguments`` - an optional array of method arguments. Arguments get converted to method parameter types if conversion is available. If conversion is not available, an exception is thrown.
+Constructor and method are selected by matching the number of parameters. The first matched method or constructor is selected for invocation and then an attempt is made to convert
+arguments to constructor/method types. 
 
-Constructors and methods are selected by matching the number of parameters. The first matched method or constructor is selected for invocation and then an attempt is made to convert . 
+### Examples
 
-### Example
+#### Default property
 
-#### YAML specification
-
-##### String configuration
+Class implements Supplier.
 
 ```yaml
-call: java.util.LinkedHashMap
+exec-call: org.nasdanika.exec.gen.tests.TestCall$CallSupplier
 ```
 
-##### Map configuration
+#### Static method
 
 ```yaml
-call: 
-   class: org.nasdanika.exec.tests.CustomMarkdownHelper
-   method: markdownToHtml
-   arguments: This ``is`` important
-   properties:
-      name: Joe
-      age: 33
+exec-call:
+  class: org.nasdanika.exec.gen.tests.TestCall$CallTarget
+  method: helloWorld
 ```
-#### Java code
+
+#### Constructor and method arguments
+
+``` yaml
+exec-call:
+  class: org.nasdanika.exec.gen.tests.TestCall$CallTarget
+  method: greet
+  init:
+    content-text: Galaxy
+  arguments:
+    content-text: Hello
+```
  
-```java
-// Anonymous class to have it loaded by this bundle classloader so it can "see" CustomMarkdownHelper.
-ObjectLoader loader = new Loader() {};
-ProgressMonitor monitor = new PrintStreamProgressMonitor(System.out, 0, 4, false);
-Object call = loader.loadYaml(TestExec.class.getResource("call-instance-method-spec.yml"), monitor);
-assertEquals(Call.class, call.getClass());
-		
-Context context = Context.EMPTY_CONTEXT;
-Object result = Util.callSupplier(((Call) call).create(context), monitor);		
-assertEquals("<p>This <code>is</code> important</p>", ((String) result).trim());
-``` 

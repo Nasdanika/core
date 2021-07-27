@@ -41,7 +41,7 @@ public interface Call extends ModelElement {
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
 	 * @see org.nasdanika.exec.ExecPackage#getCall_Type()
-	 * @model annotation="urn:org.nasdanika load-key='class' exclusive-with='service property'"
+	 * @model annotation="urn:org.nasdanika load-key='class' exclusive-with='service property' default-feature='true'"
 	 * @generated
 	 */
 	String getType();

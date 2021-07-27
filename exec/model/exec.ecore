@@ -36,9 +36,10 @@
       <eAnnotations source="urn:org.nasdanika">
         <details key="load-key" value="class"/>
         <details key="exclusive-with" value="service property"/>
+        <details key="default-feature" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required."/>
+        <details key="documentation" value="Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required.&#xA;&#xA;For SupplierFactory adapter, if the class implements SupplierFactory then it is instantiated and then its ``create()`` method is invoked to create a supplier.&#xA;If the class implements Supplier, then it is instantiated. If there are no ``init`` arguments, then the supplier is diagnosed as part of ``diagnose()``. &#xA;Otherwise it is diagnosed in ``execute()`` and diagnostic results are discarded.&#xA;&#xA;Similar processing will be implemented for Consumer and Command.&#xA;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">

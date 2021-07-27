@@ -143,6 +143,22 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 							if (!BiConsumer.class.isAssignableFrom(clazz) && !call.getProperties().isEmpty()) {
 								return new BasicDiagnostic(Status.ERROR, "In order to inject properties " + clazz.getName() + " must implement " + BiConsumer.class, call);															
 							}
+							if ((SupplierFactory.class.isAssignableFrom(clazz) || Supplier.class.isAssignableFrom(clazz))
+									&& call.getInit().isEmpty()
+									&& call.getProperties().isEmpty()
+									&& Util.isBlank(call.getMethod())) {
+								// Special case - creating an instance here so can be diagnosed
+								try {
+									Constructor<?> constr = clazz.getDeclaredConstructor();
+									Object obj = constr.newInstance();
+									instance = SupplierFactory.class.isAssignableFrom(clazz) ? ((SupplierFactory<?>) obj).create(context) : (Supplier<?>) obj;
+									clazz = null;
+									return ((Supplier<?>) instance).diagnose(progressMonitor);
+								} catch (Exception e) {
+									return new BasicDiagnostic(Status.ERROR, "Cannot instantiate " + clazz, call, e);															
+									
+								}								
+							}
 						} catch (ClassNotFoundException e) {
 							return new BasicDiagnostic(Status.ERROR, "Class not found: " + type, call);
 						}												
@@ -226,6 +242,14 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 					List<Object> argList = (List<Object>) data.get(ExecPackage.Literals.CALL__ARGUMENTS);
 					Object[] methodArguments = coerce(context, argList, method.getParameterTypes(), progressMonitor);
 					result = method.invoke(obj, methodArguments);					
+				}
+
+				if (result instanceof SupplierFactory) {
+					result = ((SupplierFactory<?>) result).create(context); 
+				} 
+				
+				if (result instanceof Supplier) {
+					result = Util.call((Supplier<?>) result, progressMonitor, null);
 				}
 				
 				if (result == null) {

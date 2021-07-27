@@ -10,7 +10,10 @@ import java.util.function.BiConsumer;
 import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.common.SupplierFactory;
 
 /**
  * Tests of descriptor view parts and wizards.
@@ -37,6 +40,44 @@ public class TestCall extends TestBase {
 		
 		public String greet(String greeting) {
 			return greeting + ", " + name + "!";
+		}
+		
+	}
+	
+	public static class CallSupplier implements Supplier<String> {
+		
+		private String name;
+
+		public CallSupplier() {
+			this("World");
+		}
+		
+		public CallSupplier(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public double size() {
+			return 1;
+		}
+
+		@Override
+		public String name() {
+			return "Call supplier " + name;
+		}
+
+		@Override
+		public String execute(ProgressMonitor progressMonitor) throws Exception {
+			return "Hello, " + name + "!";
+		}
+				
+	}
+	
+	public static class CallSupplierFactory implements SupplierFactory<String> {
+
+		@Override
+		public Supplier<String> create(Context context) throws Exception {
+			return new CallSupplier(context.getString("name"));
 		}
 		
 	}
@@ -163,6 +204,40 @@ public class TestCall extends TestBase {
 		
 		assertThat(in).isNotNull();
 		assertThat(DefaultConverter.INSTANCE.toString(in)).isEqualTo("Hi, Universe{speed-of-light=Very high}!");
+	}
+	
+	@Test
+	public void testDefaultSupplier() throws Exception {	
+		InputStream in = loadInputStream(
+				"call/default-supplier.yml",
+				diagnostic -> {
+					Status status = diagnostic.getStatus();
+					if (status != Status.SUCCESS) {
+						diagnostic.dump(System.out, 0);
+					}
+					assertThat(status).isEqualTo(Status.SUCCESS);
+				});
+		
+		assertThat(in).isNotNull();
+		assertThat(DefaultConverter.INSTANCE.toString(in)).isEqualTo("Hello, World!");
+	}
+		
+	@Test
+	public void testDefaultSupplierFactory() throws Exception {	
+		InputStream in = loadInputStream(
+				"call/default-supplier-factory.yml",
+				diagnostic -> {
+					Status status = diagnostic.getStatus();
+					if (status != Status.SUCCESS) {
+						diagnostic.dump(System.out, 0);
+					}
+					assertThat(status).isEqualTo(Status.SUCCESS);
+				},
+				Context.EMPTY_CONTEXT,
+				Context.singleton("name", "Universe"));
+		
+		assertThat(in).isNotNull();
+		assertThat(DefaultConverter.INSTANCE.toString(in)).isEqualTo("Hello, Universe!");
 	}
 	
 //	
