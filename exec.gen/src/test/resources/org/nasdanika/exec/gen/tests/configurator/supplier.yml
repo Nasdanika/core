@@ -1,0 +1,6 @@
+exec-configurator:
+   target: 
+     content-text: Hello, ${name} 
+   properties: 
+     name: 
+       content-text: Extended ${name}

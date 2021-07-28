@@ -60,6 +60,7 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 			case ExecPackage.BLOCK: return createBlock();
 			case ExecPackage.CALL: return createCall();
 			case ExecPackage.PROPERTY: return (EObject)createProperty();
+			case ExecPackage.CONFIGURATOR: return createConfigurator();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -95,6 +96,17 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 	public Map.Entry<String, EObject> createProperty() {
 		PropertyImpl property = new PropertyImpl();
 		return property;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Configurator createConfigurator() {
+		ConfiguratorImpl configurator = new ConfiguratorImpl();
+		return configurator;
 	}
 
 	/**

@@ -308,6 +308,62 @@ public interface ExecPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.ConfiguratorImpl <em>Configurator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.ConfiguratorImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getConfigurator()
+	 * @generated
+	 */
+	int CONFIGURATOR = 4;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__TARGET = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__PROPERTIES = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Configurator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Configurator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -493,6 +549,38 @@ public interface ExecPackage extends EPackage {
 	EReference getProperty_Value();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.Configurator <em>Configurator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Configurator</em>'.
+	 * @see org.nasdanika.exec.Configurator
+	 * @generated
+	 */
+	EClass getConfigurator();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.exec.Configurator#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Target</em>'.
+	 * @see org.nasdanika.exec.Configurator#getTarget()
+	 * @see #getConfigurator()
+	 * @generated
+	 */
+	EReference getConfigurator_Target();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.exec.Configurator#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Properties</em>'.
+	 * @see org.nasdanika.exec.Configurator#getProperties()
+	 * @see #getConfigurator()
+	 * @generated
+	 */
+	EReference getConfigurator_Properties();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -658,6 +746,32 @@ public interface ExecPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROPERTY__VALUE = eINSTANCE.getProperty_Value();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.ConfiguratorImpl <em>Configurator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.ConfiguratorImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getConfigurator()
+		 * @generated
+		 */
+		EClass CONFIGURATOR = eINSTANCE.getConfigurator();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONFIGURATOR__TARGET = eINSTANCE.getConfigurator_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONFIGURATOR__PROPERTIES = eINSTANCE.getConfigurator_Properties();
 
 	}
 

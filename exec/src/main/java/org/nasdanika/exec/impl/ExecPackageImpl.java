@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
+import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.ModelElement;
@@ -56,6 +57,13 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	private EClass propertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass configuratorEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -310,6 +318,36 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getConfigurator() {
+		return configuratorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConfigurator_Target() {
+		return (EReference)configuratorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getConfigurator_Properties() {
+		return (EReference)configuratorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -353,6 +391,10 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__KEY);
 		createEReference(propertyEClass, PROPERTY__VALUE);
+
+		configuratorEClass = createEClass(CONFIGURATOR);
+		createEReference(configuratorEClass, CONFIGURATOR__TARGET);
+		createEReference(configuratorEClass, CONFIGURATOR__PROPERTIES);
 	}
 
 	/**
@@ -391,6 +433,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Add supertypes to classes
 		blockEClass.getESuperTypes().add(this.getModelElement());
 		callEClass.getESuperTypes().add(this.getModelElement());
+		configuratorEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -413,6 +456,10 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		initEClass(propertyEClass, Map.Entry.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(configuratorEClass, Configurator.class, "Configurator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConfigurator_Target(), ecorePackage.getEObject(), null, "target", null, 1, 1, Configurator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConfigurator_Properties(), this.getProperty(), null, "properties", null, 0, -1, Configurator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -484,6 +531,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   new String[] {
 			   "exclusive-with", "service property"
 		   });
+		addAnnotation
+		  (configuratorEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/configurator.md"
+		   });
 	}
 
 	/**
@@ -504,7 +557,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (getCall_Type(),
 		   source,
 		   new String[] {
-			   "documentation", "Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required."
+			   "documentation", "Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required.\n\nFor SupplierFactory adapter, if the class implements SupplierFactory then it is instantiated and then its ``create()`` method is invoked to create a supplier.\nIf the class implements Supplier, then it is instantiated. If there are no ``init`` arguments, then the supplier is diagnosed as part of ``diagnose()``. \nOtherwise it is diagnosed in ``execute()`` and diagnostic results are discarded.\n\nSimilar processing will be implemented for Consumer and Command.\n"
 		   });
 		addAnnotation
 		  (getCall_Property(),
@@ -541,6 +594,18 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "documentation", "An optional array of method arguments. If elements implement SupplierFactory, then the factory is used to produce argument value. Then arguments get converted to method parameter types if conversion is available. If conversion is not available, an exception is thrown."
+		   });
+		addAnnotation
+		  (getConfigurator_Target(),
+		   source,
+		   new String[] {
+			   "documentation", "Component to execute with the augmented context."
+		   });
+		addAnnotation
+		  (getConfigurator_Properties(),
+		   source,
+		   new String[] {
+			   "documentation", "A map injected into the instance in the ``class`` case if the instance implements ${javadoc/java.util.function.BiConsumer} or in the service or property case if they implement SupplierFactory. If elements implement SupplierFactory then the supplier factory is used to produce value to be injected. Otherwise elements are injected AS-IS."
 		   });
 	}
 

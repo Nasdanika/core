@@ -10,6 +10,7 @@ import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
+import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Resource;
@@ -57,6 +58,28 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 					getInputStreamSupplierFactoryClass(), 
 					this.getClass().getClassLoader(), 
 					CallSupplierFactoryAdapter::new));		
+		
+		// Configurator
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<InputStream>, Configurator>(
+					ExecPackage.Literals.CONFIGURATOR, 
+					getInputStreamSupplierFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					ConfiguratorSupplierFactoryAdapter::new));		
+
+		registerAdapterFactory(
+				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Configurator>(
+					ExecPackage.Literals.CONFIGURATOR, 
+					getBinaryEntityContainerConsumerFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					ConfiguratorConsumerFactoryAdapter::new));		
+		
+		registerAdapterFactory(
+				new FunctionAdapterFactory<CommandFactory, Configurator>(
+					ExecPackage.Literals.CONFIGURATOR, 
+					CommandFactory.class, 
+					this.getClass().getClassLoader(), 
+					ConfiguratorCommandFactoryAdapter::new));
 		
 		// Content
 		registerAdapterFactory(

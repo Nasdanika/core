@@ -29,6 +29,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Property/key"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Property/value"/>
     </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Configurator">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Configurator/target"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Configurator/properties"/>
+    </genClasses>
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Base64">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>

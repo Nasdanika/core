@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.DiagnosticHelper;
+import org.nasdanika.exec.*;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.ExecPackage;
@@ -95,6 +96,8 @@ public class ExecValidator extends EObjectValidator {
 				return validateCall((Call)value, diagnostics, context);
 			case ExecPackage.PROPERTY:
 				return validateProperty((Map.Entry<?, ?>)value, diagnostics, context);
+			case ExecPackage.CONFIGURATOR:
+				return validateConfigurator((Configurator)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -177,6 +180,15 @@ public class ExecValidator extends EObjectValidator {
 	 */
 	public boolean validateProperty(Map.Entry<?, ?> property, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)property, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateConfigurator(Configurator configurator, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(configurator, diagnostics, context);
 	}
 
 	/**

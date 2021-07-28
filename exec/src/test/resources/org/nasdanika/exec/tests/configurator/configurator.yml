@@ -1,0 +1,5 @@
+exec-configurator:
+   target: ../content/resource/resource.yml 
+   properties: 
+     name: 
+       content-text: Extended ${name}

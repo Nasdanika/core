@@ -37,6 +37,13 @@ public interface Call extends ModelElement {
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Fully qualified class name. Mutually exclusive with ``service`` and ``property``. One of ``class``, ``property``, or ``service`` is required.
+	 * 
+	 * For SupplierFactory adapter, if the class implements SupplierFactory then it is instantiated and then its ``create()`` method is invoked to create a supplier.
+	 * If the class implements Supplier, then it is instantiated. If there are no ``init`` arguments, then the supplier is diagnosed as part of ``diagnose()``. 
+	 * Otherwise it is diagnosed in ``execute()`` and diagnostic results are discarded.
+	 * 
+	 * Similar processing will be implemented for Consumer and Command.
+	 * 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)

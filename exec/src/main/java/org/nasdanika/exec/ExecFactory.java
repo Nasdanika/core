@@ -40,6 +40,15 @@ public interface ExecFactory extends EFactory {
 	Call createCall();
 
 	/**
+	 * Returns a new object of class '<em>Configurator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Configurator</em>'.
+	 * @generated
+	 */
+	Configurator createConfigurator();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
