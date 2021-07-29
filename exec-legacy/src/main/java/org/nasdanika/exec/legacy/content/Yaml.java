@@ -14,7 +14,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 
 /**
- * Encodes contained content as Json.  
+ * Encodes contained content as YAML.  
  * @author Pavel
  *
  */
