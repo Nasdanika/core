@@ -45,7 +45,6 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 		return type == SupplierFactory.class;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {
 		MapCompoundSupplierFactory<EStructuralFeature, Object> featureMapFactory = new MapCompoundSupplierFactory<>("Feature map factory");
@@ -54,7 +53,7 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 		if (!init.isEmpty()) {
 			ListCompoundSupplierFactory<Object> initFactory = new ListCompoundSupplierFactory<>("Init"); 
 			for (EObject initArg: init) {
-				initFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptTo(initArg, SupplierFactory.class), "Cannot adapt to SupplierFactory: " + initArg));
+				initFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(initArg, Object.class), "Cannot adapt to SupplierFactory: " + initArg));
 			}
 			featureMapFactory.put(ExecPackage.Literals.CALL__INIT, initFactory);
 		}
@@ -63,7 +62,7 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 		if (!args.isEmpty()) {
 			ListCompoundSupplierFactory<Object> argFactory = new ListCompoundSupplierFactory<>("Arguments"); 
 			for (EObject arg: args) {
-				argFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptTo(arg, SupplierFactory.class), "Cannot adapt to SupplierFactory: " + arg));
+				argFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(arg, Object.class), "Cannot adapt to SupplierFactory: " + arg));
 			}
 			featureMapFactory.put(ExecPackage.Literals.CALL__ARGUMENTS, argFactory);
 		}
@@ -72,7 +71,7 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 		if (!properties.isEmpty()) {
 			MapCompoundSupplierFactory<String,Object> propertiesFactory = new MapCompoundSupplierFactory<>("Properties");
 			for (Entry<String, EObject> pe: properties.entrySet()) {
-				propertiesFactory.put(pe.getKey(), Objects.requireNonNull(EObjectAdaptable.adaptTo(pe.getValue(), SupplierFactory.class), "Cannot adapt to SupplierFactory: " + pe.getValue()));
+				propertiesFactory.put(pe.getKey(), Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(pe.getValue(), Object.class), "Cannot adapt to SupplierFactory: " + pe.getValue()));
 			}
 			featureMapFactory.put(ExecPackage.Literals.CALL__PROPERTIES, propertiesFactory);
 		}

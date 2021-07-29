@@ -78,7 +78,6 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 		
 	}	
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Supplier<InputStream> create(Context context) throws Exception {
 		Reference<Exception> eRef = new Reference<Exception>();
@@ -86,7 +85,7 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 		
 		Collection<SupplierFactory<InputStream>> tryBlock = new ArrayList<>();
 		for (EObject tbe: target.getTry()) {
-			SupplierFactory<InputStream> tbesf = EObjectAdaptable.adaptTo(tbe, SupplierFactory.class);
+			SupplierFactory<InputStream> tbesf = EObjectAdaptable.adaptToSupplierFactory(tbe, InputStream.class);
 			if (tbesf != null) {
 				tryBlock.add(tbesf);
 			}
@@ -95,13 +94,13 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 		
 		Supplier<InputStream> catchSupplier = null; 		
 		if (!target.getCatch().isEmpty()) {
-			List<SupplierFactory<InputStream>> catchBlock = target.getCatch().stream().map(e -> EObjectAdaptable.adaptTo(e, SupplierFactory.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<SupplierFactory<InputStream>> catchBlock = target.getCatch().stream().map(e -> EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class)).filter(Objects::nonNull).collect(Collectors.toList());
 			catchSupplier = Util.asInputStreamSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}
 		
 		Supplier<InputStream>  finallySupplier = null;
 		if (!target.getFinally().isEmpty()) {
-			List<SupplierFactory<InputStream>> finallyBlock = target.getFinally().stream().map(e -> EObjectAdaptable.adaptTo(e, SupplierFactory.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<SupplierFactory<InputStream>> finallyBlock = target.getFinally().stream().map(e -> EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class)).filter(Objects::nonNull).collect(Collectors.toList());
 			finallySupplier = Util.asInputStreamSupplierFactory(finallyBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}		
 		
