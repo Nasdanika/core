@@ -98,6 +98,8 @@ public class ExecValidator extends EObjectValidator {
 				return validateProperty((Map.Entry<?, ?>)value, diagnostics, context);
 			case ExecPackage.CONFIGURATOR:
 				return validateConfigurator((Configurator)value, diagnostics, context);
+			case ExecPackage.EVAL:
+				return validateEval((Eval)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -189,6 +191,15 @@ public class ExecValidator extends EObjectValidator {
 	 */
 	public boolean validateConfigurator(Configurator configurator, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(configurator, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateEval(Eval eval, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(eval, diagnostics, context);
 	}
 
 	/**

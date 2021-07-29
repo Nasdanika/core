@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;
+import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.ModelElement;
@@ -64,6 +65,13 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	private EClass configuratorEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass evalEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -348,6 +356,36 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getEval() {
+		return evalEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEval_Script() {
+		return (EReference)evalEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEval_Bindings() {
+		return (EReference)evalEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -395,6 +433,10 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		configuratorEClass = createEClass(CONFIGURATOR);
 		createEReference(configuratorEClass, CONFIGURATOR__TARGET);
 		createEReference(configuratorEClass, CONFIGURATOR__PROPERTIES);
+
+		evalEClass = createEClass(EVAL);
+		createEReference(evalEClass, EVAL__SCRIPT);
+		createEReference(evalEClass, EVAL__BINDINGS);
 	}
 
 	/**
@@ -434,6 +476,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		blockEClass.getESuperTypes().add(this.getModelElement());
 		callEClass.getESuperTypes().add(this.getModelElement());
 		configuratorEClass.getESuperTypes().add(this.getModelElement());
+		evalEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -460,6 +503,10 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		initEClass(configuratorEClass, Configurator.class, "Configurator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConfigurator_Target(), ecorePackage.getEObject(), null, "target", null, 1, 1, Configurator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getConfigurator_Properties(), this.getProperty(), null, "properties", null, 0, -1, Configurator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(evalEClass, Eval.class, "Eval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEval_Script(), ecorePackage.getEObject(), null, "script", null, 1, 1, Eval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEval_Bindings(), this.getProperty(), null, "bindings", null, 0, -1, Eval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -537,6 +584,18 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   new String[] {
 			   "documentation-reference", "doc/configurator.md"
 		   });
+		addAnnotation
+		  (evalEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/configurator.md"
+		   });
+		addAnnotation
+		  (getEval_Script(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
 	}
 
 	/**
@@ -605,7 +664,19 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (getConfigurator_Properties(),
 		   source,
 		   new String[] {
-			   "documentation", "A map injected into the instance in the ``class`` case if the instance implements ${javadoc/java.util.function.BiConsumer} or in the service or property case if they implement SupplierFactory. If elements implement SupplierFactory then the supplier factory is used to produce value to be injected. Otherwise elements are injected AS-IS."
+			   "documentation", "A map injected into the instance in the ``class`` case if the instance implements java.util.function.BiConsumer or in the service or property case if they implement SupplierFactory. \nIf elements implement SupplierFactory then the supplier factory is used to produce value to be injected. Otherwise elements are injected AS-IS."
+		   });
+		addAnnotation
+		  (getEval_Script(),
+		   source,
+		   new String[] {
+			   "documentation", "Script source"
+		   });
+		addAnnotation
+		  (getEval_Bindings(),
+		   source,
+		   new String[] {
+			   "documentation", "Script bindings. Context is available as ``context`` binding and progress monitor as ``progressMonitor`` binding."
 		   });
 	}
 

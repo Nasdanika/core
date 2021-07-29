@@ -364,6 +364,62 @@ public interface ExecPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.EvalImpl <em>Eval</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.EvalImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getEval()
+	 * @generated
+	 */
+	int EVAL = 5;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Script</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__SCRIPT = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Bindings</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__BINDINGS = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Eval</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Eval</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -581,6 +637,38 @@ public interface ExecPackage extends EPackage {
 	EReference getConfigurator_Properties();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.Eval <em>Eval</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Eval</em>'.
+	 * @see org.nasdanika.exec.Eval
+	 * @generated
+	 */
+	EClass getEval();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.exec.Eval#getScript <em>Script</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Script</em>'.
+	 * @see org.nasdanika.exec.Eval#getScript()
+	 * @see #getEval()
+	 * @generated
+	 */
+	EReference getEval_Script();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.exec.Eval#getBindings <em>Bindings</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Bindings</em>'.
+	 * @see org.nasdanika.exec.Eval#getBindings()
+	 * @see #getEval()
+	 * @generated
+	 */
+	EReference getEval_Bindings();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -772,6 +860,32 @@ public interface ExecPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONFIGURATOR__PROPERTIES = eINSTANCE.getConfigurator_Properties();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.EvalImpl <em>Eval</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.EvalImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getEval()
+		 * @generated
+		 */
+		EClass EVAL = eINSTANCE.getEval();
+
+		/**
+		 * The meta object literal for the '<em><b>Script</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVAL__SCRIPT = eINSTANCE.getEval_Script();
+
+		/**
+		 * The meta object literal for the '<em><b>Bindings</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVAL__BINDINGS = eINSTANCE.getEval_Bindings();
 
 	}
 

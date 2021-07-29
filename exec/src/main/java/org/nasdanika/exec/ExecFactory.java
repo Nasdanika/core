@@ -49,6 +49,15 @@ public interface ExecFactory extends EFactory {
 	Configurator createConfigurator();
 
 	/**
+	 * Returns a new object of class '<em>Eval</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Eval</em>'.
+	 * @generated
+	 */
+	Eval createEval();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

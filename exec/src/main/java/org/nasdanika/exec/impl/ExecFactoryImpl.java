@@ -61,6 +61,7 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 			case ExecPackage.CALL: return createCall();
 			case ExecPackage.PROPERTY: return (EObject)createProperty();
 			case ExecPackage.CONFIGURATOR: return createConfigurator();
+			case ExecPackage.EVAL: return createEval();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -107,6 +108,17 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 	public Configurator createConfigurator() {
 		ConfiguratorImpl configurator = new ConfiguratorImpl();
 		return configurator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Eval createEval() {
+		EvalImpl eval = new EvalImpl();
+		return eval;
 	}
 
 	/**

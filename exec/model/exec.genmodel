@@ -33,6 +33,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Configurator/target"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Configurator/properties"/>
     </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Eval">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Eval/script"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Eval/bindings"/>
+    </genClasses>
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Base64">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>

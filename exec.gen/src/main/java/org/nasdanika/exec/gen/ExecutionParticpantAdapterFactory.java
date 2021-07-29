@@ -11,6 +11,7 @@ import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;
+import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Resource;
@@ -80,6 +81,14 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 					CommandFactory.class, 
 					this.getClass().getClassLoader(), 
 					ConfiguratorCommandFactoryAdapter::new));
+		
+		// Eval
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory.Provider, Eval>(
+					ExecPackage.Literals.EVAL, 
+					SupplierFactory.Provider.class, 
+					this.getClass().getClassLoader(), 
+					EvalSupplierFactoryProviderAdapter::new));		
 		
 		// Content
 		registerAdapterFactory(

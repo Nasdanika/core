@@ -1,0 +1,12 @@
+Evaluates JavaScript script. 
+
+### Example
+
+```yaml
+exec-eval:
+   script: 
+     content-text: 3 * val 
+   bindings: 
+     val: 
+       content-text: 33
+```

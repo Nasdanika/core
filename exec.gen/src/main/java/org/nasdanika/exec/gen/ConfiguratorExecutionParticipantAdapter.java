@@ -27,7 +27,6 @@ public abstract class ConfiguratorExecutionParticipantAdapter extends AdapterImp
 	 * 
 	 * @return Context supplier factory or null if configuration is empty.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected org.nasdanika.common.SupplierFactory<Context> createContextSupplierFactory() {
 		Configurator configurator = (Configurator) getTarget();
 		EMap<String, EObject> properties = configurator.getProperties();
@@ -39,10 +38,10 @@ public abstract class ConfiguratorExecutionParticipantAdapter extends AdapterImp
 		for (Entry<String, EObject> ce: properties.entrySet()) {
 			EObject value = ce.getValue();
 			SupplierFactory<?> sf = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(value, Object.class), "Cannot adapt " + value + " to SupplierFactory");				
-			entriesFactory.put(ce.getKey(), (SupplierFactory) sf.then(Util.OBJECT_TO_STRING_FACTORY));
+			entriesFactory.put(ce.getKey(), sf.then(Util.OBJECT_TO_STRING_FACTORY));
 		}
 		
-		FunctionFactory<Map<String, java.lang.Object>, org.nasdanika.common.Context> contextFactory = new FunctionFactory<Map<String,Object>, org.nasdanika.common.Context>() {
+		FunctionFactory<Map<String, Object>, org.nasdanika.common.Context> contextFactory = new FunctionFactory<Map<String, Object>, org.nasdanika.common.Context>() {
 			
 			@Override
 			public Function<Map<String, java.lang.Object>, org.nasdanika.common.Context> create(org.nasdanika.common.Context context) throws Exception {
@@ -56,5 +55,4 @@ public abstract class ConfiguratorExecutionParticipantAdapter extends AdapterImp
 		return entriesFactory.then(contextFactory);
 	}
 	
-
 }

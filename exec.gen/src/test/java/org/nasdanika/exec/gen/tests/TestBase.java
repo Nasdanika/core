@@ -128,8 +128,7 @@ public class TestBase {
 		
 		// Diagnosing loaded resources. 
 		try {
-			@SuppressWarnings("unchecked")
-			SupplierFactory<InputStream> supplierFactory = Objects.requireNonNull(EObjectAdaptable.adaptTo(eObject, SupplierFactory.class), "Cannot adapt to SupplierFactory");
+			SupplierFactory<InputStream> supplierFactory = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(eObject, InputStream.class), "Cannot adapt to SupplierFactory");
 			return Util.call(supplierFactory.create(context), progressMonitor, diagnosticConsumer);
 		} catch (DiagnosticException e) {
 			System.err.println("******************************");
