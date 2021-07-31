@@ -16,7 +16,9 @@ import java.util.function.Consumer;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
@@ -24,6 +26,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.gen.ExecGenYamlLoadingExecutionParticipant;
 import org.yaml.snakeyaml.DumperOptions;
@@ -120,6 +123,7 @@ public class TestBase {
 		}		
 	}
 	
+	// Loading InputStream	
 	protected InputStream loadInputStream(
 			EObject eObject, 
 			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
@@ -172,7 +176,64 @@ public class TestBase {
 		}
 	}	
 	
-//	protected InputStream loadInputStream(String resource, Consumer<EObject> consumer, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {	
-
+	// Generating container
+	protected Diagnostic generate(
+			EObject eObject, 
+			BinaryEntityContainer container,
+			Context context,
+			ProgressMonitor progressMonitor) throws Exception {
+		
+		// Diagnosing loaded resources. 
+		try {
+			ConsumerFactory<BinaryEntityContainer> consumerFactory = Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(eObject, BinaryEntityContainer.class), "Cannot adapt to ConsumerFactory");
+			return Util.call(consumerFactory.create(context), container, progressMonitor);
+		} catch (DiagnosticException e) {
+			System.err.println("******************************");
+			System.err.println("*      Diagnostic failed     *");
+			System.err.println("******************************");
+			e.getDiagnostic().dump(System.err, 4, Status.FAIL);
+			throw e;
+		}		
+	}
+	
+	protected Diagnostic generate(
+			String resource, 
+			BinaryEntityContainer container,
+			Context modelContext,
+			Context generationContext,			
+			ProgressMonitor progressMonitor,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		EObject eObject = Objects.requireNonNull(loadObject(resource, diagnosticConsumer, modelContext, progressMonitor), "Loaded null from " + resource);
+		return generate(eObject, container, generationContext, progressMonitor);
+	}
+	
+	protected Diagnostic generate(
+			String resource, 
+			BinaryEntityContainer container,
+			Context modelContext,
+			Context generationContext,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return generate(resource, container, modelContext, generationContext, progressMonitor, diagnosticConsumer);
+		}
+	}
+	
+	/**
+	 * Generates with empty context and {@link PrintStreamProgressMonitor} outputting to System.out
+	 * @param resource
+	 * @param container 
+	 * @param diagnosticConsumer Consumer of model diagnostic. 
+	 * @return Generation diagnostic
+	 * @throws Exception
+	 */
+	protected Diagnostic generate(
+			String resource,
+			BinaryEntityContainer container,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return generate(resource, container, Context.EMPTY_CONTEXT, Context.EMPTY_CONTEXT, progressMonitor, diagnosticConsumer);
+		}
+	}	
+	
 
 }

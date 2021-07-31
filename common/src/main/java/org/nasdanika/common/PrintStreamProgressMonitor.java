@@ -16,6 +16,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 	private boolean closeStream;
 	private String indent;
 	protected int indentIncrement = 2;
+	private boolean cancelled;
 	
 	/**
 	 * Constructs a progress monitor for a given print stream.
@@ -50,7 +51,7 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public boolean isCancelled() {
-		return false;
+		return cancelled;
 	}
 
 	@Override
@@ -91,6 +92,9 @@ public class PrintStreamProgressMonitor implements ProgressMonitor {
 			out.print(": "+Arrays.deepToString(data));
 		}
 		out.println();
+		if (status == Status.CANCEL) {
+			cancelled = true;
+		}
 	}
 
 	@Override

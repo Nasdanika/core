@@ -12,6 +12,9 @@ Export-Package: org.nasdanika.exec,
  org.nasdanika.exec.content.impl,
  org.nasdanika.exec.content.util,
  org.nasdanika.exec.impl,
+ org.nasdanika.exec.resources,
+ org.nasdanika.exec.resources.impl,
+ org.nasdanika.exec.resources.util,
  org.nasdanika.exec.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport

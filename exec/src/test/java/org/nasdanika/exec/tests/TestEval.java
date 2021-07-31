@@ -32,18 +32,4 @@ public class TestEval extends TestBase {
 				});		
 	}
 	
-	@Test
-	public void testDeafultScript() throws Exception {	
-		load(
-				"eval/default-script.yml", 
-				obj -> {
-					Eval eval = (Eval) obj;
-					assertThat(eval.getScript()).isInstanceOf(Text.class);
-					assertThat(eval.getBindings()).isEmpty();
-				},
-				diagnostic -> {
-					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
-				});		
-	}	
-	
 }

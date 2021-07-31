@@ -51,6 +51,12 @@ public class ProgressRecorder implements ProgressMonitor {
 	private boolean closed;
 	
 	private List<Object> entries = new ArrayList<>();
+
+	private boolean cancelled;
+	
+	protected void cancel() {
+		cancelled = true;
+	}
 	
 	/**
 	 * @return Steps and child entries created by split().
@@ -77,7 +83,7 @@ public class ProgressRecorder implements ProgressMonitor {
 
 	@Override
 	public boolean isCancelled() {
-		return false;
+		return parent == null ? cancelled : parent.isCancelled();
 	}
 
 	@Override
@@ -122,6 +128,13 @@ public class ProgressRecorder implements ProgressMonitor {
 		}
 		
 		entries.add(new BasicStep());
+		if (status == Status.CANCEL) {
+			if (parent == null) {
+				cancelled = true;
+			} else {
+				parent.cancel();
+			}
+		}
 	}
 	
 	/**

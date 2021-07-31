@@ -17,11 +17,14 @@ import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
+import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.ModelElement;
 
 import org.nasdanika.exec.content.ContentPackage;
 
 import org.nasdanika.exec.content.impl.ContentPackageImpl;
+import org.nasdanika.exec.resources.ResourcesPackage;
+import org.nasdanika.exec.resources.impl.ResourcesPackageImpl;
 import org.nasdanika.exec.util.ExecValidator;
 
 /**
@@ -74,6 +77,13 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	private EClass evalEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass failEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -123,14 +133,18 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
 		ContentPackageImpl theContentPackage = (ContentPackageImpl)(registeredPackage instanceof ContentPackageImpl ? registeredPackage : ContentPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
+		ResourcesPackageImpl theResourcesPackage = (ResourcesPackageImpl)(registeredPackage instanceof ResourcesPackageImpl ? registeredPackage : ResourcesPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theExecPackage.createPackageContents();
 		theContentPackage.createPackageContents();
+		theResourcesPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theExecPackage.initializePackageContents();
 		theContentPackage.initializePackageContents();
+		theResourcesPackage.initializePackageContents();
 
 		// Register package validator
 		EValidator.Registry.INSTANCE.put
@@ -386,6 +400,26 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getFail() {
+		return failEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getFail_Message() {
+		return (EAttribute)failEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -437,6 +471,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		evalEClass = createEClass(EVAL);
 		createEReference(evalEClass, EVAL__SCRIPT);
 		createEReference(evalEClass, EVAL__BINDINGS);
+
+		failEClass = createEClass(FAIL);
+		createEAttribute(failEClass, FAIL__MESSAGE);
 	}
 
 	/**
@@ -464,9 +501,11 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 
 		// Obtain other dependent packages
 		ContentPackage theContentPackage = (ContentPackage)EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
+		ResourcesPackage theResourcesPackage = (ResourcesPackage)EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theContentPackage);
+		getESubpackages().add(theResourcesPackage);
 
 		// Create type parameters
 
@@ -477,6 +516,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		callEClass.getESuperTypes().add(this.getModelElement());
 		configuratorEClass.getESuperTypes().add(this.getModelElement());
 		evalEClass.getESuperTypes().add(this.getModelElement());
+		failEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -507,6 +547,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		initEClass(evalEClass, Eval.class, "Eval", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEval_Script(), ecorePackage.getEObject(), null, "script", null, 1, 1, Eval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEval_Bindings(), this.getProperty(), null, "bindings", null, 0, -1, Eval.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(failEClass, Fail.class, "Fail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFail_Message(), ecorePackage.getEString(), "message", null, 0, 1, Fail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -588,10 +631,22 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (evalEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/configurator.md"
+			   "documentation-reference", "doc/eval.md"
 		   });
 		addAnnotation
 		  (getEval_Script(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (failEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/fail.md"
+		   });
+		addAnnotation
+		  (getFail_Message(),
 		   source,
 		   new String[] {
 			   "default-feature", "true"
@@ -677,6 +732,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Script bindings. Context is available as ``context`` binding and progress monitor as ``progressMonitor`` binding."
+		   });
+		addAnnotation
+		  (getFail_Message(),
+		   source,
+		   new String[] {
+			   "documentation", "Message to output. Interpolated."
 		   });
 	}
 

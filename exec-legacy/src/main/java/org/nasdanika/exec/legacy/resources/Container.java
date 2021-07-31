@@ -98,7 +98,6 @@ public class Container extends Resource {
 	@Override
 	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {		
 		return containerFactory.then(conditionalFactory).create(context);
-	}
-	
+	}	
 
 }

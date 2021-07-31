@@ -13,11 +13,9 @@ import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecPackage;
-import org.nasdanika.exec.content.ContentPackage;
-import org.nasdanika.exec.content.Resource;
-import org.nasdanika.exec.content.Text;
-import org.nasdanika.exec.gen.content.ResourceSupplierFactoryAdapter;
-import org.nasdanika.exec.gen.content.TextSupplierFactoryAdapter;
+import org.nasdanika.exec.Fail;
+import org.nasdanika.exec.gen.content.ContentAdapterFactory;
+import org.nasdanika.exec.gen.resources.ResourcesAdapterFactory;
 
 /**
  * Provides adapters for the Engineering model elements.
@@ -27,8 +25,6 @@ import org.nasdanika.exec.gen.content.TextSupplierFactoryAdapter;
 public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 	
 	public ExecutionParticpantAdapterFactory() {
-
-		// Exec
 		
 		// Block
 		registerAdapterFactory(
@@ -89,21 +85,32 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 					SupplierFactory.Provider.class, 
 					this.getClass().getClassLoader(), 
 					EvalSupplierFactoryProviderAdapter::new));		
-		
-		// Content
+
+		// Fail
 		registerAdapterFactory(
-			new FunctionAdapterFactory<SupplierFactory<InputStream>, Resource>(
-				ContentPackage.Literals.RESOURCE, 
-				getInputStreamSupplierFactoryClass(), 
-				this.getClass().getClassLoader(), 
-				ResourceSupplierFactoryAdapter::new));
-		
-		registerAdapterFactory(
-				new FunctionAdapterFactory<SupplierFactory<InputStream>, Text>(
-					ContentPackage.Literals.TEXT, 
+				new FunctionAdapterFactory<SupplierFactory<InputStream>, Fail>(
+					ExecPackage.Literals.FAIL, 
 					getInputStreamSupplierFactoryClass(), 
 					this.getClass().getClassLoader(), 
-					TextSupplierFactoryAdapter::new));
+					FailSupplierFactoryAdapter::new));		
+
+		registerAdapterFactory(
+				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
+					ExecPackage.Literals.FAIL, 
+					getBinaryEntityContainerConsumerFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					FailConsumerFactoryAdapter::new));		
+		
+		registerAdapterFactory(
+				new FunctionAdapterFactory<CommandFactory, Fail>(
+					ExecPackage.Literals.FAIL, 
+					CommandFactory.class, 
+					this.getClass().getClassLoader(), 
+					FailCommandFactoryAdapter::new));				
+		
+		// Sub-packages
+		registerAdapterFactory(new ContentAdapterFactory());
+		registerAdapterFactory(new ResourcesAdapterFactory());
 				
 	}
 	

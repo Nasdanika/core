@@ -58,6 +58,15 @@ public interface ExecFactory extends EFactory {
 	Eval createEval();
 
 	/**
+	 * Returns a new object of class '<em>Fail</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fail</em>'.
+	 * @generated
+	 */
+	Fail createFail();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

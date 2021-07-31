@@ -22,4 +22,12 @@
             genModel="model/exec.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated exec -->
+      <package
+            uri="urn:org.nasdanika.exec.resources"
+            class="org.nasdanika.exec.resources.ResourcesPackage"
+            genModel="model/exec.genmodel"/>
+   </extension>
+
 </plugin>

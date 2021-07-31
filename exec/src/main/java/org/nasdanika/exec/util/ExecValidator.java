@@ -100,6 +100,8 @@ public class ExecValidator extends EObjectValidator {
 				return validateConfigurator((Configurator)value, diagnostics, context);
 			case ExecPackage.EVAL:
 				return validateEval((Eval)value, diagnostics, context);
+			case ExecPackage.FAIL:
+				return validateFail((Fail)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -200,6 +202,15 @@ public class ExecValidator extends EObjectValidator {
 	 */
 	public boolean validateEval(Eval eval, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(eval, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateFail(Fail fail, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(fail, diagnostics, context);
 	}
 
 	/**

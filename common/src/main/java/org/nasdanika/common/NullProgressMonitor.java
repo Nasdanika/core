@@ -11,10 +11,12 @@ public class NullProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public void close() {}
+	
+	private boolean cancelled;
 
 	@Override
 	public boolean isCancelled() {
-		return false;
+		return cancelled;
 	}
 
 	@Override
@@ -24,7 +26,9 @@ public class NullProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public void worked(Status status, double work, String progressMessage, Object... data) {
-		// NOP
+		if (status == Status.CANCEL) {
+			cancelled = true;
+		}
 	}
 
 	@Override

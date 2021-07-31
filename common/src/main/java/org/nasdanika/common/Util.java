@@ -763,7 +763,7 @@ public class Util {
 	}
 	
 	/**
-	 * Executes full command lifecycle - diagnose, execute, commit/rollback, close.
+	 * Executes full Command lifecycle - diagnose, execute, commit/rollback, close.
 	 * @param context
 	 * @param monitor
 	 * @param component
@@ -797,6 +797,44 @@ public class Util {
 			return diagnostic;
 		} finally {
 			command.close();
+		}
+	}
+	
+	/**
+	 * Executes full Consumer lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param context
+	 * @param monitor
+	 * @param component
+	 * @param failOnStatuses Status on which to throw {@link DiagnosticException}. Defaults to FAIL.
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> Diagnostic call(org.nasdanika.common.Consumer<T> consumer, T arg,  ProgressMonitor monitor, Status... failOnStatuses) throws Exception {
+		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling consumer", 3)) {
+			Diagnostic diagnostic = consumer.splitAndDiagnose(progressMonitor);			
+			Status status = diagnostic.getStatus();
+			if (failOnStatuses.length == 0) {
+				if (status == Status.FAIL) {
+					throw new DiagnosticException(diagnostic);
+				}
+			} else {
+				for (Status failStatus: failOnStatuses) {
+					if (status == failStatus) {
+						throw new DiagnosticException(diagnostic);
+					}					
+				}
+			}
+			
+			try {
+				consumer.splitAndExecute(arg, progressMonitor);
+				consumer.splitAndCommit(progressMonitor);
+			} catch (Exception e) {
+				consumer.splitAndRollback(progressMonitor);
+				throw e;
+			}
+			return diagnostic;
+		} finally {
+			consumer.close();
 		}
 	}
 	

@@ -420,6 +420,53 @@ public interface ExecPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.FailImpl <em>Fail</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.FailImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getFail()
+	 * @generated
+	 */
+	int FAIL = 6;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Message</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__MESSAGE = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Fail</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -669,6 +716,27 @@ public interface ExecPackage extends EPackage {
 	EReference getEval_Bindings();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.Fail <em>Fail</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fail</em>'.
+	 * @see org.nasdanika.exec.Fail
+	 * @generated
+	 */
+	EClass getFail();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.Fail#getMessage <em>Message</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Message</em>'.
+	 * @see org.nasdanika.exec.Fail#getMessage()
+	 * @see #getFail()
+	 * @generated
+	 */
+	EAttribute getFail_Message();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -886,6 +954,24 @@ public interface ExecPackage extends EPackage {
 		 * @generated
 		 */
 		EReference EVAL__BINDINGS = eINSTANCE.getEval_Bindings();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.FailImpl <em>Fail</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.FailImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getFail()
+		 * @generated
+		 */
+		EClass FAIL = eINSTANCE.getFail();
+
+		/**
+		 * The meta object literal for the '<em><b>Message</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FAIL__MESSAGE = eINSTANCE.getFail_Message();
 
 	}
 

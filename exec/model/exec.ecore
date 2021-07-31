@@ -127,6 +127,19 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fail" eSuperTypes="#//ModelElement">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/fail.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="default-feature" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Message to output. Interpolated."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eSubpackages name="content" nsURI="urn:org.nasdanika.exec.content" nsPrefix="org.nasdanika.exec.content">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/content/package-summary.md"/>
@@ -177,6 +190,80 @@
           <details key="documentation" value="If ``true`` (default), content is interpolated."/>
         </eAnnotations>
       </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="resources" nsURI="urn:org.nasdanika.exec.resources" nsPrefix="org.nasdanika.exec.resources">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/resources/package-summary.md"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//ModelElement">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/resources/resource.md"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Resource name. Interpolated."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Resource contents. File contents elements are adapted to ``SupplierFactory`` and produced ``InputStream``s are contcatenated. Container contents elements are adapted to ConsumerFactory and the container is passed to their ``execute`` method."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="reconcileAction" eType="#//resources/ReconcileAction"
+          defaultValueLiteral="Overwrite">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Reconcile action - what to do if a resource with the same name already exists. Defalut is ``Overwrite``."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="merger" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+          containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Merger for ``Merge`` reconcile action. Adapted to ``org.nasdanika.common.resources.Merger`` to execute actual merge."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Container" eSuperTypes="#//resources/Resource">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/resources/container.md"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="#//resources/Resource">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/resources/file.md"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ReconcileAction">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Defines an action to take when a resource with the same name already exists."/>
+      </eAnnotations>
+      <eLiterals name="Append">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Appends new content to the existing content. For containers it means that new resources will be placed in the container next to the existing resources. For files it means that the new content will be appended after the existing content."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="Cancel" value="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Cancels execution if resource already exists."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="Keep" value="2">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Keeps the existing resource intact."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="Merge" value="3">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Merges old and new content of a file using a built-in or provided ``org.nasdanika.common.resources.Merger``. Merger is obtained from ``merger`` reference. For containers Merge is the same as Append."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="Overwrite" value="5">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Overwrites existing resource. For containers - deletes their contents."/>
+        </eAnnotations>
+      </eLiterals>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>

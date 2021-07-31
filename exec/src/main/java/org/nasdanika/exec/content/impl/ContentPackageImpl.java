@@ -18,6 +18,8 @@ import org.nasdanika.exec.content.Resource;
 
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.impl.ExecPackageImpl;
+import org.nasdanika.exec.resources.ResourcesPackage;
+import org.nasdanika.exec.resources.impl.ResourcesPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -96,14 +98,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecPackage.eNS_URI);
 		ExecPackageImpl theExecPackage = (ExecPackageImpl)(registeredPackage instanceof ExecPackageImpl ? registeredPackage : ExecPackage.eINSTANCE);
+		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
+		ResourcesPackageImpl theResourcesPackage = (ResourcesPackageImpl)(registeredPackage instanceof ResourcesPackageImpl ? registeredPackage : ResourcesPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theContentPackage.createPackageContents();
 		theExecPackage.createPackageContents();
+		theResourcesPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theContentPackage.initializePackageContents();
 		theExecPackage.initializePackageContents();
+		theResourcesPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theContentPackage.freeze();

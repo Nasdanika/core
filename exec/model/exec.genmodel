@@ -37,6 +37,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Eval/script"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Eval/bindings"/>
     </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Fail">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//Fail/message"/>
+    </genClasses>
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Base64">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>
@@ -49,6 +52,23 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/content"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/interpolate"/>
       </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="Resources" disposableProviderFactory="true" ecorePackage="exec.ecore#//resources">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="exec.ecore#//resources/ReconcileAction">
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Append"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Cancel"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Keep"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Merge"/>
+        <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Overwrite"/>
+      </genEnums>
+      <genClasses ecoreClass="exec.ecore#//resources/Resource">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//resources/Resource/name"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//resources/Resource/contents"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//resources/Resource/reconcileAction"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//resources/Resource/merger"/>
+      </genClasses>
+      <genClasses ecoreClass="exec.ecore#//resources/Container"/>
+      <genClasses ecoreClass="exec.ecore#//resources/File"/>
     </nestedGenPackages>
   </genPackages>
 </genmodel:GenModel>

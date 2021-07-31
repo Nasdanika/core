@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.nasdanika.exec.ExecPackage#getEval()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/configurator.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/eval.md'"
  * @generated
  */
 public interface Eval extends ModelElement {
