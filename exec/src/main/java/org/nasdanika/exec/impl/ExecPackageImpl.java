@@ -92,6 +92,13 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	private EClass listEClass = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mapEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -448,6 +455,26 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getMap() {
+		return mapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMap_Entries() {
+		return (EReference)mapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -505,6 +532,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 
 		listEClass = createEClass(LIST);
 		createEReference(listEClass, LIST__ELEMENTS);
+
+		mapEClass = createEClass(MAP);
+		createEReference(mapEClass, MAP__ENTRIES);
 	}
 
 	/**
@@ -548,6 +578,8 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		configuratorEClass.getESuperTypes().add(this.getModelElement());
 		evalEClass.getESuperTypes().add(this.getModelElement());
 		failEClass.getESuperTypes().add(this.getModelElement());
+		listEClass.getESuperTypes().add(this.getModelElement());
+		mapEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -584,6 +616,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 
 		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getList_Elements(), ecorePackage.getEObject(), null, "elements", null, 1, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mapEClass, org.nasdanika.exec.Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMap_Entries(), this.getProperty(), null, "entries", null, 0, -1, org.nasdanika.exec.Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -697,6 +732,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   new String[] {
 			   "documentation-reference", "doc/list.md"
 		   });
+		addAnnotation
+		  (mapEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/map.md"
+		   });
 	}
 
 	/**
@@ -784,6 +825,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Message to output. Interpolated."
+		   });
+		addAnnotation
+		  (getMap_Entries(),
+		   source,
+		   new String[] {
+			   "documentation", "Map entries."
 		   });
 	}
 

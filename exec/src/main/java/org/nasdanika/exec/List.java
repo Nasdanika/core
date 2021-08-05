@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model annotation="urn:org.nasdanika documentation-reference='doc/list.md'"
  * @generated
  */
-public interface List extends EObject {
+public interface List extends ModelElement {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.

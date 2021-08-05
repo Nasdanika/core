@@ -64,6 +64,7 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 			case ExecPackage.EVAL: return createEval();
 			case ExecPackage.FAIL: return createFail();
 			case ExecPackage.LIST: return createList();
+			case ExecPackage.MAP: return createMap();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -143,6 +144,17 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 	public List createList() {
 		ListImpl list = new ListImpl();
 		return list;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public org.nasdanika.exec.Map createMap() {
+		MapImpl map = new MapImpl();
+		return map;
 	}
 
 	/**

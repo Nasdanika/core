@@ -25,20 +25,39 @@ import org.nasdanika.exec.gen.resources.ResourcesAdapterFactory;
  */
 public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<SupplierFactory<java.util.Map<String,Object>>> MAP_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<SupplierFactory<List<Object>>> LIST_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+
+	// Generic class constants
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<SupplierFactory<Object>> OBJECT_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<SupplierFactory<InputStream>> INPUT_STREAM_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+		
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<ConsumerFactory<BinaryEntityContainer>> BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS = (Class) ConsumerFactory.class;
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static final Class<ConsumerFactory<Object>> OBJECT_CONSUMER_FACTORY_CLASS = (Class) ConsumerFactory.class;
+	
 	public ExecutionParticpantAdapterFactory() {
 		
 		// Block
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Block>(
 					ExecPackage.Literals.BLOCK, 
-					getInputStreamSupplierFactoryClass(), 
+					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					BlockSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Block>(
 					ExecPackage.Literals.BLOCK, 
-					getBinaryEntityContainerConsumerFactoryClass(), 
+					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					BlockConsumerFactoryAdapter::new));		
 		
@@ -53,7 +72,7 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Call>(
 					ExecPackage.Literals.CALL, 
-					getInputStreamSupplierFactoryClass(), 
+					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					CallSupplierFactoryAdapter::new));		
 		
@@ -61,14 +80,14 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Configurator>(
 					ExecPackage.Literals.CONFIGURATOR, 
-					getInputStreamSupplierFactoryClass(), 
+					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					ConfiguratorSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Configurator>(
 					ExecPackage.Literals.CONFIGURATOR, 
-					getBinaryEntityContainerConsumerFactoryClass(), 
+					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					ConfiguratorConsumerFactoryAdapter::new));		
 		
@@ -91,14 +110,14 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Fail>(
 					ExecPackage.Literals.FAIL, 
-					getInputStreamSupplierFactoryClass(), 
+					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					FailSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
 					ExecPackage.Literals.FAIL, 
-					getBinaryEntityContainerConsumerFactoryClass(), 
+					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					FailConsumerFactoryAdapter::new));		
 		
@@ -113,9 +132,31 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<List<Object>>, org.nasdanika.exec.List>(
 					ExecPackage.Literals.LIST, 
-					getListSupplierFactoryClass(), 
+					LIST_SUPPLIER_FACTORY_CLASS, 
 					this.getClass().getClassLoader(), 
 					ListSupplierFactoryAdapter::new));		
+
+//		registerAdapterFactory(
+//				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
+//					ExecPackage.Literals.FAIL, 
+//					getBinaryEntityContainerConsumerFactoryClass(), 
+//					this.getClass().getClassLoader(), 
+//					FailConsumerFactoryAdapter::new));		
+//		
+//		registerAdapterFactory(
+//				new FunctionAdapterFactory<CommandFactory, Fail>(
+//					ExecPackage.Literals.FAIL, 
+//					CommandFactory.class, 
+//					this.getClass().getClassLoader(), 
+//					FailCommandFactoryAdapter::new));				
+		
+		// Map
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<java.util.Map<String,Object>>, org.nasdanika.exec.Map>(
+					ExecPackage.Literals.MAP, 
+					MAP_SUPPLIER_FACTORY_CLASS, 
+					this.getClass().getClassLoader(), 
+					MapSupplierFactoryAdapter::new));		
 
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
@@ -135,31 +176,6 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		registerAdapterFactory(new ContentAdapterFactory());
 		registerAdapterFactory(new ResourcesAdapterFactory());
 				
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<SupplierFactory<Object>> getObjectSupplierFactoryClass() {
-		return (Class) SupplierFactory.class;
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<SupplierFactory<List<Object>>> getListSupplierFactoryClass() {
-		return (Class) SupplierFactory.class;
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<SupplierFactory<InputStream>> getInputStreamSupplierFactoryClass() {
-		return (Class) SupplierFactory.class;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<ConsumerFactory<BinaryEntityContainer>> getBinaryEntityContainerConsumerFactoryClass() {
-		return (Class) ConsumerFactory.class;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<ConsumerFactory<Object>> getObjectConsumerFactoryClass() {
-		return (Class) ConsumerFactory.class;
 	}
 	
 }

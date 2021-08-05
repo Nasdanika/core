@@ -104,6 +104,8 @@ public class ExecValidator extends EObjectValidator {
 				return validateFail((Fail)value, diagnostics, context);
 			case ExecPackage.LIST:
 				return validateList((List)value, diagnostics, context);
+			case ExecPackage.MAP:
+				return validateMap((org.nasdanika.exec.Map)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -222,6 +224,15 @@ public class ExecValidator extends EObjectValidator {
 	 */
 	public boolean validateList(List list, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(list, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMap(org.nasdanika.exec.Map map, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(map, diagnostics, context);
 	}
 
 	/**

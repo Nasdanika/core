@@ -43,6 +43,9 @@
     <genClasses ecoreClass="exec.ecore#//List">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//List/elements"/>
     </genClasses>
+    <genClasses ecoreClass="exec.ecore#//Map">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Map/entries"/>
+    </genClasses>
     <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Base64">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>

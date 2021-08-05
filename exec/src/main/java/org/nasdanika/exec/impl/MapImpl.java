@@ -2,40 +2,40 @@
  */
 package org.nasdanika.exec.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.exec.ExecPackage;
-import org.nasdanika.exec.List;
+import org.nasdanika.exec.Map;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>List</b></em>'.
+ * An implementation of the model object '<em><b>Map</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.exec.impl.ListImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.nasdanika.exec.impl.MapImpl#getEntries <em>Entries</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ListImpl extends ModelElementImpl implements List {
+public class MapImpl extends ModelElementImpl implements Map {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected ListImpl() {
+	protected MapImpl() {
 		super();
 	}
 
@@ -46,7 +46,7 @@ public class ListImpl extends ModelElementImpl implements List {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecPackage.Literals.LIST;
+		return ExecPackage.Literals.MAP;
 	}
 
 	/**
@@ -56,8 +56,8 @@ public class ListImpl extends ModelElementImpl implements List {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<EObject> getElements() {
-		return (EList<EObject>)eDynamicGet(ExecPackage.LIST__ELEMENTS, ExecPackage.Literals.LIST__ELEMENTS, true, true);
+	public EMap<String, EObject> getEntries() {
+		return (EMap<String, EObject>)eDynamicGet(ExecPackage.MAP__ENTRIES, ExecPackage.Literals.MAP__ENTRIES, true, true);
 	}
 
 	/**
@@ -68,8 +68,8 @@ public class ListImpl extends ModelElementImpl implements List {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ExecPackage.LIST__ELEMENTS:
-				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
+			case ExecPackage.MAP__ENTRIES:
+				return ((InternalEList<?>)getEntries()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -82,8 +82,9 @@ public class ListImpl extends ModelElementImpl implements List {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecPackage.LIST__ELEMENTS:
-				return getElements();
+			case ExecPackage.MAP__ENTRIES:
+				if (coreType) return getEntries();
+				else return getEntries().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -93,13 +94,11 @@ public class ListImpl extends ModelElementImpl implements List {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecPackage.LIST__ELEMENTS:
-				getElements().clear();
-				getElements().addAll((Collection<? extends EObject>)newValue);
+			case ExecPackage.MAP__ENTRIES:
+				((EStructuralFeature.Setting)getEntries()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -113,8 +112,8 @@ public class ListImpl extends ModelElementImpl implements List {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecPackage.LIST__ELEMENTS:
-				getElements().clear();
+			case ExecPackage.MAP__ENTRIES:
+				getEntries().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -128,10 +127,10 @@ public class ListImpl extends ModelElementImpl implements List {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecPackage.LIST__ELEMENTS:
-				return !getElements().isEmpty();
+			case ExecPackage.MAP__ENTRIES:
+				return !getEntries().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //ListImpl
+} //MapImpl

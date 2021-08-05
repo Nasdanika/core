@@ -117,6 +117,14 @@ public class ExecSwitch<T> extends Switch<T> {
 			case ExecPackage.LIST: {
 				List list = (List)theEObject;
 				T result = caseList(list);
+				if (result == null) result = caseModelElement(list);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ExecPackage.MAP: {
+				org.nasdanika.exec.Map map = (org.nasdanika.exec.Map)theEObject;
+				T result = caseMap(map);
+				if (result == null) result = caseModelElement(map);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -241,6 +249,21 @@ public class ExecSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseList(List object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMap(org.nasdanika.exec.Map object) {
 		return null;
 	}
 
