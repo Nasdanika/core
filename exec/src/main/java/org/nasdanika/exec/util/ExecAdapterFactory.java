@@ -96,6 +96,10 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 				return createFailAdapter();
 			}
 			@Override
+			public Adapter caseList(List object) {
+				return createListAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -210,6 +214,20 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFailAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.List <em>List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.exec.List
+	 * @generated
+	 */
+	public Adapter createListAdapter() {
 		return null;
 	}
 

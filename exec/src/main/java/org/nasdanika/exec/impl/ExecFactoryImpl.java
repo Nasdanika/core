@@ -63,6 +63,7 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 			case ExecPackage.CONFIGURATOR: return createConfigurator();
 			case ExecPackage.EVAL: return createEval();
 			case ExecPackage.FAIL: return createFail();
+			case ExecPackage.LIST: return createList();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -131,6 +132,17 @@ public class ExecFactoryImpl extends EFactoryImpl implements ExecFactory {
 	public Fail createFail() {
 		FailImpl fail = new FailImpl();
 		return fail;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List createList() {
+		ListImpl list = new ListImpl();
+		return list;
 	}
 
 	/**

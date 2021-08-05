@@ -8,7 +8,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.PrintStreamProgressMonitor;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
+import org.nasdanika.common.resources.BinaryEntity;
+import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
 
 /**
  * Tests of descriptor view parts and wizards.
@@ -36,9 +42,29 @@ public class TestConfigurator extends TestBase {
 	}
 	
 	@Test
-	@Ignore
-	public void testConsumer() throws Exception {
-		// TODO
+	public void testConsumer() throws Exception {	
+		BinaryEntityContainer container = new EphemeralBinaryEntityContainer();
+		Diagnostic generationDiagnostic = generate(
+				"configurator/consumer.yml",
+				container,
+				Context.EMPTY_CONTEXT,
+				Context.singleton("name", "Milky Way"),				
+				diagnostic -> {
+					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
+				});
+		
+		assertThat(generationDiagnostic.getStatus()).isEqualTo(Status.SUCCESS);
+		
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		
+		BinaryEntityContainer myContainer = container.getContainer("my-container", progressMonitor);
+		assertThat(myContainer).isNotNull();
+		assertThat(myContainer.exists(progressMonitor)).isTrue();
+		
+		BinaryEntity file = myContainer.get("my-file.txt", progressMonitor);
+		assertThat(file).isNotNull();
+		assertThat(file.exists(progressMonitor)).isTrue();
+		assertThat(DefaultConverter.INSTANCE.toString(file.getState(progressMonitor))).isEqualTo("Hello, Extended Milky Way!\nHow are you doing tonight?\n");
 	}
 	
 	@Test

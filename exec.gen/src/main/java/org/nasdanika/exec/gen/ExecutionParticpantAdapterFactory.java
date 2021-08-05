@@ -1,6 +1,7 @@
 package org.nasdanika.exec.gen;
 
 import java.io.InputStream;
+import java.util.List;
 
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
@@ -108,10 +109,42 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 					this.getClass().getClassLoader(), 
 					FailCommandFactoryAdapter::new));				
 		
+		// List
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<List<Object>>, org.nasdanika.exec.List>(
+					ExecPackage.Literals.LIST, 
+					getListSupplierFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					ListSupplierFactoryAdapter::new));		
+
+//		registerAdapterFactory(
+//				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
+//					ExecPackage.Literals.FAIL, 
+//					getBinaryEntityContainerConsumerFactoryClass(), 
+//					this.getClass().getClassLoader(), 
+//					FailConsumerFactoryAdapter::new));		
+//		
+//		registerAdapterFactory(
+//				new FunctionAdapterFactory<CommandFactory, Fail>(
+//					ExecPackage.Literals.FAIL, 
+//					CommandFactory.class, 
+//					this.getClass().getClassLoader(), 
+//					FailCommandFactoryAdapter::new));				
+		
 		// Sub-packages
 		registerAdapterFactory(new ContentAdapterFactory());
 		registerAdapterFactory(new ResourcesAdapterFactory());
 				
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Class<SupplierFactory<Object>> getObjectSupplierFactoryClass() {
+		return (Class) SupplierFactory.class;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Class<SupplierFactory<List<Object>>> getListSupplierFactoryClass() {
+		return (Class) SupplierFactory.class;
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -124,5 +157,9 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 		return (Class) ConsumerFactory.class;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected Class<ConsumerFactory<Object>> getObjectConsumerFactoryClass() {
+		return (Class) ConsumerFactory.class;
+	}
 	
 }

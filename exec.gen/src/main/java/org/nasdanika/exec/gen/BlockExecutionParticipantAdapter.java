@@ -69,7 +69,7 @@ public class BlockExecutionParticipantAdapter extends AdapterImpl {
 				progressMonitor.worked(1, "Cancelled");
 				return new BasicDiagnostic(Status.CANCEL, "Progress monitor is cancelled", this);
 			}
-			BasicDiagnostic ret = new BasicDiagnostic(Status.INFO, name());
+			BasicDiagnostic ret = new BasicDiagnostic(Status.SUCCESS, name());
 			progressMonitor.setWorkRemaining(size());
 			ret.add(tryParticipant.splitAndDiagnose(progressMonitor));
 			if (catchParticipant != null) {

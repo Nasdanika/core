@@ -63,18 +63,18 @@ public class BlockCommandFactoryAdapter extends BlockExecutionParticipantAdapter
 		Reference<Exception> eRef = new Reference<Exception>();
 		Block target = (Block) getTarget();
 		
-		List<CommandFactory> tryBlock = target.getTry().stream().map(e -> EObjectAdaptable.adaptTo(e, CommandFactory.class)).filter(Objects::nonNull).collect(Collectors.toList());
+		List<CommandFactory> tryBlock = target.getTry().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptTo(e, CommandFactory.class), "Cannot adapt to CommandFactory: " + e)).collect(Collectors.toList());
 		Command tryCommand = Util.asCommandFactory(tryBlock).create(context);
 		
 		Command catchCommand = null; 		
 		if (!target.getCatch().isEmpty()) {
-			List<CommandFactory> catchBlock = target.getCatch().stream().map(e -> EObjectAdaptable.adaptTo(e, CommandFactory.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<CommandFactory> catchBlock = target.getCatch().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptTo(e, CommandFactory.class), "Cannot adapt to CommandFactory: " + e)).collect(Collectors.toList());
 			catchCommand = Util.asCommandFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}
 		
 		Command finallyCommand = null;
 		if (!target.getFinally().isEmpty()) {
-			List<CommandFactory> finallyBlock = target.getFinally().stream().map(e -> EObjectAdaptable.adaptTo(e, CommandFactory.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<CommandFactory> finallyBlock = target.getFinally().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptTo(e, CommandFactory.class), "Cannot adapt to CommandFactory: " + e)).collect(Collectors.toList());
 			finallyCommand = Util.asCommandFactory(finallyBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}		
 		

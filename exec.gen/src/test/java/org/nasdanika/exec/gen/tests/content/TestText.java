@@ -48,5 +48,23 @@ public class TestText extends TestBase {
 		assertThat(in).isNotNull();
 		assertThat(DefaultConverter.INSTANCE.toString(in)).isEqualTo("Hello World.");
 	}
+	
+	@Test
+	public void testHello() throws Exception {	
+		InputStream in = loadInputStream(
+				"text/hello.yml",
+				diagnostic -> {					
+					Status status = diagnostic.getStatus();
+					if (status != Status.SUCCESS) {
+						diagnostic.dump(System.out, 0);
+					}
+					assertThat(status).isEqualTo(Status.SUCCESS);
+				},
+				Context.EMPTY_CONTEXT,
+				Context.singleton("name", "World"));
+		
+		assertThat(in).isNotNull();
+		assertThat(DefaultConverter.INSTANCE.toString(in)).isEqualTo("Hello, World!\nHow are you doing tonight?\n");
+	}
 		
 }

@@ -467,6 +467,44 @@ public interface ExecPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.impl.ListImpl <em>List</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.impl.ListImpl
+	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getList()
+	 * @generated
+	 */
+	int LIST = 7;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__ELEMENTS = 0;
+
+	/**
+	 * The number of structural features of the '<em>List</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>List</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_OPERATION_COUNT = 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -625,6 +663,7 @@ public interface ExecPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString"
 	 *        valueType="org.eclipse.emf.ecore.EObject" valueContainment="true" valueRequired="true"
+	 *        annotation="urn:org.nasdanika documentation-reference='doc/property.md'"
 	 * @generated
 	 */
 	EClass getProperty();
@@ -735,6 +774,27 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getFail_Message();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.List <em>List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>List</em>'.
+	 * @see org.nasdanika.exec.List
+	 * @generated
+	 */
+	EClass getList();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.List#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.nasdanika.exec.List#getElements()
+	 * @see #getList()
+	 * @generated
+	 */
+	EReference getList_Elements();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -972,6 +1032,24 @@ public interface ExecPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FAIL__MESSAGE = eINSTANCE.getFail_Message();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.impl.ListImpl <em>List</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.impl.ListImpl
+		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getList()
+		 * @generated
+		 */
+		EClass LIST = eINSTANCE.getList();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LIST__ELEMENTS = eINSTANCE.getList_Elements();
 
 	}
 

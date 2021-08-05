@@ -67,6 +67,15 @@ public interface ExecFactory extends EFactory {
 	Fail createFail();
 
 	/**
+	 * Returns a new object of class '<em>List</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>List</em>'.
+	 * @generated
+	 */
+	List createList();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

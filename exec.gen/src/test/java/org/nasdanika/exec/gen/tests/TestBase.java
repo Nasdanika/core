@@ -234,6 +234,118 @@ public class TestBase {
 			return generate(resource, container, Context.EMPTY_CONTEXT, Context.EMPTY_CONTEXT, progressMonitor, diagnosticConsumer);
 		}
 	}	
+
+	// Loading Object	
+	protected Object load(
+			EObject eObject, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
+			Context context,
+			ProgressMonitor progressMonitor) throws Exception {
+		
+		// Diagnosing loaded resources. 
+		try {
+			SupplierFactory<Object> supplierFactory = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(eObject, Object.class), "Cannot adapt to SupplierFactory");
+			return Util.call(supplierFactory.create(context), progressMonitor, diagnosticConsumer);
+		} catch (DiagnosticException e) {
+			System.err.println("******************************");
+			System.err.println("*      Diagnostic failed     *");
+			System.err.println("******************************");
+			e.getDiagnostic().dump(System.err, 4, Status.FAIL);
+			throw e;
+		}		
+	}
+	
+	protected Object load(
+			String resource, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
+			Context modelContext,
+			Context generationContext,
+			ProgressMonitor progressMonitor) throws Exception {
+		EObject eObject = Objects.requireNonNull(loadObject(resource, diagnosticConsumer, modelContext, progressMonitor), "Loaded null from " + resource);
+		return load(eObject, diagnosticConsumer, generationContext, progressMonitor);
+	}
+	
+	protected Object load(
+			String resource, 
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer,
+			Context modelContext,
+			Context generationContext) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return load(resource, diagnosticConsumer, modelContext, generationContext, progressMonitor);
+		}
+	}
+	
+	/**
+	 * Loads input stream with empty context and {@link PrintStreamProgressMonitor} outputting to System.out
+	 * @param resource
+	 * @param diagnosticConsumer
+	 * @return
+	 * @throws Exception
+	 */
+	protected Object load(String resource, Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return load(resource, diagnosticConsumer, Context.EMPTY_CONTEXT, Context.EMPTY_CONTEXT, progressMonitor);
+		}
+	}	
+	
+	// Consuming
+	protected Diagnostic consume(
+			EObject eObject, 
+			Object arg,
+			Context context,
+			ProgressMonitor progressMonitor) throws Exception {
+		
+		// Diagnosing loaded resources. 
+		try {
+			ConsumerFactory<Object> consumerFactory = Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(eObject, Object.class), "Cannot adapt to ConsumerFactory");
+			return Util.call(consumerFactory.create(context), arg, progressMonitor);
+		} catch (DiagnosticException e) {
+			System.err.println("******************************");
+			System.err.println("*      Diagnostic failed     *");
+			System.err.println("******************************");
+			e.getDiagnostic().dump(System.err, 4, Status.FAIL);
+			throw e;
+		}		
+	}
+	
+	protected Diagnostic consume(
+			String resource, 
+			Object arg,
+			Context modelContext,
+			Context generationContext,			
+			ProgressMonitor progressMonitor,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		EObject eObject = Objects.requireNonNull(loadObject(resource, diagnosticConsumer, modelContext, progressMonitor), "Loaded null from " + resource);
+		return consume(eObject, arg, generationContext, progressMonitor);
+	}
+	
+	protected Diagnostic consume(
+			String resource, 
+			Object arg,
+			Context modelContext,
+			Context generationContext,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return consume(resource, arg, modelContext, generationContext, progressMonitor, diagnosticConsumer);
+		}
+	}
+	
+	/**
+	 * Generates with empty context and {@link PrintStreamProgressMonitor} outputting to System.out
+	 * @param resource
+	 * @param container 
+	 * @param diagnosticConsumer Consumer of model diagnostic. 
+	 * @return Generation diagnostic
+	 * @throws Exception
+	 */
+	protected Diagnostic consume(
+			String resource,
+			Object arg,
+			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {
+		try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
+			return consume(resource, arg, Context.EMPTY_CONTEXT, Context.EMPTY_CONTEXT, progressMonitor, diagnosticConsumer);
+		}
+	}	
 	
 
 }

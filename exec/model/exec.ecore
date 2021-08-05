@@ -86,6 +86,9 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Property" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/property.md"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
         containment="true"/>
@@ -139,6 +142,14 @@
         <details key="documentation" value="Message to output. Interpolated."/>
       </eAnnotations>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="List">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/list.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
   </eClassifiers>
   <eSubpackages name="content" nsURI="urn:org.nasdanika.exec.content" nsPrefix="org.nasdanika.exec.content">
     <eAnnotations source="urn:org.nasdanika">

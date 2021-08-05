@@ -85,22 +85,19 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 		
 		Collection<SupplierFactory<InputStream>> tryBlock = new ArrayList<>();
 		for (EObject tbe: target.getTry()) {
-			SupplierFactory<InputStream> tbesf = EObjectAdaptable.adaptToSupplierFactory(tbe, InputStream.class);
-			if (tbesf != null) {
-				tryBlock.add(tbesf);
-			}
+			tryBlock.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(tbe, InputStream.class), "Cannot adapt to SupplierFactory: " + tbe));
 		}
 		Supplier<InputStream>  trySupplier = Util.asInputStreamSupplierFactory(tryBlock).create(context);
 		
 		Supplier<InputStream> catchSupplier = null; 		
 		if (!target.getCatch().isEmpty()) {
-			List<SupplierFactory<InputStream>> catchBlock = target.getCatch().stream().map(e -> EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<SupplierFactory<InputStream>> catchBlock = target.getCatch().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class), "Cannot adapt to SupplierFactory: " + e)).collect(Collectors.toList());
 			catchSupplier = Util.asInputStreamSupplierFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}
 		
 		Supplier<InputStream>  finallySupplier = null;
 		if (!target.getFinally().isEmpty()) {
-			List<SupplierFactory<InputStream>> finallyBlock = target.getFinally().stream().map(e -> EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<SupplierFactory<InputStream>> finallyBlock = target.getFinally().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(e, InputStream.class), "Cannot adapt to SupplierFactory: " + e)).collect(Collectors.toList());
 			finallySupplier = Util.asInputStreamSupplierFactory(finallyBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}		
 		

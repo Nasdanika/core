@@ -64,18 +64,18 @@ public class BlockConsumerFactoryAdapter extends BlockExecutionParticipantAdapte
 		Reference<Exception> eRef = new Reference<Exception>();
 		Block target = (Block) getTarget();
 		
-		List<ConsumerFactory<BinaryEntityContainer>> tryBlock = target.getTry().stream().map(e -> EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class)).filter(Objects::nonNull).collect(Collectors.toList());
+		List<ConsumerFactory<BinaryEntityContainer>> tryBlock = target.getTry().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class), "Cannot adapt to ConsumerFactory: " + e)).collect(Collectors.toList());
 		Consumer<BinaryEntityContainer>  tryConsumer = Util.asConsumerFactory(tryBlock).create(context);
 		
 		Consumer<BinaryEntityContainer> catchConsumer = null; 		
 		if (!target.getCatch().isEmpty()) {
-			List<ConsumerFactory<BinaryEntityContainer>> catchBlock = target.getCatch().stream().map(e -> EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<ConsumerFactory<BinaryEntityContainer>> catchBlock = target.getCatch().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class), "Cannot adapt to ConsumerFactory: " + e)).collect(Collectors.toList());
 			catchConsumer = Util.asConsumerFactory(catchBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}
 		
 		Consumer<BinaryEntityContainer>  finallyConsumer = null;
 		if (!target.getFinally().isEmpty()) {
-			List<ConsumerFactory<BinaryEntityContainer>> finallyBlock = target.getFinally().stream().map(e -> EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class)).filter(Objects::nonNull).collect(Collectors.toList());
+			List<ConsumerFactory<BinaryEntityContainer>> finallyBlock = target.getFinally().stream().map(e -> Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(e, BinaryEntityContainer.class), "Cannot adapt to ConsumerFactory: " + e)).collect(Collectors.toList());
 			finallyConsumer = Util.asConsumerFactory(finallyBlock).contextify(ctx -> createCatchContextSupplier(ctx, eRef)).create(context);
 		}		
 		

@@ -2,40 +2,43 @@
  */
 package org.nasdanika.exec.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EMap;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecPackage;
+import org.nasdanika.exec.List;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Eval</b></em>'.
+ * An implementation of the model object '<em><b>List</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.exec.impl.EvalImpl#getScript <em>Script</em>}</li>
- *   <li>{@link org.nasdanika.exec.impl.EvalImpl#getBindings <em>Bindings</em>}</li>
+ *   <li>{@link org.nasdanika.exec.impl.ListImpl#getElements <em>Elements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EvalImpl extends ModelElementImpl implements Eval {
+public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected EvalImpl() {
+	protected ListImpl() {
 		super();
 	}
 
@@ -46,7 +49,7 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecPackage.Literals.EVAL;
+		return ExecPackage.Literals.LIST;
 	}
 
 	/**
@@ -55,28 +58,8 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	 * @generated
 	 */
 	@Override
-	public EObject getScript() {
-		return (EObject)eDynamicGet(ExecPackage.EVAL__SCRIPT, ExecPackage.Literals.EVAL__SCRIPT, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetScript(EObject newScript, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newScript, ExecPackage.EVAL__SCRIPT, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setScript(EObject newScript) {
-		eDynamicSet(ExecPackage.EVAL__SCRIPT, ExecPackage.Literals.EVAL__SCRIPT, newScript);
+	protected int eStaticFeatureCount() {
+		return 0;
 	}
 
 	/**
@@ -86,8 +69,8 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, EObject> getBindings() {
-		return (EMap<String, EObject>)eDynamicGet(ExecPackage.EVAL__BINDINGS, ExecPackage.Literals.EVAL__BINDINGS, true, true);
+	public EList<EObject> getElements() {
+		return (EList<EObject>)eDynamicGet(ExecPackage.LIST__ELEMENTS, ExecPackage.Literals.LIST__ELEMENTS, true, true);
 	}
 
 	/**
@@ -98,10 +81,8 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ExecPackage.EVAL__SCRIPT:
-				return basicSetScript(null, msgs);
-			case ExecPackage.EVAL__BINDINGS:
-				return ((InternalEList<?>)getBindings()).basicRemove(otherEnd, msgs);
+			case ExecPackage.LIST__ELEMENTS:
+				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -114,11 +95,8 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecPackage.EVAL__SCRIPT:
-				return getScript();
-			case ExecPackage.EVAL__BINDINGS:
-				if (coreType) return getBindings();
-				else return getBindings().map();
+			case ExecPackage.LIST__ELEMENTS:
+				return getElements();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -128,14 +106,13 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecPackage.EVAL__SCRIPT:
-				setScript((EObject)newValue);
-				return;
-			case ExecPackage.EVAL__BINDINGS:
-				((EStructuralFeature.Setting)getBindings()).set(newValue);
+			case ExecPackage.LIST__ELEMENTS:
+				getElements().clear();
+				getElements().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -149,11 +126,8 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecPackage.EVAL__SCRIPT:
-				setScript((EObject)null);
-				return;
-			case ExecPackage.EVAL__BINDINGS:
-				getBindings().clear();
+			case ExecPackage.LIST__ELEMENTS:
+				getElements().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -167,12 +141,10 @@ public class EvalImpl extends ModelElementImpl implements Eval {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecPackage.EVAL__SCRIPT:
-				return getScript() != null;
-			case ExecPackage.EVAL__BINDINGS:
-				return !getBindings().isEmpty();
+			case ExecPackage.LIST__ELEMENTS:
+				return !getElements().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //EvalImpl
+} //ListImpl

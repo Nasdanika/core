@@ -18,6 +18,7 @@ import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
+import org.nasdanika.exec.List;
 import org.nasdanika.exec.ModelElement;
 
 import org.nasdanika.exec.content.ContentPackage;
@@ -82,6 +83,13 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	private EClass failEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass listEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -420,6 +428,26 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getList() {
+		return listEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getList_Elements() {
+		return (EReference)listEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ExecFactory getExecFactory() {
 		return (ExecFactory)getEFactoryInstance();
 	}
@@ -474,6 +502,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 
 		failEClass = createEClass(FAIL);
 		createEAttribute(failEClass, FAIL__MESSAGE);
+
+		listEClass = createEClass(LIST);
+		createEReference(listEClass, LIST__ELEMENTS);
 	}
 
 	/**
@@ -551,6 +582,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		initEClass(failEClass, Fail.class, "Fail", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFail_Message(), ecorePackage.getEString(), "message", null, 0, 1, Fail.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getList_Elements(), ecorePackage.getEObject(), null, "elements", null, 1, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		// Create resource
 		createResource(eNS_URI);
 
@@ -622,6 +656,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 			   "exclusive-with", "service property"
 		   });
 		addAnnotation
+		  (propertyEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/property.md"
+		   });
+		addAnnotation
 		  (configuratorEClass,
 		   source,
 		   new String[] {
@@ -650,6 +690,12 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (listEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/list.md"
 		   });
 	}
 

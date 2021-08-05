@@ -3,7 +3,6 @@
 package org.nasdanika.exec.impl;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
