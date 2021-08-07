@@ -1148,4 +1148,37 @@ public class Util {
 		return null;
 	}
 	
+	/**
+	 * A method to get compiler happy without strange casts and suppressing warnings
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> Class<SupplierFactory<T>> getSupplierFactoryClass(Class<T> type) {
+		return (Class<SupplierFactory<T>>) (Class) SupplierFactory.class;
+	}
+	
+	/**
+	 * A method to get compiler happy without strange casts and suppressing warnings
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T> Class<ConsumerFactory<T>> getConsumerFactoryClass(Class<T> type) {
+		return (Class<ConsumerFactory<T>>) (Class) ConsumerFactory.class;
+	}
+	
+	/**
+	 * A method to get compiler happy without strange casts and suppressing warnings
+	 * @param <T>
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <T,R> Class<FunctionFactory<T,R>> getFunctionFactoryClass(Class<T> type, Class<R> returnType) {
+		return (Class<FunctionFactory<T,R>>) (Class) FunctionFactory.class;
+	}
+	
 }
