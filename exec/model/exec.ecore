@@ -213,6 +213,10 @@
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="#//ModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="resources" nsURI="urn:org.nasdanika.exec.resources" nsPrefix="org.nasdanika.exec.resources">
     <eAnnotations source="urn:org.nasdanika">

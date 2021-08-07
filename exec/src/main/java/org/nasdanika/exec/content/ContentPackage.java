@@ -218,6 +218,53 @@ public interface ContentPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.FilterImpl <em>Filter</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.content.impl.FilterImpl
+	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getFilter()
+	 * @generated
+	 */
+	int FILTER = 3;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__DESCRIPTION = ExecPackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__SOURCE = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Filter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_FEATURE_COUNT = ExecPackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Filter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION_COUNT = ExecPackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Base64 <em>Base64</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -301,6 +348,27 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getText_Interpolate();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Filter <em>Filter</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Filter</em>'.
+	 * @see org.nasdanika.exec.content.Filter
+	 * @generated
+	 */
+	EClass getFilter();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.exec.content.Filter#getSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Source</em>'.
+	 * @see org.nasdanika.exec.content.Filter#getSource()
+	 * @see #getFilter()
+	 * @generated
+	 */
+	EReference getFilter_Source();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -394,6 +462,24 @@ public interface ContentPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TEXT__INTERPOLATE = eINSTANCE.getText_Interpolate();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.content.impl.FilterImpl <em>Filter</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.content.impl.FilterImpl
+		 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getFilter()
+		 * @generated
+		 */
+		EClass FILTER = eINSTANCE.getFilter();
+
+		/**
+		 * The meta object literal for the '<em><b>Source</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FILTER__SOURCE = eINSTANCE.getFilter_Source();
 
 	}
 

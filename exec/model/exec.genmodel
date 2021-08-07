@@ -58,6 +58,9 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/content"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/interpolate"/>
       </genClasses>
+      <genClasses ecoreClass="exec.ecore#//content/Filter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Filter/source"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Resources" disposableProviderFactory="true" ecorePackage="exec.ecore#//resources">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="exec.ecore#//resources/ReconcileAction">

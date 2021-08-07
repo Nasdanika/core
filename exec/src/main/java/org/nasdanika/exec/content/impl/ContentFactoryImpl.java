@@ -59,6 +59,7 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 			case ContentPackage.BASE64: return createBase64();
 			case ContentPackage.RESOURCE: return createResource();
 			case ContentPackage.TEXT: return createText();
+			case ContentPackage.FILTER: return createFilter();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -95,6 +96,17 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 	public Text createText() {
 		TextImpl text = new TextImpl();
 		return text;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Filter createFilter() {
+		FilterImpl filter = new FilterImpl();
+		return filter;
 	}
 
 	/**

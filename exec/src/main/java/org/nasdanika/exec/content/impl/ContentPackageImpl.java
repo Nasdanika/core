@@ -14,6 +14,7 @@ import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.ContentPackage;
+import org.nasdanika.exec.content.Filter;
 import org.nasdanika.exec.content.Resource;
 
 import org.nasdanika.exec.content.Text;
@@ -47,6 +48,13 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	private EClass textEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass filterEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -205,6 +213,26 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getFilter() {
+		return filterEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getFilter_Source() {
+		return (EReference)filterEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ContentFactory getContentFactory() {
 		return (ContentFactory)getEFactoryInstance();
 	}
@@ -238,6 +266,9 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		textEClass = createEClass(TEXT);
 		createEAttribute(textEClass, TEXT__CONTENT);
 		createEAttribute(textEClass, TEXT__INTERPOLATE);
+
+		filterEClass = createEClass(FILTER);
+		createEReference(filterEClass, FILTER__SOURCE);
 	}
 
 	/**
@@ -274,6 +305,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		base64EClass.getESuperTypes().add(theExecPackage.getModelElement());
 		resourceEClass.getESuperTypes().add(theExecPackage.getModelElement());
 		textEClass.getESuperTypes().add(theExecPackage.getModelElement());
+		filterEClass.getESuperTypes().add(theExecPackage.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(base64EClass, Base64.class, "Base64", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -286,6 +318,9 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 1, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getText_Interpolate(), ecorePackage.getEBoolean(), "interpolate", "true", 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(filterEClass, Filter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFilter_Source(), ecorePackage.getEObject(), null, "source", null, 1, 1, Filter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create annotations
 		// urn:org.nasdanika
