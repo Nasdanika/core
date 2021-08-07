@@ -7,7 +7,7 @@
 	    <version>2021.8.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>gen</artifactId>
+	<artifactId>exec-gen</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Exec Generation Adapters</name>
 

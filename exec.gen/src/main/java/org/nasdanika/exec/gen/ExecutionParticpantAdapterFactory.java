@@ -6,6 +6,7 @@ import java.util.List;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
@@ -31,41 +32,37 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final Class<SupplierFactory<List<Object>>> LIST_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
 
-	// Generic class constants
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final Class<SupplierFactory<Object>> OBJECT_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+	public static final Class<SupplierFactory<Object>> OBJECT_SUPPLIER_FACTORY_CLASS = Util.getSupplierFactoryClass(Object.class);
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final Class<SupplierFactory<InputStream>> INPUT_STREAM_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;
+	public static final Class<SupplierFactory<InputStream>> INPUT_STREAM_SUPPLIER_FACTORY_CLASS = Util.getSupplierFactoryClass(InputStream.class);
 		
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final Class<ConsumerFactory<BinaryEntityContainer>> BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS = (Class) ConsumerFactory.class;
+	public static final Class<ConsumerFactory<BinaryEntityContainer>> BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS = Util.getConsumerFactoryClass(BinaryEntityContainer.class);
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static final Class<ConsumerFactory<Object>> OBJECT_CONSUMER_FACTORY_CLASS = (Class) ConsumerFactory.class;
+	public static final Class<ConsumerFactory<Object>> OBJECT_CONSUMER_FACTORY_CLASS = Util.getConsumerFactoryClass(Object.class);
 	
 	public ExecutionParticpantAdapterFactory() {
+		ClassLoader classLoader = getClassLoader();
 		
 		// Block
 		registerAdapterFactory(
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Block>(
 					ExecPackage.Literals.BLOCK, 
 					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					BlockSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Block>(
 					ExecPackage.Literals.BLOCK, 
 					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					BlockConsumerFactoryAdapter::new));		
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<CommandFactory, Block>(
 					ExecPackage.Literals.BLOCK, 
 					CommandFactory.class, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					BlockCommandFactoryAdapter::new));
 		
 		// Call
@@ -73,7 +70,7 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Call>(
 					ExecPackage.Literals.CALL, 
 					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					CallSupplierFactoryAdapter::new));		
 		
 		// Configurator
@@ -81,21 +78,21 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Configurator>(
 					ExecPackage.Literals.CONFIGURATOR, 
 					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					ConfiguratorSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Configurator>(
 					ExecPackage.Literals.CONFIGURATOR, 
 					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					ConfiguratorConsumerFactoryAdapter::new));		
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<CommandFactory, Configurator>(
 					ExecPackage.Literals.CONFIGURATOR, 
 					CommandFactory.class, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					ConfiguratorCommandFactoryAdapter::new));
 		
 		// Eval
@@ -103,7 +100,7 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory.Provider, Eval>(
 					ExecPackage.Literals.EVAL, 
 					SupplierFactory.Provider.class, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					EvalSupplierFactoryProviderAdapter::new));		
 
 		// Fail
@@ -111,21 +108,21 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<InputStream>, Fail>(
 					ExecPackage.Literals.FAIL, 
 					INPUT_STREAM_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					FailSupplierFactoryAdapter::new));		
 
 		registerAdapterFactory(
 				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
 					ExecPackage.Literals.FAIL, 
 					BINARY_ENTITY_CONTAINER_CONSUMER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					FailConsumerFactoryAdapter::new));		
 		
 		registerAdapterFactory(
 				new FunctionAdapterFactory<CommandFactory, Fail>(
 					ExecPackage.Literals.FAIL, 
 					CommandFactory.class, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					FailCommandFactoryAdapter::new));				
 		
 		// List
@@ -133,21 +130,21 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<List<Object>>, org.nasdanika.exec.List>(
 					ExecPackage.Literals.LIST, 
 					LIST_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					ListSupplierFactoryAdapter::new));		
 
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
 //					ExecPackage.Literals.FAIL, 
 //					getBinaryEntityContainerConsumerFactoryClass(), 
-//					this.getClass().getClassLoader(), 
+//					getClassLoader(), 
 //					FailConsumerFactoryAdapter::new));		
 //		
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<CommandFactory, Fail>(
 //					ExecPackage.Literals.FAIL, 
 //					CommandFactory.class, 
-//					this.getClass().getClassLoader(), 
+//					getClassLoader(), 
 //					FailCommandFactoryAdapter::new));				
 		
 		// Map
@@ -155,27 +152,31 @@ public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
 				new FunctionAdapterFactory<SupplierFactory<java.util.Map<String,Object>>, org.nasdanika.exec.Map>(
 					ExecPackage.Literals.MAP, 
 					MAP_SUPPLIER_FACTORY_CLASS, 
-					this.getClass().getClassLoader(), 
+					classLoader, 
 					MapSupplierFactoryAdapter::new));		
 
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<ConsumerFactory<BinaryEntityContainer>, Fail>(
 //					ExecPackage.Literals.FAIL, 
 //					getBinaryEntityContainerConsumerFactoryClass(), 
-//					this.getClass().getClassLoader(), 
+//					getClassLoader(), 
 //					FailConsumerFactoryAdapter::new));		
 //		
 //		registerAdapterFactory(
 //				new FunctionAdapterFactory<CommandFactory, Fail>(
 //					ExecPackage.Literals.FAIL, 
 //					CommandFactory.class, 
-//					this.getClass().getClassLoader(), 
+//					getClassLoader(), 
 //					FailCommandFactoryAdapter::new));				
 		
 		// Sub-packages
 		registerAdapterFactory(new ContentAdapterFactory());
 		registerAdapterFactory(new ResourcesAdapterFactory());
 				
+	}
+
+	protected ClassLoader getClassLoader() {
+		return getClass().getClassLoader();
 	}
 	
 }
