@@ -20,7 +20,10 @@ public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,
 		progressMonitor.setWorkRemaining(size());
 		Map<K,T> result = new LinkedHashMap<>();
 		for (Entry<K, Supplier<? extends T>> e: elements.entrySet()) {
-			result.put(e.getKey(), e.getValue().splitAndExecute(progressMonitor));			
+			Supplier<? extends T> value = e.getValue();
+			if (value != null) {
+				result.put(e.getKey(), value.splitAndExecute(progressMonitor));			
+			}
 		}
 		return result;
 	}	

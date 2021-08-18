@@ -21,7 +21,9 @@ public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Co
 	public void execute(E arg, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());
 		for (Consumer<? super E> e: getElements()) {
-			e.splitAndExecute(arg, progressMonitor);			
+			if (e != null) {
+				e.splitAndExecute(arg, progressMonitor);			
+			}
 		}
 	}	
 

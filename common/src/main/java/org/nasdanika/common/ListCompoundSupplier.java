@@ -24,7 +24,7 @@ public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Su
 		progressMonitor.setWorkRemaining(size());
 		List<E> result = new ArrayList<>();
 		for (Supplier<? extends E> e: getElements()) {
-			result.add(e.splitAndExecute(progressMonitor));			
+			result.add(e == null ? null : e.splitAndExecute(progressMonitor));			
 		}
 		return result;
 	}	
