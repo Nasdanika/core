@@ -16,7 +16,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		<T,R> FunctionFactory<T,R> getFactory(Class<T> parameterType, Class<R> resultType);
 	}	
 	
-	default <V> FunctionFactory<T,V> then(FunctionFactory<? super R,V> then) {
+	default <V> FunctionFactory<T,V> then(FunctionFactory<? super R, V> then) {
 		return new FunctionFactory<T, V>() {
 			
 			@Override
