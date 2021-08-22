@@ -166,7 +166,53 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			
 		};
 	}
-		
+	
+	/**
+	 * @return Function which executes this consumer passing BiSupplier.getFirst() (T) and returns getSecond() (R). 
+	 * This method can be used for chaining consumers.
+	 */
+	default <R> Function<BiSupplier<T,R>,R> asBiSupplierFunction() {
+		return new Function<BiSupplier<T,R>,R>() {
+			
+			@Override
+			public R execute(BiSupplier<T,R> input, ProgressMonitor progressMonitor) throws Exception {
+				Consumer.this.execute(input.getFirst(), progressMonitor);
+				return input.getSecond();
+			}
+			
+			@Override
+			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
+				return Consumer.this.diagnose(progressMonitor);
+			}
+			
+			@Override
+			public void close() throws Exception {
+				Consumer.this.close();
+			}
+			
+			@Override
+			public void commit(ProgressMonitor progressMonitor) throws Exception {
+				Consumer.this.commit(progressMonitor);
+			}
+			
+			@Override
+			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+				return Consumer.this.rollback(progressMonitor);
+			}
+			
+			@Override
+			public double size() {
+				return Consumer.this.size();
+			}
+			
+			@Override
+			public String name() {
+				return Consumer.this.name();
+			}
+			
+		};
+	}
+				
 	static <T> Consumer<T> fromBiConsumer(BiConsumer<T,ProgressMonitor> biConsumer, String name, double size) {
 		return new Consumer<T>() {
 

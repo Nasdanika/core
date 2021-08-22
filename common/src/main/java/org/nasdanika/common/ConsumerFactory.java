@@ -27,6 +27,17 @@ public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer
 		};
 	}
 	
+	default <R> FunctionFactory<BiSupplier<T,R>,R> asBiSupplierFunctionFactory() {
+		return new FunctionFactory<BiSupplier<T,R>, R>() {
+
+			@Override
+			public Function<BiSupplier<T,R>, R> create(Context context) throws Exception {
+				return ConsumerFactory.this.create(context).asBiSupplierFunction();
+			}
+			
+		};
+	}
+	
 	/**
 	 * @param contextSupplierFactory Factory which creates a context to be passed to this factory to create supplier.
 	 * @return Consumer factory which creates a context using the context supplier factory and then uses that context and this factory to create a function.
