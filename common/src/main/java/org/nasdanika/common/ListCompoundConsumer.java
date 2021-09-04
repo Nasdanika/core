@@ -1,11 +1,17 @@
 package org.nasdanika.common;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
-public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Consumer<? super E>> implements Consumer<E>  {
+/**
+ * For each argument element an element consumer at the same index is invoked if present. 
+ * @author Pavel
+ *
+ * @param <E>
+ */
+public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Consumer<? super E>> implements Consumer<List<E>>  {
 
-	public ListCompoundConsumer(String name, Collection<Consumer<? super E>> consumers) {
+	public ListCompoundConsumer(String name, List<Consumer<? super E>> consumers) {
 		super(name);
 		for (Consumer<? super E> consumer: consumers) {
 			add(consumer);
@@ -18,12 +24,18 @@ public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Co
 	}
 
 	@Override
-	public void execute(E arg, ProgressMonitor progressMonitor) throws Exception {
+	public void execute(List<E> args, ProgressMonitor progressMonitor) throws Exception {
 		progressMonitor.setWorkRemaining(size());
-		for (Consumer<? super E> e: getElements()) {
-			if (e != null) {
-				e.splitAndExecute(arg, progressMonitor);			
+		int idx = 0;
+		List<Consumer<? super E>> els = getElements();
+		for (E arg: args) {
+			if (idx < els.size()) {
+				Consumer<? super E> ec = els.get(idx);
+				if (ec != null) {
+					ec.splitAndExecute(arg, progressMonitor);
+				}
 			}
+			++idx;
 		}
 	}	
 

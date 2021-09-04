@@ -939,7 +939,7 @@ public class Util {
 	@SuppressWarnings("unchecked")
 	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, Marker marker) {
 		if (obj instanceof Collection) {
-			ListCompoundConsumerFactory<T> ret = new ListCompoundConsumerFactory<>("Consumer collection");
+			CollectionCompoundConsumerFactory<T> ret = new CollectionCompoundConsumerFactory<>("Consumer collection");
 			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
 				ret.add(asConsumerFactory(e, getMarker((Collection<?>) obj, idx++)));

@@ -4,3 +4,6 @@ engineering-module:
   representations:
     - representation-component-diagram: true
   
+  issues:
+    - name: Rendering of draw.io diagrams
+      description: Markdown embedding similar to PlantUML - perhaps a fenced block and YAML spec - location, format. Use generator of SVG/PNG (https://stackoverflow.com/questions/35274068/rendering-xml-from-draw-io-as-an-image-using-mxcellrenderer) or static viewer - look at generated .html files. 

@@ -2,32 +2,33 @@ package org.nasdanika.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
- * Creates a {@link ListCompoundConsumer} which passes the argument element to element consumer with the same index, if present.
+ * Creates a {@link CollectionCompoundConsumer} which passes the argument to all element consumers.
  * @author Pavel
  *
  * @param <T>
  */
-public class ListCompoundConsumerFactory<T> implements ConsumerFactory<List<T>> {
+public class CollectionCompoundConsumerFactory<T> implements ConsumerFactory<T> {
 
 	private String name;
 	private List<ConsumerFactory<? super T>> elements = new ArrayList<>();
 
-	public ListCompoundConsumerFactory(String name, List<? extends ConsumerFactory<? super T>> elements) {
+	public CollectionCompoundConsumerFactory(String name, Collection<? extends ConsumerFactory<? super T>> elements) {
 		this.name = name;
 		this.elements.addAll(elements);
 	}
 	
 	@SafeVarargs
-	public ListCompoundConsumerFactory(String name, ConsumerFactory<? super T>... elements) {
+	public CollectionCompoundConsumerFactory(String name, ConsumerFactory<? super T>... elements) {
 		this(name, Arrays.asList(elements));
 	}
 
 	@Override
-	public Consumer<List<T>> create(Context context) throws Exception {
-		ListCompoundConsumer<T> ret = new ListCompoundConsumer<>(name);
+	public Consumer<T> create(Context context) throws Exception {
+		CollectionCompoundConsumer<T> ret = new CollectionCompoundConsumer<>(name);
 		for (ConsumerFactory<? super T> e: elements) {
 			ret.add(e == null ? null : e.create(context));
 		}

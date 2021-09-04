@@ -10,7 +10,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.FilterConsumer;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.ListCompoundConsumerFactory;
+import org.nasdanika.common.CollectionCompoundConsumerFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
@@ -84,7 +84,7 @@ public class ContainerConsumerFactoryAdapter extends ResourceConsumerFactoryAdap
 	protected ConsumerFactory<BinaryEntityContainer> createContentsFactory() {
 		Container container = (Container) getTarget();
 		
-		ListCompoundConsumerFactory<BinaryEntityContainer> contentsFactory = new ListCompoundConsumerFactory<>("Contents");
+		CollectionCompoundConsumerFactory<BinaryEntityContainer> contentsFactory = new CollectionCompoundConsumerFactory<>("Contents");
 		for (EObject ce: container.getContents()) {
 			contentsFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(ce, BinaryEntityContainer.class), "Cannot adapt to ConsumerFactory"));
 		}
