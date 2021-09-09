@@ -255,6 +255,15 @@
       <eAnnotations source="urn:org.nasdanika">
         <details key="documentation-reference" value="doc/resources/container.md"/>
       </eAnnotations>
+      <eOperations name="getContainer" eType="#//resources/Container">
+        <eParameters name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getFile" eType="#//resources/File">
+        <eParameters name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="find" eType="#//resources/Resource">
+        <eParameters name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="#//resources/Resource">
       <eAnnotations source="urn:org.nasdanika">

@@ -36,7 +36,7 @@ public class FileConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<F
 	protected SupplierFactory<InputStream> getContentsFactory() {
 		ListCompoundSupplierFactory<InputStream> contentsFactory = new ListCompoundSupplierFactory<>("Contents");
 		for (EObject ce: ((File) getTarget()).getContents()) {
-			contentsFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(ce, InputStream.class), "Cannot adapt to SupplierFactory"));
+			contentsFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(ce, InputStream.class), "Cannot adapt to SupplierFactory: " + ce));
 		}
 		return contentsFactory.then(Util.JOIN_STREAMS_FACTORY);
 	}

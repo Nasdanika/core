@@ -28,6 +28,9 @@ import org.nasdanika.exec.ModelElement;
  * @generated
  */
 public interface Resource extends ModelElement {
+	
+	public static final String SEPARATOR = "/";
+	
 	/**
 	 * Returns the value of the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->

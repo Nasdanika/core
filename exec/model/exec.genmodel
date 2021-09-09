@@ -76,7 +76,17 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//resources/Resource/reconcileAction"/>
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//resources/Resource/merger"/>
       </genClasses>
-      <genClasses ecoreClass="exec.ecore#//resources/Container"/>
+      <genClasses ecoreClass="exec.ecore#//resources/Container">
+        <genOperations ecoreOperation="exec.ecore#//resources/Container/getContainer">
+          <genParameters ecoreParameter="exec.ecore#//resources/Container/getContainer/path"/>
+        </genOperations>
+        <genOperations ecoreOperation="exec.ecore#//resources/Container/getFile">
+          <genParameters ecoreParameter="exec.ecore#//resources/Container/getFile/path"/>
+        </genOperations>
+        <genOperations ecoreOperation="exec.ecore#//resources/Container/find">
+          <genParameters ecoreParameter="exec.ecore#//resources/Container/find/path"/>
+        </genOperations>
+      </genClasses>
       <genClasses ecoreClass="exec.ecore#//resources/File"/>
     </nestedGenPackages>
   </genPackages>

@@ -5,6 +5,7 @@ package org.nasdanika.exec.resources.impl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -196,6 +197,36 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 	 * @generated
 	 */
 	@Override
+	public EOperation getContainer__GetContainer__String() {
+		return containerEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getContainer__GetFile__String() {
+		return containerEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getContainer__Find__String() {
+		return containerEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getFile() {
 		return fileEClass;
 	}
@@ -246,6 +277,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 		createEReference(resourceEClass, RESOURCE__MERGER);
 
 		containerEClass = createEClass(CONTAINER);
+		createEOperation(containerEClass, CONTAINER___GET_CONTAINER__STRING);
+		createEOperation(containerEClass, CONTAINER___GET_FILE__STRING);
+		createEOperation(containerEClass, CONTAINER___FIND__STRING);
 
 		fileEClass = createEClass(FILE);
 
@@ -296,6 +330,15 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 		initEReference(getResource_Merger(), ecorePackage.getEObject(), null, "merger", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(containerEClass, org.nasdanika.exec.resources.Container.class, "Container", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		EOperation op = initEOperation(getContainer__GetContainer__String(), this.getContainer(), "getContainer", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getContainer__GetFile__String(), this.getFile(), "getFile", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getContainer__Find__String(), this.getResource(), "find", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "path", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(fileEClass, File.class, "File", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 

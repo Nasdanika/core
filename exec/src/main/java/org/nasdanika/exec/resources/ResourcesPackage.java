@@ -5,6 +5,7 @@ package org.nasdanika.exec.resources;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -198,13 +199,40 @@ public interface ResourcesPackage extends EPackage {
 	int CONTAINER_FEATURE_COUNT = RESOURCE_FEATURE_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Container</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER___GET_CONTAINER__STRING = RESOURCE_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get File</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER___GET_FILE__STRING = RESOURCE_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Find</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER___FIND__STRING = RESOURCE_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
+	int CONTAINER_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.exec.resources.impl.FileImpl <em>File</em>}' class.
@@ -355,6 +383,36 @@ public interface ResourcesPackage extends EPackage {
 	EClass getContainer();
 
 	/**
+	 * Returns the meta object for the '{@link org.nasdanika.exec.resources.Container#getContainer(java.lang.String) <em>Get Container</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Container</em>' operation.
+	 * @see org.nasdanika.exec.resources.Container#getContainer(java.lang.String)
+	 * @generated
+	 */
+	EOperation getContainer__GetContainer__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.exec.resources.Container#getFile(java.lang.String) <em>Get File</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get File</em>' operation.
+	 * @see org.nasdanika.exec.resources.Container#getFile(java.lang.String)
+	 * @generated
+	 */
+	EOperation getContainer__GetFile__String();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.exec.resources.Container#find(java.lang.String) <em>Find</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Find</em>' operation.
+	 * @see org.nasdanika.exec.resources.Container#find(java.lang.String)
+	 * @generated
+	 */
+	EOperation getContainer__Find__String();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.resources.File <em>File</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -448,6 +506,30 @@ public interface ResourcesPackage extends EPackage {
 		 * @generated
 		 */
 		EClass CONTAINER = eINSTANCE.getContainer();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Container</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CONTAINER___GET_CONTAINER__STRING = eINSTANCE.getContainer__GetContainer__String();
+
+		/**
+		 * The meta object literal for the '<em><b>Get File</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CONTAINER___GET_FILE__STRING = eINSTANCE.getContainer__GetFile__String();
+
+		/**
+		 * The meta object literal for the '<em><b>Find</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CONTAINER___FIND__STRING = eINSTANCE.getContainer__Find__String();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.exec.resources.impl.FileImpl <em>File</em>}' class.
