@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.7.3</version>
+	    <version>2021.7.3-java-8</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>exec</artifactId>
@@ -45,12 +45,12 @@
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>org.eclipse.emf.codegen</artifactId>
-			<version>2.22.0</version>
+			<version>2.20.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
-			<version>2.26.0</version>
+			<version>2.22.0</version>
 		</dependency>
 		<dependency>
 		    <groupId>io.github.azagniotov</groupId>
@@ -72,12 +72,58 @@
 		  <artifactId>org.eclipse.jgit</artifactId>
 		  <version>5.12.0.202106070339-r</version>
 		</dependency>		
-		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Enforcing proper dependencies (as in Eclipse 2020.06) so it compiles on Java 8 -->
+	    <dependency>
+	      <groupId>org.eclipse.platform</groupId>
+	      <artifactId>org.eclipse.equinox.common</artifactId>
+	      <version>3.12.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.eclipse.platform</groupId>
+	      <artifactId>org.eclipse.core.contenttype</artifactId>
+	      <version>3.7.700</version>
+	    </dependency>
+	    <dependency>
+		  <groupId>org.eclipse.platform</groupId>
+		  <artifactId>org.eclipse.core.runtime</artifactId>
+		  <version>[3.18.0]</version>
+	    </dependency>
+	    <dependency>
+		  <groupId>org.eclipse.platform</groupId>
+		  <artifactId>org.eclipse.core.resources</artifactId>
+		  <version>[3.13.0]</version>
+	    </dependency>
+	    <dependency>
+		  <groupId>org.eclipse.platform</groupId>
+		  <artifactId>org.eclipse.equinox.registry</artifactId>
+		  <version>[3.8.800]</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.eclipse.platform</groupId>
+	      <artifactId>org.eclipse.text</artifactId>
+	      <version>3.10.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.eclipse.jdt</groupId>
+	      <artifactId>org.eclipse.jdt.core</artifactId>
+	      <version>3.22.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.eclipse.jdt</groupId>
+	      <artifactId>org.eclipse.jdt.launching</artifactId>
+	      <version>3.17.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.eclipse.jdt</groupId>
+	      <artifactId>org.eclipse.jdt.debug</artifactId>
+	      <version>3.15.0</version>
+	    </dependency>
 	</dependencies>
 </project>
