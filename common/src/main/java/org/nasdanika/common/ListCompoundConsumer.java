@@ -25,17 +25,19 @@ public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Co
 
 	@Override
 	public void execute(List<E> args, ProgressMonitor progressMonitor) throws Exception {
-		progressMonitor.setWorkRemaining(size());
-		int idx = 0;
-		List<Consumer<? super E>> els = getElements();
-		for (E arg: args) {
-			if (idx < els.size()) {
-				Consumer<? super E> ec = els.get(idx);
-				if (ec != null) {
-					ec.splitAndExecute(arg, progressMonitor);
+		if (args != null) {
+			progressMonitor.setWorkRemaining(size());
+			int idx = 0;
+			List<Consumer<? super E>> els = getElements();
+			for (E arg: args) {
+				if (idx < els.size()) {
+					Consumer<? super E> ec = els.get(idx);
+					if (ec != null) {
+						ec.splitAndExecute(arg, progressMonitor);
+					}
 				}
+				++idx;
 			}
-			++idx;
 		}
 	}	
 
