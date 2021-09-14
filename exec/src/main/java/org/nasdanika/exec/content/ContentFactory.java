@@ -58,6 +58,24 @@ public interface ContentFactory extends EFactory {
 	Filter createFilter();
 
 	/**
+	 * Returns a new object of class '<em>Interpolator</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Interpolator</em>'.
+	 * @generated
+	 */
+	Interpolator createInterpolator();
+
+	/**
+	 * Returns a new object of class '<em>Markdown</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Markdown</em>'.
+	 * @generated
+	 */
+	Markdown createMarkdown();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

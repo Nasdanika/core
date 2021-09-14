@@ -6,6 +6,8 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.content.ContentPackage;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
 
@@ -32,6 +34,20 @@ public class ContentAdapterFactory extends ComposedAdapterFactory {
 					getInputStreamSupplierFactoryClass(), 
 					this.getClass().getClassLoader(), 
 					TextSupplierFactoryAdapter::new));
+		
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<InputStream>, Markdown>(
+					ContentPackage.Literals.MARKDOWN, 
+					getInputStreamSupplierFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					MarkdownSupplierFactoryAdapter::new));
+		
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<InputStream>, Interpolator>(
+					ContentPackage.Literals.INTERPOLATOR, 
+					getInputStreamSupplierFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					InterpolatorSupplierFactoryAdapter::new));
 				
 	}
 	

@@ -15,6 +15,8 @@ import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Filter;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
 
 import org.nasdanika.exec.content.Text;
@@ -55,6 +57,19 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	private EClass filterEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass interpolatorEClass = null;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass markdownEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -233,6 +248,56 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getInterpolator() {
+		return interpolatorEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInterpolator_ProcessIncludes() {
+		return (EAttribute)interpolatorEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInterpolator_Base() {
+		return (EAttribute)interpolatorEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMarkdown() {
+		return markdownEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarkdown_Style() {
+		return (EAttribute)markdownEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ContentFactory getContentFactory() {
 		return (ContentFactory)getEFactoryInstance();
 	}
@@ -269,6 +334,13 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 
 		filterEClass = createEClass(FILTER);
 		createEReference(filterEClass, FILTER__SOURCE);
+
+		interpolatorEClass = createEClass(INTERPOLATOR);
+		createEAttribute(interpolatorEClass, INTERPOLATOR__PROCESS_INCLUDES);
+		createEAttribute(interpolatorEClass, INTERPOLATOR__BASE);
+
+		markdownEClass = createEClass(MARKDOWN);
+		createEAttribute(markdownEClass, MARKDOWN__STYLE);
 	}
 
 	/**
@@ -306,6 +378,8 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		resourceEClass.getESuperTypes().add(theExecPackage.getModelElement());
 		textEClass.getESuperTypes().add(theExecPackage.getModelElement());
 		filterEClass.getESuperTypes().add(theExecPackage.getModelElement());
+		interpolatorEClass.getESuperTypes().add(this.getFilter());
+		markdownEClass.getESuperTypes().add(this.getFilter());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(base64EClass, Base64.class, "Base64", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -321,6 +395,13 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 
 		initEClass(filterEClass, Filter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFilter_Source(), ecorePackage.getEObject(), null, "source", null, 1, 1, Filter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(interpolatorEClass, Interpolator.class, "Interpolator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInterpolator_ProcessIncludes(), ecorePackage.getEBoolean(), "processIncludes", null, 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInterpolator_Base(), ecorePackage.getEString(), "base", null, 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(markdownEClass, Markdown.class, "Markdown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMarkdown_Style(), ecorePackage.getEBoolean(), "style", null, 0, 1, Markdown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create annotations
 		// urn:org.nasdanika

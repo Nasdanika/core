@@ -61,6 +61,13 @@
       <genClasses ecoreClass="exec.ecore#//content/Filter">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Filter/source"/>
       </genClasses>
+      <genClasses ecoreClass="exec.ecore#//content/Interpolator">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Interpolator/processIncludes"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Interpolator/base"/>
+      </genClasses>
+      <genClasses ecoreClass="exec.ecore#//content/Markdown">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Markdown/style"/>
+      </genClasses>
     </nestedGenPackages>
     <nestedGenPackages prefix="Resources" disposableProviderFactory="true" ecorePackage="exec.ecore#//resources">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="exec.ecore#//resources/ReconcileAction">

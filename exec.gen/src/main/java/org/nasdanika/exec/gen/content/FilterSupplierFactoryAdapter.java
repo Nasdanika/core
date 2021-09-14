@@ -21,6 +21,12 @@ public abstract class FilterSupplierFactoryAdapter<T extends Filter> extends Ada
 		setTarget(filter);
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getTarget() {
+		return (T) super.getTarget();
+	}
+	
 	private FunctionFactory<InputStream,InputStream> filterFactory = ctx -> new Function<InputStream, InputStream>() {
 
 		@Override

@@ -96,6 +96,22 @@ public class ContentSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ContentPackage.INTERPOLATOR: {
+				Interpolator interpolator = (Interpolator)theEObject;
+				T result = caseInterpolator(interpolator);
+				if (result == null) result = caseFilter(interpolator);
+				if (result == null) result = caseModelElement(interpolator);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ContentPackage.MARKDOWN: {
+				Markdown markdown = (Markdown)theEObject;
+				T result = caseMarkdown(markdown);
+				if (result == null) result = caseFilter(markdown);
+				if (result == null) result = caseModelElement(markdown);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -157,6 +173,36 @@ public class ContentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFilter(Filter object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Interpolator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Interpolator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseInterpolator(Interpolator object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Markdown</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Markdown</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarkdown(Markdown object) {
 		return null;
 	}
 

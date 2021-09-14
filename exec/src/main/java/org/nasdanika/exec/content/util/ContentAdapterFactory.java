@@ -86,6 +86,14 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 				return createFilterAdapter();
 			}
 			@Override
+			public Adapter caseInterpolator(Interpolator object) {
+				return createInterpolatorAdapter();
+			}
+			@Override
+			public Adapter caseMarkdown(Markdown object) {
+				return createMarkdownAdapter();
+			}
+			@Override
 			public Adapter caseModelElement(ModelElement object) {
 				return createModelElementAdapter();
 			}
@@ -162,6 +170,34 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFilterAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.content.Interpolator <em>Interpolator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.exec.content.Interpolator
+	 * @generated
+	 */
+	public Adapter createInterpolatorAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.content.Markdown <em>Markdown</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.exec.content.Markdown
+	 * @generated
+	 */
+	public Adapter createMarkdownAdapter() {
 		return null;
 	}
 

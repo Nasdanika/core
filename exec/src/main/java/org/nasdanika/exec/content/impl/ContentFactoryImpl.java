@@ -60,6 +60,8 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 			case ContentPackage.RESOURCE: return createResource();
 			case ContentPackage.TEXT: return createText();
 			case ContentPackage.FILTER: return createFilter();
+			case ContentPackage.INTERPOLATOR: return createInterpolator();
+			case ContentPackage.MARKDOWN: return createMarkdown();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -107,6 +109,28 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 	public Filter createFilter() {
 		FilterImpl filter = new FilterImpl();
 		return filter;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Interpolator createInterpolator() {
+		InterpolatorImpl interpolator = new InterpolatorImpl();
+		return interpolator;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Markdown createMarkdown() {
+		MarkdownImpl markdown = new MarkdownImpl();
+		return markdown;
 	}
 
 	/**

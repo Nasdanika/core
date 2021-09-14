@@ -265,6 +265,126 @@ public interface ContentPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.InterpolatorImpl <em>Interpolator</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.content.impl.InterpolatorImpl
+	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getInterpolator()
+	 * @generated
+	 */
+	int INTERPOLATOR = 4;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__DESCRIPTION = FILTER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__SOURCE = FILTER__SOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Process Includes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__PROCESS_INCLUDES = FILTER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__BASE = FILTER_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Interpolator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR_FEATURE_COUNT = FILTER_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Interpolator</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR_OPERATION_COUNT = FILTER_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.MarkdownImpl <em>Markdown</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.content.impl.MarkdownImpl
+	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getMarkdown()
+	 * @generated
+	 */
+	int MARKDOWN = 5;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__DESCRIPTION = FILTER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__SOURCE = FILTER__SOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Style</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__STYLE = FILTER_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Markdown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_FEATURE_COUNT = FILTER_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Markdown</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN_OPERATION_COUNT = FILTER_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Base64 <em>Base64</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -369,6 +489,59 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFilter_Source();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Interpolator <em>Interpolator</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Interpolator</em>'.
+	 * @see org.nasdanika.exec.content.Interpolator
+	 * @generated
+	 */
+	EClass getInterpolator();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.content.Interpolator#isProcessIncludes <em>Process Includes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Process Includes</em>'.
+	 * @see org.nasdanika.exec.content.Interpolator#isProcessIncludes()
+	 * @see #getInterpolator()
+	 * @generated
+	 */
+	EAttribute getInterpolator_ProcessIncludes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.content.Interpolator#getBase <em>Base</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base</em>'.
+	 * @see org.nasdanika.exec.content.Interpolator#getBase()
+	 * @see #getInterpolator()
+	 * @generated
+	 */
+	EAttribute getInterpolator_Base();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Markdown <em>Markdown</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Markdown</em>'.
+	 * @see org.nasdanika.exec.content.Markdown
+	 * @generated
+	 */
+	EClass getMarkdown();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.content.Markdown#isStyle <em>Style</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Style</em>'.
+	 * @see org.nasdanika.exec.content.Markdown#isStyle()
+	 * @see #getMarkdown()
+	 * @generated
+	 */
+	EAttribute getMarkdown_Style();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -480,6 +653,50 @@ public interface ContentPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FILTER__SOURCE = eINSTANCE.getFilter_Source();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.content.impl.InterpolatorImpl <em>Interpolator</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.content.impl.InterpolatorImpl
+		 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getInterpolator()
+		 * @generated
+		 */
+		EClass INTERPOLATOR = eINSTANCE.getInterpolator();
+
+		/**
+		 * The meta object literal for the '<em><b>Process Includes</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTERPOLATOR__PROCESS_INCLUDES = eINSTANCE.getInterpolator_ProcessIncludes();
+
+		/**
+		 * The meta object literal for the '<em><b>Base</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTERPOLATOR__BASE = eINSTANCE.getInterpolator_Base();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.exec.content.impl.MarkdownImpl <em>Markdown</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.exec.content.impl.MarkdownImpl
+		 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getMarkdown()
+		 * @generated
+		 */
+		EClass MARKDOWN = eINSTANCE.getMarkdown();
+
+		/**
+		 * The meta object literal for the '<em><b>Style</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKDOWN__STYLE = eINSTANCE.getMarkdown_Style();
 
 	}
 
