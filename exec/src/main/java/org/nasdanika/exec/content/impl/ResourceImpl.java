@@ -6,8 +6,7 @@ import org.eclipse.emf.ecore.EClass;
 
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Resource;
-
-import org.nasdanika.exec.impl.ModelElementImpl;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->

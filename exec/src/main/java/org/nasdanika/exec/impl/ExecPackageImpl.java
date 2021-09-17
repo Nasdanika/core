@@ -19,14 +19,13 @@ import org.nasdanika.exec.ExecFactory;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.List;
-import org.nasdanika.exec.ModelElement;
-
 import org.nasdanika.exec.content.ContentPackage;
 
 import org.nasdanika.exec.content.impl.ContentPackageImpl;
 import org.nasdanika.exec.resources.ResourcesPackage;
 import org.nasdanika.exec.resources.impl.ResourcesPackageImpl;
 import org.nasdanika.exec.util.ExecValidator;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,13 +34,6 @@ import org.nasdanika.exec.util.ExecValidator;
  * @generated
  */
 public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass modelElementEClass = null;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -146,7 +138,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
-		org.nasdanika.ncore.NcorePackage.eINSTANCE.eClass();
+		NcorePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
@@ -180,26 +172,6 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ExecPackage.eNS_URI, theExecPackage);
 		return theExecPackage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getModelElement() {
-		return modelElementEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getModelElement_Description() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -501,9 +473,6 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		isCreated = true;
 
 		// Create classes and their features
-		modelElementEClass = createEClass(MODEL_ELEMENT);
-		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
-
 		blockEClass = createEClass(BLOCK);
 		createEReference(blockEClass, BLOCK__TRY);
 		createEReference(blockEClass, BLOCK__CATCH);
@@ -566,7 +535,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Obtain other dependent packages
 		ContentPackage theContentPackage = (ContentPackage)EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
 		ResourcesPackage theResourcesPackage = (ResourcesPackage)EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
-		org.nasdanika.ncore.NcorePackage theNcorePackage = (org.nasdanika.ncore.NcorePackage)EPackage.Registry.INSTANCE.getEPackage(org.nasdanika.ncore.NcorePackage.eNS_URI);
+		NcorePackage theNcorePackage = (NcorePackage)EPackage.Registry.INSTANCE.getEPackage(NcorePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theContentPackage);
@@ -577,19 +546,15 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		modelElementEClass.getESuperTypes().add(theNcorePackage.getMarked());
-		blockEClass.getESuperTypes().add(this.getModelElement());
-		callEClass.getESuperTypes().add(this.getModelElement());
-		configuratorEClass.getESuperTypes().add(this.getModelElement());
-		evalEClass.getESuperTypes().add(this.getModelElement());
-		failEClass.getESuperTypes().add(this.getModelElement());
-		listEClass.getESuperTypes().add(this.getModelElement());
-		mapEClass.getESuperTypes().add(this.getModelElement());
+		blockEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		callEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		configuratorEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		evalEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		failEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		listEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		mapEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(blockEClass, Block.class, "Block", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBlock_Try(), ecorePackage.getEObject(), null, "try", null, 1, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getBlock_Catch(), ecorePackage.getEObject(), null, "catch", null, 0, -1, Block.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -605,7 +570,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		initEReference(getCall_Arguments(), ecorePackage.getEObject(), null, "arguments", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Map.Entry.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(configuratorEClass, Configurator.class, "Configurator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -631,10 +596,10 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Create annotations
 		// urn:org.nasdanika
 		createUrnorgAnnotations();
-		// http://www.eclipse.org/emf/2002/GenModel
-		createGenModelAnnotations();
 		// http://www.eclipse.org/emf/2002/Ecore
 		createEcoreAnnotations();
+		// http://www.eclipse.org/emf/2002/GenModel
+		createGenModelAnnotations();
 	}
 
 	/**
@@ -650,12 +615,6 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/package-summary.md"
-		   });
-		addAnnotation
-		  (modelElementEClass,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/model-element.md"
 		   });
 		addAnnotation
 		  (blockEClass,
@@ -753,12 +712,6 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 	 */
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
-		addAnnotation
-		  (getModelElement_Description(),
-		   source,
-		   new String[] {
-			   "documentation", "Element description for documentation purposes. Not used in generation."
-		   });
 		addAnnotation
 		  (getCall_Type(),
 		   source,

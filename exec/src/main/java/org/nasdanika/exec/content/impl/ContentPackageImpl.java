@@ -23,6 +23,7 @@ import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.impl.ExecPackageImpl;
 import org.nasdanika.exec.resources.ResourcesPackage;
 import org.nasdanika.exec.resources.impl.ResourcesPackageImpl;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -119,7 +120,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
-		org.nasdanika.ncore.NcorePackage.eINSTANCE.eClass();
+		NcorePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecPackage.eNS_URI);
@@ -370,17 +371,17 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		ExecPackage theExecPackage = (ExecPackage)EPackage.Registry.INSTANCE.getEPackage(ExecPackage.eNS_URI);
+		NcorePackage theNcorePackage = (NcorePackage)EPackage.Registry.INSTANCE.getEPackage(NcorePackage.eNS_URI);
 
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		base64EClass.getESuperTypes().add(theExecPackage.getModelElement());
-		resourceEClass.getESuperTypes().add(theExecPackage.getModelElement());
-		textEClass.getESuperTypes().add(theExecPackage.getModelElement());
-		filterEClass.getESuperTypes().add(theExecPackage.getModelElement());
+		base64EClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		resourceEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		textEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		filterEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		interpolatorEClass.getESuperTypes().add(this.getFilter());
 		markdownEClass.getESuperTypes().add(this.getFilter());
 

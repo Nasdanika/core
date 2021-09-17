@@ -6,10 +6,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
-import org.nasdanika.exec.ModelElement;
-
 import org.nasdanika.exec.content.*;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -223,7 +222,7 @@ public class ContentSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarked(org.nasdanika.ncore.Marked object) {
+	public T caseMarked(Marked object) {
 		return null;
 	}
 

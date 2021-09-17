@@ -13,12 +13,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.nasdanika.exec.impl.ModelElementImpl;
-
 import org.nasdanika.exec.resources.ReconcileAction;
 import org.nasdanika.exec.resources.Resource;
 import org.nasdanika.exec.resources.ResourcesPackage;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->

@@ -10,6 +10,8 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.nasdanika.exec.*;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -68,10 +70,6 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 	protected ExecSwitch<Adapter> modelSwitch =
 		new ExecSwitch<Adapter>() {
 			@Override
-			public Adapter caseModelElement(ModelElement object) {
-				return createModelElementAdapter();
-			}
-			@Override
 			public Adapter caseBlock(Block object) {
 				return createBlockAdapter();
 			}
@@ -104,8 +102,12 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 				return createMapAdapter();
 			}
 			@Override
-			public Adapter caseMarked(org.nasdanika.ncore.Marked object) {
+			public Adapter caseMarked(Marked object) {
 				return createMarkedAdapter();
+			}
+			@Override
+			public Adapter caseModelElement(ModelElement object) {
+				return createModelElementAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -128,13 +130,13 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ModelElement <em>Model Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.exec.ModelElement
+	 * @see org.nasdanika.ncore.ModelElement
 	 * @generated
 	 */
 	public Adapter createModelElementAdapter() {

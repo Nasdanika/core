@@ -6,7 +6,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
-
 import org.nasdanika.ncore.*;
 
 /**
@@ -22,7 +21,7 @@ import org.nasdanika.ncore.*;
  * @see org.nasdanika.ncore.NcorePackage
  * @generated
  */
-public class NcoreSwitch<T> extends Switch<T> {
+public class NcoreSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -64,17 +63,46 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
 			case NcorePackage.MARKED: {
 				Marked marked = (Marked)theEObject;
-				T result = caseMarked(marked);
+				T1 result = caseMarked(marked);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.MARKER: {
 				Marker marker = (Marker)theEObject;
-				T result = caseMarker(marker);
+				T1 result = caseMarker(marker);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.TEMPORAL: {
+				Temporal temporal = (Temporal)theEObject;
+				T1 result = caseTemporal(temporal);
+				if (result == null) result = caseModelElement(temporal);
+				if (result == null) result = caseMarked(temporal);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.MODEL_ELEMENT: {
+				ModelElement modelElement = (ModelElement)theEObject;
+				T1 result = caseModelElement(modelElement);
+				if (result == null) result = caseMarked(modelElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.NAMED_ELEMENT: {
+				NamedElement namedElement = (NamedElement)theEObject;
+				T1 result = caseNamedElement(namedElement);
+				if (result == null) result = caseModelElement(namedElement);
+				if (result == null) result = caseMarked(namedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.REFERENCE: {
+				Reference<?> reference = (Reference<?>)theEObject;
+				T1 result = caseReference(reference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -93,7 +121,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarked(Marked object) {
+	public T1 caseMarked(Marked object) {
 		return null;
 	}
 
@@ -108,7 +136,67 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarker(Marker object) {
+	public T1 caseMarker(Marker object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Temporal</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Temporal</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTemporal(Temporal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Model Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Model Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseModelElement(ModelElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Named Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Named Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseNamedElement(NamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseReference(Reference<T> object) {
 		return null;
 	}
 
@@ -124,7 +212,7 @@ public class NcoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T1 defaultCase(EObject object) {
 		return null;
 	}
 

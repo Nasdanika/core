@@ -10,8 +10,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Filter;
-
-import org.nasdanika.exec.impl.ModelElementImpl;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->

@@ -2,6 +2,8 @@
  */
 package org.nasdanika.exec;
 
+import org.nasdanika.ncore.ModelElement;
+
 
 /**
  * <!-- begin-user-doc -->

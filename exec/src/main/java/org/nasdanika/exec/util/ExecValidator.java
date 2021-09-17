@@ -11,10 +11,6 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.exec.*;
-import org.nasdanika.exec.Block;
-import org.nasdanika.exec.Call;
-import org.nasdanika.exec.ExecPackage;
-import org.nasdanika.exec.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -88,8 +84,6 @@ public class ExecValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
-			case ExecPackage.MODEL_ELEMENT:
-				return validateModelElement((ModelElement)value, diagnostics, context);
 			case ExecPackage.BLOCK:
 				return validateBlock((Block)value, diagnostics, context);
 			case ExecPackage.CALL:
@@ -109,15 +103,6 @@ public class ExecValidator extends EObjectValidator {
 			default:
 				return true;
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateModelElement(ModelElement modelElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(modelElement, diagnostics, context);
 	}
 
 	/**

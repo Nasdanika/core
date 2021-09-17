@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.exec.*;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,13 +69,6 @@ public class ExecSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case ExecPackage.MODEL_ELEMENT: {
-				ModelElement modelElement = (ModelElement)theEObject;
-				T result = caseModelElement(modelElement);
-				if (result == null) result = caseMarked(modelElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ExecPackage.BLOCK: {
 				Block block = (Block)theEObject;
 				T result = caseBlock(block);
@@ -286,7 +281,7 @@ public class ExecSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarked(org.nasdanika.ncore.Marked object) {
+	public T caseMarked(Marked object) {
 		return null;
 	}
 

@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentPackage;
-import org.nasdanika.exec.impl.ModelElementImpl;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 /**
  * <!-- begin-user-doc -->

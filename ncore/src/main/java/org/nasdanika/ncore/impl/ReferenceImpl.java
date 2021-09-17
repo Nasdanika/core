@@ -1,43 +1,34 @@
 /**
  */
-package org.nasdanika.exec.impl;
+package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.exec.ExecPackage;
-import org.nasdanika.exec.Fail;
-import org.nasdanika.ncore.impl.ModelElementImpl;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Reference;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Fail</b></em>'.
+ * An implementation of the model object '<em><b>Reference</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.exec.impl.FailImpl#getMessage <em>Message</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ReferenceImpl#getTarget <em>Target</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FailImpl extends ModelElementImpl implements Fail {
-	/**
-	 * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMessage()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String MESSAGE_EDEFAULT = null;
-
+public class ReferenceImpl<T> extends MinimalEObjectImpl.Container implements Reference<T> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FailImpl() {
+	protected ReferenceImpl() {
 		super();
 	}
 
@@ -48,7 +39,7 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecPackage.Literals.FAIL;
+		return NcorePackage.Literals.REFERENCE;
 	}
 
 	/**
@@ -57,8 +48,28 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 * @generated
 	 */
 	@Override
-	public String getMessage() {
-		return (String)eDynamicGet(ExecPackage.FAIL__MESSAGE, ExecPackage.Literals.FAIL__MESSAGE, true, true);
+	protected int eStaticFeatureCount() {
+		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getTarget() {
+		return (T)eDynamicGet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public T basicGetTarget() {
+		return (T)eDynamicGet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, false, true);
 	}
 
 	/**
@@ -67,8 +78,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 * @generated
 	 */
 	@Override
-	public void setMessage(String newMessage) {
-		eDynamicSet(ExecPackage.FAIL__MESSAGE, ExecPackage.Literals.FAIL__MESSAGE, newMessage);
+	public void setTarget(T newTarget) {
+		eDynamicSet(NcorePackage.REFERENCE__TARGET, NcorePackage.Literals.REFERENCE__TARGET, newTarget);
 	}
 
 	/**
@@ -79,8 +90,9 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				return getMessage();
+			case NcorePackage.REFERENCE__TARGET:
+				if (resolve) return getTarget();
+				return basicGetTarget();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -90,11 +102,12 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				setMessage((String)newValue);
+			case NcorePackage.REFERENCE__TARGET:
+				setTarget((T)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -108,8 +121,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				setMessage(MESSAGE_EDEFAULT);
+			case NcorePackage.REFERENCE__TARGET:
+				setTarget((T)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -123,10 +136,10 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				return MESSAGE_EDEFAULT == null ? getMessage() != null : !MESSAGE_EDEFAULT.equals(getMessage());
+			case NcorePackage.REFERENCE__TARGET:
+				return basicGetTarget() != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //FailImpl
+} //ReferenceImpl

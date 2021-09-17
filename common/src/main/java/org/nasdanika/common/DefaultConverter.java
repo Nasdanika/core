@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -320,5 +321,11 @@ public class DefaultConverter extends ReflectiveConverter {
 	public Instant toInstant(Date date) {
 		return Instant.ofEpochMilli(date.getTime());
 	}
+	
+	@ConverterMethod
+	public URI toURI(String str) {
+		return URI.createURI(str);
+	}
+	
 	
 }

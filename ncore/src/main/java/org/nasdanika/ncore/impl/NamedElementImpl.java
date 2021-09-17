@@ -1,43 +1,42 @@
 /**
  */
-package org.nasdanika.exec.impl;
+package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.exec.ExecPackage;
-import org.nasdanika.exec.Fail;
-import org.nasdanika.ncore.impl.ModelElementImpl;
+import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Fail</b></em>'.
+ * An implementation of the model object '<em><b>Named Element</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.exec.impl.FailImpl#getMessage <em>Message</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.NamedElementImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FailImpl extends ModelElementImpl implements Fail {
+public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	/**
-	 * The default value of the '{@link #getMessage() <em>Message</em>}' attribute.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMessage()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String MESSAGE_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected FailImpl() {
+	protected NamedElementImpl() {
 		super();
 	}
 
@@ -48,7 +47,7 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ExecPackage.Literals.FAIL;
+		return NcorePackage.Literals.NAMED_ELEMENT;
 	}
 
 	/**
@@ -57,8 +56,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 * @generated
 	 */
 	@Override
-	public String getMessage() {
-		return (String)eDynamicGet(ExecPackage.FAIL__MESSAGE, ExecPackage.Literals.FAIL__MESSAGE, true, true);
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.NAMED_ELEMENT__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
 	}
 
 	/**
@@ -67,8 +66,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	 * @generated
 	 */
 	@Override
-	public void setMessage(String newMessage) {
-		eDynamicSet(ExecPackage.FAIL__MESSAGE, ExecPackage.Literals.FAIL__MESSAGE, newMessage);
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.NAMED_ELEMENT__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
 	}
 
 	/**
@@ -79,8 +78,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				return getMessage();
+			case NcorePackage.NAMED_ELEMENT__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -93,8 +92,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				setMessage((String)newValue);
+			case NcorePackage.NAMED_ELEMENT__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -108,8 +107,8 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				setMessage(MESSAGE_EDEFAULT);
+			case NcorePackage.NAMED_ELEMENT__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -123,10 +122,10 @@ public class FailImpl extends ModelElementImpl implements Fail {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecPackage.FAIL__MESSAGE:
-				return MESSAGE_EDEFAULT == null ? getMessage() != null : !MESSAGE_EDEFAULT.equals(getMessage());
+			case NcorePackage.NAMED_ELEMENT__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //FailImpl
+} //NamedElementImpl

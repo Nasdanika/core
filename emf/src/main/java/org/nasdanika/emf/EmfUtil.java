@@ -33,6 +33,7 @@ import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.impl.ModelElementImpl;
 
 public class EmfUtil {
 
@@ -247,48 +248,7 @@ public class EmfUtil {
 	 * @return Object referencing this one via the specified reference.
 	 */
 	public static <T extends EObject> EList<T> getReferrers(EObject target, EReference eReference) {
-		EList<T> ret = new BasicInternalEList<>(EObject.class);
-		
-		Resource res = target.eResource(); 
-		TreeIterator<?> cit = null;
-		if (res == null) {
-			EObject root = target;
-			EObject rc;
-			while ((rc = root.eContainer()) != null) {
-				root = rc;
-			}
-			if (root != null) {
-				collect(root, target, eReference, ret);
-				cit = root.eAllContents();
-			}			
-		} else {
-			ResourceSet rSet = res.getResourceSet();
-			cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
-		}
-		if (cit != null) {
-			while (cit.hasNext()) {
-				collect(cit.next(), target, eReference, ret);
-			}			
-		}
-		return ret;
-	}
-
-	@SuppressWarnings("unchecked")
-	protected static <T extends EObject> void collect(
-			Object source, 
-			EObject target, 
-			EReference eReference,
-			EList<T> accumulator) {
-		if (eReference.getEContainingClass().isInstance(source)) {
-			Object value = ((EObject) source).eGet(eReference);
-			if (eReference.isMany()) {
-				if (((Collection<?>) value).contains(target)) {
-					accumulator.add((T) source);
-				}
-			} else if (value == target) {
-				accumulator.add((T) source);
-			}					
-		}
+		return ModelElementImpl.getReferrers(target, eReference);
 	}
 	
 	public static void dumpDiagnostic(org.eclipse.emf.common.util.Diagnostic d, int indent, PrintStream out) {

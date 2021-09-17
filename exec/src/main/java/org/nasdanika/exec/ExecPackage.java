@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -58,53 +59,6 @@ public interface ExecPackage extends EPackage {
 	ExecPackage eINSTANCE = org.nasdanika.exec.impl.ExecPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.exec.impl.ModelElementImpl <em>Model Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.exec.impl.ModelElementImpl
-	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getModelElement()
-	 * @generated
-	 */
-	int MODEL_ELEMENT = 0;
-
-	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT__MARKER = org.nasdanika.ncore.NcorePackage.MARKED__MARKER;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT__DESCRIPTION = org.nasdanika.ncore.NcorePackage.MARKED_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Model Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = org.nasdanika.ncore.NcorePackage.MARKED_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Model Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT_OPERATION_COUNT = org.nasdanika.ncore.NcorePackage.MARKED_OPERATION_COUNT + 0;
-
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.exec.impl.BlockImpl <em>Block</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -112,7 +66,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getBlock()
 	 * @generated
 	 */
-	int BLOCK = 1;
+	int BLOCK = 0;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -121,7 +75,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__MARKER = MODEL_ELEMENT__MARKER;
+	int BLOCK__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -130,7 +93,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int BLOCK__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
@@ -139,7 +102,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__TRY = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int BLOCK__TRY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Catch</b></em>' containment reference list.
@@ -148,7 +111,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__CATCH = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int BLOCK__CATCH = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Finally</b></em>' containment reference list.
@@ -157,7 +120,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__FINALLY = MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int BLOCK__FINALLY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Block</em>' class.
@@ -166,7 +129,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 3;
+	int BLOCK_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Block</em>' class.
@@ -175,7 +138,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int BLOCK_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -186,7 +149,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 2;
+	int CALL = 1;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -195,7 +158,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__MARKER = MODEL_ELEMENT__MARKER;
+	int CALL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -204,7 +176,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int CALL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -213,7 +185,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__TYPE = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int CALL__TYPE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Property</b></em>' attribute.
@@ -222,7 +194,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__PROPERTY = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int CALL__PROPERTY = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Service</b></em>' attribute.
@@ -231,7 +203,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__SERVICE = MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int CALL__SERVICE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Method</b></em>' attribute.
@@ -240,7 +212,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__METHOD = MODEL_ELEMENT_FEATURE_COUNT + 3;
+	int CALL__METHOD = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -249,7 +221,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__PROPERTIES = MODEL_ELEMENT_FEATURE_COUNT + 4;
+	int CALL__PROPERTIES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Init</b></em>' containment reference list.
@@ -258,7 +230,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__INIT = MODEL_ELEMENT_FEATURE_COUNT + 5;
+	int CALL__INIT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Arguments</b></em>' containment reference list.
@@ -267,7 +239,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__ARGUMENTS = MODEL_ELEMENT_FEATURE_COUNT + 6;
+	int CALL__ARGUMENTS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Call</em>' class.
@@ -276,7 +248,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 7;
+	int CALL_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of operations of the '<em>Call</em>' class.
@@ -285,7 +257,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CALL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int CALL_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.exec.impl.PropertyImpl <em>Property</em>}' class.
@@ -295,7 +267,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 3;
+	int PROPERTY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -342,7 +314,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getConfigurator()
 	 * @generated
 	 */
-	int CONFIGURATOR = 4;
+	int CONFIGURATOR = 3;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -351,7 +323,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__MARKER = MODEL_ELEMENT__MARKER;
+	int CONFIGURATOR__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -360,7 +341,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int CONFIGURATOR__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -369,7 +350,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__TARGET = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int CONFIGURATOR__TARGET = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' map.
@@ -378,7 +359,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__PROPERTIES = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int CONFIGURATOR__PROPERTIES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Configurator</em>' class.
@@ -387,7 +368,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int CONFIGURATOR_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Configurator</em>' class.
@@ -396,7 +377,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int CONFIGURATOR_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -407,7 +388,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getEval()
 	 * @generated
 	 */
-	int EVAL = 5;
+	int EVAL = 4;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -416,7 +397,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__MARKER = MODEL_ELEMENT__MARKER;
+	int EVAL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -425,7 +415,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int EVAL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Script</b></em>' containment reference.
@@ -434,7 +424,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__SCRIPT = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int EVAL__SCRIPT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Bindings</b></em>' map.
@@ -443,7 +433,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__BINDINGS = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int EVAL__BINDINGS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Eval</em>' class.
@@ -452,7 +442,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 2;
+	int EVAL_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Eval</em>' class.
@@ -461,7 +451,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int EVAL_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -472,7 +462,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getFail()
 	 * @generated
 	 */
-	int FAIL = 6;
+	int FAIL = 5;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -481,7 +471,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL__MARKER = MODEL_ELEMENT__MARKER;
+	int FAIL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -490,7 +489,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int FAIL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
@@ -499,7 +498,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL__MESSAGE = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int FAIL__MESSAGE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Fail</em>' class.
@@ -508,7 +507,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int FAIL_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Fail</em>' class.
@@ -517,7 +516,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int FAIL_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -528,7 +527,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 7;
+	int LIST = 6;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -537,7 +536,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__MARKER = MODEL_ELEMENT__MARKER;
+	int LIST__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -546,7 +554,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int LIST__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -555,7 +563,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__ELEMENTS = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int LIST__ELEMENTS = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>List</em>' class.
@@ -564,7 +572,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int LIST_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>List</em>' class.
@@ -573,7 +581,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int LIST_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -584,7 +592,7 @@ public interface ExecPackage extends EPackage {
 	 * @see org.nasdanika.exec.impl.ExecPackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 8;
+	int MAP = 7;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -593,7 +601,16 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__MARKER = MODEL_ELEMENT__MARKER;
+	int MAP__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__URI = NcorePackage.MODEL_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -602,7 +619,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+	int MAP__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' map.
@@ -611,7 +628,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__ENTRIES = MODEL_ELEMENT_FEATURE_COUNT + 0;
+	int MAP__ENTRIES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Map</em>' class.
@@ -620,7 +637,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 1;
+	int MAP_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Map</em>' class.
@@ -629,29 +646,8 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int MAP_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
-
-	/**
-	 * Returns the meta object for class '{@link org.nasdanika.exec.ModelElement <em>Model Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Model Element</em>'.
-	 * @see org.nasdanika.exec.ModelElement
-	 * @generated
-	 */
-	EClass getModelElement();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.exec.ModelElement#getDescription <em>Description</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Description</em>'.
-	 * @see org.nasdanika.exec.ModelElement#getDescription()
-	 * @see #getModelElement()
-	 * @generated
-	 */
-	EAttribute getModelElement_Description();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.Block <em>Block</em>}'.
@@ -789,7 +785,7 @@ public interface ExecPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Property</em>'.
 	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString"
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueType="org.eclipse.emf.ecore.EObject" valueContainment="true" valueRequired="true"
 	 *        annotation="urn:org.nasdanika documentation-reference='doc/property.md'"
 	 * @generated
@@ -968,24 +964,6 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.exec.impl.ModelElementImpl <em>Model Element</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.exec.impl.ModelElementImpl
-		 * @see org.nasdanika.exec.impl.ExecPackageImpl#getModelElement()
-		 * @generated
-		 */
-		EClass MODEL_ELEMENT = eINSTANCE.getModelElement();
-
-		/**
-		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MODEL_ELEMENT__DESCRIPTION = eINSTANCE.getModelElement_Description();
-
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.exec.impl.BlockImpl <em>Block</em>}' class.
 		 * <!-- begin-user-doc -->

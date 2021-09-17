@@ -8,9 +8,6 @@
   <foreignModel>exec.ecore</foreignModel>
   <genPackages prefix="Exec" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="exec.ecore#/">
-    <genClasses image="false" ecoreClass="exec.ecore#//ModelElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//ModelElement/description"/>
-    </genClasses>
     <genClasses ecoreClass="exec.ecore#//Block">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Block/try"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Block/catch"/>

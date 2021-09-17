@@ -3,8 +3,7 @@
 package org.nasdanika.exec.content;
 
 import org.eclipse.emf.ecore.EObject;
-
-import org.nasdanika.exec.ModelElement;
+import org.nasdanika.ncore.ModelElement;
 
 /**
  * <!-- begin-user-doc -->
