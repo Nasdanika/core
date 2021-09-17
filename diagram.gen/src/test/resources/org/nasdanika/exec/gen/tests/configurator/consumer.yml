@@ -1,0 +1,14 @@
+exec-configurator:
+   target: 
+     resources-container:
+        name: my-container
+        contents:
+          - resources-file:
+              name: my-file.txt
+              contents:
+                content-text: |+2
+                  Hello, ${name}!
+                  How are you doing tonight?
+   properties: 
+     name: 
+       content-text: Extended ${name}

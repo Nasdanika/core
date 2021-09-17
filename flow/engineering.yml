@@ -1,0 +1,286 @@
+engineering-module:
+   name: Model
+   path: model
+   representations:
+     - representation-component-diagram: true
+   dependencies:
+     - nasdanika:modules/html/modules/app
+     - nasdanika:modules/core/modules/emf
+   issues:
+     - name: Validation of duplicate paths in containing collection and duplicate URI's                         
+     - name: Support of objectives and key results                         
+     - name: Journey inheritance
+       description: Override/overriden, suppress, inheritance of default values for features.                         
+     - name: Support of Multi-criteria decision analysis - different methods - AHP, Weighted sum, Weighted product                         
+     - name: Icons for model elements      
+     - name: Introduce Edition  
+     - name: Contact methods, resolving by
+       description: For example, engineer's e-mail(s) and resolving by mailto:<email> URI.  
+     - name: OKR
+       markdown-description: |+2              
+         Add support of [OKR](https://en.wikipedia.org/wiki/OKR). Endeavor contains objectives. 
+         Objectives reference Endeavor. E.g. month objectives, quarter objectives, release or feature objectives.
+         Objective may contain sub-objectives and may reference parent objective - mutually exclusive - contained objective cannot reference a parent.
+         Validations of objectives hierarchy, end of the contained objective endeavor shall be before the end of the containing objective endeavor.
+         
+         Objectives can contain key results. Both objectives and key results are Aims and endeavors can be aligned to them. Validation that aligned endeavors
+         end before the objective endeavor.
+         
+         Both objective and key result have ``weight`` with default value ``1`` and derived ``completion`` attributes. 
+         Completion for key results is computed as weighted completion of aligned endeavors. Maybe add weight to Alignment with default 1 and do not take total effort into
+         account. If there is a mix of sub-objectives and key results and alignments they are all objective contributors with weights. 
+         On the objective page show 3 tables - sub-objectives (children), key results, alignments.  
+          
+         ### Old notes 
+          
+         Objectives can be nested and can reference a parent objective, e.g. Engineer's containing organization objective. Nested objective can't have parent reference.
+         Objectives can reference increments. E.g. 2021 Q3 objective.
+         Objectives may contain key results. Objectives and key results may have weight which determines how much they contribute to container/parent.
+         Objectives may contain issues. Issues may contribute either to objectives directly or to key results. Benefit may be used as issue weight or additional attribute.
+         Maybe EngineeredCapability shall be contributing, so release or feature may contribute.
+         Contribution class with weight and target. Default weight is 1, target is the default feature. 
+         Aim is a base class for Objective and Key Result. Concrete - for proxying.
+         Ability to manually set progress in aims - value between 0 and 1. This value will be added to the value of contributions.
+         Contributions count in aim progress only when they are available - done, released, ... 
+         Although effort/cost based progress may also be computed.  
+         Maybe an objective shall be able to contribute to key results and thus instead of parent link it shall have that contirbutes reference.
+         I.e. Contributions are done to Aim by Contributors - Objectives, Key results, EngineeredCapabilities. Contained aims have weight attribute which means their contribution to the container.  
+         Objectives may have benefit and that benefit may be used to compute effective benefit for contributors based on their weight. 
+         Objectives being contributors themselves also have effectiveBenefit. As such it should be possible to define benefits only for top-level objectives and compute
+         effective benefits down to issues. As "leaf" benefits are likely to be very small numbers they may be normalized to 1 for the largest benefit and also ranked. 
+         Issues can be sorted in the order of decreasing effective benefit. 
+     - name: Notes from Git commit history
+       markdown-description: |+2
+         Flag to enable - true by default.
+         Look for a YAML block in commit comments, e.g. something starting with --- Engineering --- and ending with --- End Engineering ---
+         Parse as YAML - issue key with issue URI. Also time spent and remaining effort. Engineer - find by committer e-mail or explicitly specify.
+         As part of it or before it (in 2021.5.0) - add support of referencing engineers by e-mail - AbstractGenerateSiteConsumerFactory getURI() to getURIs() or boolean matchURI().
+         Engineering block does not go to the note description. Decide how to treat commit contents - markdown by default and a flag to overrie to treat as plain text? 
+     - name: Domain or Portfolio
+       markdown-description: |+2
+         Grouping of products, may contain child domains/portfolios. 
+     - name: Metrics/Measurements
+       markdown-description: |+2
+         Metrics are defined at engineer, engineered element, or just model element. Measurements are collected under Observations.
+         Obeservation may have more than one measurement. Observation is a period. It may have a description, e.g. comments - extends ModelElement.
+         Measurement references Metric. Observation may have a status, e.g. planned, completed.
+         allObservations derived reference - uses ObservationProvider context service - passes self and gets a list of external observations back. 
+         E.g. a number of downloads for a release, or a number of site visits, or user rating. There might be multiple types of measurements. Metric may specify measurement type and validate. 
+         E.g. DoubleMetric with a single double value or multi-double value to compute avarage, deviation, etc.
+         Or AggregatedDoubleMetric which already has avarage, min, max, etc. computed.  
+     - name: Activity duration/cost
+       markdown-description: |+2
+         To compute duration/costs of journeys. Ideally/eventually - a distribution for activity and distributions for journeys.
+     - name: Resources allocation for activities and journeys
+       markdown-description: |+2
+         Banker's algorithm or something similar.
+     - name: Issue effective status 
+       markdown-description: |+2
+         Derived from the last note status if not set explicitly. Default to the first status found by walking up the hierarchy of containment first and owning engineer second.
+     - name: Remove immutable collections from derived many-references
+     - name: Validation of unsatisfied requirements
+       markdown-description: |+2
+         Not available requirement which is not scheduled for the same increment or an increment before the scheduled increment.
+         Validate only for issues/engineered capabilities scheduled for increments directly or inderectly via releases or features.
+         Report at increment and release/feature levels as well as on the issue level? 
+     - name: Validation of issue increment after the release increment
+     - name: Computing default increment from the end date.
+     - name: Activity steps
+       markdown-description: |+2
+         Section actions, paragraphs. Engineered elements. URL with fragment. The goal is to allow maintaining issue and owners at a step level as well as discussion forums. 
+         Also allow to maintain steps in their own files.
+         Leverage list of contents. Steps can be nested.
+     - name: Generated org charts
+       markdown-description: |+2
+         Visualization of org structure. Configurable number of levels up and down. People-based or org based or combined - org name and head (owner) in parenthesis with individually linking to the org and the owner.
+         Option to specify whether to show individual engineers or just organizations. An option to show headcount - title with token expansion - ``name``, ``owner``, ``head-count``, ``total-head-count``. For leaf orgs at the bottom show total headcount.
+         Auto depth based on the total number of orgs to be shown, e.g. specify that max-shapes is 10 then no more than 10 orgs will be shown. For leaf orgs use a visual differentiator, e.g. a different border to show that there is more.
+         Engineers are boxless nodes? Support of multiple visualizations - many containment reference org-charts - homogenous, strict containment.
+     - name: Engineer reference/proxy
+       description: To define cross-functional teams. Show differently in org charts. Bi-directional reference, take into account in assignments. Other attributes are read-only delegating to the target.      
+     - name: External issue
+       markdown-description: |+2
+         Support of issues tracked elsewhere. Solve at the resource loading level by using specialized resource factories. Top-down and bottom-up approaches.         
+     - name: Configurable representations (diagrams)
+       markdown-description: |+2
+         Issues and other model elements have representation reference and different representations, which can be model-element specific. E.g. Gantt, WBS, or state diagram for issues and WBS (org chart) for organizations.
+         Representations are rendered as section actions. Composite representation - style - cards, pills, ... Cards columns. Charts can be introduced this way.           
+     - name: Journey element input artifacts (requirements) and output artifacts (deliverables)
+       markdown-description: Infer transition artifacts from journey element artirfacts and vice-versa, validations of consistency, e.g. an output transition lists an artifact which is not in the list of journey element deliverables.
+     - name: Capacity, allocation, utilization calculation and validation
+       markdown-description: |+2
+         Total of increment issues does not exceed allocation if it is present. If an issue is worked over multiple increments use issue start/end to pro-rate. 
+         Total of allocations does not exceed capacity.
+         Utilization, two levels - a) engineer capacity is allocated b) allocations are utilized by assigning issues. Configurable validations and under/over allocation margins - context service?
+         For allocation compute utilization from issue notes. For capacity from allocations. Capacity shall be allocated, allocations shall be assigned. Then utilization is tracked - burn down how much of allocated is used.
+     - name: Aims, principles, alignments
+       markdown-description: |+2
+         Aim is a a concrete base class for Objective, KeyResult, Persona Goal, and Principle. Principle is hierarchical. Steal principle definition from TOGAF. 
+         Endeavor has alignment homogenous strict containment reference. Alignment is a model element referencing Aim. allAlignments derived reference.
+         Aim has derived opposite reference - alignements. Principle containment homogenous reference under EngineeredElement - e.g. architecture principles for an organization, design/coding principles for a component.
+         Consider ``extends`` relationship between principles. E.g. module level principle extends a more generic organization level principle. Many-to-many relationship.   
+     - name: YAML spec examples
+       markdown-description: Add to documentation.             
+     - name: Documents and sections
+       markdown-description: |+2
+         Engineered elements, partial support of action configuration - section style, section role - e.g. a section can be shown as context action or on the content panels - left or right. Category support too. Content is displayed in the first nav, inherited info in the second. 
+         Other options are dialog, collapsible, and context action which calls super.doGenerate() - do not cache. Add support of resources and directories in the UI where to keep documents. 
+         Document extends section. Table of contents configuration (not component) - location (e.g. right navigation), style - list/table, title (optional), depth.              
+     - name: Extract ModelElement, NamedElement, Appearance, ... to a common model
+       markdown-description: |+2
+         Including ViewAction classes. Also Document, Section, Reference, Link.  
+         The model should be a part of Core and Gen classes part of HTML. Would allow to relatively quickly build new models on top. 
+         Also extract activities, journeys (rename to flows as more generic) into a common model.
+         Consider dropping existing NCore and replace with with this new one. Keep original concrete classes in the engineering model as
+         sub-classes of the extracted classes for future extensibility and model spec compatibility.                
+     - name: Parent reference to Engineer
+       markdown-description: |+2
+         For bottom-up linking during generation of federated sites. Similar to bottom-up linking in Eclipse documentation.                
+     - name: Appearance icon and description
+       markdown-description: |+2
+         Implement support for icon and descriptions. Also section-style.                  
+     - name: Appearance view-action
+       markdown-description: |+2
+         ``viewAction``/``view-action`` - FQN of a class or static method which creates ViewAction's for model elements and features.
+         Static method name is separated from class name with ``::`` as in method references. Adapter factory takes appearance into account and for features ModelElementViewAction first
+         checks appearance before calling featureActions - i.e. customizations trump overrides. For features the factory method may return an array or a collection or an iterable or a stream.
+         For model elements method/constructor takes 2 arguments - target and factory. For features - also two arguments - semantic element view action and feature.
+         Document in appearance--view-action.md with examples. Consider an option with "Call" class as in org.nasdanika.exec.Call - class name is a default feature and then method, init, etc.
+         Maybe as an improvement - start just with class name and method name and ``::`` as a shortcut for specifying class and method name as one string.                  
+     - name: Persona avatar
+       markdown-description: |+2
+         Image URL or a class with URL being a default property and an option so specify height and width. Display in the properties table.                  
+     - name: Reference and Link
+       markdown-description: |+2
+         Named elements. Reference points to a model element in the resource set by URI. URI is the default feature. Name, description are "inherited" from the target if not set explicitly.
+         Referrers derived opposite reference to NamedElement.
+         Link points to URL, which is also a default property.                   
+     - name: Profiles
+       markdown-description: |+2
+         Nested. Contain context properties and appearance. Properties and apperance are inherited by child profiles.
+         Generation - utility methods to generate for a profile. Profiles reference to model element - included/excluded. A way to support multiple stakeholder views.                    
+     - name: ModelElement digest and forum subscriptions
+       markdown-description: |+2
+         Introduce digest operation or derived attribute. Computed from non-derived set features by computing feature value digest and then creating a YAML map of feature name -> feature digest and doing SHA-256 to compute object digest.
+         For references - feature element digest is simply URI of the target.
+         Subscriptions at forum level - this way it would be possible to subscribe for engineered elements too. Subscription features - subscriber (engineer), frequency - daily, weekly, ..., whether it is recursive, 
+         maybe filter(s) in MongoDB way - RegEx if string, feature name to RegEx or match spec if map. Generation process or another process loads the model and then tree-iterates via subscriptions and sends notifications to 
+         the notification service. The service is responsible for keeping history of last time notifications and notify only if time period has passed and digest changed.                       
+     - name: Appearance - features to show in tables
+     - name: ModelElement tags
+       markdown-description: |+2
+         Property class - value (multi-string, default feature), description and markdown description. PropertyEntry class - String key, Property value.
+         EMap tags at ModelElement level. Possible use - aliasing. Maybe name ``properties`` and use wider, e.g. to customize behavior.
+         Render as a table in a feature action.                       
+     - name: Icons
+       markdown-description: |+2
+         Icons for all or most model elements. Perhaps buy from Icons8 or Shutterstock (~$10 per icon) or Iconfinder ($2-3 per icon) or some other service.                       
+     - name: Appearance - feature order
+       markdown-description: |+2
+         Ability to specify feature order. E.g. that increments are shown after modules.                       
+     - name: Decision
+       markdown-description: |+2
+         Extends Aim and EngineeredElement. Effective dates - start, end. I.e. it takes effort to make a decision, it can be made in a series of endeavors, e.g. conducting POC's. 
+         It is owned by an engineer and may have experts. It may be aligned to other aims. And other aims and endeavors can be aligned to the decision.
+         Later on - multi-criteria decisions with criteria and alternatives and other things.
+         Extends capability too - issues and other decisions can require it - decision chaining. Resolution and markdown resolution attributes in addition to description.
+         Decision may be considered to be an endeavor. If decided so - update endeavor descripton. Decision is an engineered capability, but can't extend it because it would inherit ``aligns`` from both engineered capability and aim.
+         Validation of decision effective dates - derived decision effective dates shall be within effective dates of decisions it is based on.
+         Decision shall also have status - simply reuse issue status? Would need rejected and superceded statuses in this case.
+         Or decision is a special case of issue? If so, introduce "Alignable" class with both Aim and EngineeredCapability extending it. This way decision is an issue which extends Aim.  
+         Make Endeavor alignable instead of Engineered capability? E.g. a quarter can be aligned to addressing technical debt. 
+         Superceded and supercedes references. The superceding decision references the superceded. Superceded reference is derived. Many to many - one decision may supercede multiple and a decision may be superceded by several decisions.
+         Even if one of them is rejected the superceded decision is still superceded if any of superceding is effective - done and within the effective dates range.
+         Premises/Entailments reference (not needed - requires/requiredBy will do). Entailments is a derived reference.                        
+     - name: Visualizations of aims and alignments
+       markdown-description: Including decision chains.
+     - name: ModelElement sections, TOC depth, role, and style
+       markdown-description: |+2
+         Move sections from Document to ModelElement. Re-introduce TableOfContents class with ``depth`` default property with value -1 (unlimited).
+         ``table-of-contents`` homogenous strict containment reference in ModelElement. Additional attributes - role and style - map (properties).
+         E.g. to be able to specify ``max-width`` in case of a floating card.
+     - name: Style to Appearance
+       markdown-description: |+2
+         Contemplate adding style map to Appearance. How would it be applied? If present, wrap whatever is returned from generate into a DIV and then cascade from all styles - model element, containment feature, lineage?
+     - name: Absolute URL's in path AS-IS
+       markdown-description: |+2
+         Recognize absolute URL's/URI's (those starting with schema) in path and use AS-IS. For activator - also use AS-IS, i.e. do not use containment path, but relativize.
+         Needed for site federation - ability to create "proxy" model elements. E.g. an organization would create proxies for its departments and departments would create
+         proxies for sub-departments and may also create a proxy for the root action - in this case there would be no need in the root action - it can be null.  
+     - name: Resource uploading during generation
+       markdown-description: |+2
+         Duplicate, just to make sure - ``resource`` token replacer if there is ResourceManager service - takes URI of the resource relative to the YAML spec, uploads it somewhere (or writes to the output directory)
+         and returns a URL relative to the generated page.
+     - name: Conditional appearance
+       markdown-description: |+2
+         Extends Apperance and has condition attribute which is JavaScript evaluated with the semantic element available in binding as well as context.
+         Appearance has a containment reference of conditional appearances - kinda cascading styles. Matched top-down - if parent matches then children are evaluated.
+         Applied bottom-up first match. E.g. the first match which has icon key would define the icon. Values can contain interpolation tokens, e.g. issue icon can be taken from its status icon.
+     - name: Contact methods, notifications of validations and escalations.
+       markdown-description: |+2
+         Introduce contact methods from Party. Also, introduce a notification interface - something with boolean notify(Notification) - to adapt contact methods to in 
+         order to send notifications. For e-mails the notification will be converted to a JavaMail message, a session of whatever service will be obtained from the context,
+         and the message will be sent. For escalations - a week (should be configurable) before endeavor becomes an overdue - notification the assignee, Info status,
+         when it becomes an overdue - notification to the assignee and the owner of the containing engineer and the engineer itself - warning. A week later - error and also to the next level of the hierarchy.
+         Escalate to the next level every week. Can be done by something like a Jenkins or CircleCI scheduled jobs. Aggregate and group by severity.
+     - name: Relative dates
+       markdown-description: E.g. ``${start} + 2 weeks``. Usable for templates. Look at how https://plantuml.com/gantt-diagram does it. 
+     - name: Issue severity and priority
+       markdown-description: |+2
+         Document the difference, add to tables. Appearance - feature section with a summary table. 
+         Think about some approach to control that say a codebase with show-stopper severity issues cannot be merged to some branches - e.g. it should stay in ``develop``.
+         Provide a mapping of issue severity URI's to diagnostic statuses - context service - if such mapping is found, validation of an not done issue in that severity would result in a diagnostic with
+         respective severity. E.g. show-stopper to ERROR in ``develop`` and to FAIL in ``master``, i.e. site generation would fail in ``master`` if there are showstoppers.    
+     - name: Key results initiatives
+       markdown-description: |+2
+         Containment reference for issues. Take into account in completion calculations. Another way to track execution.
+         Include in allIssues. Show on the key result page. Appearance - element-actions/none, ...           
+     - name: Extend feature things to TypedElement to support operations
+       markdown-description: |+2
+         Operation apperance similar to feature appearance, ViewActions which invoke operations. featureIcon, label, ... How to handle operations in appearance.
+         Another option is a parallel structure with OPERATION_ROLE etc. - a bit of duplication, but should not break existing stuff...
+     - name: Document inheritance
+       markdown-description: |+2
+         Document.extends reference to another document. ModelElement.allSections derived reference returns sections by defult.
+         Overridden in JourneyElement and Document. Modifiers similar to journey element. Abstract documents have italic header.         
+     - name: Document inheritance
+       markdown-description: |+2
+         Document.extends reference to another document. ModelElement.allSections derived reference returns sections by defult.
+         Overridden in JourneyElement and Document. Modifiers similar to journey element. Abstract documents have italic header.         
+     - name: Flow package
+       markdown-description: |+2
+         journey elements. update references in docs. Generation sub-package.         
+     - name: Table Of Contents - an option to include headers from markdown
+       description: Leverage com.vladsch.flexmark.ext.toc.TocExtension
+     - name: Computing of journey elements start, duration, end
+       description: Relative to the top-most journey start. Perform at the view action level because of inheritance.
+     - name: Temporal bounds
+       description: E.g. not known for sure, but definitely in July - temporal contains upper and lower bounds. Use in before/after computations.
+     - name: Temporal and duration proabilities/distributions
+       description: Maps value -> probability. If present and actual values are not present, values are computes as averages.
+     - name: MemberAppearance format
+       description: For dates (instants) and numbers. 
+     - name: Organization/engineer start/end validation
+       description: Organization start shall not be after engineer's start and end shall not be before. 
+     - name: Cost, effort, and benefit to temporal?
+       description: Derived attributes computed from all endeavors derived from this temporal. Would represent "consequences" of binding the temporal. 
+     - name: Resource leveling
+       description: Some form of computed star/end bounds based on resource capacity. Or maybe "Suggestions" - also computed, but not a bound. E.g. computed at the gen level and output to temporal view action.    
+         
+     ### === Done === ###    
+     - name: Start/end from Issue and Increment to Endeavor
+       increment: nasdanika:increments/2021/children/q2/children/may
+       status: nasdanika:issue-statuses/done
+       markdown-description: |+2
+         For Issue with children, Release and Feature - default to derived from scheduled issues. For issues add validation - children shall be within parent if parent start/end is set.
+         For releases compute default increment from the end date in the same way as for issues. 
+     - name: Move assignee from Issue to Endeavor
+       increment: nasdanika:increments/2021/children/q2/children/may
+       status: nasdanika:issue-statuses/done
+       markdown-description: |+2
+         So releases, features, and increments may have engineers tracking/driving execution/delivery. Rework the assignments section in Engineer to have sub-sections - increments, releases, features, issues.
+         Hide endeavors with zero total cost (e.g. incrments without scheduled releases or issues), and completed. To documentation - composite effort assignees are responsible for tracking and escalation/removal of obstacles,
+         e.g. increment assignee is kinda scrum master and release/feature assignee is kinda project manager. 
+            
+                           
+   

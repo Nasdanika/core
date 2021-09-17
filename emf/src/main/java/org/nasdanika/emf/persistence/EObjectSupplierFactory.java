@@ -31,6 +31,7 @@ import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
 import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.ncore.NcoreFactory;
 
 /**
  * Loads {@link EObject} {@link EStructuralFeature}s from configuration.
@@ -232,10 +233,17 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
 				Marker marker = getMarker();
-				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
 				if (marker != null) {
 					ret.eAdapters().add(new MarkedAdapter(marker));
+					if (ret instanceof org.nasdanika.ncore.Marked) {
+						org.nasdanika.ncore.Marker mMarker = NcoreFactory.eINSTANCE.createMarker();
+						mMarker.setLocation(marker.getLocation());
+						mMarker.setLine(marker.getLine());
+						mMarker.setColumn(marker.getColumn());
+						((org.nasdanika.ncore.Marked) ret).setMarker(mMarker);
+					}
 				}
+				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
 				EStructuralFeature[] loadingFeature = { null };
 				ret.eAdapters().add(new LoadTrackerAdapter() {
 

@@ -7,6 +7,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.Status;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.tests.TestBase;
+import org.nasdanika.ncore.Marker;
 
 /**
  * Tests of descriptor view parts and wizards.
@@ -25,6 +26,8 @@ public class TestText extends TestBase {
 					assertThat(text.getDescription()).isEqualTo("Full text definition");
 					assertThat(text.getContent()).isEqualTo("Hello World.");
 					assertThat(text.isInterpolate()).isFalse();
+					Marker marker = text.getMarker();
+					assertThat(marker).isNotNull();
 				},
 				diagnostic -> {
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);

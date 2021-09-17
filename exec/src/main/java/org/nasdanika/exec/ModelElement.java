@@ -2,8 +2,6 @@
  */
 package org.nasdanika.exec;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Model Element</b></em>'.
@@ -21,7 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *        annotation="urn:org.nasdanika documentation-reference='doc/model-element.md'"
  * @generated
  */
-public interface ModelElement extends EObject {
+public interface ModelElement extends org.nasdanika.ncore.Marked {
 	/**
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->

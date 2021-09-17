@@ -1,0 +1,3 @@
+content-resource:
+   description: Full resource definition
+   location: hello.txt 

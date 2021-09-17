@@ -1,0 +1,22 @@
+exec-block:
+   try:
+     resources-container:
+        name: my-container
+        contents:
+          - resources-file:
+              name: my-file.txt
+              contents:
+                content-resource: no-such-resource
+   catch: 
+     resources-container:
+        name: my-container
+        contents:
+          - resources-file:
+              name: my-file.txt
+              contents:
+                content-text: "Good bye, World! Error: ${error}."
+   finally: 
+     resources-file:
+       name: log.txt
+       contents:
+         content-text: All done!

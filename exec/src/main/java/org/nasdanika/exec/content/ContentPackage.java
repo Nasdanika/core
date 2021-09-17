@@ -70,6 +70,15 @@ public interface ContentPackage extends EPackage {
 	int BASE64 = 0;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__MARKER = ExecPackage.MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -114,6 +123,15 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	int RESOURCE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__MARKER = ExecPackage.MODEL_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -172,6 +190,15 @@ public interface ContentPackage extends EPackage {
 	int TEXT = 2;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT__MARKER = ExecPackage.MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -228,6 +255,15 @@ public interface ContentPackage extends EPackage {
 	int FILTER = 3;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__MARKER = ExecPackage.MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -273,6 +309,15 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	int INTERPOLATOR = 4;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__MARKER = FILTER__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -337,6 +382,15 @@ public interface ContentPackage extends EPackage {
 	 * @generated
 	 */
 	int MARKDOWN = 5;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__MARKER = FILTER__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.

@@ -72,6 +72,15 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__MARKER = ExecPackage.MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -143,6 +152,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @generated
 	 */
 	int CONTAINER = 1;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__MARKER = RESOURCE__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -243,6 +261,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @generated
 	 */
 	int FILE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__MARKER = RESOURCE__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.

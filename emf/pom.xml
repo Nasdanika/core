@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.8.0</version>
+	    <version>2021.9.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>emf</artifactId>
@@ -44,13 +44,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>cli</artifactId>
+			<artifactId>ncore</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.eclipse.emf</groupId>
-		    <artifactId>org.eclipse.emf.ecore</artifactId>
-		    <version>2.24.0</version>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>cli</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.eclipse.emf</groupId>

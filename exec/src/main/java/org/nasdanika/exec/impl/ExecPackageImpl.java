@@ -145,6 +145,9 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 
 		isInited = true;
 
+		// Initialize simple dependencies
+		org.nasdanika.ncore.NcorePackage.eINSTANCE.eClass();
+
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
 		ContentPackageImpl theContentPackage = (ContentPackageImpl)(registeredPackage instanceof ContentPackageImpl ? registeredPackage : ContentPackage.eINSTANCE);
@@ -563,6 +566,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Obtain other dependent packages
 		ContentPackage theContentPackage = (ContentPackage)EPackage.Registry.INSTANCE.getEPackage(ContentPackage.eNS_URI);
 		ResourcesPackage theResourcesPackage = (ResourcesPackage)EPackage.Registry.INSTANCE.getEPackage(ResourcesPackage.eNS_URI);
+		org.nasdanika.ncore.NcorePackage theNcorePackage = (org.nasdanika.ncore.NcorePackage)EPackage.Registry.INSTANCE.getEPackage(org.nasdanika.ncore.NcorePackage.eNS_URI);
 
 		// Add subpackages
 		getESubpackages().add(theContentPackage);
@@ -573,6 +577,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		modelElementEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		blockEClass.getESuperTypes().add(this.getModelElement());
 		callEClass.getESuperTypes().add(this.getModelElement());
 		configuratorEClass.getESuperTypes().add(this.getModelElement());

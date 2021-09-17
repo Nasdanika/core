@@ -2,8 +2,10 @@
  */
 package org.nasdanika.exec.impl;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.nasdanika.exec.ExecPackage;
@@ -17,6 +19,7 @@ import org.nasdanika.exec.ModelElement;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.exec.impl.ModelElementImpl#getMarker <em>Marker</em>}</li>
  *   <li>{@link org.nasdanika.exec.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  * </ul>
  *
@@ -68,6 +71,36 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public org.nasdanika.ncore.Marker getMarker() {
+		return (org.nasdanika.ncore.Marker)eDynamicGet(ExecPackage.MODEL_ELEMENT__MARKER, org.nasdanika.ncore.NcorePackage.Literals.MARKED__MARKER, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetMarker(org.nasdanika.ncore.Marker newMarker, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newMarker, ExecPackage.MODEL_ELEMENT__MARKER, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setMarker(org.nasdanika.ncore.Marker newMarker) {
+		eDynamicSet(ExecPackage.MODEL_ELEMENT__MARKER, org.nasdanika.ncore.NcorePackage.Literals.MARKED__MARKER, newMarker);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String getDescription() {
 		return (String)eDynamicGet(ExecPackage.MODEL_ELEMENT__DESCRIPTION, ExecPackage.Literals.MODEL_ELEMENT__DESCRIPTION, true, true);
 	}
@@ -88,8 +121,24 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ExecPackage.MODEL_ELEMENT__MARKER:
+				return basicSetMarker(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ExecPackage.MODEL_ELEMENT__MARKER:
+				return getMarker();
 			case ExecPackage.MODEL_ELEMENT__DESCRIPTION:
 				return getDescription();
 		}
@@ -104,6 +153,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ExecPackage.MODEL_ELEMENT__MARKER:
+				setMarker((org.nasdanika.ncore.Marker)newValue);
+				return;
 			case ExecPackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription((String)newValue);
 				return;
@@ -119,6 +171,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ExecPackage.MODEL_ELEMENT__MARKER:
+				setMarker((org.nasdanika.ncore.Marker)null);
+				return;
 			case ExecPackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
@@ -134,6 +189,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ExecPackage.MODEL_ELEMENT__MARKER:
+				return getMarker() != null;
 			case ExecPackage.MODEL_ELEMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
 		}

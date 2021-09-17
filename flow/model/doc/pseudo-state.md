@@ -1,0 +1,1 @@
+A pseudo-state is a base class for transient [journey elements](JourneyElement.html) in the [journey](Journey.html) graph. 

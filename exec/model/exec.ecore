@@ -4,7 +4,7 @@
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/package-summary.md"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/model-element.md"/>
     </eAnnotations>

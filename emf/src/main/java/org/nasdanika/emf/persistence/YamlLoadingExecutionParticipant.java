@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -25,6 +27,9 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 	@Override
 	protected ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
 		ResourceSet ret = super.createResourceSet(progressMonitor);
+
+		// XMI as default.
+		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
 		
 		Registry packageRegistry = ret.getPackageRegistry();
 		for (EPackage ePackage: getEPackages()) {

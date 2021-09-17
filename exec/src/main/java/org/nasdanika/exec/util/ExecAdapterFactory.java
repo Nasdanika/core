@@ -104,6 +104,10 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 				return createMapAdapter();
 			}
 			@Override
+			public Adapter caseMarked(org.nasdanika.ncore.Marked object) {
+				return createMarkedAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -246,6 +250,20 @@ public class ExecAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Marked <em>Marked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Marked
+	 * @generated
+	 */
+	public Adapter createMarkedAdapter() {
 		return null;
 	}
 

@@ -68,13 +68,22 @@ public interface ExecPackage extends EPackage {
 	int MODEL_ELEMENT = 0;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__MARKER = org.nasdanika.ncore.NcorePackage.MARKED__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__DESCRIPTION = 0;
+	int MODEL_ELEMENT__DESCRIPTION = org.nasdanika.ncore.NcorePackage.MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
@@ -83,7 +92,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = 1;
+	int MODEL_ELEMENT_FEATURE_COUNT = org.nasdanika.ncore.NcorePackage.MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -92,7 +101,7 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_OPERATION_COUNT = 0;
+	int MODEL_ELEMENT_OPERATION_COUNT = org.nasdanika.ncore.NcorePackage.MARKED_OPERATION_COUNT + 0;
 
 
 	/**
@@ -104,6 +113,15 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	int BLOCK = 1;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__MARKER = MODEL_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -169,6 +187,15 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	int CALL = 2;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__MARKER = MODEL_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -318,6 +345,15 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR = 4;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__MARKER = MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -372,6 +408,15 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	int EVAL = 5;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__MARKER = MODEL_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -430,6 +475,15 @@ public interface ExecPackage extends EPackage {
 	int FAIL = 6;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__MARKER = MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -477,6 +531,15 @@ public interface ExecPackage extends EPackage {
 	int LIST = 7;
 
 	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__MARKER = MODEL_ELEMENT__MARKER;
+
+	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -522,6 +585,15 @@ public interface ExecPackage extends EPackage {
 	 * @generated
 	 */
 	int MAP = 8;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__MARKER = MODEL_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.

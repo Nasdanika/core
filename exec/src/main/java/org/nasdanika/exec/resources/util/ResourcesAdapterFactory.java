@@ -82,6 +82,10 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl {
 				return createFileAdapter();
 			}
 			@Override
+			public Adapter caseMarked(org.nasdanika.ncore.Marked object) {
+				return createMarkedAdapter();
+			}
+			@Override
 			public Adapter caseModelElement(ModelElement object) {
 				return createModelElementAdapter();
 			}
@@ -144,6 +148,20 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFileAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Marked <em>Marked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Marked
+	 * @generated
+	 */
+	public Adapter createMarkedAdapter() {
 		return null;
 	}
 

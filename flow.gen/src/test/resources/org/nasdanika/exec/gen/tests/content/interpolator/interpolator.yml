@@ -1,0 +1,3 @@
+content-interpolator:
+   source:
+     content-resource: hello.txt

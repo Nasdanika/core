@@ -72,6 +72,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				Base64 base64 = (Base64)theEObject;
 				T result = caseBase64(base64);
 				if (result == null) result = caseModelElement(base64);
+				if (result == null) result = caseMarked(base64);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -79,6 +80,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				Resource resource = (Resource)theEObject;
 				T result = caseResource(resource);
 				if (result == null) result = caseModelElement(resource);
+				if (result == null) result = caseMarked(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -86,6 +88,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				Text text = (Text)theEObject;
 				T result = caseText(text);
 				if (result == null) result = caseModelElement(text);
+				if (result == null) result = caseMarked(text);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -93,6 +96,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				Filter filter = (Filter)theEObject;
 				T result = caseFilter(filter);
 				if (result == null) result = caseModelElement(filter);
+				if (result == null) result = caseMarked(filter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -101,6 +105,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseInterpolator(interpolator);
 				if (result == null) result = caseFilter(interpolator);
 				if (result == null) result = caseModelElement(interpolator);
+				if (result == null) result = caseMarked(interpolator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -109,6 +114,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseMarkdown(markdown);
 				if (result == null) result = caseFilter(markdown);
 				if (result == null) result = caseModelElement(markdown);
+				if (result == null) result = caseMarked(markdown);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -203,6 +209,21 @@ public class ContentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarkdown(Markdown object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Marked</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Marked</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMarked(org.nasdanika.ncore.Marked object) {
 		return null;
 	}
 

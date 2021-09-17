@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.ncore/src/main/java" creationIcons="false"
+    editorDirectory="" modelPluginID="org.nasdanika.ncore" modelName="Ncore" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic" complianceLevel="8.0"
+    suppressGenModelAnnotations="false" copyrightFields="false" operationReflection="true"
+    importOrganizing="true">
+  <foreignModel>ncore.ecore</foreignModel>
+  <genPackages prefix="Ncore" basePackage="org.nasdanika" disposableProviderFactory="true"
+      ecorePackage="ncore.ecore#/">
+    <genClasses image="false" ecoreClass="ncore.ecore#//Marked">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Marked/marker"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Marker">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/line"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/column"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

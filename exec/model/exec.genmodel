@@ -3,8 +3,8 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.exec/src/main/java" creationIcons="false"
     editorDirectory="" modelPluginID="org.nasdanika.exec" modelName="Exec" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic" complianceLevel="8.0"
-    suppressGenModelAnnotations="false" copyrightFields="false" operationReflection="true"
-    importOrganizing="true">
+    suppressGenModelAnnotations="false" copyrightFields="false" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
+    operationReflection="true" importOrganizing="true">
   <foreignModel>exec.ecore</foreignModel>
   <genPackages prefix="Exec" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="exec.ecore#/">
@@ -46,7 +46,8 @@
     <genClasses ecoreClass="exec.ecore#//Map">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//Map/entries"/>
     </genClasses>
-    <nestedGenPackages prefix="Content" disposableProviderFactory="true" ecorePackage="exec.ecore#//content">
+    <nestedGenPackages prefix="Content" basePackage="org.nasdanika.exec" disposableProviderFactory="true"
+        ecorePackage="exec.ecore#//content">
       <genClasses ecoreClass="exec.ecore#//content/Base64">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>
       </genClasses>
@@ -69,7 +70,8 @@
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Markdown/style"/>
       </genClasses>
     </nestedGenPackages>
-    <nestedGenPackages prefix="Resources" disposableProviderFactory="true" ecorePackage="exec.ecore#//resources">
+    <nestedGenPackages prefix="Resources" basePackage="org.nasdanika.exec" disposableProviderFactory="true"
+        ecorePackage="exec.ecore#//resources">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="exec.ecore#//resources/ReconcileAction">
         <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Append"/>
         <genEnumLiterals ecoreEnumLiteral="exec.ecore#//resources/ReconcileAction/Cancel"/>

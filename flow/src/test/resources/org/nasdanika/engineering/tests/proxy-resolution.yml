@@ -1,0 +1,16 @@
+engineering-organization:
+   name: Proxy resolution
+   path: proxy-resolution
+   engineers:
+     - engineering-engineer:
+         name: Joe Doe
+         path: joe-doe
+   issues: 
+     - name: Good First Issue
+       path: good-first-issue
+       assignee: proxy-resolution:engineers/joe-doe     
+   modules:
+     - engineering-product:
+         name: Flagship
+         path: flagship
+         owners: proxy-resolution:engineers/joe-doe

@@ -1,0 +1,2 @@
+Call is a specialization of [transition](Transition.html) which has blocking "request-reply" semantics where the calling activity waits for a response from callee.
+Calls are made as part of activity execution and transitions are traversed upon activity completion.

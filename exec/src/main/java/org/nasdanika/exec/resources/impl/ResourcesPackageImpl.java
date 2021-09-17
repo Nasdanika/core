@@ -107,6 +107,9 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 
 		isInited = true;
 
+		// Initialize simple dependencies
+		org.nasdanika.ncore.NcorePackage.eINSTANCE.eClass();
+
 		// Obtain or create and register interdependencies
 		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(ExecPackage.eNS_URI);
 		ExecPackageImpl theExecPackage = (ExecPackageImpl)(registeredPackage instanceof ExecPackageImpl ? registeredPackage : ExecPackage.eINSTANCE);

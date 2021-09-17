@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ncore" nsURI="urn:org.nasdanika.ncore" nsPrefix="org.nasdanika.ncore">
+  <eAnnotations source="urn:org.nasdanika">
+    <details key="documentation-reference" value="doc/package-summary.md"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Marked" abstract="true" interface="true">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/marked.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marker" eType="#//Marker"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Marker">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,6 @@
+exec-map:
+  entries:
+    greeting: 
+      content-text: Hello
+    addressee: 
+      content-text: World    

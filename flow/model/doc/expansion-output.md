@@ -1,0 +1,2 @@
+Expansion output is a [pseudo-state](PseudoState.html) which can be used instead of partition [end](End.html) pseudo-state
+to indicate that the partition [journey](Journey.html) output is a collection and the output [transitions](Transition.html) are executed for each element in the collection.
