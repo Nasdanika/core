@@ -22,6 +22,24 @@ public interface DiagramFactory extends EFactory {
 	DiagramFactory eINSTANCE = org.nasdanika.diagram.impl.DiagramFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Link</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Link</em>'.
+	 * @generated
+	 */
+	Link createLink();
+
+	/**
+	 * Returns a new object of class '<em>Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Element</em>'.
+	 * @generated
+	 */
+	DiagramElement createDiagramElement();
+
+	/**
 	 * Returns a new object of class '<em>Diagram</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -38,6 +56,24 @@ public interface DiagramFactory extends EFactory {
 	 * @generated
 	 */
 	Connection createConnection();
+
+	/**
+	 * Returns a new object of class '<em>Start</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Start</em>'.
+	 * @generated
+	 */
+	Start createStart();
+
+	/**
+	 * Returns a new object of class '<em>End</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>End</em>'.
+	 * @generated
+	 */
+	End createEnd();
 
 	/**
 	 * Returns the package supported by this factory.

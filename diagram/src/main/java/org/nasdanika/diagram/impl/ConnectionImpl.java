@@ -19,11 +19,22 @@ import org.nasdanika.diagram.DiagramPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ConnectionImpl extends MinimalEObjectImpl.Container implements Connection {
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TYPE_EDEFAULT = "->";
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -88,11 +99,33 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 	 * @generated
 	 */
 	@Override
+	public String getType() {
+		return (String)eDynamicGet(DiagramPackage.CONNECTION__TYPE, DiagramPackage.Literals.CONNECTION__TYPE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(String newType) {
+		eDynamicSet(DiagramPackage.CONNECTION__TYPE, DiagramPackage.Literals.CONNECTION__TYPE, newType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case DiagramPackage.CONNECTION__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
+			case DiagramPackage.CONNECTION__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -107,6 +140,9 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 		switch (featureID) {
 			case DiagramPackage.CONNECTION__TARGET:
 				setTarget((DiagramElement)newValue);
+				return;
+			case DiagramPackage.CONNECTION__TYPE:
+				setType((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -123,6 +159,9 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 			case DiagramPackage.CONNECTION__TARGET:
 				setTarget((DiagramElement)null);
 				return;
+			case DiagramPackage.CONNECTION__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -137,6 +176,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 		switch (featureID) {
 			case DiagramPackage.CONNECTION__TARGET:
 				return basicGetTarget() != null;
+			case DiagramPackage.CONNECTION__TYPE:
+				return TYPE_EDEFAULT == null ? getType() != null : !TYPE_EDEFAULT.equals(getType());
 		}
 		return super.eIsSet(featureID);
 	}

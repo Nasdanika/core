@@ -14,6 +14,9 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.DiagramPackage;
+import org.nasdanika.diagram.End;
+import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Start;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +25,13 @@ import org.nasdanika.diagram.DiagramPackage;
  * @generated
  */
 public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass linkEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -42,6 +52,20 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	private EClass connectionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass startEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass endEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -110,6 +134,46 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getLink() {
+		return linkEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLink_Text() {
+		return (EAttribute)linkEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLink_Location() {
+		return (EAttribute)linkEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLink_Tooltip() {
+		return (EAttribute)linkEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDiagramElement() {
 		return diagramElementEClass;
 	}
@@ -130,8 +194,28 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDiagramElement_Type() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDiagramElement_Name() {
+		return (EReference)diagramElementEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getDiagramElement_Elements() {
-		return (EReference)diagramElementEClass.getEStructuralFeatures().get(1);
+		return (EReference)diagramElementEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -141,7 +225,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 */
 	@Override
 	public EReference getDiagramElement_Connections() {
-		return (EReference)diagramElementEClass.getEStructuralFeatures().get(2);
+		return (EReference)diagramElementEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -170,6 +254,26 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDiagram_Vertical() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagram_HideEmptyDescription() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getConnection() {
 		return connectionEClass;
 	}
@@ -182,6 +286,36 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	@Override
 	public EReference getConnection_Target() {
 		return (EReference)connectionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Type() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getStart() {
+		return startEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEnd() {
+		return endEClass;
 	}
 
 	/**
@@ -213,16 +347,30 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		linkEClass = createEClass(LINK);
+		createEAttribute(linkEClass, LINK__TEXT);
+		createEAttribute(linkEClass, LINK__LOCATION);
+		createEAttribute(linkEClass, LINK__TOOLTIP);
+
 		diagramElementEClass = createEClass(DIAGRAM_ELEMENT);
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__ID);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__TYPE);
+		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__NAME);
 		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__ELEMENTS);
 		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__CONNECTIONS);
 
 		diagramEClass = createEClass(DIAGRAM);
 		createEReference(diagramEClass, DIAGRAM__ELEMENTS);
+		createEAttribute(diagramEClass, DIAGRAM__VERTICAL);
+		createEAttribute(diagramEClass, DIAGRAM__HIDE_EMPTY_DESCRIPTION);
 
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__TARGET);
+		createEAttribute(connectionEClass, CONNECTION__TYPE);
+
+		startEClass = createEClass(START);
+
+		endEClass = createEClass(END);
 	}
 
 	/**
@@ -253,18 +401,35 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		diagramElementEClass.getESuperTypes().add(this.getLink());
+		startEClass.getESuperTypes().add(this.getDiagramElement());
+		endEClass.getESuperTypes().add(this.getDiagramElement());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(diagramElementEClass, DiagramElement.class, "DiagramElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLink_Text(), ecorePackage.getEString(), "text", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLink_Location(), ecorePackage.getEString(), "location", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLink_Tooltip(), ecorePackage.getEString(), "tooltip", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(diagramElementEClass, DiagramElement.class, "DiagramElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiagramElement_Id(), ecorePackage.getEString(), "id", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Type(), ecorePackage.getEString(), "type", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagramElement_Name(), ecorePackage.getEObject(), null, "name", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDiagramElement_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDiagramElement_Connections(), this.getConnection(), null, "connections", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiagram_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_Vertical(), ecorePackage.getEBoolean(), "vertical", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_HideEmptyDescription(), ecorePackage.getEBoolean(), "hideEmptyDescription", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Target(), this.getDiagramElement(), null, "target", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Type(), ecorePackage.getEString(), "type", "->", 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(startEClass, Start.class, "Start", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(endEClass, End.class, "End", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -272,6 +437,8 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		// Create annotations
 		// urn:org.nasdanika
 		createUrnorgAnnotations();
+		// http://www.eclipse.org/emf/2002/GenModel
+		createGenModelAnnotations();
 	}
 
 	/**
@@ -287,6 +454,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/package-summary.md"
+		   });
+		addAnnotation
+		  (linkEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/link.md"
 		   });
 		addAnnotation
 		  (diagramElementEClass,
@@ -305,6 +478,76 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/connection.md"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/GenModel</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createGenModelAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/GenModel";
+		addAnnotation
+		  (getLink_Text(),
+		   source,
+		   new String[] {
+			   "documentation", "Link text. Can be empty for diagram elements where text is supplied by the ``name`` reference. If not empty for diagram elements - precedes the name elements."
+		   });
+		addAnnotation
+		  (getLink_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "Link URL. If blank linik is rendered as plain text and tooltip is ignored."
+		   });
+		addAnnotation
+		  (getLink_Tooltip(),
+		   source,
+		   new String[] {
+			   "documentation", "Optional link tooltip."
+		   });
+		addAnnotation
+		  (getDiagramElement_Type(),
+		   source,
+		   new String[] {
+			   "documentation", "Element type. E.g. ``state``, ``class``, ``component``."
+		   });
+		addAnnotation
+		  (getDiagramElement_Name(),
+		   source,
+		   new String[] {
+			   "documentation", "Composite element name to support having links in the name. Elements shall be of type Link of Exec.content.Text."
+		   });
+		addAnnotation
+		  (getDiagramElement_Elements(),
+		   source,
+		   new String[] {
+			   "documentation", "Nested diagram elements."
+		   });
+		addAnnotation
+		  (getDiagramElement_Connections(),
+		   source,
+		   new String[] {
+			   "documentation", "Outbound connections."
+		   });
+		addAnnotation
+		  (getConnection_Type(),
+		   source,
+		   new String[] {
+			   "documentation", "Connection type. E.g. ``-->`` or ``..>``"
+		   });
+		addAnnotation
+		  (startEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Start pseudo-state."
+		   });
+		addAnnotation
+		  (endEClass,
+		   source,
+		   new String[] {
+			   "documentation", "End pseudo-state."
 		   });
 	}
 

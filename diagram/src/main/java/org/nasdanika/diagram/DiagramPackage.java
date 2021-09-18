@@ -58,14 +58,96 @@ public interface DiagramPackage extends EPackage {
 	DiagramPackage eINSTANCE = org.nasdanika.diagram.impl.DiagramPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.diagram.DiagramElement <em>Element</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.LinkImpl <em>Link</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.diagram.DiagramElement
+	 * @see org.nasdanika.diagram.impl.LinkImpl
+	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getLink()
+	 * @generated
+	 */
+	int LINK = 0;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__TEXT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__LOCATION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__TOOLTIP = 2;
+
+	/**
+	 * The number of structural features of the '<em>Link</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK_FEATURE_COUNT = 3;
+
+	/**
+	 * The number of operations of the '<em>Link</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.DiagramElementImpl <em>Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.diagram.impl.DiagramElementImpl
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagramElement()
 	 * @generated
 	 */
-	int DIAGRAM_ELEMENT = 0;
+	int DIAGRAM_ELEMENT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__TEXT = LINK__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__LOCATION = LINK__LOCATION;
+
+	/**
+	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__TOOLTIP = LINK__TOOLTIP;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -74,7 +156,25 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__ID = 0;
+	int DIAGRAM_ELEMENT__ID = LINK_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__TYPE = LINK_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__NAME = LINK_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -83,7 +183,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__ELEMENTS = 1;
+	int DIAGRAM_ELEMENT__ELEMENTS = LINK_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Connections</b></em>' containment reference list.
@@ -92,7 +192,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__CONNECTIONS = 2;
+	int DIAGRAM_ELEMENT__CONNECTIONS = LINK_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -101,7 +201,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT_FEATURE_COUNT = 3;
+	int DIAGRAM_ELEMENT_FEATURE_COUNT = LINK_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -110,7 +210,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT_OPERATION_COUNT = 0;
+	int DIAGRAM_ELEMENT_OPERATION_COUNT = LINK_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
@@ -120,7 +220,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagram()
 	 * @generated
 	 */
-	int DIAGRAM = 1;
+	int DIAGRAM = 2;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -132,13 +232,31 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM__ELEMENTS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Vertical</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__VERTICAL = 1;
+
+	/**
+	 * The feature id for the '<em><b>Hide Empty Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__HIDE_EMPTY_DESCRIPTION = 2;
+
+	/**
 	 * The number of structural features of the '<em>Diagram</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_FEATURE_COUNT = 1;
+	int DIAGRAM_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Diagram</em>' class.
@@ -157,7 +275,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 2;
+	int CONNECTION = 3;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -169,13 +287,22 @@ public interface DiagramPackage extends EPackage {
 	int CONNECTION__TARGET = 0;
 
 	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__TYPE = 1;
+
+	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = 1;
+	int CONNECTION_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Connection</em>' class.
@@ -186,6 +313,250 @@ public interface DiagramPackage extends EPackage {
 	 */
 	int CONNECTION_OPERATION_COUNT = 0;
 
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.StartImpl <em>Start</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.diagram.impl.StartImpl
+	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getStart()
+	 * @generated
+	 */
+	int START = 4;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__TEXT = DIAGRAM_ELEMENT__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__LOCATION = DIAGRAM_ELEMENT__LOCATION;
+
+	/**
+	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__TOOLTIP = DIAGRAM_ELEMENT__TOOLTIP;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__ID = DIAGRAM_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__TYPE = DIAGRAM_ELEMENT__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__NAME = DIAGRAM_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__ELEMENTS = DIAGRAM_ELEMENT__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Connections</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__CONNECTIONS = DIAGRAM_ELEMENT__CONNECTIONS;
+
+	/**
+	 * The number of structural features of the '<em>Start</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_FEATURE_COUNT = DIAGRAM_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Start</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_OPERATION_COUNT = DIAGRAM_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.EndImpl <em>End</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.diagram.impl.EndImpl
+	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getEnd()
+	 * @generated
+	 */
+	int END = 5;
+
+	/**
+	 * The feature id for the '<em><b>Text</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__TEXT = DIAGRAM_ELEMENT__TEXT;
+
+	/**
+	 * The feature id for the '<em><b>Location</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__LOCATION = DIAGRAM_ELEMENT__LOCATION;
+
+	/**
+	 * The feature id for the '<em><b>Tooltip</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__TOOLTIP = DIAGRAM_ELEMENT__TOOLTIP;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__ID = DIAGRAM_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__TYPE = DIAGRAM_ELEMENT__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__NAME = DIAGRAM_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__ELEMENTS = DIAGRAM_ELEMENT__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Connections</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__CONNECTIONS = DIAGRAM_ELEMENT__CONNECTIONS;
+
+	/**
+	 * The number of structural features of the '<em>End</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_FEATURE_COUNT = DIAGRAM_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>End</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_OPERATION_COUNT = DIAGRAM_ELEMENT_OPERATION_COUNT + 0;
+
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.diagram.Link <em>Link</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Link</em>'.
+	 * @see org.nasdanika.diagram.Link
+	 * @generated
+	 */
+	EClass getLink();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Link#getText <em>Text</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Text</em>'.
+	 * @see org.nasdanika.diagram.Link#getText()
+	 * @see #getLink()
+	 * @generated
+	 */
+	EAttribute getLink_Text();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Link#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Location</em>'.
+	 * @see org.nasdanika.diagram.Link#getLocation()
+	 * @see #getLink()
+	 * @generated
+	 */
+	EAttribute getLink_Location();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Link#getTooltip <em>Tooltip</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Tooltip</em>'.
+	 * @see org.nasdanika.diagram.Link#getTooltip()
+	 * @see #getLink()
+	 * @generated
+	 */
+	EAttribute getLink_Tooltip();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.DiagramElement <em>Element</em>}'.
@@ -207,6 +578,28 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDiagramElement_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getType()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Type();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.DiagramElement#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Name</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getName()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EReference getDiagramElement_Name();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.DiagramElement#getElements <em>Elements</em>}'.
@@ -252,6 +645,28 @@ public interface DiagramPackage extends EPackage {
 	EReference getDiagram_Elements();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vertical</em>'.
+	 * @see org.nasdanika.diagram.Diagram#isVertical()
+	 * @see #getDiagram()
+	 * @generated
+	 */
+	EAttribute getDiagram_Vertical();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hide Empty Description</em>'.
+	 * @see org.nasdanika.diagram.Diagram#isHideEmptyDescription()
+	 * @see #getDiagram()
+	 * @generated
+	 */
+	EAttribute getDiagram_HideEmptyDescription();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Connection <em>Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -271,6 +686,37 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getConnection_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.nasdanika.diagram.Connection#getType()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Type();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.diagram.Start <em>Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Start</em>'.
+	 * @see org.nasdanika.diagram.Start
+	 * @generated
+	 */
+	EClass getStart();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.diagram.End <em>End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>End</em>'.
+	 * @see org.nasdanika.diagram.End
+	 * @generated
+	 */
+	EClass getEnd();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -296,10 +742,44 @@ public interface DiagramPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.diagram.DiagramElement <em>Element</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.LinkImpl <em>Link</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.diagram.DiagramElement
+		 * @see org.nasdanika.diagram.impl.LinkImpl
+		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getLink()
+		 * @generated
+		 */
+		EClass LINK = eINSTANCE.getLink();
+
+		/**
+		 * The meta object literal for the '<em><b>Text</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LINK__TEXT = eINSTANCE.getLink_Text();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LINK__LOCATION = eINSTANCE.getLink_Location();
+
+		/**
+		 * The meta object literal for the '<em><b>Tooltip</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LINK__TOOLTIP = eINSTANCE.getLink_Tooltip();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramElementImpl <em>Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.diagram.impl.DiagramElementImpl
 		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagramElement()
 		 * @generated
 		 */
@@ -312,6 +792,22 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIAGRAM_ELEMENT__ID = eINSTANCE.getDiagramElement_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__TYPE = eINSTANCE.getDiagramElement_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIAGRAM_ELEMENT__NAME = eINSTANCE.getDiagramElement_Name();
 
 		/**
 		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
@@ -348,6 +844,22 @@ public interface DiagramPackage extends EPackage {
 		EReference DIAGRAM__ELEMENTS = eINSTANCE.getDiagram_Elements();
 
 		/**
+		 * The meta object literal for the '<em><b>Vertical</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM__VERTICAL = eINSTANCE.getDiagram_Vertical();
+
+		/**
+		 * The meta object literal for the '<em><b>Hide Empty Description</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM__HIDE_EMPTY_DESCRIPTION = eINSTANCE.getDiagram_HideEmptyDescription();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.ConnectionImpl <em>Connection</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -364,6 +876,34 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONNECTION__TARGET = eINSTANCE.getConnection_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__TYPE = eINSTANCE.getConnection_Type();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.StartImpl <em>Start</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.diagram.impl.StartImpl
+		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getStart()
+		 * @generated
+		 */
+		EClass START = eINSTANCE.getStart();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.EndImpl <em>End</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.diagram.impl.EndImpl
+		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getEnd()
+		 * @generated
+		 */
+		EClass END = eINSTANCE.getEnd();
 
 	}
 

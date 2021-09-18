@@ -28,11 +28,33 @@ import org.nasdanika.diagram.DiagramPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isVertical <em>Vertical</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram {
+	/**
+	 * The default value of the '{@link #isVertical() <em>Vertical</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVertical()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VERTICAL_EDEFAULT = true;
+
+	/**
+	 * The default value of the '{@link #isHideEmptyDescription() <em>Hide Empty Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHideEmptyDescription()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HIDE_EMPTY_DESCRIPTION_EDEFAULT = false;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -79,6 +101,46 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@Override
+	public boolean isVertical() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM__VERTICAL, DiagramPackage.Literals.DIAGRAM__VERTICAL, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVertical(boolean newVertical) {
+		eDynamicSet(DiagramPackage.DIAGRAM__VERTICAL, DiagramPackage.Literals.DIAGRAM__VERTICAL, newVertical);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isHideEmptyDescription() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION, DiagramPackage.Literals.DIAGRAM__HIDE_EMPTY_DESCRIPTION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHideEmptyDescription(boolean newHideEmptyDescription) {
+		eDynamicSet(DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION, DiagramPackage.Literals.DIAGRAM__HIDE_EMPTY_DESCRIPTION, newHideEmptyDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DiagramPackage.DIAGRAM__ELEMENTS:
@@ -97,6 +159,10 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		switch (featureID) {
 			case DiagramPackage.DIAGRAM__ELEMENTS:
 				return getElements();
+			case DiagramPackage.DIAGRAM__VERTICAL:
+				return isVertical();
+			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
+				return isHideEmptyDescription();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -114,6 +180,12 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				getElements().clear();
 				getElements().addAll((Collection<? extends DiagramElement>)newValue);
 				return;
+			case DiagramPackage.DIAGRAM__VERTICAL:
+				setVertical((Boolean)newValue);
+				return;
+			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
+				setHideEmptyDescription((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -129,6 +201,12 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case DiagramPackage.DIAGRAM__ELEMENTS:
 				getElements().clear();
 				return;
+			case DiagramPackage.DIAGRAM__VERTICAL:
+				setVertical(VERTICAL_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
+				setHideEmptyDescription(HIDE_EMPTY_DESCRIPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -143,6 +221,10 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 		switch (featureID) {
 			case DiagramPackage.DIAGRAM__ELEMENTS:
 				return !getElements().isEmpty();
+			case DiagramPackage.DIAGRAM__VERTICAL:
+				return isVertical() != VERTICAL_EDEFAULT;
+			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
+				return isHideEmptyDescription() != HIDE_EMPTY_DESCRIPTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

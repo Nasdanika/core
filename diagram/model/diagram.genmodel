@@ -8,16 +8,28 @@
   <foreignModel>diagram.ecore</foreignModel>
   <genPackages prefix="Diagram" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="diagram.ecore#/">
+    <genClasses ecoreClass="diagram.ecore#//Link">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/text"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/location"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/tooltip"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="diagram.ecore#//DiagramElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/elements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/connections"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Diagram">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/vertical"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/hideEmptyDescription"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Connection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/type"/>
     </genClasses>
+    <genClasses ecoreClass="diagram.ecore#//Start"/>
+    <genClasses ecoreClass="diagram.ecore#//End"/>
   </genPackages>
 </genmodel:GenModel>

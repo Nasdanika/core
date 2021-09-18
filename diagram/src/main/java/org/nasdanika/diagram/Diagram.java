@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.diagram.Diagram#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getDiagram()
@@ -34,5 +36,50 @@ public interface Diagram extends EObject {
 	 * @generated
 	 */
 	EList<DiagramElement> getElements();
+
+	/**
+	 * Returns the value of the '<em><b>Vertical</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vertical</em>' attribute.
+	 * @see #setVertical(boolean)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Vertical()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isVertical();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vertical</em>' attribute.
+	 * @see #isVertical()
+	 * @generated
+	 */
+	void setVertical(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Hide Empty Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hide Empty Description</em>' attribute.
+	 * @see #setHideEmptyDescription(boolean)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_HideEmptyDescription()
+	 * @model
+	 * @generated
+	 */
+	boolean isHideEmptyDescription();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hide Empty Description</em>' attribute.
+	 * @see #isHideEmptyDescription()
+	 * @generated
+	 */
+	void setHideEmptyDescription(boolean value);
 
 } // Diagram

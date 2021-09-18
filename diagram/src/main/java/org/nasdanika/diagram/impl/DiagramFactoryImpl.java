@@ -56,11 +56,37 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case DiagramPackage.LINK: return createLink();
+			case DiagramPackage.DIAGRAM_ELEMENT: return createDiagramElement();
 			case DiagramPackage.DIAGRAM: return createDiagram();
 			case DiagramPackage.CONNECTION: return createConnection();
+			case DiagramPackage.START: return createStart();
+			case DiagramPackage.END: return createEnd();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Link createLink() {
+		LinkImpl link = new LinkImpl();
+		return link;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DiagramElement createDiagramElement() {
+		DiagramElementImpl diagramElement = new DiagramElementImpl();
+		return diagramElement;
 	}
 
 	/**
@@ -83,6 +109,28 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public Connection createConnection() {
 		ConnectionImpl connection = new ConnectionImpl();
 		return connection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Start createStart() {
+		StartImpl start = new StartImpl();
+		return start;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public End createEnd() {
+		EndImpl end = new EndImpl();
+		return end;
 	}
 
 	/**

@@ -1,0 +1,1 @@
+Connection between two diagram elements.

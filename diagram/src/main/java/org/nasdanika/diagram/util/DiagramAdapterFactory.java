@@ -68,6 +68,10 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 	protected DiagramSwitch<Adapter> modelSwitch =
 		new DiagramSwitch<Adapter>() {
 			@Override
+			public Adapter caseLink(Link object) {
+				return createLinkAdapter();
+			}
+			@Override
 			public Adapter caseDiagramElement(DiagramElement object) {
 				return createDiagramElementAdapter();
 			}
@@ -78,6 +82,14 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseConnection(Connection object) {
 				return createConnectionAdapter();
+			}
+			@Override
+			public Adapter caseStart(Start object) {
+				return createStartAdapter();
+			}
+			@Override
+			public Adapter caseEnd(End object) {
+				return createEndAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -98,6 +110,20 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.Link <em>Link</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.diagram.Link
+	 * @generated
+	 */
+	public Adapter createLinkAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.DiagramElement <em>Element</em>}'.
@@ -138,6 +164,34 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConnectionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.Start <em>Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.diagram.Start
+	 * @generated
+	 */
+	public Adapter createStartAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.End <em>End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.diagram.End
+	 * @generated
+	 */
+	public Adapter createEndAdapter() {
 		return null;
 	}
 

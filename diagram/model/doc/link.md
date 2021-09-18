@@ -1,0 +1,1 @@
+Link can have text, location (href) and a tooltip. 
