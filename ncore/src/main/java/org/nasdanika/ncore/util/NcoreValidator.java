@@ -10,7 +10,6 @@ import java.util.Map;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
@@ -104,8 +103,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
 				return validateDuration((Duration)value, diagnostics, context);
-			case NcorePackage.URI:
-				return validateURI((URI)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -247,15 +244,6 @@ public class NcoreValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateDuration(Duration duration, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return true;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateURI(URI uri, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return true;
 	}
 

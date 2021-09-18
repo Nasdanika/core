@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +12,15 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
@@ -30,6 +31,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.ncore.util.NcoreResourceSet;
 
 /**
  * {@link ExecutionParticipant} which loads resources using {@link EObjectLoader}, diagnoses them
@@ -69,37 +71,17 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	protected abstract Collection<URI> getResources();
 	
 	protected ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
-		ResourceSetImpl ret = new ResourceSetImpl() {
-			
-			Map<URI, EObject> cache = new HashMap<>();
-			
-			@Override
-			public EObject getEObject(URI uri, boolean loadOnDemand) {
-				EObject ret = cache.get(uri);
-				if (ret != null) {
-					return ret;
-				}
-				
-				TreeIterator<Notifier> cit = getAllContents();
-				while (cit.hasNext()) {
-					Notifier next = cit.next();
-					if (next instanceof EObject) {
-						EObject nextEObject = (EObject) next;
-						if (matchURI(nextEObject, uri)) {
-							cache.put(uri, nextEObject);
-							ret = nextEObject;
-						}
-					}
-				}
+		ResourceSet ret = new NcoreResourceSet() {
 
-				if (ret != null) {
-					return ret;
-				}
-				
-				return super.getEObject(uri, loadOnDemand);
+			@Override
+			protected boolean matchURI(EObject eObj, URI uri) {
+				return super.matchURI(eObj, uri) || LoadingExecutionParticipant.this.matchURI(eObj, uri);
 			}
 			
 		};
+
+		// XMI as default.
+		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
 		
 		// replacing URI and delegating to resource set so it loads using extension factories.
 		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(CLASSPATH_SCHEME, new ResourceFactoryImpl() {
@@ -117,8 +99,15 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 			
 		});
 		
+		Registry packageRegistry = ret.getPackageRegistry();
+		for (EPackage ePackage: getEPackages()) {
+			packageRegistry.put(ePackage.getNsURI(), ePackage);
+		}		
+		
 		return ret;
 	}
+	
+	protected abstract Collection<EPackage> getEPackages();
 	
 	/**
 	 * Diagnoses the {@link ResourceSet}. This implementation finds unresolved proxies and reports them

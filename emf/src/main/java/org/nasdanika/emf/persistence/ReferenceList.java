@@ -3,6 +3,7 @@ package org.nasdanika.emf.persistence;
 import java.net.URL;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.common.ProgressMonitor;
@@ -35,13 +36,14 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			boolean required, 
 			List<T> defaultValue, 
 			String description, 
+			EClass eClass,
 			EReference eReference,
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
-		this.referenceFactory = new ReferenceFactory<>(eReference, resolver, referenceSupplierFactory, keyProvider);
+		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, resolver, referenceSupplierFactory, keyProvider);
 	}
 	
 	@Override

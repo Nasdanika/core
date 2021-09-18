@@ -1,7 +1,0 @@
-exec-call:
-  class: org.nasdanika.exec.gen.tests.TestCall$CallTarget
-  method: greet
-  init:
-    content-text: Galaxy
-  arguments:
-    content-text: Hello

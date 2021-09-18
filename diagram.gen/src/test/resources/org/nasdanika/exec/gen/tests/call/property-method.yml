@@ -1,5 +1,0 @@
-exec-call:
-  property: call-target
-  method: greet
-  arguments:
-    content-text: Hi

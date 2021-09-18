@@ -1,7 +1,0 @@
-resources-container:
-  name: my-container
-  contents:
-    - resources-file:
-        name: my-file.txt
-        contents:
-          content-text: Hello, World!

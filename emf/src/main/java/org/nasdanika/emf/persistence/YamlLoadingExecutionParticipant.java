@@ -1,13 +1,9 @@
 package org.nasdanika.emf.persistence;
 
-import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EPackage.Registry;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -27,14 +23,6 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 	@Override
 	protected ResourceSet createResourceSet(ProgressMonitor progressMonitor) {
 		ResourceSet ret = super.createResourceSet(progressMonitor);
-
-		// XMI as default.
-		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-		
-		Registry packageRegistry = ret.getPackageRegistry();
-		for (EPackage ePackage: getEPackages()) {
-			packageRegistry.put(ePackage.getNsURI(), ePackage);
-		}		
 		
 		Map<String, Object> extensionToFactoryMap = ret.getResourceFactoryRegistry().getExtensionToFactoryMap();
 		extensionToFactoryMap.put("yml", createYamlResorceFactory(ret, progressMonitor));
@@ -45,8 +33,6 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 	protected YamlResourceFactory createYamlResorceFactory(ResourceSet resourceSet, ProgressMonitor progressMonitor) {
 		return new YamlResourceFactory(createLoader(resourceSet), context, progressMonitor);
 	}
-	
-	protected abstract Collection<EPackage> getEPackages();
 
 	protected ObjectLoader createLoader(ResourceSet resourceSet) {
 		return new EObjectLoader(null, null, resourceSet);

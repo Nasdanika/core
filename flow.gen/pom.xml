@@ -42,6 +42,11 @@
 			<artifactId>flow</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>emf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>junit</groupId>

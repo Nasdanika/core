@@ -1,3 +1,0 @@
-exec-call:
-  class: org.nasdanika.exec.gen.tests.TestCall$CallTarget
-  method: helloWorld

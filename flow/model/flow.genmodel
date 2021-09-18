@@ -3,20 +3,38 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.flow/src/main/java" creationIcons="false"
     editorDirectory="" modelPluginID="org.nasdanika.flow" modelName="Flow" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic" complianceLevel="8.0"
-    suppressGenModelAnnotations="false" copyrightFields="false" operationReflection="true"
-    importOrganizing="true">
+    suppressGenModelAnnotations="false" copyrightFields="false" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
+    operationReflection="true" importOrganizing="true">
   <foreignModel>flow.ecore</foreignModel>
   <genPackages prefix="Flow" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="flow.ecore#/">
+    <genClasses ecoreClass="flow.ecore#//Package">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Package/extends"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Package/extensions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/subPackages"/>
+    </genClasses>
+    <genClasses ecoreClass="flow.ecore#//PackageEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PackageEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="flow.ecore#//Participant">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/extends"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/extensions"/>
+    </genClasses>
+    <genClasses ecoreClass="flow.ecore#//Resource"/>
+    <genClasses ecoreClass="flow.ecore#//Artifact">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/repositories"/>
+    </genClasses>
     <genClasses ecoreClass="flow.ecore#//FlowElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/calls"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/requirements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/inputArtifacts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/deliverables"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/personas"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/participants"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/overrides.1"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/overridenBy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/modifiers"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/resources"/>
       <genOperations ecoreOperation="flow.ecore#//FlowElement/getInputs">
         <genParameters ecoreParameter="flow.ecore#//FlowElement/getInputs/journeyPath"/>
       </genOperations>
@@ -40,7 +58,6 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Activity">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Activity/features"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Activity/services"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Service">
@@ -50,7 +67,6 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Transition/payload"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Transition/suppress"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Transition/target"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Transition/lag"/>
       <genOperations ecoreOperation="flow.ecore#//Transition/getTarget">
         <genParameters ecoreParameter="flow.ecore#//Transition/getTarget/journeyPath"/>
       </genOperations>
@@ -58,12 +74,12 @@
     <genClasses ecoreClass="flow.ecore#//Call">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Call/response"/>
     </genClasses>
-    <genClasses ecoreClass="flow.ecore#//Journey">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Journey/elements"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Journey/extends"/>
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Journey/extensions"/>
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Journey/root"/>
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Journey/allElements"/>
+    <genClasses ecoreClass="flow.ecore#//Flow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Flow/elements"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Flow/extends"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Flow/extensions"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Flow/root"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Flow/allElements"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//PseudoState">
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PseudoState/type"/>

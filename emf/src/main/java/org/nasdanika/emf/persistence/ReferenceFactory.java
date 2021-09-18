@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -33,6 +34,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	private boolean resolveProxies;
 	private boolean isHomogenous;
 	private EReference eReference;
+	private EClass eClass;
 
 	/**
 	 * 
@@ -42,11 +44,13 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	 * @param keyProvider
 	 */
 	public ReferenceFactory(
+			EClass eClass,
 			EReference eReference,
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
 			java.util.function.Function<ENamedElement,String> keyProvider) {
 		
+		this.eClass = eClass;
 		this.eReference = eReference;
 		this.resolver = resolver;
 		this.referenceSupplierFactory = referenceSupplierFactory;
@@ -123,12 +127,13 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 			Marker marker) {
 		
 		URI refURI = URI.createURI(ref);
-		if (base != null) {
+		if (base != null && !ref.startsWith(EObjectLoader.LATE_PROXY_RESOLUTION_URI_PREFIX)) {
 			refURI = refURI.resolve(URI.createURI(base.toString()));
 		}
 		ConfigurationException.pushThreadMarker(marker);
 		try {
-			EClass eReferenceType = eReference.getEReferenceType();
+			EGenericType eGenericReferenceType = eClass.getFeatureType(eReference);
+			EClass eReferenceType = (EClass) eGenericReferenceType.getEClassifier();
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy instead of loading object
 				EObject proxy = EObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);

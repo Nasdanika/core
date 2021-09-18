@@ -3,7 +3,6 @@ package org.nasdanika.exec.tests;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.junit.Test;
 import org.nasdanika.common.Status;
@@ -45,9 +44,9 @@ public class TestConfigurator extends TestBase {
 					assertThat(properties).hasSize(1);
 					EObject nameProperty = properties.get("name");
 					assertThat(nameProperty).isNotNull().isInstanceOf(Text.class);
-					URI namePropertyURI = ((Text) nameProperty).getUri();
+					String namePropertyURI = ((Text) nameProperty).getUri();
 					assertThat(namePropertyURI).isNotNull();
-					assertThat(namePropertyURI.toString()).isEqualTo("nasdanika:exec/configurator/properties/name");
+					assertThat(namePropertyURI).isEqualTo("nasdanika:exec/configurator/properties/name");
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.ERROR) {

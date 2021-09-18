@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -37,6 +38,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 			boolean required, 
 			Map<K,V> defaultValue, 
 			String description, 
+			EClass eClass,
 			EReference eReference,
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
@@ -45,7 +47,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");
 		if (valueFeature instanceof EReference) {
-			this.valueFactory = new ReferenceFactory<>((EReference) valueFeature, resolver, referenceSupplierFactory, keyProvider);
+			this.valueFactory = new ReferenceFactory<>(eClass, (EReference) valueFeature, resolver, referenceSupplierFactory, keyProvider);
 		}
 	}
 	

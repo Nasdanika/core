@@ -1,0 +1,6 @@
+flow-package:
+  uri: nasdanika:root
+  sub-packages:
+    common: 
+      flow-package:
+        name: Common definitions

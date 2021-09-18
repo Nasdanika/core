@@ -8,7 +8,7 @@ import org.nasdanika.emf.persistence.YamlResourceFactory;
 import org.nasdanika.exec.util.ExecYamlLoadingExecutionParticipant;
 
 /**
- * {@link YamlLoadingSupplier} for Engineering {@link EPackage}s.
+ * {@link YamlLoadingSupplier} for Exec {@link EPackage}s.
  * Registers exec- loader. 
  * @author Pavel
  *

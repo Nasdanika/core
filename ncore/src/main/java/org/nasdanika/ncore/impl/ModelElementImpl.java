@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -37,6 +36,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getMarker <em>Marker</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUri <em>Uri</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
  * </ul>
  *
  * @generated
@@ -50,7 +50,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 * @ordered
 	 */
-	protected static final URI URI_EDEFAULT = null;
+	protected static final String URI_EDEFAULT = null;
 
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -61,6 +61,16 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @ordered
 	 */
 	protected static final String DESCRIPTION_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUuid()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UUID_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -121,20 +131,31 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		eDynamicSet(NcorePackage.MODEL_ELEMENT__MARKER, NcorePackage.Literals.MARKED__MARKER, newMarker);
 	}
 	
+	private static String toString(URI uri) {
+		return uri == null ? null : uri.toString();
+	}
+	
 	/**
 	 * Computes URI from the containment reference.
 	 * @param eObj
 	 * @return
 	 */
-	private static URI getContainmentUri(EObject eObj) {
+	public static URI getUri(EObject eObj) {
 		if (eObj == null) {
 			return null;
 		}
 		
 		EObject container = eObj.eContainer();
 		if (container == null) {
-			for (EObject referrer: getReferrers(eObj, NcorePackage.Literals.REFERENCE__TARGET)) {
-				return getContainmentUri(referrer);
+//			Leads to stack overflow during loading.			
+//			for (EObject referrer: getReferrers(eObj, NcorePackage.Literals.REFERENCE__TARGET)) {
+//				return getUri(referrer);
+//			}
+			if (eObj instanceof ModelElement) {
+				String uuid = ((ModelElement) eObj).getUuid();
+				if (!Util.isBlank(uuid)) {
+					return URI.createURI("uuid:" + uuid);
+				}
 			}
 			return null;
 		}
@@ -146,8 +167,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			if (superContainer == null) {
 				return null;
 			}
-			URI superContainerURI = superContainer instanceof ModelElement ? ((ModelElement) superContainer).getUri() : getContainmentUri(superContainer);
-			if (superContainerURI == null) {
+			String superContainerURI = superContainer instanceof ModelElement ? ((ModelElement) superContainer).getUri() : toString(getUri(superContainer));
+			if (Util.isBlank(superContainerURI)) {
 				return null;
 			}
 			Object key = ((Map.Entry<?,?>) container).getKey();
@@ -167,8 +188,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			return URI.createURI(uriBuilder.toString());			
 		}
 		
-		URI containerURI = container instanceof ModelElement ? ((ModelElement) container).getUri() : getContainmentUri(container);
-		if (containerURI == null) {
+		String containerURI = container instanceof ModelElement ? ((ModelElement) container).getUri() : toString(getUri(container));
+		if (Util.isBlank(containerURI)) {
 			return null;
 		}
 		
@@ -191,9 +212,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated NOT
 	 */
 	@Override
-	public URI getUri() {
-		URI uri = (URI)eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
-		return uri == null ? getContainmentUri(this) : uri;
+	public String getUri() {
+		String uri = (String) eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
+		return Util.isBlank(uri) ? toString(getUri(this)) : uri;
 	}
 
 	/**
@@ -202,7 +223,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public void setUri(URI newUri) {
+	public void setUri(String newUri) {
 		eDynamicSet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, newUri);
 	}
 
@@ -224,6 +245,26 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void setDescription(String newDescription) {
 		eDynamicSet(NcorePackage.MODEL_ELEMENT__DESCRIPTION, NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION, newDescription);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getUuid() {
+		return (String)eDynamicGet(NcorePackage.MODEL_ELEMENT__UUID, NcorePackage.Literals.MODEL_ELEMENT__UUID, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setUuid(String newUuid) {
+		eDynamicSet(NcorePackage.MODEL_ELEMENT__UUID, NcorePackage.Literals.MODEL_ELEMENT__UUID, newUuid);
 	}
 
 	/**
@@ -254,6 +295,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getUri();
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return getDescription();
+			case NcorePackage.MODEL_ELEMENT__UUID:
+				return getUuid();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -270,10 +313,13 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				setMarker((Marker)newValue);
 				return;
 			case NcorePackage.MODEL_ELEMENT__URI:
-				setUri((URI)newValue);
+				setUri((String)newValue);
 				return;
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription((String)newValue);
+				return;
+			case NcorePackage.MODEL_ELEMENT__UUID:
+				setUuid((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -296,6 +342,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
 				return;
+			case NcorePackage.MODEL_ELEMENT__UUID:
+				setUuid(UUID_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -314,6 +363,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return URI_EDEFAULT == null ? getUri() != null : !URI_EDEFAULT.equals(getUri());
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
+			case NcorePackage.MODEL_ELEMENT__UUID:
+				return UUID_EDEFAULT == null ? getUuid() != null : !UUID_EDEFAULT.equals(getUuid());
 		}
 		return super.eIsSet(featureID);
 	}
@@ -421,6 +472,25 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				accumulator.add((T) source);
 			}					
 		}
+	}
+	
+	/**
+	 * Resolves proxy URI against this element URI - this allows to have both logical and physical proxies.
+	 * a logical proxy URI shall be prefixed with ./ and can be relative.
+	 */
+	@Override
+	public URI eProxyURI() {
+		URI eProxyURI = super.eProxyURI();
+		if (eProxyURI != null && eProxyURI.isRelative()) {
+			String baseStr = getUri();
+			if (!Util.isBlank(baseStr)) {
+				URI base = URI.createURI(baseStr);
+				if (!base.isRelative()) {
+					return eProxyURI.resolve(base);
+				}
+			}
+		}
+		return eProxyURI;
 	}
 
 } //ModelElementImpl

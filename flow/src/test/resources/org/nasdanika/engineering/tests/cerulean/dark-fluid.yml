@@ -1,7 +1,0 @@
-app-application:
-   fluid: true
-   page:
-      theme: Cerulean
-      head:
-         exec-interpolator:
-            exec-resource: ../dark-head.html    

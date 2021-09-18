@@ -1,9 +1,0 @@
-exec-call:
-  class: org.nasdanika.exec.gen.tests.TestCall$ConfigurableCallTarget
-  method: greet
-  arguments:
-    content-text: Hi
-  properties:
-    speed-of-light: 
-      content-text: Very high
-    

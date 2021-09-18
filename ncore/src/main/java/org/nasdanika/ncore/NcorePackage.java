@@ -200,13 +200,22 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__DESCRIPTION = MARKED_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__UUID = MARKED_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 2;
+	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -243,6 +252,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int TEMPORAL__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEMPORAL__UUID = MODEL_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Instant</b></em>' attribute.
@@ -426,6 +444,15 @@ public interface NcorePackage extends EPackage {
 	int NAMED_ELEMENT__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__UUID = MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -508,17 +535,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	int DURATION = 7;
-
-	/**
-	 * The meta object id for the '<em>URI</em>' data type.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.emf.common.util.URI
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getURI()
-	 * @generated
-	 */
-	int URI = 8;
-
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Marked <em>Marked</em>}'.
@@ -773,6 +789,17 @@ public interface NcorePackage extends EPackage {
 	EAttribute getModelElement_Description();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Uuid</em>'.
+	 * @see org.nasdanika.ncore.ModelElement#getUuid()
+	 * @see #getModelElement()
+	 * @generated
+	 */
+	EAttribute getModelElement_Uuid();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.NamedElement <em>Named Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -850,17 +877,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getDuration();
-
-	/**
-	 * Returns the meta object for data type '{@link org.eclipse.emf.common.util.URI <em>URI</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for data type '<em>URI</em>'.
-	 * @see org.eclipse.emf.common.util.URI
-	 * @model instanceClass="org.eclipse.emf.common.util.URI"
-	 * @generated
-	 */
-	EDataType getURI();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1086,6 +1102,14 @@ public interface NcorePackage extends EPackage {
 		EAttribute MODEL_ELEMENT__DESCRIPTION = eINSTANCE.getModelElement_Description();
 
 		/**
+		 * The meta object literal for the '<em><b>Uuid</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MODEL_ELEMENT__UUID = eINSTANCE.getModelElement_Uuid();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.NamedElementImpl <em>Named Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1140,16 +1164,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType DURATION = eINSTANCE.getDuration();
-
-		/**
-		 * The meta object literal for the '<em>URI</em>' data type.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.emf.common.util.URI
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getURI()
-		 * @generated
-		 */
-		EDataType URI = eINSTANCE.getURI();
 
 	}
 

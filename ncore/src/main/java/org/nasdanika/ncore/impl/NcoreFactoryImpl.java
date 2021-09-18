@@ -4,7 +4,6 @@ package org.nasdanika.ncore.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -81,8 +80,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 				return createInstantFromString(eDataType, initialValue);
 			case NcorePackage.DURATION:
 				return createDurationFromString(eDataType, initialValue);
-			case NcorePackage.URI:
-				return createURIFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -100,8 +97,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 				return convertInstantToString(eDataType, instanceValue);
 			case NcorePackage.DURATION:
 				return convertDurationToString(eDataType, instanceValue);
-			case NcorePackage.URI:
-				return convertURIToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -184,24 +179,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	public String convertDurationToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public URI createURIFromString(EDataType eDataType, String initialValue) {
-		return (URI)super.createFromString(eDataType, initialValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertURIToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

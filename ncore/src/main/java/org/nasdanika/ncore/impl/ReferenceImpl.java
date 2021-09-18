@@ -5,7 +5,6 @@ package org.nasdanika.ncore.impl;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Reference;
 

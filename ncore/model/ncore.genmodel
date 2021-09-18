@@ -10,7 +10,6 @@
       ecorePackage="ncore.ecore#/">
     <genDataTypes ecoreDataType="ncore.ecore#//Instant"/>
     <genDataTypes ecoreDataType="ncore.ecore#//Duration"/>
-    <genDataTypes ecoreDataType="ncore.ecore#//URI"/>
     <genClasses image="false" ecoreClass="ncore.ecore#//Marked">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Marked/marker"/>
     </genClasses>
@@ -50,6 +49,7 @@
     <genClasses image="false" ecoreClass="ncore.ecore#//ModelElement">
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/uri"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/uuid"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//NamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//NamedElement/name"/>

@@ -1,6 +1,0 @@
-exec-eval:
-   script: 
-     content-text: 3 * val 
-   bindings: 
-     val: 
-       content-text: 33

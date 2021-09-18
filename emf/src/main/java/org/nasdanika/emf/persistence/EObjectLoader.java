@@ -34,6 +34,13 @@ import org.nasdanika.emf.EmfUtil;
 
 public class EObjectLoader extends DispatchingLoader {
 	
+	/**
+	 * If proxy URI is prefixed with ./ then the URI is not resolved relative to the context resource at the load time.
+	 * Rather the prefix is removed and a URI created from the tail is passed to the proxy object to be used
+	 * at proxy resolution time. 
+	 */
+	public static final String LATE_PROXY_RESOLUTION_URI_PREFIX = "./";	
+	
 	static final String HREF_KEY = "href";
 
 	public static final String LOAD_KEY = "load-key";
@@ -313,7 +320,11 @@ public class EObjectLoader extends DispatchingLoader {
 					} else {
 						return null;
 					}
-					if (base != null) {
+					
+					String proxyURIStr = proxyURI.toString();
+					if (proxyURIStr.startsWith(LATE_PROXY_RESOLUTION_URI_PREFIX)) {
+						proxyURI = URI.createURI(proxyURIStr.substring(LATE_PROXY_RESOLUTION_URI_PREFIX.length()));
+					} else if (base != null) {
 						URI baseURI = URI.createURI(base.toString());
 						proxyURI = proxyURI.resolve(baseURI);
 					}

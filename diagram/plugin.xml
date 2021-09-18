@@ -10,7 +10,7 @@
       <!-- @generated diagram -->
       <package
             uri="urn:org.nasdanika.diagram"
-            class="org.nasdanika.ncore.DiagramPackage"
+            class="org.nasdanika.diagram.DiagramPackage"
             genModel="model/diagram.genmodel"/>
    </extension>
 

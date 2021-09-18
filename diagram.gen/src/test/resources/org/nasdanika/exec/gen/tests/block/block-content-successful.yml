@@ -1,7 +1,0 @@
-exec-block:
-   try: 
-     content-resource: ../content/resource/hello.txt
-   catch: 
-     content-text: Erroneous ${error}      
-   finally: 
-     content-text: World

@@ -2,8 +2,6 @@
  */
 package org.nasdanika.ncore;
 
-import org.eclipse.emf.common.util.URI;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Model Element</b></em>'.
@@ -15,6 +13,7 @@ import org.eclipse.emf.common.util.URI;
  * <ul>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUri <em>Uri</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
@@ -33,12 +32,12 @@ public interface ModelElement extends Marked {
 	 * 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Uri</em>' attribute.
-	 * @see #setUri(URI)
+	 * @see #setUri(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Uri()
-	 * @model dataType="org.nasdanika.ncore.URI"
+	 * @model
 	 * @generated
 	 */
-	URI getUri();
+	String getUri();
 
 	/**
 	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getUri <em>Uri</em>}' attribute.
@@ -48,7 +47,7 @@ public interface ModelElement extends Marked {
 	 * @see #getUri()
 	 * @generated
 	 */
-	void setUri(URI value);
+	void setUri(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Description</b></em>' attribute.
@@ -74,5 +73,27 @@ public interface ModelElement extends Marked {
 	 * @generated
 	 */
 	void setDescription(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Uuid</em>' attribute.
+	 * @see #setUuid(String)
+	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Uuid()
+	 * @model
+	 * @generated
+	 */
+	String getUuid();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Uuid</em>' attribute.
+	 * @see #getUuid()
+	 * @generated
+	 */
+	void setUuid(String value);
 
 } // ModelElement

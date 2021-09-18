@@ -8,13 +8,16 @@
   <foreignModel>diagram.ecore</foreignModel>
   <genPackages prefix="Diagram" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="diagram.ecore#/">
-    <genClasses image="false" ecoreClass="diagram.ecore#//Marked">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Marked/marker"/>
+    <genClasses image="false" ecoreClass="diagram.ecore#//DiagramElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/connections"/>
     </genClasses>
-    <genClasses ecoreClass="diagram.ecore#//Marker">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Marker/location"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Marker/line"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Marker/column"/>
+    <genClasses ecoreClass="diagram.ecore#//Diagram">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="diagram.ecore#//Connection">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

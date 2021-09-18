@@ -1,7 +1,0 @@
-exec-block:
-   try: 
-     content-resource: no-such-resource
-   catch: 
-     content-text: Erroneous ${error}      
-   finally: 
-     content-text: World
