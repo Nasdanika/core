@@ -19,6 +19,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/elements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/connections"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/stereotype"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/color"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/gradient"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/border"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/dashed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/dotted"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/bold"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Diagram">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>
@@ -28,6 +36,12 @@
     <genClasses ecoreClass="diagram.ecore#//Connection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/color"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/dashed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/dotted"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/bold"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/thickness"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Start"/>
     <genClasses ecoreClass="diagram.ecore#//End"/>

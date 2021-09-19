@@ -31,6 +31,14 @@ import org.nasdanika.diagram.DiagramPackage;
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getConnections <em>Connections</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getStereotype <em>Stereotype</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getColor <em>Color</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getGradient <em>Gradient</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getBorder <em>Border</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isDashed <em>Dashed</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isDotted <em>Dotted</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isBold <em>Bold</em>}</li>
  * </ul>
  *
  * @generated
@@ -55,6 +63,76 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 	 * @ordered
 	 */
 	protected static final String TYPE_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getStereotype() <em>Stereotype</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStereotype()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String STEREOTYPE_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getColor() <em>Color</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getColor()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COLOR_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getGradient() <em>Gradient</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGradient()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String GRADIENT_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getBorder() <em>Border</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBorder()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String BORDER_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #isDashed() <em>Dashed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDashed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DASHED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isDotted() <em>Dotted</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDotted()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DOTTED_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isBold() <em>Bold</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBold()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean BOLD_EDEFAULT = false;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -154,6 +232,157 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<EObject> getDescription() {
+		return (EList<EObject>)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION, DiagramPackage.Literals.DIAGRAM_ELEMENT__DESCRIPTION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getStereotype() {
+		return (String)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE, DiagramPackage.Literals.DIAGRAM_ELEMENT__STEREOTYPE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStereotype(String newStereotype) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE, DiagramPackage.Literals.DIAGRAM_ELEMENT__STEREOTYPE, newStereotype);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getColor() {
+		return (String)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__COLOR, DiagramPackage.Literals.DIAGRAM_ELEMENT__COLOR, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setColor(String newColor) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__COLOR, DiagramPackage.Literals.DIAGRAM_ELEMENT__COLOR, newColor);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getGradient() {
+		return (String)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__GRADIENT, DiagramPackage.Literals.DIAGRAM_ELEMENT__GRADIENT, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setGradient(String newGradient) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__GRADIENT, DiagramPackage.Literals.DIAGRAM_ELEMENT__GRADIENT, newGradient);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getBorder() {
+		return (String)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__BORDER, DiagramPackage.Literals.DIAGRAM_ELEMENT__BORDER, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBorder(String newBorder) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__BORDER, DiagramPackage.Literals.DIAGRAM_ELEMENT__BORDER, newBorder);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isDashed() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__DASHED, DiagramPackage.Literals.DIAGRAM_ELEMENT__DASHED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDashed(boolean newDashed) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__DASHED, DiagramPackage.Literals.DIAGRAM_ELEMENT__DASHED, newDashed);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isDotted() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__DOTTED, DiagramPackage.Literals.DIAGRAM_ELEMENT__DOTTED, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDotted(boolean newDotted) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__DOTTED, DiagramPackage.Literals.DIAGRAM_ELEMENT__DOTTED, newDotted);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isBold() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__BOLD, DiagramPackage.Literals.DIAGRAM_ELEMENT__BOLD, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBold(boolean newBold) {
+		eDynamicSet(DiagramPackage.DIAGRAM_ELEMENT__BOLD, DiagramPackage.Literals.DIAGRAM_ELEMENT__BOLD, newBold);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -163,6 +392,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return ((InternalEList<?>)getConnections()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
+				return ((InternalEList<?>)getDescription()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -185,6 +416,22 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return getElements();
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return getConnections();
+			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
+				return getDescription();
+			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:
+				return getStereotype();
+			case DiagramPackage.DIAGRAM_ELEMENT__COLOR:
+				return getColor();
+			case DiagramPackage.DIAGRAM_ELEMENT__GRADIENT:
+				return getGradient();
+			case DiagramPackage.DIAGRAM_ELEMENT__BORDER:
+				return getBorder();
+			case DiagramPackage.DIAGRAM_ELEMENT__DASHED:
+				return isDashed();
+			case DiagramPackage.DIAGRAM_ELEMENT__DOTTED:
+				return isDotted();
+			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
+				return isBold();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,6 +463,31 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				getConnections().clear();
 				getConnections().addAll((Collection<? extends Connection>)newValue);
 				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
+				getDescription().clear();
+				getDescription().addAll((Collection<? extends EObject>)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:
+				setStereotype((String)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__COLOR:
+				setColor((String)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__GRADIENT:
+				setGradient((String)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__BORDER:
+				setBorder((String)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DASHED:
+				setDashed((Boolean)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DOTTED:
+				setDotted((Boolean)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
+				setBold((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -243,6 +515,30 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				getConnections().clear();
 				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
+				getDescription().clear();
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:
+				setStereotype(STEREOTYPE_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__COLOR:
+				setColor(COLOR_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__GRADIENT:
+				setGradient(GRADIENT_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__BORDER:
+				setBorder(BORDER_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DASHED:
+				setDashed(DASHED_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__DOTTED:
+				setDotted(DOTTED_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
+				setBold(BOLD_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -265,6 +561,22 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return !getElements().isEmpty();
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return !getConnections().isEmpty();
+			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
+				return !getDescription().isEmpty();
+			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:
+				return STEREOTYPE_EDEFAULT == null ? getStereotype() != null : !STEREOTYPE_EDEFAULT.equals(getStereotype());
+			case DiagramPackage.DIAGRAM_ELEMENT__COLOR:
+				return COLOR_EDEFAULT == null ? getColor() != null : !COLOR_EDEFAULT.equals(getColor());
+			case DiagramPackage.DIAGRAM_ELEMENT__GRADIENT:
+				return GRADIENT_EDEFAULT == null ? getGradient() != null : !GRADIENT_EDEFAULT.equals(getGradient());
+			case DiagramPackage.DIAGRAM_ELEMENT__BORDER:
+				return BORDER_EDEFAULT == null ? getBorder() != null : !BORDER_EDEFAULT.equals(getBorder());
+			case DiagramPackage.DIAGRAM_ELEMENT__DASHED:
+				return isDashed() != DASHED_EDEFAULT;
+			case DiagramPackage.DIAGRAM_ELEMENT__DOTTED:
+				return isDotted() != DOTTED_EDEFAULT;
+			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
+				return isBold() != BOLD_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

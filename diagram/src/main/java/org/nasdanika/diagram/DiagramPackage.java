@@ -195,13 +195,85 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM_ELEMENT__CONNECTIONS = LINK_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Description</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__DESCRIPTION = LINK_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Stereotype</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__STEREOTYPE = LINK_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Color</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__COLOR = LINK_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Gradient</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__GRADIENT = LINK_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Border</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__BORDER = LINK_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Dashed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__DASHED = LINK_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Dotted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__DOTTED = LINK_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Bold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__BOLD = LINK_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT_FEATURE_COUNT = LINK_FEATURE_COUNT + 5;
+	int DIAGRAM_ELEMENT_FEATURE_COUNT = LINK_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -296,13 +368,67 @@ public interface DiagramPackage extends EPackage {
 	int CONNECTION__TYPE = 1;
 
 	/**
+	 * The feature id for the '<em><b>Description</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__DESCRIPTION = 2;
+
+	/**
+	 * The feature id for the '<em><b>Color</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__COLOR = 3;
+
+	/**
+	 * The feature id for the '<em><b>Dashed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__DASHED = 4;
+
+	/**
+	 * The feature id for the '<em><b>Dotted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__DOTTED = 5;
+
+	/**
+	 * The feature id for the '<em><b>Bold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__BOLD = 6;
+
+	/**
+	 * The feature id for the '<em><b>Thickness</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__THICKNESS = 7;
+
+	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = 2;
+	int CONNECTION_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Connection</em>' class.
@@ -395,6 +521,78 @@ public interface DiagramPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__CONNECTIONS = DIAGRAM_ELEMENT__CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__DESCRIPTION = DIAGRAM_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Stereotype</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__STEREOTYPE = DIAGRAM_ELEMENT__STEREOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Color</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__COLOR = DIAGRAM_ELEMENT__COLOR;
+
+	/**
+	 * The feature id for the '<em><b>Gradient</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__GRADIENT = DIAGRAM_ELEMENT__GRADIENT;
+
+	/**
+	 * The feature id for the '<em><b>Border</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__BORDER = DIAGRAM_ELEMENT__BORDER;
+
+	/**
+	 * The feature id for the '<em><b>Dashed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__DASHED = DIAGRAM_ELEMENT__DASHED;
+
+	/**
+	 * The feature id for the '<em><b>Dotted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__DOTTED = DIAGRAM_ELEMENT__DOTTED;
+
+	/**
+	 * The feature id for the '<em><b>Bold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__BOLD = DIAGRAM_ELEMENT__BOLD;
 
 	/**
 	 * The number of structural features of the '<em>Start</em>' class.
@@ -495,6 +693,78 @@ public interface DiagramPackage extends EPackage {
 	 * @ordered
 	 */
 	int END__CONNECTIONS = DIAGRAM_ELEMENT__CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__DESCRIPTION = DIAGRAM_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Stereotype</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__STEREOTYPE = DIAGRAM_ELEMENT__STEREOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Color</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__COLOR = DIAGRAM_ELEMENT__COLOR;
+
+	/**
+	 * The feature id for the '<em><b>Gradient</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__GRADIENT = DIAGRAM_ELEMENT__GRADIENT;
+
+	/**
+	 * The feature id for the '<em><b>Border</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__BORDER = DIAGRAM_ELEMENT__BORDER;
+
+	/**
+	 * The feature id for the '<em><b>Dashed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__DASHED = DIAGRAM_ELEMENT__DASHED;
+
+	/**
+	 * The feature id for the '<em><b>Dotted</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__DOTTED = DIAGRAM_ELEMENT__DOTTED;
+
+	/**
+	 * The feature id for the '<em><b>Bold</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__BOLD = DIAGRAM_ELEMENT__BOLD;
 
 	/**
 	 * The number of structural features of the '<em>End</em>' class.
@@ -624,6 +894,94 @@ public interface DiagramPackage extends EPackage {
 	EReference getDiagramElement_Connections();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.DiagramElement#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Description</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getDescription()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EReference getDiagramElement_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#getStereotype <em>Stereotype</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Stereotype</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getStereotype()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Stereotype();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#getColor <em>Color</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Color</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getColor()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Color();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#getGradient <em>Gradient</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Gradient</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getGradient()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Gradient();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#getBorder <em>Border</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Border</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#getBorder()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Border();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#isDashed <em>Dashed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dashed</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#isDashed()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Dashed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#isDotted <em>Dotted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dotted</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#isDotted()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Dotted();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.DiagramElement#isBold <em>Bold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Bold</em>'.
+	 * @see org.nasdanika.diagram.DiagramElement#isBold()
+	 * @see #getDiagramElement()
+	 * @generated
+	 */
+	EAttribute getDiagramElement_Bold();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Diagram <em>Diagram</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -697,6 +1055,72 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getConnection_Type();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Connection#getDescription <em>Description</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Description</em>'.
+	 * @see org.nasdanika.diagram.Connection#getDescription()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EReference getConnection_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#getColor <em>Color</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Color</em>'.
+	 * @see org.nasdanika.diagram.Connection#getColor()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Color();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#isDashed <em>Dashed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dashed</em>'.
+	 * @see org.nasdanika.diagram.Connection#isDashed()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Dashed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#isDotted <em>Dotted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Dotted</em>'.
+	 * @see org.nasdanika.diagram.Connection#isDotted()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Dotted();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#isBold <em>Bold</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Bold</em>'.
+	 * @see org.nasdanika.diagram.Connection#isBold()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Bold();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Connection#getThickness <em>Thickness</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Thickness</em>'.
+	 * @see org.nasdanika.diagram.Connection#getThickness()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Thickness();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Start <em>Start</em>}'.
@@ -826,6 +1250,70 @@ public interface DiagramPackage extends EPackage {
 		EReference DIAGRAM_ELEMENT__CONNECTIONS = eINSTANCE.getDiagramElement_Connections();
 
 		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIAGRAM_ELEMENT__DESCRIPTION = eINSTANCE.getDiagramElement_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Stereotype</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__STEREOTYPE = eINSTANCE.getDiagramElement_Stereotype();
+
+		/**
+		 * The meta object literal for the '<em><b>Color</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__COLOR = eINSTANCE.getDiagramElement_Color();
+
+		/**
+		 * The meta object literal for the '<em><b>Gradient</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__GRADIENT = eINSTANCE.getDiagramElement_Gradient();
+
+		/**
+		 * The meta object literal for the '<em><b>Border</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__BORDER = eINSTANCE.getDiagramElement_Border();
+
+		/**
+		 * The meta object literal for the '<em><b>Dashed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__DASHED = eINSTANCE.getDiagramElement_Dashed();
+
+		/**
+		 * The meta object literal for the '<em><b>Dotted</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__DOTTED = eINSTANCE.getDiagramElement_Dotted();
+
+		/**
+		 * The meta object literal for the '<em><b>Bold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM_ELEMENT__BOLD = eINSTANCE.getDiagramElement_Bold();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -884,6 +1372,54 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONNECTION__TYPE = eINSTANCE.getConnection_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Description</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONNECTION__DESCRIPTION = eINSTANCE.getConnection_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Color</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__COLOR = eINSTANCE.getConnection_Color();
+
+		/**
+		 * The meta object literal for the '<em><b>Dashed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__DASHED = eINSTANCE.getConnection_Dashed();
+
+		/**
+		 * The meta object literal for the '<em><b>Dotted</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__DOTTED = eINSTANCE.getConnection_Dotted();
+
+		/**
+		 * The meta object literal for the '<em><b>Bold</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__BOLD = eINSTANCE.getConnection_Bold();
+
+		/**
+		 * The meta object literal for the '<em><b>Thickness</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__THICKNESS = eINSTANCE.getConnection_Thickness();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.StartImpl <em>Start</em>}' class.

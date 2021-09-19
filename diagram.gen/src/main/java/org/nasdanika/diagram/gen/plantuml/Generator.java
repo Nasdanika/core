@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
@@ -69,6 +70,20 @@ public class Generator {
 		return ret.toString();
 	}
 	
+	protected String render(List<EObject> elements) {
+		StringBuilder ret = new StringBuilder();
+		for (EObject e: elements) {
+			if (e instanceof Link) {
+				ret.append(renderLink((Link) e));
+			} else if (e instanceof Text) {
+				ret.append(((Text) e).getContent());
+			} else {
+				throw new IllegalArgumentException("Unsupported element type: " + e);
+			}
+		}
+		return ret.toString();
+	}
+	
 	/**
 	 * @param diagramElement
 	 * @param connections
@@ -92,20 +107,15 @@ public class Generator {
 		
 		ret.append(diagramElement.getType()).append(" \"");
 		String text = diagramElement.getText();
+		EList<EObject> name = diagramElement.getName();
 		if (!Util.isBlank(text)) {
 			ret.append(text);
-		}
-		
-		for (EObject ne: diagramElement.getName()) {
-			if (ne instanceof Link) {
-				ret.append(renderLink((Link) ne));
-			} else if (ne instanceof Text) {
-				ret.append(((Text) ne).getContent());
-			} else {
-				throw new IllegalArgumentException("Unsupported name element: " + ne);
+			if (!name.isEmpty()) {
+				ret.append(" ");
 			}
 		}
 		
+		ret.append(render(name));
 		ret.append("\"");
 		
 		ret.append(" as ").append(diagramElement.getId());
@@ -115,7 +125,43 @@ public class Generator {
 			ret.append(" ").append(renderLink(null, location, diagramElement.getTooltip()));
 		}
 		
+		String stereotype = diagramElement.getStereotype();
+		if (!Util.isBlank(stereotype)) {
+			ret.append(" <<").append(stereotype).append(">>");
+		}
+		
+		String color = diagramElement.getColor();
+		if (!Util.isBlank(color)) {
+			ret.append(" #").append(color);
+			String gradient = diagramElement.getGradient();
+			if (!Util.isBlank(gradient)) {
+				ret.append("|").append(gradient);
+			}
+		}
+		
+		StringBuilder borderStyleBuilder = new StringBuilder();
+		if (diagramElement.isDashed()) {
+			borderStyleBuilder.append("[dashed]");
+		} else if (diagramElement.isDotted()) {
+			borderStyleBuilder.append("[dotted]");
+		} else if (diagramElement.isBold()) {
+			borderStyleBuilder.append("[bold]");
+		}
+		String borderColor = diagramElement.getBorder();
+		if (!Util.isBlank(borderColor)) {
+			borderStyleBuilder.append(borderColor);
+		}
+		if (borderStyleBuilder.length() > 0) {
+			ret.append(" ##").append(borderStyleBuilder.toString());
+		}
+		
 		// TODO - styling like background
+		
+		EList<EObject> description = diagramElement.getDescription();
+		if (!description.isEmpty()) {
+			ret.append(" : ");
+			ret.append(render(description));
+		}
 		
 		EList<DiagramElement> elements = diagramElement.getElements();
 		if (!elements.isEmpty()) {
@@ -153,12 +199,48 @@ public class Generator {
 			targetId = target.getId();
 		}
 		
+		StringBuilder styleBuilder = new StringBuilder();
+		String color = connection.getColor();
+		if (!Util.isBlank(color)) {
+			styleBuilder.append("#").append(color);
+		}		
+		if (connection.isDashed()) {
+			if (styleBuilder.length() > 0) {
+				styleBuilder.append(",");
+			}
+			styleBuilder.append("dashed");
+		} else if (connection.isDotted()) {
+			if (styleBuilder.length() > 0) {
+				styleBuilder.append(",");
+			}
+			styleBuilder.append("dotted");
+		} else if (connection.isBold()) {
+			if (styleBuilder.length() > 0) {
+				styleBuilder.append(",");
+			}
+			styleBuilder.append("bold");
+		}
+		int thickness = connection.getThickness();
+		if (thickness > 0) {
+			if (styleBuilder.length() > 0) {
+				styleBuilder.append(",");
+			}
+			styleBuilder.append("thickness=").append(thickness);			
+		}
+		String style = styleBuilder.length() > 0 ? "[" + styleBuilder + "]" : "";
+		
 		ret
 			.append(sourceId)
 			.append(" ")
-			.append(connection.getType())
+			.append(Context.singleton("style", style).interpolateToString(connection.getType()))
 			.append(" ")
 			.append(targetId);			
+		
+		EList<EObject> description = connection.getDescription();
+		if (!description.isEmpty()) {
+			ret.append(" : ");
+			ret.append(render(description));
+		}
 		
 		ret.append(System.lineSeparator());
 		

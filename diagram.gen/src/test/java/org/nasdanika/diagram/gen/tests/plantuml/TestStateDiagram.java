@@ -12,6 +12,8 @@ import org.nasdanika.diagram.End;
 import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Start;
 import org.nasdanika.diagram.gen.plantuml.Generator;
+import org.nasdanika.exec.content.ContentFactory;
+import org.nasdanika.exec.content.Text;
 
 /**
  * Common methods for testing
@@ -24,6 +26,7 @@ public class TestStateDiagram {
 	public void generateStateDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 		Diagram diagram = diagramFactory.createDiagram();
+		diagram.setHideEmptyDescription(true);
 		
 		Start start = diagramFactory.createStart();
 		diagram.getElements().add(start);
@@ -34,6 +37,14 @@ public class TestStateDiagram {
 		source.setText("Source");
 		source.setLocation("https://nasdanika.org");
 		source.setTooltip("We start at the home page");
+		
+		DiagramElement nested = diagramFactory.createDiagramElement();
+		source.getElements().add(nested);
+		nested.setType("state");
+		nested.setText("Nested");	
+//		nested.setStereotype("choice");
+		nested.setBorder("red");
+		nested.setDashed(true);
 		
 		Connection c1 = diagramFactory.createConnection();
 		start.getConnections().add(c1);
@@ -48,9 +59,21 @@ public class TestStateDiagram {
 		nameLink.setLocation("javascript:alert('nospace')");
 		nameLink.setTooltip("Achieve unachievable!");
 		
+		Text targetDescriptionText = ContentFactory.eINSTANCE.createText();
+		targetDescriptionText.setContent("Description of the target");
+		target.getDescription().add(targetDescriptionText);
+		
 		Connection c2 = diagramFactory.createConnection();
-		source.getConnections().add(c2);
+		nested.getConnections().add(c2);
 		c2.setTarget(target);				
+		
+		Link cDescriptionLink = diagramFactory.createLink();
+		cDescriptionLink.setLocation("https://www.somewhere.com");
+		cDescriptionLink.setText("Achieve your targets");
+		c2.getDescription().add(cDescriptionLink);
+		c2.setDashed(true);
+		c2.setColor("blue");
+		c2.setThickness(3);		
 
 		End end = diagramFactory.createEnd();
 		diagram.getElements().add(end);
@@ -66,6 +89,5 @@ public class TestStateDiagram {
 		System.out.println(spec);
 		Files.writeString(new File("target/diagram.html").toPath(), generator.generateUmlDiagram(diagram));		
 	}
-	
 
 }

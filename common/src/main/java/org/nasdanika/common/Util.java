@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 import org.jsoup.Jsoup;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -1179,6 +1180,25 @@ public class Util {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T,R> Class<FunctionFactory<T,R>> getFunctionFactoryClass(Class<T> type, Class<R> returnType) {
 		return (Class<FunctionFactory<T,R>>) (Class) FunctionFactory.class;
+	}
+
+	/**
+	 * Wraps texts so its line width grows proportionally as the number of lines increases. 
+	 * @param text
+	 * @param initialLineWidth
+	 * @param separator
+	 * @return
+	 */
+	public static String wrap(String text, int initialLineWidth, int widthIncrementPerLine, String separator) {
+		if (Util.isBlank(text) || text.length() < initialLineWidth) { 
+			return text;
+		}
+		double lines = quadraticRoot(widthIncrementPerLine, initialLineWidth - widthIncrementPerLine, -text.length()); 
+		return WordUtils.wrap(text, initialLineWidth + (int) (widthIncrementPerLine * Math.ceil(lines)), separator, false);
+	}
+	
+	private static double quadraticRoot(double a, double b, double c) { 
+		return (-b + Math.sqrt(b*b - 4 * a * c)) / (2 * a);
 	}
 	
 }

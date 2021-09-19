@@ -234,6 +234,86 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getDiagramElement_Description() {
+		return (EReference)diagramElementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Stereotype() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Color() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Gradient() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Border() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Dashed() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Dotted() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagramElement_Bold() {
+		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDiagram() {
 		return diagramEClass;
 	}
@@ -304,6 +384,66 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getConnection_Description() {
+		return (EReference)connectionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Color() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Dashed() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Dotted() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Bold() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConnection_Thickness() {
+		return (EAttribute)connectionEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getStart() {
 		return startEClass;
 	}
@@ -358,6 +498,14 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__NAME);
 		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__ELEMENTS);
 		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__CONNECTIONS);
+		createEReference(diagramElementEClass, DIAGRAM_ELEMENT__DESCRIPTION);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__STEREOTYPE);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__COLOR);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__GRADIENT);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__BORDER);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__DASHED);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__DOTTED);
+		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__BOLD);
 
 		diagramEClass = createEClass(DIAGRAM);
 		createEReference(diagramEClass, DIAGRAM__ELEMENTS);
@@ -367,6 +515,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__TARGET);
 		createEAttribute(connectionEClass, CONNECTION__TYPE);
+		createEReference(connectionEClass, CONNECTION__DESCRIPTION);
+		createEAttribute(connectionEClass, CONNECTION__COLOR);
+		createEAttribute(connectionEClass, CONNECTION__DASHED);
+		createEAttribute(connectionEClass, CONNECTION__DOTTED);
+		createEAttribute(connectionEClass, CONNECTION__BOLD);
+		createEAttribute(connectionEClass, CONNECTION__THICKNESS);
 
 		startEClass = createEClass(START);
 
@@ -417,6 +571,14 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEReference(getDiagramElement_Name(), ecorePackage.getEObject(), null, "name", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDiagramElement_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDiagramElement_Connections(), this.getConnection(), null, "connections", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagramElement_Description(), ecorePackage.getEObject(), null, "description", null, 0, -1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Stereotype(), ecorePackage.getEString(), "stereotype", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Color(), ecorePackage.getEString(), "color", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Gradient(), ecorePackage.getEString(), "gradient", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Border(), ecorePackage.getEString(), "border", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Dashed(), ecorePackage.getEBoolean(), "dashed", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Dotted(), ecorePackage.getEBoolean(), "dotted", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagramElement_Bold(), ecorePackage.getEBoolean(), "bold", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiagram_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -425,7 +587,13 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Target(), this.getDiagramElement(), null, "target", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getConnection_Type(), ecorePackage.getEString(), "type", "->", 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Type(), ecorePackage.getEString(), "type", "-${style}->", 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConnection_Description(), ecorePackage.getEObject(), null, "description", null, 0, -1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Color(), ecorePackage.getEString(), "color", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Dashed(), ecorePackage.getEBoolean(), "dashed", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Dotted(), ecorePackage.getEBoolean(), "dotted", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Bold(), ecorePackage.getEBoolean(), "bold", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConnection_Thickness(), ecorePackage.getEInt(), "thickness", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(startEClass, Start.class, "Start", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -532,10 +700,94 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 			   "documentation", "Outbound connections."
 		   });
 		addAnnotation
+		  (getDiagramElement_Description(),
+		   source,
+		   new String[] {
+			   "documentation", "Composite element description to support having links in the description. Elements shall be of type Link of Exec.content.Text."
+		   });
+		addAnnotation
+		  (getDiagramElement_Stereotype(),
+		   source,
+		   new String[] {
+			   "documentation", "Element stereotype. E.g. ``choice`` or ``fork``."
+		   });
+		addAnnotation
+		  (getDiagramElement_Color(),
+		   source,
+		   new String[] {
+			   "documentation", "Element color. E.g. ``lightblue`` or ``DDDDDD``."
+		   });
+		addAnnotation
+		  (getDiagramElement_Gradient(),
+		   source,
+		   new String[] {
+			   "documentation", "Gradient color - if set the node is displayed with a gradient from ``color`` to ``gradient``."
+		   });
+		addAnnotation
+		  (getDiagramElement_Border(),
+		   source,
+		   new String[] {
+			   "documentation", "Border color. E.g. ``lightblue`` or ``DDDDDD``."
+		   });
+		addAnnotation
+		  (getDiagramElement_Dashed(),
+		   source,
+		   new String[] {
+			   "documentation", "Dashed border style."
+		   });
+		addAnnotation
+		  (getDiagramElement_Dotted(),
+		   source,
+		   new String[] {
+			   "documentation", "Dotted border style."
+		   });
+		addAnnotation
+		  (getDiagramElement_Bold(),
+		   source,
+		   new String[] {
+			   "documentation", "Bold border style."
+		   });
+		addAnnotation
 		  (getConnection_Type(),
 		   source,
 		   new String[] {
-			   "documentation", "Connection type. E.g. ``-->`` or ``..>``"
+			   "documentation", "Connection type. E.g. ``-->`` or ``..>``. To support styling connection type shall contain ``${style}`` token which will be expanded during generation. E.g. ``-${style}->``."
+		   });
+		addAnnotation
+		  (getConnection_Description(),
+		   source,
+		   new String[] {
+			   "documentation", "Composite connection description to support having links in the description. Elements shall be of type Link of Exec.content.Text."
+		   });
+		addAnnotation
+		  (getConnection_Color(),
+		   source,
+		   new String[] {
+			   "documentation", "Connection color. E.g. ``lightblue`` or ``DDDDDD``."
+		   });
+		addAnnotation
+		  (getConnection_Dashed(),
+		   source,
+		   new String[] {
+			   "documentation", "Dashed connection style."
+		   });
+		addAnnotation
+		  (getConnection_Dotted(),
+		   source,
+		   new String[] {
+			   "documentation", "Dotted connection style."
+		   });
+		addAnnotation
+		  (getConnection_Bold(),
+		   source,
+		   new String[] {
+			   "documentation", "Bold connection style."
+		   });
+		addAnnotation
+		  (getConnection_Thickness(),
+		   source,
+		   new String[] {
+			   "documentation", "Connection thickness."
 		   });
 		addAnnotation
 		  (startEClass,
