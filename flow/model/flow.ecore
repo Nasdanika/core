@@ -5,6 +5,9 @@
     <details key="documentation-reference" value="doc/package-summary.md"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="reference-types" value="subPackages: zorro"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
         eType="#//Package" eOpposite="#//Package/extensions">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -21,9 +24,20 @@
         eType="#//PackageEntry" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PackageEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//Package"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Sub-package key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Package"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Sub-package. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"

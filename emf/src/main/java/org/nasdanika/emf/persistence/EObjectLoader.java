@@ -63,6 +63,14 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String IS_RESOLVE_URI = "resolve-uri";
 	
 	/**
+	 * This annotation allows to override element types for homogenous references.
+	 * The value shall be a YAML map of reference names to types. If entry value is a string it is treated as a class name from the same
+	 * {@link EPackage} as the annotated {@link EClass}. If it is a map then it shall contain <code>ns-uri</code> and <code>name</code> keys.
+	 * EClass is looked up in the loader's {@link ResourceSet} package registry.
+	 */
+	public static final String REFERENCE_TYPES = "reference-types";
+	
+	/**
 	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.
 	 */
 	public static final String EXCLUSIVE_WITH = "exclusive-with";

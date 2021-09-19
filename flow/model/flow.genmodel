@@ -20,8 +20,11 @@
     <genClasses ecoreClass="flow.ecore#//Participant">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/extends"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/extensions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/services"/>
     </genClasses>
-    <genClasses ecoreClass="flow.ecore#//Resource"/>
+    <genClasses ecoreClass="flow.ecore#//Resource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/services"/>
+    </genClasses>
     <genClasses ecoreClass="flow.ecore#//Artifact">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/repositories"/>
     </genClasses>

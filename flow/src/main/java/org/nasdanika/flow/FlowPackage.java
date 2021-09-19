@@ -98,6 +98,15 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -235,6 +244,15 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -262,13 +280,22 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__EXTENSIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Services</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__SERVICES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int PARTICIPANT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -317,6 +344,15 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -326,13 +362,22 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Services</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__SERVICES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int RESOURCE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -379,6 +424,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARTIFACT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -3536,7 +3590,8 @@ public interface FlowPackage extends EPackage {
 	 * @return the meta object for class '<em>Package Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
-	 *        valueType="org.nasdanika.flow.Package" valueContainment="true" valueRequired="true"
+	 *        valueType="org.nasdanika.flow.Package" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
 	 * @generated
 	 */
 	EClass getPackageEntry();
@@ -3596,6 +3651,17 @@ public interface FlowPackage extends EPackage {
 	EReference getParticipant_Extensions();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Services</em>'.
+	 * @see org.nasdanika.flow.Participant#getServices()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Services();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3604,6 +3670,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getResource();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.Resource#getServices <em>Services</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Services</em>'.
+	 * @see org.nasdanika.flow.Resource#getServices()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EReference getResource_Services();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Artifact <em>Artifact</em>}'.
@@ -4227,6 +4304,14 @@ public interface FlowPackage extends EPackage {
 		EReference PARTICIPANT__EXTENSIONS = eINSTANCE.getParticipant_Extensions();
 
 		/**
+		 * The meta object literal for the '<em><b>Services</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__SERVICES = eINSTANCE.getParticipant_Services();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ResourceImpl <em>Resource</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4235,6 +4320,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EClass RESOURCE = eINSTANCE.getResource();
+
+		/**
+		 * The meta object literal for the '<em><b>Services</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE__SERVICES = eINSTANCE.getResource_Services();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactImpl <em>Artifact</em>}' class.

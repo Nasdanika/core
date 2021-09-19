@@ -17,6 +17,7 @@ import org.nasdanika.ncore.NamedElement;
  * <ul>
  *   <li>{@link org.nasdanika.flow.Participant#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
@@ -57,5 +58,17 @@ public interface Participant extends NamedElement {
 	 * @generated
 	 */
 	EList<Participant> getExtensions();
+
+	/**
+	 * Returns the value of the '<em><b>Services</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Activity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Services</em>' containment reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Services()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Activity> getServices();
 
 } // Participant

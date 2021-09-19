@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NamedElement;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getPackage()
- * @model
+ * @model annotation="urn:org.nasdanika reference-types='subPackages: zorro'"
  * @generated
  */
 public interface Package extends NamedElement {

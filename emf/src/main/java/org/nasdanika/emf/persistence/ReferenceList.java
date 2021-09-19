@@ -43,7 +43,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			java.util.function.Function<ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
-		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, resolver, referenceSupplierFactory, keyProvider);
+		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
 	}
 	
 	@Override

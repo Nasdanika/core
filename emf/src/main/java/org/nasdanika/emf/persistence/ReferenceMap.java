@@ -47,7 +47,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");
 		if (valueFeature instanceof EReference) {
-			this.valueFactory = new ReferenceFactory<>(eClass, (EReference) valueFeature, resolver, referenceSupplierFactory, keyProvider);
+			this.valueFactory = new ReferenceFactory<>(eClass, (EReference) valueFeature, eReference.getName(), resolver, referenceSupplierFactory, keyProvider);
 		}
 	}
 	

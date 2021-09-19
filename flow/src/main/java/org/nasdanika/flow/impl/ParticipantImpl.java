@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
 
@@ -28,6 +29,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getServices <em>Services</em>}</li>
  * </ul>
  *
  * @generated
@@ -81,6 +83,17 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<Activity> getServices() {
+		return (EList<Activity>)eDynamicGet(FlowPackage.PARTICIPANT__SERVICES, FlowPackage.Literals.PARTICIPANT__SERVICES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__EXTENDS:
@@ -103,6 +116,8 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__EXTENSIONS:
 				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__SERVICES:
+				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -119,6 +134,8 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 				return getExtends();
 			case FlowPackage.PARTICIPANT__EXTENSIONS:
 				return getExtensions();
+			case FlowPackage.PARTICIPANT__SERVICES:
+				return getServices();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -136,6 +153,10 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 				getExtends().clear();
 				getExtends().addAll((Collection<? extends Participant>)newValue);
 				return;
+			case FlowPackage.PARTICIPANT__SERVICES:
+				getServices().clear();
+				getServices().addAll((Collection<? extends Activity>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -150,6 +171,9 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__EXTENDS:
 				getExtends().clear();
+				return;
+			case FlowPackage.PARTICIPANT__SERVICES:
+				getServices().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -167,6 +191,8 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 				return !getExtends().isEmpty();
 			case FlowPackage.PARTICIPANT__EXTENSIONS:
 				return !getExtensions().isEmpty();
+			case FlowPackage.PARTICIPANT__SERVICES:
+				return !getServices().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
