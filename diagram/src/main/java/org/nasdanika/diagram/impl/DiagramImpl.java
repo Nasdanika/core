@@ -30,6 +30,7 @@ import org.nasdanika.diagram.DiagramPackage;
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideFootbox <em>Hide Footbox</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,6 +55,16 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @ordered
 	 */
 	protected static final boolean HIDE_EMPTY_DESCRIPTION_EDEFAULT = false;
+
+	/**
+	 * The default value of the '{@link #isHideFootbox() <em>Hide Footbox</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHideFootbox()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HIDE_FOOTBOX_EDEFAULT = true;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -141,6 +152,26 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@Override
+	public boolean isHideFootbox() {
+		return (Boolean)eDynamicGet(DiagramPackage.DIAGRAM__HIDE_FOOTBOX, DiagramPackage.Literals.DIAGRAM__HIDE_FOOTBOX, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setHideFootbox(boolean newHideFootbox) {
+		eDynamicSet(DiagramPackage.DIAGRAM__HIDE_FOOTBOX, DiagramPackage.Literals.DIAGRAM__HIDE_FOOTBOX, newHideFootbox);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DiagramPackage.DIAGRAM__ELEMENTS:
@@ -163,6 +194,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return isVertical();
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
 				return isHideEmptyDescription();
+			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
+				return isHideFootbox();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -186,6 +219,9 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
 				setHideEmptyDescription((Boolean)newValue);
 				return;
+			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
+				setHideFootbox((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -207,6 +243,9 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
 				setHideEmptyDescription(HIDE_EMPTY_DESCRIPTION_EDEFAULT);
 				return;
+			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
+				setHideFootbox(HIDE_FOOTBOX_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -225,6 +264,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return isVertical() != VERTICAL_EDEFAULT;
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
 				return isHideEmptyDescription() != HIDE_EMPTY_DESCRIPTION_EDEFAULT;
+			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
+				return isHideFootbox() != HIDE_FOOTBOX_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

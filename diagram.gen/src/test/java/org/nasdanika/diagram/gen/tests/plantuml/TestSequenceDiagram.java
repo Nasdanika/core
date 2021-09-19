@@ -8,9 +8,7 @@ import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
-import org.nasdanika.diagram.End;
 import org.nasdanika.diagram.Link;
-import org.nasdanika.diagram.Start;
 import org.nasdanika.diagram.gen.plantuml.Generator;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
@@ -20,52 +18,33 @@ import org.nasdanika.exec.content.Text;
  * @author Pavel
  *
  */
-public class TestStateDiagram {
+public class TestSequenceDiagram {
 	
 	@Test
-	public void generateStateDiagram() throws Exception {
+	public void generateSequenceDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 		Diagram diagram = diagramFactory.createDiagram();
-		diagram.setHideEmptyDescription(true);
-		
-		Start start = diagramFactory.createStart();
-		diagram.getElements().add(start);
 		
 		DiagramElement source = diagramFactory.createDiagramElement();
 		diagram.getElements().add(source);
-		source.setType("state");
-		source.setText("Source");
+		source.setType("actor");
+		source.setText("Alice");
 		source.setLocation("https://nasdanika.org");
 		source.setTooltip("We start at the home page");
-		
-		DiagramElement nested = diagramFactory.createDiagramElement();
-		source.getElements().add(nested);
-		nested.setType("state");
-		nested.setText("Nested");	
-//		nested.setStereotype("choice");
-		nested.setBorder("red");
-		nested.setDashed(true);
-		
-		Connection c1 = diagramFactory.createConnection();
-		start.getConnections().add(c1);
-		c1.setTarget(source);
-		
+				
 		DiagramElement target = diagramFactory.createDiagramElement();
 		diagram.getElements().add(target);
-		target.setType("state");
+		target.setType("actor");
 		Link nameLink = diagramFactory.createLink();
 		target.getName().add(nameLink);
-		nameLink.setText("Target");
+		nameLink.setText("Bob");
 		nameLink.setLocation("javascript:alert('nospace')");
 		nameLink.setTooltip("Achieve unachievable!");
 		
-		Text targetDescriptionText = ContentFactory.eINSTANCE.createText();
-		targetDescriptionText.setContent("Description of the target");
-		target.getDescription().add(targetDescriptionText);
-		
 		Connection c2 = diagramFactory.createConnection();
-		nested.getConnections().add(c2);
-		c2.setTarget(target);				
+		source.getConnections().add(c2);
+		c2.setTarget(target);
+		c2.setType("->");
 		
 		Link cDescriptionLink = diagramFactory.createLink();
 		cDescriptionLink.setLocation("https://www.somewhere.com");
@@ -74,14 +53,6 @@ public class TestStateDiagram {
 		c2.setDashed(true);
 		c2.setColor("blue");
 		c2.setThickness(3);		
-
-		End end = diagramFactory.createEnd();
-		diagram.getElements().add(end);
-
-		Connection c3 = diagramFactory.createConnection();
-		target.getConnections().add(c3);
-		c3.setTarget(end);				
-		
 		
 		Generator generator = new Generator();
 		
@@ -89,7 +60,7 @@ public class TestStateDiagram {
 		System.out.println(spec);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.writeString(new File(outputDir, "state.html").toPath(), generator.generateUmlDiagram(diagram));		
+		Files.writeString(new File(outputDir, "sequence.html").toPath(), generator.generateUmlDiagram(diagram));		
 	}
 
 }

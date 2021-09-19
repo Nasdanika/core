@@ -322,13 +322,22 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM__HIDE_EMPTY_DESCRIPTION = 2;
 
 	/**
+	 * The feature id for the '<em><b>Hide Footbox</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__HIDE_FOOTBOX = 3;
+
+	/**
 	 * The number of structural features of the '<em>Diagram</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_FEATURE_COUNT = 3;
+	int DIAGRAM_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Diagram</em>' class.
@@ -1025,6 +1034,17 @@ public interface DiagramPackage extends EPackage {
 	EAttribute getDiagram_HideEmptyDescription();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hide Footbox</em>'.
+	 * @see org.nasdanika.diagram.Diagram#isHideFootbox()
+	 * @see #getDiagram()
+	 * @generated
+	 */
+	EAttribute getDiagram_HideFootbox();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Connection <em>Connection</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1346,6 +1366,14 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIAGRAM__HIDE_EMPTY_DESCRIPTION = eINSTANCE.getDiagram_HideEmptyDescription();
+
+		/**
+		 * The meta object literal for the '<em><b>Hide Footbox</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DIAGRAM__HIDE_FOOTBOX = eINSTANCE.getDiagram_HideFootbox();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.ConnectionImpl <em>Connection</em>}' class.

@@ -354,6 +354,16 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDiagram_HideFootbox() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getConnection() {
 		return connectionEClass;
 	}
@@ -511,6 +521,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEReference(diagramEClass, DIAGRAM__ELEMENTS);
 		createEAttribute(diagramEClass, DIAGRAM__VERTICAL);
 		createEAttribute(diagramEClass, DIAGRAM__HIDE_EMPTY_DESCRIPTION);
+		createEAttribute(diagramEClass, DIAGRAM__HIDE_FOOTBOX);
 
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__TARGET);
@@ -584,6 +595,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEReference(getDiagram_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Vertical(), ecorePackage.getEBoolean(), "vertical", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_HideEmptyDescription(), ecorePackage.getEBoolean(), "hideEmptyDescription", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_HideFootbox(), ecorePackage.getEBoolean(), "hideFootbox", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Target(), this.getDiagramElement(), null, "target", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -746,6 +758,18 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Bold border style."
+		   });
+		addAnnotation
+		  (getDiagram_HideEmptyDescription(),
+		   source,
+		   new String[] {
+			   "documentation", "Hides empty descriptions on state diagrams."
+		   });
+		addAnnotation
+		  (getDiagram_HideFootbox(),
+		   source,
+		   new String[] {
+			   "documentation", "Hides footbox on sequence diagrams."
 		   });
 		addAnnotation
 		  (getConnection_Type(),

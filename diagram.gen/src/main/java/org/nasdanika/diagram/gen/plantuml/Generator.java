@@ -37,6 +37,9 @@ public class Generator {
 		if (diagram.isHideEmptyDescription()) {
 			ret.append("hide empty description").append(System.lineSeparator());
 		}
+		if (diagram.isHideFootbox()) {
+			ret.append("hide footbox").append(System.lineSeparator());
+		}
 		
 		List<Connection> connections = new ArrayList<>();
 		for (DiagramElement de: diagram.getElements()) {

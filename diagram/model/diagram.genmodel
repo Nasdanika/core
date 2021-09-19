@@ -32,6 +32,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/vertical"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/hideEmptyDescription"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/hideFootbox"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Connection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>

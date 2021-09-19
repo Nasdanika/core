@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.Diagram#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getDiagram()
@@ -64,6 +65,9 @@ public interface Diagram extends EObject {
 	 * Returns the value of the '<em><b>Hide Empty Description</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Hides empty descriptions on state diagrams.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Hide Empty Description</em>' attribute.
 	 * @see #setHideEmptyDescription(boolean)
 	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_HideEmptyDescription()
@@ -81,5 +85,31 @@ public interface Diagram extends EObject {
 	 * @generated
 	 */
 	void setHideEmptyDescription(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Hide Footbox</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Hides footbox on sequence diagrams.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Hide Footbox</em>' attribute.
+	 * @see #setHideFootbox(boolean)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_HideFootbox()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isHideFootbox();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hide Footbox</em>' attribute.
+	 * @see #isHideFootbox()
+	 * @generated
+	 */
+	void setHideFootbox(boolean value);
 
 } // Diagram
