@@ -15,8 +15,12 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.nasdanika.flow.Activity;
+import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 
+import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.Resource;
 import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
@@ -30,6 +34,10 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getSubPackages <em>Sub Packages</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getParticipants <em>Participants</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getResources <em>Resources</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getActivities <em>Activities</em>}</li>
  * </ul>
  *
  * @generated
@@ -94,6 +102,50 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EMap<String, Participant> getParticipants() {
+		return (EMap<String, Participant>)eDynamicGet(FlowPackage.PACKAGE__PARTICIPANTS, FlowPackage.Literals.PACKAGE__PARTICIPANTS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EMap<String, Resource> getResources() {
+		return (EMap<String, Resource>)eDynamicGet(FlowPackage.PACKAGE__RESOURCES, FlowPackage.Literals.PACKAGE__RESOURCES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EMap<String, Artifact> getArtifacts() {
+		return (EMap<String, Artifact>)eDynamicGet(FlowPackage.PACKAGE__ARTIFACTS, FlowPackage.Literals.PACKAGE__ARTIFACTS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EMap<String, Activity> getActivities() {
+		return (EMap<String, Activity>)eDynamicGet(FlowPackage.PACKAGE__ACTIVITIES, FlowPackage.Literals.PACKAGE__ACTIVITIES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.PACKAGE__EXTENDS:
@@ -118,6 +170,14 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				return ((InternalEList<?>)getSubPackages()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE__PARTICIPANTS:
+				return ((InternalEList<?>)getParticipants()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE__RESOURCES:
+				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE__ARTIFACTS:
+				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE__ACTIVITIES:
+				return ((InternalEList<?>)getActivities()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -137,6 +197,18 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				if (coreType) return getSubPackages();
 				else return getSubPackages().map();
+			case FlowPackage.PACKAGE__PARTICIPANTS:
+				if (coreType) return getParticipants();
+				else return getParticipants().map();
+			case FlowPackage.PACKAGE__RESOURCES:
+				if (coreType) return getResources();
+				else return getResources().map();
+			case FlowPackage.PACKAGE__ARTIFACTS:
+				if (coreType) return getArtifacts();
+				else return getArtifacts().map();
+			case FlowPackage.PACKAGE__ACTIVITIES:
+				if (coreType) return getActivities();
+				else return getActivities().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -157,6 +229,18 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				((EStructuralFeature.Setting)getSubPackages()).set(newValue);
 				return;
+			case FlowPackage.PACKAGE__PARTICIPANTS:
+				((EStructuralFeature.Setting)getParticipants()).set(newValue);
+				return;
+			case FlowPackage.PACKAGE__RESOURCES:
+				((EStructuralFeature.Setting)getResources()).set(newValue);
+				return;
+			case FlowPackage.PACKAGE__ARTIFACTS:
+				((EStructuralFeature.Setting)getArtifacts()).set(newValue);
+				return;
+			case FlowPackage.PACKAGE__ACTIVITIES:
+				((EStructuralFeature.Setting)getActivities()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -174,6 +258,18 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 				return;
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				getSubPackages().clear();
+				return;
+			case FlowPackage.PACKAGE__PARTICIPANTS:
+				getParticipants().clear();
+				return;
+			case FlowPackage.PACKAGE__RESOURCES:
+				getResources().clear();
+				return;
+			case FlowPackage.PACKAGE__ARTIFACTS:
+				getArtifacts().clear();
+				return;
+			case FlowPackage.PACKAGE__ACTIVITIES:
+				getActivities().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -193,6 +289,14 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 				return !getExtensions().isEmpty();
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				return !getSubPackages().isEmpty();
+			case FlowPackage.PACKAGE__PARTICIPANTS:
+				return !getParticipants().isEmpty();
+			case FlowPackage.PACKAGE__RESOURCES:
+				return !getResources().isEmpty();
+			case FlowPackage.PACKAGE__ARTIFACTS:
+				return !getArtifacts().isEmpty();
+			case FlowPackage.PACKAGE__ACTIVITIES:
+				return !getActivities().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

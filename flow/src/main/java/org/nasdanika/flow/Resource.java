@@ -2,7 +2,7 @@
  */
 package org.nasdanika.flow;
 
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.nasdanika.ncore.NamedElement;
 
 /**
@@ -24,14 +24,18 @@ import org.nasdanika.ncore.NamedElement;
 public interface Resource extends NamedElement {
 
 	/**
-	 * Returns the value of the '<em><b>Services</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.flow.Activity}.
+	 * Returns the value of the '<em><b>Services</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link org.nasdanika.flow.Activity},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Services</em>' containment reference list.
+	 * <!-- begin-model-doc -->
+	 * Services provided by a resource. Resource service activities imply the containing resource. 
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Services</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getResource_Services()
-	 * @model containment="true"
+	 * @model mapType="org.nasdanika.flow.ActivityEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Activity&gt;"
 	 * @generated
 	 */
-	EList<Activity> getServices();
+	EMap<String, Activity> getServices();
 } // Resource

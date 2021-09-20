@@ -9,14 +9,12 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,7 +31,7 @@ import org.nasdanika.flow.Transition;
  *
  * @generated
  */
-public class TransitionImpl extends MinimalEObjectImpl.Container implements Transition {
+public class TransitionImpl extends NamedElementImpl implements Transition {
 	/**
 	 * The default value of the '{@link #isSuppress() <em>Suppress</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -71,16 +69,6 @@ public class TransitionImpl extends MinimalEObjectImpl.Container implements Tran
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.TRANSITION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

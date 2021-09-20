@@ -12,6 +12,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Package/extends"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Package/extensions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/subPackages"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/participants"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/resources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/artifacts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/activities"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//PackageEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PackageEntry/key"/>
@@ -22,11 +26,23 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/extensions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/services"/>
     </genClasses>
+    <genClasses ecoreClass="flow.ecore#//ParticipantEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ParticipantEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//ParticipantEntry/value"/>
+    </genClasses>
     <genClasses ecoreClass="flow.ecore#//Resource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/services"/>
     </genClasses>
+    <genClasses ecoreClass="flow.ecore#//ResourceEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ResourceEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//ResourceEntry/value"/>
+    </genClasses>
     <genClasses ecoreClass="flow.ecore#//Artifact">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/repositories"/>
+    </genClasses>
+    <genClasses ecoreClass="flow.ecore#//ArtifactEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ArtifactEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//ArtifactEntry/value"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//FlowElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputs"/>
@@ -62,6 +78,10 @@
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Activity">
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Activity/services"/>
+    </genClasses>
+    <genClasses ecoreClass="flow.ecore#//ActivityEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ActivityEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//ActivityEntry/value"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Service">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Service/target"/>

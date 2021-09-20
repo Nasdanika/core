@@ -8,7 +8,9 @@ import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -83,8 +85,8 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Activity> getServices() {
-		return (EList<Activity>)eDynamicGet(FlowPackage.PARTICIPANT__SERVICES, FlowPackage.Literals.PARTICIPANT__SERVICES, true, true);
+	public EMap<String, Activity> getServices() {
+		return (EMap<String, Activity>)eDynamicGet(FlowPackage.PARTICIPANT__SERVICES, FlowPackage.Literals.PARTICIPANT__SERVICES, true, true);
 	}
 
 	/**
@@ -135,7 +137,8 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 			case FlowPackage.PARTICIPANT__EXTENSIONS:
 				return getExtensions();
 			case FlowPackage.PARTICIPANT__SERVICES:
-				return getServices();
+				if (coreType) return getServices();
+				else return getServices().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -154,8 +157,7 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 				getExtends().addAll((Collection<? extends Participant>)newValue);
 				return;
 			case FlowPackage.PARTICIPANT__SERVICES:
-				getServices().clear();
-				getServices().addAll((Collection<? extends Activity>)newValue);
+				((EStructuralFeature.Setting)getServices()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

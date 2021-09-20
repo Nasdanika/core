@@ -73,6 +73,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass participantEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass resourceEClass = null;
 
 	/**
@@ -80,7 +87,21 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass resourceEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass artifactEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass artifactEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -95,6 +116,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	private EClass activityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass activityEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -328,6 +356,46 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPackage_Participants() {
+		return (EReference)packageEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPackage_Resources() {
+		return (EReference)packageEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPackage_Artifacts() {
+		return (EReference)packageEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPackage_Activities() {
+		return (EReference)packageEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPackageEntry() {
 		return packageEntryEClass;
 	}
@@ -398,6 +466,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getParticipantEntry() {
+		return participantEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getParticipantEntry_Key() {
+		return (EAttribute)participantEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getParticipantEntry_Value() {
+		return (EReference)participantEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getResource() {
 		return resourceEClass;
 	}
@@ -418,6 +516,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getResourceEntry() {
+		return resourceEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getResourceEntry_Key() {
+		return (EAttribute)resourceEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getResourceEntry_Value() {
+		return (EReference)resourceEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getArtifact() {
 		return artifactEClass;
 	}
@@ -430,6 +558,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EReference getArtifact_Repositories() {
 		return (EReference)artifactEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getArtifactEntry() {
+		return artifactEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getArtifactEntry_Key() {
+		return (EAttribute)artifactEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArtifactEntry_Value() {
+		return (EReference)artifactEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -620,6 +778,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EReference getActivity_Services() {
 		return (EReference)activityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getActivityEntry() {
+		return activityEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getActivityEntry_Key() {
+		return (EAttribute)activityEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getActivityEntry_Value() {
+		return (EReference)activityEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -935,6 +1123,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(packageEClass, PACKAGE__EXTENDS);
 		createEReference(packageEClass, PACKAGE__EXTENSIONS);
 		createEReference(packageEClass, PACKAGE__SUB_PACKAGES);
+		createEReference(packageEClass, PACKAGE__PARTICIPANTS);
+		createEReference(packageEClass, PACKAGE__RESOURCES);
+		createEReference(packageEClass, PACKAGE__ARTIFACTS);
+		createEReference(packageEClass, PACKAGE__ACTIVITIES);
 
 		packageEntryEClass = createEClass(PACKAGE_ENTRY);
 		createEAttribute(packageEntryEClass, PACKAGE_ENTRY__KEY);
@@ -945,11 +1137,23 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(participantEClass, PARTICIPANT__EXTENSIONS);
 		createEReference(participantEClass, PARTICIPANT__SERVICES);
 
+		participantEntryEClass = createEClass(PARTICIPANT_ENTRY);
+		createEAttribute(participantEntryEClass, PARTICIPANT_ENTRY__KEY);
+		createEReference(participantEntryEClass, PARTICIPANT_ENTRY__VALUE);
+
 		resourceEClass = createEClass(RESOURCE);
 		createEReference(resourceEClass, RESOURCE__SERVICES);
 
+		resourceEntryEClass = createEClass(RESOURCE_ENTRY);
+		createEAttribute(resourceEntryEClass, RESOURCE_ENTRY__KEY);
+		createEReference(resourceEntryEClass, RESOURCE_ENTRY__VALUE);
+
 		artifactEClass = createEClass(ARTIFACT);
 		createEReference(artifactEClass, ARTIFACT__REPOSITORIES);
+
+		artifactEntryEClass = createEClass(ARTIFACT_ENTRY);
+		createEAttribute(artifactEntryEClass, ARTIFACT_ENTRY__KEY);
+		createEReference(artifactEntryEClass, ARTIFACT_ENTRY__VALUE);
 
 		flowElementEClass = createEClass(FLOW_ELEMENT);
 		createEReference(flowElementEClass, FLOW_ELEMENT__OUTPUTS);
@@ -971,6 +1175,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		activityEClass = createEClass(ACTIVITY);
 		createEReference(activityEClass, ACTIVITY__SERVICES);
+
+		activityEntryEClass = createEClass(ACTIVITY_ENTRY);
+		createEAttribute(activityEntryEClass, ACTIVITY_ENTRY__KEY);
+		createEReference(activityEntryEClass, ACTIVITY_ENTRY__VALUE);
 
 		serviceEClass = createEClass(SERVICE);
 		createEReference(serviceEClass, SERVICE__TARGET);
@@ -1052,8 +1260,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		participantEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		resourceEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		artifactEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
+		flowElementEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		activityEClass.getESuperTypes().add(this.getFlowElement());
 		serviceEClass.getESuperTypes().add(this.getFlowElement());
+		transitionEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		callEClass.getESuperTypes().add(this.getTransition());
 		flowEClass.getESuperTypes().add(this.getActivity());
 		pseudoStateEClass.getESuperTypes().add(this.getFlowElement());
@@ -1074,6 +1284,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getPackage_Extends(), this.getPackage(), this.getPackage_Extensions(), "extends", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackage_Extensions(), this.getPackage(), this.getPackage_Extends(), "extensions", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getPackage_SubPackages(), this.getPackageEntry(), null, "subPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackage_Participants(), this.getParticipantEntry(), null, "participants", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackage_Resources(), this.getResourceEntry(), null, "resources", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackage_Artifacts(), this.getArtifactEntry(), null, "artifacts", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackage_Activities(), this.getActivityEntry(), null, "activities", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(packageEntryEClass, Map.Entry.class, "PackageEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPackageEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1082,13 +1296,25 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEClass(participantEClass, Participant.class, "Participant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getParticipant_Extends(), this.getParticipant(), this.getParticipant_Extensions(), "extends", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getParticipant_Extensions(), this.getParticipant(), this.getParticipant_Extends(), "extensions", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEReference(getParticipant_Services(), this.getActivity(), null, "services", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getParticipant_Services(), this.getActivityEntry(), null, "services", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(participantEntryEClass, Map.Entry.class, "ParticipantEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getParticipantEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getParticipantEntry_Value(), this.getParticipant(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResource_Services(), this.getActivity(), null, "services", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResource_Services(), this.getActivityEntry(), null, "services", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(resourceEntryEClass, Map.Entry.class, "ResourceEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getResourceEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getResourceEntry_Value(), this.getResource(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(artifactEClass, Artifact.class, "Artifact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getArtifact_Repositories(), this.getResource(), null, "repositories", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(artifactEntryEClass, Map.Entry.class, "ArtifactEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getArtifactEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifactEntry_Value(), this.getArtifact(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(flowElementEClass, FlowElement.class, "FlowElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFlowElement_Outputs(), this.getTransition(), null, "outputs", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1124,6 +1350,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getActivity_Services(), this.getService(), this.getService_Target(), "services", null, 0, -1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+
+		initEClass(activityEntryEClass, Map.Entry.class, "ActivityEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getActivityEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getActivityEntry_Value(), this.getActivity(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getService_Target(), this.getActivity(), this.getActivity_Services(), "target", null, 1, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1198,13 +1428,25 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation-reference", "doc/package-summary.md"
 		   });
 		addAnnotation
-		  (packageEClass,
+		  (getPackageEntry_Value(),
 		   source,
 		   new String[] {
-			   "reference-types", "subPackages: zorro"
+			   "homogenous", "true"
 		   });
 		addAnnotation
-		  (getPackageEntry_Value(),
+		  (getParticipantEntry_Value(),
+		   source,
+		   new String[] {
+			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (getResourceEntry_Value(),
+		   source,
+		   new String[] {
+			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (getArtifactEntry_Value(),
 		   source,
 		   new String[] {
 			   "homogenous", "true"
@@ -1360,6 +1602,42 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Journeys extending this journey."
 		   });
 		addAnnotation
+		  (getPackage_SubPackages(),
+		   source,
+		   new String[] {
+			   "documentation", "Nested packages."
+		   });
+		addAnnotation
+		  (getPackage_Participants(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow participants."
+		   });
+		addAnnotation
+		  (getPackage_Resources(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow resources."
+		   });
+		addAnnotation
+		  (getPackage_Artifacts(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow artifacts."
+		   });
+		addAnnotation
+		  (getPackage_Activities(),
+		   source,
+		   new String[] {
+			   "documentation", "Activities and flows."
+		   });
+		addAnnotation
+		  (packageEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of sub-package key to a sub-package. Null value suppresses inherited entry."
+		   });
+		addAnnotation
 		  (getPackageEntry_Key(),
 		   source,
 		   new String[] {
@@ -1382,6 +1660,72 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Journeys extending this journey."
+		   });
+		addAnnotation
+		  (getParticipant_Services(),
+		   source,
+		   new String[] {
+			   "documentation", "Services provided by a participant. Participant service activities imply the containing participant. "
+		   });
+		addAnnotation
+		  (participantEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of participant key to a participant. Null value suppresses inherited entry."
+		   });
+		addAnnotation
+		  (getParticipantEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant key."
+		   });
+		addAnnotation
+		  (getParticipantEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant. Use ``null`` to suppress inherited sub-package."
+		   });
+		addAnnotation
+		  (getResource_Services(),
+		   source,
+		   new String[] {
+			   "documentation", "Services provided by a resource. Resource service activities imply the containing resource. "
+		   });
+		addAnnotation
+		  (resourceEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of resource key to a resource. Null value suppresses inherited entry."
+		   });
+		addAnnotation
+		  (getResourceEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource key."
+		   });
+		addAnnotation
+		  (getResourceEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Resource. Use ``null`` to suppress inherited sub-package."
+		   });
+		addAnnotation
+		  (artifactEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of artifact key to an artifact. Null value suppresses inherited entry."
+		   });
+		addAnnotation
+		  (getArtifactEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifact key."
+		   });
+		addAnnotation
+		  (getArtifactEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getFlowElement__GetInputs__EList(),
@@ -1514,6 +1858,24 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Derived opposite to Service target."
+		   });
+		addAnnotation
+		  (activityEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of activity key to an activity or a flow. Null value suppresses inherited entry."
+		   });
+		addAnnotation
+		  (getActivityEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Activity key."
+		   });
+		addAnnotation
+		  (getActivityEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Activity or flow. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getService_Target(),

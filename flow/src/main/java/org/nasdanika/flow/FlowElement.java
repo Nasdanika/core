@@ -3,8 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='final override suppress suppressAndOverride'"
  * @generated
  */
-public interface FlowElement extends EObject {
+public interface FlowElement extends NamedElement {
 	/**
 	 * Returns the value of the '<em><b>Outputs</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Transition}.

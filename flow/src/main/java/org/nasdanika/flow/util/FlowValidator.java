@@ -114,14 +114,22 @@ public class FlowValidator extends EObjectValidator {
 				return validatePackageEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.PARTICIPANT:
 				return validateParticipant((Participant)value, diagnostics, context);
+			case FlowPackage.PARTICIPANT_ENTRY:
+				return validateParticipantEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.RESOURCE:
 				return validateResource((Resource)value, diagnostics, context);
+			case FlowPackage.RESOURCE_ENTRY:
+				return validateResourceEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.ARTIFACT:
 				return validateArtifact((Artifact)value, diagnostics, context);
+			case FlowPackage.ARTIFACT_ENTRY:
+				return validateArtifactEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.FLOW_ELEMENT:
 				return validateFlowElement((FlowElement)value, diagnostics, context);
 			case FlowPackage.ACTIVITY:
 				return validateActivity((Activity)value, diagnostics, context);
+			case FlowPackage.ACTIVITY_ENTRY:
+				return validateActivityEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.SERVICE:
 				return validateService((Service)value, diagnostics, context);
 			case FlowPackage.TRANSITION:
@@ -191,6 +199,15 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateParticipantEntry(Map.Entry<?, ?> participantEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)participantEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateResource(Resource resource, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(resource, diagnostics, context);
 	}
@@ -200,8 +217,26 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateResourceEntry(Map.Entry<?, ?> resourceEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)resourceEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateArtifact(Artifact artifact, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(artifact, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateArtifactEntry(Map.Entry<?, ?> artifactEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)artifactEntry, diagnostics, context);
 	}
 
 	/**
@@ -358,6 +393,15 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validateFlowElement_suppress(activity, diagnostics, context);
 		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(activity, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateActivityEntry(Map.Entry<?, ?> activityEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)activityEntry, diagnostics, context);
 	}
 
 	/**

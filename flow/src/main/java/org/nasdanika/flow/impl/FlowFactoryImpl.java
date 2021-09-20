@@ -82,10 +82,14 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 			case FlowPackage.PACKAGE: return createPackage();
 			case FlowPackage.PACKAGE_ENTRY: return (EObject)createPackageEntry();
 			case FlowPackage.PARTICIPANT: return createParticipant();
+			case FlowPackage.PARTICIPANT_ENTRY: return (EObject)createParticipantEntry();
 			case FlowPackage.RESOURCE: return createResource();
+			case FlowPackage.RESOURCE_ENTRY: return (EObject)createResourceEntry();
 			case FlowPackage.ARTIFACT: return createArtifact();
+			case FlowPackage.ARTIFACT_ENTRY: return (EObject)createArtifactEntry();
 			case FlowPackage.FLOW_ELEMENT: return createFlowElement();
 			case FlowPackage.ACTIVITY: return createActivity();
+			case FlowPackage.ACTIVITY_ENTRY: return (EObject)createActivityEntry();
 			case FlowPackage.SERVICE: return createService();
 			case FlowPackage.TRANSITION: return createTransition();
 			case FlowPackage.CALL: return createCall();
@@ -144,6 +148,16 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, Participant> createParticipantEntry() {
+		ParticipantEntryImpl participantEntry = new ParticipantEntryImpl();
+		return participantEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Resource createResource() {
 		ResourceImpl resource = new ResourceImpl();
@@ -155,10 +169,30 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, Resource> createResourceEntry() {
+		ResourceEntryImpl resourceEntry = new ResourceEntryImpl();
+		return resourceEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Artifact createArtifact() {
 		ArtifactImpl artifact = new ArtifactImpl();
 		return artifact;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, Artifact> createArtifactEntry() {
+		ArtifactEntryImpl artifactEntry = new ArtifactEntryImpl();
+		return artifactEntry;
 	}
 
 	/**
@@ -181,6 +215,16 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	public Activity createActivity() {
 		ActivityImpl activity = new ActivityImpl();
 		return activity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, Activity> createActivityEntry() {
+		ActivityEntryImpl activityEntry = new ActivityEntryImpl();
+		return activityEntry;
 	}
 
 	/**

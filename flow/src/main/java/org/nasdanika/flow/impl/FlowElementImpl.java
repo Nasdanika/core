@@ -12,9 +12,6 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.flow.Artifact;
@@ -25,6 +22,7 @@ import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -47,7 +45,7 @@ import org.nasdanika.flow.Transition;
  *
  * @generated
  */
-public class FlowElementImpl extends MinimalEObjectImpl.Container implements FlowElement {
+public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,16 +63,6 @@ public class FlowElementImpl extends MinimalEObjectImpl.Container implements Flo
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.FLOW_ELEMENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected int eStaticFeatureCount() {
-		return 0;
 	}
 
 	/**

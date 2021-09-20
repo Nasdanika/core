@@ -106,12 +106,24 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 				return createParticipantAdapter();
 			}
 			@Override
+			public Adapter caseParticipantEntry(Map.Entry<String, Participant> object) {
+				return createParticipantEntryAdapter();
+			}
+			@Override
 			public Adapter caseResource(Resource object) {
 				return createResourceAdapter();
 			}
 			@Override
+			public Adapter caseResourceEntry(Map.Entry<String, Resource> object) {
+				return createResourceEntryAdapter();
+			}
+			@Override
 			public Adapter caseArtifact(Artifact object) {
 				return createArtifactAdapter();
+			}
+			@Override
+			public Adapter caseArtifactEntry(Map.Entry<String, Artifact> object) {
+				return createArtifactEntryAdapter();
 			}
 			@Override
 			public Adapter caseFlowElement(FlowElement object) {
@@ -120,6 +132,10 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseActivity(Activity object) {
 				return createActivityAdapter();
+			}
+			@Override
+			public Adapter caseActivityEntry(Map.Entry<String, Activity> object) {
+				return createActivityEntryAdapter();
 			}
 			@Override
 			public Adapter caseService(Service object) {
@@ -260,6 +276,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Participant Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createParticipantEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -274,6 +304,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Resource Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createResourceEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Artifact <em>Artifact</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -284,6 +328,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createArtifactAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Artifact Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createArtifactEntryAdapter() {
 		return null;
 	}
 
@@ -312,6 +370,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createActivityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Activity Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createActivityEntryAdapter() {
 		return null;
 	}
 

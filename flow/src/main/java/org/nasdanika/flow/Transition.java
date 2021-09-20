@@ -3,8 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/transition.md'"
  * @generated
  */
-public interface Transition extends EObject {
+public interface Transition extends NamedElement {
 	/**
 	 * Returns the value of the '<em><b>Payload</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
