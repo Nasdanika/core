@@ -27,7 +27,7 @@
 						<configuration>
 							<classifier>model</classifier>
 							<includes>
-								<include>model/flow.*</include>
+								<include>model/**</include>
 							</includes>
 							<classesDirectory>${project.basedir}</classesDirectory>
 						</configuration>
