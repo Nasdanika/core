@@ -31,14 +31,14 @@
 	      <extension>
 	        <groupId>org.apache.maven.wagon</groupId>
 	         <artifactId>wagon-ssh</artifactId>
-	         <version>3.4.1</version>
+	         <version>3.4.3</version>
 	      </extension>
 	    </extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -90,18 +90,8 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.1</version>
 			
-				<configuration>
-					<doclet>ch.raffael.mddoclet.MarkdownDoclet</doclet>
-					<docletArtifact>
-						<groupId>ch.raffael.markdown-doclet</groupId>
-						<artifactId>markdown-doclet</artifactId>
-						<version>1.4</version>
-					</docletArtifact>
-					<useStandardDocletOptions>true</useStandardDocletOptions>
-				</configuration>
-
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
