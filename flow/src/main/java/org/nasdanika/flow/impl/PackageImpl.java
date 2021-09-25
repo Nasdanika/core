@@ -76,12 +76,11 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<org.nasdanika.flow.Package> getExtensions() {
-		return (EList<org.nasdanika.flow.Package>)eDynamicGet(FlowPackage.PACKAGE__EXTENSIONS, FlowPackage.Literals.PACKAGE__EXTENSIONS, true, true);
+		return getReferrers(FlowPackage.Literals.PACKAGE__EXTENDS);
 	}
 
 	/**

@@ -1,7 +1,5 @@
 package org.nasdanika.flow.tests;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -105,7 +103,9 @@ public class TestBase {
 			Consumer<org.nasdanika.common.Diagnostic> diagnosticConsumer) throws Exception {	
 		// Outputs to console, send to file if desired.
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		
+
+		URI resourceURI = URI.createURI(TestBase.this.getClass().getResource(resource).toString());
+
 		class TestCommand extends FlowYamlLoadingExecutionParticipant implements Command {
 
 			public TestCommand(Context context) {
@@ -114,7 +114,7 @@ public class TestBase {
 
 			@Override
 			protected Collection<URI> getResources() {				
-				return Collections.singleton(URI.createURI(TestBase.this.getClass().getResource(resource).toString()));
+				return Collections.singleton(resourceURI);
 			}
 
 			@Override
@@ -138,9 +138,8 @@ public class TestBase {
 
 			@Override
 			public void execute(ProgressMonitor progressMonitor) throws Exception {
-				assertEquals(1, roots.size());
 				if (consumer != null) {
-					consumer.accept(roots.iterator().next());
+					consumer.accept(resourceSet.getResource(resourceURI, false).getContents().get(0));
 				}
 			}
 			
