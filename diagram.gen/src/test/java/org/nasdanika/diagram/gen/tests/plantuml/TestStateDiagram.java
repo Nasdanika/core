@@ -1,6 +1,7 @@
 package org.nasdanika.diagram.gen.tests.plantuml;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.junit.Test;
@@ -89,7 +90,7 @@ public class TestStateDiagram {
 		System.out.println(spec);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.writeString(new File(outputDir, "state.html").toPath(), generator.generateUmlDiagram(diagram));		
+		Files.write(new File(outputDir, "state.html").toPath(), generator.generateUmlDiagram(diagram).getBytes(StandardCharsets.UTF_8));		
 	}
 
 }
