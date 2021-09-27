@@ -26,15 +26,12 @@ import org.nasdanika.flow.FlowPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getElements <em>Elements</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getExtends <em>Extends</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getRoot <em>Root</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getAllElements <em>All Elements</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FlowImpl extends ActivityImpl implements Flow {
+public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -61,30 +58,8 @@ public class FlowImpl extends ActivityImpl implements Flow {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<FlowElement> getElements() {
-		return (EList<FlowElement>)eDynamicGet(FlowPackage.FLOW__ELEMENTS, FlowPackage.Literals.FLOW__ELEMENTS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<Flow> getExtends() {
-		return (EList<Flow>)eDynamicGet(FlowPackage.FLOW__EXTENDS, FlowPackage.Literals.FLOW__EXTENDS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<Flow> getExtensions() {
-		return (EList<Flow>)eDynamicGet(FlowPackage.FLOW__EXTENSIONS, FlowPackage.Literals.FLOW__EXTENSIONS, true, true);
+	public EList<FlowElement<?>> getElements() {
+		return (EList<FlowElement<?>>)eDynamicGet(FlowPackage.FLOW__ELEMENTS, FlowPackage.Literals.FLOW__ELEMENTS, true, true);
 	}
 
 	/**
@@ -111,43 +86,11 @@ public class FlowImpl extends ActivityImpl implements Flow {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<FlowElement> getAllElements() {
-		return (EList<FlowElement>)eDynamicGet(FlowPackage.FLOW__ALL_ELEMENTS, FlowPackage.Literals.FLOW__ALL_ELEMENTS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FlowPackage.FLOW__EXTENDS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtends()).basicAdd(otherEnd, msgs);
-			case FlowPackage.FLOW__EXTENSIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtensions()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
-			case FlowPackage.FLOW__EXTENDS:
-				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
-			case FlowPackage.FLOW__EXTENSIONS:
-				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -162,15 +105,9 @@ public class FlowImpl extends ActivityImpl implements Flow {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				return getElements();
-			case FlowPackage.FLOW__EXTENDS:
-				return getExtends();
-			case FlowPackage.FLOW__EXTENSIONS:
-				return getExtensions();
 			case FlowPackage.FLOW__ROOT:
 				if (resolve) return getRoot();
 				return basicGetRoot();
-			case FlowPackage.FLOW__ALL_ELEMENTS:
-				return getAllElements();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -186,11 +123,7 @@ public class FlowImpl extends ActivityImpl implements Flow {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				getElements().clear();
-				getElements().addAll((Collection<? extends FlowElement>)newValue);
-				return;
-			case FlowPackage.FLOW__EXTENDS:
-				getExtends().clear();
-				getExtends().addAll((Collection<? extends Flow>)newValue);
+				getElements().addAll((Collection<? extends FlowElement<?>>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -207,9 +140,6 @@ public class FlowImpl extends ActivityImpl implements Flow {
 			case FlowPackage.FLOW__ELEMENTS:
 				getElements().clear();
 				return;
-			case FlowPackage.FLOW__EXTENDS:
-				getExtends().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -224,14 +154,8 @@ public class FlowImpl extends ActivityImpl implements Flow {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				return !getElements().isEmpty();
-			case FlowPackage.FLOW__EXTENDS:
-				return !getExtends().isEmpty();
-			case FlowPackage.FLOW__EXTENSIONS:
-				return !getExtensions().isEmpty();
 			case FlowPackage.FLOW__ROOT:
 				return basicGetRoot() != null;
-			case FlowPackage.FLOW__ALL_ELEMENTS:
-				return !getAllElements().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -20,7 +20,7 @@ import org.nasdanika.flow.PseudoState;
  *
  * @generated
  */
-public class PseudoStateImpl extends FlowElementImpl implements PseudoState {
+public class PseudoStateImpl extends FlowElementImpl<PseudoState> implements PseudoState {
 	/**
 	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -20,7 +20,7 @@ package org.nasdanika.flow;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='abstract'"
  * @generated
  */
-public interface Service extends FlowElement {
+public interface Service extends FlowElement<Service> {
 	/**
 	 * Returns the value of the '<em><b>Target</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Activity#getServices <em>Services</em>}'.

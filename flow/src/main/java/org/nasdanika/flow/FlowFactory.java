@@ -64,7 +64,7 @@ public interface FlowFactory extends EFactory {
 	 * @return a new object of class '<em>Element</em>'.
 	 * @generated
 	 */
-	FlowElement createFlowElement();
+	<T extends FlowElement<T>> FlowElement<T> createFlowElement();
 
 	/**
 	 * Returns a new object of class '<em>Activity</em>'.
@@ -73,7 +73,7 @@ public interface FlowFactory extends EFactory {
 	 * @return a new object of class '<em>Activity</em>'.
 	 * @generated
 	 */
-	Activity createActivity();
+	<T extends Activity<T>> Activity<T> createActivity();
 
 	/**
 	 * Returns a new object of class '<em>Service</em>'.

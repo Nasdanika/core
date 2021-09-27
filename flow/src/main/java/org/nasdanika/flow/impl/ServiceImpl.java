@@ -24,7 +24,7 @@ import org.nasdanika.flow.Service;
  *
  * @generated
  */
-public class ServiceImpl extends FlowElementImpl implements Service {
+public class ServiceImpl extends FlowElementImpl<Service> implements Service {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

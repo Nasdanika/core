@@ -3,7 +3,6 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EMap;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,7 +20,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model
  * @generated
  */
-public interface Resource extends NamedElement {
+public interface Resource extends PackageElement<Resource> {
 
 	/**
 	 * Returns the value of the '<em><b>Services</b></em>' map.

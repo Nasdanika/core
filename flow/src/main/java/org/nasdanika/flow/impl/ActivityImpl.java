@@ -28,7 +28,7 @@ import org.nasdanika.flow.Service;
  *
  * @generated
  */
-public class ActivityImpl extends FlowElementImpl implements Activity {
+public class ActivityImpl<T extends Activity<T>> extends FlowElementImpl<T> implements Activity<T> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

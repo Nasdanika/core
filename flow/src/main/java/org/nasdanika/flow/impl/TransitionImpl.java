@@ -14,7 +14,6 @@ import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Transition;
-import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +30,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *
  * @generated
  */
-public class TransitionImpl extends NamedElementImpl implements Transition {
+public class TransitionImpl extends PackageElementImpl<Transition> implements Transition {
 	/**
 	 * The default value of the '{@link #isSuppress() <em>Suppress</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -69,6 +68,17 @@ public class TransitionImpl extends NamedElementImpl implements Transition {
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.TRANSITION;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setPrototype(Transition newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**
@@ -128,7 +138,7 @@ public class TransitionImpl extends NamedElementImpl implements Transition {
 	 * @generated
 	 */
 	@Override
-	public FlowElement getTarget(EList<Flow> journeyPath) {
+	public FlowElement<?> getTarget(EList<Flow> journeyPath) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();

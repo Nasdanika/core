@@ -61,14 +61,14 @@ public interface FlowPackage extends EPackage {
 	FlowPackage eINSTANCE = org.nasdanika.flow.impl.FlowPackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageElementImpl <em>Package Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.flow.impl.PackageImpl
-	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackage()
+	 * @see org.nasdanika.flow.impl.PackageElementImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackageElement()
 	 * @generated
 	 */
-	int PACKAGE = 0;
+	int PACKAGE_ELEMENT = 0;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -77,7 +77,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int PACKAGE_ELEMENT__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -86,7 +86,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int PACKAGE_ELEMENT__URI = NcorePackage.NAMED_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -95,7 +95,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int PACKAGE_ELEMENT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -104,7 +104,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int PACKAGE_ELEMENT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -113,16 +113,16 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int PACKAGE_ELEMENT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__EXTENDS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PACKAGE_ELEMENT__PROTOTYPE = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -131,7 +131,161 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__EXTENSIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int PACKAGE_ELEMENT__EXTENSIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT__EXTENDS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT__MODIFIERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Package Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT___CREATE = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Package Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.PackageImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackage()
+	 * @generated
+	 */
+	int PACKAGE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__MARKER = PACKAGE_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__URI = PACKAGE_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__UUID = PACKAGE_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__NAME = PACKAGE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Super Packages</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__SUPER_PACKAGES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Sub Packages</b></em>' map.
@@ -140,7 +294,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__SUB_PACKAGES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int PACKAGE__SUB_PACKAGES = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' map.
@@ -149,7 +303,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__PARTICIPANTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
+	int PACKAGE__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' map.
@@ -158,7 +312,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__RESOURCES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int PACKAGE__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Artifacts</b></em>' map.
@@ -167,7 +321,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__ARTIFACTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int PACKAGE__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Activities</b></em>' map.
@@ -176,7 +330,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__ACTIVITIES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int PACKAGE__ACTIVITIES = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Package</em>' class.
@@ -185,7 +339,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 7;
+	int PACKAGE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Package</em>' class.
@@ -194,7 +366,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int PACKAGE_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageEntryImpl <em>Package Entry</em>}' class.
@@ -204,7 +376,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackageEntry()
 	 * @generated
 	 */
-	int PACKAGE_ENTRY = 1;
+	int PACKAGE_ENTRY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -250,7 +422,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipant()
 	 * @generated
 	 */
-	int PARTICIPANT = 2;
+	int PARTICIPANT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -259,7 +431,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int PARTICIPANT__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -268,7 +440,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int PARTICIPANT__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -277,7 +449,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int PARTICIPANT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -286,7 +458,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int PARTICIPANT__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -295,16 +467,16 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int PARTICIPANT__NAME = PACKAGE_ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__EXTENDS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int PARTICIPANT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -313,7 +485,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__EXTENSIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int PARTICIPANT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -322,7 +512,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__SERVICES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int PARTICIPANT__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
@@ -331,7 +521,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
+	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -340,7 +548,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int PARTICIPANT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.
@@ -350,7 +558,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantEntry()
 	 * @generated
 	 */
-	int PARTICIPANT_ENTRY = 3;
+	int PARTICIPANT_ENTRY = 4;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -396,7 +604,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 4;
+	int RESOURCE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -405,7 +613,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int RESOURCE__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -414,7 +622,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int RESOURCE__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -423,7 +631,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int RESOURCE__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -432,7 +640,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int RESOURCE__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -441,7 +649,43 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int RESOURCE__NAME = PACKAGE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -450,7 +694,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__SERVICES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int RESOURCE__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -459,7 +703,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -468,7 +730,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int RESOURCE_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ResourceEntryImpl <em>Resource Entry</em>}' class.
@@ -478,7 +740,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResourceEntry()
 	 * @generated
 	 */
-	int RESOURCE_ENTRY = 5;
+	int RESOURCE_ENTRY = 6;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -524,7 +786,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifact()
 	 * @generated
 	 */
-	int ARTIFACT = 6;
+	int ARTIFACT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -533,7 +795,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int ARTIFACT__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -542,7 +804,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int ARTIFACT__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -551,7 +813,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int ARTIFACT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -560,7 +822,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int ARTIFACT__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -569,7 +831,43 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int ARTIFACT__NAME = PACKAGE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
@@ -578,7 +876,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__REPOSITORIES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int ARTIFACT__REPOSITORIES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
@@ -587,7 +885,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Artifact</em>' class.
@@ -596,7 +912,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int ARTIFACT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
@@ -606,7 +922,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactEntry()
 	 * @generated
 	 */
-	int ARTIFACT_ENTRY = 7;
+	int ARTIFACT_ENTRY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -652,7 +968,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElement()
 	 * @generated
 	 */
-	int FLOW_ELEMENT = 8;
+	int FLOW_ELEMENT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -661,7 +977,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int FLOW_ELEMENT__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -670,7 +986,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int FLOW_ELEMENT__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -679,7 +995,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int FLOW_ELEMENT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -688,7 +1004,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int FLOW_ELEMENT__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -697,70 +1013,34 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int FLOW_ELEMENT__NAME = PACKAGE_ELEMENT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int FLOW_ELEMENT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__CALLS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int FLOW_ELEMENT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT__DELIVERABLES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Participants</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT__PARTICIPANTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT__OVERRIDES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT__OVERRIDEN_BY = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int FLOW_ELEMENT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
 
 	/**
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
@@ -769,7 +1049,52 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__MODIFIERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 7;
+	int FLOW_ELEMENT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__OUTPUTS = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__CALLS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__DELIVERABLES = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Participants</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -778,7 +1103,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 8;
+	int FLOW_ELEMENT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -787,7 +1112,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 9;
+	int FLOW_ELEMENT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -796,7 +1139,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_INPUTS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int FLOW_ELEMENT___GET_INPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Invocations</em>' operation.
@@ -805,7 +1148,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_INVOCATIONS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 1;
+	int FLOW_ELEMENT___GET_INVOCATIONS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get All Inputs</em>' operation.
@@ -814,7 +1157,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_ALL_INPUTS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 2;
+	int FLOW_ELEMENT___GET_ALL_INPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get All Invocations</em>' operation.
@@ -823,7 +1166,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 3;
+	int FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get All Outputs</em>' operation.
@@ -832,7 +1175,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 4;
+	int FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get All Calls</em>' operation.
@@ -841,7 +1184,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___GET_ALL_CALLS__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 5;
+	int FLOW_ELEMENT___GET_ALL_CALLS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Overrides</em>' operation.
@@ -850,7 +1193,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___OVERRIDES__FLOWELEMENT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 6;
+	int FLOW_ELEMENT___OVERRIDES__FLOWELEMENT = PACKAGE_ELEMENT_OPERATION_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -859,7 +1202,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 7;
+	int FLOW_ELEMENT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityImpl <em>Activity</em>}' class.
@@ -869,7 +1212,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 9;
+	int ACTIVITY = 10;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -917,6 +1260,42 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__NAME = FLOW_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__EXTENDS = FLOW_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -962,33 +1341,6 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__OVERRIDES = FLOW_ELEMENT__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__OVERRIDEN_BY = FLOW_ELEMENT__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1014,6 +1366,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___CREATE = FLOW_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -1095,7 +1465,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivityEntry()
 	 * @generated
 	 */
-	int ACTIVITY_ENTRY = 10;
+	int ACTIVITY_ENTRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1141,7 +1511,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 11;
+	int SERVICE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1189,6 +1559,42 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__NAME = FLOW_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__EXTENDS = FLOW_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1234,33 +1640,6 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__OVERRIDES = FLOW_ELEMENT__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__OVERRIDEN_BY = FLOW_ELEMENT__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1286,6 +1665,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___CREATE = FLOW_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -1367,7 +1764,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransition()
 	 * @generated
 	 */
-	int TRANSITION = 12;
+	int TRANSITION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1376,7 +1773,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int TRANSITION__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1385,7 +1782,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int TRANSITION__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1394,7 +1791,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int TRANSITION__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1403,7 +1800,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int TRANSITION__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1412,7 +1809,43 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int TRANSITION__NAME = PACKAGE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
@@ -1421,7 +1854,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__PAYLOAD = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int TRANSITION__PAYLOAD = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
@@ -1430,7 +1863,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__SUPPRESS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int TRANSITION__SUPPRESS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' attribute.
@@ -1439,7 +1872,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__TARGET = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int TRANSITION__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Transition</em>' class.
@@ -1448,7 +1881,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
+	int TRANSITION_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Target</em>' operation.
@@ -1457,7 +1908,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION___GET_TARGET__ELIST = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int TRANSITION___GET_TARGET__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Transition</em>' class.
@@ -1466,7 +1917,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 1;
+	int TRANSITION_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.CallImpl <em>Call</em>}' class.
@@ -1476,7 +1927,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 13;
+	int CALL = 14;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1524,6 +1975,42 @@ public interface FlowPackage extends EPackage {
 	int CALL__NAME = TRANSITION__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__PROTOTYPE = TRANSITION__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__EXTENSIONS = TRANSITION__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__EXTENDS = TRANSITION__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__MODIFIERS = TRANSITION__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1569,6 +2056,24 @@ public interface FlowPackage extends EPackage {
 	int CALL_FEATURE_COUNT = TRANSITION_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL___CREATE = TRANSITION___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL___APPLY__PACKAGEELEMENT = TRANSITION___APPLY__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Target</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1594,7 +2099,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlow()
 	 * @generated
 	 */
-	int FLOW = 14;
+	int FLOW = 15;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1642,6 +2147,42 @@ public interface FlowPackage extends EPackage {
 	int FLOW__NAME = ACTIVITY__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__PROTOTYPE = ACTIVITY__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__EXTENSIONS = ACTIVITY__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__EXTENDS = ACTIVITY__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__MODIFIERS = ACTIVITY__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1687,33 +2228,6 @@ public interface FlowPackage extends EPackage {
 	int FLOW__PARTICIPANTS = ACTIVITY__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__OVERRIDES = ACTIVITY__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__OVERRIDEN_BY = ACTIVITY__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__MODIFIERS = ACTIVITY__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1741,40 +2255,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW__ELEMENTS = ACTIVITY_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extends</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__EXTENDS = ACTIVITY_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__EXTENSIONS = ACTIVITY_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Root</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW__ROOT = ACTIVITY_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>All Elements</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__ALL_ELEMENTS = ACTIVITY_FEATURE_COUNT + 4;
+	int FLOW__ROOT = ACTIVITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Flow</em>' class.
@@ -1783,7 +2270,25 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 5;
+	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW___CREATE = ACTIVITY___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW___APPLY__PACKAGEELEMENT = ACTIVITY___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -1865,7 +2370,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPseudoState()
 	 * @generated
 	 */
-	int PSEUDO_STATE = 15;
+	int PSEUDO_STATE = 16;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1913,6 +2418,42 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__NAME = FLOW_ELEMENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__EXTENDS = FLOW_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1958,33 +2499,6 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE__OVERRIDES = FLOW_ELEMENT__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE__OVERRIDEN_BY = FLOW_ELEMENT__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2010,6 +2524,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PSEUDO_STATE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE___CREATE = FLOW_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2091,7 +2623,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getChoice()
 	 * @generated
 	 */
-	int CHOICE = 16;
+	int CHOICE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2139,6 +2671,42 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2184,33 +2752,6 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2236,6 +2777,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2317,7 +2876,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 17;
+	int END = 18;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2365,6 +2924,42 @@ public interface FlowPackage extends EPackage {
 	int END__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2410,33 +3005,6 @@ public interface FlowPackage extends EPackage {
 	int END__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2462,6 +3030,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int END_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2543,7 +3129,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 18;
+	int ENTRY_POINT = 19;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2591,6 +3177,42 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2636,33 +3258,6 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2688,6 +3283,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2769,7 +3382,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExitPoint()
 	 * @generated
 	 */
-	int EXIT_POINT = 19;
+	int EXIT_POINT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2817,6 +3430,42 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2862,33 +3511,6 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2914,6 +3536,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXIT_POINT_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2995,7 +3635,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionInput()
 	 * @generated
 	 */
-	int EXPANSION_INPUT = 20;
+	int EXPANSION_INPUT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3043,6 +3683,42 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3088,33 +3764,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3140,6 +3789,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3221,7 +3888,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionOutput()
 	 * @generated
 	 */
-	int EXPANSION_OUTPUT = 21;
+	int EXPANSION_OUTPUT = 22;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3269,6 +3936,42 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3314,33 +4017,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3366,6 +4042,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_OUTPUT_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3447,7 +4141,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFork()
 	 * @generated
 	 */
-	int FORK = 22;
+	int FORK = 23;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3495,6 +4189,42 @@ public interface FlowPackage extends EPackage {
 	int FORK__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3540,33 +4270,6 @@ public interface FlowPackage extends EPackage {
 	int FORK__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3592,6 +4295,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3673,7 +4394,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getInputPin()
 	 * @generated
 	 */
-	int INPUT_PIN = 23;
+	int INPUT_PIN = 24;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3721,6 +4442,42 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3766,33 +4523,6 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3818,6 +4548,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PIN_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3899,7 +4647,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getJoin()
 	 * @generated
 	 */
-	int JOIN = 24;
+	int JOIN = 25;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3947,6 +4695,42 @@ public interface FlowPackage extends EPackage {
 	int JOIN__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3992,33 +4776,6 @@ public interface FlowPackage extends EPackage {
 	int JOIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4044,6 +4801,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -4125,7 +4900,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getOutputPin()
 	 * @generated
 	 */
-	int OUTPUT_PIN = 25;
+	int OUTPUT_PIN = 26;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4173,6 +4948,42 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4218,33 +5029,6 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4270,6 +5054,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PIN_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -4351,7 +5153,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 26;
+	int START = 27;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4399,6 +5201,42 @@ public interface FlowPackage extends EPackage {
 	int START__NAME = PSEUDO_STATE__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__PROTOTYPE = PSEUDO_STATE__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__EXTENSIONS = PSEUDO_STATE__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__EXTENDS = PSEUDO_STATE__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4444,33 +5282,6 @@ public interface FlowPackage extends EPackage {
 	int START__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Overrides</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START__OVERRIDES = PSEUDO_STATE__OVERRIDES;
-
-	/**
-	 * The feature id for the '<em><b>Overriden By</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START__OVERRIDEN_BY = PSEUDO_STATE__OVERRIDEN_BY;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START__MODIFIERS = PSEUDO_STATE__MODIFIERS;
-
-	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4496,6 +5307,24 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START_FEATURE_COUNT = PSEUDO_STATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START___CREATE = PSEUDO_STATE___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -4571,6 +5400,80 @@ public interface FlowPackage extends EPackage {
 
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.flow.PackageElement <em>Package Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Package Element</em>'.
+	 * @see org.nasdanika.flow.PackageElement
+	 * @generated
+	 */
+	EClass getPackageElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.flow.PackageElement#getPrototype <em>Prototype</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Prototype</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getPrototype()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Prototype();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.PackageElement#getExtensions <em>Extensions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Extensions</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getExtensions()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Extensions();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.PackageElement#getExtends <em>Extends</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Extends</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getExtends()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Extends();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.PackageElement#getModifiers <em>Modifiers</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Modifiers</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getModifiers()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EAttribute getPackageElement_Modifiers();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#create() <em>Create</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Create</em>' operation.
+	 * @see org.nasdanika.flow.PackageElement#create()
+	 * @generated
+	 */
+	EOperation getPackageElement__Create();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#apply(org.nasdanika.flow.PackageElement) <em>Apply</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Apply</em>' operation.
+	 * @see org.nasdanika.flow.PackageElement#apply(org.nasdanika.flow.PackageElement)
+	 * @generated
+	 */
+	EOperation getPackageElement__Apply__PackageElement();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Package <em>Package</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4581,26 +5484,15 @@ public interface FlowPackage extends EPackage {
 	EClass getPackage();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Package#getExtends <em>Extends</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Package#getSuperPackages <em>Super Packages</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extends</em>'.
-	 * @see org.nasdanika.flow.Package#getExtends()
+	 * @return the meta object for the reference list '<em>Super Packages</em>'.
+	 * @see org.nasdanika.flow.Package#getSuperPackages()
 	 * @see #getPackage()
 	 * @generated
 	 */
-	EReference getPackage_Extends();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Package#getExtensions <em>Extensions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extensions</em>'.
-	 * @see org.nasdanika.flow.Package#getExtensions()
-	 * @see #getPackage()
-	 * @generated
-	 */
-	EReference getPackage_Extensions();
+	EReference getPackage_SuperPackages();
 
 	/**
 	 * Returns the meta object for the map '{@link org.nasdanika.flow.Package#getSubPackages <em>Sub Packages</em>}'.
@@ -4701,28 +5593,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParticipant();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getExtends <em>Extends</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extends</em>'.
-	 * @see org.nasdanika.flow.Participant#getExtends()
-	 * @see #getParticipant()
-	 * @generated
-	 */
-	EReference getParticipant_Extends();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getExtensions <em>Extensions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extensions</em>'.
-	 * @see org.nasdanika.flow.Participant#getExtensions()
-	 * @see #getParticipant()
-	 * @generated
-	 */
-	EReference getParticipant_Extensions();
 
 	/**
 	 * Returns the meta object for the map '{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}'.
@@ -4946,39 +5816,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFlowElement_Participants();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.nasdanika.flow.FlowElement#getOverrides <em>Overrides</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Overrides</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getOverrides()
-	 * @see #getFlowElement()
-	 * @generated
-	 */
-	EReference getFlowElement_Overrides();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getOverridenBy <em>Overriden By</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Overriden By</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getOverridenBy()
-	 * @see #getFlowElement()
-	 * @generated
-	 */
-	EReference getFlowElement_OverridenBy();
-
-	/**
-	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getModifiers <em>Modifiers</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Modifiers</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getModifiers()
-	 * @see #getFlowElement()
-	 * @generated
-	 */
-	EAttribute getFlowElement_Modifiers();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}'.
@@ -5233,28 +6070,6 @@ public interface FlowPackage extends EPackage {
 	EReference getFlow_Elements();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Flow#getExtends <em>Extends</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extends</em>'.
-	 * @see org.nasdanika.flow.Flow#getExtends()
-	 * @see #getFlow()
-	 * @generated
-	 */
-	EReference getFlow_Extends();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Flow#getExtensions <em>Extensions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extensions</em>'.
-	 * @see org.nasdanika.flow.Flow#getExtensions()
-	 * @see #getFlow()
-	 * @generated
-	 */
-	EReference getFlow_Extensions();
-
-	/**
 	 * Returns the meta object for the reference '{@link org.nasdanika.flow.Flow#getRoot <em>Root</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5264,17 +6079,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFlow_Root();
-
-	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Flow#getAllElements <em>All Elements</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>All Elements</em>'.
-	 * @see org.nasdanika.flow.Flow#getAllElements()
-	 * @see #getFlow()
-	 * @generated
-	 */
-	EReference getFlow_AllElements();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.PseudoState <em>Pseudo State</em>}'.
@@ -5431,6 +6235,64 @@ public interface FlowPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PackageElementImpl <em>Package Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.PackageElementImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackageElement()
+		 * @generated
+		 */
+		EClass PACKAGE_ELEMENT = eINSTANCE.getPackageElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Prototype</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__PROTOTYPE = eINSTANCE.getPackageElement_Prototype();
+
+		/**
+		 * The meta object literal for the '<em><b>Extensions</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__EXTENSIONS = eINSTANCE.getPackageElement_Extensions();
+
+		/**
+		 * The meta object literal for the '<em><b>Extends</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__EXTENDS = eINSTANCE.getPackageElement_Extends();
+
+		/**
+		 * The meta object literal for the '<em><b>Modifiers</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PACKAGE_ELEMENT__MODIFIERS = eINSTANCE.getPackageElement_Modifiers();
+
+		/**
+		 * The meta object literal for the '<em><b>Create</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PACKAGE_ELEMENT___CREATE = eINSTANCE.getPackageElement__Create();
+
+		/**
+		 * The meta object literal for the '<em><b>Apply</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT = eINSTANCE.getPackageElement__Apply__PackageElement();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5441,20 +6303,12 @@ public interface FlowPackage extends EPackage {
 		EClass PACKAGE = eINSTANCE.getPackage();
 
 		/**
-		 * The meta object literal for the '<em><b>Extends</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Super Packages</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference PACKAGE__EXTENDS = eINSTANCE.getPackage_Extends();
-
-		/**
-		 * The meta object literal for the '<em><b>Extensions</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PACKAGE__EXTENSIONS = eINSTANCE.getPackage_Extensions();
+		EReference PACKAGE__SUPER_PACKAGES = eINSTANCE.getPackage_SuperPackages();
 
 		/**
 		 * The meta object literal for the '<em><b>Sub Packages</b></em>' map feature.
@@ -5531,22 +6385,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARTICIPANT = eINSTANCE.getParticipant();
-
-		/**
-		 * The meta object literal for the '<em><b>Extends</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARTICIPANT__EXTENDS = eINSTANCE.getParticipant_Extends();
-
-		/**
-		 * The meta object literal for the '<em><b>Extensions</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARTICIPANT__EXTENSIONS = eINSTANCE.getParticipant_Extensions();
 
 		/**
 		 * The meta object literal for the '<em><b>Services</b></em>' map feature.
@@ -5719,30 +6557,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLOW_ELEMENT__PARTICIPANTS = eINSTANCE.getFlowElement_Participants();
-
-		/**
-		 * The meta object literal for the '<em><b>Overrides</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW_ELEMENT__OVERRIDES = eINSTANCE.getFlowElement_Overrides();
-
-		/**
-		 * The meta object literal for the '<em><b>Overriden By</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW_ELEMENT__OVERRIDEN_BY = eINSTANCE.getFlowElement_OverridenBy();
-
-		/**
-		 * The meta object literal for the '<em><b>Modifiers</b></em>' attribute list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute FLOW_ELEMENT__MODIFIERS = eINSTANCE.getFlowElement_Modifiers();
 
 		/**
 		 * The meta object literal for the '<em><b>Resources</b></em>' reference list feature.
@@ -5949,36 +6763,12 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW__ELEMENTS = eINSTANCE.getFlow_Elements();
 
 		/**
-		 * The meta object literal for the '<em><b>Extends</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW__EXTENDS = eINSTANCE.getFlow_Extends();
-
-		/**
-		 * The meta object literal for the '<em><b>Extensions</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW__EXTENSIONS = eINSTANCE.getFlow_Extensions();
-
-		/**
 		 * The meta object literal for the '<em><b>Root</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference FLOW__ROOT = eINSTANCE.getFlow_Root();
-
-		/**
-		 * The meta object literal for the '<em><b>All Elements</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW__ALL_ELEMENTS = eINSTANCE.getFlow_AllElements();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PseudoStateImpl <em>Pseudo State</em>}' class.

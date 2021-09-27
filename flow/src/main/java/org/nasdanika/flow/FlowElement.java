@@ -3,7 +3,6 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,9 +18,6 @@ import org.nasdanika.ncore.NamedElement;
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getDeliverables <em>Deliverables</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getParticipants <em>Participants</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getOverrides <em>Overrides</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getOverridenBy <em>Overriden By</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}</li>
  * </ul>
  *
@@ -30,7 +26,7 @@ import org.nasdanika.ncore.NamedElement;
  *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='final override suppress suppressAndOverride'"
  * @generated
  */
-public interface FlowElement extends NamedElement {
+public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T> {
 	/**
 	 * Returns the value of the '<em><b>Outputs</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Transition}.
@@ -107,65 +103,6 @@ public interface FlowElement extends NamedElement {
 	 * @generated
 	 */
 	EList<Participant> getParticipants();
-
-	/**
-	 * Returns the value of the '<em><b>Overrides</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getOverridenBy <em>Overriden By</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A journey element which is overriden by this element. 
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Overrides</em>' reference.
-	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Overrides()
-	 * @see org.nasdanika.flow.FlowElement#getOverridenBy
-	 * @model opposite="overridenBy" changeable="false" derived="true"
-	 * @generated
-	 */
-	FlowElement getOverrides();
-
-	/**
-	 * Returns the value of the '<em><b>Overriden By</b></em>' reference list.
-	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getOverrides <em>Overrides</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Elements of the extension journeys which override this element.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Overriden By</em>' reference list.
-	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_OverridenBy()
-	 * @see org.nasdanika.flow.FlowElement#getOverrides
-	 * @model opposite="overrides" changeable="false" derived="true"
-	 * @generated
-	 */
-	EList<FlowElement> getOverridenBy();
-
-	/**
-	 * Returns the value of the '<em><b>Modifiers</b></em>' attribute list.
-	 * The list contents are of type {@link java.lang.String}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * A collection of boolean flags:
-	 * 
-	 * * ``abstract`` - Specifies that this journey element is abstract. For journeys it means that they contain abstract elements and must be extended to become concrete. If a journey contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete journeys extend abstract journeys they must override (implement) all abstract elements.
-	 * * ``explicit-end`` - Applies to [journeys](Journey.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding journey elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.
-	 * * ``explicit-start`` - Applies to journeys. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding journey elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.
-	 * * ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.
-	 * * ``optional`` - Specifies that this journey element is optional. Optional elements have different apperance on diagrams.
-	 * * ``override`` - Specifies that this journey element overrides an element in one of extended journeys. If this modifier is present and overrides reference is null, then it results in a diagnostic error.
-	 * * ``partition`` - Applies to journeys and specifies that the journey shall be rendered as a partition on a digarm.
-	 * * ``suppress`` - Specifies that this element supprresses its overriden element, i.e. removes it from the list of journey elements.
-	 * * ``vertical`` - Specifies that journey element direction top-down instead of the default left-to-right.
-	 * 
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Modifiers</em>' attribute list.
-	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Modifiers()
-	 * @model
-	 * @generated
-	 */
-	EList<String> getModifiers();
 
 	/**
 	 * Returns the value of the '<em><b>Resources</b></em>' reference list.
@@ -260,6 +197,6 @@ public interface FlowElement extends NamedElement {
 	 * @model
 	 * @generated
 	 */
-	boolean overrides(FlowElement journeyElement);
+	boolean overrides(FlowElement<?> journeyElement);
 
 } // FlowElement

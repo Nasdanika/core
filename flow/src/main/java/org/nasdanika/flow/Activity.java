@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EList;
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/activity.md'"
  * @generated
  */
-public interface Activity extends FlowElement {
+public interface Activity<T extends Activity<T>> extends FlowElement<T> {
 	/**
 	 * Returns the value of the '<em><b>Services</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Service}.

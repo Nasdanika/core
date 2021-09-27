@@ -22,7 +22,6 @@ import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
-import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -37,15 +36,12 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getDeliverables <em>Deliverables</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipants <em>Participants</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOverrides <em>Overrides</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOverridenBy <em>Overriden By</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FlowElementImpl extends NamedElementImpl implements FlowElement {
+public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImpl<T> implements FlowElement<T> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -63,6 +59,17 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.FLOW_ELEMENT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setPrototype(T newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**
@@ -118,57 +125,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 	@Override
 	public EList<Participant> getParticipants() {
 		return (EList<Participant>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANTS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public FlowElement getOverrides() {
-		return (FlowElement)eDynamicGet(FlowPackage.FLOW_ELEMENT__OVERRIDES, FlowPackage.Literals.FLOW_ELEMENT__OVERRIDES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FlowElement basicGetOverrides() {
-		return (FlowElement)eDynamicGet(FlowPackage.FLOW_ELEMENT__OVERRIDES, FlowPackage.Literals.FLOW_ELEMENT__OVERRIDES, false, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetOverrides(FlowElement newOverrides, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newOverrides, FlowPackage.FLOW_ELEMENT__OVERRIDES, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<FlowElement> getOverridenBy() {
-		return (EList<FlowElement>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY, FlowPackage.Literals.FLOW_ELEMENT__OVERRIDEN_BY, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<String> getModifiers() {
-		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__MODIFIERS, FlowPackage.Literals.FLOW_ELEMENT__MODIFIERS, true, true);
 	}
 
 	/**
@@ -260,30 +216,10 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 	 * @generated
 	 */
 	@Override
-	public boolean overrides(FlowElement journeyElement) {
+	public boolean overrides(FlowElement<?> journeyElement) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FlowPackage.FLOW_ELEMENT__OVERRIDES:
-				FlowElement overrides = basicGetOverrides();
-				if (overrides != null)
-					msgs = ((InternalEObject)overrides).eInverseRemove(this, FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY, FlowElement.class, msgs);
-				return basicSetOverrides((FlowElement)otherEnd, msgs);
-			case FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOverridenBy()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -298,10 +234,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 				return ((InternalEList<?>)getOutputs()).basicRemove(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return ((InternalEList<?>)getCalls()).basicRemove(otherEnd, msgs);
-			case FlowPackage.FLOW_ELEMENT__OVERRIDES:
-				return basicSetOverrides(null, msgs);
-			case FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY:
-				return ((InternalEList<?>)getOverridenBy()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -324,13 +256,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 				return getDeliverables();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return getParticipants();
-			case FlowPackage.FLOW_ELEMENT__OVERRIDES:
-				if (resolve) return getOverrides();
-				return basicGetOverrides();
-			case FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY:
-				return getOverridenBy();
-			case FlowPackage.FLOW_ELEMENT__MODIFIERS:
-				return getModifiers();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return getResources();
 		}
@@ -366,10 +291,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 				getParticipants().clear();
 				getParticipants().addAll((Collection<? extends Participant>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__MODIFIERS:
-				getModifiers().clear();
-				getModifiers().addAll((Collection<? extends String>)newValue);
-				return;
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				getResources().clear();
 				getResources().addAll((Collection<? extends Resource>)newValue);
@@ -401,9 +322,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				getParticipants().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__MODIFIERS:
-				getModifiers().clear();
-				return;
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				getResources().clear();
 				return;
@@ -429,12 +347,6 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 				return !getDeliverables().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return !getParticipants().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__OVERRIDES:
-				return basicGetOverrides() != null;
-			case FlowPackage.FLOW_ELEMENT__OVERRIDEN_BY:
-				return !getOverridenBy().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__MODIFIERS:
-				return !getModifiers().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return !getResources().isEmpty();
 		}
@@ -463,7 +375,7 @@ public class FlowElementImpl extends NamedElementImpl implements FlowElement {
 			case FlowPackage.FLOW_ELEMENT___GET_ALL_CALLS__ELIST:
 				return getAllCalls((EList<Flow>)arguments.get(0));
 			case FlowPackage.FLOW_ELEMENT___OVERRIDES__FLOWELEMENT:
-				return overrides((FlowElement)arguments.get(0));
+				return overrides((FlowElement<?>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

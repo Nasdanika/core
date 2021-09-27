@@ -4,26 +4,70 @@
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/package-summary.md"/>
   </eAnnotations>
-  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="PackageElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/package-element.md"/>
+    </eAnnotations>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//PackageElement">
+        <eTypeArguments eTypeParameter="#//PackageElement/T"/>
+      </eBounds>
+    </eTypeParameters>
+    <eOperations name="create">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Creates a new package element of the same type as this element with ``prototype`` reference to this package element.&#xA;This method also creates contained elements.&#xA;"/>
+      </eAnnotations>
+      <eGenericType eTypeParameter="#//PackageElement/T"/>
+    </eOperations>
+    <eOperations name="apply">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Applies configuration of this element, including inherited configuration, to the argument. &#xA;"/>
+      </eAnnotations>
+      <eParameters name="packageElement">
+        <eGenericType eTypeParameter="#//PackageElement/T"/>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prototype">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This reference is set by ``create()`` method and points to a package element which created and configured this element."/>
+      </eAnnotations>
+      <eGenericType eTypeParameter="#//PackageElement/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
+        changeable="false" derived="true" eOpposite="#//PackageElement/extends">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived reference - known elements extending this element.&#xA;Known means elements in the same resource set."/>
+      </eAnnotations>
+      <eGenericType eTypeParameter="#//PackageElement/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
+        changeable="false" derived="true" eOpposite="#//PackageElement/extensions">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Elements can  extend other elements and inherit their configuration - set attributes and references. &#xA;For top-level packages inheritance shall be explicitly set using ``superPackages`` reference.&#xA;For nested packages and other package elements ``extends`` is derived from containing packages.&#xA;For nested packages super-packages derived from containment precede explicitly specified super-packages, &#xA;i.e. the explicitly specified super-packages (mix-ins) can override configuration inherited via containment.&#xA;"/>
+      </eAnnotations>
+      <eGenericType eTypeParameter="#//PackageElement/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A collection of boolean flags:&#xA;&#xA;* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.&#xA;* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.&#xA;* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.&#xA;* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.&#xA;* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.&#xA;* ``override`` - Specifies that this element overrides (extends) an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.&#xA;* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/package.md"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
-        eType="#//Package" eOpposite="#//Package/extensions">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superPackages" upperBound="-1"
+        eType="#//Package">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Package can  extend other packages and inherit their elements. &#xA;Package own elements overide inherited elements with the same keys. &#xA;To suppress an inheriIted element define an element with the same key and ``null`` value.&#xA;&#xA;Multiple inheritance allows to have &quot;mix-in&quot; packages. &#xA;For example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows &#xA;and then specializing at the lower levels of the organization, say to specific tools. &#xA;Then there can be a technology tree, for example different cloud platforms. &#xA;A set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        eType="#//Package" changeable="false" derived="true" eOpposite="#//Package/extends">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Derived reference - known packages extending this package. Known means packages in the same resource set."/>
+        <details key="documentation" value="Package can extend other packages and inherit their elements. &#xA;This reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.&#xA;For top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.&#xA;&#xA;Package own elements overide inherited elements with the same keys. &#xA;To suppress an inheriIted element define an element with the same key and ``null`` value.&#xA;&#xA;Multiple inheritance allows to have &quot;mix-in&quot; packages. &#xA;For example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows &#xA;and then specializing at the lower levels of the organization, say to specific tools. &#xA;Then there can be a technology tree, for example different cloud platforms. &#xA;A set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.&#xA;&#xA;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subPackages" upperBound="-1"
         eType="#//PackageEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Nested packages."/>
+        <details key="documentation" value="Packages contained in this package."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
@@ -50,6 +94,9 @@
         <details key="documentation" value="Activities and flows."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Package"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PackageEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -70,28 +117,19 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Participant" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Participant">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/participant.md"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
-        eType="#//Participant" eOpposite="#//Participant/extensions">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="777 Derived"/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        eType="#//Participant" changeable="false" derived="true" eOpposite="#//Participant/extends">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Journeys extending this journey."/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
         eType="#//ActivityEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Services provided by a participant. Participant service activities imply the containing participant. "/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Participant"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParticipantEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -112,13 +150,16 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Resource">
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
         eType="#//ActivityEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Services provided by a resource. Resource service activities imply the containing resource. "/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Resource"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ResourceEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -139,9 +180,12 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Artifact" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
         eType="#//Resource"/>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Artifact"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArtifactEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -162,13 +206,18 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FlowElement" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="FlowElement">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/journey-element.md"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="final override suppress suppressAndOverride"/>
     </eAnnotations>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//FlowElement">
+        <eTypeArguments eTypeParameter="#//FlowElement/T"/>
+      </eBounds>
+    </eTypeParameters>
     <eOperations name="getInputs" upperBound="-1" eType="#//Transition">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Transitions which have this journey element as its target in a given journey path. "/>
@@ -233,7 +282,11 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Returns ``true`` if this journey element directly or transitively overrided the argument journey element."/>
       </eAnnotations>
-      <eParameters name="journeyElement" eType="#//FlowElement"/>
+      <eParameters name="journeyElement">
+        <eGenericType eClassifier="#//FlowElement">
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
         eType="#//Transition" containment="true">
@@ -273,37 +326,30 @@
         <details key="documentation" value="Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="overrides" eType="#//FlowElement"
-        changeable="false" derived="true" eOpposite="#//FlowElement/overridenBy">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="A journey element which is overriden by this element. "/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="overridenBy" upperBound="-1"
-        eType="#//FlowElement" changeable="false" derived="true" eOpposite="#//FlowElement/overrides.1">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Elements of the extension journeys which override this element."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" upperBound="-1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="A collection of boolean flags:&#xA;&#xA;* ``abstract`` - Specifies that this journey element is abstract. For journeys it means that they contain abstract elements and must be extended to become concrete. If a journey contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete journeys extend abstract journeys they must override (implement) all abstract elements.&#xA;* ``explicit-end`` - Applies to [journeys](Journey.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding journey elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.&#xA;* ``explicit-start`` - Applies to journeys. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding journey elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.&#xA;* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.&#xA;* ``optional`` - Specifies that this journey element is optional. Optional elements have different apperance on diagrams.&#xA;* ``override`` - Specifies that this journey element overrides an element in one of extended journeys. If this modifier is present and overrides reference is null, then it results in a diagnostic error.&#xA;* ``partition`` - Applies to journeys and specifies that the journey shall be rendered as a partition on a digarm.&#xA;* ``suppress`` - Specifies that this element supprresses its overriden element, i.e. removes it from the list of journey elements.&#xA;* ``vertical`` - Specifies that journey element direction top-down instead of the default left-to-right.&#xA;"/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
         eType="#//Resource"/>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eTypeParameter="#//FlowElement/T"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//FlowElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Activity">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/activity.md"/>
     </eAnnotations>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//Activity">
+        <eTypeArguments eTypeParameter="#//Activity/T"/>
+      </eBounds>
+    </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
         eType="#//Service" changeable="false" derived="true" eOpposite="#//Service/target">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived opposite to Service target."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//FlowElement">
+      <eTypeArguments eTypeParameter="#//Activity/T"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ActivityEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -321,7 +367,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//FlowElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/service.md"/>
     </eAnnotations>
@@ -334,15 +380,21 @@
         <details key="documentation" value="Target activity of the service."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//FlowElement">
+      <eTypeArguments eClassifier="#//Service"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/transition.md"/>
     </eAnnotations>
-    <eOperations name="getTarget" eType="#//FlowElement">
+    <eOperations name="getTarget">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Resolves transition's target journey element for a given journey."/>
       </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
       <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
         <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
           <details key="documentation" value="Journey nesting path to resolve target element for. May be different from the containment path in the case of nested journeys of extended journeys."/>
@@ -369,6 +421,9 @@
         <details key="documentation" value="Relative path to the target [journey element](JourneyElement.html). May contain ``..`` to navigate to the parent [journey](Journey.html) - i.e. the journey which contains the journey containing the element which contains this transition. May contain ``/`` to navigate to nested journeys. Treated as URI if contains ``:``."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Transition"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Call" eSuperTypes="#//Transition">
     <eAnnotations source="urn:org.nasdanika">
@@ -381,7 +436,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Flow" eSuperTypes="#//Activity">
+  <eClassifiers xsi:type="ecore:EClass" name="Flow">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/journey.md"/>
     </eAnnotations>
@@ -389,22 +444,13 @@
       <details key="constraints" value="final abstract elements"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        eType="#//FlowElement" containment="true">
+        containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Elements of this journey."/>
       </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
-        eType="#//Flow" eOpposite="#//Flow/extensions">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Journey can  extend another journey and inherit its elements. Inherited elements can be overriden or suppressed."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        eType="#//Flow" changeable="false" derived="true" eOpposite="#//Flow/extends">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Journeys extending this journey."/>
-      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="#//Flow" changeable="false"
         derived="true">
@@ -412,14 +458,11 @@
         <details key="documentation" value="Root of this journey inheritance hierarchy."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="allElements" upperBound="-1"
-        eType="#//FlowElement" changeable="false" derived="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Own and inherited elements."/>
-      </eAnnotations>
-    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//Activity">
+      <eTypeArguments eClassifier="#//Flow"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PseudoState" eSuperTypes="#//FlowElement">
+  <eClassifiers xsi:type="ecore:EClass" name="PseudoState">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/pseudo-state.md"/>
     </eAnnotations>
@@ -429,6 +472,9 @@
         <details key="documentation" value="Pseudo-state type provided by concrete sub-classes."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//FlowElement">
+      <eTypeArguments eClassifier="#//PseudoState"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">

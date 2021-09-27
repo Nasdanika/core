@@ -26,6 +26,7 @@ import org.nasdanika.flow.Fork;
 import org.nasdanika.flow.InputPin;
 import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
@@ -94,6 +95,10 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	protected FlowSwitch<Adapter> modelSwitch =
 		new FlowSwitch<Adapter>() {
 			@Override
+			public <T extends PackageElement<T>> Adapter casePackageElement(PackageElement<T> object) {
+				return createPackageElementAdapter();
+			}
+			@Override
 			public Adapter casePackage(org.nasdanika.flow.Package object) {
 				return createPackageAdapter();
 			}
@@ -126,11 +131,11 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 				return createArtifactEntryAdapter();
 			}
 			@Override
-			public Adapter caseFlowElement(FlowElement object) {
+			public <T extends FlowElement<T>> Adapter caseFlowElement(FlowElement<T> object) {
 				return createFlowElementAdapter();
 			}
 			@Override
-			public Adapter caseActivity(Activity object) {
+			public <T extends Activity<T>> Adapter caseActivity(Activity<T> object) {
 				return createActivityAdapter();
 			}
 			@Override
@@ -232,6 +237,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.PackageElement <em>Package Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.flow.PackageElement
+	 * @generated
+	 */
+	public Adapter createPackageElementAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Package <em>Package</em>}'.

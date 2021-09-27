@@ -12,8 +12,6 @@ import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Resource;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Artifact</b></em>'.
@@ -27,7 +25,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *
  * @generated
  */
-public class ArtifactImpl extends NamedElementImpl implements Artifact {
+public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifact {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -45,6 +43,17 @@ public class ArtifactImpl extends NamedElementImpl implements Artifact {
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.ARTIFACT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setPrototype(Artifact newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**

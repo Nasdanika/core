@@ -4,8 +4,6 @@ package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.nasdanika.ncore.NamedElement;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Artifact</b></em>'.
@@ -22,7 +20,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model
  * @generated
  */
-public interface Artifact extends NamedElement {
+public interface Artifact extends PackageElement<Artifact> {
 	/**
 	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.

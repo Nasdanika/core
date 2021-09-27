@@ -19,7 +19,7 @@ package org.nasdanika.flow;
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/pseudo-state.md'"
  * @generated
  */
-public interface PseudoState extends FlowElement {
+public interface PseudoState extends FlowElement<PseudoState> {
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->

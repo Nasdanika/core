@@ -2,12 +2,7 @@
  */
 package org.nasdanika.flow.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -19,8 +14,6 @@ import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Participant</b></em>'.
@@ -29,14 +22,12 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getExtends <em>Extends</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getServices <em>Services</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ParticipantImpl extends NamedElementImpl implements Participant {
+public class ParticipantImpl extends PackageElementImpl<Participant> implements Participant {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -59,23 +50,12 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Participant> getExtends() {
-		return (EList<Participant>)eDynamicGet(FlowPackage.PARTICIPANT__EXTENDS, FlowPackage.Literals.PARTICIPANT__EXTENDS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<Participant> getExtensions() {
-		return (EList<Participant>)eDynamicGet(FlowPackage.PARTICIPANT__EXTENSIONS, FlowPackage.Literals.PARTICIPANT__EXTENSIONS, true, true);
+	public void setPrototype(Participant newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**
@@ -94,30 +74,9 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtends()).basicAdd(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__EXTENSIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtensions()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__EXTENSIONS:
-				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__SERVICES:
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 		}
@@ -132,10 +91,6 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				return getExtends();
-			case FlowPackage.PARTICIPANT__EXTENSIONS:
-				return getExtensions();
 			case FlowPackage.PARTICIPANT__SERVICES:
 				if (coreType) return getServices();
 				else return getServices().map();
@@ -152,10 +107,6 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				getExtends().clear();
-				getExtends().addAll((Collection<? extends Participant>)newValue);
-				return;
 			case FlowPackage.PARTICIPANT__SERVICES:
 				((EStructuralFeature.Setting)getServices()).set(newValue);
 				return;
@@ -171,9 +122,6 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				getExtends().clear();
-				return;
 			case FlowPackage.PARTICIPANT__SERVICES:
 				getServices().clear();
 				return;
@@ -189,10 +137,6 @@ public class ParticipantImpl extends NamedElementImpl implements Participant {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FlowPackage.PARTICIPANT__EXTENDS:
-				return !getExtends().isEmpty();
-			case FlowPackage.PARTICIPANT__EXTENSIONS:
-				return !getExtensions().isEmpty();
 			case FlowPackage.PARTICIPANT__SERVICES:
 				return !getServices().isEmpty();
 		}

@@ -201,8 +201,8 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * @generated
 	 */
 	@Override
-	public FlowElement createFlowElement() {
-		FlowElementImpl flowElement = new FlowElementImpl();
+	public <T extends FlowElement<T>> FlowElement<T> createFlowElement() {
+		FlowElementImpl<T> flowElement = new FlowElementImpl<T>();
 		return flowElement;
 	}
 
@@ -212,8 +212,8 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * @generated
 	 */
 	@Override
-	public Activity createActivity() {
-		ActivityImpl activity = new ActivityImpl();
+	public <T extends Activity<T>> Activity<T> createActivity() {
+		ActivityImpl<T> activity = new ActivityImpl<T>();
 		return activity;
 	}
 

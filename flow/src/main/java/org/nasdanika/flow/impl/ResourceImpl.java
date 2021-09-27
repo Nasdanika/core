@@ -13,8 +13,6 @@ import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Resource;
 
-import org.nasdanika.ncore.impl.NamedElementImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Resource</b></em>'.
@@ -28,7 +26,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *
  * @generated
  */
-public class ResourceImpl extends NamedElementImpl implements Resource {
+public class ResourceImpl extends PackageElementImpl<Resource> implements Resource {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -46,6 +44,17 @@ public class ResourceImpl extends NamedElementImpl implements Resource {
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.RESOURCE;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
+	 * @generated
+	 */
+	@Override
+	public void setPrototype(Resource newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**

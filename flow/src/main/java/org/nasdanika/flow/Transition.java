@@ -3,7 +3,6 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,7 +22,7 @@ import org.nasdanika.ncore.NamedElement;
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/transition.md'"
  * @generated
  */
-public interface Transition extends NamedElement {
+public interface Transition extends PackageElement<Transition> {
 	/**
 	 * Returns the value of the '<em><b>Payload</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
@@ -100,6 +99,6 @@ public interface Transition extends NamedElement {
 	 * @model journeyPathRequired="true" journeyPathMany="true"
 	 * @generated
 	 */
-	FlowElement getTarget(EList<Flow> journeyPath);
+	FlowElement<?> getTarget(EList<Flow> journeyPath);
 
 } // Transition

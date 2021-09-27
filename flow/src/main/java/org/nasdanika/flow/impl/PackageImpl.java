@@ -5,7 +5,7 @@ package org.nasdanika.flow.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.common.util.EMap;
@@ -18,10 +18,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
-
+import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
-import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,8 +30,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getExtends <em>Extends</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getSuperPackages <em>Super Packages</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getSubPackages <em>Sub Packages</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getParticipants <em>Participants</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageImpl#getResources <em>Resources</em>}</li>
@@ -42,7 +40,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *
  * @generated
  */
-public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.Package {
+public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> implements org.nasdanika.flow.Package {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,22 +63,30 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * This is specialized for the more specific type known in this context.
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public EList<org.nasdanika.flow.Package> getExtends() {
-		return (EList<org.nasdanika.flow.Package>)eDynamicGet(FlowPackage.PACKAGE__EXTENDS, FlowPackage.Literals.PACKAGE__EXTENDS, true, true);
+	public void setPrototype(org.nasdanika.flow.Package newPrototype) {
+		super.setPrototype(newPrototype);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public EList<org.nasdanika.flow.Package> getExtensions() {
-		return getReferrers(FlowPackage.Literals.PACKAGE__EXTENDS);
+	public EList<org.nasdanika.flow.Package> getSuperPackages() {
+		return (EList<org.nasdanika.flow.Package>)eDynamicGet(FlowPackage.PACKAGE__SUPER_PACKAGES, FlowPackage.Literals.PACKAGE__SUPER_PACKAGES, true, true);
+	}
+	
+	@Override
+	public EList<Package> getExtends() {
+		EList<Package> ret = ECollections.newBasicEList(super.getExtends());
+		ret.addAll(getSuperPackages());
+		return ret;
 	}
 
 	/**
@@ -143,30 +149,9 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtends()).basicAdd(otherEnd, msgs);
-			case FlowPackage.PACKAGE__EXTENSIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getExtensions()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
-			case FlowPackage.PACKAGE__EXTENSIONS:
-				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				return ((InternalEList<?>)getSubPackages()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE__PARTICIPANTS:
@@ -189,10 +174,8 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				return getExtends();
-			case FlowPackage.PACKAGE__EXTENSIONS:
-				return getExtensions();
+			case FlowPackage.PACKAGE__SUPER_PACKAGES:
+				return getSuperPackages();
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				if (coreType) return getSubPackages();
 				else return getSubPackages().map();
@@ -221,9 +204,9 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				getExtends().clear();
-				getExtends().addAll((Collection<? extends org.nasdanika.flow.Package>)newValue);
+			case FlowPackage.PACKAGE__SUPER_PACKAGES:
+				getSuperPackages().clear();
+				getSuperPackages().addAll((Collection<? extends org.nasdanika.flow.Package>)newValue);
 				return;
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				((EStructuralFeature.Setting)getSubPackages()).set(newValue);
@@ -252,8 +235,8 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				getExtends().clear();
+			case FlowPackage.PACKAGE__SUPER_PACKAGES:
+				getSuperPackages().clear();
 				return;
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				getSubPackages().clear();
@@ -282,10 +265,8 @@ public class PackageImpl extends NamedElementImpl implements org.nasdanika.flow.
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FlowPackage.PACKAGE__EXTENDS:
-				return !getExtends().isEmpty();
-			case FlowPackage.PACKAGE__EXTENSIONS:
-				return !getExtensions().isEmpty();
+			case FlowPackage.PACKAGE__SUPER_PACKAGES:
+				return !getSuperPackages().isEmpty();
 			case FlowPackage.PACKAGE__SUB_PACKAGES:
 				return !getSubPackages().isEmpty();
 			case FlowPackage.PACKAGE__PARTICIPANTS:

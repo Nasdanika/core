@@ -24,6 +24,7 @@ import org.nasdanika.flow.Fork;
 import org.nasdanika.flow.InputPin;
 import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
@@ -48,7 +49,7 @@ import org.nasdanika.ncore.NamedElement;
  * @see org.nasdanika.flow.FlowPackage
  * @generated
  */
-public class FlowSwitch<T> extends Switch<T> {
+public class FlowSwitch<T1> extends Switch<T1> {
 	/**
 	 * The cached model package
 	 * <!-- begin-user-doc -->
@@ -90,11 +91,21 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	protected T doSwitch(int classifierID, EObject theEObject) {
+	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case FlowPackage.PACKAGE_ELEMENT: {
+				PackageElement<?> packageElement = (PackageElement<?>)theEObject;
+				T1 result = casePackageElement(packageElement);
+				if (result == null) result = caseNamedElement(packageElement);
+				if (result == null) result = caseModelElement(packageElement);
+				if (result == null) result = caseMarked(packageElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FlowPackage.PACKAGE: {
 				org.nasdanika.flow.Package package_ = (org.nasdanika.flow.Package)theEObject;
-				T result = casePackage(package_);
+				T1 result = casePackage(package_);
+				if (result == null) result = casePackageElement(package_);
 				if (result == null) result = caseNamedElement(package_);
 				if (result == null) result = caseModelElement(package_);
 				if (result == null) result = caseMarked(package_);
@@ -103,13 +114,14 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.PACKAGE_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<String, org.nasdanika.flow.Package> packageEntry = (Map.Entry<String, org.nasdanika.flow.Package>)theEObject;
-				T result = casePackageEntry(packageEntry);
+				T1 result = casePackageEntry(packageEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FlowPackage.PARTICIPANT: {
 				Participant participant = (Participant)theEObject;
-				T result = caseParticipant(participant);
+				T1 result = caseParticipant(participant);
+				if (result == null) result = casePackageElement(participant);
 				if (result == null) result = caseNamedElement(participant);
 				if (result == null) result = caseModelElement(participant);
 				if (result == null) result = caseMarked(participant);
@@ -118,13 +130,14 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.PARTICIPANT_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<String, Participant> participantEntry = (Map.Entry<String, Participant>)theEObject;
-				T result = caseParticipantEntry(participantEntry);
+				T1 result = caseParticipantEntry(participantEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FlowPackage.RESOURCE: {
 				Resource resource = (Resource)theEObject;
-				T result = caseResource(resource);
+				T1 result = caseResource(resource);
+				if (result == null) result = casePackageElement(resource);
 				if (result == null) result = caseNamedElement(resource);
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = caseMarked(resource);
@@ -133,13 +146,14 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.RESOURCE_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<String, Resource> resourceEntry = (Map.Entry<String, Resource>)theEObject;
-				T result = caseResourceEntry(resourceEntry);
+				T1 result = caseResourceEntry(resourceEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FlowPackage.ARTIFACT: {
 				Artifact artifact = (Artifact)theEObject;
-				T result = caseArtifact(artifact);
+				T1 result = caseArtifact(artifact);
+				if (result == null) result = casePackageElement(artifact);
 				if (result == null) result = caseNamedElement(artifact);
 				if (result == null) result = caseModelElement(artifact);
 				if (result == null) result = caseMarked(artifact);
@@ -148,13 +162,14 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.ARTIFACT_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<String, Artifact> artifactEntry = (Map.Entry<String, Artifact>)theEObject;
-				T result = caseArtifactEntry(artifactEntry);
+				T1 result = caseArtifactEntry(artifactEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FlowPackage.FLOW_ELEMENT: {
-				FlowElement flowElement = (FlowElement)theEObject;
-				T result = caseFlowElement(flowElement);
+				FlowElement<?> flowElement = (FlowElement<?>)theEObject;
+				T1 result = caseFlowElement(flowElement);
+				if (result == null) result = casePackageElement(flowElement);
 				if (result == null) result = caseNamedElement(flowElement);
 				if (result == null) result = caseModelElement(flowElement);
 				if (result == null) result = caseMarked(flowElement);
@@ -162,9 +177,10 @@ public class FlowSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case FlowPackage.ACTIVITY: {
-				Activity activity = (Activity)theEObject;
-				T result = caseActivity(activity);
+				Activity<?> activity = (Activity<?>)theEObject;
+				T1 result = caseActivity(activity);
 				if (result == null) result = caseFlowElement(activity);
+				if (result == null) result = casePackageElement(activity);
 				if (result == null) result = caseNamedElement(activity);
 				if (result == null) result = caseModelElement(activity);
 				if (result == null) result = caseMarked(activity);
@@ -173,14 +189,15 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.ACTIVITY_ENTRY: {
 				@SuppressWarnings("unchecked") Map.Entry<String, Activity> activityEntry = (Map.Entry<String, Activity>)theEObject;
-				T result = caseActivityEntry(activityEntry);
+				T1 result = caseActivityEntry(activityEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case FlowPackage.SERVICE: {
 				Service service = (Service)theEObject;
-				T result = caseService(service);
+				T1 result = caseService(service);
 				if (result == null) result = caseFlowElement(service);
+				if (result == null) result = casePackageElement(service);
 				if (result == null) result = caseNamedElement(service);
 				if (result == null) result = caseModelElement(service);
 				if (result == null) result = caseMarked(service);
@@ -189,7 +206,8 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.TRANSITION: {
 				Transition transition = (Transition)theEObject;
-				T result = caseTransition(transition);
+				T1 result = caseTransition(transition);
+				if (result == null) result = casePackageElement(transition);
 				if (result == null) result = caseNamedElement(transition);
 				if (result == null) result = caseModelElement(transition);
 				if (result == null) result = caseMarked(transition);
@@ -198,8 +216,9 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.CALL: {
 				Call call = (Call)theEObject;
-				T result = caseCall(call);
+				T1 result = caseCall(call);
 				if (result == null) result = caseTransition(call);
+				if (result == null) result = casePackageElement(call);
 				if (result == null) result = caseNamedElement(call);
 				if (result == null) result = caseModelElement(call);
 				if (result == null) result = caseMarked(call);
@@ -208,9 +227,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.FLOW: {
 				Flow flow = (Flow)theEObject;
-				T result = caseFlow(flow);
+				T1 result = caseFlow(flow);
 				if (result == null) result = caseActivity(flow);
 				if (result == null) result = caseFlowElement(flow);
+				if (result == null) result = casePackageElement(flow);
 				if (result == null) result = caseNamedElement(flow);
 				if (result == null) result = caseModelElement(flow);
 				if (result == null) result = caseMarked(flow);
@@ -219,8 +239,9 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.PSEUDO_STATE: {
 				PseudoState pseudoState = (PseudoState)theEObject;
-				T result = casePseudoState(pseudoState);
+				T1 result = casePseudoState(pseudoState);
 				if (result == null) result = caseFlowElement(pseudoState);
+				if (result == null) result = casePackageElement(pseudoState);
 				if (result == null) result = caseNamedElement(pseudoState);
 				if (result == null) result = caseModelElement(pseudoState);
 				if (result == null) result = caseMarked(pseudoState);
@@ -229,9 +250,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.CHOICE: {
 				Choice choice = (Choice)theEObject;
-				T result = caseChoice(choice);
+				T1 result = caseChoice(choice);
 				if (result == null) result = casePseudoState(choice);
 				if (result == null) result = caseFlowElement(choice);
+				if (result == null) result = casePackageElement(choice);
 				if (result == null) result = caseNamedElement(choice);
 				if (result == null) result = caseModelElement(choice);
 				if (result == null) result = caseMarked(choice);
@@ -240,9 +262,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.END: {
 				End end = (End)theEObject;
-				T result = caseEnd(end);
+				T1 result = caseEnd(end);
 				if (result == null) result = casePseudoState(end);
 				if (result == null) result = caseFlowElement(end);
+				if (result == null) result = casePackageElement(end);
 				if (result == null) result = caseNamedElement(end);
 				if (result == null) result = caseModelElement(end);
 				if (result == null) result = caseMarked(end);
@@ -251,9 +274,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.ENTRY_POINT: {
 				EntryPoint entryPoint = (EntryPoint)theEObject;
-				T result = caseEntryPoint(entryPoint);
+				T1 result = caseEntryPoint(entryPoint);
 				if (result == null) result = casePseudoState(entryPoint);
 				if (result == null) result = caseFlowElement(entryPoint);
+				if (result == null) result = casePackageElement(entryPoint);
 				if (result == null) result = caseNamedElement(entryPoint);
 				if (result == null) result = caseModelElement(entryPoint);
 				if (result == null) result = caseMarked(entryPoint);
@@ -262,9 +286,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.EXIT_POINT: {
 				ExitPoint exitPoint = (ExitPoint)theEObject;
-				T result = caseExitPoint(exitPoint);
+				T1 result = caseExitPoint(exitPoint);
 				if (result == null) result = casePseudoState(exitPoint);
 				if (result == null) result = caseFlowElement(exitPoint);
+				if (result == null) result = casePackageElement(exitPoint);
 				if (result == null) result = caseNamedElement(exitPoint);
 				if (result == null) result = caseModelElement(exitPoint);
 				if (result == null) result = caseMarked(exitPoint);
@@ -273,9 +298,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.EXPANSION_INPUT: {
 				ExpansionInput expansionInput = (ExpansionInput)theEObject;
-				T result = caseExpansionInput(expansionInput);
+				T1 result = caseExpansionInput(expansionInput);
 				if (result == null) result = casePseudoState(expansionInput);
 				if (result == null) result = caseFlowElement(expansionInput);
+				if (result == null) result = casePackageElement(expansionInput);
 				if (result == null) result = caseNamedElement(expansionInput);
 				if (result == null) result = caseModelElement(expansionInput);
 				if (result == null) result = caseMarked(expansionInput);
@@ -284,9 +310,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.EXPANSION_OUTPUT: {
 				ExpansionOutput expansionOutput = (ExpansionOutput)theEObject;
-				T result = caseExpansionOutput(expansionOutput);
+				T1 result = caseExpansionOutput(expansionOutput);
 				if (result == null) result = casePseudoState(expansionOutput);
 				if (result == null) result = caseFlowElement(expansionOutput);
+				if (result == null) result = casePackageElement(expansionOutput);
 				if (result == null) result = caseNamedElement(expansionOutput);
 				if (result == null) result = caseModelElement(expansionOutput);
 				if (result == null) result = caseMarked(expansionOutput);
@@ -295,9 +322,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.FORK: {
 				Fork fork = (Fork)theEObject;
-				T result = caseFork(fork);
+				T1 result = caseFork(fork);
 				if (result == null) result = casePseudoState(fork);
 				if (result == null) result = caseFlowElement(fork);
+				if (result == null) result = casePackageElement(fork);
 				if (result == null) result = caseNamedElement(fork);
 				if (result == null) result = caseModelElement(fork);
 				if (result == null) result = caseMarked(fork);
@@ -306,9 +334,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.INPUT_PIN: {
 				InputPin inputPin = (InputPin)theEObject;
-				T result = caseInputPin(inputPin);
+				T1 result = caseInputPin(inputPin);
 				if (result == null) result = casePseudoState(inputPin);
 				if (result == null) result = caseFlowElement(inputPin);
+				if (result == null) result = casePackageElement(inputPin);
 				if (result == null) result = caseNamedElement(inputPin);
 				if (result == null) result = caseModelElement(inputPin);
 				if (result == null) result = caseMarked(inputPin);
@@ -317,9 +346,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.JOIN: {
 				Join join = (Join)theEObject;
-				T result = caseJoin(join);
+				T1 result = caseJoin(join);
 				if (result == null) result = casePseudoState(join);
 				if (result == null) result = caseFlowElement(join);
+				if (result == null) result = casePackageElement(join);
 				if (result == null) result = caseNamedElement(join);
 				if (result == null) result = caseModelElement(join);
 				if (result == null) result = caseMarked(join);
@@ -328,9 +358,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.OUTPUT_PIN: {
 				OutputPin outputPin = (OutputPin)theEObject;
-				T result = caseOutputPin(outputPin);
+				T1 result = caseOutputPin(outputPin);
 				if (result == null) result = casePseudoState(outputPin);
 				if (result == null) result = caseFlowElement(outputPin);
+				if (result == null) result = casePackageElement(outputPin);
 				if (result == null) result = caseNamedElement(outputPin);
 				if (result == null) result = caseModelElement(outputPin);
 				if (result == null) result = caseMarked(outputPin);
@@ -339,9 +370,10 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			case FlowPackage.START: {
 				Start start = (Start)theEObject;
-				T result = caseStart(start);
+				T1 result = caseStart(start);
 				if (result == null) result = casePseudoState(start);
 				if (result == null) result = caseFlowElement(start);
+				if (result == null) result = casePackageElement(start);
 				if (result == null) result = caseNamedElement(start);
 				if (result == null) result = caseModelElement(start);
 				if (result == null) result = caseMarked(start);
@@ -350,6 +382,21 @@ public class FlowSwitch<T> extends Switch<T> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Package Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Package Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T extends PackageElement<T>> T1 casePackageElement(PackageElement<T> object) {
+		return null;
 	}
 
 	/**
@@ -363,7 +410,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePackage(org.nasdanika.flow.Package object) {
+	public T1 casePackage(org.nasdanika.flow.Package object) {
 		return null;
 	}
 
@@ -378,7 +425,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePackageEntry(Map.Entry<String, org.nasdanika.flow.Package> object) {
+	public T1 casePackageEntry(Map.Entry<String, org.nasdanika.flow.Package> object) {
 		return null;
 	}
 
@@ -393,7 +440,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseParticipant(Participant object) {
+	public T1 caseParticipant(Participant object) {
 		return null;
 	}
 
@@ -408,7 +455,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseParticipantEntry(Map.Entry<String, Participant> object) {
+	public T1 caseParticipantEntry(Map.Entry<String, Participant> object) {
 		return null;
 	}
 
@@ -423,7 +470,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResource(Resource object) {
+	public T1 caseResource(Resource object) {
 		return null;
 	}
 
@@ -438,7 +485,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResourceEntry(Map.Entry<String, Resource> object) {
+	public T1 caseResourceEntry(Map.Entry<String, Resource> object) {
 		return null;
 	}
 
@@ -453,7 +500,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseArtifact(Artifact object) {
+	public T1 caseArtifact(Artifact object) {
 		return null;
 	}
 
@@ -468,7 +515,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseArtifactEntry(Map.Entry<String, Artifact> object) {
+	public T1 caseArtifactEntry(Map.Entry<String, Artifact> object) {
 		return null;
 	}
 
@@ -483,7 +530,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFlowElement(FlowElement object) {
+	public <T extends FlowElement<T>> T1 caseFlowElement(FlowElement<T> object) {
 		return null;
 	}
 
@@ -498,7 +545,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseActivity(Activity object) {
+	public <T extends Activity<T>> T1 caseActivity(Activity<T> object) {
 		return null;
 	}
 
@@ -513,7 +560,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseActivityEntry(Map.Entry<String, Activity> object) {
+	public T1 caseActivityEntry(Map.Entry<String, Activity> object) {
 		return null;
 	}
 
@@ -528,7 +575,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseService(Service object) {
+	public T1 caseService(Service object) {
 		return null;
 	}
 
@@ -543,7 +590,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTransition(Transition object) {
+	public T1 caseTransition(Transition object) {
 		return null;
 	}
 
@@ -558,7 +605,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCall(Call object) {
+	public T1 caseCall(Call object) {
 		return null;
 	}
 
@@ -573,7 +620,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFlow(Flow object) {
+	public T1 caseFlow(Flow object) {
 		return null;
 	}
 
@@ -588,7 +635,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePseudoState(PseudoState object) {
+	public T1 casePseudoState(PseudoState object) {
 		return null;
 	}
 
@@ -603,7 +650,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseChoice(Choice object) {
+	public T1 caseChoice(Choice object) {
 		return null;
 	}
 
@@ -618,7 +665,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEnd(End object) {
+	public T1 caseEnd(End object) {
 		return null;
 	}
 
@@ -633,7 +680,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseEntryPoint(EntryPoint object) {
+	public T1 caseEntryPoint(EntryPoint object) {
 		return null;
 	}
 
@@ -648,7 +695,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExitPoint(ExitPoint object) {
+	public T1 caseExitPoint(ExitPoint object) {
 		return null;
 	}
 
@@ -663,7 +710,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExpansionInput(ExpansionInput object) {
+	public T1 caseExpansionInput(ExpansionInput object) {
 		return null;
 	}
 
@@ -678,7 +725,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseExpansionOutput(ExpansionOutput object) {
+	public T1 caseExpansionOutput(ExpansionOutput object) {
 		return null;
 	}
 
@@ -693,7 +740,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFork(Fork object) {
+	public T1 caseFork(Fork object) {
 		return null;
 	}
 
@@ -708,7 +755,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseInputPin(InputPin object) {
+	public T1 caseInputPin(InputPin object) {
 		return null;
 	}
 
@@ -723,7 +770,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseJoin(Join object) {
+	public T1 caseJoin(Join object) {
 		return null;
 	}
 
@@ -738,7 +785,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseOutputPin(OutputPin object) {
+	public T1 caseOutputPin(OutputPin object) {
 		return null;
 	}
 
@@ -753,7 +800,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseStart(Start object) {
+	public T1 caseStart(Start object) {
 		return null;
 	}
 
@@ -768,7 +815,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseMarked(Marked object) {
+	public T1 caseMarked(Marked object) {
 		return null;
 	}
 
@@ -783,7 +830,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseModelElement(ModelElement object) {
+	public T1 caseModelElement(ModelElement object) {
 		return null;
 	}
 
@@ -798,7 +845,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNamedElement(NamedElement object) {
+	public T1 caseNamedElement(NamedElement object) {
 		return null;
 	}
 
@@ -814,7 +861,7 @@ public class FlowSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	@Override
-	public T defaultCase(EObject object) {
+	public T1 defaultCase(EObject object) {
 		return null;
 	}
 

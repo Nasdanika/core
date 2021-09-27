@@ -5,7 +5,6 @@ package org.nasdanika.flow;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.common.util.EMap;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,8 +15,7 @@ import org.nasdanika.ncore.NamedElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.flow.Package#getExtends <em>Extends</em>}</li>
- *   <li>{@link org.nasdanika.flow.Package#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Package#getSuperPackages <em>Super Packages</em>}</li>
  *   <li>{@link org.nasdanika.flow.Package#getSubPackages <em>Sub Packages</em>}</li>
  *   <li>{@link org.nasdanika.flow.Package#getParticipants <em>Participants</em>}</li>
  *   <li>{@link org.nasdanika.flow.Package#getResources <em>Resources</em>}</li>
@@ -26,43 +24,37 @@ import org.nasdanika.ncore.NamedElement;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getPackage()
- * @model
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/package.md'"
  * @generated
  */
-public interface Package extends NamedElement {
+public interface Package extends PackageElement<Package> {
 	/**
-	 * Returns the value of the '<em><b>Extends</b></em>' reference list.
+	 * Returns the value of the '<em><b>Super Packages</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Package}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Package#getExtensions <em>Extensions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Journey can  extend another journey and inherit its elements. Inherited elements can be overriden or suppressed.
+	 * Package can extend other packages and inherit their elements. 
+	 * This reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.
+	 * For top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.
+	 * 
+	 * Package own elements overide inherited elements with the same keys. 
+	 * To suppress an inheriIted element define an element with the same key and ``null`` value.
+	 * 
+	 * Multiple inheritance allows to have "mix-in" packages. 
+	 * For example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows 
+	 * and then specializing at the lower levels of the organization, say to specific tools. 
+	 * Then there can be a technology tree, for example different cloud platforms. 
+	 * A set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.
+	 * 
+	 * 
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Extends</em>' reference list.
-	 * @see org.nasdanika.flow.FlowPackage#getPackage_Extends()
-	 * @see org.nasdanika.flow.Package#getExtensions
-	 * @model opposite="extensions"
+	 * @return the value of the '<em>Super Packages</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getPackage_SuperPackages()
+	 * @model
 	 * @generated
 	 */
-	EList<Package> getExtends();
-
-	/**
-	 * Returns the value of the '<em><b>Extensions</b></em>' reference list.
-	 * The list contents are of type {@link org.nasdanika.flow.Package}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Package#getExtends <em>Extends</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Journeys extending this journey.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Extensions</em>' reference list.
-	 * @see org.nasdanika.flow.FlowPackage#getPackage_Extensions()
-	 * @see org.nasdanika.flow.Package#getExtends
-	 * @model opposite="extends" changeable="false" derived="true"
-	 * @generated
-	 */
-	EList<Package> getExtensions();
+	EList<Package> getSuperPackages();
 
 	/**
 	 * Returns the value of the '<em><b>Sub Packages</b></em>' map.
@@ -71,7 +63,7 @@ public interface Package extends NamedElement {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Nested packages.
+	 * Packages contained in this package.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Sub Packages</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getPackage_SubPackages()

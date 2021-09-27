@@ -29,6 +29,7 @@ import org.nasdanika.flow.Fork;
 import org.nasdanika.flow.InputPin;
 import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
@@ -108,6 +109,8 @@ public class FlowValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
+			case FlowPackage.PACKAGE_ELEMENT:
+				return validatePackageElement((PackageElement<?>)value, diagnostics, context);
 			case FlowPackage.PACKAGE:
 				return validatePackage((org.nasdanika.flow.Package)value, diagnostics, context);
 			case FlowPackage.PACKAGE_ENTRY:
@@ -125,9 +128,9 @@ public class FlowValidator extends EObjectValidator {
 			case FlowPackage.ARTIFACT_ENTRY:
 				return validateArtifactEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.FLOW_ELEMENT:
-				return validateFlowElement((FlowElement)value, diagnostics, context);
+				return validateFlowElement((FlowElement<?>)value, diagnostics, context);
 			case FlowPackage.ACTIVITY:
-				return validateActivity((Activity)value, diagnostics, context);
+				return validateActivity((Activity<?>)value, diagnostics, context);
 			case FlowPackage.ACTIVITY_ENTRY:
 				return validateActivityEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.SERVICE:
@@ -165,6 +168,15 @@ public class FlowValidator extends EObjectValidator {
 			default:
 				return true;
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validatePackageElement(PackageElement<?> packageElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(packageElement, diagnostics, context);
 	}
 
 	/**
@@ -244,7 +256,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement(FlowElement flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFlowElement(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(flowElement, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(flowElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(flowElement, diagnostics, context);
@@ -267,7 +279,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement_final(FlowElement flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFlowElement_final(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		// TODO implement the constraint
 		// -> specify the condition that violates the constraint
 		// -> verify the diagnostic details, including severity, code, and message
@@ -295,7 +307,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement_override(FlowElement flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFlowElement_override(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		// TODO implement the constraint
 		// -> specify the condition that violates the constraint
 		// -> verify the diagnostic details, including severity, code, and message
@@ -323,7 +335,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement_suppress(FlowElement flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFlowElement_suppress(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		// TODO implement the constraint
 		// -> specify the condition that violates the constraint
 		// -> verify the diagnostic details, including severity, code, and message
@@ -351,7 +363,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement_suppressAndOverride(FlowElement flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateFlowElement_suppressAndOverride(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		// TODO implement the constraint
 		// -> specify the condition that violates the constraint
 		// -> verify the diagnostic details, including severity, code, and message
@@ -378,7 +390,7 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateActivity(Activity activity, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateActivity(Activity<?> activity, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(activity, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(activity, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(activity, diagnostics, context);
