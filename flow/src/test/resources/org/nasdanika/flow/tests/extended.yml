@@ -4,3 +4,4 @@ flow-package:
   sub-packages:
     common: 
       name: Extended common definitions
+    to-suppress: null

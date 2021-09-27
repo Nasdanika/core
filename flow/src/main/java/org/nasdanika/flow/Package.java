@@ -51,7 +51,7 @@ public interface Package extends PackageElement<Package> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Super Packages</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getPackage_SuperPackages()
-	 * @model
+	 * @model annotation="urn:org.nasdanika load-key='extends'"
 	 * @generated
 	 */
 	EList<Package> getSuperPackages();

@@ -119,7 +119,7 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Creates a new package element of the same type as this element with ``prototype`` reference to this package element.
-	 * This method also creates contained elements.
+	 * For top-level packages this method also calls ``apply()`` and then ``resolve()``.
 	 * 
 	 * <!-- end-model-doc -->
 	 * @model
@@ -132,11 +132,24 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Applies configuration of this element, including inherited configuration, to the argument. 
+	 * This method shall be called after ``create()`` and shall create contained elements.
+	 * Cross-reference resolution shall be done in ``resolve()`` which is called after ``apply()`` and as such contained elements are already created.
 	 * 
 	 * <!-- end-model-doc -->
 	 * @model
 	 * @generated
 	 */
 	void apply(T packageElement);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resolves cross-references.
+	 * <!-- end-model-doc -->
+	 * @model
+	 * @generated
+	 */
+	void resolve(T packageElement);
 
 } // PackageElement

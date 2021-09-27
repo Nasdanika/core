@@ -179,13 +179,22 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Package Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 2;
+	int PACKAGE_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.
@@ -358,6 +367,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PACKAGE___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Package</em>' class.
@@ -542,6 +560,15 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The number of operations of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -724,6 +751,15 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The number of operations of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -904,6 +940,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARTIFACT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Artifact</em>' class.
@@ -1131,6 +1176,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW_ELEMENT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -1384,6 +1438,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -1685,6 +1748,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1902,6 +1974,15 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Target</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2072,6 +2153,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL___APPLY__PACKAGEELEMENT = TRANSITION___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL___RESOLVE__PACKAGEELEMENT = TRANSITION___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Target</em>' operation.
@@ -2289,6 +2379,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW___APPLY__PACKAGEELEMENT = ACTIVITY___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW___RESOLVE__PACKAGEELEMENT = ACTIVITY___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -2544,6 +2643,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2795,6 +2903,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3050,6 +3167,15 @@ public interface FlowPackage extends EPackage {
 	int END___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3301,6 +3427,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -3556,6 +3691,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3807,6 +3951,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -4062,6 +4215,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4313,6 +4475,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -4568,6 +4739,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4819,6 +4999,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
@@ -5074,6 +5263,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5327,6 +5525,15 @@ public interface FlowPackage extends EPackage {
 	int START___APPLY__PACKAGEELEMENT = PSEUDO_STATE___APPLY__PACKAGEELEMENT;
 
 	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
+
+	/**
 	 * The operation id for the '<em>Get Inputs</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5472,6 +5679,16 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getPackageElement__Apply__PackageElement();
+
+	/**
+	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#resolve(org.nasdanika.flow.PackageElement) <em>Resolve</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Resolve</em>' operation.
+	 * @see org.nasdanika.flow.PackageElement#resolve(org.nasdanika.flow.PackageElement)
+	 * @generated
+	 */
+	EOperation getPackageElement__Resolve__PackageElement();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Package <em>Package</em>}'.
@@ -6291,6 +6508,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT = eINSTANCE.getPackageElement__Apply__PackageElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Resolve</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT = eINSTANCE.getPackageElement__Resolve__PackageElement();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.

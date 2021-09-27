@@ -18,6 +18,9 @@
       <genOperations ecoreOperation="flow.ecore#//PackageElement/apply">
         <genParameters ecoreParameter="flow.ecore#//PackageElement/apply/packageElement"/>
       </genOperations>
+      <genOperations ecoreOperation="flow.ecore#//PackageElement/resolve">
+        <genParameters ecoreParameter="flow.ecore#//PackageElement/resolve/packageElement"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Package">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Package/superPackages"/>

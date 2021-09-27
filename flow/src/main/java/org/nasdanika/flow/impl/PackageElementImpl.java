@@ -121,7 +121,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	@SuppressWarnings("unchecked")
 	@Override
 	public T create() {
-		T ret = (T) EcoreUtil.copy(this);
+		T ret = (T) EcoreUtil.create(eClass());
 		ret.setPrototype((T) this);
 		return ret;
 	}
@@ -132,21 +132,29 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	 * @generated NOT
 	 */
 	@Override
-	public void apply(T packageElement) {
-		
+	public void apply(T instance) {		
 		// Calls apply for all bases.
 		for (T base: getExtends()) {
-			base.apply(packageElement);
+			base.apply(instance);
 		}
 		
 		// Setting inherited attributes if they are not set yet.
 		for (EAttribute attr: eClass().getEAllAttributes()) {
 			if (attr.isChangeable() && eIsSet(attr)) {
 				Object attrValue = eGet(attr);
-				packageElement.eSet(attr, attrValue);
+				instance.eSet(attr, attrValue);
 			}
 		}
-		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public void resolve(T packageElement) {
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -274,6 +282,9 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return create();
 			case FlowPackage.PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT:
 				apply((T)arguments.get(0));
+				return null;
+			case FlowPackage.PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT:
+				resolve((T)arguments.get(0));
 				return null;
 		}
 		return super.eInvoke(operationID, arguments);

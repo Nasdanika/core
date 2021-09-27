@@ -3,6 +3,8 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -82,9 +84,21 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 		return (EList<org.nasdanika.flow.Package>)eDynamicGet(FlowPackage.PACKAGE__SUPER_PACKAGES, FlowPackage.Literals.PACKAGE__SUPER_PACKAGES, true, true);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Package> getExtends() {
-		EList<Package> ret = ECollections.newBasicEList(super.getExtends());
+		EList<Package> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.PACKAGE_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			Package container = (Package) eContainer().eContainer();
+			for (Package cExtends: container.getExtends()) {
+				Package ext = cExtends.getSubPackages().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
+		}
+		
 		ret.addAll(getSuperPackages());
 		return ret;
 	}
@@ -279,6 +293,42 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 				return !getActivities().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	@Override
+	public Package create() {
+		Package ret = super.create();
+		if (eContainmentFeature() != FlowPackage.Literals.PACKAGE_ENTRY__VALUE) {
+			apply(ret);
+			resolve(ret);
+		}
+		return ret;
+	}
+	
+	@Override
+	public void apply(Package instance) {
+		super.apply(instance);
+		
+		// --- Creating contained elements ---
+		
+		// Sub-packages
+		for (Entry<String, Package> pe: getSubPackages().entrySet()) {
+			Package sp = pe.getValue();
+			EMap<String, Package> instanceSubPackages = instance.getSubPackages();
+			String spKey = pe.getKey();
+			if (sp == null) {
+				instanceSubPackages.removeKey(spKey);
+			} else {
+				Package spi = sp.create();
+				instanceSubPackages.put(spKey, spi);
+				sp.apply(spi);
+			}
+		}
+	}
+	
+	@Override
+	public void resolve(Package instance) {
+		// NOP
 	}
 
 } //PackageImpl

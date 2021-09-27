@@ -396,6 +396,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EOperation getPackageElement__Resolve__PackageElement() {
+		return packageElementEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getPackage() {
 		return packageEClass;
 	}
@@ -1116,6 +1126,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEAttribute(packageElementEClass, PACKAGE_ELEMENT__MODIFIERS);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___CREATE);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT);
+		createEOperation(packageElementEClass, PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT);
 
 		packageEClass = createEClass(PACKAGE);
 		createEReference(packageEClass, PACKAGE__SUPER_PACKAGES);
@@ -1332,6 +1343,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g1 = createEGenericType(packageElementEClass_T);
 		addEParameter(op, g1, "packageElement", 0, 1, IS_UNIQUE, IS_ORDERED);
 
+		op = initEOperation(getPackageElement__Resolve__PackageElement(), null, "resolve", 0, 1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(packageElementEClass_T);
+		addEParameter(op, g1, "packageElement", 0, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(packageEClass, org.nasdanika.flow.Package.class, "Package", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPackage_SuperPackages(), this.getPackage(), null, "superPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackage_SubPackages(), this.getPackageEntry(), null, "subPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1491,6 +1506,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/package.md"
+		   });
+		addAnnotation
+		  (getPackage_SuperPackages(),
+		   source,
+		   new String[] {
+			   "load-key", "extends"
 		   });
 		addAnnotation
 		  (getPackageEntry_Value(),
@@ -1664,13 +1685,19 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getPackageElement__Create(),
 		   source,
 		   new String[] {
-			   "documentation", "Creates a new package element of the same type as this element with ``prototype`` reference to this package element.\nThis method also creates contained elements.\n"
+			   "documentation", "Creates a new package element of the same type as this element with ``prototype`` reference to this package element.\nFor top-level packages this method also calls ``apply()`` and then ``resolve()``.\n"
 		   });
 		addAnnotation
 		  (getPackageElement__Apply__PackageElement(),
 		   source,
 		   new String[] {
-			   "documentation", "Applies configuration of this element, including inherited configuration, to the argument. \n"
+			   "documentation", "Applies configuration of this element, including inherited configuration, to the argument. \nThis method shall be called after ``create()`` and shall create contained elements.\nCross-reference resolution shall be done in ``resolve()`` which is called after ``apply()`` and as such contained elements are already created.\n"
+		   });
+		addAnnotation
+		  (getPackageElement__Resolve__PackageElement(),
+		   source,
+		   new String[] {
+			   "documentation", "Resolves cross-references."
 		   });
 		addAnnotation
 		  (getPackageElement_Prototype(),

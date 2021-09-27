@@ -15,15 +15,23 @@
     </eTypeParameters>
     <eOperations name="create">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Creates a new package element of the same type as this element with ``prototype`` reference to this package element.&#xA;This method also creates contained elements.&#xA;"/>
+        <details key="documentation" value="Creates a new package element of the same type as this element with ``prototype`` reference to this package element.&#xA;For top-level packages this method also calls ``apply()`` and then ``resolve()``.&#xA;"/>
       </eAnnotations>
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eOperations>
     <eOperations name="apply">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Applies configuration of this element, including inherited configuration, to the argument. &#xA;"/>
+        <details key="documentation" value="Applies configuration of this element, including inherited configuration, to the argument. &#xA;This method shall be called after ``create()`` and shall create contained elements.&#xA;Cross-reference resolution shall be done in ``resolve()`` which is called after ``apply()`` and as such contained elements are already created.&#xA;"/>
       </eAnnotations>
-      <eParameters name="packageElement">
+      <eParameters name="instance">
+        <eGenericType eTypeParameter="#//PackageElement/T"/>
+      </eParameters>
+    </eOperations>
+    <eOperations name="resolve">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resolves cross-references."/>
+      </eAnnotations>
+      <eParameters name="instance">
         <eGenericType eTypeParameter="#//PackageElement/T"/>
       </eParameters>
     </eOperations>
@@ -62,6 +70,9 @@
         eType="#//Package">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Package can extend other packages and inherit their elements. &#xA;This reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.&#xA;For top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.&#xA;&#xA;Package own elements overide inherited elements with the same keys. &#xA;To suppress an inheriIted element define an element with the same key and ``null`` value.&#xA;&#xA;Multiple inheritance allows to have &quot;mix-in&quot; packages. &#xA;For example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows &#xA;and then specializing at the lower levels of the organization, say to specific tools. &#xA;Then there can be a technology tree, for example different cloud platforms. &#xA;A set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.&#xA;&#xA;"/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="extends"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subPackages" upperBound="-1"
