@@ -16,10 +16,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PackageElement/modifiers"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/create"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/apply">
-        <genParameters ecoreParameter="flow.ecore#//PackageElement/apply/packageElement"/>
+        <genParameters ecoreParameter="flow.ecore#//PackageElement/apply/instance"/>
       </genOperations>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/resolve">
-        <genParameters ecoreParameter="flow.ecore#//PackageElement/resolve/packageElement"/>
+        <genParameters ecoreParameter="flow.ecore#//PackageElement/resolve/instance"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Package">

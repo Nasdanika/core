@@ -371,11 +371,13 @@
         <details key="documentation" value="Activity key."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Activity"
-        containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Activity or flow. Use ``null`` to suppress inherited sub-package."/>
       </eAnnotations>
+      <eGenericType eClassifier="#//Activity">
+        <eTypeArguments/>
+      </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service">
@@ -462,12 +464,6 @@
       <eGenericType eClassifier="#//FlowElement">
         <eTypeArguments/>
       </eGenericType>
-    </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="#//Flow" changeable="false"
-        derived="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Root of this journey inheritance hierarchy."/>
-      </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//Activity">
       <eTypeArguments eClassifier="#//Flow"/>

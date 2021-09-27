@@ -5,9 +5,7 @@ package org.nasdanika.flow.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Resource;

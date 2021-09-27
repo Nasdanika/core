@@ -2,7 +2,10 @@
  */
 package org.nasdanika.flow.impl;
 
+import static org.nasdanika.flow.FlowPackage.RESOURCE;
+
 import java.util.Map;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
@@ -11,9 +14,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
@@ -38,9 +39,7 @@ import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
-
 import org.nasdanika.flow.util.FlowValidator;
-
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -1341,11 +1340,11 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		op = initEOperation(getPackageElement__Apply__PackageElement(), null, "apply", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
-		addEParameter(op, g1, "packageElement", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, g1, "instance", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		op = initEOperation(getPackageElement__Resolve__PackageElement(), null, "resolve", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
-		addEParameter(op, g1, "packageElement", 0, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, g1, "instance", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(packageEClass, org.nasdanika.flow.Package.class, "Package", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPackage_SuperPackages(), this.getPackage(), null, "superPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1417,7 +1416,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		initEClass(activityEntryEClass, Map.Entry.class, "ActivityEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getActivityEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getActivityEntry_Value(), this.getActivity(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getActivity());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getActivityEntry_Value(), g1, null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getService_Target(), this.getActivity(), this.getActivity_Services(), "target", null, 1, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

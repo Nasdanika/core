@@ -2,14 +2,14 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Map.Entry;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
@@ -65,8 +65,8 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, Activity> getServices() {
-		return (EMap<String, Activity>)eDynamicGet(FlowPackage.PARTICIPANT__SERVICES, FlowPackage.Literals.PARTICIPANT__SERVICES, true, true);
+	public EMap<String, Activity<?>> getServices() {
+		return (EMap<String, Activity<?>>)eDynamicGet(FlowPackage.PARTICIPANT__SERVICES, FlowPackage.Literals.PARTICIPANT__SERVICES, true, true);
 	}
 
 	/**
@@ -141,6 +141,31 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 				return !getServices().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void apply(Participant instance) {
+		super.apply(instance);
+		
+		// Services
+		for (Entry<String, Activity<?>> se: getServices().entrySet()) {
+			Activity service = se.getValue();
+			EMap<String, Activity<?>> instanceServices = instance.getServices();
+			String serviceKey = se.getKey();
+			if (service == null) {
+				instanceServices.removeKey(serviceKey);
+			} else {
+				Activity instanceService = (Activity) service.create();
+				instanceServices.put(serviceKey, instanceService);
+				service.apply(instanceService);
+			}
+		}
+	}
+	
+	@Override
+	public void resolve(Participant instance) {
+		// NOP
 	}
 
 } //ParticipantImpl

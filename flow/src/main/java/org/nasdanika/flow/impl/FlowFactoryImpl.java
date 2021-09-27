@@ -3,14 +3,12 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
@@ -222,7 +220,7 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Map.Entry<String, Activity> createActivityEntry() {
+	public Map.Entry<String, Activity<?>> createActivityEntry() {
 		ActivityEntryImpl activityEntry = new ActivityEntryImpl();
 		return activityEntry;
 	}

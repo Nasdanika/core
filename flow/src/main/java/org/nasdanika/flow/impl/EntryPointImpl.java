@@ -3,7 +3,6 @@
 package org.nasdanika.flow.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.flow.EntryPoint;
 import org.nasdanika.flow.FlowPackage;
 

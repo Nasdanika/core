@@ -139,7 +139,7 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 				return createActivityAdapter();
 			}
 			@Override
-			public Adapter caseActivityEntry(Map.Entry<String, Activity> object) {
+			public Adapter caseActivityEntry(Map.Entry<String, Activity<?>> object) {
 				return createActivityEntryAdapter();
 			}
 			@Override

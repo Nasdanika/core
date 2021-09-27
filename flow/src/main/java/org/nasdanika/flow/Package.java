@@ -123,7 +123,7 @@ public interface Package extends PackageElement<Package> {
 	/**
 	 * Returns the value of the '<em><b>Activities</b></em>' map.
 	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link org.nasdanika.flow.Activity},
+	 * and the value is of type {@link org.nasdanika.flow.Activity<?>},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -131,9 +131,9 @@ public interface Package extends PackageElement<Package> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Activities</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getPackage_Activities()
-	 * @model mapType="org.nasdanika.flow.ActivityEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Activity&gt;"
+	 * @model mapType="org.nasdanika.flow.ActivityEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Activity&lt;?&gt;&gt;"
 	 * @generated
 	 */
-	EMap<String, Activity> getActivities();
+	EMap<String, Activity<?>> getActivities();
 
 } // Package

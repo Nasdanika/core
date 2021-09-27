@@ -24,7 +24,7 @@ public interface Participant extends PackageElement<Participant> {
 	/**
 	 * Returns the value of the '<em><b>Services</b></em>' map.
 	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link org.nasdanika.flow.Activity},
+	 * and the value is of type {@link org.nasdanika.flow.Activity<?>},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -32,9 +32,9 @@ public interface Participant extends PackageElement<Participant> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Services</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Services()
-	 * @model mapType="org.nasdanika.flow.ActivityEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Activity&gt;"
+	 * @model mapType="org.nasdanika.flow.ActivityEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Activity&lt;?&gt;&gt;"
 	 * @generated
 	 */
-	EMap<String, Activity> getServices();
+	EMap<String, Activity<?>> getServices();
 
 } // Participant

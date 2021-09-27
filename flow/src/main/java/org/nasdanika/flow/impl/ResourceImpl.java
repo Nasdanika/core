@@ -2,10 +2,11 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Map.Entry;
+
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -64,8 +65,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, Activity> getServices() {
-		return (EMap<String, Activity>)eDynamicGet(FlowPackage.RESOURCE__SERVICES, FlowPackage.Literals.RESOURCE__SERVICES, true, true);
+	public EMap<String, Activity<?>> getServices() {
+		return (EMap<String, Activity<?>>)eDynamicGet(FlowPackage.RESOURCE__SERVICES, FlowPackage.Literals.RESOURCE__SERVICES, true, true);
 	}
 
 	/**
@@ -140,6 +141,31 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				return !getServices().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void apply(Resource instance) {
+		super.apply(instance);
+		
+		// Services
+		for (Entry<String, Activity<?>> se: getServices().entrySet()) {
+			Activity service = se.getValue();
+			EMap<String, Activity<?>> instanceServices = instance.getServices();
+			String serviceKey = se.getKey();
+			if (service == null) {
+				instanceServices.removeKey(serviceKey);
+			} else {
+				Activity instanceService = (Activity) service.create();
+				instanceServices.put(serviceKey, instanceService);
+				service.apply(instanceService);
+			}
+		}
+	}
+	
+	@Override
+	public void resolve(Resource instance) {
+		// NOP
 	}
 
 } //ResourceImpl

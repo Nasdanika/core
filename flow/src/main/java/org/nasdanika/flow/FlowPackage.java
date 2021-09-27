@@ -6143,7 +6143,7 @@ public interface FlowPackage extends EPackage {
 	 * @return the meta object for class '<em>Activity Entry</em>'.
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
-	 *        valueType="org.nasdanika.flow.Activity" valueContainment="true"
+	 *        valueType="org.nasdanika.flow.Activity&lt;?&gt;" valueContainment="true"
 	 * @generated
 	 */
 	EClass getActivityEntry();

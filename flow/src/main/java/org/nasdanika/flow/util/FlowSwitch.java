@@ -188,7 +188,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				return result;
 			}
 			case FlowPackage.ACTIVITY_ENTRY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, Activity> activityEntry = (Map.Entry<String, Activity>)theEObject;
+				@SuppressWarnings("unchecked") Map.Entry<String, Activity<?>> activityEntry = (Map.Entry<String, Activity<?>>)theEObject;
 				T1 result = caseActivityEntry(activityEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -560,7 +560,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseActivityEntry(Map.Entry<String, Activity> object) {
+	public T1 caseActivityEntry(Map.Entry<String, Activity<?>> object) {
 		return null;
 	}
 

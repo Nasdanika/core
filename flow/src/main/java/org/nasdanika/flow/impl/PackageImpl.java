@@ -9,14 +9,11 @@ import java.util.Map.Entry;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
@@ -154,8 +151,8 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, Activity> getActivities() {
-		return (EMap<String, Activity>)eDynamicGet(FlowPackage.PACKAGE__ACTIVITIES, FlowPackage.Literals.PACKAGE__ACTIVITIES, true, true);
+	public EMap<String, Activity<?>> getActivities() {
+		return (EMap<String, Activity<?>>)eDynamicGet(FlowPackage.PACKAGE__ACTIVITIES, FlowPackage.Literals.PACKAGE__ACTIVITIES, true, true);
 	}
 
 	/**
@@ -305,6 +302,7 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 		return ret;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void apply(Package instance) {
 		super.apply(instance);
@@ -324,6 +322,63 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 				sp.apply(spi);
 			}
 		}
+		
+		// Participants
+		for (Entry<String, Participant> pe: getParticipants().entrySet()) {
+			Participant participant = pe.getValue();
+			EMap<String, Participant> instanceParticipants = instance.getParticipants();
+			String participantKey = pe.getKey();
+			if (participant == null) {
+				instanceParticipants.removeKey(participantKey);
+			} else {
+				Participant instanceParticipant = participant.create();
+				instanceParticipants.put(participantKey, instanceParticipant);
+				participant.apply(instanceParticipant);
+			}
+		}
+		
+		// Resources
+		for (Entry<String, Resource> re: getResources().entrySet()) {
+			Resource resource = re.getValue();
+			EMap<String, Resource> instanceResources = instance.getResources();
+			String resourceKey = re.getKey();
+			if (resource == null) {
+				instanceResources.removeKey(resourceKey);
+			} else {
+				Resource instanceResource = resource.create();
+				instanceResources.put(resourceKey, instanceResource);
+				resource.apply(instanceResource);
+			}
+		}
+		
+		// Artifacts
+		for (Entry<String, Artifact> ae: getArtifacts().entrySet()) {
+			Artifact artifact = ae.getValue();
+			EMap<String, Artifact> instanceArtifacts = instance.getArtifacts();
+			String artifactKey = ae.getKey();
+			if (artifact == null) {
+				instanceArtifacts.removeKey(artifactKey);
+			} else {
+				Artifact instanceArtifact = artifact.create();
+				instanceArtifacts.put(artifactKey, instanceArtifact);
+				artifact.apply(instanceArtifact);
+			}
+		}
+		
+		// Activities
+		for (Entry<String, Activity<?>> ae: getActivities().entrySet()) {
+			Activity activity = ae.getValue();
+			EMap<String, Activity<?>> instanceActivities = instance.getActivities();
+			String activityKey = ae.getKey();
+			if (activity == null) {
+				instanceActivities.removeKey(activityKey);
+			} else {
+				Activity instanceService = (Activity) activity.create();
+				instanceActivities.put(activityKey, instanceService);
+				activity.apply(instanceService);
+			}
+		}
+		
 	}
 	
 	@Override

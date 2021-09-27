@@ -139,7 +139,7 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @model
 	 * @generated
 	 */
-	void apply(T packageElement);
+	void apply(T instance);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -150,6 +150,6 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @model
 	 * @generated
 	 */
-	void resolve(T packageElement);
+	void resolve(T instance);
 
 } // PackageElement

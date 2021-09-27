@@ -3,16 +3,12 @@
 package org.nasdanika.flow.impl;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.BasicEMap;
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 
@@ -30,7 +26,7 @@ import org.nasdanika.flow.FlowPackage;
  *
  * @generated
  */
-public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,Activity> {
+public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements BasicEMap.Entry<String,Activity<?>> {
 	/**
 	 * The default value of the '{@link #getTypedKey() <em>Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -93,8 +89,8 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Activity getTypedValue() {
-		return (Activity)eDynamicGet(FlowPackage.ACTIVITY_ENTRY__VALUE, FlowPackage.Literals.ACTIVITY_ENTRY__VALUE, true, true);
+	public Activity<?> getTypedValue() {
+		return (Activity<?>)eDynamicGet(FlowPackage.ACTIVITY_ENTRY__VALUE, FlowPackage.Literals.ACTIVITY_ENTRY__VALUE, true, true);
 	}
 
 	/**
@@ -102,7 +98,7 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTypedValue(Activity newValue, NotificationChain msgs) {
+	public NotificationChain basicSetTypedValue(Activity<?> newValue, NotificationChain msgs) {
 		msgs = eDynamicInverseAdd((InternalEObject)newValue, FlowPackage.ACTIVITY_ENTRY__VALUE, msgs);
 		return msgs;
 	}
@@ -112,7 +108,7 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypedValue(Activity newValue) {
+	public void setTypedValue(Activity<?> newValue) {
 		eDynamicSet(FlowPackage.ACTIVITY_ENTRY__VALUE, FlowPackage.Literals.ACTIVITY_ENTRY__VALUE, newValue);
 	}
 
@@ -158,7 +154,7 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 				setTypedKey((String)newValue);
 				return;
 			case FlowPackage.ACTIVITY_ENTRY__VALUE:
-				setTypedValue((Activity)newValue);
+				setTypedValue((Activity<?>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -176,7 +172,7 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 				setTypedKey(KEY_EDEFAULT);
 				return;
 			case FlowPackage.ACTIVITY_ENTRY__VALUE:
-				setTypedValue((Activity)null);
+				setTypedValue((Activity<?>)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -255,7 +251,7 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * @generated
 	 */
 	@Override
-	public Activity getValue() {
+	public Activity<?> getValue() {
 		return getTypedValue();
 	}
 
@@ -265,8 +261,8 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * @generated
 	 */
 	@Override
-	public Activity setValue(Activity value) {
-		Activity oldValue = getValue();
+	public Activity<?> setValue(Activity<?> value) {
+		Activity<?> oldValue = getValue();
 		setTypedValue(value);
 		return oldValue;
 	}
@@ -277,9 +273,9 @@ public class ActivityEntryImpl extends MinimalEObjectImpl.Container implements B
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public EMap<String, Activity> getEMap() {
+	public EMap<String, Activity<?>> getEMap() {
 		EObject container = eContainer();
-		return container == null ? null : (EMap<String, Activity>)container.eGet(eContainmentFeature());
+		return container == null ? null : (EMap<String, Activity<?>>)container.eGet(eContainmentFeature());
 	}
 
 } //ActivityEntryImpl
