@@ -1588,12 +1588,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "strict-containment", "true"
 		   });
 		addAnnotation
-		  (getFlowElementEntry_Value(),
-		   source,
-		   new String[] {
-			   "homogenous", "true"
-		   });
-		addAnnotation
 		  (transitionEClass,
 		   source,
 		   new String[] {
@@ -1919,19 +1913,19 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (flowElementEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of artifact key to an artifact. Null value suppresses inherited entry."
+			   "documentation", "Mapping of flow element key to a flow element. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getFlowElementEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Flow element key."
 		   });
 		addAnnotation
 		  (getFlowElementEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Flow element. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getTransition__GetTarget__EList(),
@@ -1967,19 +1961,19 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (transitionEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of artifact key to an artifact. Null value suppresses inherited entry."
+			   "documentation", "Mapping of output key to a transition. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getTransitionEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Output key."
 		   });
 		addAnnotation
 		  (getTransitionEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Output transition. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getCall_Response(),
@@ -1991,19 +1985,19 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (callEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of artifact key to an artifact. Null value suppresses inherited entry."
+			   "documentation", "Mapping of call key to a call. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getCallEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Call key."
 		   });
 		addAnnotation
 		  (getCallEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Call. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getActivity_Services(),

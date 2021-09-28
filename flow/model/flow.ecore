@@ -275,19 +275,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElementEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
+      <details key="documentation" value="Mapping of flow element key to a flow element. Null value suppresses inherited entry."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Artifact key."/>
+        <details key="documentation" value="Flow element key."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" containment="true">
-      <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
-      </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Flow element. Use ``null`` to suppress inherited sub-package."/>
       </eAnnotations>
       <eGenericType eClassifier="#//FlowElement">
         <eTypeArguments/>
@@ -337,11 +334,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TransitionEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
+      <details key="documentation" value="Mapping of output key to a transition. Null value suppresses inherited entry."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Artifact key."/>
+        <details key="documentation" value="Output key."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Transition"
@@ -350,7 +347,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Output transition. Use ``null`` to suppress inherited sub-package."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -367,11 +364,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CallEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
+      <details key="documentation" value="Mapping of call key to a call. Null value suppresses inherited entry."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Artifact key."/>
+        <details key="documentation" value="Call key."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Call"
@@ -380,7 +377,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Call. Use ``null`` to suppress inherited sub-package."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

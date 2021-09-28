@@ -9,7 +9,6 @@ import org.nasdanika.common.Status;
 import org.nasdanika.flow.Package;
 
 /**
- * Tests of descriptor view parts and wizards.
  * @author Pavel
  *
  */

@@ -1,0 +1,104 @@
+flow-package:
+  uri: nasdanika:agile/core
+  description: Generic agile software development.
+  modifiers: abstract 
+  participants:
+    product-owner:
+      name: Product Owner
+      description: Creates and grooms stories.
+    developer:
+      name: Developer
+      description: Implements stories and tests in their local environment
+    tester:
+      name: Tester
+      description: Tests in runtime environment
+  resources:
+    issue-tracker:
+      name: Issue Tracker
+      modifiers: abstract
+      description: Repository of stories
+    source-repository:
+      name: Source Repository
+      modifiers: abstract
+      description: Repository of source code
+    ide:
+      name: Development Environment
+      modifiers: abstract
+    build-tool:
+      name: Build tool
+      modifiers: abstract
+    runtime:
+      name: Runtime
+      modifiers: abstract
+      description: Execution environment for the binary artifacts.
+  artifacts:
+    story:
+      name: User story
+      description: Describes increment in product fucntionality.
+    source:
+      name: Source code
+      description: A collection of artifacts stored in the source repository and used to build a binary.
+    binary:
+      name: Binary artifact(s)
+      description: Artifacts built from source code for execution in runtime environments.
+  activities:
+    development:
+      flow-flow:
+        elements:
+          create:
+            flow-activity:
+              name: Create a story
+              description: Product Owner creates a new story in the issue tracker.
+              participants: product-owner
+              resources: issue-tracker
+              output-artifacts: story
+#              outputs: 
+#                target: groom
+          groom:
+            flow-activity:
+              name: Groom a story
+              description: Product Owner elaborates a story so it has enough details for development and testing.
+              participants: product-owner
+              resources: issue-tracker
+              input-artifacts: story
+              output-artifacts: story
+#              outputs: 
+#                target: develop
+          develop:
+            flow-activity:
+              name: Develop a story
+              description: Developer creates or modifies source code to implement story functionality.
+              participants: developer
+              resources: 
+                - issue-tracker
+                - source-repository
+                - ide
+              input-artifacts: story
+              output-artifacts: source-code
+#              outputs: 
+#                target: build
+          build:
+            flow-activity:
+              name: Build
+              description: Developer or an automated process builds sources to produce binaries.
+              participants: developer
+              resources: 
+                - source-repository
+                - build-tool
+                - runtime-environment
+              input-artifacts: source-code
+              output-artifacts: binary
+#              outputs: 
+#                target: test
+          test:
+            flow-activity:
+              name: Test
+              description: Tester validates story functionality using the binary produced in build activity.
+              participants: tester
+              resources: 
+                - runtime-environment
+                - issue-tracker
+              input-artifacts: 
+               - story
+               - binary
+            

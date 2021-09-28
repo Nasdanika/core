@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.nasdanika.common.Util;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.ncore.impl.NamedElementImpl;
@@ -288,6 +289,15 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return null;
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+	
+	@Override
+	public String getName() {
+		String name = super.getName();
+		if (Util.isBlank(name)) {
+			// TODO - derive name from key - kebab to label.
+		}
+		return name;
 	}
 
 } //PackageElementImpl

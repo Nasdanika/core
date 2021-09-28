@@ -5174,7 +5174,6 @@ public interface FlowPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueType="org.nasdanika.flow.FlowElement&lt;?&gt;" valueContainment="true"
-	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
 	 * @generated
 	 */
 	EClass getFlowElementEntry();
