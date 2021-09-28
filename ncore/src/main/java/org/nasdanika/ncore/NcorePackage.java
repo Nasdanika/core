@@ -60,6 +60,34 @@ public interface NcorePackage extends EPackage {
 	NcorePackage eINSTANCE = org.nasdanika.ncore.impl.NcorePackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.common.Adaptable
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getAdaptable()
+	 * @generated
+	 */
+	int ADAPTABLE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Adaptable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTABLE_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Adaptable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTABLE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.Marked <em>Marked</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,7 +95,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMarked()
 	 * @generated
 	 */
-	int MARKED = 0;
+	int MARKED = 1;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -104,7 +132,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMarker()
 	 * @generated
 	 */
-	int MARKER = 1;
+	int MARKER = 2;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -160,7 +188,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getTemporal()
 	 * @generated
 	 */
-	int TEMPORAL = 2;
+	int TEMPORAL = 3;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ModelElementImpl <em>Model Element</em>}' class.
@@ -170,7 +198,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getModelElement()
 	 * @generated
 	 */
-	int MODEL_ELEMENT = 3;
+	int MODEL_ELEMENT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -414,7 +442,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNamedElement()
 	 * @generated
 	 */
-	int NAMED_ELEMENT = 4;
+	int NAMED_ELEMENT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -487,7 +515,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getReference()
 	 * @generated
 	 */
-	int REFERENCE = 5;
+	int REFERENCE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -524,7 +552,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 6;
+	int INSTANT = 7;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -534,7 +562,18 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 7;
+	int DURATION = 8;
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Adaptable</em>'.
+	 * @see org.nasdanika.common.Adaptable
+	 * @model instanceClass="org.nasdanika.common.Adaptable"
+	 * @generated
+	 */
+	EClass getAdaptable();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Marked <em>Marked</em>}'.
@@ -901,6 +940,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.common.Adaptable
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getAdaptable()
+		 * @generated
+		 */
+		EClass ADAPTABLE = eINSTANCE.getAdaptable();
+
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.Marked <em>Marked</em>}' class.
 		 * <!-- begin-user-doc -->

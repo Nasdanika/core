@@ -4,6 +4,8 @@
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/package-summary.md"/>
   </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Adaptable" instanceClassName="org.nasdanika.common.Adaptable"
+      abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Marked" abstract="true" interface="true">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/marked.md"/>
@@ -129,7 +131,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="#//Marked">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="#//Marked #//Adaptable">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/model-element.md"/>
     </eAnnotations>

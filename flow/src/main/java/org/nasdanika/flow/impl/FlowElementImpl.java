@@ -3,17 +3,26 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
+import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
@@ -30,10 +39,14 @@ import org.nasdanika.flow.Transition;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getCalls <em>Calls</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifacts <em>Output Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifactKeys <em>Output Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipants <em>Participants</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipantsKeys <em>Participants Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResourcesKeys <em>Resources Keys</em>}</li>
  * </ul>
  *
  * @generated
@@ -98,6 +111,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<String> getInputArtifactKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS, FlowPackage.Literals.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<Artifact> getInputArtifacts() {
 		return (EList<Artifact>)eDynamicGet(FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS, FlowPackage.Literals.FLOW_ELEMENT__INPUT_ARTIFACTS, true, true);
 	}
@@ -120,6 +144,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<String> getOutputArtifactKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<Participant> getParticipants() {
 		return (EList<Participant>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANTS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS, true, true);
 	}
@@ -131,8 +166,55 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<String> getParticipantsKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
 	public EList<Resource> getResources() {
-		return (EList<Resource>)eDynamicGet(FlowPackage.FLOW_ELEMENT__RESOURCES, FlowPackage.Literals.FLOW_ELEMENT__RESOURCES, true, true);
+		EList<Resource> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
+						for (String key: getResourcesKeys()) {
+							URI rURI = URI.createURI(key).resolve(resourcesURI);
+							EObject target = resourceSet.getEObject(rURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Resource) {
+								ret.add((Resource) target);
+							} else {
+								throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<String> getResourcesKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS, FlowPackage.Literals.FLOW_ELEMENT__RESOURCES_KEYS, true, true);
 	}
 
 	/**
@@ -165,14 +247,22 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				if (coreType) return getCalls();
 				else return getCalls().map();
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				return getInputArtifactKeys();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return getInputArtifacts();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
 				return getOutputArtifacts();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
+				return getOutputArtifactKeys();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return getParticipants();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
+				return getParticipantsKeys();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return getResources();
+			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
+				return getResourcesKeys();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -192,21 +282,21 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				((EStructuralFeature.Setting)getCalls()).set(newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
-				getInputArtifacts().clear();
-				getInputArtifacts().addAll((Collection<? extends Artifact>)newValue);
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				getInputArtifactKeys().clear();
+				getInputArtifactKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
-				getOutputArtifacts().clear();
-				getOutputArtifacts().addAll((Collection<? extends Artifact>)newValue);
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
+				getOutputArtifactKeys().clear();
+				getOutputArtifactKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
-				getParticipants().clear();
-				getParticipants().addAll((Collection<? extends Participant>)newValue);
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
+				getParticipantsKeys().clear();
+				getParticipantsKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__RESOURCES:
-				getResources().clear();
-				getResources().addAll((Collection<? extends Resource>)newValue);
+			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
+				getResourcesKeys().clear();
+				getResourcesKeys().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -226,17 +316,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				getCalls().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
-				getInputArtifacts().clear();
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				getInputArtifactKeys().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
-				getOutputArtifacts().clear();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
+				getOutputArtifactKeys().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
-				getParticipants().clear();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
+				getParticipantsKeys().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__RESOURCES:
-				getResources().clear();
+			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
+				getResourcesKeys().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -254,14 +344,22 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return !getOutputs().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return !getCalls().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				return !getInputArtifactKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return !getInputArtifacts().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
 				return !getOutputArtifacts().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
+				return !getOutputArtifactKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return !getParticipants().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
+				return !getParticipantsKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return !getResources().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
+				return !getResourcesKeys().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -298,5 +396,27 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			}
 		}
 	}
+	
+	/**
+	 * Flow containment
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<T> getExtends() {
+		EList<T> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.FLOW_ELEMENT_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			Flow container = (Flow) eContainer().eContainer();
+			for (Flow cExtends: container.getExtends()) {
+				FlowElement<?> ext = cExtends.getElements().get(key);
+				if (ext != null) {
+					ret.add((T) ext);
+				}
+			}
+		}
+		
+		return ret;
+	}	
+	
 
 } //FlowElementImpl

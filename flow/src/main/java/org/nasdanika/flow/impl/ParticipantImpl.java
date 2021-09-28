@@ -2,9 +2,12 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -12,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Participant;
 
 /**
@@ -167,5 +171,23 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 	public void resolve(Participant instance) {
 		// NOP
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Participant> getExtends() {
+		EList<Participant> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.PARTICIPANT_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			Package container = (Package) eContainer().eContainer();
+			for (Package cExtends: container.getExtends()) {
+				Participant ext = cExtends.getParticipants().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
+		}
+		
+		return ret;
+	}	
 
 } //ParticipantImpl

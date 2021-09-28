@@ -165,6 +165,33 @@ public class Util {
 		}
 		
 	};
+		
+	public static FunctionFactory<Object,InputStream> OBJECT_TO_STREAM = context -> new Function<Object, InputStream>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "Object to InputStream";
+		}
+		
+		@Override
+		public InputStream execute(Object object, ProgressMonitor progressMonitor) throws Exception {
+			if (object == null) {
+				return null;
+			}
+			if (object instanceof InputStream) {
+				return (InputStream) object;
+			}
+			
+			return asInputStreamSupplierFactory(object).create(context).execute(progressMonitor);
+		}
+		
+	};
+	
 	
 	public static String toString(Context context, InputStream in) throws IOException {
 		if (in == null) {
@@ -873,11 +900,25 @@ public class Util {
 		}
 		
 		if (obj instanceof SupplierFactory.Provider && type != null) {
-			return ((SupplierFactory.Provider) obj).getFactory(type);
+			SupplierFactory<T> factory = ((SupplierFactory.Provider) obj).getFactory(type);
+			if (factory != null) {
+				return factory;
+			}
 		}
 		
 		if (obj instanceof Adaptable) {
-			SupplierFactory<T> adapter = ((Adaptable) obj).adaptTo(SupplierFactory.class);
+			Adaptable adaptable = (Adaptable) obj;
+			if (type != null) {
+				SupplierFactory.Provider provider = adaptable.adaptTo(SupplierFactory.Provider.class);
+				if (provider != null) {
+					SupplierFactory<T> factory = provider.getFactory(type);
+					if (factory != null) {
+						return factory;
+					}
+				}
+			}
+			
+			SupplierFactory<T> adapter = adaptable.adaptTo(SupplierFactory.class);
 			if (adapter != null) {
 				return adapter;
 			}
@@ -894,8 +935,8 @@ public class Util {
 	 */
 	public static SupplierFactory<InputStream> asInputStreamSupplierFactory(Object obj) {
 		SupplierFactory<InputStream> ret = asSupplierFactory(obj, InputStream.class, JOIN_STREAMS_FACTORY);
-		if (ret != null) {
-			return ret;
+		if (ret != null) {			
+			return ret.then(OBJECT_TO_STREAM);
 		}
 		
 		// Converting to string, interpolating, streaming

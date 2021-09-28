@@ -19,6 +19,8 @@ public class TestAgile extends TestBase {
 				obj -> {
 					org.nasdanika.flow.Package pkg = (org.nasdanika.flow.Package) obj;
 					
+					assertThat(pkg.getParticipants().get("product-owner").getDescription()).isEqualTo("<p>");
+					
 					assertThat(pkg.getParticipants()).hasSize(3);
 					assertThat(pkg.getResources()).hasSize(5);
 					assertThat(pkg.getArtifacts()).hasSize(3);

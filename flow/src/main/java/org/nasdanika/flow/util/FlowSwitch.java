@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
@@ -99,6 +100,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(packageElement);
 				if (result == null) result = caseModelElement(packageElement);
 				if (result == null) result = caseMarked(packageElement);
+				if (result == null) result = caseAdaptable(packageElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -109,6 +111,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(package_);
 				if (result == null) result = caseModelElement(package_);
 				if (result == null) result = caseMarked(package_);
+				if (result == null) result = caseAdaptable(package_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -125,6 +128,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(participant);
 				if (result == null) result = caseModelElement(participant);
 				if (result == null) result = caseMarked(participant);
+				if (result == null) result = caseAdaptable(participant);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -141,6 +145,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(resource);
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = caseMarked(resource);
+				if (result == null) result = caseAdaptable(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -157,6 +162,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(artifact);
 				if (result == null) result = caseModelElement(artifact);
 				if (result == null) result = caseMarked(artifact);
+				if (result == null) result = caseAdaptable(artifact);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -173,6 +179,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(flowElement);
 				if (result == null) result = caseModelElement(flowElement);
 				if (result == null) result = caseMarked(flowElement);
+				if (result == null) result = caseAdaptable(flowElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -189,6 +196,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(transition);
 				if (result == null) result = caseModelElement(transition);
 				if (result == null) result = caseMarked(transition);
+				if (result == null) result = caseAdaptable(transition);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -206,6 +214,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(call);
 				if (result == null) result = caseModelElement(call);
 				if (result == null) result = caseMarked(call);
+				if (result == null) result = caseAdaptable(call);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -223,6 +232,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(activity);
 				if (result == null) result = caseModelElement(activity);
 				if (result == null) result = caseMarked(activity);
+				if (result == null) result = caseAdaptable(activity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -240,6 +250,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(service);
 				if (result == null) result = caseModelElement(service);
 				if (result == null) result = caseMarked(service);
+				if (result == null) result = caseAdaptable(service);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -252,6 +263,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(flow);
 				if (result == null) result = caseModelElement(flow);
 				if (result == null) result = caseMarked(flow);
+				if (result == null) result = caseAdaptable(flow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -263,6 +275,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(pseudoState);
 				if (result == null) result = caseModelElement(pseudoState);
 				if (result == null) result = caseMarked(pseudoState);
+				if (result == null) result = caseAdaptable(pseudoState);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -275,6 +288,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(choice);
 				if (result == null) result = caseModelElement(choice);
 				if (result == null) result = caseMarked(choice);
+				if (result == null) result = caseAdaptable(choice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -287,6 +301,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(end);
 				if (result == null) result = caseModelElement(end);
 				if (result == null) result = caseMarked(end);
+				if (result == null) result = caseAdaptable(end);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -299,6 +314,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(entryPoint);
 				if (result == null) result = caseModelElement(entryPoint);
 				if (result == null) result = caseMarked(entryPoint);
+				if (result == null) result = caseAdaptable(entryPoint);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -311,6 +327,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(exitPoint);
 				if (result == null) result = caseModelElement(exitPoint);
 				if (result == null) result = caseMarked(exitPoint);
+				if (result == null) result = caseAdaptable(exitPoint);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -323,6 +340,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(expansionInput);
 				if (result == null) result = caseModelElement(expansionInput);
 				if (result == null) result = caseMarked(expansionInput);
+				if (result == null) result = caseAdaptable(expansionInput);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -335,6 +353,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(expansionOutput);
 				if (result == null) result = caseModelElement(expansionOutput);
 				if (result == null) result = caseMarked(expansionOutput);
+				if (result == null) result = caseAdaptable(expansionOutput);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -347,6 +366,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(fork);
 				if (result == null) result = caseModelElement(fork);
 				if (result == null) result = caseMarked(fork);
+				if (result == null) result = caseAdaptable(fork);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -359,6 +379,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(inputPin);
 				if (result == null) result = caseModelElement(inputPin);
 				if (result == null) result = caseMarked(inputPin);
+				if (result == null) result = caseAdaptable(inputPin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -371,6 +392,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(join);
 				if (result == null) result = caseModelElement(join);
 				if (result == null) result = caseMarked(join);
+				if (result == null) result = caseAdaptable(join);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -383,6 +405,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(outputPin);
 				if (result == null) result = caseModelElement(outputPin);
 				if (result == null) result = caseMarked(outputPin);
+				if (result == null) result = caseAdaptable(outputPin);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -395,6 +418,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(start);
 				if (result == null) result = caseModelElement(start);
 				if (result == null) result = caseMarked(start);
+				if (result == null) result = caseAdaptable(start);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -879,6 +903,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseMarked(Marked object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseAdaptable(Adaptable object) {
 		return null;
 	}
 

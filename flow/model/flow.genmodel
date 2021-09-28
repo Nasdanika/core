@@ -59,10 +59,14 @@
       <genTypeParameters ecoreTypeParameter="flow.ecore#//FlowElement/T"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/calls"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/inputArtifactKeys"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/inputArtifacts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputArtifacts"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/outputArtifactKeys"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/participants"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/participantsKeys"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/resources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/resourcesKeys"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//FlowElementEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElementEntry/key"/>

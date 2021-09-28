@@ -41,7 +41,7 @@ public class TestResources extends TestBase {
 		BinaryEntity file = myContainer.get("my-file.txt", progressMonitor);
 		assertThat(file).isNotNull();
 		assertThat(file.exists(progressMonitor)).isTrue();
-		assertThat(DefaultConverter.INSTANCE.toString(file.getState(progressMonitor))).isEqualTo("Hello, World!");
+		assertThat(DefaultConverter.INSTANCE.toString(file.getState(progressMonitor)).trim()).isEqualTo("<p>Hello, <code>World</code>!</p>");
 	}
 		
 }

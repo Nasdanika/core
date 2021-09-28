@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import org.nasdanika.common.Adaptable;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Model Element</b></em>'.
@@ -17,11 +19,11 @@ package org.nasdanika.ncore;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
- * @model abstract="true"
+ * @model abstract="true" superTypes="org.nasdanika.ncore.Marked org.nasdanika.ncore.Adaptable"
  *        annotation="urn:org.nasdanika documentation-reference='doc/model-element.md'"
  * @generated
  */
-public interface ModelElement extends Marked {
+public interface ModelElement extends Marked, Adaptable {
 	/**
 	 * Returns the value of the '<em><b>Uri</b></em>' attribute.
 	 * <!-- begin-user-doc -->

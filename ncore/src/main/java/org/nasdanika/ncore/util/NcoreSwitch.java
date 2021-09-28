@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.*;
 
 /**
@@ -65,6 +66,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	@Override
 	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case NcorePackage.ADAPTABLE: {
+				Adaptable adaptable = (Adaptable)theEObject;
+				T1 result = caseAdaptable(adaptable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.MARKED: {
 				Marked marked = (Marked)theEObject;
 				T1 result = caseMarked(marked);
@@ -82,6 +89,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseTemporal(temporal);
 				if (result == null) result = caseModelElement(temporal);
 				if (result == null) result = caseMarked(temporal);
+				if (result == null) result = caseAdaptable(temporal);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -89,6 +97,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				ModelElement modelElement = (ModelElement)theEObject;
 				T1 result = caseModelElement(modelElement);
 				if (result == null) result = caseMarked(modelElement);
+				if (result == null) result = caseAdaptable(modelElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -97,6 +106,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseNamedElement(namedElement);
 				if (result == null) result = caseModelElement(namedElement);
 				if (result == null) result = caseMarked(namedElement);
+				if (result == null) result = caseAdaptable(namedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -108,6 +118,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseAdaptable(Adaptable object) {
+		return null;
 	}
 
 	/**

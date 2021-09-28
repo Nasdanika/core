@@ -4,7 +4,9 @@ package org.nasdanika.flow.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Map;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.flow.Artifact;
@@ -235,6 +237,24 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 				return getTarget((EList<Flow>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Transition> getExtends() {
+		EList<Transition> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.TRANSITION_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			FlowElement<?> container = (FlowElement<?>) eContainer().eContainer();
+			for (FlowElement<?> cExtends: container.getExtends()) {
+				Transition ext = cExtends.getOutputs().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
+		}
+		
+		return ret;
 	}
 
 } //TransitionImpl

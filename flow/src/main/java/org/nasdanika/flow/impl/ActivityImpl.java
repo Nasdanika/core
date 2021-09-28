@@ -2,13 +2,20 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Package;
+import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 
 /**
@@ -111,5 +118,44 @@ public class ActivityImpl<T extends Activity<T>> extends FlowElementImpl<T> impl
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<T> getExtends() {
+		if (eContainmentFeature() == FlowPackage.Literals.ACTIVITY_ENTRY__VALUE) {
+			EList<T> ret = ECollections.newBasicEList();
+			EObject entry = eContainer();
+			String key = ((Map.Entry<String, ?>) entry).getKey();
+			if (entry.eContainmentFeature() == FlowPackage.Literals.PACKAGE__ACTIVITIES) {
+				Package container = (Package) entry.eContainer();
+				for (Package cExtends: container.getExtends()) {
+					Activity<?> ext = cExtends.getActivities().get(key);
+					if (ext != null) {
+						ret.add((T) ext);
+					}
+				}
+			} else if (entry.eContainmentFeature() == FlowPackage.Literals.PARTICIPANT__SERVICES) {
+				Participant container = (Participant) entry.eContainer();
+				for (Participant cExtends: container.getExtends()) {
+					Activity<?> ext = cExtends.getServices().get(key);
+					if (ext != null) {
+						ret.add((T) ext);
+					}
+				}
+			} else if (entry.eContainmentFeature() == FlowPackage.Literals.RESOURCE__SERVICES) {
+				Resource container = (Resource) entry.eContainer();
+				for (Resource cExtends: container.getExtends()) {
+					Activity<?> ext = cExtends.getServices().get(key);
+					if (ext != null) {
+						ret.add((T) ext);
+					}
+				}
+			} 
+			
+			return ret;
+		}
+		
+		return super.getExtends();
+	}	
 
 } //ActivityImpl

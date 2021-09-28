@@ -3,11 +3,14 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.Map;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
 
 /**
@@ -124,5 +127,23 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Artifact> getExtends() {
+		EList<Artifact> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.ARTIFACT_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			Package container = (Package) eContainer().eContainer();
+			for (Package cExtends: container.getExtends()) {
+				Artifact ext = cExtends.getArtifacts().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
+		}
+		
+		return ret;
+	}	
 
 } //ArtifactImpl

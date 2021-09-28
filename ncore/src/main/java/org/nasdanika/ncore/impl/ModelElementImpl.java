@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -491,6 +493,20 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			}
 		}
 		return eProxyURI;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T adaptTo(Class<T> type) {
+		if (type.isInstance(this)) {
+			return (T) this;
+		}
+		
+		Adapter adapter = EcoreUtil.getRegisteredAdapter(this, type);
+		if (type.isInstance(adapter)) {
+			return (T) adapter;
+		}
+		return null;
 	}
 
 } //ModelElementImpl

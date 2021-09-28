@@ -60,7 +60,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>exec</artifactId>
+			<artifactId>exec-gen</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	

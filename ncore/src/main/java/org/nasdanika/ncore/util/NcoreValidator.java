@@ -10,9 +10,11 @@ import java.util.Map;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.*;
 
 /**
@@ -87,6 +89,8 @@ public class NcoreValidator extends EObjectValidator {
 	@Override
 	protected boolean validate(int classifierID, Object value, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		switch (classifierID) {
+			case NcorePackage.ADAPTABLE:
+				return validateAdaptable((Adaptable)value, diagnostics, context);
 			case NcorePackage.MARKED:
 				return validateMarked((Marked)value, diagnostics, context);
 			case NcorePackage.MARKER:
@@ -106,6 +110,15 @@ public class NcoreValidator extends EObjectValidator {
 			default:
 				return true;
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateAdaptable(Adaptable adaptable, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)adaptable, diagnostics, context);
 	}
 
 	/**

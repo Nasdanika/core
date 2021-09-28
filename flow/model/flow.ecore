@@ -223,6 +223,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="FlowElement">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/journey-element.md"/>
+      <contents xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="urn:org.nasdanika">
+          <details key="load-key" value="input-artifacts"/>
+        </eAnnotations>
+      </contents>
     </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//FlowElement">
@@ -249,26 +255,62 @@
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="input-artifacts"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of input artifacts resolved relative to the containing package ``artifacts/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputArtifacts" upperBound="-1"
-        eType="#//Artifact">
+        eType="#//Artifact" changeable="false" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Input artifacts required to start working on this activity."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputArtifacts" upperBound="-1"
-        eType="#//Artifact">
+        eType="#//Artifact" changeable="false" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Output artifacts of the activity."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputArtifactKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="output-artifacts"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of output artifacts resolved relative to the containing package ``artifacts/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
-        eType="#//Participant">
+        eType="#//Participant" changeable="false" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participantsKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="participants"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of participants resolved relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
-        eType="#//Resource"/>
+        eType="#//Resource" changeable="false" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourcesKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="resources"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of resources resolved relative to the containing package ``resources/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eTypeParameter="#//FlowElement/T"/>
     </eGenericSuperTypes>

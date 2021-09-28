@@ -4,4 +4,6 @@ resources-container:
     - resources-file:
         name: my-file.txt
         contents:
-          content-text: Hello, World!
+         content-markdown: 
+           source:
+             content-text: 'Hello, ``World``!'

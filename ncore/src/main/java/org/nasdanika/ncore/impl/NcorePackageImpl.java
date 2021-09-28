@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
@@ -32,6 +33,13 @@ import org.nasdanika.ncore.util.NcoreValidator;
  * @generated
  */
 public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass adaptableEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -157,6 +165,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(NcorePackage.eNS_URI, theNcorePackage);
 		return theNcorePackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAdaptable() {
+		return adaptableEClass;
 	}
 
 	/**
@@ -498,6 +516,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		isCreated = true;
 
 		// Create classes and their features
+		adaptableEClass = createEClass(ADAPTABLE);
+
 		markedEClass = createEClass(MARKED);
 		createEReference(markedEClass, MARKED__MARKER);
 
@@ -569,9 +589,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Add supertypes to classes
 		temporalEClass.getESuperTypes().add(this.getModelElement());
 		modelElementEClass.getESuperTypes().add(this.getMarked());
+		modelElementEClass.getESuperTypes().add(this.getAdaptable());
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
 
 		// Initialize classes, features, and operations; add parameters
+		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(markedEClass, Marked.class, "Marked", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarked_Marker(), this.getMarker(), null, "marker", null, 0, 1, Marked.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

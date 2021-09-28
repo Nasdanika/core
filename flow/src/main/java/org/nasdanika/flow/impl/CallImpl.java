@@ -3,12 +3,16 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.Map;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Transition;
 
 /**
  * <!-- begin-user-doc -->
@@ -112,6 +116,24 @@ public class CallImpl extends TransitionImpl implements Call {
 				return !getResponse().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Transition> getExtends() {
+		EList<Transition> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.CALL_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			FlowElement<?> container = (FlowElement<?>) eContainer().eContainer();
+			for (FlowElement<?> cExtends: container.getExtends()) {
+				Call ext = cExtends.getCalls().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
+		}
+		
+		return ret;
 	}
 
 } //CallImpl

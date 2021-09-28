@@ -1,11 +1,14 @@
 flow-package:
-  uri: nasdanika:agile/core
+  uri: nasdanika://agile/core
   description: Generic agile software development.
   modifiers: abstract 
   participants:
     product-owner:
       name: Product Owner
-      description: Creates and grooms stories.
+      description: 
+        content-markdown:
+          source:
+            content-text: Creates and ``grooms`` stories.
     developer:
       name: Developer
       description: Implements stories and tests in their local environment
@@ -85,7 +88,7 @@ flow-package:
               resources: 
                 - source-repository
                 - build-tool
-                - runtime-environment
+                - runtime
               input-artifacts: source-code
               output-artifacts: binary
 #              outputs: 
@@ -96,7 +99,7 @@ flow-package:
               description: Tester validates story functionality using the binary produced in build activity.
               participants: tester
               resources: 
-                - runtime-environment
+                - runtime
                 - issue-tracker
               input-artifacts: 
                - story
