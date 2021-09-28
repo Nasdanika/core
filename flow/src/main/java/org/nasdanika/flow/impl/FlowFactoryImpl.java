@@ -86,11 +86,14 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 			case FlowPackage.ARTIFACT: return createArtifact();
 			case FlowPackage.ARTIFACT_ENTRY: return (EObject)createArtifactEntry();
 			case FlowPackage.FLOW_ELEMENT: return createFlowElement();
+			case FlowPackage.FLOW_ELEMENT_ENTRY: return (EObject)createFlowElementEntry();
+			case FlowPackage.TRANSITION: return createTransition();
+			case FlowPackage.TRANSITION_ENTRY: return (EObject)createTransitionEntry();
+			case FlowPackage.CALL: return createCall();
+			case FlowPackage.CALL_ENTRY: return (EObject)createCallEntry();
 			case FlowPackage.ACTIVITY: return createActivity();
 			case FlowPackage.ACTIVITY_ENTRY: return (EObject)createActivityEntry();
 			case FlowPackage.SERVICE: return createService();
-			case FlowPackage.TRANSITION: return createTransition();
-			case FlowPackage.CALL: return createCall();
 			case FlowPackage.FLOW: return createFlow();
 			case FlowPackage.PSEUDO_STATE: return createPseudoState();
 			case FlowPackage.CHOICE: return createChoice();
@@ -209,6 +212,16 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, FlowElement<?>> createFlowElementEntry() {
+		FlowElementEntryImpl flowElementEntry = new FlowElementEntryImpl();
+		return flowElementEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public <T extends Activity<T>> Activity<T> createActivity() {
 		ActivityImpl<T> activity = new ActivityImpl<T>();
@@ -252,10 +265,30 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Map.Entry<String, Transition> createTransitionEntry() {
+		TransitionEntryImpl transitionEntry = new TransitionEntryImpl();
+		return transitionEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Call createCall() {
 		CallImpl call = new CallImpl();
 		return call;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, Call> createCallEntry() {
+		CallEntryImpl callEntry = new CallEntryImpl();
+		return callEntry;
 	}
 
 	/**

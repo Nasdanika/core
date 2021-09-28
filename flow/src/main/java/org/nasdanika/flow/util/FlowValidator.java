@@ -3,8 +3,6 @@
 package org.nasdanika.flow.util;
 
 import java.util.Map;
-
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 
@@ -12,7 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
-
+import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
@@ -129,16 +127,22 @@ public class FlowValidator extends EObjectValidator {
 				return validateArtifactEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.FLOW_ELEMENT:
 				return validateFlowElement((FlowElement<?>)value, diagnostics, context);
+			case FlowPackage.FLOW_ELEMENT_ENTRY:
+				return validateFlowElementEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case FlowPackage.TRANSITION:
+				return validateTransition((Transition)value, diagnostics, context);
+			case FlowPackage.TRANSITION_ENTRY:
+				return validateTransitionEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case FlowPackage.CALL:
+				return validateCall((Call)value, diagnostics, context);
+			case FlowPackage.CALL_ENTRY:
+				return validateCallEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.ACTIVITY:
 				return validateActivity((Activity<?>)value, diagnostics, context);
 			case FlowPackage.ACTIVITY_ENTRY:
 				return validateActivityEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.SERVICE:
 				return validateService((Service)value, diagnostics, context);
-			case FlowPackage.TRANSITION:
-				return validateTransition((Transition)value, diagnostics, context);
-			case FlowPackage.CALL:
-				return validateCall((Call)value, diagnostics, context);
 			case FlowPackage.FLOW:
 				return validateFlow((Flow)value, diagnostics, context);
 			case FlowPackage.PSEUDO_STATE:
@@ -176,7 +180,57 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validatePackageElement(PackageElement<?> packageElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(packageElement, diagnostics, context);
+		if (!validate_NoCircularContainment(packageElement, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(packageElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(packageElement, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the final constraint of '<em>Package Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean validatePackageElement_final(PackageElement<?> packageElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (diagnostics != null) {
+			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, packageElement);
+			if (packageElement.getModifiers().contains("final") && packageElement.getModifiers().contains("abstract")) {
+				helper.error(packageElement.eClass().getName() + "  " + packageElement.getName() + " is final and abstract at the same time.");
+			}
+			for (PackageElement<?> ex: packageElement.getExtends()) {
+				if (ex.getModifiers().contains("final")) {
+					helper.error("Extending a final " + ex.eClass().getName() + " " + ex.getName() + " (" + ex.getUri() + ")");
+				}
+			}
+			return helper.isSuccess();
+		}
+		return true;
+	}
+
+	/**
+	 * Validates the override constraint of '<em>Package Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean validatePackageElement_extension(PackageElement<?> packageElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (diagnostics != null) {
+			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, packageElement);
+			if (packageElement.getModifiers().contains("override") && packageElement.getExtends().isEmpty()) {
+				helper.error(packageElement.eClass().getName() + "  " + packageElement.getName() + " is an extension but does not extend any other element.");
+			}
+			return helper.isSuccess();
+		}
+		return true;
 	}
 
 	/**
@@ -185,7 +239,18 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validatePackage(org.nasdanika.flow.Package package_, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(package_, diagnostics, context);
+		if (!validate_NoCircularContainment(package_, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(package_, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -203,7 +268,18 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateParticipant(Participant participant, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(participant, diagnostics, context);
+		if (!validate_NoCircularContainment(participant, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(participant, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(participant, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -221,7 +297,18 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateResource(Resource resource, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(resource, diagnostics, context);
+		if (!validate_NoCircularContainment(resource, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(resource, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(resource, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -239,7 +326,18 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateArtifact(Artifact artifact, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(artifact, diagnostics, context);
+		if (!validate_NoCircularContainment(artifact, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(artifact, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(artifact, diagnostics, context);
+		return result;
 	}
 
 	/**
@@ -266,123 +364,18 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(flowElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(flowElement, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(flowElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(flowElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(flowElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(flowElement, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(flowElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(flowElement, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(flowElement, diagnostics, context);
 		return result;
 	}
 
 	/**
-	 * Validates the final constraint of '<em>Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateFlowElement_final(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "final", getObjectLabel(flowElement, context) },
-						 new Object[] { flowElement },
-						 context));
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Validates the override constraint of '<em>Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlowElement_override(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "override", getObjectLabel(flowElement, context) },
-						 new Object[] { flowElement },
-						 context));
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Validates the suppress constraint of '<em>Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlowElement_suppress(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "suppress", getObjectLabel(flowElement, context) },
-						 new Object[] { flowElement },
-						 context));
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Validates the suppressAndOverride constraint of '<em>Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlowElement_suppressAndOverride(FlowElement<?> flowElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "suppressAndOverride", getObjectLabel(flowElement, context) },
-						 new Object[] { flowElement },
-						 context));
-			}
-			return false;
-		}
-		return true;
+	public boolean validateFlowElementEntry(Map.Entry<?, ?> flowElementEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)flowElementEntry, diagnostics, context);
 	}
 
 	/**
@@ -400,10 +393,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(activity, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(activity, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(activity, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(activity, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(activity, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(activity, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(activity, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(activity, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(activity, diagnostics, context);
 		return result;
 	}
 
@@ -431,40 +422,9 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(service, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(service, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(service, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(service, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(service, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(service, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(service, diagnostics, context);
-		if (result || diagnostics != null) result &= validateService_abstract(service, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(service, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(service, diagnostics, context);
 		return result;
-	}
-
-	/**
-	 * Validates the abstract constraint of '<em>Service</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateService_abstract(Service service, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "abstract", getObjectLabel(service, context) },
-						 new Object[] { service },
-						 context));
-			}
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -473,7 +433,27 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateTransition(Transition transition, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(transition, diagnostics, context);
+		if (!validate_NoCircularContainment(transition, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(transition, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(transition, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateTransitionEntry(Map.Entry<?, ?> transitionEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)transitionEntry, diagnostics, context);
 	}
 
 	/**
@@ -482,7 +462,27 @@ public class FlowValidator extends EObjectValidator {
 	 * @generated
 	 */
 	public boolean validateCall(Call call, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(call, diagnostics, context);
+		if (!validate_NoCircularContainment(call, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(call, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(call, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateCallEntry(Map.Entry<?, ?> callEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)callEntry, diagnostics, context);
 	}
 
 	/**
@@ -500,98 +500,9 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(flow, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(flow, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlow_final(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlow_abstract(flow, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlow_elements(flow, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(flow, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(flow, diagnostics, context);
 		return result;
-	}
-
-	/**
-	 * Validates the final constraint of '<em>Flow</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlow_final(Flow flow, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO override the constraint, if desired
-		// -> uncomment the scaffolding
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "final", getObjectLabel(flow, context) },
-						 new Object[] { flow },
-						 context));
-			}
-			return false;
-		}
-		return validateFlowElement_final(flow, diagnostics, context);
-	}
-
-	/**
-	 * Validates the abstract constraint of '<em>Flow</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlow_abstract(Flow flow, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "abstract", getObjectLabel(flow, context) },
-						 new Object[] { flow },
-						 context));
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Validates the elements constraint of '<em>Flow</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateFlow_elements(Flow flow, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		// TODO implement the constraint
-		// -> specify the condition that violates the constraint
-		// -> verify the diagnostic details, including severity, code, and message
-		// Ensure that you remove @generated or mark it @generated NOT
-		if (false) {
-			if (diagnostics != null) {
-				diagnostics.add
-					(createDiagnostic
-						(Diagnostic.ERROR,
-						 DIAGNOSTIC_SOURCE,
-						 0,
-						 "_UI_GenericConstraint_diagnostic",
-						 new Object[] { "elements", getObjectLabel(flow, context) },
-						 new Object[] { flow },
-						 context));
-			}
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -609,10 +520,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(pseudoState, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(pseudoState, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(pseudoState, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(pseudoState, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(pseudoState, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(pseudoState, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(pseudoState, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(pseudoState, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(pseudoState, diagnostics, context);
 		return result;
 	}
 
@@ -631,10 +540,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(choice, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(choice, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(choice, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(choice, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(choice, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(choice, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(choice, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(choice, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(choice, diagnostics, context);
 		return result;
 	}
 
@@ -653,10 +560,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(end, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(end, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(end, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(end, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(end, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(end, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(end, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(end, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(end, diagnostics, context);
 		return result;
 	}
 
@@ -675,10 +580,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(entryPoint, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(entryPoint, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(entryPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(entryPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(entryPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(entryPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(entryPoint, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(entryPoint, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(entryPoint, diagnostics, context);
 		return result;
 	}
 
@@ -697,10 +600,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(exitPoint, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(exitPoint, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(exitPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(exitPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(exitPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(exitPoint, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(exitPoint, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(exitPoint, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(exitPoint, diagnostics, context);
 		return result;
 	}
 
@@ -719,10 +620,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(expansionInput, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(expansionInput, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(expansionInput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(expansionInput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(expansionInput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(expansionInput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(expansionInput, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(expansionInput, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(expansionInput, diagnostics, context);
 		return result;
 	}
 
@@ -741,10 +640,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(expansionOutput, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(expansionOutput, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(expansionOutput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(expansionOutput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(expansionOutput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(expansionOutput, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(expansionOutput, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(expansionOutput, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(expansionOutput, diagnostics, context);
 		return result;
 	}
 
@@ -763,10 +660,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(fork, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(fork, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(fork, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(fork, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(fork, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(fork, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(fork, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(fork, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(fork, diagnostics, context);
 		return result;
 	}
 
@@ -785,10 +680,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(inputPin, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(inputPin, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(inputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(inputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(inputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(inputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(inputPin, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(inputPin, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(inputPin, diagnostics, context);
 		return result;
 	}
 
@@ -807,10 +700,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(join, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(join, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(join, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(join, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(join, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(join, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(join, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(join, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(join, diagnostics, context);
 		return result;
 	}
 
@@ -829,10 +720,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(outputPin, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(outputPin, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(outputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(outputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(outputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(outputPin, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(outputPin, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(outputPin, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(outputPin, diagnostics, context);
 		return result;
 	}
 
@@ -851,10 +740,8 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_UniqueID(start, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryKeyUnique(start, diagnostics, context);
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(start, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_final(start, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_override(start, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppress(start, diagnostics, context);
-		if (result || diagnostics != null) result &= validateFlowElement_suppressAndOverride(start, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(start, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(start, diagnostics, context);
 		return result;
 	}
 

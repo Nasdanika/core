@@ -8,6 +8,9 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/package-element.md"/>
     </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="final extension"/>
+    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//PackageElement">
         <eTypeArguments eTypeParameter="#//PackageElement/T"/>
@@ -58,7 +61,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="A collection of boolean flags:&#xA;&#xA;* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.&#xA;* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.&#xA;* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.&#xA;* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.&#xA;* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.&#xA;* ``override`` - Specifies that this element overrides (extends) an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.&#xA;* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.&#xA;"/>
+        <details key="documentation" value="A collection of boolean flags:&#xA;&#xA;* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.&#xA;* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.&#xA;* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.&#xA;* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.&#xA;* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.&#xA;* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.&#xA;* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.&#xA;"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -221,86 +224,13 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/journey-element.md"/>
     </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="final override suppress suppressAndOverride"/>
-    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//FlowElement">
         <eTypeArguments eTypeParameter="#//FlowElement/T"/>
       </eBounds>
     </eTypeParameters>
-    <eOperations name="getInputs" upperBound="-1" eType="#//Transition">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Transitions which have this journey element as its target in a given journey path. "/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve transitions target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getInvocations" upperBound="-1" eType="#//Call">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Calls which have this journey element as its target in a given journey path. "/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve calls target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getAllInputs" upperBound="-1" eType="#//Transition">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Opposite to all outputs, i.e. all inbound transitions, in a given journey path."/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve transitions target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getAllInvocations" upperBound="-1" eType="#//Call">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Opposite to all calls, i.e. all incoming calls, in a given journey path."/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve calls target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getAllOutputs" upperBound="-1" eType="#//Transition">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Includes own outputs and outputs inherited from the base journey of the containing journey. This element outputs override inherited outputs with the same path."/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve transitions target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="getAllCalls" upperBound="-1" eType="#//Call">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Includes own calls and calls inherited from the base journey of the containing journey. This element calls override inherited calls with the same path."/>
-      </eAnnotations>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve calls target elements. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
-    <eOperations name="overrides" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Returns ``true`` if this journey element directly or transitively overrided the argument journey element."/>
-      </eAnnotations>
-      <eParameters name="journeyElement">
-        <eGenericType eClassifier="#//FlowElement">
-          <eTypeArguments/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
-        eType="#//Transition" containment="true">
+        eType="#//TransitionEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Activity outbound transitions to other activities."/>
       </eAnnotations>
@@ -310,7 +240,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="calls" upperBound="-1"
-        eType="#//Call" containment="true">
+        eType="#//CallEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Calls to other activities."/>
       </eAnnotations>
@@ -325,7 +255,7 @@
         <details key="documentation" value="Input artifacts required to start working on this activity."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="deliverables" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputArtifacts" upperBound="-1"
         eType="#//Artifact">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Output artifacts of the activity."/>
@@ -343,59 +273,26 @@
       <eTypeArguments eTypeParameter="#//FlowElement/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Activity">
-    <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/activity.md"/>
-    </eAnnotations>
-    <eTypeParameters name="T">
-      <eBounds eClassifier="#//Activity">
-        <eTypeArguments eTypeParameter="#//Activity/T"/>
-      </eBounds>
-    </eTypeParameters>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
-        eType="#//Service" changeable="false" derived="true" eOpposite="#//Service/target">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Derived opposite to Service target."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//FlowElement">
-      <eTypeArguments eTypeParameter="#//Activity/T"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ActivityEntry" instanceClassName="java.util.Map$Entry">
+  <eClassifiers xsi:type="ecore:EClass" name="FlowElementEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Mapping of activity key to an activity or a flow. Null value suppresses inherited entry."/>
+      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Activity key."/>
+        <details key="documentation" value="Artifact key."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" containment="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Activity or flow. Use ``null`` to suppress inherited sub-package."/>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
       </eAnnotations>
-      <eGenericType eClassifier="#//Activity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Service">
-    <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/service.md"/>
-    </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="abstract"/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
-        eType="#//Activity" eOpposite="#//Activity/services">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Target activity of the service."/>
-      </eAnnotations>
-    </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//FlowElement">
-      <eTypeArguments eClassifier="#//Service"/>
-    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Transition">
     <eAnnotations source="urn:org.nasdanika">
@@ -438,6 +335,25 @@
       <eTypeArguments eClassifier="#//Transition"/>
     </eGenericSuperTypes>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Artifact key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Transition"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Call" eSuperTypes="#//Transition">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/call.md"/>
@@ -449,21 +365,85 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Mapping of artifact key to an artifact. Null value suppresses inherited entry."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Artifact key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Call"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/flow/activity.md"/>
+    </eAnnotations>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//Activity">
+        <eTypeArguments eTypeParameter="#//Activity/T"/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" changeable="false" derived="true" eOpposite="#//Service/target">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived opposite to Service target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//FlowElement">
+      <eTypeArguments eTypeParameter="#//Activity/T"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivityEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Mapping of activity key to an activity or a flow. Null value suppresses inherited entry."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Activity key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Activity or flow. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//Activity">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/flow/service.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Activity" eOpposite="#//Activity/services">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Target activity of the service."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//FlowElement">
+      <eTypeArguments eClassifier="#//Service"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Flow">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/journey.md"/>
     </eAnnotations>
-    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
-      <details key="constraints" value="final abstract elements"/>
-    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        containment="true">
+        eType="#//FlowElementEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Elements of this journey."/>
       </eAnnotations>
-      <eGenericType eClassifier="#//FlowElement">
-        <eTypeArguments/>
-      </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//Activity">
       <eTypeArguments eClassifier="#//Flow"/>

@@ -2,17 +2,18 @@
  */
 package org.nasdanika.flow.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
-import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
@@ -30,7 +31,7 @@ import org.nasdanika.flow.Transition;
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getCalls <em>Calls</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getDeliverables <em>Deliverables</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifacts <em>Output Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipants <em>Participants</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
  * </ul>
@@ -75,8 +76,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Transition> getOutputs() {
-		return (EList<Transition>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUTS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUTS, true, true);
+	public EMap<String, Transition> getOutputs() {
+		return (EMap<String, Transition>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUTS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUTS, true, true);
 	}
 
 	/**
@@ -86,8 +87,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Call> getCalls() {
-		return (EList<Call>)eDynamicGet(FlowPackage.FLOW_ELEMENT__CALLS, FlowPackage.Literals.FLOW_ELEMENT__CALLS, true, true);
+	public EMap<String, Call> getCalls() {
+		return (EMap<String, Call>)eDynamicGet(FlowPackage.FLOW_ELEMENT__CALLS, FlowPackage.Literals.FLOW_ELEMENT__CALLS, true, true);
 	}
 
 	/**
@@ -108,8 +109,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Artifact> getDeliverables() {
-		return (EList<Artifact>)eDynamicGet(FlowPackage.FLOW_ELEMENT__DELIVERABLES, FlowPackage.Literals.FLOW_ELEMENT__DELIVERABLES, true, true);
+	public EList<Artifact> getOutputArtifacts() {
+		return (EList<Artifact>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUT_ARTIFACTS, true, true);
 	}
 
 	/**
@@ -140,90 +141,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 * @generated
 	 */
 	@Override
-	public EList<Transition> getInputs(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Call> getInvocations(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Transition> getAllInputs(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Call> getAllInvocations(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Transition> getAllOutputs(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<Call> getAllCalls(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean overrides(FlowElement<?> journeyElement) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.FLOW_ELEMENT__OUTPUTS:
@@ -243,13 +160,15 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case FlowPackage.FLOW_ELEMENT__OUTPUTS:
-				return getOutputs();
+				if (coreType) return getOutputs();
+				else return getOutputs().map();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
-				return getCalls();
+				if (coreType) return getCalls();
+				else return getCalls().map();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return getInputArtifacts();
-			case FlowPackage.FLOW_ELEMENT__DELIVERABLES:
-				return getDeliverables();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				return getOutputArtifacts();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return getParticipants();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
@@ -268,20 +187,18 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case FlowPackage.FLOW_ELEMENT__OUTPUTS:
-				getOutputs().clear();
-				getOutputs().addAll((Collection<? extends Transition>)newValue);
+				((EStructuralFeature.Setting)getOutputs()).set(newValue);
 				return;
 			case FlowPackage.FLOW_ELEMENT__CALLS:
-				getCalls().clear();
-				getCalls().addAll((Collection<? extends Call>)newValue);
+				((EStructuralFeature.Setting)getCalls()).set(newValue);
 				return;
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				getInputArtifacts().clear();
 				getInputArtifacts().addAll((Collection<? extends Artifact>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__DELIVERABLES:
-				getDeliverables().clear();
-				getDeliverables().addAll((Collection<? extends Artifact>)newValue);
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				getOutputArtifacts().clear();
+				getOutputArtifacts().addAll((Collection<? extends Artifact>)newValue);
 				return;
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				getParticipants().clear();
@@ -312,8 +229,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				getInputArtifacts().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__DELIVERABLES:
-				getDeliverables().clear();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				getOutputArtifacts().clear();
 				return;
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				getParticipants().clear();
@@ -339,8 +256,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return !getCalls().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return !getInputArtifacts().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__DELIVERABLES:
-				return !getDeliverables().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				return !getOutputArtifacts().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return !getParticipants().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
@@ -348,32 +265,38 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 		}
 		return super.eIsSet(featureID);
 	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	
 	@Override
-	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case FlowPackage.FLOW_ELEMENT___GET_INPUTS__ELIST:
-				return getInputs((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___GET_INVOCATIONS__ELIST:
-				return getInvocations((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___GET_ALL_INPUTS__ELIST:
-				return getAllInputs((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST:
-				return getAllInvocations((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST:
-				return getAllOutputs((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___GET_ALL_CALLS__ELIST:
-				return getAllCalls((EList<Flow>)arguments.get(0));
-			case FlowPackage.FLOW_ELEMENT___OVERRIDES__FLOWELEMENT:
-				return overrides((FlowElement<?>)arguments.get(0));
+	public void apply(T instance) {
+		super.apply(instance);
+		
+		// Outputs
+		for (Entry<String, Transition> outputEntry: getOutputs().entrySet()) {
+			Transition output = outputEntry.getValue();
+			EMap<String, Transition> instanceOutputs = instance.getOutputs();
+			String outputKey = outputEntry.getKey();
+			if (output == null) {
+				instanceOutputs.removeKey(outputKey);
+			} else {
+				Transition instanceOutput = output.create();
+				instanceOutputs.put(outputKey, instanceOutput);
+				output.apply(instanceOutput);
+			}
 		}
-		return super.eInvoke(operationID, arguments);
+		
+		// Calls
+		for (Entry<String, Call> callEntry: getCalls().entrySet()) {
+			Call call = callEntry.getValue();
+			EMap<String, Call> instanceCalls = instance.getCalls();
+			String callKey = callEntry.getKey();
+			if (call == null) {
+				instanceCalls.removeKey(callKey);
+			} else {
+				Call instanceCall = (Call) call.create();
+				instanceCalls.put(callKey, instanceCall);
+				call.apply(instanceCall);
+			}
+		}
 	}
 
 } //FlowElementImpl

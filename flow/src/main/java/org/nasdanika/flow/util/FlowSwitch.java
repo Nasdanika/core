@@ -176,6 +176,45 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FlowPackage.FLOW_ELEMENT_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, FlowElement<?>> flowElementEntry = (Map.Entry<String, FlowElement<?>>)theEObject;
+				T1 result = caseFlowElementEntry(flowElementEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.TRANSITION: {
+				Transition transition = (Transition)theEObject;
+				T1 result = caseTransition(transition);
+				if (result == null) result = casePackageElement(transition);
+				if (result == null) result = caseNamedElement(transition);
+				if (result == null) result = caseModelElement(transition);
+				if (result == null) result = caseMarked(transition);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.TRANSITION_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Transition> transitionEntry = (Map.Entry<String, Transition>)theEObject;
+				T1 result = caseTransitionEntry(transitionEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.CALL: {
+				Call call = (Call)theEObject;
+				T1 result = caseCall(call);
+				if (result == null) result = caseTransition(call);
+				if (result == null) result = casePackageElement(call);
+				if (result == null) result = caseNamedElement(call);
+				if (result == null) result = caseModelElement(call);
+				if (result == null) result = caseMarked(call);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.CALL_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Call> callEntry = (Map.Entry<String, Call>)theEObject;
+				T1 result = caseCallEntry(callEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FlowPackage.ACTIVITY: {
 				Activity<?> activity = (Activity<?>)theEObject;
 				T1 result = caseActivity(activity);
@@ -201,27 +240,6 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseNamedElement(service);
 				if (result == null) result = caseModelElement(service);
 				if (result == null) result = caseMarked(service);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FlowPackage.TRANSITION: {
-				Transition transition = (Transition)theEObject;
-				T1 result = caseTransition(transition);
-				if (result == null) result = casePackageElement(transition);
-				if (result == null) result = caseNamedElement(transition);
-				if (result == null) result = caseModelElement(transition);
-				if (result == null) result = caseMarked(transition);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FlowPackage.CALL: {
-				Call call = (Call)theEObject;
-				T1 result = caseCall(call);
-				if (result == null) result = caseTransition(call);
-				if (result == null) result = casePackageElement(call);
-				if (result == null) result = caseNamedElement(call);
-				if (result == null) result = caseModelElement(call);
-				if (result == null) result = caseMarked(call);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -535,6 +553,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Element Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Element Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseFlowElementEntry(Map.Entry<String, FlowElement<?>> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Activity</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -595,6 +628,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Transition Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Transition Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseTransitionEntry(Map.Entry<String, Transition> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Call</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -606,6 +654,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseCall(Call object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Call Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Call Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseCallEntry(Map.Entry<String, Call> object) {
 		return null;
 	}
 

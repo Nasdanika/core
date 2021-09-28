@@ -24,6 +24,7 @@ import org.nasdanika.ncore.NamedElement;
  * @see org.nasdanika.flow.FlowPackage#getPackageElement()
  * @model abstract="true"
  *        annotation="urn:org.nasdanika documentation-reference='doc/package-element.md'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='final extension'"
  * @generated
  */
 public interface PackageElement<T extends PackageElement<T>> extends NamedElement {
@@ -103,7 +104,7 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * * ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.
 	 * * ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.
 	 * * ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.
-	 * * ``override`` - Specifies that this element overrides (extends) an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.
+	 * * ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.
 	 * * ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.
 	 * 
 	 * <!-- end-model-doc -->

@@ -1097,7 +1097,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1106,7 +1106,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__OUTPUTS = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1124,13 +1124,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__DELIVERABLES = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int FLOW_ELEMENT__OUTPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -1187,76 +1187,59 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_INPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_INVOCATIONS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_ALL_INPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___GET_ALL_CALLS__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 5;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT___OVERRIDES__FLOWELEMENT = PACKAGE_ELEMENT_OPERATION_COUNT + 6;
-
-	/**
 	 * The number of operations of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 7;
+	int FLOW_ELEMENT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.FlowElementEntryImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElementEntry()
+	 * @generated
+	 */
+	int FLOW_ELEMENT_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Element Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Element Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT_ENTRY_OPERATION_COUNT = 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityImpl <em>Activity</em>}' class.
@@ -1266,259 +1249,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 10;
-
-	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__MARKER = FLOW_ELEMENT__MARKER;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__URI = FLOW_ELEMENT__URI;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__DESCRIPTION = FLOW_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__UUID = FLOW_ELEMENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__NAME = FLOW_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Prototype</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Extends</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__EXTENDS = FLOW_ELEMENT__EXTENDS;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
-
-	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__OUTPUTS = FLOW_ELEMENT__OUTPUTS;
-
-	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__CALLS = FLOW_ELEMENT__CALLS;
-
-	/**
-	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
-
-	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__DELIVERABLES = FLOW_ELEMENT__DELIVERABLES;
-
-	/**
-	 * The feature id for the '<em><b>Participants</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
-
-	/**
-	 * The feature id for the '<em><b>Resources</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__RESOURCES = FLOW_ELEMENT__RESOURCES;
-
-	/**
-	 * The feature id for the '<em><b>Services</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__SERVICES = FLOW_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Activity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Create</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___CREATE = FLOW_ELEMENT___CREATE;
-
-	/**
-	 * The operation id for the '<em>Apply</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Resolve</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_INPUTS__ELIST = FLOW_ELEMENT___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_ALL_INPUTS__ELIST = FLOW_ELEMENT___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_ALL_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_ALL_OUTPUTS__ELIST = FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___GET_ALL_CALLS__ELIST = FLOW_ELEMENT___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY___OVERRIDES__FLOWELEMENT = FLOW_ELEMENT___OVERRIDES__FLOWELEMENT;
-
-	/**
-	 * The number of operations of the '<em>Activity</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_OPERATION_COUNT = FLOW_ELEMENT_OPERATION_COUNT + 0;
+	int ACTIVITY = 15;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityEntryImpl <em>Activity Entry</em>}' class.
@@ -1528,43 +1259,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivityEntry()
 	 * @generated
 	 */
-	int ACTIVITY_ENTRY = 11;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_ENTRY__KEY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_ENTRY__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Activity Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_ENTRY_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Activity Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY_ENTRY_OPERATION_COUNT = 0;
+	int ACTIVITY_ENTRY = 16;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ServiceImpl <em>Service</em>}' class.
@@ -1574,259 +1269,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 12;
-
-	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__MARKER = FLOW_ELEMENT__MARKER;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__URI = FLOW_ELEMENT__URI;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__DESCRIPTION = FLOW_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__UUID = FLOW_ELEMENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__NAME = FLOW_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Prototype</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Extends</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__EXTENDS = FLOW_ELEMENT__EXTENDS;
-
-	/**
-	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
-
-	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__OUTPUTS = FLOW_ELEMENT__OUTPUTS;
-
-	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__CALLS = FLOW_ELEMENT__CALLS;
-
-	/**
-	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
-
-	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__DELIVERABLES = FLOW_ELEMENT__DELIVERABLES;
-
-	/**
-	 * The feature id for the '<em><b>Participants</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
-
-	/**
-	 * The feature id for the '<em><b>Resources</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__RESOURCES = FLOW_ELEMENT__RESOURCES;
-
-	/**
-	 * The feature id for the '<em><b>Target</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__TARGET = FLOW_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Service</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Create</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___CREATE = FLOW_ELEMENT___CREATE;
-
-	/**
-	 * The operation id for the '<em>Apply</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Resolve</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_INPUTS__ELIST = FLOW_ELEMENT___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_ALL_INPUTS__ELIST = FLOW_ELEMENT___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_ALL_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_ALL_OUTPUTS__ELIST = FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___GET_ALL_CALLS__ELIST = FLOW_ELEMENT___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE___OVERRIDES__FLOWELEMENT = FLOW_ELEMENT___OVERRIDES__FLOWELEMENT;
-
-	/**
-	 * The number of operations of the '<em>Service</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE_OPERATION_COUNT = FLOW_ELEMENT_OPERATION_COUNT + 0;
+	int SERVICE = 17;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionImpl <em>Transition</em>}' class.
@@ -1836,7 +1279,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransition()
 	 * @generated
 	 */
-	int TRANSITION = 13;
+	int TRANSITION = 11;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2001,6 +1444,52 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionEntryImpl <em>Transition Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.TransitionEntryImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransitionEntry()
+	 * @generated
+	 */
+	int TRANSITION_ENTRY = 12;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Transition Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Transition Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.CallImpl <em>Call</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2008,7 +1497,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 14;
+	int CALL = 13;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2182,6 +1671,466 @@ public interface FlowPackage extends EPackage {
 	int CALL_OPERATION_COUNT = TRANSITION_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.CallEntryImpl <em>Call Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.CallEntryImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCallEntry()
+	 * @generated
+	 */
+	int CALL_ENTRY = 14;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Call Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Call Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__MARKER = FLOW_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__URI = FLOW_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__DESCRIPTION = FLOW_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__UUID = FLOW_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__NAME = FLOW_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__EXTENDS = FLOW_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__OUTPUTS = FLOW_ELEMENT__OUTPUTS;
+
+	/**
+	 * The feature id for the '<em><b>Calls</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__CALLS = FLOW_ELEMENT__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__OUTPUT_ARTIFACTS = FLOW_ELEMENT__OUTPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Participants</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__RESOURCES = FLOW_ELEMENT__RESOURCES;
+
+	/**
+	 * The feature id for the '<em><b>Services</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__SERVICES = FLOW_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Activity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___CREATE = FLOW_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Activity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_OPERATION_COUNT = FLOW_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Activity Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Activity Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__MARKER = FLOW_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__URI = FLOW_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__DESCRIPTION = FLOW_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__UUID = FLOW_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__NAME = FLOW_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__PROTOTYPE = FLOW_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__EXTENSIONS = FLOW_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__EXTENDS = FLOW_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__OUTPUTS = FLOW_ELEMENT__OUTPUTS;
+
+	/**
+	 * The feature id for the '<em><b>Calls</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__CALLS = FLOW_ELEMENT__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__OUTPUT_ARTIFACTS = FLOW_ELEMENT__OUTPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Participants</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__RESOURCES = FLOW_ELEMENT__RESOURCES;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__TARGET = FLOW_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Service</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___CREATE = FLOW_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___APPLY__PACKAGEELEMENT = FLOW_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Service</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_OPERATION_COUNT = FLOW_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.FlowImpl <em>Flow</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2189,7 +2138,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlow()
 	 * @generated
 	 */
-	int FLOW = 15;
+	int FLOW = 18;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2273,7 +2222,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW__MODIFIERS = ACTIVITY__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2282,7 +2231,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW__OUTPUTS = ACTIVITY__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2300,13 +2249,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW__INPUT_ARTIFACTS = ACTIVITY__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW__DELIVERABLES = ACTIVITY__DELIVERABLES;
+	int FLOW__OUTPUT_ARTIFACTS = ACTIVITY__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -2336,7 +2285,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW__SERVICES = ACTIVITY__SERVICES;
 
 	/**
-	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Elements</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2345,22 +2294,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW__ELEMENTS = ACTIVITY_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Root</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__ROOT = ACTIVITY_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Flow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 2;
+	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -2390,69 +2330,6 @@ public interface FlowPackage extends EPackage {
 	int FLOW___RESOLVE__PACKAGEELEMENT = ACTIVITY___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_INPUTS__ELIST = ACTIVITY___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_INVOCATIONS__ELIST = ACTIVITY___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_ALL_INPUTS__ELIST = ACTIVITY___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_ALL_INVOCATIONS__ELIST = ACTIVITY___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_ALL_OUTPUTS__ELIST = ACTIVITY___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___GET_ALL_CALLS__ELIST = ACTIVITY___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW___OVERRIDES__FLOWELEMENT = ACTIVITY___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Flow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2469,7 +2346,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPseudoState()
 	 * @generated
 	 */
-	int PSEUDO_STATE = 16;
+	int PSEUDO_STATE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2553,7 +2430,7 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2562,7 +2439,7 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__OUTPUTS = FLOW_ELEMENT__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2580,13 +2457,13 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PSEUDO_STATE__DELIVERABLES = FLOW_ELEMENT__DELIVERABLES;
+	int PSEUDO_STATE__OUTPUT_ARTIFACTS = FLOW_ELEMENT__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -2652,69 +2529,6 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE___RESOLVE__PACKAGEELEMENT = FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_INPUTS__ELIST = FLOW_ELEMENT___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_ALL_INPUTS__ELIST = FLOW_ELEMENT___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST = FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST = FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___GET_ALL_CALLS__ELIST = FLOW_ELEMENT___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE___OVERRIDES__FLOWELEMENT = FLOW_ELEMENT___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Pseudo State</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2731,7 +2545,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getChoice()
 	 * @generated
 	 */
-	int CHOICE = 17;
+	int CHOICE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2815,7 +2629,7 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2824,7 +2638,7 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2842,13 +2656,13 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int CHOICE__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -2914,69 +2728,6 @@ public interface FlowPackage extends EPackage {
 	int CHOICE___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Choice</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2993,7 +2744,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 18;
+	int END = 21;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3077,7 +2828,7 @@ public interface FlowPackage extends EPackage {
 	int END__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3086,7 +2837,7 @@ public interface FlowPackage extends EPackage {
 	int END__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3104,13 +2855,13 @@ public interface FlowPackage extends EPackage {
 	int END__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int END__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -3176,69 +2927,6 @@ public interface FlowPackage extends EPackage {
 	int END___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>End</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3255,7 +2943,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 19;
+	int ENTRY_POINT = 22;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3339,7 +3027,7 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3348,7 +3036,7 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3366,13 +3054,13 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_POINT__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int ENTRY_POINT__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -3438,69 +3126,6 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Entry Point</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3517,7 +3142,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExitPoint()
 	 * @generated
 	 */
-	int EXIT_POINT = 20;
+	int EXIT_POINT = 23;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3601,7 +3226,7 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3610,7 +3235,7 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3628,13 +3253,13 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXIT_POINT__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int EXIT_POINT__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -3700,69 +3325,6 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Exit Point</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3779,7 +3341,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionInput()
 	 * @generated
 	 */
-	int EXPANSION_INPUT = 21;
+	int EXPANSION_INPUT = 24;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3863,7 +3425,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3872,7 +3434,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3890,13 +3452,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_INPUT__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int EXPANSION_INPUT__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -3962,69 +3524,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Expansion Input</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4041,7 +3540,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionOutput()
 	 * @generated
 	 */
-	int EXPANSION_OUTPUT = 22;
+	int EXPANSION_OUTPUT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4125,7 +3624,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4134,7 +3633,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4152,13 +3651,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_OUTPUT__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int EXPANSION_OUTPUT__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -4224,69 +3723,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Expansion Output</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4303,7 +3739,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFork()
 	 * @generated
 	 */
-	int FORK = 23;
+	int FORK = 26;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4387,7 +3823,7 @@ public interface FlowPackage extends EPackage {
 	int FORK__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4396,7 +3832,7 @@ public interface FlowPackage extends EPackage {
 	int FORK__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4414,13 +3850,13 @@ public interface FlowPackage extends EPackage {
 	int FORK__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORK__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int FORK__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -4486,69 +3922,6 @@ public interface FlowPackage extends EPackage {
 	int FORK___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Fork</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4565,7 +3938,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getInputPin()
 	 * @generated
 	 */
-	int INPUT_PIN = 24;
+	int INPUT_PIN = 27;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4649,7 +4022,7 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4658,7 +4031,7 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4676,13 +4049,13 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PIN__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int INPUT_PIN__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -4748,69 +4121,6 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Input Pin</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4827,7 +4137,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getJoin()
 	 * @generated
 	 */
-	int JOIN = 25;
+	int JOIN = 28;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4911,7 +4221,7 @@ public interface FlowPackage extends EPackage {
 	int JOIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4920,7 +4230,7 @@ public interface FlowPackage extends EPackage {
 	int JOIN__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4938,13 +4248,13 @@ public interface FlowPackage extends EPackage {
 	int JOIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int JOIN__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -5010,69 +4320,6 @@ public interface FlowPackage extends EPackage {
 	int JOIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Join</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5089,7 +4336,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getOutputPin()
 	 * @generated
 	 */
-	int OUTPUT_PIN = 26;
+	int OUTPUT_PIN = 29;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5173,7 +4420,7 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5182,7 +4429,7 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5200,13 +4447,13 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PIN__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int OUTPUT_PIN__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -5272,69 +4519,6 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
-
-	/**
 	 * The number of operations of the '<em>Output Pin</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5351,7 +4535,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 27;
+	int START = 30;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5435,7 +4619,7 @@ public interface FlowPackage extends EPackage {
 	int START__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5444,7 +4628,7 @@ public interface FlowPackage extends EPackage {
 	int START__OUTPUTS = PSEUDO_STATE__OUTPUTS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Calls</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5462,13 +4646,13 @@ public interface FlowPackage extends EPackage {
 	int START__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
 
 	/**
-	 * The feature id for the '<em><b>Deliverables</b></em>' reference list.
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START__DELIVERABLES = PSEUDO_STATE__DELIVERABLES;
+	int START__OUTPUT_ARTIFACTS = PSEUDO_STATE__OUTPUT_ARTIFACTS;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -5532,69 +4716,6 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START___RESOLVE__PACKAGEELEMENT = PSEUDO_STATE___RESOLVE__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Get Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_INPUTS__ELIST = PSEUDO_STATE___GET_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_INVOCATIONS__ELIST = PSEUDO_STATE___GET_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Inputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_ALL_INPUTS__ELIST = PSEUDO_STATE___GET_ALL_INPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Invocations</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_ALL_INVOCATIONS__ELIST = PSEUDO_STATE___GET_ALL_INVOCATIONS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Outputs</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_ALL_OUTPUTS__ELIST = PSEUDO_STATE___GET_ALL_OUTPUTS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Get All Calls</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___GET_ALL_CALLS__ELIST = PSEUDO_STATE___GET_ALL_CALLS__ELIST;
-
-	/**
-	 * The operation id for the '<em>Overrides</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START___OVERRIDES__FLOWELEMENT = PSEUDO_STATE___OVERRIDES__FLOWELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Start</em>' class.
@@ -5980,10 +5101,10 @@ public interface FlowPackage extends EPackage {
 	EClass getFlowElement();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.FlowElement#getOutputs <em>Outputs</em>}'.
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.FlowElement#getOutputs <em>Outputs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Outputs</em>'.
+	 * @return the meta object for the map '<em>Outputs</em>'.
 	 * @see org.nasdanika.flow.FlowElement#getOutputs()
 	 * @see #getFlowElement()
 	 * @generated
@@ -5991,10 +5112,10 @@ public interface FlowPackage extends EPackage {
 	EReference getFlowElement_Outputs();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.FlowElement#getCalls <em>Calls</em>}'.
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.FlowElement#getCalls <em>Calls</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Calls</em>'.
+	 * @return the meta object for the map '<em>Calls</em>'.
 	 * @see org.nasdanika.flow.FlowElement#getCalls()
 	 * @see #getFlowElement()
 	 * @generated
@@ -6013,15 +5134,15 @@ public interface FlowPackage extends EPackage {
 	EReference getFlowElement_InputArtifacts();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getDeliverables <em>Deliverables</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getOutputArtifacts <em>Output Artifacts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Deliverables</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getDeliverables()
+	 * @return the meta object for the reference list '<em>Output Artifacts</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getOutputArtifacts()
 	 * @see #getFlowElement()
 	 * @generated
 	 */
-	EReference getFlowElement_Deliverables();
+	EReference getFlowElement_OutputArtifacts();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getParticipants <em>Participants</em>}'.
@@ -6046,74 +5167,39 @@ public interface FlowPackage extends EPackage {
 	EReference getFlowElement_Resources();
 
 	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getInputs(org.eclipse.emf.common.util.EList) <em>Get Inputs</em>}' operation.
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Element Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Inputs</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getInputs(org.eclipse.emf.common.util.EList)
+	 * @return the meta object for class '<em>Element Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueType="org.nasdanika.flow.FlowElement&lt;?&gt;" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
 	 * @generated
 	 */
-	EOperation getFlowElement__GetInputs__EList();
+	EClass getFlowElementEntry();
 
 	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getInvocations(org.eclipse.emf.common.util.EList) <em>Get Invocations</em>}' operation.
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Invocations</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getInvocations(org.eclipse.emf.common.util.EList)
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getFlowElementEntry()
 	 * @generated
 	 */
-	EOperation getFlowElement__GetInvocations__EList();
+	EAttribute getFlowElementEntry_Key();
 
 	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getAllInputs(org.eclipse.emf.common.util.EList) <em>Get All Inputs</em>}' operation.
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get All Inputs</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getAllInputs(org.eclipse.emf.common.util.EList)
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getFlowElementEntry()
 	 * @generated
 	 */
-	EOperation getFlowElement__GetAllInputs__EList();
-
-	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getAllInvocations(org.eclipse.emf.common.util.EList) <em>Get All Invocations</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get All Invocations</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getAllInvocations(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getFlowElement__GetAllInvocations__EList();
-
-	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getAllOutputs(org.eclipse.emf.common.util.EList) <em>Get All Outputs</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get All Outputs</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getAllOutputs(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getFlowElement__GetAllOutputs__EList();
-
-	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#getAllCalls(org.eclipse.emf.common.util.EList) <em>Get All Calls</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get All Calls</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#getAllCalls(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getFlowElement__GetAllCalls__EList();
-
-	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.FlowElement#overrides(org.nasdanika.flow.FlowElement) <em>Overrides</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Overrides</em>' operation.
-	 * @see org.nasdanika.flow.FlowElement#overrides(org.nasdanika.flow.FlowElement)
-	 * @generated
-	 */
-	EOperation getFlowElement__Overrides__FlowElement();
+	EReference getFlowElementEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Activity <em>Activity</em>}'.
@@ -6245,6 +5331,41 @@ public interface FlowPackage extends EPackage {
 	EOperation getTransition__GetTarget__EList();
 
 	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Transition Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Transition Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueType="org.nasdanika.flow.Transition" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 * @generated
+	 */
+	EClass getTransitionEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getTransitionEntry()
+	 * @generated
+	 */
+	EAttribute getTransitionEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getTransitionEntry()
+	 * @generated
+	 */
+	EReference getTransitionEntry_Value();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Call <em>Call</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6266,6 +5387,41 @@ public interface FlowPackage extends EPackage {
 	EReference getCall_Response();
 
 	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Call Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Call Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueType="org.nasdanika.flow.Call" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 * @generated
+	 */
+	EClass getCallEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getCallEntry()
+	 * @generated
+	 */
+	EAttribute getCallEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getCallEntry()
+	 * @generated
+	 */
+	EReference getCallEntry_Value();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Flow <em>Flow</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6276,26 +5432,15 @@ public interface FlowPackage extends EPackage {
 	EClass getFlow();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.Flow#getElements <em>Elements</em>}'.
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.Flow#getElements <em>Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @return the meta object for the map '<em>Elements</em>'.
 	 * @see org.nasdanika.flow.Flow#getElements()
 	 * @see #getFlow()
 	 * @generated
 	 */
 	EReference getFlow_Elements();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.nasdanika.flow.Flow#getRoot <em>Root</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Root</em>'.
-	 * @see org.nasdanika.flow.Flow#getRoot()
-	 * @see #getFlow()
-	 * @generated
-	 */
-	EReference getFlow_Root();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.PseudoState <em>Pseudo State</em>}'.
@@ -6744,7 +5889,7 @@ public interface FlowPackage extends EPackage {
 		EClass FLOW_ELEMENT = eINSTANCE.getFlowElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Outputs</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Outputs</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -6752,7 +5897,7 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW_ELEMENT__OUTPUTS = eINSTANCE.getFlowElement_Outputs();
 
 		/**
-		 * The meta object literal for the '<em><b>Calls</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Calls</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -6768,12 +5913,12 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW_ELEMENT__INPUT_ARTIFACTS = eINSTANCE.getFlowElement_InputArtifacts();
 
 		/**
-		 * The meta object literal for the '<em><b>Deliverables</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Output Artifacts</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference FLOW_ELEMENT__DELIVERABLES = eINSTANCE.getFlowElement_Deliverables();
+		EReference FLOW_ELEMENT__OUTPUT_ARTIFACTS = eINSTANCE.getFlowElement_OutputArtifacts();
 
 		/**
 		 * The meta object literal for the '<em><b>Participants</b></em>' reference list feature.
@@ -6792,60 +5937,30 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW_ELEMENT__RESOURCES = eINSTANCE.getFlowElement_Resources();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Inputs</b></em>' operation.
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.FlowElementEntryImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElementEntry()
 		 * @generated
 		 */
-		EOperation FLOW_ELEMENT___GET_INPUTS__ELIST = eINSTANCE.getFlowElement__GetInputs__EList();
+		EClass FLOW_ELEMENT_ENTRY = eINSTANCE.getFlowElementEntry();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Invocations</b></em>' operation.
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation FLOW_ELEMENT___GET_INVOCATIONS__ELIST = eINSTANCE.getFlowElement__GetInvocations__EList();
+		EAttribute FLOW_ELEMENT_ENTRY__KEY = eINSTANCE.getFlowElementEntry_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Get All Inputs</b></em>' operation.
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation FLOW_ELEMENT___GET_ALL_INPUTS__ELIST = eINSTANCE.getFlowElement__GetAllInputs__EList();
-
-		/**
-		 * The meta object literal for the '<em><b>Get All Invocations</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation FLOW_ELEMENT___GET_ALL_INVOCATIONS__ELIST = eINSTANCE.getFlowElement__GetAllInvocations__EList();
-
-		/**
-		 * The meta object literal for the '<em><b>Get All Outputs</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation FLOW_ELEMENT___GET_ALL_OUTPUTS__ELIST = eINSTANCE.getFlowElement__GetAllOutputs__EList();
-
-		/**
-		 * The meta object literal for the '<em><b>Get All Calls</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation FLOW_ELEMENT___GET_ALL_CALLS__ELIST = eINSTANCE.getFlowElement__GetAllCalls__EList();
-
-		/**
-		 * The meta object literal for the '<em><b>Overrides</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation FLOW_ELEMENT___OVERRIDES__FLOWELEMENT = eINSTANCE.getFlowElement__Overrides__FlowElement();
+		EReference FLOW_ELEMENT_ENTRY__VALUE = eINSTANCE.getFlowElementEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ActivityImpl <em>Activity</em>}' class.
@@ -6952,6 +6067,32 @@ public interface FlowPackage extends EPackage {
 		EOperation TRANSITION___GET_TARGET__ELIST = eINSTANCE.getTransition__GetTarget__EList();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.TransitionEntryImpl <em>Transition Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.TransitionEntryImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransitionEntry()
+		 * @generated
+		 */
+		EClass TRANSITION_ENTRY = eINSTANCE.getTransitionEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSITION_ENTRY__KEY = eINSTANCE.getTransitionEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TRANSITION_ENTRY__VALUE = eINSTANCE.getTransitionEntry_Value();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.CallImpl <em>Call</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6970,6 +6111,32 @@ public interface FlowPackage extends EPackage {
 		EReference CALL__RESPONSE = eINSTANCE.getCall_Response();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.CallEntryImpl <em>Call Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.CallEntryImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCallEntry()
+		 * @generated
+		 */
+		EClass CALL_ENTRY = eINSTANCE.getCallEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL_ENTRY__KEY = eINSTANCE.getCallEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CALL_ENTRY__VALUE = eINSTANCE.getCallEntry_Value();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.FlowImpl <em>Flow</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6980,20 +6147,12 @@ public interface FlowPackage extends EPackage {
 		EClass FLOW = eINSTANCE.getFlow();
 
 		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Elements</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference FLOW__ELEMENTS = eINSTANCE.getFlow_Elements();
-
-		/**
-		 * The meta object literal for the '<em><b>Root</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference FLOW__ROOT = eINSTANCE.getFlow_Root();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PseudoStateImpl <em>Pseudo State</em>}' class.

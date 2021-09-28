@@ -17,7 +17,6 @@ package org.nasdanika.flow;
  *
  * @see org.nasdanika.flow.FlowPackage#getService()
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/service.md'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='abstract'"
  * @generated
  */
 public interface Service extends FlowElement<Service> {

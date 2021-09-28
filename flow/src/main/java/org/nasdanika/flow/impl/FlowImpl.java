@@ -2,11 +2,12 @@
  */
 package org.nasdanika.flow.impl;
 
-import java.util.Collection;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Flow;
@@ -22,7 +23,6 @@ import org.nasdanika.flow.FlowPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getElements <em>Elements</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getRoot <em>Root</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,27 +54,8 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<FlowElement<?>> getElements() {
-		return (EList<FlowElement<?>>)eDynamicGet(FlowPackage.FLOW__ELEMENTS, FlowPackage.Literals.FLOW__ELEMENTS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Flow getRoot() {
-		return (Flow)eDynamicGet(FlowPackage.FLOW__ROOT, FlowPackage.Literals.FLOW__ROOT, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Flow basicGetRoot() {
-		return (Flow)eDynamicGet(FlowPackage.FLOW__ROOT, FlowPackage.Literals.FLOW__ROOT, false, true);
+	public EMap<String, FlowElement<?>> getElements() {
+		return (EMap<String, FlowElement<?>>)eDynamicGet(FlowPackage.FLOW__ELEMENTS, FlowPackage.Literals.FLOW__ELEMENTS, true, true);
 	}
 
 	/**
@@ -100,10 +81,8 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
-				return getElements();
-			case FlowPackage.FLOW__ROOT:
-				if (resolve) return getRoot();
-				return basicGetRoot();
+				if (coreType) return getElements();
+				else return getElements().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -118,8 +97,7 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
-				getElements().clear();
-				getElements().addAll((Collection<? extends FlowElement<?>>)newValue);
+				((EStructuralFeature.Setting)getElements()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -150,10 +128,29 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				return !getElements().isEmpty();
-			case FlowPackage.FLOW__ROOT:
-				return basicGetRoot() != null;
 		}
 		return super.eIsSet(featureID);
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void apply(Flow instance) {
+		super.apply(instance);
+
+		// Elements
+		for (Entry<String, FlowElement<?>> elementsEntry: getElements().entrySet()) {
+			FlowElement element = elementsEntry.getValue();
+			EMap<String, FlowElement<?>> instanceElements = instance.getElements();
+			String elementKey = elementsEntry.getKey();
+			if (element == null) {
+				instanceElements.removeKey(elementKey);
+			} else {
+				FlowElement instanceElement = (FlowElement) element.create();
+				instanceElements.put(elementKey, instanceElement);
+				element.apply(instanceElement);
+			}
+		}
+		
 	}
 
 } //FlowImpl

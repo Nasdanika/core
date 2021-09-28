@@ -135,6 +135,26 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 				return createFlowElementAdapter();
 			}
 			@Override
+			public Adapter caseFlowElementEntry(Map.Entry<String, FlowElement<?>> object) {
+				return createFlowElementEntryAdapter();
+			}
+			@Override
+			public Adapter caseTransition(Transition object) {
+				return createTransitionAdapter();
+			}
+			@Override
+			public Adapter caseTransitionEntry(Map.Entry<String, Transition> object) {
+				return createTransitionEntryAdapter();
+			}
+			@Override
+			public Adapter caseCall(Call object) {
+				return createCallAdapter();
+			}
+			@Override
+			public Adapter caseCallEntry(Map.Entry<String, Call> object) {
+				return createCallEntryAdapter();
+			}
+			@Override
 			public <T extends Activity<T>> Adapter caseActivity(Activity<T> object) {
 				return createActivityAdapter();
 			}
@@ -145,14 +165,6 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseService(Service object) {
 				return createServiceAdapter();
-			}
-			@Override
-			public Adapter caseTransition(Transition object) {
-				return createTransitionAdapter();
-			}
-			@Override
-			public Adapter caseCall(Call object) {
-				return createCallAdapter();
 			}
 			@Override
 			public Adapter caseFlow(Flow object) {
@@ -379,6 +391,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Element Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createFlowElementEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Activity <em>Activity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -435,6 +461,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Transition Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createTransitionEntryAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Call <em>Call</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -445,6 +485,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCallAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Call Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createCallEntryAdapter() {
 		return null;
 	}
 
