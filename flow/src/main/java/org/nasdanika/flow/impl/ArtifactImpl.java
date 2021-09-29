@@ -22,6 +22,7 @@ import org.nasdanika.flow.Resource;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getRepositoryKeys <em>Repository Keys</em>}</li>
  * </ul>
  *
  * @generated
@@ -73,11 +74,24 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<String> getRepositoryKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.ARTIFACT__REPOSITORY_KEYS, FlowPackage.Literals.ARTIFACT__REPOSITORY_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__REPOSITORIES:
 				return getRepositories();
+			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
+				return getRepositoryKeys();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,9 +105,9 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FlowPackage.ARTIFACT__REPOSITORIES:
-				getRepositories().clear();
-				getRepositories().addAll((Collection<? extends Resource>)newValue);
+			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
+				getRepositoryKeys().clear();
+				getRepositoryKeys().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -107,8 +121,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FlowPackage.ARTIFACT__REPOSITORIES:
-				getRepositories().clear();
+			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
+				getRepositoryKeys().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -124,6 +138,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__REPOSITORIES:
 				return !getRepositories().isEmpty();
+			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
+				return !getRepositoryKeys().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

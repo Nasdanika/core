@@ -152,13 +152,22 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT__MODIFIERS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT__DOCUMENTATION = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Package Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -286,6 +295,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PACKAGE__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Super Packages</b></em>' reference list.
@@ -524,6 +542,15 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -713,6 +740,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -906,6 +942,15 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -915,13 +960,22 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__REPOSITORIES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Repository Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__REPOSITORY_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1095,6 +1149,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW_ELEMENT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -1399,6 +1462,15 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1408,22 +1480,40 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__PAYLOAD = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Payload Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__PAYLOAD_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__SUPPRESS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int TRANSITION__SUPPRESS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Target</b></em>' attribute.
+	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int TRANSITION__TARGET_KEY = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Transition</em>' class.
@@ -1432,7 +1522,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int TRANSITION_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1462,22 +1552,13 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
 
 	/**
-	 * The operation id for the '<em>Get Target</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSITION___GET_TARGET__ELIST = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
-
-	/**
 	 * The number of operations of the '<em>Transition</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 1;
+	int TRANSITION_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionEntryImpl <em>Transition Entry</em>}' class.
@@ -1617,6 +1698,15 @@ public interface FlowPackage extends EPackage {
 	int CALL__MODIFIERS = TRANSITION__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__DOCUMENTATION = TRANSITION__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1624,6 +1714,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__PAYLOAD = TRANSITION__PAYLOAD;
+
+	/**
+	 * The feature id for the '<em><b>Payload Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__PAYLOAD_KEYS = TRANSITION__PAYLOAD_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
@@ -1635,7 +1734,16 @@ public interface FlowPackage extends EPackage {
 	int CALL__SUPPRESS = TRANSITION__SUPPRESS;
 
 	/**
-	 * The feature id for the '<em><b>Target</b></em>' attribute.
+	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__TARGET_KEY = TRANSITION__TARGET_KEY;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1653,13 +1761,22 @@ public interface FlowPackage extends EPackage {
 	int CALL__RESPONSE = TRANSITION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Response Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__RESPONSE_KEYS = TRANSITION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Call</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CALL_FEATURE_COUNT = TRANSITION_FEATURE_COUNT + 1;
+	int CALL_FEATURE_COUNT = TRANSITION_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1687,15 +1804,6 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL___RESOLVE__PACKAGEELEMENT = TRANSITION___RESOLVE__PACKAGEELEMENT;
-
-	/**
-	 * The operation id for the '<em>Get Target</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CALL___GET_TARGET__ELIST = TRANSITION___GET_TARGET__ELIST;
 
 	/**
 	 * The number of operations of the '<em>Call</em>' class.
@@ -1832,6 +1940,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -2095,6 +2212,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2194,13 +2320,22 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__TARGET = FLOW_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__TARGET_KEY = FLOW_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Service</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 1;
+	int SERVICE_FEATURE_COUNT = FLOW_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -2328,6 +2463,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__MODIFIERS = ACTIVITY__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__DOCUMENTATION = ACTIVITY__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -2574,6 +2718,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__MODIFIERS = FLOW_ELEMENT__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2807,6 +2960,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3044,6 +3206,15 @@ public interface FlowPackage extends EPackage {
 	int END__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3277,6 +3448,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3514,6 +3694,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3747,6 +3936,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3984,6 +4182,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4217,6 +4424,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -4454,6 +4670,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4687,6 +4912,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -4924,6 +5158,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5159,6 +5402,15 @@ public interface FlowPackage extends EPackage {
 	int START__MODIFIERS = PSEUDO_STATE__MODIFIERS;
 
 	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5356,6 +5608,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPackageElement_Modifiers();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.PackageElement#getDocumentation <em>Documentation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Documentation</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getDocumentation()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Documentation();
 
 	/**
 	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#create() <em>Create</em>}' operation.
@@ -5632,6 +5895,17 @@ public interface FlowPackage extends EPackage {
 	EReference getArtifact_Repositories();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Artifact#getRepositoryKeys <em>Repository Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Repository Keys</em>'.
+	 * @see org.nasdanika.flow.Artifact#getRepositoryKeys()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EAttribute getArtifact_RepositoryKeys();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Artifact Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5897,6 +6171,17 @@ public interface FlowPackage extends EPackage {
 	EReference getService_Target();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Service#getTargetKey <em>Target Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Target Key</em>'.
+	 * @see org.nasdanika.flow.Service#getTargetKey()
+	 * @see #getService()
+	 * @generated
+	 */
+	EAttribute getService_TargetKey();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Transition <em>Transition</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5918,6 +6203,17 @@ public interface FlowPackage extends EPackage {
 	EReference getTransition_Payload();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Transition#getPayloadKeys <em>Payload Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Payload Keys</em>'.
+	 * @see org.nasdanika.flow.Transition#getPayloadKeys()
+	 * @see #getTransition()
+	 * @generated
+	 */
+	EAttribute getTransition_PayloadKeys();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Transition#isSuppress <em>Suppress</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5929,25 +6225,26 @@ public interface FlowPackage extends EPackage {
 	EAttribute getTransition_Suppress();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Transition#getTarget <em>Target</em>}'.
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Transition#getTargetKey <em>Target Key</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Target</em>'.
+	 * @return the meta object for the attribute '<em>Target Key</em>'.
+	 * @see org.nasdanika.flow.Transition#getTargetKey()
+	 * @see #getTransition()
+	 * @generated
+	 */
+	EAttribute getTransition_TargetKey();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.flow.Transition#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
 	 * @see org.nasdanika.flow.Transition#getTarget()
 	 * @see #getTransition()
 	 * @generated
 	 */
-	EAttribute getTransition_Target();
-
-	/**
-	 * Returns the meta object for the '{@link org.nasdanika.flow.Transition#getTarget(org.eclipse.emf.common.util.EList) <em>Get Target</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Target</em>' operation.
-	 * @see org.nasdanika.flow.Transition#getTarget(org.eclipse.emf.common.util.EList)
-	 * @generated
-	 */
-	EOperation getTransition__GetTarget__EList();
+	EReference getTransition_Target();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Transition Entry</em>}'.
@@ -6004,6 +6301,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCall_Response();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Call#getResponseKeys <em>Response Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Response Keys</em>'.
+	 * @see org.nasdanika.flow.Call#getResponseKeys()
+	 * @see #getCall()
+	 * @generated
+	 */
+	EAttribute getCall_ResponseKeys();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Call Entry</em>}'.
@@ -6258,6 +6566,14 @@ public interface FlowPackage extends EPackage {
 		EAttribute PACKAGE_ELEMENT__MODIFIERS = eINSTANCE.getPackageElement_Modifiers();
 
 		/**
+		 * The meta object literal for the '<em><b>Documentation</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__DOCUMENTATION = eINSTANCE.getPackageElement_Documentation();
+
+		/**
 		 * The meta object literal for the '<em><b>Create</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6472,6 +6788,14 @@ public interface FlowPackage extends EPackage {
 		EReference ARTIFACT__REPOSITORIES = eINSTANCE.getArtifact_Repositories();
 
 		/**
+		 * The meta object literal for the '<em><b>Repository Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTIFACT__REPOSITORY_KEYS = eINSTANCE.getArtifact_RepositoryKeys();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6676,6 +7000,14 @@ public interface FlowPackage extends EPackage {
 		EReference SERVICE__TARGET = eINSTANCE.getService_Target();
 
 		/**
+		 * The meta object literal for the '<em><b>Target Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SERVICE__TARGET_KEY = eINSTANCE.getService_TargetKey();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.TransitionImpl <em>Transition</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6694,6 +7026,14 @@ public interface FlowPackage extends EPackage {
 		EReference TRANSITION__PAYLOAD = eINSTANCE.getTransition_Payload();
 
 		/**
+		 * The meta object literal for the '<em><b>Payload Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TRANSITION__PAYLOAD_KEYS = eINSTANCE.getTransition_PayloadKeys();
+
+		/**
 		 * The meta object literal for the '<em><b>Suppress</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6702,20 +7042,20 @@ public interface FlowPackage extends EPackage {
 		EAttribute TRANSITION__SUPPRESS = eINSTANCE.getTransition_Suppress();
 
 		/**
-		 * The meta object literal for the '<em><b>Target</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Target Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute TRANSITION__TARGET = eINSTANCE.getTransition_Target();
+		EAttribute TRANSITION__TARGET_KEY = eINSTANCE.getTransition_TargetKey();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Target</b></em>' operation.
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation TRANSITION___GET_TARGET__ELIST = eINSTANCE.getTransition__GetTarget__EList();
+		EReference TRANSITION__TARGET = eINSTANCE.getTransition_Target();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.TransitionEntryImpl <em>Transition Entry</em>}' class.
@@ -6760,6 +7100,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CALL__RESPONSE = eINSTANCE.getCall_Response();
+
+		/**
+		 * The meta object literal for the '<em><b>Response Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CALL__RESPONSE_KEYS = eINSTANCE.getCall_ResponseKeys();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.CallEntryImpl <em>Call Entry</em>}' class.

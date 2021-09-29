@@ -14,7 +14,9 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.Transition#getPayload <em>Payload</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Transition#getPayloadKeys <em>Payload Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.Transition#isSuppress <em>Suppress</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Transition#getTargetKey <em>Target Key</em>}</li>
  *   <li>{@link org.nasdanika.flow.Transition#getTarget <em>Target</em>}</li>
  * </ul>
  *
@@ -33,10 +35,25 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_Payload()
-	 * @model
+	 * @model changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getPayload();
+
+	/**
+	 * Returns the value of the '<em><b>Payload Keys</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keys of payload artifacts relative to the containing package ``artifacts/`` reference.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Payload Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getTransition_PayloadKeys()
+	 * @model annotation="urn:org.nasdanika load-key='payload'"
+	 * @generated
+	 */
+	EList<String> getPayloadKeys();
 
 	/**
 	 * Returns the value of the '<em><b>Suppress</b></em>' attribute.
@@ -64,41 +81,43 @@ public interface Transition extends PackageElement<Transition> {
 	void setSuppress(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Target</b></em>' attribute.
+	 * Returns the value of the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Relative path to the target [journey element](JourneyElement.html). May contain ``..`` to navigate to the parent [journey](Journey.html) - i.e. the journey which contains the journey containing the element which contains this transition. May contain ``/`` to navigate to nested journeys. Treated as URI if contains ``:``.
+	 * Key of transition target relative to the containing flow ``elements/`` reference.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Target</em>' attribute.
-	 * @see #setTarget(String)
-	 * @see org.nasdanika.flow.FlowPackage#getTransition_Target()
+	 * @return the value of the '<em>Target Key</em>' attribute.
+	 * @see #setTargetKey(String)
+	 * @see org.nasdanika.flow.FlowPackage#getTransition_TargetKey()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika default-feature='true'"
+	 *        annotation="urn:org.nasdanika load-key='target'"
 	 * @generated
 	 */
-	String getTarget();
+	String getTargetKey();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.flow.Transition#getTarget <em>Target</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.flow.Transition#getTargetKey <em>Target Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Target</em>' attribute.
-	 * @see #getTarget()
+	 * @param value the new value of the '<em>Target Key</em>' attribute.
+	 * @see #getTargetKey()
 	 * @generated
 	 */
-	void setTarget(String value);
+	void setTargetKey(String value);
 
 	/**
+	 * Returns the value of the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Resolves transition's target journey element for a given journey.
-	 * @param journeyPath Journey nesting path to resolve target element for. May be different from the containment path in the case of nested journeys of extended journeys.
+	 * Transition target.
 	 * <!-- end-model-doc -->
-	 * @model journeyPathRequired="true" journeyPathMany="true"
+	 * @return the value of the '<em>Target</em>' reference.
+	 * @see org.nasdanika.flow.FlowPackage#getTransition_Target()
+	 * @model changeable="false" derived="true"
 	 * @generated
 	 */
-	FlowElement<?> getTarget(EList<Flow> journeyPath);
+	FlowElement<?> getTarget();
 
 } // Transition

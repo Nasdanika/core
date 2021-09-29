@@ -5,7 +5,7 @@ flow-package:
   participants:
     product-owner:
       name: Product Owner
-      description: 
+      documentation: 
         content-markdown:
           source:
             content-text: Creates and ``grooms`` stories.
@@ -55,8 +55,9 @@ flow-package:
               participants: product-owner
               resources: issue-tracker
               output-artifacts: story
-#              outputs: 
-#                target: groom
+              outputs: 
+                groom:
+                  target: groom
           groom:
             flow-activity:
               name: Groom a story
@@ -65,8 +66,10 @@ flow-package:
               resources: issue-tracker
               input-artifacts: story
               output-artifacts: story
-#              outputs: 
-#                target: develop
+              outputs: 
+                develop:
+                  target: develop
+                  payload: story
           develop:
             flow-activity:
               name: Develop a story
@@ -77,9 +80,10 @@ flow-package:
                 - source-repository
                 - ide
               input-artifacts: story
-              output-artifacts: source-code
-#              outputs: 
-#                target: build
+              output-artifacts: source
+              outputs: 
+                build: 
+                  target: build
           build:
             flow-activity:
               name: Build
@@ -89,10 +93,11 @@ flow-package:
                 - source-repository
                 - build-tool
                 - runtime
-              input-artifacts: source-code
+              input-artifacts: source
               output-artifacts: binary
-#              outputs: 
-#                target: test
+              outputs: 
+                test:
+                  target: test
           test:
             flow-activity:
               name: Test

@@ -9,6 +9,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -29,6 +30,7 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getModifiers <em>Modifiers</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getDocumentation <em>Documentation</em>}</li>
  * </ul>
  *
  * @generated
@@ -117,6 +119,17 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<EObject> getDocumentation() {
+		return (EList<EObject>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION, FlowPackage.Literals.PACKAGE_ELEMENT__DOCUMENTATION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@SuppressWarnings("unchecked")
@@ -145,6 +158,13 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				Object attrValue = eGet(attr);
 				instance.eSet(attr, attrValue);
 			}
+		}
+		
+		EList<EObject> documentation = getDocumentation();
+		if (!documentation.isEmpty()) {
+			EList<EObject> instanceDocumentation = instance.getDocumentation();
+			instanceDocumentation.clear();
+			instanceDocumentation.addAll(EcoreUtil.copyAll(documentation));
 		}
 	}
 
@@ -187,6 +207,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return ((InternalEList<?>)getExtensions()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE_ELEMENT__EXTENDS:
 				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
+				return ((InternalEList<?>)getDocumentation()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -208,6 +230,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return getExtends();
 			case FlowPackage.PACKAGE_ELEMENT__MODIFIERS:
 				return getModifiers();
+			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
+				return getDocumentation();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -228,6 +252,10 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				getModifiers().clear();
 				getModifiers().addAll((Collection<? extends String>)newValue);
 				return;
+			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
+				getDocumentation().clear();
+				getDocumentation().addAll((Collection<? extends EObject>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -245,6 +273,9 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return;
 			case FlowPackage.PACKAGE_ELEMENT__MODIFIERS:
 				getModifiers().clear();
+				return;
+			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
+				getDocumentation().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -266,6 +297,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return !getExtends().isEmpty();
 			case FlowPackage.PACKAGE_ELEMENT__MODIFIERS:
 				return !getModifiers().isEmpty();
+			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
+				return !getDocumentation().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

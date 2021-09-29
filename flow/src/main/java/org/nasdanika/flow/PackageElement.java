@@ -4,6 +4,7 @@ package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
 
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.ncore.NamedElement;
 
 /**
@@ -19,6 +20,7 @@ import org.nasdanika.ncore.NamedElement;
  *   <li>{@link org.nasdanika.flow.PackageElement#getExtensions <em>Extensions</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getModifiers <em>Modifiers</em>}</li>
+ *   <li>{@link org.nasdanika.flow.PackageElement#getDocumentation <em>Documentation</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getPackageElement()
@@ -114,6 +116,18 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @generated
 	 */
 	EList<String> getModifiers();
+
+	/**
+	 * Returns the value of the '<em><b>Documentation</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Documentation</em>' containment reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Documentation()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<EObject> getDocumentation();
 
 	/**
 	 * <!-- begin-user-doc -->

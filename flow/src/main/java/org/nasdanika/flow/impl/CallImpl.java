@@ -7,7 +7,13 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
@@ -23,6 +29,7 @@ import org.nasdanika.flow.Transition;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.CallImpl#getResponse <em>Response</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.CallImpl#getResponseKeys <em>Response Keys</em>}</li>
  * </ul>
  *
  * @generated
@@ -50,12 +57,48 @@ public class CallImpl extends TransitionImpl implements Call {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Artifact> getResponse() {
+		EList<Artifact> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+						for (String key: getResponseKeys()) {
+							URI aURI = URI.createURI(key).resolve(artifactsURI);
+							EObject target = resourceSet.getEObject(aURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Artifact) {
+								ret.add((Artifact) target);
+							} else {
+								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Artifact> getResponse() {
-		return (EList<Artifact>)eDynamicGet(FlowPackage.CALL__RESPONSE, FlowPackage.Literals.CALL__RESPONSE, true, true);
+	public EList<String> getResponseKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.CALL__RESPONSE_KEYS, FlowPackage.Literals.CALL__RESPONSE_KEYS, true, true);
 	}
 
 	/**
@@ -68,6 +111,8 @@ public class CallImpl extends TransitionImpl implements Call {
 		switch (featureID) {
 			case FlowPackage.CALL__RESPONSE:
 				return getResponse();
+			case FlowPackage.CALL__RESPONSE_KEYS:
+				return getResponseKeys();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -81,9 +126,9 @@ public class CallImpl extends TransitionImpl implements Call {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FlowPackage.CALL__RESPONSE:
-				getResponse().clear();
-				getResponse().addAll((Collection<? extends Artifact>)newValue);
+			case FlowPackage.CALL__RESPONSE_KEYS:
+				getResponseKeys().clear();
+				getResponseKeys().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -97,8 +142,8 @@ public class CallImpl extends TransitionImpl implements Call {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FlowPackage.CALL__RESPONSE:
-				getResponse().clear();
+			case FlowPackage.CALL__RESPONSE_KEYS:
+				getResponseKeys().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -114,6 +159,8 @@ public class CallImpl extends TransitionImpl implements Call {
 		switch (featureID) {
 			case FlowPackage.CALL__RESPONSE:
 				return !getResponse().isEmpty();
+			case FlowPackage.CALL__RESPONSE_KEYS:
+				return !getResponseKeys().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

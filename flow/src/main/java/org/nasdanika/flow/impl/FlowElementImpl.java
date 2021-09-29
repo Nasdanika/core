@@ -118,23 +118,73 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Artifact> getInputArtifacts() {
-		return (EList<Artifact>)eDynamicGet(FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS, FlowPackage.Literals.FLOW_ELEMENT__INPUT_ARTIFACTS, true, true);
+		EList<Artifact> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+						for (String key: getInputArtifactKeys()) {
+							URI aURI = URI.createURI(key).resolve(artifactsURI);
+							EObject target = resourceSet.getEObject(aURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Artifact) {
+								ret.add((Artifact) target);
+							} else {
+								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Artifact> getOutputArtifacts() {
-		return (EList<Artifact>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUT_ARTIFACTS, true, true);
+		EList<Artifact> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+						for (String key: getOutputArtifactKeys()) {
+							URI aURI = URI.createURI(key).resolve(artifactsURI);
+							EObject target = resourceSet.getEObject(aURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Artifact) {
+								ret.add((Artifact) target);
+							} else {
+								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -151,12 +201,37 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Participant> getParticipants() {
-		return (EList<Participant>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANTS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS, true, true);
+		EList<Participant> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI participantsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/participants/");
+						for (String key: getParticipantsKeys()) {
+							URI pURI = URI.createURI(key).resolve(participantsURI);
+							EObject target = resourceSet.getEObject(pURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid participant reference: " + key + " (" + pURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Participant) {
+								ret.add((Participant) target);
+							} else {
+								throw new ConfigurationException("Expected participant at: " + key + " (" + pURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
 	}
 
 	/**

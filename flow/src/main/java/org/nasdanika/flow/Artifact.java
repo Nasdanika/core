@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.Artifact#getRepositories <em>Repositories</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getRepositoryKeys <em>Repository Keys</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
@@ -28,9 +29,24 @@ public interface Artifact extends PackageElement<Artifact> {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Repositories()
-	 * @model
+	 * @model changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getRepositories();
+
+	/**
+	 * Returns the value of the '<em><b>Repository Keys</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keys of artifact's repositories relative to the containing package ``resources/`` reference.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Repository Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_RepositoryKeys()
+	 * @model annotation="urn:org.nasdanika load-key='repositories'"
+	 * @generated
+	 */
+	EList<String> getRepositoryKeys();
 
 } // Artifact

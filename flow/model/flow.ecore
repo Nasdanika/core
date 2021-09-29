@@ -64,6 +64,8 @@
         <details key="documentation" value="A collection of boolean flags:&#xA;&#xA;* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.&#xA;* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.&#xA;* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.&#xA;* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.&#xA;* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.&#xA;* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.&#xA;* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.&#xA;"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Package">
     <eAnnotations source="urn:org.nasdanika">
@@ -196,7 +198,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
-        eType="#//Resource"/>
+        eType="#//Resource" changeable="false" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="repositories"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of artifact's repositories relative to the containing package ``resources/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Artifact"/>
     </eGenericSuperTypes>
@@ -337,23 +348,19 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/flow/transition.md"/>
     </eAnnotations>
-    <eOperations name="getTarget">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Resolves transition's target journey element for a given journey."/>
-      </eAnnotations>
-      <eGenericType eClassifier="#//FlowElement">
-        <eTypeArguments/>
-      </eGenericType>
-      <eParameters name="journeyPath" lowerBound="1" upperBound="-1" eType="#//Flow">
-        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-          <details key="documentation" value="Journey nesting path to resolve target element for. May be different from the containment path in the case of nested journeys of extended journeys."/>
-        </eAnnotations>
-      </eParameters>
-    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="payload" upperBound="-1"
-        eType="#//Artifact">
+        eType="#//Artifact" changeable="false" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Artifacts passed from source to target activity."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="payloadKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="payload"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of payload artifacts relative to the containing package ``artifacts/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="suppress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
@@ -361,14 +368,23 @@
         <details key="documentation" value="Can be used in journeys extending other journeys to remove the inherited transition from the list of outputs/call. Transitions to supprressed journey elements are automatically supppressed."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="default-feature" value="true"/>
+        <details key="load-key" value="target"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Relative path to the target [journey element](JourneyElement.html). May contain ``..`` to navigate to the parent [journey](Journey.html) - i.e. the journey which contains the journey containing the element which contains this transition. May contain ``/`` to navigate to nested journeys. Treated as URI if contains ``:``."/>
+        <details key="documentation" value="Key of transition target relative to the containing flow ``elements/`` reference."/>
       </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" changeable="false"
+        derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Transition target."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Transition"/>
@@ -398,9 +414,18 @@
       <details key="documentation-reference" value="doc/flow/call.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="response" upperBound="-1"
-        eType="#//Artifact">
+        eType="#//Artifact" changeable="false" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Response artifacts passed back from the target to the source activity."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responseKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="response"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of response artifacts relative to the containing package ``artifacts/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -465,9 +490,21 @@
       <details key="documentation-reference" value="doc/flow/service.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
-        eType="#//Activity" eOpposite="#//Activity/services">
+        changeable="false" derived="true" eOpposite="#//Activity/services">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Target activity of the service."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//Activity">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="target"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Key of service target activity relative to the containing package."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//FlowElement">

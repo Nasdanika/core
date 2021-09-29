@@ -2,15 +2,20 @@
  */
 package org.nasdanika.flow.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
-import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Transition;
@@ -24,7 +29,9 @@ import org.nasdanika.flow.Transition;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getPayload <em>Payload</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getPayloadKeys <em>Payload Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#isSuppress <em>Suppress</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getTargetKey <em>Target Key</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getTarget <em>Target</em>}</li>
  * </ul>
  *
@@ -42,14 +49,14 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	protected static final boolean SUPPRESS_EDEFAULT = false;
 
 	/**
-	 * The default value of the '{@link #getTarget() <em>Target</em>}' attribute.
+	 * The default value of the '{@link #getTargetKey() <em>Target Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTarget()
+	 * @see #getTargetKey()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TARGET_EDEFAULT = null;
+	protected static final String TARGET_KEY_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -84,12 +91,48 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Artifact> getPayload() {
+		EList<Artifact> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res != null) {
+			ResourceSet resourceSet = res.getResourceSet();
+			if (resourceSet != null) {
+				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+					if (ancestor instanceof org.nasdanika.flow.Package) {
+						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+						for (String key: getPayloadKeys()) {
+							URI aURI = URI.createURI(key).resolve(artifactsURI);
+							EObject target = resourceSet.getEObject(aURI, false);
+							if (target == null) {
+								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+							
+							if (target instanceof Artifact) {
+								ret.add((Artifact) target);
+							} else {
+								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Artifact> getPayload() {
-		return (EList<Artifact>)eDynamicGet(FlowPackage.TRANSITION__PAYLOAD, FlowPackage.Literals.TRANSITION__PAYLOAD, true, true);
+	public EList<String> getPayloadKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.TRANSITION__PAYLOAD_KEYS, FlowPackage.Literals.TRANSITION__PAYLOAD_KEYS, true, true);
 	}
 
 	/**
@@ -118,8 +161,8 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * @generated
 	 */
 	@Override
-	public String getTarget() {
-		return (String)eDynamicGet(FlowPackage.TRANSITION__TARGET, FlowPackage.Literals.TRANSITION__TARGET, true, true);
+	public String getTargetKey() {
+		return (String)eDynamicGet(FlowPackage.TRANSITION__TARGET_KEY, FlowPackage.Literals.TRANSITION__TARGET_KEY, true, true);
 	}
 
 	/**
@@ -128,8 +171,46 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * @generated
 	 */
 	@Override
-	public void setTarget(String newTarget) {
-		eDynamicSet(FlowPackage.TRANSITION__TARGET, FlowPackage.Literals.TRANSITION__TARGET, newTarget);
+	public void setTargetKey(String newTargetKey) {
+		eDynamicSet(FlowPackage.TRANSITION__TARGET_KEY, FlowPackage.Literals.TRANSITION__TARGET_KEY, newTargetKey);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public FlowElement<?> getTarget() {
+		String targetKey = getTargetKey();
+		if (Util.isBlank(targetKey)) {
+			return null;
+		}
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res == null) {
+			return null;
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			return null;
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Flow) {
+				URI flowElementsURI = URI.createURI(((org.nasdanika.flow.Flow) ancestor).getUri() + "/elements/");
+				URI feURI = URI.createURI(targetKey).resolve(flowElementsURI);
+				EObject target = resourceSet.getEObject(feURI, false);
+				if (target == null) {
+					throw new ConfigurationException("Invalid flow element reference: " + targetKey + " (" + feURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+				}
+				
+				if (target instanceof FlowElement) {
+					return (FlowElement<?>) target;
+				}
+				
+				throw new ConfigurationException("Expected artifact at: " + targetKey + " (" + feURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -137,11 +218,8 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public FlowElement<?> getTarget(EList<Flow> journeyPath) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+	public FlowElement<?> basicGetTarget() {
+		return (FlowElement<?>)eDynamicGet(FlowPackage.TRANSITION__TARGET, FlowPackage.Literals.TRANSITION__TARGET, false, true);
 	}
 
 	/**
@@ -154,10 +232,15 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 		switch (featureID) {
 			case FlowPackage.TRANSITION__PAYLOAD:
 				return getPayload();
+			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
+				return getPayloadKeys();
 			case FlowPackage.TRANSITION__SUPPRESS:
 				return isSuppress();
+			case FlowPackage.TRANSITION__TARGET_KEY:
+				return getTargetKey();
 			case FlowPackage.TRANSITION__TARGET:
-				return getTarget();
+				if (resolve) return getTarget();
+				return basicGetTarget();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -171,15 +254,15 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FlowPackage.TRANSITION__PAYLOAD:
-				getPayload().clear();
-				getPayload().addAll((Collection<? extends Artifact>)newValue);
+			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
+				getPayloadKeys().clear();
+				getPayloadKeys().addAll((Collection<? extends String>)newValue);
 				return;
 			case FlowPackage.TRANSITION__SUPPRESS:
 				setSuppress((Boolean)newValue);
 				return;
-			case FlowPackage.TRANSITION__TARGET:
-				setTarget((String)newValue);
+			case FlowPackage.TRANSITION__TARGET_KEY:
+				setTargetKey((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -193,14 +276,14 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FlowPackage.TRANSITION__PAYLOAD:
-				getPayload().clear();
+			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
+				getPayloadKeys().clear();
 				return;
 			case FlowPackage.TRANSITION__SUPPRESS:
 				setSuppress(SUPPRESS_EDEFAULT);
 				return;
-			case FlowPackage.TRANSITION__TARGET:
-				setTarget(TARGET_EDEFAULT);
+			case FlowPackage.TRANSITION__TARGET_KEY:
+				setTargetKey(TARGET_KEY_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -216,29 +299,18 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 		switch (featureID) {
 			case FlowPackage.TRANSITION__PAYLOAD:
 				return !getPayload().isEmpty();
+			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
+				return !getPayloadKeys().isEmpty();
 			case FlowPackage.TRANSITION__SUPPRESS:
 				return isSuppress() != SUPPRESS_EDEFAULT;
+			case FlowPackage.TRANSITION__TARGET_KEY:
+				return TARGET_KEY_EDEFAULT == null ? getTargetKey() != null : !TARGET_KEY_EDEFAULT.equals(getTargetKey());
 			case FlowPackage.TRANSITION__TARGET:
-				return TARGET_EDEFAULT == null ? getTarget() != null : !TARGET_EDEFAULT.equals(getTarget());
+				return basicGetTarget() != null;
 		}
 		return super.eIsSet(featureID);
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
-		switch (operationID) {
-			case FlowPackage.TRANSITION___GET_TARGET__ELIST:
-				return getTarget((EList<Flow>)arguments.get(0));
-		}
-		return super.eInvoke(operationID, arguments);
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Transition> getExtends() {
