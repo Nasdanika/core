@@ -2,8 +2,6 @@ package org.nasdanika.flow.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
-
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -88,6 +86,7 @@ public class TestAgile extends TestBase {
 		Artifact sourceArtifact = core.getArtifacts().get("source");
 		Resource sourceRepository = core.getResources().get("source-repository");
 		assertThat(sourceArtifact.getRepositories()).singleElement().isEqualTo(sourceRepository);
+		assertThat(sourceRepository.getArtifacts()).singleElement().isEqualTo(sourceArtifact);
 				
 		// Opposites		
 	}

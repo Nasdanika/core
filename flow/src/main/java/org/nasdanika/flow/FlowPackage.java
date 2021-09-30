@@ -760,13 +760,22 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -5839,6 +5848,17 @@ public interface FlowPackage extends EPackage {
 	EReference getResource_Services();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Artifacts</em>'.
+	 * @see org.nasdanika.flow.Resource#getArtifacts()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EReference getResource_Artifacts();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Resource Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6742,6 +6762,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESOURCE__SERVICES = eINSTANCE.getResource_Services();
+
+		/**
+		 * The meta object literal for the '<em><b>Artifacts</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE__ARTIFACTS = eINSTANCE.getResource_Artifacts();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ResourceEntryImpl <em>Resource Entry</em>}' class.

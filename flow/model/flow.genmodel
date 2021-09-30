@@ -44,6 +44,7 @@
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Resource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/services"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/artifacts"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ResourceEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ResourceEntry/key"/>

@@ -67,7 +67,7 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @return the value of the '<em>Extensions</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Extensions()
 	 * @see org.nasdanika.flow.PackageElement#getExtends
-	 * @model opposite="extends" changeable="false" derived="true"
+	 * @model opposite="extends" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<T> getExtensions();

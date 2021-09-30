@@ -25,11 +25,13 @@ public interface Artifact extends PackageElement<Artifact> {
 	/**
 	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Repositories()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Resource#getArtifacts
+	 * @model opposite="artifacts" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getRepositories();

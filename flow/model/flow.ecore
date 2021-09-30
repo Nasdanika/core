@@ -45,7 +45,7 @@
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        changeable="false" derived="true" eOpposite="#//PackageElement/extends">
+        changeable="false" transient="true" derived="true" eOpposite="#//PackageElement/extends">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived reference - known elements extending this element.&#xA;Known means elements in the same resource set."/>
       </eAnnotations>
@@ -173,6 +173,12 @@
         <details key="documentation" value="Services provided by a resource. Resource service activities imply the containing resource. "/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/repositories">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived opposite to Artifact.repositories."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Resource"/>
     </eGenericSuperTypes>
@@ -198,7 +204,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
-        eType="#//Resource" changeable="false" transient="true" derived="true"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/artifacts"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
+import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
@@ -27,6 +28,7 @@ import org.nasdanika.flow.Resource;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getServices <em>Services</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getArtifacts <em>Artifacts</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,6 +78,31 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Artifact> getArtifacts() {
+		return getOppositeReferrers(FlowPackage.Literals.RESOURCE__ARTIFACTS);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FlowPackage.RESOURCE__ARTIFACTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -83,6 +110,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 		switch (featureID) {
 			case FlowPackage.RESOURCE__SERVICES:
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
+			case FlowPackage.RESOURCE__ARTIFACTS:
+				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -98,6 +127,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 			case FlowPackage.RESOURCE__SERVICES:
 				if (coreType) return getServices();
 				else return getServices().map();
+			case FlowPackage.RESOURCE__ARTIFACTS:
+				return getArtifacts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -143,6 +174,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 		switch (featureID) {
 			case FlowPackage.RESOURCE__SERVICES:
 				return !getServices().isEmpty();
+			case FlowPackage.RESOURCE__ARTIFACTS:
+				return !getArtifacts().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
