@@ -164,6 +164,7 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	/**
 	 * Returns the value of the '<em><b>Participants</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -171,7 +172,8 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Participants</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Participants()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Participant#getParticipates
+	 * @model opposite="participates" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Participant> getParticipants();

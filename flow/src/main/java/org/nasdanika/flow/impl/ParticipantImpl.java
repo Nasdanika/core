@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Participant;
@@ -27,6 +28,7 @@ import org.nasdanika.flow.Participant;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getServices <em>Services</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getParticipates <em>Participates</em>}</li>
  * </ul>
  *
  * @generated
@@ -76,6 +78,31 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<FlowElement<?>> getParticipates() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__PARTICIPATES);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FlowPackage.PARTICIPANT__PARTICIPATES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getParticipates()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -83,6 +110,8 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__SERVICES:
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__PARTICIPATES:
+				return ((InternalEList<?>)getParticipates()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -98,6 +127,8 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 			case FlowPackage.PARTICIPANT__SERVICES:
 				if (coreType) return getServices();
 				else return getServices().map();
+			case FlowPackage.PARTICIPANT__PARTICIPATES:
+				return getParticipates();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -143,6 +174,8 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__SERVICES:
 				return !getServices().isEmpty();
+			case FlowPackage.PARTICIPANT__PARTICIPATES:
+				return !getParticipates().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -93,6 +93,8 @@ public class TestAgile extends TestBase {
 		assertThat(sourceArtifact.getInputFor()).singleElement();
 		assertThat(sourceArtifact.getOutputFor()).singleElement();
 		
+		assertThat(core.getParticipants().get("product-owner").getParticipates()).hasSize(2);
+		
 	}
 	
 }

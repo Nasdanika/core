@@ -37,6 +37,7 @@
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Participant">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/services"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/participates"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ParticipantEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ParticipantEntry/key"/>
@@ -45,6 +46,7 @@
     <genClasses ecoreClass="flow.ecore#//Resource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/services"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/artifacts"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/usedBy"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ResourceEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ResourceEntry/key"/>

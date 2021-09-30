@@ -560,13 +560,22 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Participates</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__PARTICIPATES = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -6098,6 +6107,17 @@ public interface FlowPackage extends EPackage {
 	EReference getParticipant_Services();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Participates</em>'.
+	 * @see org.nasdanika.flow.Participant#getParticipates()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Participates();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Participant Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7068,6 +7088,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PARTICIPANT__SERVICES = eINSTANCE.getParticipant_Services();
+
+		/**
+		 * The meta object literal for the '<em><b>Participates</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__PARTICIPATES = eINSTANCE.getParticipant_Participates();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.

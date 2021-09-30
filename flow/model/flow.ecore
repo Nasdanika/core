@@ -143,6 +143,15 @@
         <details key="documentation" value="Services provided by a participant. Participant service activities imply the containing participant. "/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participates" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/participants">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements this participant participates in."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Participant"/>
     </eGenericSuperTypes>
@@ -178,6 +187,15 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived opposite to Artifact.repositories."/>
       </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedBy" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/resources">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements which use this resource."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Resource"/>
@@ -333,7 +351,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
-        eType="#//Participant" changeable="false" transient="true" derived="true">
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/participates">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions."/>
       </eAnnotations>
@@ -348,7 +367,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
-        eType="#//Resource" changeable="false" transient="true" derived="true"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/usedBy"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">

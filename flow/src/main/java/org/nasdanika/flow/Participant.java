@@ -2,6 +2,7 @@
  */
 package org.nasdanika.flow;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 /**
@@ -14,6 +15,7 @@ import org.eclipse.emf.common.util.EMap;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
@@ -36,5 +38,22 @@ public interface Participant extends PackageElement<Participant> {
 	 * @generated
 	 */
 	EMap<String, Activity<?>> getServices();
+
+	/**
+	 * Returns the value of the '<em><b>Participates</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getParticipants <em>Participants</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements this participant participates in.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Participates</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Participates()
+	 * @see org.nasdanika.flow.FlowElement#getParticipants
+	 * @model opposite="participants" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<FlowElement<?>> getParticipates();
 
 } // Participant
