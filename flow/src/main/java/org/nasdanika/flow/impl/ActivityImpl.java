@@ -54,12 +54,11 @@ public class ActivityImpl<T extends Activity<T>> extends FlowElementImpl<T> impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Service> getServices() {
-		return (EList<Service>)eDynamicGet(FlowPackage.ACTIVITY__SERVICES, FlowPackage.Literals.ACTIVITY__SERVICES, true, true);
+		return getOppositeReferrers(FlowPackage.Literals.ACTIVITY__SERVICES);
 	}
 
 	/**

@@ -45,7 +45,7 @@
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        changeable="false" transient="true" derived="true" eOpposite="#//PackageElement/extends">
+        changeable="false" derived="true" eOpposite="#//PackageElement/extends">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived reference - known elements extending this element.&#xA;Known means elements in the same resource set."/>
       </eAnnotations>
