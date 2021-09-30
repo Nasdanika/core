@@ -28,6 +28,7 @@ public interface Transition extends PackageElement<Transition> {
 	/**
 	 * Returns the value of the '<em><b>Payload</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getPayloadFor <em>Payload For</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -35,7 +36,8 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_Payload()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Artifact#getPayloadFor
+	 * @model opposite="payloadFor" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getPayload();

@@ -18,10 +18,12 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
+import org.nasdanika.flow.Transition;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +37,8 @@ import org.nasdanika.flow.Resource;
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getRepositoryKeys <em>Repository Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInputFor <em>Input For</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getOutputFor <em>Output For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getPayloadFor <em>Payload For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getResponseFor <em>Response For</em>}</li>
  * </ul>
  *
  * @generated
@@ -142,6 +146,26 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Transition> getPayloadFor() {
+		return getOppositeReferrers(FlowPackage.Literals.ARTIFACT__PAYLOAD_FOR);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Call> getResponseFor() {
+		return getOppositeReferrers(FlowPackage.Literals.ARTIFACT__RESPONSE_FOR);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -154,6 +178,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputFor()).basicAdd(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputFor()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__PAYLOAD_FOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getPayloadFor()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__RESPONSE_FOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponseFor()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -172,6 +200,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return ((InternalEList<?>)getInputFor()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:
 				return ((InternalEList<?>)getOutputFor()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__PAYLOAD_FOR:
+				return ((InternalEList<?>)getPayloadFor()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__RESPONSE_FOR:
+				return ((InternalEList<?>)getResponseFor()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -192,6 +224,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return getInputFor();
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:
 				return getOutputFor();
+			case FlowPackage.ARTIFACT__PAYLOAD_FOR:
+				return getPayloadFor();
+			case FlowPackage.ARTIFACT__RESPONSE_FOR:
+				return getResponseFor();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -244,6 +280,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return !getInputFor().isEmpty();
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:
 				return !getOutputFor().isEmpty();
+			case FlowPackage.ARTIFACT__PAYLOAD_FOR:
+				return !getPayloadFor().isEmpty();
+			case FlowPackage.ARTIFACT__RESPONSE_FOR:
+				return !getResponseFor().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

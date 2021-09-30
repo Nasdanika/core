@@ -5,12 +5,15 @@ package org.nasdanika.flow.impl;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
@@ -101,6 +104,35 @@ public class CallImpl extends TransitionImpl implements Call {
 	@Override
 	public EList<String> getResponseKeys() {
 		return (EList<String>)eDynamicGet(FlowPackage.CALL__RESPONSE_KEYS, FlowPackage.Literals.CALL__RESPONSE_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FlowPackage.CALL__RESPONSE:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponse()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FlowPackage.CALL__RESPONSE:
+				return ((InternalEList<?>)getResponse()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

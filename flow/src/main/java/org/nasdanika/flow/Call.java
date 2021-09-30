@@ -25,6 +25,7 @@ public interface Call extends Transition {
 	/**
 	 * Returns the value of the '<em><b>Response</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getResponseFor <em>Response For</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -32,7 +33,8 @@ public interface Call extends Transition {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Response</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getCall_Response()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Artifact#getResponseFor
+	 * @model opposite="responseFor" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getResponse();

@@ -60,6 +60,7 @@ flow-package:
               outputs: 
                 groom:
                   target: groom
+                  payload: story
           groom:
             flow-activity:
               name: Groom a story

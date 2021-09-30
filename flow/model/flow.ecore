@@ -250,6 +250,18 @@
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="payloadFor" upperBound="-1"
+        eType="#//Transition" changeable="false" transient="true" derived="true" eOpposite="#//Transition/payload">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived opposite to Transition payload."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responseFor" upperBound="-1"
+        eType="#//Call" changeable="false" transient="true" derived="true" eOpposite="#//Call/response">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived opposite to Call response."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Artifact"/>
     </eGenericSuperTypes>
@@ -404,7 +416,7 @@
       <details key="documentation-reference" value="doc/flow/transition.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="payload" upperBound="-1"
-        eType="#//Artifact" changeable="false" transient="true" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/payloadFor">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Artifacts passed from source to target activity."/>
       </eAnnotations>
@@ -469,7 +481,7 @@
       <details key="documentation-reference" value="doc/flow/call.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="response" upperBound="-1"
-        eType="#//Artifact" changeable="false" transient="true" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/responseFor">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Response artifacts passed back from the target to the source activity."/>
       </eAnnotations>

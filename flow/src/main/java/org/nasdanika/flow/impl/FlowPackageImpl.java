@@ -716,6 +716,26 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getArtifact_PayloadFor() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArtifact_ResponseFor() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getArtifactEntry() {
 		return artifactEntryEClass;
 	}
@@ -1353,6 +1373,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEAttribute(artifactEClass, ARTIFACT__REPOSITORY_KEYS);
 		createEReference(artifactEClass, ARTIFACT__INPUT_FOR);
 		createEReference(artifactEClass, ARTIFACT__OUTPUT_FOR);
+		createEReference(artifactEClass, ARTIFACT__PAYLOAD_FOR);
+		createEReference(artifactEClass, ARTIFACT__RESPONSE_FOR);
 
 		artifactEntryEClass = createEClass(ARTIFACT_ENTRY);
 		createEAttribute(artifactEntryEClass, ARTIFACT_ENTRY__KEY);
@@ -1540,7 +1562,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g1 = createEGenericType(packageElementEClass_T);
 		initEReference(getPackageElement_Prototype(), g1, null, "prototype", null, 0, 1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
-		initEReference(getPackageElement_Extensions(), g1, this.getPackageElement_Extends(), "extensions", null, 0, -1, PackageElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getPackageElement_Extensions(), g1, this.getPackageElement_Extends(), "extensions", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
 		initEReference(getPackageElement_Extends(), g1, this.getPackageElement_Extensions(), "extends", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPackageElement_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1604,6 +1626,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
 		initEReference(getArtifact_OutputFor(), g1, this.getFlowElement_OutputArtifacts(), "outputFor", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifact_PayloadFor(), this.getTransition(), this.getTransition_Payload(), "payloadFor", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifact_ResponseFor(), this.getCall(), this.getCall_Response(), "responseFor", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		initEClass(artifactEntryEClass, Map.Entry.class, "ArtifactEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArtifactEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1631,7 +1655,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getFlowElementEntry_Value(), g1, null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(transitionEClass, Transition.class, "Transition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTransition_Payload(), this.getArtifact(), null, "payload", null, 0, -1, Transition.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getTransition_Payload(), this.getArtifact(), this.getArtifact_PayloadFor(), "payload", null, 0, -1, Transition.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransition_PayloadKeys(), ecorePackage.getEString(), "payloadKeys", null, 0, -1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransition_Suppress(), ecorePackage.getEBoolean(), "suppress", null, 0, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTransition_TargetKey(), ecorePackage.getEString(), "targetKey", null, 1, 1, Transition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1645,7 +1669,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getTransitionEntry_Value(), this.getTransition(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(callEClass, Call.class, "Call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCall_Response(), this.getArtifact(), null, "response", null, 0, -1, Call.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getCall_Response(), this.getArtifact(), this.getArtifact_ResponseFor(), "response", null, 0, -1, Call.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCall_ResponseKeys(), ecorePackage.getEString(), "responseKeys", null, 0, -1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(callEntryEClass, Map.Entry.class, "CallEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -2148,6 +2172,18 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Flow elements which output this artifact."
+		   });
+		addAnnotation
+		  (getArtifact_PayloadFor(),
+		   source,
+		   new String[] {
+			   "documentation", "Derived opposite to Transition payload."
+		   });
+		addAnnotation
+		  (getArtifact_ResponseFor(),
+		   source,
+		   new String[] {
+			   "documentation", "Derived opposite to Call response."
 		   });
 		addAnnotation
 		  (artifactEntryEClass,

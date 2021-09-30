@@ -17,6 +17,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.nasdanika.flow.Artifact#getRepositoryKeys <em>Repository Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getInputFor <em>Input For</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getOutputFor <em>Output For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getPayloadFor <em>Payload For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getResponseFor <em>Response For</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
@@ -86,5 +88,39 @@ public interface Artifact extends PackageElement<Artifact> {
 	 * @generated
 	 */
 	EList<FlowElement<?>> getOutputFor();
+
+	/**
+	 * Returns the value of the '<em><b>Payload For</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Transition}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Transition#getPayload <em>Payload</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Derived opposite to Transition payload.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Payload For</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_PayloadFor()
+	 * @see org.nasdanika.flow.Transition#getPayload
+	 * @model opposite="payload" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Transition> getPayloadFor();
+
+	/**
+	 * Returns the value of the '<em><b>Response For</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Call}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Call#getResponse <em>Response</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Derived opposite to Call response.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Response For</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_ResponseFor()
+	 * @see org.nasdanika.flow.Call#getResponse
+	 * @model opposite="response" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Call> getResponseFor();
 
 } // Artifact

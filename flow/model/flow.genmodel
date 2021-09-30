@@ -57,6 +57,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Artifact/repositoryKeys"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/inputFor"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/outputFor"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/payloadFor"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/responseFor"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ArtifactEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ArtifactEntry/key"/>
