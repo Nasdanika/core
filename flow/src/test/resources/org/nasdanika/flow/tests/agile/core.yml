@@ -46,6 +46,7 @@ flow-package:
     binary:
       name: Binary artifact(s)
       description: Artifacts built from source code for execution in runtime environments.
+      modifiers: abstract
   activities:
     development:
       flow-flow:

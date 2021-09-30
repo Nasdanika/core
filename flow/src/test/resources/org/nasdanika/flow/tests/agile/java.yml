@@ -1,0 +1,35 @@
+flow-package:
+  uri: nasdanika://agile/java
+  description: Java agile development on GitHub.
+  extends: core.yml 
+  resources:
+    issue-tracker:
+      name: GitHub Issues
+      description: Issues are used for stories
+      modifiers: extension
+    source-repository:
+      name: GitHub
+      modifiers: extension
+      description: Git repository.
+    ide:
+      name: Eclipse IDE
+      modifiers: extension
+    build-tool:
+      name: Maven
+      modifiers: extension
+    runtime:
+      name: Java Runtime Environment
+      modifiers: extension
+  artifacts:
+    binary:
+      name: JAR
+      description: Java Archive.
+      modifiers: extension
+  activities:
+    development:
+      flow-flow:
+        elements:
+          develop:
+            flow-activity:
+              description: Develop in Eclipse, test in Eclipse, build and test locally.
+            
