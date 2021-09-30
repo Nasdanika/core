@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.EMap;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputs <em>Outputs</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getCalls <em>Calls</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
@@ -47,6 +48,21 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * @generated
 	 */
 	EMap<String, Transition> getOutputs();
+
+	/**
+	 * Returns the value of the '<em><b>Inputs</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Transition}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Transitions which have this flow element as a target.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Inputs</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Inputs()
+	 * @model transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Transition> getInputs();
 
 	/**
 	 * Returns the value of the '<em><b>Calls</b></em>' map.

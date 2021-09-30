@@ -3,8 +3,10 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -38,6 +40,7 @@ import org.nasdanika.flow.Transition;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputs <em>Outputs</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getCalls <em>Calls</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
@@ -91,6 +94,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	public EMap<String, Transition> getOutputs() {
 		return (EMap<String, Transition>)eDynamicGet(FlowPackage.FLOW_ELEMENT__OUTPUTS, FlowPackage.Literals.FLOW_ELEMENT__OUTPUTS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Transition> getInputs() {
+		List<Transition> inputs = getReferrers(FlowPackage.Literals.TRANSITION__TARGET);
+		return ECollections.newBasicEList(inputs.stream().filter(e -> e.eContainmentFeature() == FlowPackage.Literals.TRANSITION_ENTRY__VALUE).collect(Collectors.toList()));
 	}
 
 	/**
@@ -327,6 +341,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__OUTPUTS:
 				if (coreType) return getOutputs();
 				else return getOutputs().map();
+			case FlowPackage.FLOW_ELEMENT__INPUTS:
+				return getInputs();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				if (coreType) return getCalls();
 				else return getCalls().map();
@@ -425,6 +441,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 		switch (featureID) {
 			case FlowPackage.FLOW_ELEMENT__OUTPUTS:
 				return !getOutputs().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__INPUTS:
+				return !getInputs().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return !getCalls().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:

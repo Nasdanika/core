@@ -79,6 +79,7 @@ public class TestAgile extends TestBase {
 		
 		assertThat(developActivity.getInputArtifacts()).singleElement();
 		assertThat(developActivity.getInputArtifacts().get(0).getName()).isEqualTo("User story");
+		assertThat(developActivity.getInputs()).singleElement();
 		
 		assertThat(developActivity.getOutputArtifacts()).singleElement();
 		assertThat(developActivity.getOutputArtifacts().get(0).getName()).isEqualTo("Source code");
