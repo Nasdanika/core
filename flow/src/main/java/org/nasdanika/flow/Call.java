@@ -32,7 +32,7 @@ public interface Call extends Transition {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Response</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getCall_Response()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getResponse();

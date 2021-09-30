@@ -29,7 +29,7 @@ public interface Artifact extends PackageElement<Artifact> {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Repositories()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getRepositories();

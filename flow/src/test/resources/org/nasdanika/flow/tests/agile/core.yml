@@ -38,9 +38,11 @@ flow-package:
     story:
       name: User story
       description: Describes increment in product fucntionality.
+      repositories: issue-tracker
     source:
       name: Source code
       description: A collection of artifacts stored in the source repository and used to build a binary.
+      repositories: source-repository
     binary:
       name: Binary artifact(s)
       description: Artifacts built from source code for execution in runtime environments.

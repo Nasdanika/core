@@ -63,28 +63,30 @@ public class CallImpl extends TransitionImpl implements Call {
 	public EList<Artifact> getResponse() {
 		EList<Artifact> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res != null) {
-			ResourceSet resourceSet = res.getResourceSet();
-			if (resourceSet != null) {
-				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-					if (ancestor instanceof org.nasdanika.flow.Package) {
-						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
-						for (String key: getResponseKeys()) {
-							URI aURI = URI.createURI(key).resolve(artifactsURI);
-							EObject target = resourceSet.getEObject(aURI, false);
-							if (target == null) {
-								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-							
-							if (target instanceof Artifact) {
-								ret.add((Artifact) target);
-							} else {
-								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-						}
-						break;
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+				for (String key: getResponseKeys()) {
+					URI aURI = URI.createURI(key).resolve(artifactsURI);
+					EObject target = resourceSet.getEObject(aURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Artifact) {
+						ret.add((Artifact) target);
+					} else {
+						throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 					}
 				}
+				break;
 			}
 		}
 		return ret;

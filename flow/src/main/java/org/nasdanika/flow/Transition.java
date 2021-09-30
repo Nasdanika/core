@@ -35,7 +35,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_Payload()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getPayload();
@@ -115,7 +115,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Target</em>' reference.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_Target()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	FlowElement<?> getTarget();

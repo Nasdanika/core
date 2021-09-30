@@ -39,14 +39,14 @@ import org.nasdanika.flow.Transition;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getCalls <em>Calls</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifacts <em>Output Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifactKeys <em>Output Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipants <em>Participants</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipantsKeys <em>Participants Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipantKeys <em>Participant Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResourcesKeys <em>Resources Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResourceKeys <em>Resource Keys</em>}</li>
  * </ul>
  *
  * @generated
@@ -124,28 +124,30 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public EList<Artifact> getInputArtifacts() {
 		EList<Artifact> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res != null) {
-			ResourceSet resourceSet = res.getResourceSet();
-			if (resourceSet != null) {
-				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-					if (ancestor instanceof org.nasdanika.flow.Package) {
-						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
-						for (String key: getInputArtifactKeys()) {
-							URI aURI = URI.createURI(key).resolve(artifactsURI);
-							EObject target = resourceSet.getEObject(aURI, false);
-							if (target == null) {
-								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-							
-							if (target instanceof Artifact) {
-								ret.add((Artifact) target);
-							} else {
-								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-						}
-						break;
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+				for (String key: getInputArtifactKeys()) {
+					URI aURI = URI.createURI(key).resolve(artifactsURI);
+					EObject target = resourceSet.getEObject(aURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Artifact) {
+						ret.add((Artifact) target);
+					} else {
+						throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 					}
 				}
+				break;
 			}
 		}
 		return ret;
@@ -160,28 +162,30 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public EList<Artifact> getOutputArtifacts() {
 		EList<Artifact> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res != null) {
-			ResourceSet resourceSet = res.getResourceSet();
-			if (resourceSet != null) {
-				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-					if (ancestor instanceof org.nasdanika.flow.Package) {
-						URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
-						for (String key: getOutputArtifactKeys()) {
-							URI aURI = URI.createURI(key).resolve(artifactsURI);
-							EObject target = resourceSet.getEObject(aURI, false);
-							if (target == null) {
-								throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-							
-							if (target instanceof Artifact) {
-								ret.add((Artifact) target);
-							} else {
-								throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-						}
-						break;
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
+				for (String key: getOutputArtifactKeys()) {
+					URI aURI = URI.createURI(key).resolve(artifactsURI);
+					EObject target = resourceSet.getEObject(aURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Artifact) {
+						ret.add((Artifact) target);
+					} else {
+						throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 					}
 				}
+				break;
 			}
 		}
 		return ret;
@@ -207,28 +211,30 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public EList<Participant> getParticipants() {
 		EList<Participant> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res != null) {
-			ResourceSet resourceSet = res.getResourceSet();
-			if (resourceSet != null) {
-				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-					if (ancestor instanceof org.nasdanika.flow.Package) {
-						URI participantsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/participants/");
-						for (String key: getParticipantsKeys()) {
-							URI pURI = URI.createURI(key).resolve(participantsURI);
-							EObject target = resourceSet.getEObject(pURI, false);
-							if (target == null) {
-								throw new ConfigurationException("Invalid participant reference: " + key + " (" + pURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-							
-							if (target instanceof Participant) {
-								ret.add((Participant) target);
-							} else {
-								throw new ConfigurationException("Expected participant at: " + key + " (" + pURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-						}
-						break;
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI participantsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/participants/");
+				for (String key: getParticipantKeys()) {
+					URI pURI = URI.createURI(key).resolve(participantsURI);
+					EObject target = resourceSet.getEObject(pURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid participant reference: " + key + " (" + pURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Participant) {
+						ret.add((Participant) target);
+					} else {
+						throw new ConfigurationException("Expected participant at: " + key + " (" + pURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 					}
 				}
+				break;
 			}
 		}
 		return ret;
@@ -241,8 +247,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<String> getParticipantsKeys() {
-		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS_KEYS, true, true);
+	public EList<String> getParticipantKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__PARTICIPANT_KEYS, FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANT_KEYS, true, true);
 	}
 
 	/**
@@ -254,28 +260,30 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	public EList<Resource> getResources() {
 		EList<Resource> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res != null) {
-			ResourceSet resourceSet = res.getResourceSet();
-			if (resourceSet != null) {
-				for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-					if (ancestor instanceof org.nasdanika.flow.Package) {
-						URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
-						for (String key: getResourcesKeys()) {
-							URI rURI = URI.createURI(key).resolve(resourcesURI);
-							EObject target = resourceSet.getEObject(rURI, false);
-							if (target == null) {
-								throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-							
-							if (target instanceof Resource) {
-								ret.add((Resource) target);
-							} else {
-								throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-							}
-						}
-						break;
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
+				for (String key: getResourceKeys()) {
+					URI rURI = URI.createURI(key).resolve(resourcesURI);
+					EObject target = resourceSet.getEObject(rURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Resource) {
+						ret.add((Resource) target);
+					} else {
+						throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 					}
 				}
+				break;
 			}
 		}
 		return ret;
@@ -288,8 +296,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<String> getResourcesKeys() {
-		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS, FlowPackage.Literals.FLOW_ELEMENT__RESOURCES_KEYS, true, true);
+	public EList<String> getResourceKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS, FlowPackage.Literals.FLOW_ELEMENT__RESOURCE_KEYS, true, true);
 	}
 
 	/**
@@ -322,22 +330,22 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				if (coreType) return getCalls();
 				else return getCalls().map();
-			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
-				return getInputArtifactKeys();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return getInputArtifacts();
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				return getInputArtifactKeys();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
 				return getOutputArtifacts();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
 				return getOutputArtifactKeys();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return getParticipants();
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
-				return getParticipantsKeys();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANT_KEYS:
+				return getParticipantKeys();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return getResources();
-			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
-				return getResourcesKeys();
+			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
+				return getResourceKeys();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -365,13 +373,13 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				getOutputArtifactKeys().clear();
 				getOutputArtifactKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
-				getParticipantsKeys().clear();
-				getParticipantsKeys().addAll((Collection<? extends String>)newValue);
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANT_KEYS:
+				getParticipantKeys().clear();
+				getParticipantKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
-				getResourcesKeys().clear();
-				getResourcesKeys().addAll((Collection<? extends String>)newValue);
+			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
+				getResourceKeys().clear();
+				getResourceKeys().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -397,11 +405,11 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
 				getOutputArtifactKeys().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
-				getParticipantsKeys().clear();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANT_KEYS:
+				getParticipantKeys().clear();
 				return;
-			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
-				getResourcesKeys().clear();
+			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
+				getResourceKeys().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -419,22 +427,22 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return !getOutputs().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return !getCalls().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
-				return !getInputArtifactKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return !getInputArtifacts().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
+				return !getInputArtifactKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
 				return !getOutputArtifacts().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS:
 				return !getOutputArtifactKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return !getParticipants().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS_KEYS:
-				return !getParticipantsKeys().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__PARTICIPANT_KEYS:
+				return !getParticipantKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return !getResources().isEmpty();
-			case FlowPackage.FLOW_ELEMENT__RESOURCES_KEYS:
-				return !getResourcesKeys().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
+				return !getResourceKeys().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

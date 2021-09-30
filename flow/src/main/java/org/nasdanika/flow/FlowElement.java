@@ -16,14 +16,14 @@ import org.eclipse.emf.common.util.EMap;
  * <ul>
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getCalls <em>Calls</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifacts <em>Input Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputArtifacts <em>Output Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputArtifactKeys <em>Output Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getParticipants <em>Participants</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getParticipantsKeys <em>Participants Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getParticipantKeys <em>Participant Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}</li>
- *   <li>{@link org.nasdanika.flow.FlowElement#getResourcesKeys <em>Resources Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getResourceKeys <em>Resource Keys</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlowElement()
@@ -90,7 +90,7 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Input Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_InputArtifacts()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getInputArtifacts();
@@ -105,7 +105,7 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Output Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_OutputArtifacts()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getOutputArtifacts();
@@ -135,25 +135,25 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Participants</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Participants()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Participant> getParticipants();
 
 	/**
-	 * Returns the value of the '<em><b>Participants Keys</b></em>' attribute list.
+	 * Returns the value of the '<em><b>Participant Keys</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Keys of participants resolved relative to the containing package ``participants/`` reference.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Participants Keys</em>' attribute list.
-	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ParticipantsKeys()
+	 * @return the value of the '<em>Participant Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ParticipantKeys()
 	 * @model annotation="urn:org.nasdanika load-key='participants'"
 	 * @generated
 	 */
-	EList<String> getParticipantsKeys();
+	EList<String> getParticipantKeys();
 
 	/**
 	 * Returns the value of the '<em><b>Resources</b></em>' reference list.
@@ -162,24 +162,24 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Resources</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Resources()
-	 * @model changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getResources();
 
 	/**
-	 * Returns the value of the '<em><b>Resources Keys</b></em>' attribute list.
+	 * Returns the value of the '<em><b>Resource Keys</b></em>' attribute list.
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * Keys of resources resolved relative to the containing package ``resources/`` reference.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Resources Keys</em>' attribute list.
-	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ResourcesKeys()
+	 * @return the value of the '<em>Resource Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ResourceKeys()
 	 * @model annotation="urn:org.nasdanika load-key='resources'"
 	 * @generated
 	 */
-	EList<String> getResourcesKeys();
+	EList<String> getResourceKeys();
 
 } // FlowElement

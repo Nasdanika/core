@@ -1178,22 +1178,22 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__CALLS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -1223,13 +1223,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PARTICIPANTS_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
+	int FLOW_ELEMENT__PARTICIPANT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -1241,13 +1241,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 8;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCES_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 9;
+	int FLOW_ELEMENT__RESOURCE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -1969,15 +1969,6 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ACTIVITY__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1985,6 +1976,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -2014,13 +2014,13 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__PARTICIPANTS_KEYS = FLOW_ELEMENT__PARTICIPANTS_KEYS;
+	int ACTIVITY__PARTICIPANT_KEYS = FLOW_ELEMENT__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -2032,13 +2032,13 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__RESOURCES = FLOW_ELEMENT__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__RESOURCES_KEYS = FLOW_ELEMENT__RESOURCES_KEYS;
+	int ACTIVITY__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
@@ -2239,15 +2239,6 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SERVICE__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2255,6 +2246,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int SERVICE__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -2284,13 +2284,13 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__PARTICIPANTS_KEYS = FLOW_ELEMENT__PARTICIPANTS_KEYS;
+	int SERVICE__PARTICIPANT_KEYS = FLOW_ELEMENT__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -2302,13 +2302,13 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__RESOURCES = FLOW_ELEMENT__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__RESOURCES_KEYS = FLOW_ELEMENT__RESOURCES_KEYS;
+	int SERVICE__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -2492,15 +2492,6 @@ public interface FlowPackage extends EPackage {
 	int FLOW__CALLS = ACTIVITY__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW__INPUT_ARTIFACT_KEYS = ACTIVITY__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2508,6 +2499,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__INPUT_ARTIFACTS = ACTIVITY__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__INPUT_ARTIFACT_KEYS = ACTIVITY__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -2537,13 +2537,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW__PARTICIPANTS = ACTIVITY__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW__PARTICIPANTS_KEYS = ACTIVITY__PARTICIPANTS_KEYS;
+	int FLOW__PARTICIPANT_KEYS = ACTIVITY__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -2555,13 +2555,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW__RESOURCES = ACTIVITY__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW__RESOURCES_KEYS = ACTIVITY__RESOURCES_KEYS;
+	int FLOW__RESOURCE_KEYS = ACTIVITY__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
@@ -2745,15 +2745,6 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PSEUDO_STATE__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2761,6 +2752,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PSEUDO_STATE__INPUT_ARTIFACTS = FLOW_ELEMENT__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__INPUT_ARTIFACT_KEYS = FLOW_ELEMENT__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -2790,13 +2790,13 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__PARTICIPANTS = FLOW_ELEMENT__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PSEUDO_STATE__PARTICIPANTS_KEYS = FLOW_ELEMENT__PARTICIPANTS_KEYS;
+	int PSEUDO_STATE__PARTICIPANT_KEYS = FLOW_ELEMENT__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -2808,13 +2808,13 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__RESOURCES = FLOW_ELEMENT__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PSEUDO_STATE__RESOURCES_KEYS = FLOW_ELEMENT__RESOURCES_KEYS;
+	int PSEUDO_STATE__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -2989,15 +2989,6 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CHOICE__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3005,6 +2996,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -3034,13 +3034,13 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int CHOICE__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -3052,13 +3052,13 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int CHOICE__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -3233,15 +3233,6 @@ public interface FlowPackage extends EPackage {
 	int END__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3249,6 +3240,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int END__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -3278,13 +3278,13 @@ public interface FlowPackage extends EPackage {
 	int END__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int END__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -3296,13 +3296,13 @@ public interface FlowPackage extends EPackage {
 	int END__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int END__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -3477,15 +3477,6 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ENTRY_POINT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3493,6 +3484,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -3522,13 +3522,13 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_POINT__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int ENTRY_POINT__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -3540,13 +3540,13 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_POINT__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int ENTRY_POINT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -3721,15 +3721,6 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXIT_POINT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3737,6 +3728,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXIT_POINT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -3766,13 +3766,13 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXIT_POINT__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int EXIT_POINT__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -3784,13 +3784,13 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXIT_POINT__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int EXIT_POINT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -3965,15 +3965,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_INPUT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3981,6 +3972,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -4010,13 +4010,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_INPUT__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int EXPANSION_INPUT__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -4028,13 +4028,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_INPUT__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int EXPANSION_INPUT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -4209,15 +4209,6 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EXPANSION_OUTPUT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4225,6 +4216,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_OUTPUT__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -4254,13 +4254,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_OUTPUT__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int EXPANSION_OUTPUT__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -4272,13 +4272,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_OUTPUT__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int EXPANSION_OUTPUT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -4453,15 +4453,6 @@ public interface FlowPackage extends EPackage {
 	int FORK__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FORK__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4469,6 +4460,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -4498,13 +4498,13 @@ public interface FlowPackage extends EPackage {
 	int FORK__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORK__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int FORK__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -4516,13 +4516,13 @@ public interface FlowPackage extends EPackage {
 	int FORK__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORK__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int FORK__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -4697,15 +4697,6 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_PIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4713,6 +4704,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -4742,13 +4742,13 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PIN__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int INPUT_PIN__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -4760,13 +4760,13 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PIN__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int INPUT_PIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -4941,15 +4941,6 @@ public interface FlowPackage extends EPackage {
 	int JOIN__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int JOIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4957,6 +4948,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -4986,13 +4986,13 @@ public interface FlowPackage extends EPackage {
 	int JOIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int JOIN__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -5004,13 +5004,13 @@ public interface FlowPackage extends EPackage {
 	int JOIN__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int JOIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -5185,15 +5185,6 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OUTPUT_PIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5201,6 +5192,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PIN__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -5230,13 +5230,13 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PIN__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int OUTPUT_PIN__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -5248,13 +5248,13 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PIN__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int OUTPUT_PIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -5429,15 +5429,6 @@ public interface FlowPackage extends EPackage {
 	int START__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
-
-	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5445,6 +5436,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__INPUT_ARTIFACTS = PSEUDO_STATE__INPUT_ARTIFACTS;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__INPUT_ARTIFACT_KEYS = PSEUDO_STATE__INPUT_ARTIFACT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -5474,13 +5474,13 @@ public interface FlowPackage extends EPackage {
 	int START__PARTICIPANTS = PSEUDO_STATE__PARTICIPANTS;
 
 	/**
-	 * The feature id for the '<em><b>Participants Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START__PARTICIPANTS_KEYS = PSEUDO_STATE__PARTICIPANTS_KEYS;
+	int START__PARTICIPANT_KEYS = PSEUDO_STATE__PARTICIPANT_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -5492,13 +5492,13 @@ public interface FlowPackage extends EPackage {
 	int START__RESOURCES = PSEUDO_STATE__RESOURCES;
 
 	/**
-	 * The feature id for the '<em><b>Resources Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START__RESOURCES_KEYS = PSEUDO_STATE__RESOURCES_KEYS;
+	int START__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -6028,15 +6028,15 @@ public interface FlowPackage extends EPackage {
 	EReference getFlowElement_Participants();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getParticipantsKeys <em>Participants Keys</em>}'.
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getParticipantKeys <em>Participant Keys</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Participants Keys</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getParticipantsKeys()
+	 * @return the meta object for the attribute list '<em>Participant Keys</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getParticipantKeys()
 	 * @see #getFlowElement()
 	 * @generated
 	 */
-	EAttribute getFlowElement_ParticipantsKeys();
+	EAttribute getFlowElement_ParticipantKeys();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}'.
@@ -6050,15 +6050,15 @@ public interface FlowPackage extends EPackage {
 	EReference getFlowElement_Resources();
 
 	/**
-	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getResourcesKeys <em>Resources Keys</em>}'.
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getResourceKeys <em>Resource Keys</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute list '<em>Resources Keys</em>'.
-	 * @see org.nasdanika.flow.FlowElement#getResourcesKeys()
+	 * @return the meta object for the attribute list '<em>Resource Keys</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getResourceKeys()
 	 * @see #getFlowElement()
 	 * @generated
 	 */
-	EAttribute getFlowElement_ResourcesKeys();
+	EAttribute getFlowElement_ResourceKeys();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Element Entry</em>}'.
@@ -6888,12 +6888,12 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW_ELEMENT__PARTICIPANTS = eINSTANCE.getFlowElement_Participants();
 
 		/**
-		 * The meta object literal for the '<em><b>Participants Keys</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Participant Keys</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FLOW_ELEMENT__PARTICIPANTS_KEYS = eINSTANCE.getFlowElement_ParticipantsKeys();
+		EAttribute FLOW_ELEMENT__PARTICIPANT_KEYS = eINSTANCE.getFlowElement_ParticipantKeys();
 
 		/**
 		 * The meta object literal for the '<em><b>Resources</b></em>' reference list feature.
@@ -6904,12 +6904,12 @@ public interface FlowPackage extends EPackage {
 		EReference FLOW_ELEMENT__RESOURCES = eINSTANCE.getFlowElement_Resources();
 
 		/**
-		 * The meta object literal for the '<em><b>Resources Keys</b></em>' attribute list feature.
+		 * The meta object literal for the '<em><b>Resource Keys</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute FLOW_ELEMENT__RESOURCES_KEYS = eINSTANCE.getFlowElement_ResourcesKeys();
+		EAttribute FLOW_ELEMENT__RESOURCE_KEYS = eINSTANCE.getFlowElement_ResourceKeys();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.

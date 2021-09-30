@@ -7,7 +7,13 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
@@ -61,12 +67,39 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Resource> getRepositories() {
-		return (EList<Resource>)eDynamicGet(FlowPackage.ARTIFACT__REPOSITORIES, FlowPackage.Literals.ARTIFACT__REPOSITORIES, true, true);
+		EList<Resource> ret = ECollections.newBasicEList();
+		org.eclipse.emf.ecore.resource.Resource res = eResource();
+		if (res == null) {
+			throw new IllegalStateException("Not in a resource");
+		}
+		ResourceSet resourceSet = res.getResourceSet();
+		if (resourceSet == null) {
+			throw new IllegalStateException("Not in a resourceset");
+		}
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
+				for (String key: getRepositoryKeys()) {
+					URI rURI = URI.createURI(key).resolve(resourcesURI);
+					EObject target = resourceSet.getEObject(rURI, false);
+					if (target == null) {
+						throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+					
+					if (target instanceof Resource) {
+						ret.add((Resource) target);
+					} else {
+						throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+					}
+				}
+				break;
+			}
+		}
+		return ret;
 	}
 
 	/**

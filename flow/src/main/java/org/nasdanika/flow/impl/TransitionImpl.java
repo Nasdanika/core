@@ -188,11 +188,11 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 		}
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
 		if (res == null) {
-			return null;
+			throw new IllegalStateException("Not in a resource");
 		}
 		ResourceSet resourceSet = res.getResourceSet();
 		if (resourceSet == null) {
-			return null;
+			throw new IllegalStateException("Not in a resourceset");
 		}
 		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof org.nasdanika.flow.Flow) {

@@ -198,7 +198,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
-        eType="#//Resource" changeable="false" derived="true"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -266,6 +266,12 @@
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputArtifacts" upperBound="-1"
+        eType="#//Artifact" changeable="false" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Input artifacts required to start working on this activity."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -275,14 +281,8 @@
         <details key="documentation" value="Keys of input artifacts resolved relative to the containing package ``artifacts/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="inputArtifacts" upperBound="-1"
-        eType="#//Artifact" changeable="false" derived="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Input artifacts required to start working on this activity."/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputArtifacts" upperBound="-1"
-        eType="#//Artifact" changeable="false" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Output artifacts of the activity."/>
       </eAnnotations>
@@ -297,12 +297,12 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
-        eType="#//Participant" changeable="false" derived="true">
+        eType="#//Participant" changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participantsKeys" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participantKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
         <details key="load-key" value="participants"/>
@@ -312,8 +312,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
-        eType="#//Resource" changeable="false" derived="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourcesKeys" upperBound="-1"
+        eType="#//Resource" changeable="false" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
         <details key="load-key" value="resources"/>
@@ -349,7 +349,7 @@
       <details key="documentation-reference" value="doc/flow/transition.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="payload" upperBound="-1"
-        eType="#//Artifact" changeable="false" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Artifacts passed from source to target activity."/>
       </eAnnotations>
@@ -378,7 +378,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" changeable="false"
-        derived="true">
+        transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Transition target."/>
       </eAnnotations>
@@ -414,7 +414,7 @@
       <details key="documentation-reference" value="doc/flow/call.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="response" upperBound="-1"
-        eType="#//Artifact" changeable="false" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Response artifacts passed back from the target to the source activity."/>
       </eAnnotations>
@@ -490,7 +490,7 @@
       <details key="documentation-reference" value="doc/flow/service.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
-        changeable="false" derived="true" eOpposite="#//Activity/services">
+        changeable="false" transient="true" derived="true" eOpposite="#//Activity/services">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Target activity of the service."/>
       </eAnnotations>
