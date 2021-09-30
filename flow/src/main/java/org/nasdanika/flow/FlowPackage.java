@@ -1196,13 +1196,22 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__CALLS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INVOCATIONS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
@@ -1211,7 +1220,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
@@ -1220,7 +1229,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
+	int FLOW_ELEMENT__OUTPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Output Artifact Keys</b></em>' attribute list.
@@ -1229,7 +1238,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+	int FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Participants</b></em>' reference list.
@@ -1238,7 +1247,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
+	int FLOW_ELEMENT__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
@@ -1247,7 +1256,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PARTICIPANT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 8;
+	int FLOW_ELEMENT__PARTICIPANT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Resources</b></em>' reference list.
@@ -1256,7 +1265,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 9;
+	int FLOW_ELEMENT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
@@ -1265,7 +1274,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 10;
+	int FLOW_ELEMENT__RESOURCE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -1274,7 +1283,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 11;
+	int FLOW_ELEMENT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1996,6 +2005,15 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INVOCATIONS = FLOW_ELEMENT__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2275,6 +2293,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__INVOCATIONS = FLOW_ELEMENT__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2535,6 +2562,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__CALLS = ACTIVITY__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__INVOCATIONS = ACTIVITY__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -2799,6 +2835,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__CALLS = FLOW_ELEMENT__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__INVOCATIONS = FLOW_ELEMENT__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3050,6 +3095,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -3305,6 +3359,15 @@ public interface FlowPackage extends EPackage {
 	int END__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3556,6 +3619,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -3811,6 +3883,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4062,6 +4143,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -4317,6 +4407,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4568,6 +4667,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -4823,6 +4931,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5074,6 +5191,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -5329,6 +5455,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__CALLS = PSEUDO_STATE__CALLS;
 
 	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5580,6 +5715,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__CALLS = PSEUDO_STATE__CALLS;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__INVOCATIONS = PSEUDO_STATE__INVOCATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
@@ -6146,6 +6290,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFlowElement_Calls();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.FlowElement#getInvocations <em>Invocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Invocations</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getInvocations()
+	 * @see #getFlowElement()
+	 * @generated
+	 */
+	EReference getFlowElement_Invocations();
 
 	/**
 	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.FlowElement#getInputArtifactKeys <em>Input Artifact Keys</em>}'.
@@ -7037,6 +7192,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLOW_ELEMENT__CALLS = eINSTANCE.getFlowElement_Calls();
+
+		/**
+		 * The meta object literal for the '<em><b>Invocations</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLOW_ELEMENT__INVOCATIONS = eINSTANCE.getFlowElement_Invocations();
 
 		/**
 		 * The meta object literal for the '<em><b>Input Artifact Keys</b></em>' attribute list feature.

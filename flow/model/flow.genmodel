@@ -63,6 +63,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputs"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/inputs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/calls"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/invocations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/inputArtifacts"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/inputArtifactKeys"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/outputArtifacts"/>

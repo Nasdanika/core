@@ -746,17 +746,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getFlowElement_InputArtifactKeys() {
-		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getFlowElement_InputArtifacts() {
+	public EReference getFlowElement_Invocations() {
 		return (EReference)flowElementEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -766,8 +756,28 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getFlowElement_InputArtifactKeys() {
+		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getFlowElement_InputArtifacts() {
+		return (EReference)flowElementEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EReference getFlowElement_OutputArtifacts() {
-		return (EReference)flowElementEClass.getEStructuralFeatures().get(5);
+		return (EReference)flowElementEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -777,7 +787,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EAttribute getFlowElement_OutputArtifactKeys() {
-		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -787,7 +797,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EReference getFlowElement_Participants() {
-		return (EReference)flowElementEClass.getEStructuralFeatures().get(7);
+		return (EReference)flowElementEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -797,7 +807,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EAttribute getFlowElement_ParticipantKeys() {
-		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -807,7 +817,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EReference getFlowElement_Resources() {
-		return (EReference)flowElementEClass.getEStructuralFeatures().get(9);
+		return (EReference)flowElementEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -817,7 +827,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EAttribute getFlowElement_ResourceKeys() {
-		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -1308,6 +1318,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(flowElementEClass, FLOW_ELEMENT__OUTPUTS);
 		createEReference(flowElementEClass, FLOW_ELEMENT__INPUTS);
 		createEReference(flowElementEClass, FLOW_ELEMENT__CALLS);
+		createEReference(flowElementEClass, FLOW_ELEMENT__INVOCATIONS);
 		createEReference(flowElementEClass, FLOW_ELEMENT__INPUT_ARTIFACTS);
 		createEAttribute(flowElementEClass, FLOW_ELEMENT__INPUT_ARTIFACT_KEYS);
 		createEReference(flowElementEClass, FLOW_ELEMENT__OUTPUT_ARTIFACTS);
@@ -1542,6 +1553,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getFlowElement_Outputs(), this.getTransitionEntry(), null, "outputs", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Inputs(), this.getTransition(), null, "inputs", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Calls(), this.getCallEntry(), null, "calls", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFlowElement_Invocations(), this.getCall(), null, "invocations", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_InputArtifacts(), this.getArtifact(), null, "inputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_InputArtifactKeys(), ecorePackage.getEString(), "inputArtifactKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_OutputArtifacts(), this.getArtifact(), null, "outputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
@@ -2088,6 +2100,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Calls to other activities."
+		   });
+		addAnnotation
+		  (getFlowElement_Invocations(),
+		   source,
+		   new String[] {
+			   "documentation", "Calls which have this flow element as a target."
 		   });
 		addAnnotation
 		  (getFlowElement_InputArtifacts(),

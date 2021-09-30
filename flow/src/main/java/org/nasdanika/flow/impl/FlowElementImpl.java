@@ -42,6 +42,7 @@ import org.nasdanika.flow.Transition;
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getCalls <em>Calls</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInvocations <em>Invocations</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getOutputArtifacts <em>Output Artifacts</em>}</li>
@@ -116,6 +117,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	public EMap<String, Call> getCalls() {
 		return (EMap<String, Call>)eDynamicGet(FlowPackage.FLOW_ELEMENT__CALLS, FlowPackage.Literals.FLOW_ELEMENT__CALLS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Call> getInvocations() {
+		List<Call> invocations = getReferrers(FlowPackage.Literals.TRANSITION__TARGET).stream().filter(e -> e instanceof Call).map(e -> (Call) e).collect(Collectors.toList());
+		return ECollections.newBasicEList(invocations.stream().filter(e -> e.eContainmentFeature() == FlowPackage.Literals.CALL_ENTRY__VALUE).collect(Collectors.toList()));
 	}
 
 	/**
@@ -346,6 +358,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				if (coreType) return getCalls();
 				else return getCalls().map();
+			case FlowPackage.FLOW_ELEMENT__INVOCATIONS:
+				return getInvocations();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return getInputArtifacts();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:
@@ -445,6 +459,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return !getInputs().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return !getCalls().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__INVOCATIONS:
+				return !getInvocations().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
 				return !getInputArtifacts().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACT_KEYS:

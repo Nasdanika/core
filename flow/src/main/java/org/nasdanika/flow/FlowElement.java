@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputs <em>Outputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getCalls <em>Calls</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getInvocations <em>Invocations</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifacts <em>Input Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getInputArtifactKeys <em>Input Artifact Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getOutputArtifacts <em>Output Artifacts</em>}</li>
@@ -80,6 +81,21 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * @generated
 	 */
 	EMap<String, Call> getCalls();
+
+	/**
+	 * Returns the value of the '<em><b>Invocations</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Call}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Calls which have this flow element as a target.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Invocations</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Invocations()
+	 * @model transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Call> getInvocations();
 
 	/**
 	 * Returns the value of the '<em><b>Input Artifact Keys</b></em>' attribute list.
