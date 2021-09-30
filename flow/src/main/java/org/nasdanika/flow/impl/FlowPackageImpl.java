@@ -676,6 +676,26 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getArtifact_InputFor() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArtifact_OutputFor() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getArtifactEntry() {
 		return artifactEntryEClass;
 	}
@@ -1309,6 +1329,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		artifactEClass = createEClass(ARTIFACT);
 		createEReference(artifactEClass, ARTIFACT__REPOSITORIES);
 		createEAttribute(artifactEClass, ARTIFACT__REPOSITORY_KEYS);
+		createEReference(artifactEClass, ARTIFACT__INPUT_FOR);
+		createEReference(artifactEClass, ARTIFACT__OUTPUT_FOR);
 
 		artifactEntryEClass = createEClass(ARTIFACT_ENTRY);
 		createEAttribute(artifactEntryEClass, ARTIFACT_ENTRY__KEY);
@@ -1544,6 +1566,14 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEClass(artifactEClass, Artifact.class, "Artifact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getArtifact_Repositories(), this.getResource(), this.getResource_Artifacts(), "repositories", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtifact_RepositoryKeys(), ecorePackage.getEString(), "repositoryKeys", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getFlowElement());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getArtifact_InputFor(), g1, this.getFlowElement_InputArtifacts(), "inputFor", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getFlowElement());
+		g2 = createEGenericType();
+		g1.getETypeArguments().add(g2);
+		initEReference(getArtifact_OutputFor(), g1, this.getFlowElement_OutputArtifacts(), "outputFor", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		initEClass(artifactEntryEClass, Map.Entry.class, "ArtifactEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArtifactEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1554,9 +1584,9 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getFlowElement_Inputs(), this.getTransition(), null, "inputs", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Calls(), this.getCallEntry(), null, "calls", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Invocations(), this.getCall(), null, "invocations", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEReference(getFlowElement_InputArtifacts(), this.getArtifact(), null, "inputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getFlowElement_InputArtifacts(), this.getArtifact(), this.getArtifact_InputFor(), "inputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_InputArtifactKeys(), ecorePackage.getEString(), "inputArtifactKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFlowElement_OutputArtifacts(), this.getArtifact(), null, "outputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getFlowElement_OutputArtifacts(), this.getArtifact(), this.getArtifact_OutputFor(), "outputArtifacts", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_OutputArtifactKeys(), ecorePackage.getEString(), "outputArtifactKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Participants(), this.getParticipant(), null, "participants", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_ParticipantKeys(), ecorePackage.getEString(), "participantKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2064,6 +2094,18 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Keys of artifact\'s repositories relative to the containing package ``resources/`` reference."
+		   });
+		addAnnotation
+		  (getArtifact_InputFor(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements which take this artifact as an input."
+		   });
+		addAnnotation
+		  (getArtifact_OutputFor(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements which output this artifact."
 		   });
 		addAnnotation
 		  (artifactEntryEClass,

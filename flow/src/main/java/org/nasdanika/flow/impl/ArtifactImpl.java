@@ -18,6 +18,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
@@ -32,6 +33,8 @@ import org.nasdanika.flow.Resource;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getRepositoryKeys <em>Repository Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInputFor <em>Input For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getOutputFor <em>Output For</em>}</li>
  * </ul>
  *
  * @generated
@@ -119,6 +122,26 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<FlowElement<?>> getInputFor() {
+		return getOppositeReferrers(FlowPackage.Literals.ARTIFACT__INPUT_FOR);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<FlowElement<?>> getOutputFor() {
+		return getOppositeReferrers(FlowPackage.Literals.ARTIFACT__OUTPUT_FOR);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -127,6 +150,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__REPOSITORIES:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRepositories()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__INPUT_FOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputFor()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__OUTPUT_FOR:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputFor()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -141,6 +168,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__REPOSITORIES:
 				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__INPUT_FOR:
+				return ((InternalEList<?>)getInputFor()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__OUTPUT_FOR:
+				return ((InternalEList<?>)getOutputFor()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -157,6 +188,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return getRepositories();
 			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
 				return getRepositoryKeys();
+			case FlowPackage.ARTIFACT__INPUT_FOR:
+				return getInputFor();
+			case FlowPackage.ARTIFACT__OUTPUT_FOR:
+				return getOutputFor();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -205,6 +240,10 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return !getRepositories().isEmpty();
 			case FlowPackage.ARTIFACT__REPOSITORY_KEYS:
 				return !getRepositoryKeys().isEmpty();
+			case FlowPackage.ARTIFACT__INPUT_FOR:
+				return !getInputFor().isEmpty();
+			case FlowPackage.ARTIFACT__OUTPUT_FOR:
+				return !getOutputFor().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

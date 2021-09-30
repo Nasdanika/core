@@ -115,6 +115,7 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	/**
 	 * Returns the value of the '<em><b>Input Artifacts</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getInputFor <em>Input For</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -122,7 +123,8 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Input Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_InputArtifacts()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Artifact#getInputFor
+	 * @model opposite="inputFor" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getInputArtifacts();
@@ -130,6 +132,7 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	/**
 	 * Returns the value of the '<em><b>Output Artifacts</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getOutputFor <em>Output For</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -137,7 +140,8 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Output Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_OutputArtifacts()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Artifact#getOutputFor
+	 * @model opposite="outputFor" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Artifact> getOutputArtifacts();

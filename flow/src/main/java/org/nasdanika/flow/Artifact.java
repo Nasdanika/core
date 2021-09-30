@@ -15,6 +15,8 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link org.nasdanika.flow.Artifact#getRepositories <em>Repositories</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getRepositoryKeys <em>Repository Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getInputFor <em>Input For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getOutputFor <em>Output For</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
@@ -50,5 +52,39 @@ public interface Artifact extends PackageElement<Artifact> {
 	 * @generated
 	 */
 	EList<String> getRepositoryKeys();
+
+	/**
+	 * Returns the value of the '<em><b>Input For</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getInputArtifacts <em>Input Artifacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements which take this artifact as an input.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Input For</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_InputFor()
+	 * @see org.nasdanika.flow.FlowElement#getInputArtifacts
+	 * @model opposite="inputArtifacts" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<FlowElement<?>> getInputFor();
+
+	/**
+	 * Returns the value of the '<em><b>Output For</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getOutputArtifacts <em>Output Artifacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements which output this artifact.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Output For</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_OutputFor()
+	 * @see org.nasdanika.flow.FlowElement#getOutputArtifacts
+	 * @model opposite="outputArtifacts" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<FlowElement<?>> getOutputFor();
 
 } // Artifact

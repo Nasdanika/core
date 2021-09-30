@@ -214,6 +214,24 @@
         <details key="documentation" value="Keys of artifact's repositories relative to the containing package ``resources/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputFor" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/inputArtifacts">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements which take this artifact as an input."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputFor" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/outputArtifacts">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements which output this artifact."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//FlowElement">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Artifact"/>
     </eGenericSuperTypes>
@@ -285,7 +303,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputArtifacts" upperBound="-1"
-        eType="#//Artifact" changeable="false" transient="true" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/inputFor">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Input artifacts required to start working on this activity."/>
       </eAnnotations>
@@ -300,7 +318,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputArtifacts" upperBound="-1"
-        eType="#//Artifact" changeable="false" transient="true" derived="true">
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/outputFor">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Output artifacts of the activity."/>
       </eAnnotations>

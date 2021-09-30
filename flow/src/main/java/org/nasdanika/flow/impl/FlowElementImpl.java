@@ -331,6 +331,23 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputArtifacts()).basicAdd(otherEnd, msgs);
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputArtifacts()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -338,6 +355,10 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return ((InternalEList<?>)getOutputs()).basicRemove(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__CALLS:
 				return ((InternalEList<?>)getCalls()).basicRemove(otherEnd, msgs);
+			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
+				return ((InternalEList<?>)getInputArtifacts()).basicRemove(otherEnd, msgs);
+			case FlowPackage.FLOW_ELEMENT__OUTPUT_ARTIFACTS:
+				return ((InternalEList<?>)getOutputArtifacts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}

@@ -978,13 +978,31 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__REPOSITORY_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Input For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INPUT_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Output For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__OUTPUT_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -6214,6 +6232,28 @@ public interface FlowPackage extends EPackage {
 	EAttribute getArtifact_RepositoryKeys();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getInputFor <em>Input For</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Input For</em>'.
+	 * @see org.nasdanika.flow.Artifact#getInputFor()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_InputFor();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getOutputFor <em>Output For</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Output For</em>'.
+	 * @see org.nasdanika.flow.Artifact#getOutputFor()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_OutputFor();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Artifact Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7132,6 +7172,22 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ARTIFACT__REPOSITORY_KEYS = eINSTANCE.getArtifact_RepositoryKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Input For</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__INPUT_FOR = eINSTANCE.getArtifact_InputFor();
+
+		/**
+		 * The meta object literal for the '<em><b>Output For</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__OUTPUT_FOR = eINSTANCE.getArtifact_OutputFor();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.

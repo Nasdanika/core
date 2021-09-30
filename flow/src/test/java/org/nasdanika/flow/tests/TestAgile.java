@@ -89,7 +89,10 @@ public class TestAgile extends TestBase {
 		assertThat(sourceArtifact.getRepositories()).singleElement().isEqualTo(sourceRepository);
 		assertThat(sourceRepository.getArtifacts()).singleElement().isEqualTo(sourceArtifact);
 				
-		// Opposites		
+		// Opposites
+		assertThat(sourceArtifact.getInputFor()).singleElement();
+		assertThat(sourceArtifact.getOutputFor()).singleElement();
+		
 	}
 	
 }
