@@ -513,7 +513,7 @@
       </eBounds>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
-        eType="#//Service" changeable="false" derived="true" eOpposite="#//Service/target">
+        eType="#//Service" changeable="false" transient="true" derived="true" eOpposite="#//Service/target">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived opposite to Service target."/>
       </eAnnotations>

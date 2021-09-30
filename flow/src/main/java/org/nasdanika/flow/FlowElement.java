@@ -196,11 +196,13 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	/**
 	 * Returns the value of the '<em><b>Resources</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Resource#getUsedBy <em>Used By</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Resources</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Resources()
-	 * @model transient="true" changeable="false" derived="true"
+	 * @see org.nasdanika.flow.Resource#getUsedBy
+	 * @model opposite="usedBy" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getResources();

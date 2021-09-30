@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
@@ -29,6 +30,7 @@ import org.nasdanika.flow.Resource;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedBy <em>Used By</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,6 +90,16 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<FlowElement<?>> getUsedBy() {
+		return getOppositeReferrers(FlowPackage.Literals.RESOURCE__USED_BY);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -96,6 +108,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 		switch (featureID) {
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
+			case FlowPackage.RESOURCE__USED_BY:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedBy()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -112,6 +126,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
+			case FlowPackage.RESOURCE__USED_BY:
+				return ((InternalEList<?>)getUsedBy()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -129,6 +145,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				else return getServices().map();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return getArtifacts();
+			case FlowPackage.RESOURCE__USED_BY:
+				return getUsedBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,6 +194,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				return !getServices().isEmpty();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return !getArtifacts().isEmpty();
+			case FlowPackage.RESOURCE__USED_BY:
+				return !getUsedBy().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
