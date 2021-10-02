@@ -2,17 +2,26 @@ package org.nasdanika.flow.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.junit.Test;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Status;
+import org.nasdanika.diagram.Diagram;
+import org.nasdanika.diagram.gen.plantuml.Generator;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Flow;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.flow.util.FlowStateDiagramGenerator;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 
 /**
@@ -42,6 +51,30 @@ public class TestAgile extends TestBase {
 //					}					
 					
 					assertCore(instance);
+					
+					FlowStateDiagramGenerator flowStateDiagramGenerator = new FlowStateDiagramGenerator() {
+					
+						@Override
+						protected String getFlowElementLocation(String key, FlowElement<?> flowElement) {
+							return "https://www.nasdanika.org/" + key + ".html";
+						}
+						
+					};
+					
+					Diagram diagram = flowStateDiagramGenerator.generateFlowDiagram((Flow) core.getActivities().get("development"));
+					
+					Generator generator = new Generator();
+					
+					String spec = generator.generateSpec(diagram);
+					System.out.println(spec);
+					File outputDir = new File("target/diagrams");
+					outputDir.mkdirs();
+					try {
+						Files.write(new File(outputDir, "core.html").toPath(), generator.generateUmlDiagram(diagram).getBytes(StandardCharsets.UTF_8));
+					} catch (Exception e) {
+						throw new NasdanikaException(e);
+					}		
+					
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.FAIL || diagnostic.getStatus() == Status.ERROR) {
