@@ -58,6 +58,7 @@ flow-package:
               participants: product-owner
               resources: issue-tracker
               output-artifacts: story
+              modifiers: final
               outputs: 
                 groom:
                   target: groom
@@ -79,6 +80,7 @@ flow-package:
               name: Develop a story
               description: Developer creates or modifies source code to implement story functionality.
               participants: developer
+              modifiers: abstract
               resources: 
                 - issue-tracker
                 - source-repository

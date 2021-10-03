@@ -51,29 +51,7 @@ public class TestAgile extends TestBase {
 //					}					
 					
 					assertCore(instance);
-					
-					FlowStateDiagramGenerator flowStateDiagramGenerator = new FlowStateDiagramGenerator() {
-					
-						@Override
-						protected String getFlowElementLocation(String key, FlowElement<?> flowElement) {
-							return "https://www.nasdanika.org/" + key + ".html";
-						}
-						
-					};
-					
-					Diagram diagram = flowStateDiagramGenerator.generateFlowDiagram((Flow) core.getActivities().get("development"));
-					
-					Generator generator = new Generator();
-					
-					String spec = generator.generateSpec(diagram);
-					System.out.println(spec);
-					File outputDir = new File("target/diagrams");
-					outputDir.mkdirs();
-					try {
-						Files.write(new File(outputDir, "core.html").toPath(), generator.generateUmlDiagram(diagram).getBytes(StandardCharsets.UTF_8));
-					} catch (Exception e) {
-						throw new NasdanikaException(e);
-					}		
+					generateFlowDiagram((Flow) instance.getActivities().get("development"), "core");		
 					
 				},
 				diagnostic -> {
@@ -85,6 +63,31 @@ public class TestAgile extends TestBase {
 					}
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
 				});		
+	}
+
+	private void generateFlowDiagram(Flow flow, String name) {
+		FlowStateDiagramGenerator flowStateDiagramGenerator = new FlowStateDiagramGenerator() {
+		
+			@Override
+			protected String getFlowElementLocation(String key, FlowElement<?> flowElement) {
+				return "https://www.nasdanika.org/" + key + ".html";
+			}
+			
+		};
+		
+		Diagram diagram = flowStateDiagramGenerator.generateFlowDiagram(flow);
+		
+		Generator generator = new Generator();
+		
+		String spec = generator.generateSpec(diagram);
+		System.out.println(spec);
+		File outputDir = new File("target/diagrams");
+		outputDir.mkdirs();
+		try {
+			Files.write(new File(outputDir, name + ".html").toPath(), generator.generateUmlDiagram(diagram).getBytes(StandardCharsets.UTF_8));
+		} catch (Exception e) {
+			throw new NasdanikaException(e);
+		}
 	}
 
 	private void assertCore(org.nasdanika.flow.Package core) {
@@ -183,6 +186,7 @@ public class TestAgile extends TestBase {
 					assertThat(developActivity.getOutputArtifacts()).singleElement();
 					assertThat(developActivity.getOutputArtifacts().get(0).getName()).isEqualTo("Source code");
 										
+					generateFlowDiagram((Flow) javaInstance.getActivities().get("development"), "java");		
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.FAIL || diagnostic.getStatus() == Status.ERROR) {
@@ -246,6 +250,7 @@ public class TestAgile extends TestBase {
 					assertThat(developActivity.getOutputArtifacts()).singleElement();
 					assertThat(developActivity.getOutputArtifacts().get(0).getName()).isEqualTo("Source code");
 										
+					generateFlowDiagram((Flow) javaKubernetesInstance.getActivities().get("development"), "java-kubernetes");		
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.FAIL || diagnostic.getStatus() == Status.ERROR) {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.emf.common.util.EList;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
@@ -100,6 +101,15 @@ public class FlowStateDiagramGenerator {
 			ret.setText(value.getName());
 			ret.setLocation(getFlowElementLocation(key, value));
 			ret.setTooltip(getFlowElementTooltip(key, value));
+		}
+		EList<String> modifiers = value.getModifiers();
+		if (modifiers.contains("final")) {
+			ret.setBold(true);
+		} else if (modifiers.contains("abstract")) {
+			ret.setDashed(true);
+		}
+		if (modifiers.contains("optional")) {
+			ret.setColor("grey");
 		}
 		return ret;
 	}
