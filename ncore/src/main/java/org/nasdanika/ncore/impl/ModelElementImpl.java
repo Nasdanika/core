@@ -6,10 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -77,10 +79,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected ModelElementImpl() {
 		super();
+		setUuid(UUID.randomUUID().toString());
 	}
 
 	/**
@@ -206,6 +209,43 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			uriBuilder.append("/").append(idx);
 		}
 		return URI.createURI(uriBuilder.toString());			
+	}
+	
+	/**
+	 * Containment path relative to the object container.
+	 * @param eObject
+	 * @return null if there is no container. Reference name concatenated with object key for {@link EMap}'s and with object index for many-references.
+	 */
+	public static String containmentPath(EObject eObj) {		
+		EObject container = eObj.eContainer();
+		if (container == null) {
+			return null;
+		}
+		EReference eContainmentFeature = eObj.eContainmentFeature();
+		
+		// EMap
+		if (container instanceof Map.Entry && "value".equals(eContainmentFeature.getName())) {
+			EObject superContainer = container.eContainer();
+			if (superContainer == null) {
+				return null;
+			}
+			Object key = ((Map.Entry<?,?>) container).getKey();
+			if (key == null) {
+				return null;
+			}
+			String strKey = String.valueOf(key);
+			if (Util.isBlank(strKey)) {
+				return null;
+			}
+			return container.eContainmentFeature().getName() + "/" + strKey;
+		}
+		
+		if (eContainmentFeature.isMany()) {		
+			int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
+			return eContainmentFeature.getName() + "/" + idx;
+		}
+		
+		return eContainmentFeature.getName();		
 	}
 
 	/**
