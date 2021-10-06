@@ -210,7 +210,7 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 					return (FlowElement<?>) target;
 				}
 				
-				throw new ConfigurationException("Expected artifact at: " + targetKey + " (" + feURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
+				throw new ConfigurationException("Expected flow element at: " + targetKey + " (" + feURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
 			}
 		}
 		return null;
