@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -167,7 +168,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		
 		// EMap
 		EReference eContainmentFeature = eObj.eContainmentFeature();
-		if (container instanceof Map.Entry && "value".equals(eContainmentFeature.getName())) {
+		if (isEMapEntry(container) && "value".equals(eContainmentFeature.getName())) {
 			EObject superContainer = container.eContainer();
 			if (superContainer == null) {
 				return null;
@@ -205,10 +206,29 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		
 		uriBuilder.append(eContainmentFeature.getName());
 		if (eContainmentFeature.isMany()) {		
-			int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
-			uriBuilder.append("/").append(idx);
+			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
+			if (eKeys.isEmpty()) {
+				int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
+				uriBuilder.append("/").append(idx);
+			} else {
+				for (EAttribute eKey: eKeys) {
+					uriBuilder.append("/").append(eObj.eGet(eKey));
+				}
+			}
 		}
 		return URI.createURI(uriBuilder.toString());			
+	}
+
+	/**
+	 * @param eObj
+	 * @return true if the argument is an entry for EMap
+	 */
+	public static boolean isEMapEntry(EObject eObj) {
+		if (eObj instanceof Map.Entry) {
+			EReference cf = eObj.eContainmentFeature();
+			return cf != null && cf.isMany() && cf.getEType().getInstanceClass() == Map.Entry.class;
+		}
+		return false;
 	}
 	
 	/**
@@ -224,7 +244,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		EReference eContainmentFeature = eObj.eContainmentFeature();
 		
 		// EMap
-		if (container instanceof Map.Entry && "value".equals(eContainmentFeature.getName())) {
+		if (isEMapEntry(container) && "value".equals(eContainmentFeature.getName())) {
 			EObject superContainer = container.eContainer();
 			if (superContainer == null) {
 				return null;
@@ -241,8 +261,16 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		}
 		
 		if (eContainmentFeature.isMany()) {		
-			int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
-			return eContainmentFeature.getName() + "/" + idx;
+			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
+			if (eKeys.isEmpty()) {
+				int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
+				return eContainmentFeature.getName() + "/" + idx;
+			}
+			StringBuilder pathBuilder = new StringBuilder(eContainmentFeature.getName());
+			for (EAttribute eKey: eKeys) {
+				pathBuilder.append("/").append(eObj.eGet(eKey));
+			}
+			return pathBuilder.toString();
 		}
 		
 		return eContainmentFeature.getName();		

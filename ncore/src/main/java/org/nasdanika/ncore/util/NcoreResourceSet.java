@@ -1,8 +1,5 @@
 package org.nasdanika.ncore.util;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -14,14 +11,8 @@ import org.nasdanika.ncore.impl.ModelElementImpl;
 
 public class NcoreResourceSet extends ResourceSetImpl {
 
-	Map<URI, EObject> cache = new HashMap<>();
-	
 	@Override
 	public EObject getEObject(URI uri, boolean loadOnDemand) {
-		EObject ret = cache.get(uri);
-		if (ret != null) {
-			return ret;
-		}
 		
 		TreeIterator<Notifier> cit = getAllContents();
 		while (cit.hasNext()) {
@@ -29,14 +20,9 @@ public class NcoreResourceSet extends ResourceSetImpl {
 			if (next instanceof EObject) {
 				EObject nextEObject = (EObject) next;
 				if (matchURI(nextEObject, uri)) {
-					cache.put(uri, nextEObject);
-					ret = nextEObject;
+					return nextEObject;
 				}
 			}
-		}
-
-		if (ret != null) {
-			return ret;
 		}
 		
 		return super.getEObject(uri, loadOnDemand);
@@ -51,6 +37,9 @@ public class NcoreResourceSet extends ResourceSetImpl {
 	 * @return
 	 */
 	protected boolean matchURI(EObject eObj, URI uri) {
+		if (ModelElementImpl.isEMapEntry(eObj)) {
+			return false; // Ignoring EMap entries.
+		}
 		URI objUri = ModelElementImpl.getUri(eObj);
 		if (objUri != null && objUri.equals(uri)) {
 			return true;
