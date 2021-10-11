@@ -98,6 +98,15 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -187,6 +196,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTAINER__DESCRIPTION = RESOURCE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__UUID = RESOURCE__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -305,6 +323,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILE__DESCRIPTION = RESOURCE__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__UUID = RESOURCE__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

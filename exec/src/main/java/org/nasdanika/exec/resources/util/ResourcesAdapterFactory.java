@@ -8,6 +8,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.exec.resources.*;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
@@ -83,6 +84,10 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseMarked(Marked object) {
 				return createMarkedAdapter();
+			}
+			@Override
+			public Adapter caseAdaptable(Adaptable object) {
+				return createAdaptableAdapter();
 			}
 			@Override
 			public Adapter caseModelElement(ModelElement object) {
@@ -161,6 +166,20 @@ public class ResourcesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createMarkedAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.common.Adaptable
+	 * @generated
+	 */
+	public Adapter createAdaptableAdapter() {
 		return null;
 	}
 

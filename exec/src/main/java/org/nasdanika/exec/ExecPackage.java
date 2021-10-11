@@ -96,6 +96,15 @@ public interface ExecPackage extends EPackage {
 	int BLOCK__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -177,6 +186,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -344,6 +362,15 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -416,6 +443,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVAL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Script</b></em>' containment reference.
@@ -492,6 +528,15 @@ public interface ExecPackage extends EPackage {
 	int FAIL__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -557,6 +602,15 @@ public interface ExecPackage extends EPackage {
 	int LIST__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -620,6 +674,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAP__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' map.

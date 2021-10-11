@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.exec.content.*;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
@@ -72,6 +73,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseBase64(base64);
 				if (result == null) result = caseModelElement(base64);
 				if (result == null) result = caseMarked(base64);
+				if (result == null) result = caseAdaptable(base64);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -80,6 +82,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseResource(resource);
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = caseMarked(resource);
+				if (result == null) result = caseAdaptable(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -88,6 +91,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseText(text);
 				if (result == null) result = caseModelElement(text);
 				if (result == null) result = caseMarked(text);
+				if (result == null) result = caseAdaptable(text);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -96,6 +100,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				T result = caseFilter(filter);
 				if (result == null) result = caseModelElement(filter);
 				if (result == null) result = caseMarked(filter);
+				if (result == null) result = caseAdaptable(filter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -105,6 +110,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				if (result == null) result = caseFilter(interpolator);
 				if (result == null) result = caseModelElement(interpolator);
 				if (result == null) result = caseMarked(interpolator);
+				if (result == null) result = caseAdaptable(interpolator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -114,6 +120,7 @@ public class ContentSwitch<T> extends Switch<T> {
 				if (result == null) result = caseFilter(markdown);
 				if (result == null) result = caseModelElement(markdown);
 				if (result == null) result = caseMarked(markdown);
+				if (result == null) result = caseAdaptable(markdown);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -223,6 +230,21 @@ public class ContentSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarked(Marked object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdaptable(Adaptable object) {
 		return null;
 	}
 

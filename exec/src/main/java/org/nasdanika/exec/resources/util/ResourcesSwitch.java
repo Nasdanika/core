@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
+import org.nasdanika.common.Adaptable;
 import org.nasdanika.exec.resources.*;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
@@ -72,6 +73,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				T result = caseResource(resource);
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = caseMarked(resource);
+				if (result == null) result = caseAdaptable(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -81,6 +83,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseResource(container);
 				if (result == null) result = caseModelElement(container);
 				if (result == null) result = caseMarked(container);
+				if (result == null) result = caseAdaptable(container);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -90,6 +93,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseResource(file);
 				if (result == null) result = caseModelElement(file);
 				if (result == null) result = caseMarked(file);
+				if (result == null) result = caseAdaptable(file);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -154,6 +158,21 @@ public class ResourcesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarked(Marked object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adaptable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdaptable(Adaptable object) {
 		return null;
 	}
 

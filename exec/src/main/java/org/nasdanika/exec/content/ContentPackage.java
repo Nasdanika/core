@@ -97,6 +97,15 @@ public interface ContentPackage extends EPackage {
 	int BASE64__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Sources</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -159,6 +168,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -235,6 +253,15 @@ public interface ContentPackage extends EPackage {
 	int TEXT__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Content</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -309,6 +336,15 @@ public interface ContentPackage extends EPackage {
 	int FILTER__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -372,6 +408,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int INTERPOLATOR__DESCRIPTION = FILTER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__UUID = FILTER__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -454,6 +499,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKDOWN__DESCRIPTION = FILTER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__UUID = FILTER__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
