@@ -275,6 +275,24 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		
 		return eContainmentFeature.getName();		
 	}
+	
+	public static String relativeContainmentPath(EObject obj, EObject base) {
+		if (obj == null || base == null) {
+			return null;
+		}
+		if (EcoreUtil.isAncestor(obj, base)) {
+			// TODO
+		}
+		if (EcoreUtil.isAncestor(base, obj)) {
+			// TODO
+		}
+		for (EObject ancestor = obj.eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (EcoreUtil.isAncestor(ancestor, obj)) {
+				// TODO
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * <!-- begin-user-doc -->
