@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -26,8 +26,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
@@ -73,26 +71,27 @@ public class EmfUtil {
 	 */
 	public static Collection<EClassifier> collectTypeDependencies(EClass eClass) {
 		Collection<EClassifier> collector = new HashSet<>();
+		Predicate<EGenericType> predicate = new HashSet<EGenericType>()::add;
 		for (EGenericType st: eClass.getEGenericSuperTypes()) {
-			collector.addAll(collectGenericTypeDependencies(st, false));
+			collector.addAll(collectGenericTypeDependencies(st, false, predicate));
 		}
 		for (EReference ref: eClass.getEReferences()) {
-			collector.addAll(collectGenericTypeDependencies(ref.getEGenericType(), false));
+			collector.addAll(collectGenericTypeDependencies(ref.getEGenericType(), false, predicate));
 		}		
 		
 		for (EAttribute attr: eClass.getEAttributes()) {
-			collector.addAll(collectGenericTypeDependencies(attr.getEGenericType(), true));
+			collector.addAll(collectGenericTypeDependencies(attr.getEGenericType(), true, predicate));
 		}					
 		for (EOperation op: eClass.getEOperations()) {
 			EGenericType opType = op.getEGenericType();
 			if (opType != null) {
-				collector.addAll(collectGenericTypeDependencies(opType, true));
+				collector.addAll(collectGenericTypeDependencies(opType, true, predicate));
 			}
 			for (EGenericType ge: op.getEGenericExceptions()) {
-				collector.addAll(collectGenericTypeDependencies(ge, true));
+				collector.addAll(collectGenericTypeDependencies(ge, true, predicate));
 			}
 			for (EParameter ep: op.getEParameters()) {
-				collector.addAll(collectGenericTypeDependencies(ep.getEGenericType(), true));
+				collector.addAll(collectGenericTypeDependencies(ep.getEGenericType(), true, predicate));
 			}
 		}					
 		return collector;
@@ -104,30 +103,30 @@ public class EmfUtil {
 	 * @param includeEClassifier if true, include EClassifier of the type itself. Otherwise, only EClassifiers of referenced generic types - bounds, type arguments, and type parameter.
 	 * @return A set of {@link EClassifier}'s.
 	 */
-	public static Collection<EClassifier> collectGenericTypeDependencies(EGenericType type, boolean includeEClassifier) {
+	public static Collection<EClassifier> collectGenericTypeDependencies(EGenericType type, boolean includeEClassifier, Predicate<EGenericType> predicate) {
 		Set<EClassifier> ret = new HashSet<>();
-		if (type != null) {
+		if (type != null && predicate.test(type)) {
 			EClassifier eClassifier = type.getEClassifier();
 			if (includeEClassifier && eClassifier != null) {
 				ret.add(eClassifier);
 			}
 			
 			// Lower bound
-			ret.addAll(collectGenericTypeDependencies(type.getELowerBound(), true));
+			ret.addAll(collectGenericTypeDependencies(type.getELowerBound(), true, predicate));
 			
 			// Upper bound
-			ret.addAll(collectGenericTypeDependencies(type.getEUpperBound(), true));
+			ret.addAll(collectGenericTypeDependencies(type.getEUpperBound(), true, predicate));
 			
 			// Type arguments
 			for (EGenericType ta: type.getETypeArguments()) {
-				ret.addAll(collectGenericTypeDependencies(ta, true));
+				ret.addAll(collectGenericTypeDependencies(ta, true, predicate));
 			}
 			
 			// Type parameter
 			ETypeParameter tp = type.getETypeParameter();
 			if (tp != null) {
 				for (EGenericType b: tp.getEBounds()) {
-					ret.addAll(collectGenericTypeDependencies(b, true));					
+					ret.addAll(collectGenericTypeDependencies(b, true, predicate));					
 				}
 			}
 		}
