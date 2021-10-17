@@ -69,8 +69,8 @@ public class TestAgile extends TestBase {
 		FlowStateDiagramGenerator flowStateDiagramGenerator = new FlowStateDiagramGenerator() {
 		
 			@Override
-			protected String getFlowElementLocation(String key, FlowElement<?> flowElement) {
-				return "https://www.nasdanika.org/" + key + ".html";
+			protected String getFlowElementLocation(FlowElement<?> flowElement) {
+				return "https://www.nasdanika.org/" + flowElement.getUuid() + ".html";
 			}
 			
 		};

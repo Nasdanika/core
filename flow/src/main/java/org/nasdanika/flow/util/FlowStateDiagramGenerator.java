@@ -1,8 +1,9 @@
 package org.nasdanika.flow.util;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.nasdanika.common.Util;
@@ -11,7 +12,6 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.Link;
-import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.EntryPoint;
@@ -34,15 +34,15 @@ public class FlowStateDiagramGenerator {
 	public Diagram generateFlowDiagram(Flow flow) {
 		Diagram ret = createDiagram(flow);
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		for (Entry<String, FlowElement<?>> fe: flow.getElements()) {
-			DiagramElement diagramElement = createDiagramElement(fe.getKey(), fe.getValue(), semanticMap);
+		for (FlowElement<?> fe: flow.getElements().values()) {
+			DiagramElement diagramElement = createDiagramElement(fe, semanticMap, null);
 			if (diagramElement != null) {
 				ret.getElements().add(diagramElement);
 			}
 		}
 		
-		for (Entry<String, FlowElement<?>> fe: flow.getElements()) {
-			wire(fe.getKey(), fe.getValue(), semanticMap);
+		for (FlowElement<?> fe: flow.getElements().values()) {
+			wire(fe, semanticMap);
 		}
 		
 		// Auto start/end
@@ -50,131 +50,196 @@ public class FlowStateDiagramGenerator {
 		return ret;
 	}
 	
-	public Diagram generateActivityContextDiagram(Activity<?> activity) {
-//		Diagram ret = createDiagram(activity);
-		throw new UnsupportedOperationException();
-//		return ret;
+	public Diagram generateContextDiagram(FlowElement<?> flowElement) {
+		Collection<FlowElement<?>> diagramElements = new HashSet<>();
+		collectRelatedElements(flowElement, diagramElements);
+		
+		Diagram ret = createDiagram(flowElement);
+		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
+		for (FlowElement<?> fe: diagramElements) {			
+			DiagramElement diagramElement = createDiagramElement(fe, semanticMap, flowElement);
+			if (diagramElement != null) {
+				ret.getElements().add(diagramElement);
+			}
+		}
+		
+		for (FlowElement<?> fe: diagramElements) {
+			wire(fe, semanticMap);
+		}
+		
+		return ret;
+	}
+
+	private void collectRelatedElements(FlowElement<?> flowElement, Collection<FlowElement<?>> accumulator) { 
+		if (flowElement != null && accumulator.add(flowElement)) {
+			for (Transition input: flowElement.getInputs()) {
+				FlowElement<?> target = (FlowElement<?>) input.eContainer().eContainer(); 
+				if (target instanceof PseudoState) {
+					collectRelatedElements(target, accumulator);
+				} else {					
+					accumulator.add(target);
+				}
+			}
+
+			for (Transition output: flowElement.getOutputs().values()) {
+				FlowElement<?> target = output.getTarget(); 
+				if (target instanceof PseudoState) {
+					collectRelatedElements(target, accumulator);
+				} else if (target != null) {
+					accumulator.add(target);
+				}
+			}
+
+			for (Call invocation: flowElement.getInvocations()) {
+				FlowElement<?> target = (FlowElement<?>) invocation.eContainer().eContainer(); 
+				if (target instanceof PseudoState) {
+					collectRelatedElements(target, accumulator);
+				} else if (target != null) {
+					accumulator.add(target);
+				}
+			}
+
+			for (Call call: flowElement.getCalls().values()) {
+				FlowElement<?> target = call.getTarget(); 
+				if (target instanceof PseudoState) {
+					collectRelatedElements(target, accumulator);
+				} else if (target != null) {
+					accumulator.add(target);
+				}
+			}
+		}
 	}
 	
-	protected DiagramElement createDiagramElement(
-			String key, 
-			FlowElement<?> value, 
-			Map<FlowElement<?>, DiagramElement> semanticMap) {
+	protected DiagramElement createDiagramElement(FlowElement<?> flowElement, Map<FlowElement<?>, DiagramElement> semanticMap, FlowElement<?> contextElement) {
 		
-		if (value instanceof org.nasdanika.flow.Start) {
+		if (flowElement instanceof org.nasdanika.flow.Start) {
 			org.nasdanika.diagram.Start ret = diagramFactory.createStart();
-			semanticMap.put(value, ret);
+			semanticMap.put(flowElement, ret);
 			return ret;
 		}
 		
-		if (value instanceof org.nasdanika.flow.End) {
+		if (flowElement instanceof org.nasdanika.flow.End) {
 			org.nasdanika.diagram.End ret = diagramFactory.createEnd();
-			semanticMap.put(value, ret);
+			semanticMap.put(flowElement, ret);
 			return ret;
 		}
 		
 		org.nasdanika.diagram.DiagramElement ret = diagramFactory.createDiagramElement();
-		semanticMap.put(value, ret);
+		semanticMap.put(flowElement, ret);
 		ret.setType("state");
 		
-		if (value instanceof PseudoState) {
-			if (value instanceof Choice) {
+		if (flowElement instanceof PseudoState) {
+			if (flowElement instanceof Choice) {
 				ret.setStereotype("choice");
-			} else if (value instanceof EntryPoint) { 
+			} else if (flowElement instanceof EntryPoint) { 
 				ret.setStereotype("entryPoint");
-			} else if (value instanceof ExitPoint) { 
+			} else if (flowElement instanceof ExitPoint) { 
 				ret.setStereotype("exitPoint");
-			} else if (value instanceof ExpansionInput) { 
+			} else if (flowElement instanceof ExpansionInput) { 
 				ret.setStereotype("expansionInput");
-			} else if (value instanceof ExpansionOutput) { 
+			} else if (flowElement instanceof ExpansionOutput) { 
 				ret.setStereotype("expansioinOutput");
-			} else if (value instanceof Fork) { 
+			} else if (flowElement instanceof Fork) { 
 				ret.setStereotype("fork");
-			} else if (value instanceof InputPin) { 
+			} else if (flowElement instanceof InputPin) { 
 				ret.setStereotype("inputPin");
-			} else if (value instanceof Join) { 
+			} else if (flowElement instanceof Join) { 
 				ret.setStereotype("join");
-			} else if (value instanceof OutputPin) { 
+			} else if (flowElement instanceof OutputPin) { 
 				ret.setStereotype("outputPin");				
 			}
 		} else {
-			ret.setText(value.getName());
-			ret.setLocation(getFlowElementLocation(key, value));
-			ret.setTooltip(getFlowElementTooltip(key, value));
+			ret.setText(flowElement.getName());
+			ret.setLocation(getFlowElementLocation(flowElement));
+			ret.setTooltip(getFlowElementTooltip(flowElement));
 		}
-		EList<String> modifiers = value.getModifiers();
+		EList<String> modifiers = flowElement.getModifiers();
 		if (modifiers.contains("final")) {
 			ret.setBold(true);
 		} else if (modifiers.contains("abstract")) {
 			ret.setDashed(true);
 		}
-		if (modifiers.contains("optional")) {
-			ret.setColor("grey");
+		
+		if (contextElement == null) {
+			if (modifiers.contains("optional")) {
+				ret.setColor("grey");
+			}
+		} else {
+			if (flowElement != contextElement) {
+				ret.setColor("DDDDDD");
+			}
 		}
 		return ret;
 	}
 	
-	protected String getFlowElementLocation(String key, FlowElement<?> flowElement) {
+	protected String getFlowElementLocation(FlowElement<?> flowElement) {
 		return null;
 	}
 	
-	protected String getFlowElementTooltip(String key, FlowElement<?> flowElement) {
+	protected String getFlowElementTooltip(FlowElement<?> flowElement) {
 		return null;
 	}
 	
-	protected void wire(String key, FlowElement<?> value, Map<FlowElement<?>, DiagramElement> semanticMap) {
+	protected void wire(FlowElement<?> value, Map<FlowElement<?>, DiagramElement> semanticMap) {
+		EList<Connection> connections = semanticMap.get(value).getConnections();
+		
 		// Transitions
 		for (Transition output: value.getOutputs().values()) {
-			Connection transition = diagramFactory.createConnection();
-			semanticMap.get(value).getConnections().add(transition);
-			transition.setTarget(semanticMap.get(output.getTarget()));
-			transition.setType("-->");
-			String name = output.getName();
-			if (!Util.isBlank(name)) {
-				Link link = diagramFactory.createLink();
-				link.setText(name);
-				link.setLocation(getTransitionLocation(key, output));
-				link.setTooltip(getTransitionTooltip(key, output));
-				transition.getDescription().add(link);
+			DiagramElement connectionTarget = semanticMap.get((FlowElement<?>) output.getTarget());
+			if (connectionTarget != null) {
+				Connection transition = diagramFactory.createConnection();
+				connections.add(transition);
+				transition.setTarget(connectionTarget);
+				transition.setType("-->");
+				String name = output.getName();
+				if (!Util.isBlank(name)) {
+					Link link = diagramFactory.createLink();
+					link.setText(name);
+					link.setLocation(getTransitionLocation(output));
+					link.setTooltip(getTransitionTooltip(output));
+					transition.getDescription().add(link);
+				}
 			}
 		}
 		
 		// Calls
 		for (Call call: value.getCalls().values()) {
-			Connection connection = diagramFactory.createConnection();
-			semanticMap.get(value).getConnections().add(connection);
-			connection.setTarget(semanticMap.get(call.getTarget()));
-			connection.setType("-left${style}->");
-			connection.setColor("black");
-			String name = call.getName();
-			if (!Util.isBlank(name)) {
-				Link link = diagramFactory.createLink();
-				link.setText(name);
-				link.setLocation(getCallLocation(key, call));
-				link.setTooltip(getCallTooltip(key, call));
-				connection.getDescription().add(link);
+			DiagramElement connectionTarget = semanticMap.get((FlowElement<?>) call.getTarget());
+			if (connectionTarget != null) {
+				Connection connection = diagramFactory.createConnection();
+				connections.add(connection);
+				connection.setTarget(connectionTarget);
+				connection.setType("-left${style}->");
+				connection.setColor("black");
+				String name = call.getName();
+				if (!Util.isBlank(name)) {
+					Link link = diagramFactory.createLink();
+					link.setText(name);
+					link.setLocation(getCallLocation(call));
+					link.setTooltip(getCallTooltip(call));
+					connection.getDescription().add(link);
+				}
 			}
 		}
 	}
 		
-	protected String getTransitionLocation(String key, Transition transition) {
+	protected String getTransitionLocation(Transition transition) {
 		return null;
 	}
 	
-	protected String getTransitionTooltip(String key, Transition transition) {
+	protected String getTransitionTooltip(Transition transition) {
 		return null;
 	}
 	
-	protected String getCallLocation(String key, Call call) {
+	protected String getCallLocation(Call call) {
 		return null;
 	}
 	
-	protected String getCallTooltip(String key, Call call) {
+	protected String getCallTooltip(Call call) {
 		return null;
 	}
 	
-
-	protected Diagram createDiagram(Activity<?> activity) {
+	protected Diagram createDiagram(FlowElement<?> flowElement) {
 		return diagramFactory.createDiagram();
 //		diagram.setHideEmptyDescription(true);
 	}
