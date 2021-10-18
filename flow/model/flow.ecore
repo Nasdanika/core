@@ -152,6 +152,18 @@
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/usedBy">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Resources this participant uses in their activities."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/usedBy">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Artifacts this participant uses in their activities."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Participant"/>
     </eGenericSuperTypes>
@@ -188,7 +200,7 @@
         <details key="documentation" value="Derived opposite to Artifact.repositories."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="usedBy" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedIn" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/resources">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Flow elements which use this resource."/>
@@ -196,6 +208,13 @@
       <eGenericType eClassifier="#//FlowElement">
         <eTypeArguments/>
       </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedBy" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/resources">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Participants use this resource in their activities."/>
+      </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
       <eTypeArguments eClassifier="#//Resource"/>
@@ -260,6 +279,13 @@
         eType="#//Call" changeable="false" transient="true" derived="true" eOpposite="#//Call/response">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived opposite to Call response."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedBy" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/artifacts">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Participants use this artifact in their activities."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
@@ -379,7 +405,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
-        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/usedBy"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/usedIn"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -586,6 +612,11 @@
         eType="#//FlowElementEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Elements of this journey."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If true, this flow shall be displayed as a partition on the parent flow diagram."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//Activity">

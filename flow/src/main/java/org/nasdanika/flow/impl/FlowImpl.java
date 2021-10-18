@@ -23,11 +23,22 @@ import org.nasdanika.flow.FlowPackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.FlowImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowImpl#isPartition <em>Partition</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class FlowImpl extends ActivityImpl<Flow> implements Flow {
+	/**
+	 * The default value of the '{@link #isPartition() <em>Partition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isPartition()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean PARTITION_EDEFAULT = false;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -64,6 +75,26 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 	 * @generated
 	 */
 	@Override
+	public boolean isPartition() {
+		return (Boolean)eDynamicGet(FlowPackage.FLOW__PARTITION, FlowPackage.Literals.FLOW__PARTITION, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPartition(boolean newPartition) {
+		eDynamicSet(FlowPackage.FLOW__PARTITION, FlowPackage.Literals.FLOW__PARTITION, newPartition);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
@@ -83,6 +114,8 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 			case FlowPackage.FLOW__ELEMENTS:
 				if (coreType) return getElements();
 				else return getElements().map();
+			case FlowPackage.FLOW__PARTITION:
+				return isPartition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -99,6 +132,9 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 			case FlowPackage.FLOW__ELEMENTS:
 				((EStructuralFeature.Setting)getElements()).set(newValue);
 				return;
+			case FlowPackage.FLOW__PARTITION:
+				setPartition((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -114,6 +150,9 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 			case FlowPackage.FLOW__ELEMENTS:
 				getElements().clear();
 				return;
+			case FlowPackage.FLOW__PARTITION:
+				setPartition(PARTITION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -128,6 +167,8 @@ public class FlowImpl extends ActivityImpl<Flow> implements Flow {
 		switch (featureID) {
 			case FlowPackage.FLOW__ELEMENTS:
 				return !getElements().isEmpty();
+			case FlowPackage.FLOW__PARTITION:
+				return isPartition() != PARTITION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

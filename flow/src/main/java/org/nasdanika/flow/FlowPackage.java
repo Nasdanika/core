@@ -569,13 +569,31 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__PARTICIPATES = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -778,13 +796,22 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Used In</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__USED_IN = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Used By</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__USED_BY = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int RESOURCE__USED_BY = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -793,7 +820,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1032,13 +1059,22 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__RESPONSE_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Used By</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__USED_BY = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -2717,13 +2753,22 @@ public interface FlowPackage extends EPackage {
 	int FLOW__ELEMENTS = ACTIVITY_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Partition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__PARTITION = ACTIVITY_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Flow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 1;
+	int FLOW_FEATURE_COUNT = ACTIVITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -6145,6 +6190,28 @@ public interface FlowPackage extends EPackage {
 	EReference getParticipant_Participates();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getResources <em>Resources</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Resources</em>'.
+	 * @see org.nasdanika.flow.Participant#getResources()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Resources();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getArtifacts <em>Artifacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Artifacts</em>'.
+	 * @see org.nasdanika.flow.Participant#getArtifacts()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Artifacts();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Participant Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6210,6 +6277,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getResource_Artifacts();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Resource#getUsedIn <em>Used In</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Used In</em>'.
+	 * @see org.nasdanika.flow.Resource#getUsedIn()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EReference getResource_UsedIn();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Resource#getUsedBy <em>Used By</em>}'.
@@ -6332,6 +6410,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getArtifact_ResponseFor();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getUsedBy <em>Used By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Used By</em>'.
+	 * @see org.nasdanika.flow.Artifact#getUsedBy()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_UsedBy();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Artifact Entry</em>}'.
@@ -6820,6 +6909,17 @@ public interface FlowPackage extends EPackage {
 	EReference getFlow_Elements();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Flow#isPartition <em>Partition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Partition</em>'.
+	 * @see org.nasdanika.flow.Flow#isPartition()
+	 * @see #getFlow()
+	 * @generated
+	 */
+	EAttribute getFlow_Partition();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.PseudoState <em>Pseudo State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7158,6 +7258,22 @@ public interface FlowPackage extends EPackage {
 		EReference PARTICIPANT__PARTICIPATES = eINSTANCE.getParticipant_Participates();
 
 		/**
+		 * The meta object literal for the '<em><b>Resources</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__RESOURCES = eINSTANCE.getParticipant_Resources();
+
+		/**
+		 * The meta object literal for the '<em><b>Artifacts</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__ARTIFACTS = eINSTANCE.getParticipant_Artifacts();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7208,6 +7324,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESOURCE__ARTIFACTS = eINSTANCE.getResource_Artifacts();
+
+		/**
+		 * The meta object literal for the '<em><b>Used In</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE__USED_IN = eINSTANCE.getResource_UsedIn();
 
 		/**
 		 * The meta object literal for the '<em><b>Used By</b></em>' reference list feature.
@@ -7300,6 +7424,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ARTIFACT__RESPONSE_FOR = eINSTANCE.getArtifact_ResponseFor();
+
+		/**
+		 * The meta object literal for the '<em><b>Used By</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__USED_BY = eINSTANCE.getArtifact_UsedBy();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
@@ -7674,6 +7806,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLOW__ELEMENTS = eINSTANCE.getFlow_Elements();
+
+		/**
+		 * The meta object literal for the '<em><b>Partition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FLOW__PARTITION = eINSTANCE.getFlow_Partition();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PseudoStateImpl <em>Pseudo State</em>}' class.

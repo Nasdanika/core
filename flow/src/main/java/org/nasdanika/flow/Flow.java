@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EMap;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.flow.Flow#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Flow#isPartition <em>Partition</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlow()
@@ -36,5 +37,30 @@ public interface Flow extends Activity<Flow> {
 	 * @generated
 	 */
 	EMap<String, FlowElement<?>> getElements();
+
+	/**
+	 * Returns the value of the '<em><b>Partition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * If true, this flow shall be displayed as a partition on the parent flow diagram.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Partition</em>' attribute.
+	 * @see #setPartition(boolean)
+	 * @see org.nasdanika.flow.FlowPackage#getFlow_Partition()
+	 * @model
+	 * @generated
+	 */
+	boolean isPartition();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.flow.Flow#isPartition <em>Partition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Partition</em>' attribute.
+	 * @see #isPartition()
+	 * @generated
+	 */
+	void setPartition(boolean value);
 
 } // Flow

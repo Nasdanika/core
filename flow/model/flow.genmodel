@@ -38,6 +38,8 @@
     <genClasses ecoreClass="flow.ecore#//Participant">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/services"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/participates"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/resources"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/artifacts"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ParticipantEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ParticipantEntry/key"/>
@@ -46,6 +48,7 @@
     <genClasses ecoreClass="flow.ecore#//Resource">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/services"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/artifacts"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/usedIn"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/usedBy"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ResourceEntry">
@@ -59,6 +62,7 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/outputFor"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/payloadFor"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/responseFor"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/usedBy"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ArtifactEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ArtifactEntry/key"/>
@@ -116,6 +120,7 @@
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//Flow">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Flow/elements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Flow/partition"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//PseudoState">
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PseudoState/type"/>

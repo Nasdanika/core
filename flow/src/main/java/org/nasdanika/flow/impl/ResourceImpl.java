@@ -2,7 +2,9 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -17,8 +19,10 @@ import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
+import org.nasdanika.ncore.util.NamedElementComparator;
 
 /**
  * <!-- begin-user-doc -->
@@ -30,6 +34,7 @@ import org.nasdanika.flow.Resource;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedIn <em>Used In</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedBy <em>Used By</em>}</li>
  * </ul>
  *
@@ -93,8 +98,25 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	 * @generated NOT
 	 */
 	@Override
-	public EList<FlowElement<?>> getUsedBy() {
-		return getOppositeReferrers(FlowPackage.Literals.RESOURCE__USED_BY);
+	public EList<FlowElement<?>> getUsedIn() {
+		return getOppositeReferrers(FlowPackage.Literals.RESOURCE__USED_IN);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Participant> getUsedBy() {
+		Set<Participant> collector = new HashSet<>();
+		for (FlowElement<?> fe: getUsedIn()) {
+			collector.addAll(fe.getParticipants());
+		}
+		
+		EList<Participant> ret = ECollections.newBasicEList(collector);
+		ret.sort(NamedElementComparator.INSTANCE);
+		return ret;
 	}
 
 	/**
@@ -108,6 +130,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 		switch (featureID) {
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
+			case FlowPackage.RESOURCE__USED_IN:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedIn()).basicAdd(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_BY:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedBy()).basicAdd(otherEnd, msgs);
 		}
@@ -126,6 +150,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
+			case FlowPackage.RESOURCE__USED_IN:
+				return ((InternalEList<?>)getUsedIn()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_BY:
 				return ((InternalEList<?>)getUsedBy()).basicRemove(otherEnd, msgs);
 		}
@@ -145,6 +171,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				else return getServices().map();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return getArtifacts();
+			case FlowPackage.RESOURCE__USED_IN:
+				return getUsedIn();
 			case FlowPackage.RESOURCE__USED_BY:
 				return getUsedBy();
 		}
@@ -194,6 +222,8 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 				return !getServices().isEmpty();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return !getArtifacts().isEmpty();
+			case FlowPackage.RESOURCE__USED_IN:
+				return !getUsedIn().isEmpty();
 			case FlowPackage.RESOURCE__USED_BY:
 				return !getUsedBy().isEmpty();
 		}

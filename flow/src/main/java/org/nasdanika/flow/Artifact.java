@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.nasdanika.flow.Artifact#getOutputFor <em>Output For</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getPayloadFor <em>Payload For</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getResponseFor <em>Response For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getUsedBy <em>Used By</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
@@ -122,5 +123,22 @@ public interface Artifact extends PackageElement<Artifact> {
 	 * @generated
 	 */
 	EList<Call> getResponseFor();
+
+	/**
+	 * Returns the value of the '<em><b>Used By</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getArtifacts <em>Artifacts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participants use this artifact in their activities.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Used By</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_UsedBy()
+	 * @see org.nasdanika.flow.Participant#getArtifacts
+	 * @model opposite="artifacts" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Participant> getUsedBy();
 
 } // Artifact

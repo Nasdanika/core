@@ -16,6 +16,7 @@ import org.eclipse.emf.common.util.EMap;
  * <ul>
  *   <li>{@link org.nasdanika.flow.Resource#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Resource#getUsedIn <em>Used In</em>}</li>
  *   <li>{@link org.nasdanika.flow.Resource#getUsedBy <em>Used By</em>}</li>
  * </ul>
  *
@@ -59,7 +60,7 @@ public interface Resource extends PackageElement<Resource> {
 	EList<Artifact> getArtifacts();
 
 	/**
-	 * Returns the value of the '<em><b>Used By</b></em>' reference list.
+	 * Returns the value of the '<em><b>Used In</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}<code>&lt;?&gt;</code>.
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}'.
 	 * <!-- begin-user-doc -->
@@ -67,11 +68,28 @@ public interface Resource extends PackageElement<Resource> {
 	 * <!-- begin-model-doc -->
 	 * Flow elements which use this resource.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Used By</em>' reference list.
-	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedBy()
+	 * @return the value of the '<em>Used In</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedIn()
 	 * @see org.nasdanika.flow.FlowElement#getResources
 	 * @model opposite="resources" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
-	EList<FlowElement<?>> getUsedBy();
+	EList<FlowElement<?>> getUsedIn();
+
+	/**
+	 * Returns the value of the '<em><b>Used By</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getResources <em>Resources</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participants use this resource in their activities.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Used By</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedBy()
+	 * @see org.nasdanika.flow.Participant#getResources
+	 * @model opposite="resources" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Participant> getUsedBy();
 } // Resource

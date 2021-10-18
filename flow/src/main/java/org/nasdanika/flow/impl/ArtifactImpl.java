@@ -3,7 +3,9 @@
 package org.nasdanika.flow.impl;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -21,9 +23,11 @@ import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.util.NamedElementComparator;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,6 +43,7 @@ import org.nasdanika.flow.Transition;
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getOutputFor <em>Output For</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getPayloadFor <em>Payload For</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getResponseFor <em>Response For</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getUsedBy <em>Used By</em>}</li>
  * </ul>
  *
  * @generated
@@ -166,6 +171,34 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Participant> getUsedBy() {
+		Set<Participant> collector = new HashSet<>();		
+		for (FlowElement<?> fe: getInputFor()) {
+			collector.addAll(fe.getParticipants());
+		}
+		for (FlowElement<?> fe: getOutputFor()) {
+			collector.addAll(fe.getParticipants());
+		}
+		for (Transition transition: getPayloadFor()) {
+			collector.addAll(transition.getTarget().getParticipants());
+			collector.addAll(((FlowElement<?>) transition.eContainer().eContainer()).getParticipants());
+		}
+		for (Call call: getResponseFor()) {
+			collector.addAll(call.getTarget().getParticipants());
+			collector.addAll(((FlowElement<?>) call.eContainer().eContainer()).getParticipants());
+		}
+		
+		EList<Participant> ret = ECollections.newBasicEList(collector);
+		ret.sort(NamedElementComparator.INSTANCE);
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -182,6 +215,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getPayloadFor()).basicAdd(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__RESPONSE_FOR:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponseFor()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__USED_BY:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedBy()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -204,6 +239,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return ((InternalEList<?>)getPayloadFor()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__RESPONSE_FOR:
 				return ((InternalEList<?>)getResponseFor()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__USED_BY:
+				return ((InternalEList<?>)getUsedBy()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -228,6 +265,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return getPayloadFor();
 			case FlowPackage.ARTIFACT__RESPONSE_FOR:
 				return getResponseFor();
+			case FlowPackage.ARTIFACT__USED_BY:
+				return getUsedBy();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -284,6 +323,8 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 				return !getPayloadFor().isEmpty();
 			case FlowPackage.ARTIFACT__RESPONSE_FOR:
 				return !getResponseFor().isEmpty();
+			case FlowPackage.ARTIFACT__USED_BY:
+				return !getUsedBy().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

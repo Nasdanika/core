@@ -16,6 +16,8 @@ import org.eclipse.emf.common.util.EMap;
  * <ul>
  *   <li>{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getResources <em>Resources</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getArtifacts <em>Artifacts</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
@@ -55,5 +57,39 @@ public interface Participant extends PackageElement<Participant> {
 	 * @generated
 	 */
 	EList<FlowElement<?>> getParticipates();
+
+	/**
+	 * Returns the value of the '<em><b>Resources</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Resource#getUsedBy <em>Used By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resources this participant uses in their activities.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Resources</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Resources()
+	 * @see org.nasdanika.flow.Resource#getUsedBy
+	 * @model opposite="usedBy" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Resource> getResources();
+
+	/**
+	 * Returns the value of the '<em><b>Artifacts</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getUsedBy <em>Used By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Artifacts this participant uses in their activities.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Artifacts</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Artifacts()
+	 * @see org.nasdanika.flow.Artifact#getUsedBy
+	 * @model opposite="usedBy" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Artifact> getArtifacts();
 
 } // Participant

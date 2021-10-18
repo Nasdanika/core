@@ -2,8 +2,10 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -14,10 +16,15 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
+import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.Resource;
+import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.util.NamedElementComparator;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +36,8 @@ import org.nasdanika.flow.Participant;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getParticipates <em>Participates</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getResources <em>Resources</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getArtifacts <em>Artifacts</em>}</li>
  * </ul>
  *
  * @generated
@@ -88,6 +97,55 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Resource> getResources() {
+		Set<Resource> collector = new HashSet<>();
+		for (FlowElement<?> fe: getParticipates()) {
+			collector.addAll(fe.getResources());
+		}
+		
+		EList<Resource> ret = ECollections.newBasicEList(collector);
+		ret.sort(NamedElementComparator.INSTANCE);
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Artifact> getArtifacts() {
+		Set<Artifact> collector = new HashSet<>();
+		for (FlowElement<?> fe: getParticipates()) {
+			collector.addAll(fe.getInputArtifacts());
+			collector.addAll(fe.getOutputArtifacts());
+			for (Transition input: fe.getInputs()) {
+				collector.addAll(input.getPayload());
+			}
+			for (Transition output: fe.getOutputs().values()) {
+				collector.addAll(output.getPayload());
+			}
+			for (Call invocation: fe.getInvocations()) {
+				collector.addAll(invocation.getPayload());
+				collector.addAll(invocation.getResponse());
+			}
+			for (Call call: fe.getCalls().values()) {
+				collector.addAll(call.getPayload());
+				collector.addAll(call.getResponse());
+			}
+		}
+		
+		EList<Artifact> ret = ECollections.newBasicEList(collector);
+		ret.sort(NamedElementComparator.INSTANCE);
+		return ret;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -96,6 +154,10 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__PARTICIPATES:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getParticipates()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__RESOURCES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResources()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__ARTIFACTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -112,6 +174,10 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__PARTICIPATES:
 				return ((InternalEList<?>)getParticipates()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__RESOURCES:
+				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__ARTIFACTS:
+				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -129,6 +195,10 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 				else return getServices().map();
 			case FlowPackage.PARTICIPANT__PARTICIPATES:
 				return getParticipates();
+			case FlowPackage.PARTICIPANT__RESOURCES:
+				return getResources();
+			case FlowPackage.PARTICIPANT__ARTIFACTS:
+				return getArtifacts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,6 +246,10 @@ public class ParticipantImpl extends PackageElementImpl<Participant> implements 
 				return !getServices().isEmpty();
 			case FlowPackage.PARTICIPANT__PARTICIPATES:
 				return !getParticipates().isEmpty();
+			case FlowPackage.PARTICIPANT__RESOURCES:
+				return !getResources().isEmpty();
+			case FlowPackage.PARTICIPANT__ARTIFACTS:
+				return !getArtifacts().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
