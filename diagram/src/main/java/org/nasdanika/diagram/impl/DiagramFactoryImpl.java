@@ -3,6 +3,7 @@
 package org.nasdanika.diagram.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -57,6 +58,7 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case DiagramPackage.LINK: return createLink();
+			case DiagramPackage.NOTE: return createNote();
 			case DiagramPackage.DIAGRAM_ELEMENT: return createDiagramElement();
 			case DiagramPackage.DIAGRAM: return createDiagram();
 			case DiagramPackage.CONNECTION: return createConnection();
@@ -73,9 +75,50 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	 * @generated
 	 */
 	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case DiagramPackage.NOTE_PLACEMENT:
+				return createNotePlacementFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case DiagramPackage.NOTE_PLACEMENT:
+				return convertNotePlacementToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Link createLink() {
 		LinkImpl link = new LinkImpl();
 		return link;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Note createNote() {
+		NoteImpl note = new NoteImpl();
+		return note;
 	}
 
 	/**
@@ -131,6 +174,26 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public End createEnd() {
 		EndImpl end = new EndImpl();
 		return end;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotePlacement createNotePlacementFromString(EDataType eDataType, String initialValue) {
+		NotePlacement result = NotePlacement.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertNotePlacementToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

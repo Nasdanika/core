@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramPackage;
+import org.nasdanika.diagram.Note;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,6 +28,7 @@ import org.nasdanika.diagram.DiagramPackage;
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getTarget <em>Target</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#getColor <em>Color</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#isDashed <em>Dashed</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.ConnectionImpl#isDotted <em>Dotted</em>}</li>
@@ -187,6 +189,17 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Note> getNotes() {
+		return (EList<Note>)eDynamicGet(DiagramPackage.CONNECTION__NOTES, DiagramPackage.Literals.CONNECTION__NOTES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public String getColor() {
 		return (String)eDynamicGet(DiagramPackage.CONNECTION__COLOR, DiagramPackage.Literals.CONNECTION__COLOR, true, true);
@@ -292,6 +305,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 		switch (featureID) {
 			case DiagramPackage.CONNECTION__DESCRIPTION:
 				return ((InternalEList<?>)getDescription()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.CONNECTION__NOTES:
+				return ((InternalEList<?>)getNotes()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -311,6 +326,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 				return getType();
 			case DiagramPackage.CONNECTION__DESCRIPTION:
 				return getDescription();
+			case DiagramPackage.CONNECTION__NOTES:
+				return getNotes();
 			case DiagramPackage.CONNECTION__COLOR:
 				return getColor();
 			case DiagramPackage.CONNECTION__DASHED:
@@ -343,6 +360,10 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 			case DiagramPackage.CONNECTION__DESCRIPTION:
 				getDescription().clear();
 				getDescription().addAll((Collection<? extends EObject>)newValue);
+				return;
+			case DiagramPackage.CONNECTION__NOTES:
+				getNotes().clear();
+				getNotes().addAll((Collection<? extends Note>)newValue);
 				return;
 			case DiagramPackage.CONNECTION__COLOR:
 				setColor((String)newValue);
@@ -380,6 +401,9 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 			case DiagramPackage.CONNECTION__DESCRIPTION:
 				getDescription().clear();
 				return;
+			case DiagramPackage.CONNECTION__NOTES:
+				getNotes().clear();
+				return;
 			case DiagramPackage.CONNECTION__COLOR:
 				setColor(COLOR_EDEFAULT);
 				return;
@@ -413,6 +437,8 @@ public class ConnectionImpl extends MinimalEObjectImpl.Container implements Conn
 				return TYPE_EDEFAULT == null ? getType() != null : !TYPE_EDEFAULT.equals(getType());
 			case DiagramPackage.CONNECTION__DESCRIPTION:
 				return !getDescription().isEmpty();
+			case DiagramPackage.CONNECTION__NOTES:
+				return !getNotes().isEmpty();
 			case DiagramPackage.CONNECTION__COLOR:
 				return COLOR_EDEFAULT == null ? getColor() != null : !COLOR_EDEFAULT.equals(getColor());
 			case DiagramPackage.CONNECTION__DASHED:

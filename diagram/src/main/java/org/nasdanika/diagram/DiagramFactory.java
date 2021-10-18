@@ -31,6 +31,15 @@ public interface DiagramFactory extends EFactory {
 	Link createLink();
 
 	/**
+	 * Returns a new object of class '<em>Note</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Note</em>'.
+	 * @generated
+	 */
+	Note createNote();
+
+	/**
 	 * Returns a new object of class '<em>Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

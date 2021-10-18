@@ -13,6 +13,7 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.End;
 import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
 import org.nasdanika.exec.content.Text;
 
@@ -89,12 +90,12 @@ public class Generator {
 	
 	/**
 	 * @param diagramElement
-	 * @param connections
+	 * @param connectionsCollector
 	 * @param depth
 	 * @return Diagram element spec with a line separator.
 	 */
-	protected String generate(DiagramElement diagramElement, List<Connection> connections, int depth) {
-		connections.addAll(diagramElement.getConnections());
+	protected String generate(DiagramElement diagramElement, List<Connection> connectionsCollector, int depth) {
+		connectionsCollector.addAll(diagramElement.getConnections());
 		if (diagramElement instanceof Start) {
 			return "";
 		}
@@ -108,20 +109,30 @@ public class Generator {
 			ret.append("  ");
 		}
 		
-		ret.append(diagramElement.getType()).append(" \"");
+		ret.append(diagramElement.getType()).append(" ");		
+		
+		StringBuilder nameBuilder = new StringBuilder();
 		String text = diagramElement.getText();
 		EList<EObject> name = diagramElement.getName();
 		if (!Util.isBlank(text)) {
-			ret.append(text);
+			nameBuilder.append(text);
 			if (!name.isEmpty()) {
 				ret.append(" ");
 			}
 		}
 		
-		ret.append(render(name));
-		ret.append("\"");
+		nameBuilder.append(render(name));
 		
-		ret.append(" as ").append(diagramElement.getId());
+		String renderedName = nameBuilder.toString();
+		if (!Util.isBlank(renderedName)) {
+			ret
+				.append("\"")
+				.append(renderedName)
+				.append("\"")
+				.append(" as ");
+		}
+		
+		ret.append(diagramElement.getId());
 		
 		String location = diagramElement.getLocation();
 		if (!Util.isBlank(location)) {
@@ -171,7 +182,7 @@ public class Generator {
 			ret.append(" {").append(System.lineSeparator());
 			
 			for (DiagramElement element: elements) {
-				ret.append(generate(element, connections, depth + 1));
+				ret.append(generate(element, connectionsCollector, depth + 1));
 			}
 			
 			for (int i = 0; i < depth; ++i) {
@@ -179,6 +190,33 @@ public class Generator {
 			}
 			ret.append("}");
 		}
+		ret.append(System.lineSeparator());
+		
+		for (Note note: diagramElement.getNotes()) {
+			ret
+				.append("note ")
+				.append(note.getPlacement().name().toLowerCase())
+				.append(" of ")
+				.append(diagramElement.getId())
+				.append(System.lineSeparator());
+			ret.append(renderNote(note));
+			ret.append("end note").append(System.lineSeparator());
+		}
+		
+		return ret.toString();
+	}
+
+	protected String renderNote( Note note) {
+		StringBuilder ret = new StringBuilder();
+		String noteText = note.getText();
+		EList<EObject> noteContent = note.getContent();
+		if (!Util.isBlank(noteText)) {
+			ret.append(noteText);
+			if (!noteContent.isEmpty()) {
+				ret.append(" ");
+			}
+		}
+		ret.append(render(noteContent));
 		ret.append(System.lineSeparator());
 		return ret.toString();
 	}
@@ -246,6 +284,12 @@ public class Generator {
 		}
 		
 		ret.append(System.lineSeparator());
+		
+		for (Note note: connection.getNotes()) {
+			ret.append("note on link").append(System.lineSeparator());
+			ret.append(renderNote(note));
+			ret.append("end note").append(System.lineSeparator());
+		}
 		
 		return ret.toString();
 	}	

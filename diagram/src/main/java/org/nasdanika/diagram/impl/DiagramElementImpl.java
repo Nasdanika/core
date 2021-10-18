@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramPackage;
+import org.nasdanika.diagram.Note;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,6 +32,7 @@ import org.nasdanika.diagram.DiagramPackage;
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getConnections <em>Connections</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getColor <em>Color</em>}</li>
@@ -234,6 +236,17 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<Note> getNotes() {
+		return (EList<Note>)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__NOTES, DiagramPackage.Literals.DIAGRAM_ELEMENT__NOTES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public EList<EObject> getDescription() {
 		return (EList<EObject>)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION, DiagramPackage.Literals.DIAGRAM_ELEMENT__DESCRIPTION, true, true);
 	}
@@ -392,6 +405,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return ((InternalEList<?>)getConnections()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.DIAGRAM_ELEMENT__NOTES:
+				return ((InternalEList<?>)getNotes()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				return ((InternalEList<?>)getDescription()).basicRemove(otherEnd, msgs);
 		}
@@ -416,6 +431,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return getElements();
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return getConnections();
+			case DiagramPackage.DIAGRAM_ELEMENT__NOTES:
+				return getNotes();
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				return getDescription();
 			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:
@@ -462,6 +479,10 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				getConnections().clear();
 				getConnections().addAll((Collection<? extends Connection>)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__NOTES:
+				getNotes().clear();
+				getNotes().addAll((Collection<? extends Note>)newValue);
 				return;
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				getDescription().clear();
@@ -515,6 +536,9 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				getConnections().clear();
 				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__NOTES:
+				getNotes().clear();
+				return;
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				getDescription().clear();
 				return;
@@ -561,6 +585,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return !getElements().isEmpty();
 			case DiagramPackage.DIAGRAM_ELEMENT__CONNECTIONS:
 				return !getConnections().isEmpty();
+			case DiagramPackage.DIAGRAM_ELEMENT__NOTES:
+				return !getNotes().isEmpty();
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				return !getDescription().isEmpty();
 			case DiagramPackage.DIAGRAM_ELEMENT__STEREOTYPE:

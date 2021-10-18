@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.Connection#getTarget <em>Target</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Connection#getType <em>Type</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Connection#getDescription <em>Description</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Connection#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Connection#getColor <em>Color</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Connection#isDashed <em>Dashed</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Connection#isDotted <em>Dotted</em>}</li>
@@ -91,6 +92,21 @@ public interface Connection extends EObject {
 	 * @generated
 	 */
 	EList<EObject> getDescription();
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.diagram.Note}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Connection notes.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Notes</em>' containment reference list.
+	 * @see org.nasdanika.diagram.DiagramPackage#getConnection_Notes()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Note> getNotes();
 
 	/**
 	 * Returns the value of the '<em><b>Color</b></em>' attribute.

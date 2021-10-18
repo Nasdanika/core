@@ -8,10 +8,21 @@
   <foreignModel>diagram.ecore</foreignModel>
   <genPackages prefix="Diagram" basePackage="org.nasdanika" disposableProviderFactory="true"
       ecorePackage="diagram.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="diagram.ecore#//NotePlacement">
+      <genEnumLiterals ecoreEnumLiteral="diagram.ecore#//NotePlacement/Top"/>
+      <genEnumLiterals ecoreEnumLiteral="diagram.ecore#//NotePlacement/Bottom"/>
+      <genEnumLiterals ecoreEnumLiteral="diagram.ecore#//NotePlacement/Left"/>
+      <genEnumLiterals ecoreEnumLiteral="diagram.ecore#//NotePlacement/Right"/>
+    </genEnums>
     <genClasses ecoreClass="diagram.ecore#//Link">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/text"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Link/tooltip"/>
+    </genClasses>
+    <genClasses ecoreClass="diagram.ecore#//Note">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Note/text"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Note/content"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Note/placement"/>
     </genClasses>
     <genClasses image="false" ecoreClass="diagram.ecore#//DiagramElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/id"/>
@@ -19,6 +30,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/elements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/connections"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/notes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//DiagramElement/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/stereotype"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/color"/>
@@ -38,6 +50,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/type"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/notes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/color"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/dashed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Connection/dotted"/>

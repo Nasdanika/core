@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getConnections <em>Connections</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.DiagramElement#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getStereotype <em>Stereotype</em>}</li>
  *   <li>{@link org.nasdanika.diagram.DiagramElement#getColor <em>Color</em>}</li>
@@ -126,6 +127,21 @@ public interface DiagramElement extends Link {
 	 * @generated
 	 */
 	EList<Connection> getConnections();
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.diagram.Note}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Element notes.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Notes</em>' containment reference list.
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagramElement_Notes()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Note> getNotes();
 
 	/**
 	 * Returns the value of the '<em><b>Description</b></em>' containment reference list.
