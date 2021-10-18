@@ -12,6 +12,7 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Note;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.EntryPoint;
@@ -41,7 +42,7 @@ public class FlowStateDiagramGenerator {
 			}
 		}
 		
-		for (FlowElement<?> fe: flow.getElements().values()) {
+		for (FlowElement<?> fe: semanticMap.keySet()) {
 			wire(fe, semanticMap);
 		}
 		
@@ -148,10 +149,23 @@ public class FlowStateDiagramGenerator {
 			} else if (flowElement instanceof OutputPin) { 
 				ret.setStereotype("outputPin");				
 			}
+			String name = flowElement.getName();
+			if (!Util.isBlank(name)) {
+				Note nameNote = diagramFactory.createNote();
+				nameNote.setText(name);
+				ret.getNotes().add(nameNote);				
+			}
 		} else {
 			ret.setText(flowElement.getName());
 			ret.setLocation(getFlowElementLocation(flowElement));
 			ret.setTooltip(getFlowElementTooltip(flowElement));
+			
+			if (flowElement instanceof Flow && ((Flow) flowElement).isPartition()) {
+				EList<DiagramElement> elements = ret.getElements();
+				for (FlowElement<?> subElement: ((Flow) flowElement).getElements().values()) {
+					elements.add(createDiagramElement(subElement, semanticMap, contextElement));
+				}
+			}
 		}
 		EList<String> modifiers = flowElement.getModifiers();
 		if (modifiers.contains("final")) {
