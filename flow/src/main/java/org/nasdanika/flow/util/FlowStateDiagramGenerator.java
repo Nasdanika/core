@@ -1,9 +1,12 @@
 package org.nasdanika.flow.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.nasdanika.common.Util;
@@ -25,6 +28,7 @@ import org.nasdanika.flow.Fork;
 import org.nasdanika.flow.InputPin;
 import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
+import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Transition;
 
@@ -35,12 +39,7 @@ public class FlowStateDiagramGenerator {
 	public Diagram generateFlowDiagram(Flow flow) {
 		Diagram ret = createDiagram(flow);
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		for (FlowElement<?> fe: flow.getElements().values()) {
-			DiagramElement diagramElement = createDiagramElement(fe, semanticMap, null);
-			if (diagramElement != null) {
-				ret.getElements().add(diagramElement);
-			}
-		}
+		ret.getElements().addAll(createDiagramElements(flow.getElements().values(), semanticMap, null));
 		
 		for (FlowElement<?> fe: semanticMap.keySet()) {
 			wire(fe, semanticMap);
@@ -57,12 +56,7 @@ public class FlowStateDiagramGenerator {
 		
 		Diagram ret = createDiagram(flowElement);
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		for (FlowElement<?> fe: diagramElements) {			
-			DiagramElement diagramElement = createDiagramElement(fe, semanticMap, flowElement);
-			if (diagramElement != null) {
-				ret.getElements().add(diagramElement);
-			}
-		}
+		ret.getElements().addAll(createDiagramElements(diagramElements, semanticMap, flowElement));
 		
 		for (FlowElement<?> fe: diagramElements) {
 			wire(fe, semanticMap);
@@ -112,7 +106,6 @@ public class FlowStateDiagramGenerator {
 	}
 	
 	protected DiagramElement createDiagramElement(FlowElement<?> flowElement, Map<FlowElement<?>, DiagramElement> semanticMap, FlowElement<?> contextElement) {
-		
 		if (flowElement instanceof org.nasdanika.flow.Start) {
 			org.nasdanika.diagram.Start ret = diagramFactory.createStart();
 			semanticMap.put(flowElement, ret);
@@ -161,10 +154,7 @@ public class FlowStateDiagramGenerator {
 			ret.setTooltip(getFlowElementTooltip(flowElement));
 			
 			if (flowElement instanceof Flow && ((Flow) flowElement).isPartition()) {
-				EList<DiagramElement> elements = ret.getElements();
-				for (FlowElement<?> subElement: ((Flow) flowElement).getElements().values()) {
-					elements.add(createDiagramElement(subElement, semanticMap, contextElement));
-				}
+				ret.getElements().addAll(createDiagramElements(((Flow) flowElement).getElements().values(), semanticMap, contextElement));
 			}
 		}
 		EList<String> modifiers = flowElement.getModifiers();
@@ -174,13 +164,44 @@ public class FlowStateDiagramGenerator {
 			ret.setDashed(true);
 		}
 		
-		if (contextElement == null) {
-			if (modifiers.contains("optional")) {
-				ret.setColor("grey");
+		if (modifiers.contains("optional")) {
+			ret.setBorder("grey");
+		}
+		
+		ret.setColor(contextElement == null || flowElement == contextElement ? "FEFECE" : "DDDDDD");
+		
+		return ret;
+	}
+
+	/**
+	 * Creates diagram for flow elements potentially grouping them.
+	 * @param flowElements 
+	 * @param semanticMap
+	 * @param contextElement
+	 * @return
+	 */
+	protected List<DiagramElement> createDiagramElements(
+			Collection<FlowElement<?>> flowElements,
+			Map<FlowElement<?>, DiagramElement> semanticMap, 
+			FlowElement<?> contextElement) {		
+		List<DiagramElement> ret = new ArrayList<>();
+		if (isGroupByParticipant()) {
+			java.util.function.Function<FlowElement<?>, Participant> keyExtractor = fe -> {
+				EList<Participant> participants = fe.getParticipants();
+				return participants.isEmpty() ? null : participants.get(0);
+			};
+			for (Entry<Participant, List<FlowElement<?>>> ge: Util.groupBy(flowElements, keyExtractor).entrySet()) {
+				if (ge.getKey() == null) {
+					for (FlowElement<?> subElement: ge.getValue()) {
+						ret.add(createDiagramElement(subElement, semanticMap, contextElement));
+					}							
+				} else {
+					ret.add(createParticipantGroup(ge.getKey(), ge.getValue(), semanticMap, contextElement));
+				}
 			}
-		} else {
-			if (flowElement != contextElement) {
-				ret.setColor("DDDDDD");
+		} else {				
+			for (FlowElement<?> subElement: flowElements) {
+				ret.add(createDiagramElement(subElement, semanticMap, contextElement));
 			}
 		}
 		return ret;
@@ -257,5 +278,42 @@ public class FlowStateDiagramGenerator {
 		return diagramFactory.createDiagram();
 //		diagram.setHideEmptyDescription(true);
 	}
+	
+	protected boolean isGroupByParticipant() {
+		return true;
+	}
 
+	protected DiagramElement createParticipantGroup(
+			Participant participant, 
+			Collection<FlowElement<?>> groupElements, 
+			Map<FlowElement<?>, DiagramElement> semanticMap, 
+			FlowElement<?> contextElement) {
+		
+		org.nasdanika.diagram.DiagramElement ret = diagramFactory.createDiagramElement();
+		ret.setColor("E0E0FF");
+		
+		ret.setText(participant.getName());
+		ret.setType("state");
+		ret.setLocation(getParticipantLocation(participant));
+		ret.setTooltip(getParticipantTooltip(participant));
+		
+		
+		for (FlowElement<?> groupElement: groupElements) {
+			DiagramElement diagramElement = createDiagramElement(groupElement, semanticMap, contextElement);
+			if (diagramElement != null) {
+				ret.getElements().add(diagramElement);
+			}
+		}
+		
+		return ret;		
+	}
+	
+	protected String getParticipantLocation(Participant participant) {
+		return null;
+	}
+	
+	protected String getParticipantTooltip(Participant participant) {
+		return null;
+	}
+	
 }

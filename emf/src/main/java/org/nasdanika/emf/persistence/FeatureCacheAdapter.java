@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -16,6 +17,22 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *
  */
 public class FeatureCacheAdapter extends AdapterImpl implements FeatureCache {
+	
+	private static AtomicLong calls = new AtomicLong();
+	private static AtomicLong misses = new AtomicLong();
+	private static AtomicLong computeTime = new AtomicLong();
+	
+	public static long getCalls() {
+		return calls.get();
+	}
+
+	public static long getMisses() {
+		return misses.get();
+	}
+
+	public static long getComputeTime() {
+		return computeTime.get();
+	}
 
 	/**
 	 * Identity based notification to clear all caches.
@@ -34,7 +51,14 @@ public class FeatureCacheAdapter extends AdapterImpl implements FeatureCache {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <F extends EStructuralFeature, T> T get(F feature, BiFunction<EObject, F, T> computer) {
-		return (T) cache.computeIfAbsent(feature, f -> computer.apply((EObject) getTarget(), feature));
+		calls.incrementAndGet();
+		return (T) cache.computeIfAbsent(feature, f -> {
+			misses.incrementAndGet();
+			long start = System.nanoTime();
+			T result = computer.apply((EObject) getTarget(), (F) f);
+			computeTime.addAndGet(System.nanoTime() - start);
+			return result;
+		});
 	}
 	
 	@Override

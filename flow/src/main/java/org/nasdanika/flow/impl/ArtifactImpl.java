@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -23,8 +24,8 @@ import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
-import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Package;
+import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.ncore.util.NamedElementComparator;
@@ -84,8 +85,21 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Resource> getRepositories() {
+		return (EList<Resource>) getCachedFeature(FlowPackage.Literals.ARTIFACT__REPOSITORIES);
+	}
+	
+	@Override
+	protected Object computeCachedFeature(EStructuralFeature feature) {
+		if (feature == FlowPackage.Literals.ARTIFACT__REPOSITORIES) {
+			return computeRepositories();
+		}
+		return super.computeCachedFeature(feature);
+	}
+
+	private EList<Resource> computeRepositories() {
 		EList<Resource> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
 		if (res == null) {

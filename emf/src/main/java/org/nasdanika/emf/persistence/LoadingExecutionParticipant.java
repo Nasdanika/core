@@ -13,8 +13,8 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EPackage.Registry;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
@@ -158,10 +158,21 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		Marked marked = EObjectAdaptable.adaptTo(source, Marked.class);
 		Marker marker = marked == null ? null : marked.getMarker();
 		if (marker == null) {
-			return new BasicDiagnostic(Status.FAIL, "Unresolved proxy: " + source, source, containmentReference, container);
+			return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy: " + source, source, containmentReference, container);
 		}
 	
-		return new BasicDiagnostic(Status.FAIL, "Unresolved proxy at " + marker + ": " + source, source, marker, containmentReference, container);		
+		return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy at " + marker + ": " + source, source, marker, containmentReference, container);		
+	}
+
+	/**
+	 * Override if unresolved proxies are allowed in loaded resources, e.g. they'd be resolvable at some point after the model is loaded. 
+	 * This method is called only if isDiagnose() returns true (default). If the diagnostic would result in errors, e.g. due to unresolved
+	 * proxies in opposites, then override isDiagnoseModel() instead to return false and then explicitly diagnose the model which is fully loaded and as 
+	 * such all proxies are resolvable. 
+	 * @return Diagnostic status for unresolved proxies. This method returns FAIL which results in exception during load.
+	 */
+	protected Status getUnresolvedProxyStatus() {
+		return Status.FAIL;
 	}
 
 	/**
@@ -179,24 +190,38 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		// Resolving all proxies and clearing all caches
 		EcoreUtil.resolveAll(resourceSet);
 		resourceSet.getAllContents().forEachRemaining(notifier -> notifier.eNotify(FeatureCacheAdapter.CLEAR_CACHE));
-		
-		BasicDiagnostic ret = diagnose();
-		
-		Diagnostician diagnostician = new Diagnostician();
-		if (ret.getStatus() != Status.FAIL) {				
-			roots = new ArrayList<>();
-			Map<Class<Context>, Context> diagnosticContext = Collections.singletonMap(Context.class, context);
-			for (Resource resource: resourceSet.getResources()) {
-				for (EObject e: resource.getContents()) {
-					org.eclipse.emf.common.util.Diagnostic diagnostic = diagnostician.validate(e, diagnosticContext);
-					diagnosticMap.put(e, diagnostic);
-					ret.add(EmfUtil.wrap(diagnostic));
-					roots.add(e);
+
+		if (isDiagnoseModel()) {
+			BasicDiagnostic ret = diagnose();
+			
+			Diagnostician diagnostician = new Diagnostician();
+			if (ret.getStatus() != Status.FAIL) {				
+				roots = new ArrayList<>();
+				Map<Class<Context>, Context> diagnosticContext = Collections.singletonMap(Context.class, context);
+				for (Resource resource: resourceSet.getResources()) {
+					for (EObject e: resource.getContents()) {
+						org.eclipse.emf.common.util.Diagnostic diagnostic = diagnostician.validate(e, diagnosticContext);
+						diagnosticMap.put(e, diagnostic);
+						ret.add(EmfUtil.wrap(diagnostic));
+						roots.add(e);
+					}
 				}
 			}
+			
+			return ret;
 		}
 		
-		return ret;
+		return ExecutionParticipant.super.diagnose(progressMonitor);
+	}
+	
+	/**
+	 * If this method returns <code>true</code> the loaded model is diagnosed by {@link Diagnostician}.
+	 * Override to return <code>false</code> if the diagnosis is not required after loading, e.g. the model is knows to contain diagnostic errors. 
+	 * E.g. it is a partial model with unresolved proxies.
+	 * @return  
+	 */
+	protected boolean isDiagnoseModel() {
+		return true;
 	}
 
 	/**

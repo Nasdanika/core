@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -96,8 +97,13 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Artifact> getPayload() {
+		return (EList<Artifact>) getCachedFeature(FlowPackage.Literals.TRANSITION__PAYLOAD);
+	}
+
+	private EList<Artifact> computePayload() {
 		EList<Artifact> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
 		if (res != null) {
@@ -126,6 +132,17 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 		}
 		return ret;
 	}
+	
+	@Override
+	protected Object computeCachedFeature(EStructuralFeature feature) {
+		if (feature == FlowPackage.Literals.TRANSITION__PAYLOAD) {
+			return computePayload();
+		}
+		if (feature == FlowPackage.Literals.TRANSITION__TARGET) {
+			return computeTarget();
+		}
+		return super.computeCachedFeature(feature);
+	}	
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -185,6 +202,10 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 */
 	@Override
 	public FlowElement<?> getTarget() {
+		return (FlowElement<?>) getCachedFeature(FlowPackage.Literals.TRANSITION__TARGET);
+	}
+
+	public FlowElement<?> computeTarget() {
 		String targetKey = getTargetKey();
 		if (Util.isBlank(targetKey)) {
 			return null;

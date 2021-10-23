@@ -11,6 +11,15 @@ public class NamedElementComparator implements Comparator<NamedElement> {
 
 	@Override
 	public int compare(NamedElement a, NamedElement b) {
+		if (a == b) {
+			return 0;
+		}
+		if (a == null) {
+			return 1;
+		}
+		if (b == null) {
+			return -1;
+		}
 		if (Util.isBlank(a.getName())) {
 			if (Util.isBlank(b.getName())) {
 				String aUri = a.getUri();

@@ -66,6 +66,7 @@ flow-package:
           groom:
             flow-activity:
               name: Groom a story
+              modifiers: optional
               description: Product Owner elaborates a story so it has enough details for development and testing.
               participants: product-owner
               resources: issue-tracker

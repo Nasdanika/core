@@ -206,7 +206,7 @@ public class Generator {
 		return ret.toString();
 	}
 
-	protected String renderNote( Note note) {
+	protected String renderNote(Note note) {
 		StringBuilder ret = new StringBuilder();
 		String noteText = note.getText();
 		EList<EObject> noteContent = note.getContent();

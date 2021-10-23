@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -1237,6 +1238,42 @@ public class Util {
 		double lines = quadraticRoot(widthIncrementPerLine, initialLineWidth - widthIncrementPerLine, -text.length()); 
 		return WordUtils.wrap(text, initialLineWidth + (int) (widthIncrementPerLine * Math.ceil(lines)), separator, false);
 	}
+	
+	/**
+	 * Inserts separators into a list of elements so when these elements are rendered as text the text is wrapped in such a way that
+	 * line width grows proportionally as the number of lines increases. 
+	 * @param elements Elements to wrap 
+	 * @param initialLineWidth
+	 * @param separatorSupplier creates separators to insert into the resulting list.
+	 * @return
+	 */
+	public static <T> List<T> wrap(
+			List<T> elements, 
+			ToIntFunction<T> elementLengthComputer,  
+			int initialLineWidth, 
+			int widthIncrementPerLine, 
+			java.util.function.Supplier<T> wordSeparatorSupplier,			
+			java.util.function.Supplier<T> lineSeparatorSupplier) {
+		int length = elements.stream().mapToInt(elementLengthComputer).sum();		
+		int wrapLength = initialLineWidth;
+		if (length > initialLineWidth) { 
+			wrapLength += (int) (widthIncrementPerLine * Math.ceil(quadraticRoot(widthIncrementPerLine, initialLineWidth - widthIncrementPerLine, -length)));
+		}
+		List<T> ret = new ArrayList<T>();
+		int lineLength = 0;
+		for (T element: elements) {
+			if (lineLength > wrapLength) {
+				ret.add(lineSeparatorSupplier.get());
+				lineLength = 0;
+			} 
+			if (lineLength > 0) {
+				ret.add(wordSeparatorSupplier.get());
+			}
+			ret.add(element);
+			lineLength += elementLengthComputer.applyAsInt(element);
+		}
+		return ret;
+	}	
 	
 	private static double quadraticRoot(double a, double b, double c) { 
 		return (-b + Math.sqrt(b*b - 4 * a * c)) / (2 * a);

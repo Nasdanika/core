@@ -373,9 +373,9 @@ public class PackageImpl extends PackageElementImpl<org.nasdanika.flow.Package> 
 			if (activity == null) {
 				instanceActivities.removeKey(activityKey);
 			} else {
-				Activity instanceService = (Activity) activity.create();
-				instanceActivities.put(activityKey, instanceService);
-				activity.apply(instanceService);
+				Activity instanceActivity = (Activity) activity.create();
+				instanceActivities.put(activityKey, instanceActivity);
+				activity.apply(instanceActivity);
 			}
 		}
 		

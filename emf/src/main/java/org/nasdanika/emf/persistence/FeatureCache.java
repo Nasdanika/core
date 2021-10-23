@@ -32,6 +32,7 @@ public interface FeatureCache {
 			if (add) {
 				adapter = new FeatureCacheAdapter();
 				target.eAdapters().add((FeatureCacheAdapter) adapter);
+				((FeatureCacheAdapter) adapter).setTarget(target);
 			} else {
 				return computer.apply(target, feature);
 			}

@@ -6,6 +6,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Util;
@@ -67,6 +68,18 @@ public class ServiceImpl extends FlowElementImpl<Service> implements Service {
 	 */
 	@Override
 	public Activity<?> getTarget() {
+		return (Activity<?>) getCachedFeature(FlowPackage.Literals.SERVICE__TARGET);
+	}
+	
+	@Override
+	protected Object computeCachedFeature(EStructuralFeature feature) {
+		if (feature == FlowPackage.Literals.SERVICE__TARGET) {
+			return computeTarget();
+		}
+		return super.computeCachedFeature(feature);
+	}
+	
+	private Activity<?> computeTarget() {
 		String targetKey = getTargetKey();
 		if (Util.isBlank(targetKey)) {
 			return null;
@@ -97,6 +110,7 @@ public class ServiceImpl extends FlowElementImpl<Service> implements Service {
 		}
 		return null;
 	}
+	
 
 	/**
 	 * <!-- begin-user-doc -->

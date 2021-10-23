@@ -28,6 +28,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -212,7 +213,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				uriBuilder.append("/").append(idx);
 			} else {
 				for (EAttribute eKey: eKeys) {
-					uriBuilder.append("/").append(eObj.eGet(eKey));
+					uriBuilder.append("/").append(eObj.eGet(eKey)); // TODO - add support for passing eKey path computer.
 				}
 			}
 		}
@@ -593,6 +594,31 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			return (T) adapter;
 		}
 		return null;
+	}
+	
+	/**
+	 * Creates a proxy for a given type and URI and then attempts to resolve it in the context of this EObject.
+	 * @param type
+	 * @param uri
+	 * @return
+	 */
+	protected EObject resolve(EClass type, URI uri) {
+		return EcoreUtil.resolve(createProxy(type, uri), this);
+	}
+	
+	/**
+	 * Creates a proxy of given type with given URI 
+	 * @param eClass
+	 * @param uri
+	 * @return
+	 */
+	protected static EObject createProxy(EClass type, URI uri) {
+		EObject proxy = type.getEPackage().getEFactoryInstance().create(type);
+		((InternalEObject) proxy).eSetProxyURI(uri);
+		if (proxy instanceof NamedElement) {
+			((NamedElement) proxy).setName(type.getName() + " proxy for " + uri);
+		}
+		return proxy;
 	}
 
 } //ModelElementImpl

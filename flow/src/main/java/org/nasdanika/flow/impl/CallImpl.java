@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -62,8 +63,13 @@ public class CallImpl extends TransitionImpl implements Call {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Artifact> getResponse() {
+		return (EList<Artifact>) getCachedFeature(FlowPackage.Literals.CALL__RESPONSE);
+	}
+
+	private EList<Artifact> computeResponse() {
 		EList<Artifact> ret = ECollections.newBasicEList();
 		org.eclipse.emf.ecore.resource.Resource res = eResource();
 		if (res == null) {
@@ -94,6 +100,14 @@ public class CallImpl extends TransitionImpl implements Call {
 		}
 		return ret;
 	}
+	
+	@Override
+	protected Object computeCachedFeature(EStructuralFeature feature) {
+		if (feature == FlowPackage.Literals.CALL__RESPONSE) {
+			return computeResponse();
+		}
+		return super.computeCachedFeature(feature);
+	}	
 
 	/**
 	 * <!-- begin-user-doc -->

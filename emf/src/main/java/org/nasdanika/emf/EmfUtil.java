@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,16 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.BasicDiagnostic;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.persistence.FeatureCacheAdapter;
 import org.nasdanika.ncore.impl.ModelElementImpl;
 
 public class EmfUtil {
@@ -299,5 +305,39 @@ public class EmfUtil {
 
 		return result.toString();
 	}		
+
+	/**
+	 * Resolves all proxies, clears feature caches and then diagnoses the resource set.
+	 * @param resourceSet
+	 * @param context
+	 * @return
+	 */
+	public static org.eclipse.emf.common.util.Diagnostic resolveClearCacheAndDiagnose(ResourceSet resourceSet, Context context) {
+		EcoreUtil.resolveAll(resourceSet);
+		resourceSet.getAllContents().forEachRemaining(notifier -> notifier.eNotify(FeatureCacheAdapter.CLEAR_CACHE));
+
+		Diagnostician diagnostician = new Diagnostician();
+		org.eclipse.emf.common.util.BasicDiagnostic ret = new org.eclipse.emf.common.util.BasicDiagnostic();
+		Map<Class<Context>, Context> diagnosticContext = Collections.singletonMap(Context.class, context);
+		for (Resource resource: resourceSet.getResources()) {
+			org.eclipse.emf.common.util.BasicDiagnostic resourceDiagnostic = new org.eclipse.emf.common.util.BasicDiagnostic(resource.getURI().toString(), 0, "Resource diagnostic", new Object[] {resource});
+			for (EObject e: resource.getContents()) {
+				org.eclipse.emf.common.util.Diagnostic diagnostic = diagnostician.validate(e, diagnosticContext);
+				resourceDiagnostic.add(diagnostic);
+			}
+			ret.add(resourceDiagnostic);
+		}
+		return ret;
+	}
+	
+	/**
+	 * Resolves URI against the base if base is not null.
+	 * @param uri
+	 * @param base
+	 * @return
+	 */
+	public static URI resolve(URI uri, URI base) {
+		return base == null ? uri : uri.resolve(base);
+	}
 
 }

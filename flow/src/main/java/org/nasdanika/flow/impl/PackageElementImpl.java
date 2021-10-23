@@ -4,16 +4,20 @@ package org.nasdanika.flow.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.persistence.FeatureCache;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.ncore.impl.NamedElementImpl;
@@ -332,5 +336,33 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 		}
 		return name;
 	}
+	
+	/**
+	 * Caching opposites.
+	 * @param <E>
+	 * @param eReference
+	 * @return
+	 */
+	protected <E extends EObject> EList<E> getOppositeReferrers(EReference reference) {
+		return FeatureCache.get(this, Objects.requireNonNull(reference, "Reference is null"), (target, ref) -> super.getOppositeReferrers(ref), true);		
+	}
+	
+	protected Object getCachedFeature(EStructuralFeature feature) {
+		return FeatureCache.get(this, feature, (t,f) -> {
+			if (t != PackageElementImpl.this) {
+				throw new IllegalStateException("Invoking computer on a wrong target");
+			}
+			return computeCachedFeature(f);
+		}, true);		
+	}
+
+	/**
+	 * Implement computation in subclasses which call getCachedFeature(). 
+	 * @param feature
+	 * @return
+	 */
+	protected Object computeCachedFeature(EStructuralFeature feature) {
+		throw new UnsupportedOperationException("Computation of feature " + feature + " is not implemented");
+	}	
 
 } //PackageElementImpl
