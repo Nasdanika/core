@@ -2538,6 +2538,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   new String[] {
 			   "constraints", "final extension"
 		   });
+		addAnnotation
+		  (packageEClass,
+		   source,
+		   new String[] {
+			   "constraints", "test"
+		   });
 	}
 
 } //FlowPackageImpl

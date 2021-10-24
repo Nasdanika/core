@@ -3,11 +3,13 @@
 package org.nasdanika.flow.util;
 
 import java.util.Map;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
+import org.nasdanika.common.Util;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
@@ -33,6 +35,7 @@ import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -251,7 +254,24 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(package_, diagnostics, context);
 		if (result || diagnostics != null) result &= validatePackageElement_final(package_, diagnostics, context);
 		if (result || diagnostics != null) result &= validatePackageElement_extension(package_, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackage_test(package_, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * Validates the test constraint of '<em>Package</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public boolean validatePackage_test(org.nasdanika.flow.Package package_, DiagnosticChain diagnostics, Map<Object, Object> context) {
+//		if (diagnostics != null) {
+//			DiagnosticHelper helper = new DiagnosticHelper(diagnostics, DIAGNOSTIC_SOURCE, 0, package_);
+//			helper.error("Package error");
+//			helper.warning("URI warning", NcorePackage.Literals.MODEL_ELEMENT__URI);
+//			return helper.isSuccess();
+//		}
+		return true;
 	}
 
 	/**

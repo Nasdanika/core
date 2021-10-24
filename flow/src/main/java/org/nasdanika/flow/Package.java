@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.EMap;
  *
  * @see org.nasdanika.flow.FlowPackage#getPackage()
  * @model annotation="urn:org.nasdanika documentation-reference='doc/package.md'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='test'"
  * @generated
  */
 public interface Package extends PackageElement<Package> {
