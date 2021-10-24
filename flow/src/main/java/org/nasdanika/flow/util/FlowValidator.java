@@ -3,7 +3,6 @@
 package org.nasdanika.flow.util;
 
 import java.util.Map;
-
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
@@ -31,6 +30,7 @@ import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
 
@@ -112,6 +112,8 @@ public class FlowValidator extends EObjectValidator {
 				return validatePackage((org.nasdanika.flow.Package)value, diagnostics, context);
 			case FlowPackage.PACKAGE_ENTRY:
 				return validatePackageEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case FlowPackage.SERVICE_PROVIDER:
+				return validateServiceProvider((ServiceProvider<?>)value, diagnostics, context);
 			case FlowPackage.PARTICIPANT:
 				return validateParticipant((Participant)value, diagnostics, context);
 			case FlowPackage.PARTICIPANT_ENTRY:
@@ -259,6 +261,26 @@ public class FlowValidator extends EObjectValidator {
 	 */
 	public boolean validatePackageEntry(Map.Entry<?, ?> packageEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)packageEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateServiceProvider(ServiceProvider<?> serviceProvider, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(serviceProvider, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(serviceProvider, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(serviceProvider, diagnostics, context);
+		return result;
 	}
 
 	/**

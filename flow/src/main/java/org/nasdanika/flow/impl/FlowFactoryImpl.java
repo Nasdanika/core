@@ -26,10 +26,12 @@ import org.nasdanika.flow.Fork;
 import org.nasdanika.flow.InputPin;
 import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
 
@@ -79,6 +81,7 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 		switch (eClass.getClassifierID()) {
 			case FlowPackage.PACKAGE: return createPackage();
 			case FlowPackage.PACKAGE_ENTRY: return (EObject)createPackageEntry();
+			case FlowPackage.SERVICE_PROVIDER: return createServiceProvider();
 			case FlowPackage.PARTICIPANT: return createParticipant();
 			case FlowPackage.PARTICIPANT_ENTRY: return (EObject)createParticipantEntry();
 			case FlowPackage.RESOURCE: return createResource();
@@ -131,6 +134,17 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	public Map.Entry<String, org.nasdanika.flow.Package> createPackageEntry() {
 		PackageEntryImpl packageEntry = new PackageEntryImpl();
 		return packageEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public <T extends PackageElement<T>> ServiceProvider<T> createServiceProvider() {
+		ServiceProviderImpl<T> serviceProvider = new ServiceProviderImpl<T>();
+		return serviceProvider;
 	}
 
 	/**

@@ -30,6 +30,7 @@ import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.ncore.Marked;
@@ -103,6 +104,10 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePackageEntry(Map.Entry<String, org.nasdanika.flow.Package> object) {
 				return createPackageEntryAdapter();
+			}
+			@Override
+			public <T extends PackageElement<T>> Adapter caseServiceProvider(ServiceProvider<T> object) {
+				return createServiceProviderAdapter();
 			}
 			@Override
 			public Adapter caseParticipant(Participant object) {
@@ -291,6 +296,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPackageEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.ServiceProvider <em>Service Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.flow.ServiceProvider
+	 * @generated
+	 */
+	public Adapter createServiceProviderAdapter() {
 		return null;
 	}
 

@@ -450,14 +450,14 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.flow.impl.ParticipantImpl <em>Participant</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.ServiceProviderImpl <em>Service Provider</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.flow.impl.ParticipantImpl
-	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipant()
+	 * @see org.nasdanika.flow.impl.ServiceProviderImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getServiceProvider()
 	 * @generated
 	 */
-	int PARTICIPANT = 3;
+	int SERVICE_PROVIDER = 3;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -466,7 +466,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__MARKER = PACKAGE_ELEMENT__MARKER;
+	int SERVICE_PROVIDER__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -475,7 +475,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__URI = PACKAGE_ELEMENT__URI;
+	int SERVICE_PROVIDER__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -484,7 +484,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+	int SERVICE_PROVIDER__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -493,7 +493,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__UUID = PACKAGE_ELEMENT__UUID;
+	int SERVICE_PROVIDER__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -502,7 +502,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__NAME = PACKAGE_ELEMENT__NAME;
+	int SERVICE_PROVIDER__NAME = PACKAGE_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Prototype</b></em>' reference.
@@ -511,7 +511,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+	int SERVICE_PROVIDER__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -520,7 +520,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+	int SERVICE_PROVIDER__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -529,7 +529,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+	int SERVICE_PROVIDER__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
 
 	/**
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
@@ -538,7 +538,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+	int SERVICE_PROVIDER__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -547,7 +547,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+	int SERVICE_PROVIDER__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -556,43 +556,16 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+	int SERVICE_PROVIDER__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Participates</b></em>' reference list.
+	 * The number of structural features of the '<em>Service Provider</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__PARTICIPATES = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Resources</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTICIPANT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Artifacts</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTICIPANT__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Participant</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PARTICIPANT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int SERVICE_PROVIDER_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -601,7 +574,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT___CREATE = PACKAGE_ELEMENT___CREATE;
+	int SERVICE_PROVIDER___CREATE = PACKAGE_ELEMENT___CREATE;
 
 	/**
 	 * The operation id for the '<em>Apply</em>' operation.
@@ -610,7 +583,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+	int SERVICE_PROVIDER___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Resolve</em>' operation.
@@ -619,7 +592,188 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+	int SERVICE_PROVIDER___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Service Provider</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_PROVIDER_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.ParticipantImpl <em>Participant</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.ParticipantImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipant()
+	 * @generated
+	 */
+	int PARTICIPANT = 4;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__MARKER = SERVICE_PROVIDER__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__URI = SERVICE_PROVIDER__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__DESCRIPTION = SERVICE_PROVIDER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__UUID = SERVICE_PROVIDER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__NAME = SERVICE_PROVIDER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__PROTOTYPE = SERVICE_PROVIDER__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__EXTENSIONS = SERVICE_PROVIDER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__EXTENDS = SERVICE_PROVIDER__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__MODIFIERS = SERVICE_PROVIDER__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Services</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__SERVICES = SERVICE_PROVIDER__SERVICES;
+
+	/**
+	 * The feature id for the '<em><b>Participates</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__PARTICIPATES = SERVICE_PROVIDER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__RESOURCES = SERVICE_PROVIDER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__ARTIFACTS = SERVICE_PROVIDER_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Participant</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___CREATE = SERVICE_PROVIDER___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___APPLY__PACKAGEELEMENT = SERVICE_PROVIDER___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT___RESOLVE__PACKAGEELEMENT = SERVICE_PROVIDER___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Participant</em>' class.
@@ -628,7 +782,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+	int PARTICIPANT_OPERATION_COUNT = SERVICE_PROVIDER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.
@@ -638,7 +792,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantEntry()
 	 * @generated
 	 */
-	int PARTICIPANT_ENTRY = 4;
+	int PARTICIPANT_ENTRY = 5;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -684,7 +838,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 5;
+	int RESOURCE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -693,7 +847,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__MARKER = PACKAGE_ELEMENT__MARKER;
+	int RESOURCE__MARKER = SERVICE_PROVIDER__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -702,7 +856,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__URI = PACKAGE_ELEMENT__URI;
+	int RESOURCE__URI = SERVICE_PROVIDER__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -711,7 +865,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+	int RESOURCE__DESCRIPTION = SERVICE_PROVIDER__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -720,7 +874,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__UUID = PACKAGE_ELEMENT__UUID;
+	int RESOURCE__UUID = SERVICE_PROVIDER__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -729,7 +883,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__NAME = PACKAGE_ELEMENT__NAME;
+	int RESOURCE__NAME = SERVICE_PROVIDER__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Prototype</b></em>' reference.
@@ -738,7 +892,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+	int RESOURCE__PROTOTYPE = SERVICE_PROVIDER__PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -747,7 +901,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+	int RESOURCE__EXTENSIONS = SERVICE_PROVIDER__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -756,7 +910,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+	int RESOURCE__EXTENDS = SERVICE_PROVIDER__EXTENDS;
 
 	/**
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
@@ -765,7 +919,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+	int RESOURCE__MODIFIERS = SERVICE_PROVIDER__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -774,7 +928,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+	int RESOURCE__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -783,7 +937,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__SERVICES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+	int RESOURCE__SERVICES = SERVICE_PROVIDER__SERVICES;
 
 	/**
 	 * The feature id for the '<em><b>Artifacts</b></em>' reference list.
@@ -792,7 +946,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int RESOURCE__ARTIFACTS = SERVICE_PROVIDER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Used In</b></em>' reference list.
@@ -801,7 +955,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__USED_IN = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int RESOURCE__USED_IN = SERVICE_PROVIDER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Used By</b></em>' reference list.
@@ -810,7 +964,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__USED_BY = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int RESOURCE__USED_BY = SERVICE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -819,7 +973,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int RESOURCE_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -828,7 +982,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE___CREATE = PACKAGE_ELEMENT___CREATE;
+	int RESOURCE___CREATE = SERVICE_PROVIDER___CREATE;
 
 	/**
 	 * The operation id for the '<em>Apply</em>' operation.
@@ -837,7 +991,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+	int RESOURCE___APPLY__PACKAGEELEMENT = SERVICE_PROVIDER___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Resolve</em>' operation.
@@ -846,7 +1000,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+	int RESOURCE___RESOLVE__PACKAGEELEMENT = SERVICE_PROVIDER___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -855,7 +1009,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+	int RESOURCE_OPERATION_COUNT = SERVICE_PROVIDER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ResourceEntryImpl <em>Resource Entry</em>}' class.
@@ -865,7 +1019,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResourceEntry()
 	 * @generated
 	 */
-	int RESOURCE_ENTRY = 6;
+	int RESOURCE_ENTRY = 7;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -911,7 +1065,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifact()
 	 * @generated
 	 */
-	int ARTIFACT = 7;
+	int ARTIFACT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1119,7 +1273,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactEntry()
 	 * @generated
 	 */
-	int ARTIFACT_ENTRY = 8;
+	int ARTIFACT_ENTRY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1165,7 +1319,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElement()
 	 * @generated
 	 */
-	int FLOW_ELEMENT = 9;
+	int FLOW_ELEMENT = 10;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1418,7 +1572,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElementEntry()
 	 * @generated
 	 */
-	int FLOW_ELEMENT_ENTRY = 10;
+	int FLOW_ELEMENT_ENTRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1464,7 +1618,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 15;
+	int ACTIVITY = 16;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityEntryImpl <em>Activity Entry</em>}' class.
@@ -1474,7 +1628,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivityEntry()
 	 * @generated
 	 */
-	int ACTIVITY_ENTRY = 16;
+	int ACTIVITY_ENTRY = 17;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ServiceImpl <em>Service</em>}' class.
@@ -1484,7 +1638,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 17;
+	int SERVICE = 18;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionImpl <em>Transition</em>}' class.
@@ -1494,7 +1648,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransition()
 	 * @generated
 	 */
-	int TRANSITION = 11;
+	int TRANSITION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1684,7 +1838,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransitionEntry()
 	 * @generated
 	 */
-	int TRANSITION_ENTRY = 12;
+	int TRANSITION_ENTRY = 13;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1730,7 +1884,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 13;
+	int CALL = 14;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1938,7 +2092,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCallEntry()
 	 * @generated
 	 */
-	int CALL_ENTRY = 14;
+	int CALL_ENTRY = 15;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -2533,7 +2687,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlow()
 	 * @generated
 	 */
-	int FLOW = 18;
+	int FLOW = 19;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2813,7 +2967,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPseudoState()
 	 * @generated
 	 */
-	int PSEUDO_STATE = 19;
+	int PSEUDO_STATE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3075,7 +3229,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getChoice()
 	 * @generated
 	 */
-	int CHOICE = 20;
+	int CHOICE = 21;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3337,7 +3491,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 21;
+	int END = 22;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3599,7 +3753,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 22;
+	int ENTRY_POINT = 23;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3861,7 +4015,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExitPoint()
 	 * @generated
 	 */
-	int EXIT_POINT = 23;
+	int EXIT_POINT = 24;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4123,7 +4277,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionInput()
 	 * @generated
 	 */
-	int EXPANSION_INPUT = 24;
+	int EXPANSION_INPUT = 25;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4385,7 +4539,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionOutput()
 	 * @generated
 	 */
-	int EXPANSION_OUTPUT = 25;
+	int EXPANSION_OUTPUT = 26;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4647,7 +4801,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFork()
 	 * @generated
 	 */
-	int FORK = 26;
+	int FORK = 27;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4909,7 +5063,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getInputPin()
 	 * @generated
 	 */
-	int INPUT_PIN = 27;
+	int INPUT_PIN = 28;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5171,7 +5325,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getJoin()
 	 * @generated
 	 */
-	int JOIN = 28;
+	int JOIN = 29;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5433,7 +5587,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getOutputPin()
 	 * @generated
 	 */
-	int OUTPUT_PIN = 29;
+	int OUTPUT_PIN = 30;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5695,7 +5849,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 30;
+	int START = 31;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -6157,6 +6311,27 @@ public interface FlowPackage extends EPackage {
 	EReference getPackageEntry_Value();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.flow.ServiceProvider <em>Service Provider</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Service Provider</em>'.
+	 * @see org.nasdanika.flow.ServiceProvider
+	 * @generated
+	 */
+	EClass getServiceProvider();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.ServiceProvider#getServices <em>Services</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Services</em>'.
+	 * @see org.nasdanika.flow.ServiceProvider#getServices()
+	 * @see #getServiceProvider()
+	 * @generated
+	 */
+	EReference getServiceProvider_Services();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Participant <em>Participant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6165,17 +6340,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getParticipant();
-
-	/**
-	 * Returns the meta object for the map '{@link org.nasdanika.flow.Participant#getServices <em>Services</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Services</em>'.
-	 * @see org.nasdanika.flow.Participant#getServices()
-	 * @see #getParticipant()
-	 * @generated
-	 */
-	EReference getParticipant_Services();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}'.
@@ -6254,17 +6418,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getResource();
-
-	/**
-	 * Returns the meta object for the map '{@link org.nasdanika.flow.Resource#getServices <em>Services</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Services</em>'.
-	 * @see org.nasdanika.flow.Resource#getServices()
-	 * @see #getResource()
-	 * @generated
-	 */
-	EReference getResource_Services();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}'.
@@ -7231,6 +7384,24 @@ public interface FlowPackage extends EPackage {
 		EReference PACKAGE_ENTRY__VALUE = eINSTANCE.getPackageEntry_Value();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ServiceProviderImpl <em>Service Provider</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.ServiceProviderImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getServiceProvider()
+		 * @generated
+		 */
+		EClass SERVICE_PROVIDER = eINSTANCE.getServiceProvider();
+
+		/**
+		 * The meta object literal for the '<em><b>Services</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SERVICE_PROVIDER__SERVICES = eINSTANCE.getServiceProvider_Services();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantImpl <em>Participant</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7239,14 +7410,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PARTICIPANT = eINSTANCE.getParticipant();
-
-		/**
-		 * The meta object literal for the '<em><b>Services</b></em>' map feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PARTICIPANT__SERVICES = eINSTANCE.getParticipant_Services();
 
 		/**
 		 * The meta object literal for the '<em><b>Participates</b></em>' reference list feature.
@@ -7307,14 +7470,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EClass RESOURCE = eINSTANCE.getResource();
-
-		/**
-		 * The meta object literal for the '<em><b>Services</b></em>' map feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESOURCE__SERVICES = eINSTANCE.getResource_Services();
 
 		/**
 		 * The meta object literal for the '<em><b>Artifacts</b></em>' reference list feature.

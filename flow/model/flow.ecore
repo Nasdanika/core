@@ -133,16 +133,29 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Participant">
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceProvider">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/participant.md"/>
+      <details key="documentation-reference" value="doc/service-provider.md"/>
     </eAnnotations>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//PackageElement">
+        <eTypeArguments eTypeParameter="#//ServiceProvider/T"/>
+      </eBounds>
+    </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
         eType="#//ActivityEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Services provided by a participant. Participant service activities imply the containing participant. "/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eTypeParameter="#//ServiceProvider/T"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Participant">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/participant.md"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participates" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/participants">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -164,7 +177,7 @@
         <details key="documentation" value="Artifacts this participant uses in their activities."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//PackageElement">
+    <eGenericSuperTypes eClassifier="#//ServiceProvider">
       <eTypeArguments eClassifier="#//Participant"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -188,12 +201,6 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Resource">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
-        eType="#//ActivityEntry" containment="true">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Services provided by a resource. Resource service activities imply the containing resource. "/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
         eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/repositories">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -216,7 +223,7 @@
         <details key="documentation" value="Participants use this resource in their activities."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//PackageElement">
+    <eGenericSuperTypes eClassifier="#//ServiceProvider">
       <eTypeArguments eClassifier="#//Resource"/>
     </eGenericSuperTypes>
   </eClassifiers>

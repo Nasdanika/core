@@ -37,6 +37,7 @@ import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.flow.util.FlowValidator;
@@ -69,6 +70,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	private EClass packageEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass serviceProviderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -536,6 +544,26 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getServiceProvider() {
+		return serviceProviderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getServiceProvider_Services() {
+		return (EReference)serviceProviderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getParticipant() {
 		return participantEClass;
 	}
@@ -546,7 +574,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getParticipant_Services() {
+	public EReference getParticipant_Participates() {
 		return (EReference)participantEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -556,7 +584,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getParticipant_Participates() {
+	public EReference getParticipant_Resources() {
 		return (EReference)participantEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -566,18 +594,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getParticipant_Resources() {
-		return (EReference)participantEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getParticipant_Artifacts() {
-		return (EReference)participantEClass.getEStructuralFeatures().get(3);
+		return (EReference)participantEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -626,7 +644,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getResource_Services() {
+	public EReference getResource_Artifacts() {
 		return (EReference)resourceEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -636,7 +654,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getResource_Artifacts() {
+	public EReference getResource_UsedIn() {
 		return (EReference)resourceEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -646,18 +664,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getResource_UsedIn() {
-		return (EReference)resourceEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getResource_UsedBy() {
-		return (EReference)resourceEClass.getEStructuralFeatures().get(3);
+		return (EReference)resourceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1401,8 +1409,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEAttribute(packageEntryEClass, PACKAGE_ENTRY__KEY);
 		createEReference(packageEntryEClass, PACKAGE_ENTRY__VALUE);
 
+		serviceProviderEClass = createEClass(SERVICE_PROVIDER);
+		createEReference(serviceProviderEClass, SERVICE_PROVIDER__SERVICES);
+
 		participantEClass = createEClass(PARTICIPANT);
-		createEReference(participantEClass, PARTICIPANT__SERVICES);
 		createEReference(participantEClass, PARTICIPANT__PARTICIPATES);
 		createEReference(participantEClass, PARTICIPANT__RESOURCES);
 		createEReference(participantEClass, PARTICIPANT__ARTIFACTS);
@@ -1412,7 +1422,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(participantEntryEClass, PARTICIPANT_ENTRY__VALUE);
 
 		resourceEClass = createEClass(RESOURCE);
-		createEReference(resourceEClass, RESOURCE__SERVICES);
 		createEReference(resourceEClass, RESOURCE__ARTIFACTS);
 		createEReference(resourceEClass, RESOURCE__USED_IN);
 		createEReference(resourceEClass, RESOURCE__USED_BY);
@@ -1540,6 +1549,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		// Create type parameters
 		ETypeParameter packageElementEClass_T = addETypeParameter(packageElementEClass, "T");
+		ETypeParameter serviceProviderEClass_T = addETypeParameter(serviceProviderEClass, "T");
 		ETypeParameter flowElementEClass_T = addETypeParameter(flowElementEClass, "T");
 		ETypeParameter activityEClass_T = addETypeParameter(activityEClass, "T");
 
@@ -1548,6 +1558,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		EGenericType g2 = createEGenericType(packageElementEClass_T);
 		g1.getETypeArguments().add(g2);
 		packageElementEClass_T.getEBounds().add(g1);
+		g1 = createEGenericType(this.getPackageElement());
+		g2 = createEGenericType(serviceProviderEClass_T);
+		g1.getETypeArguments().add(g2);
+		serviceProviderEClass_T.getEBounds().add(g1);
 		g1 = createEGenericType(this.getFlowElement());
 		g2 = createEGenericType(flowElementEClass_T);
 		g1.getETypeArguments().add(g2);
@@ -1564,10 +1578,14 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g1.getETypeArguments().add(g2);
 		packageEClass.getEGenericSuperTypes().add(g1);
 		g1 = createEGenericType(this.getPackageElement());
+		g2 = createEGenericType(serviceProviderEClass_T);
+		g1.getETypeArguments().add(g2);
+		serviceProviderEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getServiceProvider());
 		g2 = createEGenericType(this.getParticipant());
 		g1.getETypeArguments().add(g2);
 		participantEClass.getEGenericSuperTypes().add(g1);
-		g1 = createEGenericType(this.getPackageElement());
+		g1 = createEGenericType(this.getServiceProvider());
 		g2 = createEGenericType(this.getResource());
 		g1.getETypeArguments().add(g2);
 		resourceEClass.getEGenericSuperTypes().add(g1);
@@ -1647,8 +1665,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEAttribute(getPackageEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageEntry_Value(), this.getPackage(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(serviceProviderEClass, ServiceProvider.class, "ServiceProvider", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getServiceProvider_Services(), this.getActivityEntry(), null, "services", null, 0, -1, ServiceProvider.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(participantEClass, Participant.class, "Participant", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getParticipant_Services(), this.getActivityEntry(), null, "services", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getFlowElement());
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
@@ -1661,7 +1681,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getParticipantEntry_Value(), this.getParticipant(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResource_Services(), this.getActivityEntry(), null, "services", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getResource_Artifacts(), this.getArtifact(), this.getArtifact_Repositories(), "artifacts", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getFlowElement());
 		g2 = createEGenericType();
@@ -1830,6 +1849,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (serviceProviderEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/service-provider.md"
 		   });
 		addAnnotation
 		  (participantEClass,
@@ -2150,7 +2175,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Sub-package. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
-		  (getParticipant_Services(),
+		  (getServiceProvider_Services(),
 		   source,
 		   new String[] {
 			   "documentation", "Services provided by a participant. Participant service activities imply the containing participant. "
@@ -2190,12 +2215,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Participant. Use ``null`` to suppress inherited sub-package."
-		   });
-		addAnnotation
-		  (getResource_Services(),
-		   source,
-		   new String[] {
-			   "documentation", "Services provided by a resource. Resource service activities imply the containing resource. "
 		   });
 		addAnnotation
 		  (getResource_Artifacts(),

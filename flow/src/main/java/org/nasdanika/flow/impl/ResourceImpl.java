@@ -12,7 +12,6 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
@@ -32,7 +31,6 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getServices <em>Services</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getArtifacts <em>Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedIn <em>Used In</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedBy <em>Used By</em>}</li>
@@ -40,7 +38,7 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  *
  * @generated
  */
-public class ResourceImpl extends PackageElementImpl<Resource> implements Resource {
+public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resource {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -58,28 +56,6 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.RESOURCE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * This is specialized for the more specific type known in this context.
-	 * @generated
-	 */
-	@Override
-	public void setPrototype(Resource newPrototype) {
-		super.setPrototype(newPrototype);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EMap<String, Activity<?>> getServices() {
-		return (EMap<String, Activity<?>>)eDynamicGet(FlowPackage.RESOURCE__SERVICES, FlowPackage.Literals.RESOURCE__SERVICES, true, true);
 	}
 
 	/**
@@ -146,8 +122,6 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.RESOURCE__SERVICES:
-				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_IN:
@@ -166,9 +140,6 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FlowPackage.RESOURCE__SERVICES:
-				if (coreType) return getServices();
-				else return getServices().map();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return getArtifacts();
 			case FlowPackage.RESOURCE__USED_IN:
@@ -184,42 +155,9 @@ public class ResourceImpl extends PackageElementImpl<Resource> implements Resour
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case FlowPackage.RESOURCE__SERVICES:
-				((EStructuralFeature.Setting)getServices()).set(newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case FlowPackage.RESOURCE__SERVICES:
-				getServices().clear();
-				return;
-		}
-		super.eUnset(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FlowPackage.RESOURCE__SERVICES:
-				return !getServices().isEmpty();
 			case FlowPackage.RESOURCE__ARTIFACTS:
 				return !getArtifacts().isEmpty();
 			case FlowPackage.RESOURCE__USED_IN:

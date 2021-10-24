@@ -29,6 +29,7 @@ import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.PseudoState;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.ncore.Marked;
@@ -119,9 +120,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FlowPackage.SERVICE_PROVIDER: {
+				ServiceProvider<?> serviceProvider = (ServiceProvider<?>)theEObject;
+				T1 result = caseServiceProvider(serviceProvider);
+				if (result == null) result = casePackageElement(serviceProvider);
+				if (result == null) result = caseNamedElement(serviceProvider);
+				if (result == null) result = caseModelElement(serviceProvider);
+				if (result == null) result = caseMarked(serviceProvider);
+				if (result == null) result = caseAdaptable(serviceProvider);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FlowPackage.PARTICIPANT: {
 				Participant participant = (Participant)theEObject;
 				T1 result = caseParticipant(participant);
+				if (result == null) result = caseServiceProvider(participant);
 				if (result == null) result = casePackageElement(participant);
 				if (result == null) result = caseNamedElement(participant);
 				if (result == null) result = caseModelElement(participant);
@@ -139,6 +152,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 			case FlowPackage.RESOURCE: {
 				Resource resource = (Resource)theEObject;
 				T1 result = caseResource(resource);
+				if (result == null) result = caseServiceProvider(resource);
 				if (result == null) result = casePackageElement(resource);
 				if (result == null) result = caseNamedElement(resource);
 				if (result == null) result = caseModelElement(resource);
@@ -466,6 +480,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 casePackageEntry(Map.Entry<String, org.nasdanika.flow.Package> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Service Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Service Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T extends PackageElement<T>> T1 caseServiceProvider(ServiceProvider<T> object) {
 		return null;
 	}
 

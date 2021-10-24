@@ -14,9 +14,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
-import org.nasdanika.flow.Participant;
-import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
+import org.nasdanika.flow.ServiceProvider;
 
 /**
  * <!-- begin-user-doc -->
@@ -133,18 +132,10 @@ public class ActivityImpl<T extends Activity<T>> extends FlowElementImpl<T> impl
 						ret.add((T) ext);
 					}
 				}
-			} else if (entry.eContainmentFeature() == FlowPackage.Literals.PARTICIPANT__SERVICES) {
-				Participant container = (Participant) entry.eContainer();
-				for (Participant cExtends: container.getExtends()) {
-					Activity<?> ext = cExtends.getServices().get(key);
-					if (ext != null) {
-						ret.add((T) ext);
-					}
-				}
-			} else if (entry.eContainmentFeature() == FlowPackage.Literals.RESOURCE__SERVICES) {
-				Resource container = (Resource) entry.eContainer();
-				for (Resource cExtends: container.getExtends()) {
-					Activity<?> ext = cExtends.getServices().get(key);
+			} else if (entry.eContainmentFeature() == FlowPackage.Literals.SERVICE_PROVIDER__SERVICES) {
+				ServiceProvider<?> container = (ServiceProvider<?>) entry.eContainer();
+				for (Object cExtends: container.getExtends()) {
+					Activity<?> ext = ((ServiceProvider<?>) cExtends).getServices().get(key);
 					if (ext != null) {
 						ret.add((T) ext);
 					}

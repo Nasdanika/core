@@ -31,6 +31,15 @@ public interface FlowFactory extends EFactory {
 	Package createPackage();
 
 	/**
+	 * Returns a new object of class '<em>Service Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Service Provider</em>'.
+	 * @generated
+	 */
+	<T extends PackageElement<T>> ServiceProvider<T> createServiceProvider();
+
+	/**
 	 * Returns a new object of class '<em>Participant</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
