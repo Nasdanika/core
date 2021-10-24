@@ -5,14 +5,8 @@ package org.nasdanika.flow.impl;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Service;
@@ -74,43 +68,15 @@ public class ServiceImpl extends FlowElementImpl<Service> implements Service {
 	@Override
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		if (feature == FlowPackage.Literals.SERVICE__TARGET) {
-			return computeTarget();
+			URI targetURI = URI.createURI(getTargetKey());
+			URI packageURI = getPackageRelativeURI("/");
+			if (packageURI != null) {
+				targetURI = targetURI.resolve(packageURI);
+			}
+			return resolve(FlowPackage.Literals.ACTIVITY, targetURI); 
 		}
 		return super.computeCachedFeature(feature);
 	}
-	
-	private Activity<?> computeTarget() {
-		String targetKey = getTargetKey();
-		if (Util.isBlank(targetKey)) {
-			return null;
-		}
-		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res == null) {
-			return null;
-		}
-		ResourceSet resourceSet = res.getResourceSet();
-		if (resourceSet == null) {
-			return null;
-		}
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI pkgURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/");
-				URI activityURI = URI.createURI(targetKey).resolve(pkgURI);
-				EObject target = resourceSet.getEObject(activityURI, false);
-				if (target == null) {
-					throw new ConfigurationException("Invalid activity reference: " + targetKey + " (" + activityURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-				}
-				
-				if (target instanceof Activity) {
-					return (Activity<?>) target;
-				}
-				
-				throw new ConfigurationException("Expected artifact at: " + targetKey + " (" + activityURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-			}
-		}
-		return null;
-	}
-	
 
 	/**
 	 * <!-- begin-user-doc -->

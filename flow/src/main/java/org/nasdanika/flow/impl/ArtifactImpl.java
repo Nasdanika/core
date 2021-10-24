@@ -10,16 +10,10 @@ import java.util.Set;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
@@ -94,41 +88,9 @@ public class ArtifactImpl extends PackageElementImpl<Artifact> implements Artifa
 	@Override
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		if (feature == FlowPackage.Literals.ARTIFACT__REPOSITORIES) {
-			return computeRepositories();
+			return resolveResources(getRepositoryKeys());
 		}
 		return super.computeCachedFeature(feature);
-	}
-
-	private EList<Resource> computeRepositories() {
-		EList<Resource> ret = ECollections.newBasicEList();
-		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res == null) {
-			throw new IllegalStateException("Not in a resource");
-		}
-		ResourceSet resourceSet = res.getResourceSet();
-		if (resourceSet == null) {
-			throw new IllegalStateException("Not in a resourceset");
-		}
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
-				for (String key: getRepositoryKeys()) {
-					URI rURI = URI.createURI(key).resolve(resourcesURI);
-					EObject target = resourceSet.getEObject(rURI, false);
-					if (target == null) {
-						throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-					}
-					
-					if (target instanceof Resource) {
-						ret.add((Resource) target);
-					} else {
-						throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-					}
-				}
-				break;
-			}
-		}
-		return ret;
 	}
 
 	/**

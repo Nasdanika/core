@@ -12,27 +12,18 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
-import org.nasdanika.flow.FlowFactory;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
-import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -158,49 +149,18 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		if (feature == FlowPackage.Literals.FLOW_ELEMENT__INPUT_ARTIFACTS) {
-			return computeInputArtifacts();
+			return resolveArtifacts(getInputArtifactKeys());
 		}
 		if (feature == FlowPackage.Literals.FLOW_ELEMENT__OUTPUT_ARTIFACTS) {
-			return computeOutputArtifacts();
+			return resolveArtifacts(getOutputArtifactKeys());
 		}
 		if (feature == FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS) {
-			return computeParticipants();
+			return resolveParticipants(getParticipantKeys());
 		}
 		if (feature == FlowPackage.Literals.FLOW_ELEMENT__RESOURCES) {
-			return computeResources();
+			return resolveResources(getResourceKeys());
 		}
 		return super.computeCachedFeature(feature);
-	}
-
-	private EList<Artifact> computeInputArtifacts() {
-		EList<Artifact> ret = ECollections.newBasicEList();
-		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res == null) {
-			throw new IllegalStateException("Not in a resource");
-		}
-		ResourceSet resourceSet = res.getResourceSet();
-		if (resourceSet == null) {
-			throw new IllegalStateException("Not in a resourceset");
-		}
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");
-				for (String key: getInputArtifactKeys()) {
-					URI aURI = URI.createURI(key).resolve(artifactsURI);
-					EObject target = resourceSet.getEObject(aURI, false);
-					if (target instanceof Artifact) {
-						ret.add((Artifact) target);
-					} else {
-						Artifact proxy = FlowFactory.eINSTANCE.createArtifact();
-						proxy.setName("Artifact proxy for " + aURI);
-						((InternalEObject) proxy).eSetProxyURI(aURI);
-						ret.add(proxy);
-					}
-				}
-				break;
-			}
-		}
-		return ret;
 	}
 
 	/**
@@ -212,42 +172,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	public EList<Artifact> getOutputArtifacts() {
 		return (EList<Artifact>) getCachedFeature(FlowPackage.Literals.FLOW_ELEMENT__OUTPUT_ARTIFACTS);
-	}
-
-	private EList<Artifact> computeOutputArtifacts() {		
-		EList<Artifact> ret = ECollections.newBasicEList();
-		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res == null) {
-			throw new IllegalStateException("Not in a resource");
-		}
-		ResourceSet resourceSet = res.getResourceSet();
-		if (resourceSet == null) {
-			throw new IllegalStateException("Not in a resourceset");
-		}
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI artifactsURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/artifacts/");				
-				for (String key: getOutputArtifactKeys()) {
-					URI aURI = URI.createURI(key).resolve(artifactsURI);
-					Artifact proxy = FlowFactory.eINSTANCE.createArtifact();
-					proxy.setName("Artifact proxy for " + aURI);
-					((InternalEObject) proxy).eSetProxyURI(aURI);
-					ret.add((Artifact) EcoreUtil.resolve(proxy, this));
-//					EObject target = resourceSet.getEObject(aURI, false);
-//					if (target == null) {
-//						throw new ConfigurationException("Invalid artifact reference: " + key + " (" + aURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-//					}
-//					
-//					if (target instanceof Artifact) {
-//						ret.add((Artifact) target);
-//					} else {
-//						throw new ConfigurationException("Expected artifact at: " + key + " (" + aURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-//					}
-				}
-				break;
-			}
-		}
-		return ret;
 	}
 
 	/**
@@ -272,34 +196,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 		return (EList<Participant>) getCachedFeature(FlowPackage.Literals.FLOW_ELEMENT__PARTICIPANTS);
 	}
 
-	private EList<Participant> computeParticipants() {
-		EList<Participant> ret = ECollections.newBasicEList();
-		URI participantsURI = getPackageRelativeURI("/participants/");
-		getParticipantKeys().stream()
-			.map(URI::createURI)
-			.map(pURI -> participantsURI == null ? pURI : pURI.resolve(participantsURI))
-			.map(this::resolveParticipant)
-			.forEach(ret::add);
-		return ret;		
-	}
-	
-	protected Participant resolveParticipant(URI uri) {
-		return (Participant) resolve(FlowPackage.Literals.PARTICIPANT, uri); 
-	}
-	
-	/**
-	 * @param path
-	 * @return URI relative to the containing flow Package or null if there is no containing package.
-	 */
-	protected URI getPackageRelativeURI(String path) {
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				return URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + path);
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -320,38 +216,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	public EList<Resource> getResources() {
 		return (EList<Resource>) getCachedFeature(FlowPackage.Literals.FLOW_ELEMENT__RESOURCES);
-	}
-
-	private EList<Resource> computeResources() {
-		EList<Resource> ret = ECollections.newBasicEList();
-		org.eclipse.emf.ecore.resource.Resource res = eResource();
-		if (res == null) {
-			throw new IllegalStateException("Not in a resource");
-		}
-		ResourceSet resourceSet = res.getResourceSet();
-		if (resourceSet == null) {
-			throw new IllegalStateException("Not in a resourceset");
-		}
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI resourcesURI = URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + "/resources/");
-				for (String key: getResourceKeys()) {
-					URI rURI = URI.createURI(key).resolve(resourcesURI);
-					EObject target = resourceSet.getEObject(rURI, false);
-					if (target == null) {
-						throw new ConfigurationException("Invalid resource reference: " + key + " (" + rURI + ")", EObjectAdaptable.adaptTo(this, Marked.class));
-					}
-					
-					if (target instanceof Resource) {
-						ret.add((Resource) target);
-					} else {
-						throw new ConfigurationException("Expected resource at: " + key + " (" + rURI + "), got " + target, EObjectAdaptable.adaptTo(this, Marked.class));
-					}
-				}
-				break;
-			}
-		}
-		return ret;
 	}
 
 	/**

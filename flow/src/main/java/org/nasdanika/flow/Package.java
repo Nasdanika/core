@@ -3,7 +3,6 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.common.util.EMap;
 
 /**

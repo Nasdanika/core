@@ -3,13 +3,11 @@
 package org.nasdanika.flow.util;
 
 import java.util.Map;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
-
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
@@ -34,7 +32,6 @@ import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
-
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;

@@ -4,8 +4,8 @@ package org.nasdanika.flow.impl;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -19,8 +19,8 @@ import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
-import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Package;
+import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.ncore.util.NamedElementComparator;
 

@@ -5,9 +5,13 @@ package org.nasdanika.flow.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -18,8 +22,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.persistence.FeatureCache;
+import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.PackageElement;
+import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.Resource;
 import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
@@ -364,5 +372,67 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		throw new UnsupportedOperationException("Computation of feature " + feature + " is not implemented");
 	}	
+	
+	// Helper methods to create and resolve package element proxies
+	
+	/**
+	 * @param path
+	 * @return URI relative to the containing flow Package or null if there is no containing package.
+	 */
+	protected URI getPackageRelativeURI(String path) {
+		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (ancestor instanceof org.nasdanika.flow.Package) {
+				return URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + path);
+			}
+		}
+		return null;
+	}
+	
+	protected Artifact resolveArtifact(URI uri) {
+		return (Artifact) resolve(FlowPackage.Literals.ARTIFACT, uri); 
+	}
+	
+	protected <E> EList<E> resolvePackageElements(Collection<String> keys, String referencePath, Function<URI,E> elementResolver) {
+		URI referenceURI = getPackageRelativeURI(referencePath);
+		return keys.stream()
+			.map(URI::createURI)
+			.map(eUri -> referenceURI == null ? eUri : eUri.resolve(referenceURI))
+			.map(elementResolver)
+			.collect(Collectors.toCollection(ECollections::newBasicEList));
+	}
+	
+	protected EList<Artifact> resolveArtifacts(Collection<String> artifactKeys) {
+		return resolvePackageElements(artifactKeys, "/artifacts/", this::resolveArtifact);
+	}
+	
+	protected Participant resolveParticipant(URI uri) {
+		return (Participant) resolve(FlowPackage.Literals.PARTICIPANT, uri); 
+	}
+	
+	protected EList<Participant> resolveParticipants(Collection<String> participantKeys) {
+		return resolvePackageElements(participantKeys, "/participants/", this::resolveParticipant);
+	}
+	
+	protected Resource resolveResource(URI uri) {
+		return (Resource) resolve(FlowPackage.Literals.RESOURCE, uri); 
+	}
+
+	protected EList<Resource> resolveResources(Collection<String> resourceKeys) {
+		return resolvePackageElements(resourceKeys, "/resources/", this::resolveResource);
+	}
+	
+	protected FlowElement<?> resolveFlowElement(URI uri) {
+		return (FlowElement<?>) resolve(FlowPackage.Literals.FLOW_ELEMENT, uri); 
+	}
+
+	/**
+	 * Resolves flow elements relative to the containing package. 
+	 * Flow elements can be under activities or service providers - resources or participants.
+	 * @param resourceKeys
+	 * @return
+	 */
+	protected EList<FlowElement<?>> resolveFlowElements(Collection<String> elementKeys) {
+		return resolvePackageElements(elementKeys, "/", this::resolveFlowElement);
+	}
 
 } //PackageElementImpl
