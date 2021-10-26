@@ -38,21 +38,21 @@
         <eGenericType eTypeParameter="#//PackageElement/T"/>
       </eParameters>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="prototype">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prototype" transient="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="This reference is set by ``create()`` method and points to a package element which created and configured this element."/>
       </eAnnotations>
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
-        changeable="false" derived="true" eOpposite="#//PackageElement/extends">
+        changeable="false" transient="true" derived="true" eOpposite="#//PackageElement/extends">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Derived reference - known elements extending this element.&#xA;Known means elements in the same resource set."/>
       </eAnnotations>
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
-        changeable="false" derived="true" eOpposite="#//PackageElement/extensions">
+        changeable="false" transient="true" derived="true" eOpposite="#//PackageElement/extensions">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Elements can  extend other elements and inherit their configuration - set attributes and references. &#xA;For top-level packages inheritance shall be explicitly set using ``superPackages`` reference.&#xA;For nested packages and other package elements ``extends`` is derived from containing packages.&#xA;For nested packages super-packages derived from containment precede explicitly specified super-packages, &#xA;i.e. the explicitly specified super-packages (mix-ins) can override configuration inherited via containment.&#xA;"/>
       </eAnnotations>
@@ -181,7 +181,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="specializations" upperBound="-1"
-        eType="#//Participant" changeable="false" derived="true" eOpposite="#//Participant/bases"/>
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/bases"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -192,7 +193,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="bases" upperBound="-1"
-        eType="#//Participant" changeable="false" derived="true" eOpposite="#//Participant/specializations"/>
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/specializations"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/responsible">
       <eGenericType eClassifier="#//ParticipantResponsibility">
@@ -414,6 +416,7 @@
       <eAnnotations source="urn:org.nasdanika">
         <details key="homogenous" value="true"/>
         <details key="strict-containment" value="true"/>
+        <details key="load-key" value="relationships"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inboundRelationships" upperBound="-1"

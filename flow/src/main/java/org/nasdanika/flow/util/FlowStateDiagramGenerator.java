@@ -174,7 +174,13 @@ public class FlowStateDiagramGenerator {
 			ret.setBorder("grey");
 		}
 		
-		ret.setColor(contextElement == null || flowElement == contextElement ? "FEFECE" : "DDDDDD");
+		if (contextElement == null || flowElement == contextElement) {
+			if (Util.isBlank(ret.getColor())) {
+				ret.setColor("FEFECE"); 				
+			}
+		} else {
+			ret.setColor("DDDDDD");
+		}
 		
 		return ret;
 	}

@@ -194,7 +194,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * @return the value of the '<em>Outbound Relationships</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_OutboundRelationships()
 	 * @model mapType="org.nasdanika.flow.RelationshipEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Relationship&gt;"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true' load-key='relationships'"
 	 * @generated
 	 */
 	EMap<String, Relationship> getOutboundRelationships();

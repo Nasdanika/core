@@ -105,7 +105,13 @@ public class ArtifactComponentDiagramGenerator {
 			}
 		}
 		
-		ret.setColor(contextElement == null || semanticElement == contextElement ? "FEFECE" : "DDDDDD");
+		if (contextElement == null || semanticElement == contextElement) {
+			if (Util.isBlank(ret.getColor())) {
+				ret.setColor("FEFECE"); 				
+			}
+		} else {
+			ret.setColor("DDDDDD");
+		}
 		
 		return ret;
 	}

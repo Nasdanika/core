@@ -90,7 +90,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * @return the value of the '<em>Specializations</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Specializations()
 	 * @see org.nasdanika.flow.Participant#getBases
-	 * @model opposite="bases" changeable="false" derived="true"
+	 * @model opposite="bases" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Participant> getSpecializations();
@@ -119,7 +119,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * @return the value of the '<em>Bases</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Bases()
 	 * @see org.nasdanika.flow.Participant#getSpecializations
-	 * @model opposite="specializations" changeable="false" derived="true"
+	 * @model opposite="specializations" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Participant> getBases();

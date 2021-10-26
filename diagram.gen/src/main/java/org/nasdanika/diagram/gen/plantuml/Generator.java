@@ -50,7 +50,7 @@ public class Generator {
 		for (Connection c: connections) {
 			ret.append(generate(c));
 		}
-		
+
 		return ret.toString();
 	}
 	
@@ -144,30 +144,34 @@ public class Generator {
 			ret.append(" <<").append(stereotype).append(">>");
 		}
 		
+		StringBuilder styleBuilder = new StringBuilder();
 		String color = diagramElement.getColor();
 		if (!Util.isBlank(color)) {
-			ret.append(" #").append(color);
+			styleBuilder.append(" #").append(color);
 			String gradient = diagramElement.getGradient();
 			if (!Util.isBlank(gradient)) {
-				ret.append("|").append(gradient);
+				styleBuilder.append("|").append(gradient);
 			}
 		}
 		
-		StringBuilder borderStyleBuilder = new StringBuilder();
-		if (diagramElement.isDashed()) {
-			borderStyleBuilder.append("[dashed]");
-		} else if (diagramElement.isDotted()) {
-			borderStyleBuilder.append("[dotted]");
-		} else if (diagramElement.isBold()) {
-			borderStyleBuilder.append("[bold]");
-		}
 		String borderColor = diagramElement.getBorder();
 		if (!Util.isBlank(borderColor)) {
-			borderStyleBuilder.append(borderColor);
+			styleBuilder.append(styleBuilder.length() == 0 ? " #" : ";");
+			styleBuilder.append("line:").append(borderColor);
 		}
-		if (borderStyleBuilder.length() > 0) {
-			ret.append(" ##").append(borderStyleBuilder.toString());
+				
+		if (diagramElement.isDashed()) {
+			styleBuilder.append(styleBuilder.length() == 0 ? " #" : ";");
+			styleBuilder.append("line.dashed");
+		} else if (diagramElement.isDotted()) {
+			styleBuilder.append(styleBuilder.length() == 0 ? " #" : ";");
+			styleBuilder.append("line.dotted");
+		} else if (diagramElement.isBold()) {
+			styleBuilder.append(styleBuilder.length() == 0 ? " #" : ";");
+			styleBuilder.append("line.bold");
 		}
+		
+		ret.append(styleBuilder);
 		
 		// TODO - styling like background
 		
