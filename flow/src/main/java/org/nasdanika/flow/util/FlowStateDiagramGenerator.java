@@ -102,6 +102,12 @@ public class FlowStateDiagramGenerator {
 					accumulator.add(target);
 				}
 			}
+			
+//			if (flowElement instanceof Flow && ((Flow) flowElement).isPartition()) {
+//				for (FlowElement<?> subElement: ((Flow) flowElement).getElements().values()) {
+//					collectRelatedElements(subElement, accumulator);
+//				}
+//			}
 		}
 	}
 	

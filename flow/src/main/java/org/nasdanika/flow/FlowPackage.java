@@ -9064,7 +9064,7 @@ public interface FlowPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueType="org.nasdanika.flow.Relationship" valueContainment="true"
-	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
 	 * @generated
 	 */
 	EClass getRelationshipEntry();
@@ -9462,7 +9462,7 @@ public interface FlowPackage extends EPackage {
 	 * @see java.util.Map.Entry
 	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
 	 *        valueType="org.nasdanika.flow.Transition" valueContainment="true"
-	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
 	 * @generated
 	 */
 	EClass getTransitionEntry();

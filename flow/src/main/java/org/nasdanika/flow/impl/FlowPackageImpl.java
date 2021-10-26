@@ -2417,7 +2417,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRelationship_TargetKey(),
 		   source,
 		   new String[] {
-			   "load-key", "target"
+			   "load-key", "target",
+			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getRelationship_Style(),
@@ -2429,7 +2430,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRelationshipEntry_Value(),
 		   source,
 		   new String[] {
-			   "homogenous", "true"
+			   "homogenous", "true",
+			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (flowElementEClass,
@@ -2497,13 +2499,15 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getTransition_TargetKey(),
 		   source,
 		   new String[] {
-			   "load-key", "target"
+			   "load-key", "target",
+			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getTransitionEntry_Value(),
 		   source,
 		   new String[] {
-			   "homogenous", "true"
+			   "homogenous", "true",
+			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (callEClass,

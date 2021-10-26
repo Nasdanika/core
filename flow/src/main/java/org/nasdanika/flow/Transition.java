@@ -67,7 +67,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * @see #setTargetKey(String)
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_TargetKey()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika load-key='target'"
+	 *        annotation="urn:org.nasdanika load-key='target' default-feature='true'"
 	 * @generated
 	 */
 	String getTargetKey();

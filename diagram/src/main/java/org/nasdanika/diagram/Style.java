@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.EObject;
 public interface Style extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
-	 * The default value is <code>"-${style}->"</code>.
+	 * The default value is <code>""</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -40,7 +40,7 @@ public interface Style extends EObject {
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
 	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Type()
-	 * @model default="-${style}-&gt;"
+	 * @model default=""
 	 * @generated
 	 */
 	String getType();

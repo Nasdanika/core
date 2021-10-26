@@ -496,6 +496,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
         <details key="load-key" value="target"/>
+        <details key="default-feature" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Key of relationship target relative to the containing artifact."/>
@@ -533,6 +534,7 @@
         containment="true">
       <eAnnotations source="urn:org.nasdanika">
         <details key="homogenous" value="true"/>
+        <details key="strict-containment" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Outbound relationshipt. Use ``null`` to suppress inherited relationship."/>
@@ -695,6 +697,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
         <details key="load-key" value="target"/>
+        <details key="default-feature" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Key of transition target relative to the containing flow ``elements/`` reference."/>
@@ -726,6 +729,7 @@
         containment="true">
       <eAnnotations source="urn:org.nasdanika">
         <details key="homogenous" value="true"/>
+        <details key="strict-containment" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Output transition. Use ``null`` to suppress inherited relationship."/>

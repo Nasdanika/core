@@ -48,7 +48,7 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String TYPE_EDEFAULT = "-${style}->";
+	protected static final String TYPE_EDEFAULT = "";
 
 	/**
 	 * The default value of the '{@link #getColor() <em>Color</em>}' attribute.

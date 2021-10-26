@@ -35,10 +35,11 @@ public class ConnectionImpl extends StyleImpl implements Connection {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	protected ConnectionImpl() {
 		super();
+		setType("-${style}->");
 	}
 
 	/**

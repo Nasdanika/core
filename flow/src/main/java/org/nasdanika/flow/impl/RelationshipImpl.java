@@ -2,7 +2,11 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -283,8 +287,25 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		Connection style = getStyle();
 		if (style != null) {
 			instance.setStyle(EcoreUtil.copy(style));
+		}		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Relationship> getExtends() {
+		EList<Relationship> ret = ECollections.newBasicEList();
+		if (eContainmentFeature() == FlowPackage.Literals.RELATIONSHIP_ENTRY__VALUE) {
+			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
+			Artifact container = (Artifact) eContainer().eContainer();
+			for (Artifact cExtends: container.getExtends()) {
+				Relationship ext = cExtends.getOutboundRelationships().get(key);
+				if (ext != null) {
+					ret.add(ext);
+				}
+			}
 		}
 		
-	}
+		return ret;
+	}	
 
 } //RelationshipImpl
