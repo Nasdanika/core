@@ -16,6 +16,13 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.nasdanika.flow.Participant#getParticipates <em>Participates</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getSpecializations <em>Specializations</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getBaseKeys <em>Base Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getBases <em>Bases</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getResponsible <em>Responsible</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getAccountable <em>Accountable</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getConsulted <em>Consulted</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getInformed <em>Informed</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
@@ -73,5 +80,104 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * @generated
 	 */
 	EList<Artifact> getArtifacts();
+
+	/**
+	 * Returns the value of the '<em><b>Specializations</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getBases <em>Bases</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Specializations</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Specializations()
+	 * @see org.nasdanika.flow.Participant#getBases
+	 * @model opposite="bases" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Participant> getSpecializations();
+
+	/**
+	 * Returns the value of the '<em><b>Base Keys</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keys of base participants, which this participant is a specialization of, relative to the containing package ``participants/`` reference.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Base Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_BaseKeys()
+	 * @model annotation="urn:org.nasdanika load-key='bases'"
+	 * @generated
+	 */
+	EList<String> getBaseKeys();
+
+	/**
+	 * Returns the value of the '<em><b>Bases</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getSpecializations <em>Specializations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Bases</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Bases()
+	 * @see org.nasdanika.flow.Participant#getSpecializations
+	 * @model opposite="specializations" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Participant> getBases();
+
+	/**
+	 * Returns the value of the '<em><b>Responsible</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.ParticipantResponsibility}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getResponsible <em>Responsible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Responsible</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Responsible()
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getResponsible
+	 * @model opposite="responsible" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<ParticipantResponsibility<?>> getResponsible();
+
+	/**
+	 * Returns the value of the '<em><b>Accountable</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.ParticipantResponsibility}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getAccountable <em>Accountable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Accountable</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Accountable()
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getAccountable
+	 * @model opposite="accountable" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<ParticipantResponsibility<?>> getAccountable();
+
+	/**
+	 * Returns the value of the '<em><b>Consulted</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.ParticipantResponsibility}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getConsulted <em>Consulted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Consulted</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Consulted()
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getConsulted
+	 * @model opposite="consulted" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<ParticipantResponsibility<?>> getConsulted();
+
+	/**
+	 * Returns the value of the '<em><b>Informed</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.ParticipantResponsibility}<code>&lt;?&gt;</code>.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getInformed <em>Informed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Informed</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Informed()
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getInformed
+	 * @model opposite="informed" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<ParticipantResponsibility<?>> getInformed();
 
 } // Participant

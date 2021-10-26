@@ -59,6 +59,7 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 		switch (eClass.getClassifierID()) {
 			case DiagramPackage.LINK: return createLink();
 			case DiagramPackage.NOTE: return createNote();
+			case DiagramPackage.STYLE: return createStyle();
 			case DiagramPackage.DIAGRAM_ELEMENT: return createDiagramElement();
 			case DiagramPackage.DIAGRAM: return createDiagram();
 			case DiagramPackage.CONNECTION: return createConnection();
@@ -119,6 +120,17 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public Note createNote() {
 		NoteImpl note = new NoteImpl();
 		return note;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Style createStyle() {
+		StyleImpl style = new StyleImpl();
+		return style;
 	}
 
 	/**

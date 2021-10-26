@@ -740,13 +740,76 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__ARTIFACTS = SERVICE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Specializations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__SPECIALIZATIONS = SERVICE_PROVIDER_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Base Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__BASE_KEYS = SERVICE_PROVIDER_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Bases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__BASES = SERVICE_PROVIDER_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__RESPONSIBLE = SERVICE_PROVIDER_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__ACCOUNTABLE = SERVICE_PROVIDER_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__CONSULTED = SERVICE_PROVIDER_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__INFORMED = SERVICE_PROVIDER_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 3;
+	int PARTICIPANT_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1058,14 +1121,14 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactImpl <em>Artifact</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.ParticipantResponsibilityImpl <em>Participant Responsibility</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.flow.impl.ArtifactImpl
-	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifact()
+	 * @see org.nasdanika.flow.impl.ParticipantResponsibilityImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantResponsibility()
 	 * @generated
 	 */
-	int ARTIFACT = 8;
+	int PARTICIPANT_RESPONSIBILITY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1074,7 +1137,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__MARKER = PACKAGE_ELEMENT__MARKER;
+	int PARTICIPANT_RESPONSIBILITY__MARKER = PACKAGE_ELEMENT__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1083,7 +1146,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__URI = PACKAGE_ELEMENT__URI;
+	int PARTICIPANT_RESPONSIBILITY__URI = PACKAGE_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1092,7 +1155,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+	int PARTICIPANT_RESPONSIBILITY__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1101,7 +1164,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__UUID = PACKAGE_ELEMENT__UUID;
+	int PARTICIPANT_RESPONSIBILITY__UUID = PACKAGE_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1110,7 +1173,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__NAME = PACKAGE_ELEMENT__NAME;
+	int PARTICIPANT_RESPONSIBILITY__NAME = PACKAGE_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Prototype</b></em>' reference.
@@ -1119,7 +1182,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+	int PARTICIPANT_RESPONSIBILITY__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1128,7 +1191,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+	int PARTICIPANT_RESPONSIBILITY__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -1137,7 +1200,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+	int PARTICIPANT_RESPONSIBILITY__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
 
 	/**
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
@@ -1146,7 +1209,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+	int PARTICIPANT_RESPONSIBILITY__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -1155,79 +1218,88 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+	int PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__REPOSITORIES = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+	int PARTICIPANT_RESPONSIBILITY__RESPONSIBLE = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Repository Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__REPOSITORY_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Input For</b></em>' reference list.
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__INPUT_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Output For</b></em>' reference list.
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__OUTPUT_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Payload For</b></em>' reference list.
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__PAYLOAD_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int PARTICIPANT_RESPONSIBILITY__CONSULTED = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Response For</b></em>' reference list.
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__RESPONSE_FOR = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
+	int PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Used By</b></em>' reference list.
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__USED_BY = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+	int PARTICIPANT_RESPONSIBILITY__INFORMED = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The number of structural features of the '<em>Artifact</em>' class.
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
+	int PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
+
+	/**
+	 * The number of structural features of the '<em>Participant Responsibility</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1236,7 +1308,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT___CREATE = PACKAGE_ELEMENT___CREATE;
+	int PARTICIPANT_RESPONSIBILITY___CREATE = PACKAGE_ELEMENT___CREATE;
 
 	/**
 	 * The operation id for the '<em>Apply</em>' operation.
@@ -1245,7 +1317,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+	int PARTICIPANT_RESPONSIBILITY___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Resolve</em>' operation.
@@ -1254,7 +1326,350 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+	int PARTICIPANT_RESPONSIBILITY___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Participant Responsibility</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactImpl <em>Artifact</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.ArtifactImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifact()
+	 * @generated
+	 */
+	int ARTIFACT = 9;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__URI = PARTICIPANT_RESPONSIBILITY__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__DESCRIPTION = PARTICIPANT_RESPONSIBILITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__UUID = PARTICIPANT_RESPONSIBILITY__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__NAME = PARTICIPANT_RESPONSIBILITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__PROTOTYPE = PARTICIPANT_RESPONSIBILITY__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__EXTENSIONS = PARTICIPANT_RESPONSIBILITY__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__EXTENDS = PARTICIPANT_RESPONSIBILITY__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__MODIFIERS = PARTICIPANT_RESPONSIBILITY__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__RESPONSIBLE = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__RESPONSIBLE_KEYS = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__ACCOUNTABLE = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__ACCOUNTABLE_KEYS = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__CONSULTED = PARTICIPANT_RESPONSIBILITY__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__CONSULTED_KEYS = PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INFORMED = PARTICIPANT_RESPONSIBILITY__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INFORMED_KEYS = PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Services</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__SERVICES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Repositories</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__REPOSITORIES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Repository Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__REPOSITORY_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Input For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INPUT_FOR = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Output For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__OUTPUT_FOR = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Payload For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__PAYLOAD_FOR = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Response For</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__RESPONSE_FOR = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Used By</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__USED_BY = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Responsibilities</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__RESPONSIBILITIES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Children</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__CHILDREN = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Outbound Relationships</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__OUTBOUND_RELATIONSHIPS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Inbound Relationships</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INBOUND_RELATIONSHIPS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Partition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__PARTITION = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 12;
+
+	/**
+	 * The feature id for the '<em><b>Style</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__STYLE = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
+
+	/**
+	 * The number of structural features of the '<em>Artifact</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___CREATE = PARTICIPANT_RESPONSIBILITY___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___APPLY__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT___RESOLVE__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Artifact</em>' class.
@@ -1263,7 +1678,37 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+	int ARTIFACT_OPERATION_COUNT = PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactParticipantResponsibilityImpl <em>Artifact Participant Responsibility</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.ArtifactParticipantResponsibilityImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactParticipantResponsibility()
+	 * @generated
+	 */
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY = 11;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.RelationshipImpl <em>Relationship</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.RelationshipImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationship()
+	 * @generated
+	 */
+	int RELATIONSHIP = 12;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.RelationshipEntryImpl <em>Relationship Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.RelationshipEntryImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationshipEntry()
+	 * @generated
+	 */
+	int RELATIONSHIP_ENTRY = 13;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
@@ -1273,7 +1718,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactEntry()
 	 * @generated
 	 */
-	int ARTIFACT_ENTRY = 9;
+	int ARTIFACT_ENTRY = 10;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1312,23 +1757,13 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.flow.impl.FlowElementImpl <em>Element</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.flow.impl.FlowElementImpl
-	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElement()
-	 * @generated
-	 */
-	int FLOW_ELEMENT = 10;
-
-	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__MARKER = PACKAGE_ELEMENT__MARKER;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1337,7 +1772,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__URI = PACKAGE_ELEMENT__URI;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__URI = PARTICIPANT_RESPONSIBILITY__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1346,7 +1781,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__DESCRIPTION = PARTICIPANT_RESPONSIBILITY__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1355,7 +1790,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__UUID = PACKAGE_ELEMENT__UUID;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__UUID = PARTICIPANT_RESPONSIBILITY__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1364,7 +1799,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__NAME = PACKAGE_ELEMENT__NAME;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__NAME = PARTICIPANT_RESPONSIBILITY__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Prototype</b></em>' reference.
@@ -1373,7 +1808,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__PROTOTYPE = PARTICIPANT_RESPONSIBILITY__PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1382,7 +1817,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__EXTENSIONS = PARTICIPANT_RESPONSIBILITY__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Extends</b></em>' reference list.
@@ -1391,7 +1826,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__EXTENDS = PARTICIPANT_RESPONSIBILITY__EXTENDS;
 
 	/**
 	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
@@ -1400,7 +1835,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__MODIFIERS = PARTICIPANT_RESPONSIBILITY__MODIFIERS;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -1409,124 +1844,115 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Outputs</b></em>' map.
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUTS = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__RESPONSIBLE = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE;
 
 	/**
-	 * The feature id for the '<em><b>Inputs</b></em>' reference list.
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUTS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS;
 
 	/**
-	 * The feature id for the '<em><b>Calls</b></em>' map.
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__CALLS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE;
 
 	/**
-	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INVOCATIONS = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__CONSULTED = PARTICIPANT_RESPONSIBILITY__CONSULTED;
 
 	/**
-	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS = PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS;
 
 	/**
-	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUT_ARTIFACTS = PACKAGE_ELEMENT_FEATURE_COUNT + 6;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__INFORMED = PARTICIPANT_RESPONSIBILITY__INFORMED;
 
 	/**
-	 * The feature id for the '<em><b>Output Artifact Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 7;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS = PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS;
 
 	/**
-	 * The feature id for the '<em><b>Participants</b></em>' reference list.
+	 * The feature id for the '<em><b>Artifact Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PARTICIPANTS = PACKAGE_ELEMENT_FEATURE_COUNT + 8;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__ARTIFACT_KEY = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
+	 * The feature id for the '<em><b>Artifact</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__PARTICIPANT_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 9;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__ARTIFACT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCES = PACKAGE_ELEMENT_FEATURE_COUNT + 10;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__SUPPRESS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
+	 * The number of structural features of the '<em>Artifact Participant Responsibility</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__RESOURCE_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 11;
-
-	/**
-	 * The number of structural features of the '<em>Element</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLOW_ELEMENT_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 12;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1535,7 +1961,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___CREATE = PACKAGE_ELEMENT___CREATE;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY___CREATE = PARTICIPANT_RESPONSIBILITY___CREATE;
 
 	/**
 	 * The operation id for the '<em>Apply</em>' operation.
@@ -1544,7 +1970,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY___APPLY__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___APPLY__PACKAGEELEMENT;
 
 	/**
 	 * The operation id for the '<em>Resolve</em>' operation.
@@ -1553,7 +1979,539 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY___RESOLVE__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Artifact Participant Responsibility</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT = PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__MARKER = PACKAGE_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__URI = PACKAGE_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__DESCRIPTION = PACKAGE_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__UUID = PACKAGE_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__NAME = PACKAGE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__PROTOTYPE = PACKAGE_ELEMENT__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__EXTENSIONS = PACKAGE_ELEMENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__EXTENDS = PACKAGE_ELEMENT__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__MODIFIERS = PACKAGE_ELEMENT__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__TARGET_KEY = PACKAGE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Target</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Style</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__STYLE = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Relationship</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP___CREATE = PACKAGE_ELEMENT___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP___APPLY__PACKAGEELEMENT = PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP___RESOLVE__PACKAGEELEMENT = PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT;
+
+	/**
+	 * The number of operations of the '<em>Relationship</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Relationship Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Relationship Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP_ENTRY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.FlowElementImpl <em>Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.FlowElementImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElement()
+	 * @generated
+	 */
+	int FLOW_ELEMENT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__URI = PARTICIPANT_RESPONSIBILITY__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__DESCRIPTION = PARTICIPANT_RESPONSIBILITY__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__UUID = PARTICIPANT_RESPONSIBILITY__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__NAME = PARTICIPANT_RESPONSIBILITY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__PROTOTYPE = PARTICIPANT_RESPONSIBILITY__PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__EXTENSIONS = PARTICIPANT_RESPONSIBILITY__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Extends</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__EXTENDS = PARTICIPANT_RESPONSIBILITY__EXTENDS;
+
+	/**
+	 * The feature id for the '<em><b>Modifiers</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__MODIFIERS = PARTICIPANT_RESPONSIBILITY__MODIFIERS;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__RESPONSIBLE = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__RESPONSIBLE_KEYS = PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__ACCOUNTABLE = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__ACCOUNTABLE_KEYS = PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__CONSULTED = PARTICIPANT_RESPONSIBILITY__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__CONSULTED_KEYS = PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INFORMED = PARTICIPANT_RESPONSIBILITY__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INFORMED_KEYS = PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Outputs</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__OUTPUTS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Inputs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INPUTS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Calls</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__CALLS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Invocations</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INVOCATIONS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INPUT_ARTIFACTS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Input Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__INPUT_ARTIFACT_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Output Artifacts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__OUTPUT_ARTIFACTS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Output Artifact Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__OUTPUT_ARTIFACT_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Participants</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__PARTICIPANTS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Participant Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__PARTICIPANT_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 9;
+
+	/**
+	 * The feature id for the '<em><b>Resources</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__RESOURCES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 10;
+
+	/**
+	 * The feature id for the '<em><b>Resource Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__RESOURCE_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 11;
+
+	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 12;
+
+	/**
+	 * The number of structural features of the '<em>Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
+
+	/**
+	 * The operation id for the '<em>Create</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___CREATE = PARTICIPANT_RESPONSIBILITY___CREATE;
+
+	/**
+	 * The operation id for the '<em>Apply</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___APPLY__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___APPLY__PACKAGEELEMENT;
+
+	/**
+	 * The operation id for the '<em>Resolve</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT___RESOLVE__PACKAGEELEMENT = PARTICIPANT_RESPONSIBILITY___RESOLVE__PACKAGEELEMENT;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -1562,7 +2520,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_OPERATION_COUNT = PACKAGE_ELEMENT_OPERATION_COUNT + 0;
+	int FLOW_ELEMENT_OPERATION_COUNT = PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.
@@ -1572,7 +2530,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElementEntry()
 	 * @generated
 	 */
-	int FLOW_ELEMENT_ENTRY = 11;
+	int FLOW_ELEMENT_ENTRY = 15;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1618,7 +2576,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 16;
+	int ACTIVITY = 20;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityEntryImpl <em>Activity Entry</em>}' class.
@@ -1628,7 +2586,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivityEntry()
 	 * @generated
 	 */
-	int ACTIVITY_ENTRY = 17;
+	int ACTIVITY_ENTRY = 21;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ServiceImpl <em>Service</em>}' class.
@@ -1638,7 +2596,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 18;
+	int SERVICE = 22;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionImpl <em>Transition</em>}' class.
@@ -1648,7 +2606,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransition()
 	 * @generated
 	 */
-	int TRANSITION = 12;
+	int TRANSITION = 16;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1759,22 +2717,13 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__PAYLOAD_KEYS = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSITION__SUPPRESS = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__TARGET_KEY = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int TRANSITION__TARGET_KEY = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -1783,7 +2732,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
+	int TRANSITION__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Transition</em>' class.
@@ -1792,7 +2741,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 5;
+	int TRANSITION_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1838,7 +2787,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransitionEntry()
 	 * @generated
 	 */
-	int TRANSITION_ENTRY = 13;
+	int TRANSITION_ENTRY = 17;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1884,7 +2833,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 14;
+	int CALL = 18;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1995,15 +2944,6 @@ public interface FlowPackage extends EPackage {
 	int CALL__PAYLOAD_KEYS = TRANSITION__PAYLOAD_KEYS;
 
 	/**
-	 * The feature id for the '<em><b>Suppress</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CALL__SUPPRESS = TRANSITION__SUPPRESS;
-
-	/**
 	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2092,7 +3032,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCallEntry()
 	 * @generated
 	 */
-	int CALL_ENTRY = 15;
+	int CALL_ENTRY = 19;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -2221,6 +3161,78 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__RESPONSIBLE = FLOW_ELEMENT__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__RESPONSIBLE_KEYS = FLOW_ELEMENT__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__ACCOUNTABLE = FLOW_ELEMENT__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__ACCOUNTABLE_KEYS = FLOW_ELEMENT__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__CONSULTED = FLOW_ELEMENT__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__CONSULTED_KEYS = FLOW_ELEMENT__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INFORMED = FLOW_ELEMENT__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__INFORMED_KEYS = FLOW_ELEMENT__INFORMED_KEYS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2327,6 +3339,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
@@ -2509,6 +3530,78 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__RESPONSIBLE = FLOW_ELEMENT__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__RESPONSIBLE_KEYS = FLOW_ELEMENT__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__ACCOUNTABLE = FLOW_ELEMENT__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__ACCOUNTABLE_KEYS = FLOW_ELEMENT__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__CONSULTED = FLOW_ELEMENT__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__CONSULTED_KEYS = FLOW_ELEMENT__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__INFORMED = FLOW_ELEMENT__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__INFORMED_KEYS = FLOW_ELEMENT__INFORMED_KEYS;
+
+	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2617,6 +3710,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2687,7 +3789,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlow()
 	 * @generated
 	 */
-	int FLOW = 19;
+	int FLOW = 23;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2778,6 +3880,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__DOCUMENTATION = ACTIVITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__RESPONSIBLE = ACTIVITY__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__RESPONSIBLE_KEYS = ACTIVITY__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__ACCOUNTABLE = ACTIVITY__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__ACCOUNTABLE_KEYS = ACTIVITY__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__CONSULTED = ACTIVITY__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__CONSULTED_KEYS = ACTIVITY__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__INFORMED = ACTIVITY__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__INFORMED_KEYS = ACTIVITY__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -2888,6 +4062,15 @@ public interface FlowPackage extends EPackage {
 	int FLOW__RESOURCE_KEYS = ACTIVITY__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__ARTIFACT_RESPONSIBILITIES = ACTIVITY__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2967,7 +4150,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPseudoState()
 	 * @generated
 	 */
-	int PSEUDO_STATE = 20;
+	int PSEUDO_STATE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3058,6 +4241,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PSEUDO_STATE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__RESPONSIBLE = FLOW_ELEMENT__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__RESPONSIBLE_KEYS = FLOW_ELEMENT__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__ACCOUNTABLE = FLOW_ELEMENT__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__ACCOUNTABLE_KEYS = FLOW_ELEMENT__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__CONSULTED = FLOW_ELEMENT__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__CONSULTED_KEYS = FLOW_ELEMENT__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__INFORMED = FLOW_ELEMENT__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__INFORMED_KEYS = FLOW_ELEMENT__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3168,6 +4423,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__RESOURCE_KEYS = FLOW_ELEMENT__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3229,7 +4493,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getChoice()
 	 * @generated
 	 */
-	int CHOICE = 21;
+	int CHOICE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3320,6 +4584,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3430,6 +4766,15 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3491,7 +4836,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 22;
+	int END = 26;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3582,6 +4927,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int END__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3692,6 +5109,15 @@ public interface FlowPackage extends EPackage {
 	int END__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3753,7 +5179,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 23;
+	int ENTRY_POINT = 27;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3844,6 +5270,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -3954,6 +5452,15 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4015,7 +5522,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExitPoint()
 	 * @generated
 	 */
-	int EXIT_POINT = 24;
+	int EXIT_POINT = 28;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4106,6 +5613,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXIT_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -4216,6 +5795,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4277,7 +5865,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionInput()
 	 * @generated
 	 */
-	int EXPANSION_INPUT = 25;
+	int EXPANSION_INPUT = 29;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4368,6 +5956,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -4478,6 +6138,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4539,7 +6208,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionOutput()
 	 * @generated
 	 */
-	int EXPANSION_OUTPUT = 26;
+	int EXPANSION_OUTPUT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4630,6 +6299,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_OUTPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -4740,6 +6481,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4801,7 +6551,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFork()
 	 * @generated
 	 */
-	int FORK = 27;
+	int FORK = 31;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4892,6 +6642,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -5002,6 +6824,15 @@ public interface FlowPackage extends EPackage {
 	int FORK__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5063,7 +6894,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getInputPin()
 	 * @generated
 	 */
-	int INPUT_PIN = 28;
+	int INPUT_PIN = 32;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5154,6 +6985,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int INPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -5264,6 +7167,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5325,7 +7237,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getJoin()
 	 * @generated
 	 */
-	int JOIN = 29;
+	int JOIN = 33;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5416,6 +7328,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -5526,6 +7510,15 @@ public interface FlowPackage extends EPackage {
 	int JOIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5587,7 +7580,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getOutputPin()
 	 * @generated
 	 */
-	int OUTPUT_PIN = 30;
+	int OUTPUT_PIN = 34;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5678,6 +7671,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int OUTPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -5788,6 +7853,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
 
 	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5849,7 +7923,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 31;
+	int START = 35;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5940,6 +8014,78 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__RESPONSIBLE = PSEUDO_STATE__RESPONSIBLE;
+
+	/**
+	 * The feature id for the '<em><b>Responsible Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__RESPONSIBLE_KEYS = PSEUDO_STATE__RESPONSIBLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Accountable</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__ACCOUNTABLE = PSEUDO_STATE__ACCOUNTABLE;
+
+	/**
+	 * The feature id for the '<em><b>Accountable Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__ACCOUNTABLE_KEYS = PSEUDO_STATE__ACCOUNTABLE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Consulted</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__CONSULTED = PSEUDO_STATE__CONSULTED;
+
+	/**
+	 * The feature id for the '<em><b>Consulted Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__CONSULTED_KEYS = PSEUDO_STATE__CONSULTED_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Informed</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__INFORMED = PSEUDO_STATE__INFORMED;
+
+	/**
+	 * The feature id for the '<em><b>Informed Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__INFORMED_KEYS = PSEUDO_STATE__INFORMED_KEYS;
 
 	/**
 	 * The feature id for the '<em><b>Outputs</b></em>' map.
@@ -6048,6 +8194,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__RESOURCE_KEYS = PSEUDO_STATE__RESOURCE_KEYS;
+
+	/**
+	 * The feature id for the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -6375,6 +8530,83 @@ public interface FlowPackage extends EPackage {
 	EReference getParticipant_Artifacts();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getSpecializations <em>Specializations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Specializations</em>'.
+	 * @see org.nasdanika.flow.Participant#getSpecializations()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Specializations();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Participant#getBaseKeys <em>Base Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Base Keys</em>'.
+	 * @see org.nasdanika.flow.Participant#getBaseKeys()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EAttribute getParticipant_BaseKeys();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getBases <em>Bases</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Bases</em>'.
+	 * @see org.nasdanika.flow.Participant#getBases()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Bases();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getResponsible <em>Responsible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Responsible</em>'.
+	 * @see org.nasdanika.flow.Participant#getResponsible()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Responsible();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getAccountable <em>Accountable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Accountable</em>'.
+	 * @see org.nasdanika.flow.Participant#getAccountable()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Accountable();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getConsulted <em>Consulted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Consulted</em>'.
+	 * @see org.nasdanika.flow.Participant#getConsulted()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Consulted();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Participant#getInformed <em>Informed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Informed</em>'.
+	 * @see org.nasdanika.flow.Participant#getInformed()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Informed();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Participant Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6488,6 +8720,104 @@ public interface FlowPackage extends EPackage {
 	EReference getResourceEntry_Value();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.flow.ParticipantResponsibility <em>Participant Responsibility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Participant Responsibility</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility
+	 * @generated
+	 */
+	EClass getParticipantResponsibility();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.ParticipantResponsibility#getResponsible <em>Responsible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Responsible</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getResponsible()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EReference getParticipantResponsibility_Responsible();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.ParticipantResponsibility#getResponsibleKeys <em>Responsible Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Responsible Keys</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getResponsibleKeys()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getParticipantResponsibility_ResponsibleKeys();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.ParticipantResponsibility#getAccountable <em>Accountable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Accountable</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getAccountable()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EReference getParticipantResponsibility_Accountable();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.ParticipantResponsibility#getAccountableKeys <em>Accountable Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Accountable Keys</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getAccountableKeys()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getParticipantResponsibility_AccountableKeys();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.ParticipantResponsibility#getConsulted <em>Consulted</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Consulted</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getConsulted()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EReference getParticipantResponsibility_Consulted();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.ParticipantResponsibility#getConsultedKeys <em>Consulted Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Consulted Keys</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getConsultedKeys()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getParticipantResponsibility_ConsultedKeys();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.ParticipantResponsibility#getInformed <em>Informed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Informed</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getInformed()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EReference getParticipantResponsibility_Informed();
+
+	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.ParticipantResponsibility#getInformedKeys <em>Informed Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Informed Keys</em>'.
+	 * @see org.nasdanika.flow.ParticipantResponsibility#getInformedKeys()
+	 * @see #getParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getParticipantResponsibility_InformedKeys();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Artifact <em>Artifact</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6573,6 +8903,193 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getArtifact_UsedBy();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getResponsibilities <em>Responsibilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Responsibilities</em>'.
+	 * @see org.nasdanika.flow.Artifact#getResponsibilities()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_Responsibilities();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.Artifact#getChildren <em>Children</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Children</em>'.
+	 * @see org.nasdanika.flow.Artifact#getChildren()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_Children();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.Artifact#getOutboundRelationships <em>Outbound Relationships</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Outbound Relationships</em>'.
+	 * @see org.nasdanika.flow.Artifact#getOutboundRelationships()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_OutboundRelationships();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getInboundRelationships <em>Inbound Relationships</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Inbound Relationships</em>'.
+	 * @see org.nasdanika.flow.Artifact#getInboundRelationships()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_InboundRelationships();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Artifact#isPartition <em>Partition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Partition</em>'.
+	 * @see org.nasdanika.flow.Artifact#isPartition()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EAttribute getArtifact_Partition();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.flow.Artifact#getStyle <em>Style</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Style</em>'.
+	 * @see org.nasdanika.flow.Artifact#getStyle()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_Style();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.flow.ArtifactParticipantResponsibility <em>Artifact Participant Responsibility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Artifact Participant Responsibility</em>'.
+	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility
+	 * @generated
+	 */
+	EClass getArtifactParticipantResponsibility();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.ArtifactParticipantResponsibility#getArtifactKey <em>Artifact Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Artifact Key</em>'.
+	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility#getArtifactKey()
+	 * @see #getArtifactParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getArtifactParticipantResponsibility_ArtifactKey();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.flow.ArtifactParticipantResponsibility#getArtifact <em>Artifact</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Artifact</em>'.
+	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility#getArtifact()
+	 * @see #getArtifactParticipantResponsibility()
+	 * @generated
+	 */
+	EReference getArtifactParticipantResponsibility_Artifact();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.ArtifactParticipantResponsibility#isSuppress <em>Suppress</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Suppress</em>'.
+	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility#isSuppress()
+	 * @see #getArtifactParticipantResponsibility()
+	 * @generated
+	 */
+	EAttribute getArtifactParticipantResponsibility_Suppress();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.flow.Relationship <em>Relationship</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Relationship</em>'.
+	 * @see org.nasdanika.flow.Relationship
+	 * @generated
+	 */
+	EClass getRelationship();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Relationship#getTargetKey <em>Target Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Target Key</em>'.
+	 * @see org.nasdanika.flow.Relationship#getTargetKey()
+	 * @see #getRelationship()
+	 * @generated
+	 */
+	EAttribute getRelationship_TargetKey();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.flow.Relationship#getTarget <em>Target</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see org.nasdanika.flow.Relationship#getTarget()
+	 * @see #getRelationship()
+	 * @generated
+	 */
+	EReference getRelationship_Target();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.flow.Relationship#getStyle <em>Style</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Style</em>'.
+	 * @see org.nasdanika.flow.Relationship#getStyle()
+	 * @see #getRelationship()
+	 * @generated
+	 */
+	EReference getRelationship_Style();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Relationship Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Relationship Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueType="org.nasdanika.flow.Relationship" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 * @generated
+	 */
+	EClass getRelationshipEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRelationshipEntry()
+	 * @generated
+	 */
+	EAttribute getRelationshipEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRelationshipEntry()
+	 * @generated
+	 */
+	EReference getRelationshipEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Artifact Entry</em>}'.
@@ -6752,6 +9269,17 @@ public interface FlowPackage extends EPackage {
 	EAttribute getFlowElement_ResourceKeys();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.FlowElement#getArtifactResponsibilities <em>Artifact Responsibilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Artifact Responsibilities</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getArtifactResponsibilities()
+	 * @see #getFlowElement()
+	 * @generated
+	 */
+	EReference getFlowElement_ArtifactResponsibilities();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Element Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6903,17 +9431,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTransition_PayloadKeys();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Transition#isSuppress <em>Suppress</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Suppress</em>'.
-	 * @see org.nasdanika.flow.Transition#isSuppress()
-	 * @see #getTransition()
-	 * @generated
-	 */
-	EAttribute getTransition_Suppress();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.Transition#getTargetKey <em>Target Key</em>}'.
@@ -7436,6 +9953,62 @@ public interface FlowPackage extends EPackage {
 		EReference PARTICIPANT__ARTIFACTS = eINSTANCE.getParticipant_Artifacts();
 
 		/**
+		 * The meta object literal for the '<em><b>Specializations</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__SPECIALIZATIONS = eINSTANCE.getParticipant_Specializations();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTICIPANT__BASE_KEYS = eINSTANCE.getParticipant_BaseKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Bases</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__BASES = eINSTANCE.getParticipant_Bases();
+
+		/**
+		 * The meta object literal for the '<em><b>Responsible</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__RESPONSIBLE = eINSTANCE.getParticipant_Responsible();
+
+		/**
+		 * The meta object literal for the '<em><b>Accountable</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__ACCOUNTABLE = eINSTANCE.getParticipant_Accountable();
+
+		/**
+		 * The meta object literal for the '<em><b>Consulted</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__CONSULTED = eINSTANCE.getParticipant_Consulted();
+
+		/**
+		 * The meta object literal for the '<em><b>Informed</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__INFORMED = eINSTANCE.getParticipant_Informed();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7522,6 +10095,80 @@ public interface FlowPackage extends EPackage {
 		EReference RESOURCE_ENTRY__VALUE = eINSTANCE.getResourceEntry_Value();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantResponsibilityImpl <em>Participant Responsibility</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.ParticipantResponsibilityImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantResponsibility()
+		 * @generated
+		 */
+		EClass PARTICIPANT_RESPONSIBILITY = eINSTANCE.getParticipantResponsibility();
+
+		/**
+		 * The meta object literal for the '<em><b>Responsible</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT_RESPONSIBILITY__RESPONSIBLE = eINSTANCE.getParticipantResponsibility_Responsible();
+
+		/**
+		 * The meta object literal for the '<em><b>Responsible Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTICIPANT_RESPONSIBILITY__RESPONSIBLE_KEYS = eINSTANCE.getParticipantResponsibility_ResponsibleKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Accountable</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE = eINSTANCE.getParticipantResponsibility_Accountable();
+
+		/**
+		 * The meta object literal for the '<em><b>Accountable Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTICIPANT_RESPONSIBILITY__ACCOUNTABLE_KEYS = eINSTANCE.getParticipantResponsibility_AccountableKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Consulted</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT_RESPONSIBILITY__CONSULTED = eINSTANCE.getParticipantResponsibility_Consulted();
+
+		/**
+		 * The meta object literal for the '<em><b>Consulted Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTICIPANT_RESPONSIBILITY__CONSULTED_KEYS = eINSTANCE.getParticipantResponsibility_ConsultedKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Informed</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT_RESPONSIBILITY__INFORMED = eINSTANCE.getParticipantResponsibility_Informed();
+
+		/**
+		 * The meta object literal for the '<em><b>Informed Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PARTICIPANT_RESPONSIBILITY__INFORMED_KEYS = eINSTANCE.getParticipantResponsibility_InformedKeys();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactImpl <em>Artifact</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7586,6 +10233,148 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ARTIFACT__USED_BY = eINSTANCE.getArtifact_UsedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Responsibilities</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__RESPONSIBILITIES = eINSTANCE.getArtifact_Responsibilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Children</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__CHILDREN = eINSTANCE.getArtifact_Children();
+
+		/**
+		 * The meta object literal for the '<em><b>Outbound Relationships</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__OUTBOUND_RELATIONSHIPS = eINSTANCE.getArtifact_OutboundRelationships();
+
+		/**
+		 * The meta object literal for the '<em><b>Inbound Relationships</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__INBOUND_RELATIONSHIPS = eINSTANCE.getArtifact_InboundRelationships();
+
+		/**
+		 * The meta object literal for the '<em><b>Partition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTIFACT__PARTITION = eINSTANCE.getArtifact_Partition();
+
+		/**
+		 * The meta object literal for the '<em><b>Style</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__STYLE = eINSTANCE.getArtifact_Style();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactParticipantResponsibilityImpl <em>Artifact Participant Responsibility</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.ArtifactParticipantResponsibilityImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactParticipantResponsibility()
+		 * @generated
+		 */
+		EClass ARTIFACT_PARTICIPANT_RESPONSIBILITY = eINSTANCE.getArtifactParticipantResponsibility();
+
+		/**
+		 * The meta object literal for the '<em><b>Artifact Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTIFACT_PARTICIPANT_RESPONSIBILITY__ARTIFACT_KEY = eINSTANCE.getArtifactParticipantResponsibility_ArtifactKey();
+
+		/**
+		 * The meta object literal for the '<em><b>Artifact</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT_PARTICIPANT_RESPONSIBILITY__ARTIFACT = eINSTANCE.getArtifactParticipantResponsibility_Artifact();
+
+		/**
+		 * The meta object literal for the '<em><b>Suppress</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTIFACT_PARTICIPANT_RESPONSIBILITY__SUPPRESS = eINSTANCE.getArtifactParticipantResponsibility_Suppress();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.RelationshipImpl <em>Relationship</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.RelationshipImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationship()
+		 * @generated
+		 */
+		EClass RELATIONSHIP = eINSTANCE.getRelationship();
+
+		/**
+		 * The meta object literal for the '<em><b>Target Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RELATIONSHIP__TARGET_KEY = eINSTANCE.getRelationship_TargetKey();
+
+		/**
+		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RELATIONSHIP__TARGET = eINSTANCE.getRelationship_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Style</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RELATIONSHIP__STYLE = eINSTANCE.getRelationship_Style();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.RelationshipEntryImpl <em>Relationship Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.RelationshipEntryImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationshipEntry()
+		 * @generated
+		 */
+		EClass RELATIONSHIP_ENTRY = eINSTANCE.getRelationshipEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RELATIONSHIP_ENTRY__KEY = eINSTANCE.getRelationshipEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RELATIONSHIP_ENTRY__VALUE = eINSTANCE.getRelationshipEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
@@ -7720,6 +10509,14 @@ public interface FlowPackage extends EPackage {
 		EAttribute FLOW_ELEMENT__RESOURCE_KEYS = eINSTANCE.getFlowElement_ResourceKeys();
 
 		/**
+		 * The meta object literal for the '<em><b>Artifact Responsibilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES = eINSTANCE.getFlowElement_ArtifactResponsibilities();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -7840,14 +10637,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TRANSITION__PAYLOAD_KEYS = eINSTANCE.getTransition_PayloadKeys();
-
-		/**
-		 * The meta object literal for the '<em><b>Suppress</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TRANSITION__SUPPRESS = eINSTANCE.getTransition_Suppress();
 
 		/**
 		 * The meta object literal for the '<em><b>Target Key</b></em>' attribute feature.

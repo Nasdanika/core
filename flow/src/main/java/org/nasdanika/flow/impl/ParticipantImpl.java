@@ -2,6 +2,7 @@
  */
 package org.nasdanika.flow.impl;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,6 +22,7 @@ import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.ncore.util.NamedElementComparator;
@@ -36,6 +38,13 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getParticipates <em>Participates</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getArtifacts <em>Artifacts</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getSpecializations <em>Specializations</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getBaseKeys <em>Base Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getBases <em>Bases</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getResponsible <em>Responsible</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getAccountable <em>Accountable</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getConsulted <em>Consulted</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getInformed <em>Informed</em>}</li>
  * </ul>
  *
  * @generated
@@ -122,6 +131,77 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Participant> getSpecializations() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__SPECIALIZATIONS);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<String> getBaseKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.PARTICIPANT__BASE_KEYS, FlowPackage.Literals.PARTICIPANT__BASE_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Participant> getBases() {
+		return resolveParticipants(getBaseKeys());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ParticipantResponsibility<?>> getResponsible() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__RESPONSIBLE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ParticipantResponsibility<?>> getAccountable() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__ACCOUNTABLE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ParticipantResponsibility<?>> getConsulted() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__CONSULTED);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ParticipantResponsibility<?>> getInformed() {
+		return getOppositeReferrers(FlowPackage.Literals.PARTICIPANT__INFORMED);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -134,6 +214,18 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResources()).basicAdd(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getSpecializations()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__BASES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getBases()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__RESPONSIBLE:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponsible()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getAccountable()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__CONSULTED:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getConsulted()).basicAdd(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__INFORMED:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInformed()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -152,6 +244,18 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
+				return ((InternalEList<?>)getSpecializations()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__BASES:
+				return ((InternalEList<?>)getBases()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__RESPONSIBLE:
+				return ((InternalEList<?>)getResponsible()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
+				return ((InternalEList<?>)getAccountable()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__CONSULTED:
+				return ((InternalEList<?>)getConsulted()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__INFORMED:
+				return ((InternalEList<?>)getInformed()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -170,8 +274,54 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return getResources();
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return getArtifacts();
+			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
+				return getSpecializations();
+			case FlowPackage.PARTICIPANT__BASE_KEYS:
+				return getBaseKeys();
+			case FlowPackage.PARTICIPANT__BASES:
+				return getBases();
+			case FlowPackage.PARTICIPANT__RESPONSIBLE:
+				return getResponsible();
+			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
+				return getAccountable();
+			case FlowPackage.PARTICIPANT__CONSULTED:
+				return getConsulted();
+			case FlowPackage.PARTICIPANT__INFORMED:
+				return getInformed();
 		}
 		return super.eGet(featureID, resolve, coreType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public void eSet(int featureID, Object newValue) {
+		switch (featureID) {
+			case FlowPackage.PARTICIPANT__BASE_KEYS:
+				getBaseKeys().clear();
+				getBaseKeys().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void eUnset(int featureID) {
+		switch (featureID) {
+			case FlowPackage.PARTICIPANT__BASE_KEYS:
+				getBaseKeys().clear();
+				return;
+		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -188,6 +338,20 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return !getResources().isEmpty();
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return !getArtifacts().isEmpty();
+			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
+				return !getSpecializations().isEmpty();
+			case FlowPackage.PARTICIPANT__BASE_KEYS:
+				return !getBaseKeys().isEmpty();
+			case FlowPackage.PARTICIPANT__BASES:
+				return !getBases().isEmpty();
+			case FlowPackage.PARTICIPANT__RESPONSIBLE:
+				return !getResponsible().isEmpty();
+			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
+				return !getAccountable().isEmpty();
+			case FlowPackage.PARTICIPANT__CONSULTED:
+				return !getConsulted().isEmpty();
+			case FlowPackage.PARTICIPANT__INFORMED:
+				return !getInformed().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

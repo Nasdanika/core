@@ -3,16 +3,15 @@
 package org.nasdanika.flow.util;
 
 import java.util.Map;
-import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.DiagnosticChain;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
-import org.nasdanika.common.Util;
 import org.nasdanika.emf.DiagnosticHelper;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.ArtifactParticipantResponsibility;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.End;
@@ -29,13 +28,14 @@ import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.PseudoState;
+import org.nasdanika.flow.Relationship;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
-import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -125,10 +125,18 @@ public class FlowValidator extends EObjectValidator {
 				return validateResource((Resource)value, diagnostics, context);
 			case FlowPackage.RESOURCE_ENTRY:
 				return validateResourceEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case FlowPackage.PARTICIPANT_RESPONSIBILITY:
+				return validateParticipantResponsibility((ParticipantResponsibility<?>)value, diagnostics, context);
 			case FlowPackage.ARTIFACT:
 				return validateArtifact((Artifact)value, diagnostics, context);
 			case FlowPackage.ARTIFACT_ENTRY:
 				return validateArtifactEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case FlowPackage.ARTIFACT_PARTICIPANT_RESPONSIBILITY:
+				return validateArtifactParticipantResponsibility((ArtifactParticipantResponsibility)value, diagnostics, context);
+			case FlowPackage.RELATIONSHIP:
+				return validateRelationship((Relationship)value, diagnostics, context);
+			case FlowPackage.RELATIONSHIP_ENTRY:
+				return validateRelationshipEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.FLOW_ELEMENT:
 				return validateFlowElement((FlowElement<?>)value, diagnostics, context);
 			case FlowPackage.FLOW_ELEMENT_ENTRY:
@@ -366,6 +374,26 @@ public class FlowValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateParticipantResponsibility(ParticipantResponsibility<?> participantResponsibility, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(participantResponsibility, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(participantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(participantResponsibility, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateArtifact(Artifact artifact, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		if (!validate_NoCircularContainment(artifact, diagnostics, context)) return false;
 		boolean result = validate_EveryMultiplicityConforms(artifact, diagnostics, context);
@@ -379,6 +407,55 @@ public class FlowValidator extends EObjectValidator {
 		if (result || diagnostics != null) result &= validatePackageElement_final(artifact, diagnostics, context);
 		if (result || diagnostics != null) result &= validatePackageElement_extension(artifact, diagnostics, context);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateArtifactParticipantResponsibility(ArtifactParticipantResponsibility artifactParticipantResponsibility, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(artifactParticipantResponsibility, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(artifactParticipantResponsibility, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(artifactParticipantResponsibility, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateRelationship(Relationship relationship, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(relationship, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_final(relationship, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePackageElement_extension(relationship, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateRelationshipEntry(Map.Entry<?, ?> relationshipEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)relationshipEntry, diagnostics, context);
 	}
 
 	/**

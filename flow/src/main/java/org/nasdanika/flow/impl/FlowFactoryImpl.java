@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.ArtifactParticipantResponsibility;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.End;
@@ -28,7 +29,9 @@ import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.PseudoState;
+import org.nasdanika.flow.Relationship;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
@@ -86,8 +89,12 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 			case FlowPackage.PARTICIPANT_ENTRY: return (EObject)createParticipantEntry();
 			case FlowPackage.RESOURCE: return createResource();
 			case FlowPackage.RESOURCE_ENTRY: return (EObject)createResourceEntry();
+			case FlowPackage.PARTICIPANT_RESPONSIBILITY: return createParticipantResponsibility();
 			case FlowPackage.ARTIFACT: return createArtifact();
 			case FlowPackage.ARTIFACT_ENTRY: return (EObject)createArtifactEntry();
+			case FlowPackage.ARTIFACT_PARTICIPANT_RESPONSIBILITY: return createArtifactParticipantResponsibility();
+			case FlowPackage.RELATIONSHIP: return createRelationship();
+			case FlowPackage.RELATIONSHIP_ENTRY: return (EObject)createRelationshipEntry();
 			case FlowPackage.FLOW_ELEMENT: return createFlowElement();
 			case FlowPackage.FLOW_ELEMENT_ENTRY: return (EObject)createFlowElementEntry();
 			case FlowPackage.TRANSITION: return createTransition();
@@ -195,9 +202,52 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	 * @generated
 	 */
 	@Override
+	public <T extends PackageElement<T>> ParticipantResponsibility<T> createParticipantResponsibility() {
+		ParticipantResponsibilityImpl<T> participantResponsibility = new ParticipantResponsibilityImpl<T>();
+		return participantResponsibility;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Artifact createArtifact() {
 		ArtifactImpl artifact = new ArtifactImpl();
 		return artifact;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ArtifactParticipantResponsibility createArtifactParticipantResponsibility() {
+		ArtifactParticipantResponsibilityImpl artifactParticipantResponsibility = new ArtifactParticipantResponsibilityImpl();
+		return artifactParticipantResponsibility;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Relationship createRelationship() {
+		RelationshipImpl relationship = new RelationshipImpl();
+		return relationship;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, Relationship> createRelationshipEntry() {
+		RelationshipEntryImpl relationshipEntry = new RelationshipEntryImpl();
+		return relationshipEntry;
 	}
 
 	/**

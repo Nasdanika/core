@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.ArtifactParticipantResponsibility;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.End;
@@ -27,7 +28,9 @@ import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.PseudoState;
+import org.nasdanika.flow.Relationship;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
@@ -126,12 +129,28 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 				return createResourceEntryAdapter();
 			}
 			@Override
+			public <T extends PackageElement<T>> Adapter caseParticipantResponsibility(ParticipantResponsibility<T> object) {
+				return createParticipantResponsibilityAdapter();
+			}
+			@Override
 			public Adapter caseArtifact(Artifact object) {
 				return createArtifactAdapter();
 			}
 			@Override
 			public Adapter caseArtifactEntry(Map.Entry<String, Artifact> object) {
 				return createArtifactEntryAdapter();
+			}
+			@Override
+			public Adapter caseArtifactParticipantResponsibility(ArtifactParticipantResponsibility object) {
+				return createArtifactParticipantResponsibilityAdapter();
+			}
+			@Override
+			public Adapter caseRelationship(Relationship object) {
+				return createRelationshipAdapter();
+			}
+			@Override
+			public Adapter caseRelationshipEntry(Map.Entry<String, Relationship> object) {
+				return createRelationshipEntryAdapter();
 			}
 			@Override
 			public <T extends FlowElement<T>> Adapter caseFlowElement(FlowElement<T> object) {
@@ -370,6 +389,20 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.ParticipantResponsibility <em>Participant Responsibility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.flow.ParticipantResponsibility
+	 * @generated
+	 */
+	public Adapter createParticipantResponsibilityAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Artifact <em>Artifact</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -380,6 +413,48 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createArtifactAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.ArtifactParticipantResponsibility <em>Artifact Participant Responsibility</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility
+	 * @generated
+	 */
+	public Adapter createArtifactParticipantResponsibilityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.flow.Relationship <em>Relationship</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.flow.Relationship
+	 * @generated
+	 */
+	public Adapter createRelationshipAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Relationship Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createRelationshipEntryAdapter() {
 		return null;
 	}
 

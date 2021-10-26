@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.ArtifactParticipantResponsibility;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
@@ -45,11 +46,12 @@ import org.nasdanika.flow.Transition;
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getParticipantKeys <em>Participant Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResourceKeys <em>Resource Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getArtifactResponsibilities <em>Artifact Responsibilities</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImpl<T> implements FlowElement<T> {
+public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantResponsibilityImpl<T> implements FlowElement<T> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -67,17 +69,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	@Override
 	protected EClass eStaticClass() {
 		return FlowPackage.Literals.FLOW_ELEMENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * This is specialized for the more specific type known in this context.
-	 * @generated
-	 */
-	@Override
-	public void setPrototype(T newPrototype) {
-		super.setPrototype(newPrototype);
 	}
 
 	/**
@@ -236,6 +227,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<ArtifactParticipantResponsibility> getArtifactResponsibilities() {
+		return (EList<ArtifactParticipantResponsibility>)eDynamicGet(FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES, FlowPackage.Literals.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.FLOW_ELEMENT__INPUT_ARTIFACTS:
@@ -270,6 +272,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return ((InternalEList<?>)getParticipants()).basicRemove(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__RESOURCES:
 				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
+			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
+				return ((InternalEList<?>)getArtifactResponsibilities()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -308,6 +312,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return getResources();
 			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
 				return getResourceKeys();
+			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
+				return getArtifactResponsibilities();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -343,6 +349,10 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				getResourceKeys().clear();
 				getResourceKeys().addAll((Collection<? extends String>)newValue);
 				return;
+			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
+				getArtifactResponsibilities().clear();
+				getArtifactResponsibilities().addAll((Collection<? extends ArtifactParticipantResponsibility>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -372,6 +382,9 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return;
 			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
 				getResourceKeys().clear();
+				return;
+			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
+				getArtifactResponsibilities().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -409,6 +422,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				return !getResources().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__RESOURCE_KEYS:
 				return !getResourceKeys().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
+				return !getArtifactResponsibilities().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -444,6 +459,17 @@ public class FlowElementImpl<T extends FlowElement<T>> extends PackageElementImp
 				call.apply(instanceCall);
 			}
 		}
+		
+		// Artifact participant responsibilities
+		for (ArtifactParticipantResponsibility apr: getArtifactResponsibilities()) {
+			EList<ArtifactParticipantResponsibility> instanceArtifactResponsibilities = instance.getArtifactResponsibilities();
+			instanceArtifactResponsibilities.removeIf(e -> apr.getArtifactKey().equals(e.getArtifactKey()));
+			if (!apr.isSuppress()) {
+				ArtifactParticipantResponsibility instanceApr = apr.create();
+				instanceArtifactResponsibilities.add(instanceApr);
+				apr.apply(instanceApr);
+			}
+		}		
 	}
 	
 	/**

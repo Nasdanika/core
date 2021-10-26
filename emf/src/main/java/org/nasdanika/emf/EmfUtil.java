@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
@@ -44,6 +46,15 @@ public class EmfUtil {
 	private static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";
 	public static final String ICON_KEY = "icon";
 	public static final String LABEL_KEY = "label";
+	
+	public static final Comparator<ENamedElement> ENAMED_ELEMENT_COMPARATOR = new Comparator<ENamedElement>() {
+
+		@Override
+		public int compare(ENamedElement a, ENamedElement b) {
+			return a.getName().compareTo(b.getName());
+		}
+		
+	};
 
 	private EmfUtil() {
 		// Singleton

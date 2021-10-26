@@ -26,13 +26,14 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.nasdanika.flow.FlowElement#getParticipantKeys <em>Participant Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getResourceKeys <em>Resource Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getArtifactResponsibilities <em>Artifact Responsibilities</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlowElement()
  * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/journey-element.md'"
  * @generated
  */
-public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T> {
+public interface FlowElement<T extends FlowElement<T>> extends ParticipantResponsibility<T> {
 	/**
 	 * Returns the value of the '<em><b>Outputs</b></em>' map.
 	 * The key is of type {@link java.lang.String},
@@ -221,5 +222,18 @@ public interface FlowElement<T extends FlowElement<T>> extends PackageElement<T>
 	 * @generated
 	 */
 	EList<String> getResourceKeys();
+
+	/**
+	 * Returns the value of the '<em><b>Artifact Responsibilities</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.ArtifactParticipantResponsibility}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Artifact Responsibilities</em>' containment reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ArtifactResponsibilities()
+	 * @model containment="true" keys="artifactKey"
+	 *        annotation="urn:org.nasdanika homogenous='true'"
+	 * @generated
+	 */
+	EList<ArtifactParticipantResponsibility> getArtifactResponsibilities();
 
 } // FlowElement

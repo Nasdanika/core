@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.ArtifactParticipantResponsibility;
 import org.nasdanika.flow.Call;
 import org.nasdanika.flow.Choice;
 import org.nasdanika.flow.End;
@@ -26,7 +27,9 @@ import org.nasdanika.flow.Join;
 import org.nasdanika.flow.OutputPin;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
+import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.PseudoState;
+import org.nasdanika.flow.Relationship;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
@@ -167,9 +170,22 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FlowPackage.PARTICIPANT_RESPONSIBILITY: {
+				ParticipantResponsibility<?> participantResponsibility = (ParticipantResponsibility<?>)theEObject;
+				T1 result = caseParticipantResponsibility(participantResponsibility);
+				if (result == null) result = casePackageElement(participantResponsibility);
+				if (result == null) result = caseNamedElement(participantResponsibility);
+				if (result == null) result = caseModelElement(participantResponsibility);
+				if (result == null) result = caseMarked(participantResponsibility);
+				if (result == null) result = caseAdaptable(participantResponsibility);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FlowPackage.ARTIFACT: {
 				Artifact artifact = (Artifact)theEObject;
 				T1 result = caseArtifact(artifact);
+				if (result == null) result = caseParticipantResponsibility(artifact);
+				if (result == null) result = caseServiceProvider(artifact);
 				if (result == null) result = casePackageElement(artifact);
 				if (result == null) result = caseNamedElement(artifact);
 				if (result == null) result = caseModelElement(artifact);
@@ -184,9 +200,39 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case FlowPackage.ARTIFACT_PARTICIPANT_RESPONSIBILITY: {
+				ArtifactParticipantResponsibility artifactParticipantResponsibility = (ArtifactParticipantResponsibility)theEObject;
+				T1 result = caseArtifactParticipantResponsibility(artifactParticipantResponsibility);
+				if (result == null) result = caseParticipantResponsibility(artifactParticipantResponsibility);
+				if (result == null) result = casePackageElement(artifactParticipantResponsibility);
+				if (result == null) result = caseNamedElement(artifactParticipantResponsibility);
+				if (result == null) result = caseModelElement(artifactParticipantResponsibility);
+				if (result == null) result = caseMarked(artifactParticipantResponsibility);
+				if (result == null) result = caseAdaptable(artifactParticipantResponsibility);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.RELATIONSHIP: {
+				Relationship relationship = (Relationship)theEObject;
+				T1 result = caseRelationship(relationship);
+				if (result == null) result = casePackageElement(relationship);
+				if (result == null) result = caseNamedElement(relationship);
+				if (result == null) result = caseModelElement(relationship);
+				if (result == null) result = caseMarked(relationship);
+				if (result == null) result = caseAdaptable(relationship);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.RELATIONSHIP_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Relationship> relationshipEntry = (Map.Entry<String, Relationship>)theEObject;
+				T1 result = caseRelationshipEntry(relationshipEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case FlowPackage.FLOW_ELEMENT: {
 				FlowElement<?> flowElement = (FlowElement<?>)theEObject;
 				T1 result = caseFlowElement(flowElement);
+				if (result == null) result = caseParticipantResponsibility(flowElement);
 				if (result == null) result = casePackageElement(flowElement);
 				if (result == null) result = caseNamedElement(flowElement);
 				if (result == null) result = caseModelElement(flowElement);
@@ -240,6 +286,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				Activity<?> activity = (Activity<?>)theEObject;
 				T1 result = caseActivity(activity);
 				if (result == null) result = caseFlowElement(activity);
+				if (result == null) result = caseParticipantResponsibility(activity);
 				if (result == null) result = casePackageElement(activity);
 				if (result == null) result = caseNamedElement(activity);
 				if (result == null) result = caseModelElement(activity);
@@ -258,6 +305,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				Service service = (Service)theEObject;
 				T1 result = caseService(service);
 				if (result == null) result = caseFlowElement(service);
+				if (result == null) result = caseParticipantResponsibility(service);
 				if (result == null) result = casePackageElement(service);
 				if (result == null) result = caseNamedElement(service);
 				if (result == null) result = caseModelElement(service);
@@ -271,6 +319,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseFlow(flow);
 				if (result == null) result = caseActivity(flow);
 				if (result == null) result = caseFlowElement(flow);
+				if (result == null) result = caseParticipantResponsibility(flow);
 				if (result == null) result = casePackageElement(flow);
 				if (result == null) result = caseNamedElement(flow);
 				if (result == null) result = caseModelElement(flow);
@@ -283,6 +332,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				PseudoState pseudoState = (PseudoState)theEObject;
 				T1 result = casePseudoState(pseudoState);
 				if (result == null) result = caseFlowElement(pseudoState);
+				if (result == null) result = caseParticipantResponsibility(pseudoState);
 				if (result == null) result = casePackageElement(pseudoState);
 				if (result == null) result = caseNamedElement(pseudoState);
 				if (result == null) result = caseModelElement(pseudoState);
@@ -296,6 +346,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseChoice(choice);
 				if (result == null) result = casePseudoState(choice);
 				if (result == null) result = caseFlowElement(choice);
+				if (result == null) result = caseParticipantResponsibility(choice);
 				if (result == null) result = casePackageElement(choice);
 				if (result == null) result = caseNamedElement(choice);
 				if (result == null) result = caseModelElement(choice);
@@ -309,6 +360,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseEnd(end);
 				if (result == null) result = casePseudoState(end);
 				if (result == null) result = caseFlowElement(end);
+				if (result == null) result = caseParticipantResponsibility(end);
 				if (result == null) result = casePackageElement(end);
 				if (result == null) result = caseNamedElement(end);
 				if (result == null) result = caseModelElement(end);
@@ -322,6 +374,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseEntryPoint(entryPoint);
 				if (result == null) result = casePseudoState(entryPoint);
 				if (result == null) result = caseFlowElement(entryPoint);
+				if (result == null) result = caseParticipantResponsibility(entryPoint);
 				if (result == null) result = casePackageElement(entryPoint);
 				if (result == null) result = caseNamedElement(entryPoint);
 				if (result == null) result = caseModelElement(entryPoint);
@@ -335,6 +388,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseExitPoint(exitPoint);
 				if (result == null) result = casePseudoState(exitPoint);
 				if (result == null) result = caseFlowElement(exitPoint);
+				if (result == null) result = caseParticipantResponsibility(exitPoint);
 				if (result == null) result = casePackageElement(exitPoint);
 				if (result == null) result = caseNamedElement(exitPoint);
 				if (result == null) result = caseModelElement(exitPoint);
@@ -348,6 +402,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseExpansionInput(expansionInput);
 				if (result == null) result = casePseudoState(expansionInput);
 				if (result == null) result = caseFlowElement(expansionInput);
+				if (result == null) result = caseParticipantResponsibility(expansionInput);
 				if (result == null) result = casePackageElement(expansionInput);
 				if (result == null) result = caseNamedElement(expansionInput);
 				if (result == null) result = caseModelElement(expansionInput);
@@ -361,6 +416,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseExpansionOutput(expansionOutput);
 				if (result == null) result = casePseudoState(expansionOutput);
 				if (result == null) result = caseFlowElement(expansionOutput);
+				if (result == null) result = caseParticipantResponsibility(expansionOutput);
 				if (result == null) result = casePackageElement(expansionOutput);
 				if (result == null) result = caseNamedElement(expansionOutput);
 				if (result == null) result = caseModelElement(expansionOutput);
@@ -374,6 +430,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseFork(fork);
 				if (result == null) result = casePseudoState(fork);
 				if (result == null) result = caseFlowElement(fork);
+				if (result == null) result = caseParticipantResponsibility(fork);
 				if (result == null) result = casePackageElement(fork);
 				if (result == null) result = caseNamedElement(fork);
 				if (result == null) result = caseModelElement(fork);
@@ -387,6 +444,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseInputPin(inputPin);
 				if (result == null) result = casePseudoState(inputPin);
 				if (result == null) result = caseFlowElement(inputPin);
+				if (result == null) result = caseParticipantResponsibility(inputPin);
 				if (result == null) result = casePackageElement(inputPin);
 				if (result == null) result = caseNamedElement(inputPin);
 				if (result == null) result = caseModelElement(inputPin);
@@ -400,6 +458,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseJoin(join);
 				if (result == null) result = casePseudoState(join);
 				if (result == null) result = caseFlowElement(join);
+				if (result == null) result = caseParticipantResponsibility(join);
 				if (result == null) result = casePackageElement(join);
 				if (result == null) result = caseNamedElement(join);
 				if (result == null) result = caseModelElement(join);
@@ -413,6 +472,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseOutputPin(outputPin);
 				if (result == null) result = casePseudoState(outputPin);
 				if (result == null) result = caseFlowElement(outputPin);
+				if (result == null) result = caseParticipantResponsibility(outputPin);
 				if (result == null) result = casePackageElement(outputPin);
 				if (result == null) result = caseNamedElement(outputPin);
 				if (result == null) result = caseModelElement(outputPin);
@@ -426,6 +486,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				T1 result = caseStart(start);
 				if (result == null) result = casePseudoState(start);
 				if (result == null) result = caseFlowElement(start);
+				if (result == null) result = caseParticipantResponsibility(start);
 				if (result == null) result = casePackageElement(start);
 				if (result == null) result = caseNamedElement(start);
 				if (result == null) result = caseModelElement(start);
@@ -559,6 +620,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Participant Responsibility</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Participant Responsibility</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T extends PackageElement<T>> T1 caseParticipantResponsibility(ParticipantResponsibility<T> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Artifact</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -570,6 +646,51 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseArtifact(Artifact object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Artifact Participant Responsibility</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Artifact Participant Responsibility</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseArtifactParticipantResponsibility(ArtifactParticipantResponsibility object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Relationship</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Relationship</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseRelationship(Relationship object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Relationship Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Relationship Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseRelationshipEntry(Map.Entry<String, Relationship> object) {
 		return null;
 	}
 

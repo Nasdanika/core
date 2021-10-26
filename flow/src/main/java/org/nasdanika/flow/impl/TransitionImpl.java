@@ -30,7 +30,6 @@ import org.nasdanika.flow.Transition;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getPayload <em>Payload</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getPayloadKeys <em>Payload Keys</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#isSuppress <em>Suppress</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getTargetKey <em>Target Key</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.TransitionImpl#getTarget <em>Target</em>}</li>
  * </ul>
@@ -38,16 +37,6 @@ import org.nasdanika.flow.Transition;
  * @generated
  */
 public class TransitionImpl extends PackageElementImpl<Transition> implements Transition {
-	/**
-	 * The default value of the '{@link #isSuppress() <em>Suppress</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSuppress()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean SUPPRESS_EDEFAULT = false;
-
 	/**
 	 * The default value of the '{@link #getTargetKey() <em>Target Key</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -132,26 +121,6 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * @generated
 	 */
 	@Override
-	public boolean isSuppress() {
-		return (Boolean)eDynamicGet(FlowPackage.TRANSITION__SUPPRESS, FlowPackage.Literals.TRANSITION__SUPPRESS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSuppress(boolean newSuppress) {
-		eDynamicSet(FlowPackage.TRANSITION__SUPPRESS, FlowPackage.Literals.TRANSITION__SUPPRESS, newSuppress);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getTargetKey() {
 		return (String)eDynamicGet(FlowPackage.TRANSITION__TARGET_KEY, FlowPackage.Literals.TRANSITION__TARGET_KEY, true, true);
 	}
@@ -226,8 +195,6 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 				return getPayload();
 			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
 				return getPayloadKeys();
-			case FlowPackage.TRANSITION__SUPPRESS:
-				return isSuppress();
 			case FlowPackage.TRANSITION__TARGET_KEY:
 				return getTargetKey();
 			case FlowPackage.TRANSITION__TARGET:
@@ -250,9 +217,6 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 				getPayloadKeys().clear();
 				getPayloadKeys().addAll((Collection<? extends String>)newValue);
 				return;
-			case FlowPackage.TRANSITION__SUPPRESS:
-				setSuppress((Boolean)newValue);
-				return;
 			case FlowPackage.TRANSITION__TARGET_KEY:
 				setTargetKey((String)newValue);
 				return;
@@ -270,9 +234,6 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 		switch (featureID) {
 			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
 				getPayloadKeys().clear();
-				return;
-			case FlowPackage.TRANSITION__SUPPRESS:
-				setSuppress(SUPPRESS_EDEFAULT);
 				return;
 			case FlowPackage.TRANSITION__TARGET_KEY:
 				setTargetKey(TARGET_KEY_EDEFAULT);
@@ -293,8 +254,6 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 				return !getPayload().isEmpty();
 			case FlowPackage.TRANSITION__PAYLOAD_KEYS:
 				return !getPayloadKeys().isEmpty();
-			case FlowPackage.TRANSITION__SUPPRESS:
-				return isSuppress() != SUPPRESS_EDEFAULT;
 			case FlowPackage.TRANSITION__TARGET_KEY:
 				return TARGET_KEY_EDEFAULT == null ? getTargetKey() != null : !TARGET_KEY_EDEFAULT.equals(getTargetKey());
 			case FlowPackage.TRANSITION__TARGET:

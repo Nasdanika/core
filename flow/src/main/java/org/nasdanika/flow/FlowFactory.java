@@ -58,6 +58,15 @@ public interface FlowFactory extends EFactory {
 	Resource createResource();
 
 	/**
+	 * Returns a new object of class '<em>Participant Responsibility</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Participant Responsibility</em>'.
+	 * @generated
+	 */
+	<T extends PackageElement<T>> ParticipantResponsibility<T> createParticipantResponsibility();
+
+	/**
 	 * Returns a new object of class '<em>Artifact</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -65,6 +74,24 @@ public interface FlowFactory extends EFactory {
 	 * @generated
 	 */
 	Artifact createArtifact();
+
+	/**
+	 * Returns a new object of class '<em>Artifact Participant Responsibility</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Artifact Participant Responsibility</em>'.
+	 * @generated
+	 */
+	ArtifactParticipantResponsibility createArtifactParticipantResponsibility();
+
+	/**
+	 * Returns a new object of class '<em>Relationship</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Relationship</em>'.
+	 * @generated
+	 */
+	Relationship createRelationship();
 
 	/**
 	 * Returns a new object of class '<em>Element</em>'.

@@ -180,6 +180,43 @@
         <details key="documentation" value="Artifacts this participant uses in their activities."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializations" upperBound="-1"
+        eType="#//Participant" changeable="false" derived="true" eOpposite="#//Participant/bases"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="bases"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of base participants, which this participant is a specialization of, relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bases" upperBound="-1"
+        eType="#//Participant" changeable="false" derived="true" eOpposite="#//Participant/specializations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/responsible">
+      <eGenericType eClassifier="#//ParticipantResponsibility">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accountable" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/accountable">
+      <eGenericType eClassifier="#//ParticipantResponsibility">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulted" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/consulted">
+      <eGenericType eClassifier="#//ParticipantResponsibility">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="informed" upperBound="-1"
+        changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/informed">
+      <eGenericType eClassifier="#//ParticipantResponsibility">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ServiceProvider">
       <eTypeArguments eClassifier="#//Participant"/>
     </eGenericSuperTypes>
@@ -249,6 +286,64 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParticipantResponsibility">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//PackageElement">
+        <eTypeArguments eTypeParameter="#//ParticipantResponsibility/T"/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/responsible"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responsibleKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="responsible"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of responsible participants relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accountable" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/accountable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accountableKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="accountable"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of accountable participants relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulted" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/consulted"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consultedKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="consulted"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of consulted participants relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="informed" upperBound="-1"
+        eType="#//Participant" changeable="false" transient="true" derived="true"
+        eOpposite="#//Participant/informed"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="informedKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="informed"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of informed participants relative to the containing package ``participants/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eTypeParameter="#//ParticipantResponsibility/T"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
         eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/artifacts"/>
@@ -298,7 +393,54 @@
         <details key="documentation" value="Participants use this artifact in their activities."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//PackageElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilities" upperBound="-1"
+        eType="#//ArtifactParticipantResponsibility" changeable="false" derived="true"
+        eOpposite="#//ArtifactParticipantResponsibility/artifact">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Responsibilities for this artifact at a flow element level."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ArtifactEntry" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Artifacts can be organized into a hierarchy (Product Breakdown Structure)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outboundRelationships"
+        upperBound="-1" eType="#//RelationshipEntry" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Outbound relationships to other artifacts."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+        <details key="strict-containment" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inboundRelationships" upperBound="-1"
+        eType="#//Relationship" changeable="false" transient="true" derived="true"
+        eOpposite="#//Relationship/target">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Relationships which have this artifact as a target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If true, this composite artifact shall be displayed as a partition on the parent component diagram."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="style" eType="ecore:EClass ../../org.nasdanika.diagram/model/diagram.ecore#//DiagramElement"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Diagram element style for component diagrams."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//ParticipantResponsibility">
+      <eTypeArguments eClassifier="#//Artifact"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//ServiceProvider">
       <eTypeArguments eClassifier="#//Artifact"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -318,6 +460,82 @@
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Flow artifact. Use ``null`` to suppress inherited sub-package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArtifactParticipantResponsibility">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactKey" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="artifact"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Key of the responsibility artifact relative to the containing package ``artifacts/`` reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifact" eType="#//Artifact"
+        changeable="false" derived="true" eOpposite="#//Artifact/responsibilities">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Transition target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suppress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If true, suppresses inherited responsibility for this responsibility's artifact."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//ParticipantResponsibility">
+      <eTypeArguments eClassifier="#//ArtifactParticipantResponsibility"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/flow/relationship.md"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-key" value="target"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Key of relationship target relative to the containing artifact."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Artifact"
+        changeable="false" transient="true" derived="true" eOpposite="#//Artifact/inboundRelationships">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Relationship target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="style" eType="ecore:EClass ../../org.nasdanika.diagram/model/diagram.ecore#//Connection"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connection style for component diagrams."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//PackageElement">
+      <eTypeArguments eClassifier="#//Relationship"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationshipEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Mapping of relationship keys (qualifiers) to a relationships. Null value suppresses inherited entry."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Relationship key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Relationship"
+        containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Outbound relationshipt. Use ``null`` to suppress inherited relationship."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -425,7 +643,14 @@
         <details key="documentation" value="Keys of resources resolved relative to the containing package ``resources/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eGenericSuperTypes eClassifier="#//PackageElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifactResponsibilities"
+        upperBound="-1" eType="#//ArtifactParticipantResponsibility" containment="true"
+        eKeys="#//ArtifactParticipantResponsibility/artifactKey">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//ParticipantResponsibility">
       <eTypeArguments eTypeParameter="#//FlowElement/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
@@ -466,11 +691,6 @@
         <details key="documentation" value="Keys of payload artifacts relative to the containing package ``artifacts/`` reference."/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suppress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Can be used in journeys extending other journeys to remove the inherited transition from the list of outputs/call. Transitions to supprressed journey elements are automatically supppressed."/>
-      </eAnnotations>
-    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -508,7 +728,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Output transition. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Output transition. Use ``null`` to suppress inherited relationship."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

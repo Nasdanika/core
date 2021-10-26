@@ -76,6 +76,10 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 				return createNoteAdapter();
 			}
 			@Override
+			public Adapter caseStyle(Style object) {
+				return createStyleAdapter();
+			}
+			@Override
 			public Adapter caseDiagramElement(DiagramElement object) {
 				return createDiagramElementAdapter();
 			}
@@ -140,6 +144,20 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNoteAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.Style <em>Style</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.diagram.Style
+	 * @generated
+	 */
+	public Adapter createStyleAdapter() {
 		return null;
 	}
 
