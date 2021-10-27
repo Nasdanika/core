@@ -379,10 +379,14 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	 * @param path
 	 * @return URI relative to the containing flow Package or null if there is no containing package.
 	 */
-	protected URI getPackageRelativeURI(String path) {
+	protected URI getPackageFeatureURI(EStructuralFeature feature) {
 		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof org.nasdanika.flow.Package) {
-				return URI.createURI(((org.nasdanika.flow.Package) ancestor).getUri() + path);
+				URI uri = getUri(ancestor);
+				if (feature != null) {
+					uri = uri.appendSegment(feature.getName());					
+				}
+				return uri.appendSegment("");
 			}
 		}
 		return null;
@@ -392,8 +396,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 		return (Artifact) resolve(FlowPackage.Literals.ARTIFACT, uri); 
 	}
 	
-	protected <E> EList<E> resolvePackageElements(Collection<String> keys, String referencePath, Function<URI,E> elementResolver) {
-		URI referenceURI = getPackageRelativeURI(referencePath);
+	protected <E> EList<E> resolvePackageElements(Collection<String> keys, EStructuralFeature feature, Function<URI,E> elementResolver) {
+		URI referenceURI = getPackageFeatureURI(feature);
 		return keys.stream()
 			.map(URI::createURI)
 			.map(eUri -> referenceURI == null ? eUri : eUri.resolve(referenceURI))
@@ -402,7 +406,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	}
 	
 	protected EList<Artifact> resolveArtifacts(Collection<String> artifactKeys) {
-		return resolvePackageElements(artifactKeys, "/artifacts/", this::resolveArtifact);
+		return resolvePackageElements(artifactKeys, FlowPackage.Literals.PACKAGE__ARTIFACTS, this::resolveArtifact);
 	}
 	
 	protected Participant resolveParticipant(URI uri) {
@@ -410,7 +414,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	}
 	
 	protected EList<Participant> resolveParticipants(Collection<String> participantKeys) {
-		return resolvePackageElements(participantKeys, "/participants/", this::resolveParticipant);
+		return resolvePackageElements(participantKeys, FlowPackage.Literals.PACKAGE__PARTICIPANTS, this::resolveParticipant);
 	}
 	
 	protected Resource resolveResource(URI uri) {
@@ -418,7 +422,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	}
 
 	protected EList<Resource> resolveResources(Collection<String> resourceKeys) {
-		return resolvePackageElements(resourceKeys, "/resources/", this::resolveResource);
+		return resolvePackageElements(resourceKeys, FlowPackage.Literals.PACKAGE__RESOURCES, this::resolveResource);
 	}
 	
 	protected FlowElement<?> resolveFlowElement(URI uri) {
@@ -432,7 +436,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	 * @return
 	 */
 	protected EList<FlowElement<?>> resolveFlowElements(Collection<String> elementKeys) {
-		return resolvePackageElements(elementKeys, "/", this::resolveFlowElement);
+		return resolvePackageElements(elementKeys, null, this::resolveFlowElement);
 	}
 
 } //PackageElementImpl

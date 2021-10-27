@@ -289,7 +289,7 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	protected URI getFlowElementsURI() {
 		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof Flow) {
-				return URI.createURI(((Flow) ancestor).getUri() + "/elements/");
+				return getUri(ancestor).appendSegment("elements").appendSegment(""); 
 			}
 		}
 		return null;

@@ -161,7 +161,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * @return the value of the '<em>Responsibilities</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Responsibilities()
 	 * @see org.nasdanika.flow.ArtifactParticipantResponsibility#getArtifact
-	 * @model opposite="artifact" changeable="false" derived="true"
+	 * @model opposite="artifact" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<ArtifactParticipantResponsibility> getResponsibilities();

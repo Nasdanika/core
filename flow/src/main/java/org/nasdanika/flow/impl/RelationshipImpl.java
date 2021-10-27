@@ -266,12 +266,9 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		if (feature == FlowPackage.Literals.RELATIONSHIP__TARGET) {
 			URI targetURI = URI.createURI(getTargetKey());
 			if (eContainmentFeature() == FlowPackage.Literals.RELATIONSHIP_ENTRY__VALUE) {
-				EObject cc = eContainer().eContainer();
-				if (cc instanceof ModelElement) {
-					String ccURI = ((ModelElement) cc).getUri();
-					if (!Util.isBlank(ccURI)) {
-						targetURI = targetURI.resolve(URI.createURI(ccURI));
-					}
+				URI ccURI = getUri(eContainer().eContainer());
+				if (ccURI != null) {
+					targetURI = targetURI.resolve(ccURI);
 				}
 			}
 			return resolveArtifact(targetURI);

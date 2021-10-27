@@ -59,7 +59,7 @@ public interface ArtifactParticipantResponsibility extends ParticipantResponsibi
 	 * @return the value of the '<em>Artifact</em>' reference.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifactParticipantResponsibility_Artifact()
 	 * @see org.nasdanika.flow.Artifact#getResponsibilities
-	 * @model opposite="responsibilities" changeable="false" derived="true"
+	 * @model opposite="responsibilities" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	Artifact getArtifact();

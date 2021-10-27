@@ -97,7 +97,7 @@ public class ArtifactParticipantResponsibilityImpl extends ParticipantResponsibi
 	@Override
 	public Artifact getArtifact() {
 		URI artifactURI = URI.createURI(getArtifactKey());
-		URI pkgURI = getPackageRelativeURI("/artifacts/");
+		URI pkgURI = getPackageFeatureURI(FlowPackage.Literals.PACKAGE__ARTIFACTS);
 		if (pkgURI != null) {
 			artifactURI = artifactURI.resolve(pkgURI);
 		}

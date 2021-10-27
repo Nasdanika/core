@@ -396,8 +396,8 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilities" upperBound="-1"
-        eType="#//ArtifactParticipantResponsibility" changeable="false" derived="true"
-        eOpposite="#//ArtifactParticipantResponsibility/artifact">
+        eType="#//ArtifactParticipantResponsibility" changeable="false" transient="true"
+        derived="true" eOpposite="#//ArtifactParticipantResponsibility/artifact">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Responsibilities for this artifact at a flow element level."/>
       </eAnnotations>
@@ -477,7 +477,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="artifact" eType="#//Artifact"
-        changeable="false" derived="true" eOpposite="#//Artifact/responsibilities">
+        changeable="false" transient="true" derived="true" eOpposite="#//Artifact/responsibilities">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Transition target."/>
       </eAnnotations>

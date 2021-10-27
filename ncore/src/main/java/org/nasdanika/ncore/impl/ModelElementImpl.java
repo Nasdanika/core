@@ -3,6 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -143,16 +144,29 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	}
 	
 	/**
-	 * Computes URI from the containment reference.
+	 * Returns {@link ModelElement}.getUri() if the argument is an instance of ModelElement and getUri() returns a non blank string.
+	 * Computes URI from the containment reference otherwise.
 	 * @param eObj
 	 * @return
 	 */
 	public static URI getUri(EObject eObj) {
-		if (eObj == null) {
-			return null;
+		if (eObj == null || isEMapEntry(eObj)) {
+			return null; // EMap entries do not have URI's.
+		}
+		
+		if (eObj instanceof ModelElement) {
+			String uri = ((ModelElement) eObj).getUri();
+			if (!Util.isBlank(uri)) {
+				return URI.createURI(uri);
+			}
 		}
 		
 		EObject container = eObj.eContainer();
+		LinkedList<String> containmentPath = new LinkedList<>();
+		while (isEMapEntry(container)) {
+			containmentPath.addFirst(containmentPath(container));
+			container = container.eContainer();
+		}
 		if (container == null) {
 //			Leads to stack overflow during loading.			
 //			for (EObject referrer: getReferrers(eObj, NcorePackage.Literals.REFERENCE__TARGET)) {
@@ -161,63 +175,26 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			if (eObj instanceof ModelElement) {
 				String uuid = ((ModelElement) eObj).getUuid();
 				if (!Util.isBlank(uuid)) {
-					return URI.createURI("uuid:" + uuid);
+					return URI.createURI("uuid://" + uuid);
 				}
 			}
 			return null;
 		}
 		
-		// EMap
-		EReference eContainmentFeature = eObj.eContainmentFeature();
-		if (isEMapEntry(container) && "value".equals(eContainmentFeature.getName())) {
-			EObject superContainer = container.eContainer();
-			if (superContainer == null) {
-				return null;
-			}
-			String superContainerURI = superContainer instanceof ModelElement ? ((ModelElement) superContainer).getUri() : toString(getUri(superContainer));
-			if (Util.isBlank(superContainerURI)) {
-				return null;
-			}
-			Object key = ((Map.Entry<?,?>) container).getKey();
-			if (key == null) {
-				return null;
-			}
-			String strKey = String.valueOf(key);
-			if (Util.isBlank(strKey)) {
-				return null;
-			}
-			StringBuilder uriBuilder = new StringBuilder(superContainerURI.toString());
-			if (uriBuilder.charAt(uriBuilder.length() - 1) != '/') {
-				uriBuilder.append("/");
-			}
-			
-			uriBuilder.append(container.eContainmentFeature().getName()).append("/").append(strKey);
-			return URI.createURI(uriBuilder.toString());			
-		}
-		
-		String containerURI = container instanceof ModelElement ? ((ModelElement) container).getUri() : toString(getUri(container));
-		if (Util.isBlank(containerURI)) {
+		URI cURI = getUri(container);
+		if (cURI == null) {
 			return null;
 		}
-		
-		StringBuilder uriBuilder = new StringBuilder(containerURI.toString());
-		if (uriBuilder.charAt(uriBuilder.length() - 1) != '/') {
-			uriBuilder.append("/");
+		if (containmentPath.isEmpty()) {
+			containmentPath.add(containmentPath(eObj));
 		}
-		
-		uriBuilder.append(eContainmentFeature.getName());
-		if (eContainmentFeature.isMany()) {		
-			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
-			if (eKeys.isEmpty()) {
-				int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
-				uriBuilder.append("/").append(idx);
-			} else {
-				for (EAttribute eKey: eKeys) {
-					uriBuilder.append("/").append(eObj.eGet(eKey)); // TODO - add support for passing eKey path computer.
-				}
-			}
+		String cp = String.join("/", containmentPath);
+		URI cpURI = URI.createURI(cp);
+		String cLastSegment = cURI.lastSegment();
+		if (cLastSegment == null || cLastSegment.length() > 0) {
+			cURI = cURI.appendSegment("");
 		}
-		return URI.createURI(uriBuilder.toString());			
+		return cpURI.resolve(cURI);
 	}
 
 	/**
@@ -237,31 +214,22 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @param eObject
 	 * @return null if there is no container. Reference name concatenated with object key for {@link EMap}'s and with object index for many-references.
 	 */
-	public static String containmentPath(EObject eObj) {		
+	public static String containmentPath(EObject eObj) {
 		EObject container = eObj.eContainer();
 		if (container == null) {
 			return null;
 		}
 		EReference eContainmentFeature = eObj.eContainmentFeature();
 		
-		// EMap
-		if (isEMapEntry(container) && "value".equals(eContainmentFeature.getName())) {
-			EObject superContainer = container.eContainer();
-			if (superContainer == null) {
-				return null;
+		if (eContainmentFeature.isMany()) {
+			if (isEMapEntry(eObj)) {
+				Object key = ((Map.Entry<?,?>) eObj).getKey();
+				if (key == null) {
+					return null;
+				}
+				return eContainmentFeature.getName() + "/" + key;
 			}
-			Object key = ((Map.Entry<?,?>) container).getKey();
-			if (key == null) {
-				return null;
-			}
-			String strKey = String.valueOf(key);
-			if (Util.isBlank(strKey)) {
-				return null;
-			}
-			return container.eContainmentFeature().getName() + "/" + strKey;
-		}
-		
-		if (eContainmentFeature.isMany()) {		
+			
 			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
 			if (eKeys.isEmpty()) {
 				int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
@@ -298,12 +266,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getUri() {
-		String uri = (String) eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
-		return Util.isBlank(uri) ? toString(getUri(this)) : uri;
+		return (String) eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
 	}
 
 	/**
@@ -472,8 +439,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			TreeIterator<?> cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
 			while (cit.hasNext()) {
 				Object next = cit.next(); 
-				if (type.isInstance(next) && uri.toString().equals(((T) next).getUri())) {
-					return (T) next;
+				if (type.isInstance(next)) {
+					URI nextURI = getUri((T) next);
+					if (nextURI != null && nextURI.equals(uri)) {					
+						return (T) next;
+					}
 				}
 			}
 		}
@@ -571,12 +541,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	public URI eProxyURI() {
 		URI eProxyURI = super.eProxyURI();
 		if (eProxyURI != null && eProxyURI.isRelative()) {
-			String baseStr = getUri();
-			if (!Util.isBlank(baseStr)) {
-				URI base = URI.createURI(baseStr);
-				if (!base.isRelative()) {
-					return eProxyURI.resolve(base);
-				}
+			URI base = getUri(this);
+			if (base != null && !base.isRelative()) {
+				return eProxyURI.resolve(base);
 			}
 		}
 		return eProxyURI;

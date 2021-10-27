@@ -69,7 +69,7 @@ public class ServiceImpl extends FlowElementImpl<Service> implements Service {
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		if (feature == FlowPackage.Literals.SERVICE__TARGET) {
 			URI targetURI = URI.createURI(getTargetKey());
-			URI packageURI = getPackageRelativeURI("/");
+			URI packageURI = getPackageFeatureURI(null);
 			if (packageURI != null) {
 				targetURI = targetURI.resolve(packageURI);
 			}
