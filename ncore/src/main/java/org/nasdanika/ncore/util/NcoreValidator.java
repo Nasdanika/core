@@ -15,6 +15,8 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.*;
 
 /**
@@ -91,10 +93,14 @@ public class NcoreValidator extends EObjectValidator {
 		switch (classifierID) {
 			case NcorePackage.ADAPTABLE:
 				return validateAdaptable((Adaptable)value, diagnostics, context);
+			case NcorePackage.IMARKED:
+				return validateIMarked((Marked)value, diagnostics, context);
 			case NcorePackage.MARKED:
-				return validateMarked((Marked)value, diagnostics, context);
+				return validateMarked((org.nasdanika.ncore.Marked)value, diagnostics, context);
+			case NcorePackage.IMARKER:
+				return validateIMarker((Marker)value, diagnostics, context);
 			case NcorePackage.MARKER:
-				return validateMarker((Marker)value, diagnostics, context);
+				return validateMarker((org.nasdanika.ncore.Marker)value, diagnostics, context);
 			case NcorePackage.TEMPORAL:
 				return validateTemporal((Temporal)value, diagnostics, context);
 			case NcorePackage.MODEL_ELEMENT:
@@ -126,7 +132,16 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateMarked(Marked marked, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarked(Marked iMarked, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)iMarked, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMarked(org.nasdanika.ncore.Marked marked, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(marked, diagnostics, context);
 	}
 
@@ -135,7 +150,16 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateMarker(Marker marker, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarker(Marker iMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)iMarker, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMarker(org.nasdanika.ncore.Marker marker, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(marker, diagnostics, context);
 	}
 

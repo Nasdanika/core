@@ -6,14 +6,19 @@
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Adaptable" instanceClassName="org.nasdanika.common.Adaptable"
       abstract="true" interface="true"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Marked" abstract="true" interface="true">
+  <eClassifiers xsi:type="ecore:EClass" name="IMarked" instanceClassName="org.nasdanika.common.persistence.Marked"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Marked" abstract="true" interface="true"
+      eSuperTypes="#//IMarked">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/marked.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="marker" eType="#//Marker"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Marker">
+  <eClassifiers xsi:type="ecore:EClass" name="IMarker" instanceClassName="org.nasdanika.common.persistence.Marker"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Marker" eSuperTypes="#//IMarker">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>

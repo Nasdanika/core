@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
-import org.nasdanika.ncore.impl.ModelElementImpl;
 
 public class NcoreResourceSet extends ResourceSetImpl {
 
@@ -37,10 +36,10 @@ public class NcoreResourceSet extends ResourceSetImpl {
 	 * @return
 	 */
 	protected boolean matchURI(EObject eObj, URI uri) {
-		if (ModelElementImpl.isEMapEntry(eObj)) {
+		if (NcoreUtil.isEMapEntry(eObj)) {
 			return false; // Ignoring EMap entries.
 		}
-		URI objUri = ModelElementImpl.getUri(eObj);
+		URI objUri = NcoreUtil.getUri(eObj);
 		if (objUri != null && objUri.equals(uri)) {
 			return true;
 		}

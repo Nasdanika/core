@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.emf.persistence.FeatureCache;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowElement;
@@ -28,7 +29,9 @@ import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
+import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.impl.NamedElementImpl;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -160,7 +163,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	@Override
 	public void apply(T instance) {		
 		// Calls apply for all bases.
-		for (T base: getExtends()) {
+		for (T base: resolveProxies(getExtends())) {
 			base.apply(instance);
 		}
 		
@@ -172,11 +175,18 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 			}
 		}
 		
+		// Documentation
 		EList<EObject> documentation = getDocumentation();
 		if (!documentation.isEmpty()) {
 			EList<EObject> instanceDocumentation = instance.getDocumentation();
 			instanceDocumentation.clear();
 			instanceDocumentation.addAll(EcoreUtil.copyAll(documentation));
+		}
+		
+		// Marker
+		Marker marker = getMarker();
+		if (marker != null) {
+			instance.setMarker(EcoreUtil.copy(marker));
 		}
 	}
 
@@ -382,7 +392,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	protected URI getPackageFeatureURI(EStructuralFeature feature) {
 		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof org.nasdanika.flow.Package) {
-				URI uri = getUri(ancestor);
+				URI uri = NcoreUtil.getUri(ancestor);
 				if (feature != null) {
 					uri = uri.appendSegment(feature.getName());					
 				}

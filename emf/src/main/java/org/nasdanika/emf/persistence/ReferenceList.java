@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import java.net.URL;
 import java.util.List;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -40,7 +41,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			EReference eReference,
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
-			java.util.function.Function<ENamedElement,String> keyProvider,
+			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);

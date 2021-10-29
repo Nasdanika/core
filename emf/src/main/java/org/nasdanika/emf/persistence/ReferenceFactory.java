@@ -3,7 +3,7 @@ package org.nasdanika.emf.persistence;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -23,7 +23,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectFactory;
 import org.nasdanika.common.persistence.ObjectLoader;
-import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -34,7 +34,7 @@ import org.yaml.snakeyaml.Yaml;
 public class ReferenceFactory<T> implements ObjectFactory<T> {
 	
 	private EObjectLoader resolver;
-	private Function<ENamedElement, String> keyProvider;
+	private BiFunction<EClass,ENamedElement, String> keyProvider;
 	private boolean isStrictContainment;
 	private boolean referenceSupplierFactory;
 	private boolean resolveProxies;
@@ -58,7 +58,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 			String eReferenceKey,  
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
-			java.util.function.Function<ENamedElement,String> keyProvider) {
+			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
 		this.eClass = eClass;
 		this.eReference = eReference;
@@ -68,8 +68,8 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		this.resolveProxies = !eReference.isResolveProxies();
 		this.keyProvider = keyProvider;
 		
-		this.isHomogenous = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_HOMOGENOUS));			
-		this.isStrictContainment = isHomogenous && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_STRICT_CONTAINMENT));			
+		this.isHomogenous = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_HOMOGENOUS));			
+		this.isStrictContainment = isHomogenous && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_STRICT_CONTAINMENT));			
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -145,7 +145,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 			EClass eReferenceType = effectiveReferenceType();
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy instead of loading object
-				EObject proxy = EObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base);
+				EObject proxy = EObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, marker);
 				if (marker != null) {
 					proxy.eAdapters().add(new MarkedAdapter(marker));
 				}
@@ -164,46 +164,48 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		EGenericType eGenericReferenceType = eClass.getFeatureType(eReference);
 		EClass eReferenceType = (EClass) eGenericReferenceType.getEClassifier();
 		
-		String refTypes = EmfUtil.getNasdanikaAnnotationDetail(eClass, EObjectLoader.REFERENCE_TYPES);
-		if (!Util.isBlank(refTypes)) {
-			Yaml yaml = new Yaml();
-			Map<String,Object> refTypesMap = yaml.load(refTypes);
-			Object refType = refTypesMap.get(eReferenceKey);
-			if (refType != null) {
-				EPackage ePackage;
-				String refTypeClassName;
-				if (refType instanceof String) {
-					ePackage = eClass.getEPackage();
-					refTypeClassName = (String) refType;
-				} else if (refType instanceof Map) {
-					@SuppressWarnings("unchecked")
-					Map<String, Object> refTypeMap = (Map<String,Object>) refType;
-					Object nsURI = refTypeMap.get("ns-uri");
-					if (nsURI instanceof String) {
-						ResourceSet resourceSet = resolver.getResourceSet();
-						Registry packageRegistry = resourceSet.getPackageRegistry();
-						ePackage = packageRegistry.getEPackage((String) nsURI); 
-						if (ePackage == null) {
-							throw new IllegalArgumentException("EPackage not found: " + nsURI);													
-						}
-						Object className = refTypeMap.get("name");
-						if (className instanceof String) {
-							refTypeClassName = (String) className;
+		for (EClass ec: NcoreUtil.lineage(eClass)) {
+			String refTypes = NcoreUtil.getNasdanikaAnnotationDetail(ec, EObjectLoader.REFERENCE_TYPES);
+			if (!Util.isBlank(refTypes)) {
+				Yaml yaml = new Yaml();
+				Map<String,Object> refTypesMap = yaml.load(refTypes);
+				Object refType = refTypesMap.get(eReferenceKey);
+				if (refType != null) {
+					EPackage ePackage;
+					String refTypeClassName;
+					if (refType instanceof String) {
+						ePackage = ec.getEPackage();
+						refTypeClassName = (String) refType;
+					} else if (refType instanceof Map) {
+						@SuppressWarnings("unchecked")
+						Map<String, Object> refTypeMap = (Map<String,Object>) refType;
+						Object nsURI = refTypeMap.get("ns-uri");
+						if (nsURI instanceof String) {
+							ResourceSet resourceSet = resolver.getResourceSet();
+							Registry packageRegistry = resourceSet.getPackageRegistry();
+							ePackage = packageRegistry.getEPackage((String) nsURI); 
+							if (ePackage == null) {
+								throw new IllegalArgumentException("EPackage not found: " + nsURI);													
+							}
+							Object className = refTypeMap.get("name");
+							if (className instanceof String) {
+								refTypeClassName = (String) className;
+							} else {
+								throw new IllegalArgumentException("Reference type specification name shall be a String, got: " + className);													
+							}
 						} else {
-							throw new IllegalArgumentException("Reference type specification name shall be a String, got: " + className);													
-						}
+							throw new IllegalArgumentException("Reference type specification ns-uri shall be a String, got: " + nsURI);						
+						}					
 					} else {
-						throw new IllegalArgumentException("Reference type specification ns-uri shall be a String, got: " + nsURI);						
+						throw new IllegalArgumentException("Unsupported reference type specification: " + refType.getClass() + ": " + refType);
 					}					
-				} else {
-					throw new IllegalArgumentException("Unsupported reference type specification: " + refType.getClass() + ": " + refType);
-				}					
-				
-				eReferenceType = (EClass) ePackage.getEClassifier(refTypeClassName);
-				if (eReferenceType == null) {
-					throw new IllegalArgumentException("Reference type " + refTypeClassName + " not found in EPackage " + ePackage.getNsURI());						
-				}
-			}				
+					
+					eReferenceType = (EClass) ePackage.getEClassifier(refTypeClassName);
+					if (eReferenceType == null) {
+						throw new IllegalArgumentException("Reference type " + refTypeClassName + " not found in EPackage " + ePackage.getNsURI());						
+					}
+				}				
+			}
 		}
 		return eReferenceType;
 	}	

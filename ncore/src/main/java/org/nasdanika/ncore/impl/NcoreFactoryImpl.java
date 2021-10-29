@@ -107,7 +107,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public Marker createMarker() {
+	public org.nasdanika.ncore.Marker createMarker() {
 		MarkerImpl marker = new MarkerImpl();
 		return marker;
 	}

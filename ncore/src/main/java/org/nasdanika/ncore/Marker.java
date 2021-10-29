@@ -19,10 +19,10 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMarker()
- * @model
+ * @model superTypes="org.nasdanika.ncore.IMarker"
  * @generated
  */
-public interface Marker extends EObject {
+public interface Marker extends EObject, org.nasdanika.common.persistence.Marker {
 	/**
 	 * Returns the value of the '<em><b>Location</b></em>' attribute.
 	 * <!-- begin-user-doc -->

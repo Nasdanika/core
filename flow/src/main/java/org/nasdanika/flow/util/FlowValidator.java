@@ -36,7 +36,7 @@ import org.nasdanika.flow.Service;
 import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Start;
 import org.nasdanika.flow.Transition;
-import org.nasdanika.ncore.impl.ModelElementImpl;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -221,7 +221,7 @@ public class FlowValidator extends EObjectValidator {
 			}
 			for (PackageElement<?> ex: packageElement.getExtends()) {
 				if (ex.getModifiers().contains("final")) {
-					helper.error("Extending a final " + ex.eClass().getName() + " " + ex.getName() + " (" + ModelElementImpl.getUri(ex) + ")");
+					helper.error("Extending a final " + ex.eClass().getName() + " " + ex.getName() + " (" + NcoreUtil.getUri(ex) + ")");
 				}
 			}
 			return helper.isSuccess();

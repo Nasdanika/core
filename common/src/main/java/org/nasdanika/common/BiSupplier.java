@@ -18,5 +18,25 @@ public interface BiSupplier<T,U> extends java.util.function.Consumer<BiConsumer<
 	default void accept(BiConsumer<T, U> consumer) {
 		consumer.accept(getFirst(), getSecond());
 	}
+	
+	static <T,U> BiSupplier<T, U> of(T first, U second) {
+		return new BiSupplier<T, U>() {
+
+			@Override
+			public T getFirst() {
+				return first;
+			}
+
+			@Override
+			public U getSecond() {
+				return second;
+			}
+			
+			@Override
+			public String toString() {
+				return BiSupplier.class.getName() + " { first=" + first +", second=" + second + "}";
+			}
+		};
+	}
 
 }

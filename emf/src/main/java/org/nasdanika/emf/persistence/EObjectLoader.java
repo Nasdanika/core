@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -30,7 +31,10 @@ import org.nasdanika.common.persistence.DispatchingLoader;
 import org.nasdanika.common.persistence.Loadable;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
-import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.NcoreFactory;
+import org.nasdanika.ncore.util.NcoreUtil;
+import org.yaml.snakeyaml.Yaml;
 
 public class EObjectLoader extends DispatchingLoader {
 	
@@ -43,6 +47,9 @@ public class EObjectLoader extends DispatchingLoader {
 	
 	static final String HREF_KEY = "href";
 
+	/**
+	 * Use this annotation to customize load keys. Use feature-key annotation for features to also customize containment path calculation.
+	 */
 	public static final String LOAD_KEY = "load-key";
 	
 	/**
@@ -71,6 +78,12 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String REFERENCE_TYPES = "reference-types";
 	
 	/**
+	 * This annotation allows to load keys for features.
+	 * The value shall be a YAML map of feature names to keys. If entry value is a string it is treated as a key name.
+	 */
+	public static final String LOAD_KEYS = "load-keys";
+	
+	/**
 	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.
 	 */
 	public static final String EXCLUSIVE_WITH = "exclusive-with";
@@ -82,15 +95,15 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String IS_COMPUTED = "computed";
 	
 	public static boolean isDefaultFeature(EClass eClass, EStructuralFeature feature) {
-		if ("true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, IS_DEFAULT_FEATURE))) {
+		if ("true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, IS_DEFAULT_FEATURE))) {
 			return true;
 		}
-		String dfName = EmfUtil.getNasdanikaAnnotationDetail(eClass, IS_DEFAULT_FEATURE);
+		String dfName = NcoreUtil.getNasdanikaAnnotationDetail(eClass, IS_DEFAULT_FEATURE);
 		if (!Util.isBlank(dfName)) {
 			return feature.getName().equals(dfName);
 		}
 		for (EClass st: eClass.getEAllSuperTypes()) {
-			dfName = EmfUtil.getNasdanikaAnnotationDetail(st, IS_DEFAULT_FEATURE);
+			dfName = NcoreUtil.getNasdanikaAnnotationDetail(st, IS_DEFAULT_FEATURE);
 			if (!Util.isBlank(dfName)) {
 				return feature.getName().equals(dfName);
 			}			
@@ -116,10 +129,11 @@ public class EObjectLoader extends DispatchingLoader {
 	
 	/**
 	 * Default implementation of load key provider - gets load key from the Nasdanika annotation (urn:org.nasdanika) <code>load-key</code> details if it is present.
+	 * For features delegates to {@link NcoreUtil} getFeatureKey.
 	 * Otherwise converts {@link ENamedElement} element name from camel case to lower-cased kebab case. E.g. firstName is converted first-name.
 	 */
-	public static final java.util.function.Function<ENamedElement,String> LOAD_KEY_PROVIDER = ne -> {
-		EAnnotation na = EmfUtil.getNasdanikaAnnotation(ne);
+	public static final BiFunction<EClass,ENamedElement,String> LOAD_KEY_PROVIDER = (eClass,ne) -> {
+		EAnnotation na = NcoreUtil.getNasdanikaAnnotation(ne);
 		if (na != null) {
 			if (na.getDetails().containsKey(IS_LOADABLE) && "false".equals(na.getDetails().get(IS_LOADABLE))) {
 				return null;
@@ -128,19 +142,25 @@ public class EObjectLoader extends DispatchingLoader {
 				return na.getDetails().get(LOAD_KEY);
 			}
 		}
+
+		if (eClass != null && ne instanceof EStructuralFeature) {
+			EStructuralFeature feature = (EStructuralFeature) ne;
+			String loadKey = getLoadKey(eClass, feature);		
+			return loadKey == null ? NcoreUtil.getFeatureKey(eClass, feature) : loadKey;
+		}
 		
 		return Util.camelToKebab(ne.getName());
 	};
 	
-	private java.util.function.Function<ENamedElement,String> keyProvider;
+	private BiFunction<EClass,ENamedElement,String> keyProvider;
 	
 	private class EPackageEntry {
 
 		EPackage ePackage;
 		
-		java.util.function.Function<ENamedElement,String> keyProvider;
+		BiFunction<EClass,ENamedElement,String> keyProvider;
 				
-		EPackageEntry(EPackage ePackage, java.util.function.Function<ENamedElement,String> keyProvider) {
+		EPackageEntry(EPackage ePackage, BiFunction<EClass,ENamedElement,String> keyProvider) {
 			this.ePackage = ePackage;
 			this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
 		}
@@ -151,7 +171,7 @@ public class EObjectLoader extends DispatchingLoader {
 
 	private ResourceSet resourceSet;
 
-	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, EPackage... ePackages) {
+	public EObjectLoader(ObjectLoader chain, BiFunction<EClass,ENamedElement,String> keyProvider, EPackage... ePackages) {
 		super(chain);
 		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
 		for (EPackage ePackage: ePackages) {
@@ -163,7 +183,7 @@ public class EObjectLoader extends DispatchingLoader {
 		this(null, null, ePackages);
 	}
 
-	public EObjectLoader(ObjectLoader chain, java.util.function.Function<ENamedElement,String> keyProvider, ResourceSet resourceSet) {
+	public EObjectLoader(ObjectLoader chain, BiFunction<EClass,ENamedElement,String> keyProvider, ResourceSet resourceSet) {
 		this(chain, keyProvider, resourceSet.getPackageRegistry().values().toArray(new EPackage[0]));
 		this.resourceSet = resourceSet;
 	}
@@ -172,11 +192,11 @@ public class EObjectLoader extends DispatchingLoader {
 		this(null, null, resourceSet);
 	}
 	
-	public void register(EPackage ePackage, java.util.function.Function<ENamedElement,String> keyProvider) {
+	public void register(EPackage ePackage, BiFunction<EClass,ENamedElement,String> keyProvider) {
 		if (keyProvider == null) {
 			keyProvider = this.keyProvider;
 		}
-		String packageKey = keyProvider.apply(ePackage);
+		String packageKey = keyProvider.apply(null, ePackage);
 		if (packageKey != null) {
 			registry.put(packageKey + "-", new EPackageEntry(ePackage, keyProvider == null ? this.keyProvider : keyProvider));
 		}
@@ -188,7 +208,7 @@ public class EObjectLoader extends DispatchingLoader {
 
 	@Override
 	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		BiSupplier<EClass,java.util.function.Function<ENamedElement,String>> result = resolveEClass(type);
+		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
 		if (result != null) {
 			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond());
 		}
@@ -201,15 +221,15 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param type
 	 * @return
 	 */
-	public BiSupplier<EClass,java.util.function.Function<ENamedElement,String>> resolveEClass(String type) {		
+	public BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> resolveEClass(String type) {		
 		for (Entry<String, EPackageEntry> re: registry.entrySet()) {
 			if (type.startsWith(re.getKey())) {
 				EPackageEntry ePackageEntry = re.getValue();
 				for (EClassifier eClassifier: ePackageEntry.ePackage.getEClassifiers()) {
-					if (eClassifier instanceof EClass && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(eClassifier, IS_LOADABLE, "true"))) {
-						String eClassifierKey = ePackageEntry.keyProvider.apply(eClassifier);
+					if (eClassifier instanceof EClass && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eClassifier, IS_LOADABLE, "true"))) {
+						String eClassifierKey = ePackageEntry.keyProvider.apply(null, eClassifier);
 						if (eClassifierKey != null && type.equals(re.getKey() + eClassifierKey)) {
-							return new BiSupplier<EClass, java.util.function.Function<ENamedElement,String>>() {
+							return new BiSupplier<EClass, BiFunction<EClass,ENamedElement,String>>() {
 
 								@Override
 								public EClass getFirst() {
@@ -217,7 +237,7 @@ public class EObjectLoader extends DispatchingLoader {
 								}
 
 								@Override
-								public java.util.function.Function<ENamedElement, String> getSecond() {
+								public BiFunction<EClass,ENamedElement, String> getSecond() {
 									return ePackageEntry.keyProvider;
 								}
 							}; 
@@ -250,7 +270,7 @@ public class EObjectLoader extends DispatchingLoader {
 			URL base, 
 			ProgressMonitor progressMonitor, 
 			Marker marker, 
-			java.util.function.Function<ENamedElement,String> keyProvider) throws Exception {
+			BiFunction<EClass,ENamedElement,String> keyProvider) throws Exception {
 		
 		// Nulls are nulls
 		if (config == null) {
@@ -258,7 +278,7 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		
 		// Proxy
-		Object proxy = createProxy(eClass, config, base);
+		Object proxy = createProxy(eClass, config, base, marker);
 		if (proxy != null) {
 			return proxy;
 		}
@@ -311,7 +331,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param base
 	 * @return Proxy object or null if config is not a proxy config.
 	 */
-	public static EObject createProxy(EClass eClass, Object config, URL base) {
+	public static EObject createProxy(EClass eClass, Object config, URL base, Marker marker) {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
@@ -337,11 +357,31 @@ public class EObjectLoader extends DispatchingLoader {
 						proxyURI = proxyURI.resolve(baseURI);
 					}
 					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
+					mark(eObject, marker);
+					
 					return eObject;
 				}
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * If marker is not null adds marked adapter. If eObject is instance of {@link Marked} creates and sets {@link org.nasdanika.ncore.Marker}.
+	 * @param eObject
+	 * @param marker
+	 */
+	public static void mark(EObject eObject, Marker marker) {
+		if (marker != null) {
+			eObject.eAdapters().add(new MarkedAdapter(marker));
+			if (eObject instanceof Marked) {
+				org.nasdanika.ncore.Marker mMarker = NcoreFactory.eINSTANCE.createMarker();
+				mMarker.setLocation(marker.getLocation());
+				mMarker.setLine(marker.getLine());
+				mMarker.setColumn(marker.getColumn());
+				((Marked) eObject).setMarker(mMarker);
+			}
+		}
 	}
 	
 	/**
@@ -361,4 +401,23 @@ public class EObjectLoader extends DispatchingLoader {
 	public ResourceSet getResourceSet() {
 		return resourceSet;
 	}
+	
+	/**
+	 * @return Load key from <code>load-keys</code> annotation. 
+	 */
+	public static String getLoadKey(EClass eClass, EStructuralFeature feature) {
+		for (EClass ec: NcoreUtil.lineage(eClass)) {
+			String loadKeys = NcoreUtil.getNasdanikaAnnotationDetail(ec, LOAD_KEYS);
+			if (!Util.isBlank(loadKeys)) {
+				Yaml yaml = new Yaml();
+				Map<String,Object> loadKeyMap = yaml.load(loadKeys);
+				Object loadKey = loadKeyMap.get(feature.getName());
+				if (loadKey instanceof String) {
+					return (String) loadKey;
+				}
+			}
+		}
+		return null;
+	}	
+	
 }

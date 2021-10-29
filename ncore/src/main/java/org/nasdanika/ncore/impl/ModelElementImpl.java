@@ -3,19 +3,16 @@
 package org.nasdanika.ncore.impl;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,12 +22,11 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
-import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -139,130 +135,6 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		eDynamicSet(NcorePackage.MODEL_ELEMENT__MARKER, NcorePackage.Literals.MARKED__MARKER, newMarker);
 	}
 	
-	private static String toString(URI uri) {
-		return uri == null ? null : uri.toString();
-	}
-	
-	/**
-	 * Returns {@link ModelElement}.getUri() if the argument is an instance of ModelElement and getUri() returns a non blank string.
-	 * Computes URI from the containment reference otherwise.
-	 * @param eObj
-	 * @return
-	 */
-	public static URI getUri(EObject eObj) {
-		if (eObj == null || isEMapEntry(eObj)) {
-			return null; // EMap entries do not have URI's.
-		}
-		
-		if (eObj instanceof ModelElement) {
-			String uri = ((ModelElement) eObj).getUri();
-			if (!Util.isBlank(uri)) {
-				return URI.createURI(uri);
-			}
-		}
-		
-		EObject container = eObj.eContainer();
-		LinkedList<String> containmentPath = new LinkedList<>();
-		while (isEMapEntry(container)) {
-			containmentPath.addFirst(containmentPath(container));
-			container = container.eContainer();
-		}
-		if (container == null) {
-//			Leads to stack overflow during loading.			
-//			for (EObject referrer: getReferrers(eObj, NcorePackage.Literals.REFERENCE__TARGET)) {
-//				return getUri(referrer);
-//			}
-			if (eObj instanceof ModelElement) {
-				String uuid = ((ModelElement) eObj).getUuid();
-				if (!Util.isBlank(uuid)) {
-					return URI.createURI("uuid://" + uuid);
-				}
-			}
-			return null;
-		}
-		
-		URI cURI = getUri(container);
-		if (cURI == null) {
-			return null;
-		}
-		if (containmentPath.isEmpty()) {
-			containmentPath.add(containmentPath(eObj));
-		}
-		String cp = String.join("/", containmentPath);
-		URI cpURI = URI.createURI(cp);
-		String cLastSegment = cURI.lastSegment();
-		if (cLastSegment == null || cLastSegment.length() > 0) {
-			cURI = cURI.appendSegment("");
-		}
-		return cpURI.resolve(cURI);
-	}
-
-	/**
-	 * @param eObj
-	 * @return true if the argument is an entry for EMap
-	 */
-	public static boolean isEMapEntry(EObject eObj) {
-		if (eObj instanceof Map.Entry) {
-			EReference cf = eObj.eContainmentFeature();
-			return cf != null && cf.isMany() && cf.getEType().getInstanceClass() == Map.Entry.class;
-		}
-		return false;
-	}
-	
-	/**
-	 * Containment path relative to the object container.
-	 * @param eObject
-	 * @return null if there is no container. Reference name concatenated with object key for {@link EMap}'s and with object index for many-references.
-	 */
-	public static String containmentPath(EObject eObj) {
-		EObject container = eObj.eContainer();
-		if (container == null) {
-			return null;
-		}
-		EReference eContainmentFeature = eObj.eContainmentFeature();
-		
-		if (eContainmentFeature.isMany()) {
-			if (isEMapEntry(eObj)) {
-				Object key = ((Map.Entry<?,?>) eObj).getKey();
-				if (key == null) {
-					return null;
-				}
-				return eContainmentFeature.getName() + "/" + key;
-			}
-			
-			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
-			if (eKeys.isEmpty()) {
-				int idx = ((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj);
-				return eContainmentFeature.getName() + "/" + idx;
-			}
-			StringBuilder pathBuilder = new StringBuilder(eContainmentFeature.getName());
-			for (EAttribute eKey: eKeys) {
-				pathBuilder.append("/").append(eObj.eGet(eKey));
-			}
-			return pathBuilder.toString();
-		}
-		
-		return eContainmentFeature.getName();		
-	}
-	
-	public static String relativeContainmentPath(EObject obj, EObject base) {
-		if (obj == null || base == null) {
-			return null;
-		}
-		if (EcoreUtil.isAncestor(obj, base)) {
-			// TODO
-		}
-		if (EcoreUtil.isAncestor(base, obj)) {
-			// TODO
-		}
-		for (EObject ancestor = obj.eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
-			if (EcoreUtil.isAncestor(ancestor, obj)) {
-				// TODO
-			}
-		}
-		return null;
-	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -270,7 +142,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 */
 	@Override
 	public String getUri() {
-		return (String) eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
+		return (String)eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
 	}
 
 	/**
@@ -440,7 +312,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			while (cit.hasNext()) {
 				Object next = cit.next(); 
 				if (type.isInstance(next)) {
-					URI nextURI = getUri((T) next);
+					URI nextURI = NcoreUtil.getUri((T) next);
 					if (nextURI != null && nextURI.equals(uri)) {					
 						return (T) next;
 					}
@@ -478,59 +350,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @return
 	 */
 	protected <T extends EObject> EList<T> getReferrers(EReference eReference) {
-		return getReferrers(this, eReference);
-	}
-	
-	/**
-	 * Finds objects referencing the argument object (target) via the specified reference.
-	 * @param <T>
-	 * @param target Referenced object
-	 * @param eReference Reference
-	 * @return Object referencing this one via the specified reference.
-	 */
-	public static <T extends EObject> EList<T> getReferrers(EObject target, EReference eReference) {
-		EList<T> ret = new BasicInternalEList<>(EObject.class);
-		
-		Resource res = target.eResource(); 
-		TreeIterator<?> cit = null;
-		if (res == null) {
-			EObject root = target;
-			EObject rc;
-			while ((rc = root.eContainer()) != null) {
-				root = rc;
-			}
-			if (root != null) {
-				collect(root, target, eReference, ret);
-				cit = root.eAllContents();
-			}			
-		} else {
-			ResourceSet rSet = res.getResourceSet();
-			cit = rSet == null ? res.getAllContents() : rSet. getAllContents();
-		}
-		if (cit != null) {
-			while (cit.hasNext()) {
-				collect(cit.next(), target, eReference, ret);
-			}			
-		}
-		return ret;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T extends EObject> void collect(
-			Object source, 
-			EObject target, 
-			EReference eReference,
-			EList<T> accumulator) {
-		if (eReference.getEContainingClass().isInstance(source)) {
-			Object value = ((EObject) source).eGet(eReference);
-			if (eReference.isMany()) {
-				if (((Collection<?>) value).contains(target)) {
-					accumulator.add((T) source);
-				}
-			} else if (value == target) {
-				accumulator.add((T) source);
-			}					
-		}
+		return NcoreUtil.getReferrers(this, eReference);
 	}
 	
 	/**
@@ -541,7 +361,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	public URI eProxyURI() {
 		URI eProxyURI = super.eProxyURI();
 		if (eProxyURI != null && eProxyURI.isRelative()) {
-			URI base = getUri(this);
+			URI base = NcoreUtil.getUri(this);
 			if (base != null && !base.isRelative()) {
 				return eProxyURI.resolve(base);
 			}
@@ -570,22 +390,36 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @return
 	 */
 	protected EObject resolve(EClass type, URI uri) {
-		return EcoreUtil.resolve(createProxy(type, uri), this);
+		return EcoreUtil.resolve(NcoreUtil.createProxy(type, uri), this);
 	}
 	
+	protected <E extends EObject> List<E> resolveProxies(Collection<E> objects) {
+		return objects.stream().map(this::resolveProxy).collect(Collectors.toList());
+	}
+
 	/**
-	 * Creates a proxy of given type with given URI 
-	 * @param eClass
-	 * @param uri
+	 * If argument is a proxy - resolves it. If it is not resolved throws {@link ConfigurationException} with a {@link org.nasdanika.common.persistence.Marker} from the proxy if it is {@link org.nasdanika.common.persistence.Marked} 
+	 * and has a marker or from this object.  
+	 * @param <E>
+	 * @param eObject
 	 * @return
 	 */
-	protected static EObject createProxy(EClass type, URI uri) {
-		EObject proxy = type.getEPackage().getEFactoryInstance().create(type);
-		((InternalEObject) proxy).eSetProxyURI(uri);
-		if (proxy instanceof NamedElement) {
-			((NamedElement) proxy).setName(type.getName() + " proxy for " + uri);
+	@SuppressWarnings("unchecked")
+	protected <E extends EObject> E resolveProxy(E eObject) {
+		if (eObject.eIsProxy()) {
+			eObject = (E) EcoreUtil.resolve(eObject, this);
+			if (eObject.eIsProxy()) { // Not resolved.
+				org.nasdanika.common.persistence.Marker marker = null;
+				if (eObject instanceof org.nasdanika.common.persistence.Marked) {
+					marker = ((org.nasdanika.common.persistence.Marked) eObject).getMarker();
+				}
+				if (marker == null) {
+					marker = getMarker();
+				}
+				throw new ConfigurationException("Unresolved proxy: " + eObject, marker);
+			}
 		}
-		return proxy;
+		return eObject;	
 	}
 
 } //ModelElementImpl

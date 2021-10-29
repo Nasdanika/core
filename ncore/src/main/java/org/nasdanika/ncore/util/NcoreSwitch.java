@@ -7,6 +7,8 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.*;
 
 /**
@@ -72,15 +74,29 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.IMARKED: {
+				Marked iMarked = (Marked)theEObject;
+				T1 result = caseIMarked(iMarked);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.MARKED: {
-				Marked marked = (Marked)theEObject;
+				org.nasdanika.ncore.Marked marked = (org.nasdanika.ncore.Marked)theEObject;
 				T1 result = caseMarked(marked);
+				if (result == null) result = caseIMarked(marked);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.IMARKER: {
+				Marker iMarker = (Marker)theEObject;
+				T1 result = caseIMarker(iMarker);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.MARKER: {
-				Marker marker = (Marker)theEObject;
+				org.nasdanika.ncore.Marker marker = (org.nasdanika.ncore.Marker)theEObject;
 				T1 result = caseMarker(marker);
+				if (result == null) result = caseIMarker(marker);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -90,6 +106,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseModelElement(temporal);
 				if (result == null) result = caseMarked(temporal);
 				if (result == null) result = caseAdaptable(temporal);
+				if (result == null) result = caseIMarked(temporal);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -98,6 +115,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseModelElement(modelElement);
 				if (result == null) result = caseMarked(modelElement);
 				if (result == null) result = caseAdaptable(modelElement);
+				if (result == null) result = caseIMarked(modelElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -107,6 +125,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseModelElement(namedElement);
 				if (result == null) result = caseMarked(namedElement);
 				if (result == null) result = caseAdaptable(namedElement);
+				if (result == null) result = caseIMarked(namedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -136,6 +155,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseIMarked(Marked object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Marked</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -146,7 +180,22 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMarked(Marked object) {
+	public T1 caseMarked(org.nasdanika.ncore.Marked object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IMarker</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IMarker</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseIMarker(Marker object) {
 		return null;
 	}
 
@@ -161,7 +210,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseMarker(Marker object) {
+	public T1 caseMarker(org.nasdanika.ncore.Marker object) {
 		return null;
 	}
 

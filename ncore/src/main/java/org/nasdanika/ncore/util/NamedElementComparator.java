@@ -5,7 +5,6 @@ import java.util.Comparator;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.NamedElement;
-import org.nasdanika.ncore.impl.ModelElementImpl;
 
 public class NamedElementComparator implements Comparator<NamedElement> {
 	
@@ -24,8 +23,8 @@ public class NamedElementComparator implements Comparator<NamedElement> {
 		}
 		if (Util.isBlank(a.getName())) {
 			if (Util.isBlank(b.getName())) {
-				URI aUri = ModelElementImpl.getUri(a);
-				URI bUri = ModelElementImpl.getUri(b);
+				URI aUri = NcoreUtil.getUri(a);
+				URI bUri = NcoreUtil.getUri(b);
 				if (aUri == null) {
 					if (bUri == null) {
 						return a.hashCode() - b.hashCode();

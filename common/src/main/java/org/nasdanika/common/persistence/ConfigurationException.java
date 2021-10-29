@@ -15,12 +15,12 @@ public class ConfigurationException extends NasdanikaException {
 	private Marker marker;
 
 	public ConfigurationException(String message, Marker marker) {
-		super(marker == null ? message : message + " at " + marker);
+		super(marker == null ? message : message + " at " + Marker.toString(marker));
 		this.marker = marker;
 	}
 
 	public ConfigurationException(String message, Throwable cause, Marker marker) {
-		super(marker == null ? message : message + " at " + marker, cause);
+		super(marker == null ? message : message + " at " + Marker.toString(marker), cause);
 		this.marker = marker;
 	}
 

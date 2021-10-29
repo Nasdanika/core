@@ -19,6 +19,7 @@ import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Relationship;
 import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -266,7 +267,7 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		if (feature == FlowPackage.Literals.RELATIONSHIP__TARGET) {
 			URI targetURI = URI.createURI(getTargetKey());
 			if (eContainmentFeature() == FlowPackage.Literals.RELATIONSHIP_ENTRY__VALUE) {
-				URI ccURI = getUri(eContainer().eContainer());
+				URI ccURI = NcoreUtil.getUri(eContainer().eContainer());
 				if (ccURI != null) {
 					targetURI = targetURI.resolve(ccURI);
 				}

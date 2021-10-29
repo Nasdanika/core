@@ -45,7 +45,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass iMarkedEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass markedEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass iMarkerEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -183,6 +197,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getIMarked() {
+		return iMarkedEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getMarked() {
 		return markedEClass;
 	}
@@ -195,6 +219,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EReference getMarked_Marker() {
 		return (EReference)markedEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getIMarker() {
+		return iMarkerEClass;
 	}
 
 	/**
@@ -518,8 +552,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Create classes and their features
 		adaptableEClass = createEClass(ADAPTABLE);
 
+		iMarkedEClass = createEClass(IMARKED);
+
 		markedEClass = createEClass(MARKED);
 		createEReference(markedEClass, MARKED__MARKER);
+
+		iMarkerEClass = createEClass(IMARKER);
 
 		markerEClass = createEClass(MARKER);
 		createEAttribute(markerEClass, MARKER__LOCATION);
@@ -587,6 +625,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		markedEClass.getESuperTypes().add(this.getIMarked());
+		markerEClass.getESuperTypes().add(this.getIMarker());
 		temporalEClass.getESuperTypes().add(this.getModelElement());
 		modelElementEClass.getESuperTypes().add(this.getMarked());
 		modelElementEClass.getESuperTypes().add(this.getAdaptable());
@@ -595,8 +635,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(iMarkedEClass, org.nasdanika.common.persistence.Marked.class, "IMarked", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(markedEClass, Marked.class, "Marked", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMarked_Marker(), this.getMarker(), null, "marker", null, 0, 1, Marked.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(iMarkerEClass, org.nasdanika.common.persistence.Marker.class, "IMarker", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(markerEClass, Marker.class, "Marker", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMarker_Location(), ecorePackage.getEString(), "location", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

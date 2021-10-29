@@ -35,7 +35,7 @@ public interface Note extends EObject {
 	 * @return the value of the '<em>Text</em>' attribute.
 	 * @see #setText(String)
 	 * @see org.nasdanika.diagram.DiagramPackage#getNote_Text()
-	 * @model
+	 * @model annotation="urn:org.nasdanika default-feature='true'"
 	 * @generated
 	 */
 	String getText();

@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
@@ -42,7 +43,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 			EReference eReference,
 			EObjectLoader resolver,
 			boolean referenceSupplierFactory,
-			java.util.function.Function<ENamedElement,String> keyProvider,
+			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");

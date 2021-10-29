@@ -66,6 +66,7 @@ public interface Style extends EObject {
 	 * @return the value of the '<em>Notes</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Notes()
 	 * @model containment="true"
+	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
 	 * @generated
 	 */
 	EList<Note> getNotes();

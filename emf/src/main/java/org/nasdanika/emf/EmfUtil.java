@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -39,11 +40,10 @@ import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.persistence.FeatureCacheAdapter;
-import org.nasdanika.ncore.impl.ModelElementImpl;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 public class EmfUtil {
 
-	private static final String NASDANIKA_ANNOTATION_SOURCE = "urn:org.nasdanika";
 	public static final String ICON_KEY = "icon";
 	public static final String LABEL_KEY = "label";
 	
@@ -57,27 +57,11 @@ public class EmfUtil {
 	};
 
 	private EmfUtil() {
-		// Singleton
+		// Utility class
 	}
 		
-	public static EAnnotation getNasdanikaAnnotation(EModelElement modelElement) {
-		return modelElement == null ? null : modelElement.getEAnnotation(NASDANIKA_ANNOTATION_SOURCE);
-	}
-	
-	public static String getNasdanikaAnnotationDetail(EModelElement modelElement, String key) {
-		return getNasdanikaAnnotationDetail(modelElement, key, null);
-	}
-	
-	public static String getNasdanikaAnnotationDetail(EModelElement modelElement, String key, String defaultValue) {
-		EAnnotation na = getNasdanikaAnnotation(modelElement);
-		if (na == null || !na.getDetails().containsKey(key)) {
-			return defaultValue;
-		}
-		return na.getDetails().get(key);
-	}
-	
 	public static String getCategory(EModelElement modelElement) {
-		return getNasdanikaAnnotationDetail(modelElement, "category");
+		return NcoreUtil.getNasdanikaAnnotationDetail(modelElement, "category");
 	}
 
 	/**
@@ -176,7 +160,7 @@ public class EmfUtil {
 	 * @return
 	 */
 	public static String getDocumentation(EModelElement modelElement) {
-		EAnnotation nasdanikaAnnotation = getNasdanikaAnnotation(modelElement);
+		EAnnotation nasdanikaAnnotation = NcoreUtil.getNasdanikaAnnotation(modelElement);
 		if (nasdanikaAnnotation != null) {
 			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
 			if (!Util.isBlank(docRef)) {
@@ -239,24 +223,6 @@ public class EmfUtil {
 	}
 	
 	/**
-	 * Flattened inheritance hierarchy from the argument class to all of its supertypes in the order of inheritance.
-	 * @param eClass
-	 * @return
-	 */
-	public static List<EClass> lineage(EClass eClass) {
-		List<EClass> ret = new ArrayList<>();
-		ret.add(eClass);
-		for (EClass sc: eClass.getESuperTypes()) {
-			for (EClass scLineage: lineage(sc)) {
-				if (!ret.contains(scLineage)) {
-					ret.add(scLineage);
-				}
-			}
-		}
-		return ret;
-	}
-
-	/**
 	 * Finds objects referencing the argument object (target) via the specified reference.
 	 * @param <T>
 	 * @param target Referenced object
@@ -264,7 +230,7 @@ public class EmfUtil {
 	 * @return Object referencing this one via the specified reference.
 	 */
 	public static <T extends EObject> EList<T> getReferrers(EObject target, EReference eReference) {
-		return ModelElementImpl.getReferrers(target, eReference);
+		return NcoreUtil.getReferrers(target, eReference);
 	}
 	
 	public static void dumpDiagnostic(org.eclipse.emf.common.util.Diagnostic d, int indent, PrintStream out) {
@@ -340,6 +306,26 @@ public class EmfUtil {
 		}
 		return ret;
 	}
+
+	/**
+	 * Diagnoses the resource set.
+	 * @param resourceSet
+	 * @param context
+	 * @param diagnosticConsumer consumer of diagnostics.
+	 * @return
+	 */
+	public static void diagnose(ResourceSet resourceSet, Context context, BiConsumer<EObject, org.eclipse.emf.common.util.Diagnostic> diagnosticConsumer) {
+		EcoreUtil.resolveAll(resourceSet);
+		resourceSet.getAllContents().forEachRemaining(notifier -> notifier.eNotify(FeatureCacheAdapter.CLEAR_CACHE));
+
+		Diagnostician diagnostician = new Diagnostician();
+		Map<Class<Context>, Context> diagnosticContext = Collections.singletonMap(Context.class, context);
+		for (Resource resource: resourceSet.getResources()) {
+			for (EObject e: resource.getContents()) {
+				diagnosticConsumer.accept(e, diagnostician.validate(e, diagnosticContext));
+			}
+		}
+	}	
 	
 	/**
 	 * Resolves URI against the base if base is not null.

@@ -1,6 +1,5 @@
 package org.nasdanika.common.persistence;
 
-import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.error.Mark;
 
 /**
@@ -50,7 +49,7 @@ public class MarkerImpl implements Marker {
 	
 	@Override
 	public String toString() {
-		return (Util.isBlank(location) ? "" : location) + " " + getLine()+":"+getColumn();
+		return Marker.toString(this);
 	}
 
 	@Override

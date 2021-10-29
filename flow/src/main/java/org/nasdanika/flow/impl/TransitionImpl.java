@@ -19,6 +19,7 @@ import org.nasdanika.flow.Flow;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Transition;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -289,7 +290,7 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	protected URI getFlowElementsURI() {
 		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof Flow) {
-				return getUri(ancestor).appendSegment("elements").appendSegment(""); 
+				return NcoreUtil.getUri(ancestor).appendSegment("elements").appendSegment(""); 
 			}
 		}
 		return null;

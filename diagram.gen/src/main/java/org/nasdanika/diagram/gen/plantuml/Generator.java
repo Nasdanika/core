@@ -134,14 +134,14 @@ public class Generator {
 		
 		ret.append(diagramElement.getId());
 		
-		String location = diagramElement.getLocation();
-		if (!Util.isBlank(location)) {
-			ret.append(" ").append(renderLink(null, location, diagramElement.getTooltip()));
-		}
-		
 		String stereotype = diagramElement.getStereotype();
 		if (!Util.isBlank(stereotype)) {
 			ret.append(" <<").append(stereotype).append(">>");
+		}
+		
+		String location = diagramElement.getLocation();
+		if (!Util.isBlank(location)) {
+			ret.append(" ").append(renderLink(null, location, diagramElement.getTooltip()));
 		}
 		
 		StringBuilder styleBuilder = new StringBuilder();

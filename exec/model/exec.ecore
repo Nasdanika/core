@@ -24,7 +24,7 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="class"/>
+        <details key="feature-key" value="class"/>
         <details key="exclusive-with" value="service property"/>
         <details key="default-feature" value="true"/>
       </eAnnotations>

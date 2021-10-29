@@ -3,9 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
 

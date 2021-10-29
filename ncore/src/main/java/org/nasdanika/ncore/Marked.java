@@ -17,11 +17,11 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMarked()
- * @model interface="true" abstract="true"
+ * @model interface="true" abstract="true" superTypes="org.nasdanika.ncore.IMarked"
  *        annotation="urn:org.nasdanika documentation-reference='doc/marked.md'"
  * @generated
  */
-public interface Marked extends EObject {
+public interface Marked extends EObject, org.nasdanika.common.persistence.Marked {
 	/**
 	 * Returns the value of the '<em><b>Marker</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

@@ -699,10 +699,23 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 			   "documentation-reference", "doc/note.md"
 		   });
 		addAnnotation
+		  (getNote_Text(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
 		  (styleEClass,
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/style.md"
+		   });
+		addAnnotation
+		  (getStyle_Notes(),
+		   source,
+		   new String[] {
+			   "homogenous", "true",
+			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (diagramElementEClass,

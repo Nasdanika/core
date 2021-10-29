@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DependencyTracer;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * Generates PlantUML text from Ecore models.
@@ -264,7 +265,7 @@ public class PlantUmlTextGenerator {
 		
 		for (EClassifier rc: relatedSet) {
 			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
-				String style = EmfUtil.getNasdanikaAnnotationDetail(rc, DIAGRAM_STYLE_KEY);
+				String style = NcoreUtil.getNasdanikaAnnotationDetail(rc, DIAGRAM_STYLE_KEY);
 				if (style == null) {
 					style = RELATED_BACKGROUND;
 				} else {
@@ -342,7 +343,7 @@ public class PlantUmlTextGenerator {
 			collector.append("\" ");
 		}
 		
-		String diagramStyle = EmfUtil.getNasdanikaAnnotationDetail(ref, DIAGRAM_STYLE_KEY);
+		String diagramStyle = NcoreUtil.getNasdanikaAnnotationDetail(ref, DIAGRAM_STYLE_KEY);
 		String relationLine = Util.isBlank(diagramStyle) ? "--" : "-[" + diagramStyle + "]-";
 		String associationRelation = relationLine + ">";
 		
@@ -474,7 +475,7 @@ public class PlantUmlTextGenerator {
 	}
 		
 	public void appendEClassifier(EClassifier eClassifier, Set<EClassifier> allClassifiers) throws IOException {
-		String style = Context.EMPTY_CONTEXT.interpolateToString(EmfUtil.getNasdanikaAnnotationDetail(eClassifier, DIAGRAM_STYLE_KEY));
+		String style = Context.EMPTY_CONTEXT.interpolateToString(NcoreUtil.getNasdanikaAnnotationDetail(eClassifier, DIAGRAM_STYLE_KEY));
 		appendEClassifier(eClassifier, style, allClassifiers);
 	}
 	

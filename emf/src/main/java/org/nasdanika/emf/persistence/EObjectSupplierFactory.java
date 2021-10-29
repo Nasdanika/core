@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EAttribute;
@@ -31,7 +32,7 @@ import org.nasdanika.common.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
 import org.nasdanika.emf.EmfUtil;
-import org.nasdanika.ncore.NcoreFactory;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * Loads {@link EObject} {@link EStructuralFeature}s from configuration.
@@ -47,17 +48,17 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	public EObjectSupplierFactory(
 			EObjectLoader loader, 
 			EClass eClass, 
-			java.util.function.Function<ENamedElement,String> keyProvider) {
+			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
 		this.eClass = eClass;	
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
 		}		
 		for (EStructuralFeature feature: eClass.getEAllStructuralFeatures()) {
-			if (!feature.isChangeable() && !"true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_COMPUTED))) {
+			if (!feature.isChangeable() && !"true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_COMPUTED))) {
 				continue;
 			}
-			String featureKey = keyProvider.apply(feature);
+			String featureKey = keyProvider.apply(eClass, feature);
 			if (featureKey == null) {
 				continue;
 			}
@@ -77,7 +78,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			String featureKey, 
 			EStructuralFeature feature, 
 			EObjectLoader loader, 
-			java.util.function.Function<ENamedElement,String> keyProvider) {
+			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
 		return wrapFeature(featureKey, feature, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, feature));
 	}
@@ -94,10 +95,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			String featureKey, 
 			EStructuralFeature feature, 
 			EObjectLoader loader, 
-			java.util.function.Function<ENamedElement,String> keyProvider,
+			BiFunction<EClass,ENamedElement,String> keyProvider,
 			boolean isDefault) {
 
-		String exclusiveWithStr = EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.EXCLUSIVE_WITH);
+		String exclusiveWithStr = NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.EXCLUSIVE_WITH);
 		Object[] exclusiveWith = exclusiveWithStr == null ? new String[0] : exclusiveWithStr.split("\\s");
 		
 		String documentation = EmfUtil.getDocumentation(feature);
@@ -108,14 +109,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			
 			EClassifier featureType = feature.getEType();
 			Class<?> featureClass = featureType.getInstanceClass();
-			boolean interpolate = "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
+			boolean interpolate = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
 			if (String.class == featureClass) {
 				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation) {
 					
 					@Override
 					public Object create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
 						Object ret = super.create(loader, config, base, progressMonitor, marker);
-						if (ret instanceof String && "true".equals(EmfUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
+						if (ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
 							return base.toURI().resolve((String) ret).toString();
 						}
 						return ret;
@@ -150,7 +151,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 
 							@Override
 							public EClass execute(String type, ProgressMonitor progressMonitor) throws Exception {
-								BiSupplier<EClass, java.util.function.Function<ENamedElement, String>> result = loader.resolveEClass(type);
+								BiSupplier<EClass, BiFunction<EClass,ENamedElement, String>> result = loader.resolveEClass(type);
 								if (result == null) {
 									throw new ConfigurationException("Cannot resolve " + type+ " to EClass", EObjectSupplierFactory.this.getMarker());
 								}
@@ -235,17 +236,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
+				EObjectLoader.mark(ret, getMarker());
 				Marker marker = getMarker();
-				if (marker != null) {
-					ret.eAdapters().add(new MarkedAdapter(marker));
-					if (ret instanceof org.nasdanika.ncore.Marked) {
-						org.nasdanika.ncore.Marker mMarker = NcoreFactory.eINSTANCE.createMarker();
-						mMarker.setLocation(marker.getLocation());
-						mMarker.setLine(marker.getLine());
-						mMarker.setColumn(marker.getColumn());
-						((org.nasdanika.ncore.Marked) ret).setMarker(mMarker);
-					}
-				}
+				EObjectLoader.mark(ret, marker);
 				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
 				EStructuralFeature[] loadingFeature = { null };
 				ret.eAdapters().add(new LoadTrackerAdapter() {

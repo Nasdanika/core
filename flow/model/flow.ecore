@@ -80,7 +80,7 @@
         <details key="documentation" value="Package can extend other packages and inherit their elements. &#xA;This reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.&#xA;For top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.&#xA;&#xA;Package own elements overide inherited elements with the same keys. &#xA;To suppress an inheriIted element define an element with the same key and ``null`` value.&#xA;&#xA;Multiple inheritance allows to have &quot;mix-in&quot; packages. &#xA;For example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows &#xA;and then specializing at the lower levels of the organization, say to specific tools. &#xA;Then there can be a technology tree, for example different cloud platforms. &#xA;A set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.&#xA;&#xA;"/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="extends"/>
+        <details key="feature-key" value="extends"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subPackages" upperBound="-1"
@@ -186,7 +186,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="bases"/>
+        <details key="feature-key" value="bases"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of base participants, which this participant is a specialization of, relative to the containing package ``participants/`` reference."/>
@@ -300,7 +300,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="responsibleKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="responsible"/>
+        <details key="feature-key" value="responsible"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of responsible participants relative to the containing package ``participants/`` reference."/>
@@ -312,7 +312,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="accountableKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="accountable"/>
+        <details key="feature-key" value="accountable"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of accountable participants relative to the containing package ``participants/`` reference."/>
@@ -324,7 +324,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="consultedKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="consulted"/>
+        <details key="feature-key" value="consulted"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of consulted participants relative to the containing package ``participants/`` reference."/>
@@ -336,7 +336,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="informedKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="informed"/>
+        <details key="feature-key" value="informed"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of informed participants relative to the containing package ``participants/`` reference."/>
@@ -352,7 +352,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="repositories"/>
+        <details key="feature-key" value="repositories"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of artifact's repositories relative to the containing package ``resources/`` reference."/>
@@ -416,7 +416,7 @@
       <eAnnotations source="urn:org.nasdanika">
         <details key="homogenous" value="true"/>
         <details key="strict-containment" value="true"/>
-        <details key="load-key" value="relationships"/>
+        <details key="feature-key" value="relationships"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inboundRelationships" upperBound="-1"
@@ -470,7 +470,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="artifact"/>
+        <details key="feature-key" value="artifact"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Key of the responsibility artifact relative to the containing package ``artifacts/`` reference."/>
@@ -498,7 +498,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="target"/>
+        <details key="feature-key" value="target"/>
         <details key="default-feature" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -550,7 +550,7 @@
       <contents xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
         <eAnnotations source="urn:org.nasdanika">
-          <details key="load-key" value="input-artifacts"/>
+          <details key="feature-key" value="input-artifacts"/>
         </eAnnotations>
       </contents>
     </eAnnotations>
@@ -600,7 +600,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="input-artifacts"/>
+        <details key="feature-key" value="input-artifacts"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of input artifacts resolved relative to the containing package ``artifacts/`` reference."/>
@@ -615,7 +615,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputArtifactKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="output-artifacts"/>
+        <details key="feature-key" value="output-artifacts"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of output artifacts resolved relative to the containing package ``artifacts/`` reference."/>
@@ -631,7 +631,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="participantKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="participants"/>
+        <details key="feature-key" value="participants"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of participants resolved relative to the containing package ``participants/`` reference."/>
@@ -642,7 +642,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="resources"/>
+        <details key="feature-key" value="resources"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of resources resolved relative to the containing package ``resources/`` reference."/>
@@ -690,7 +690,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="payloadKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="payload"/>
+        <details key="feature-key" value="payload"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of payload artifacts relative to the containing package ``artifacts/`` reference."/>
@@ -699,7 +699,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="target"/>
+        <details key="feature-key" value="target"/>
         <details key="default-feature" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -752,7 +752,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="responseKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="response"/>
+        <details key="feature-key" value="response"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Keys of response artifacts relative to the containing package ``artifacts/`` reference."/>
@@ -831,7 +831,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="load-key" value="target"/>
+        <details key="feature-key" value="target"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Key of service target activity relative to the containing package."/>
