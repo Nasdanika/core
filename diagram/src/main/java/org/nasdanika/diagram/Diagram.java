@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getType <em>Type</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getDiagram()
@@ -111,5 +112,29 @@ public interface Diagram extends EObject {
 	 * @generated
 	 */
 	void setHideFootbox(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Type</b></em>' attribute.
+	 * The default value is <code>"plantuml:uml"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Type</em>' attribute.
+	 * @see #setType(String)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Type()
+	 * @model default="plantuml:uml"
+	 *        annotation="urn:org.nasdanika documentation-reference='doc/diagram-type.md'"
+	 * @generated
+	 */
+	String getType();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#getType <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Type</em>' attribute.
+	 * @see #getType()
+	 * @generated
+	 */
+	void setType(String value);
 
 } // Diagram

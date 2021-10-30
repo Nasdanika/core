@@ -10,7 +10,7 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.Link;
-import org.nasdanika.diagram.gen.plantuml.Generator;
+import org.nasdanika.diagram.gen.PlantumlGenerator;
 
 /**
  * Common methods for testing
@@ -53,7 +53,7 @@ public class TestSequenceDiagram {
 		c2.setColor("blue");
 		c2.setThickness(3);		
 		
-		Generator generator = new Generator();
+		PlantumlGenerator generator = new PlantumlGenerator();
 		
 		String spec = generator.generateSpec(diagram);
 		System.out.println(spec);

@@ -1,4 +1,4 @@
-package org.nasdanika.diagram.gen.plantuml;
+package org.nasdanika.diagram.gen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import org.nasdanika.exec.content.Text;
  * @author Pavel
  *
  */
-public class Generator {
+public class PlantumlGenerator {
 	
 //	public Generator(DiagramGenerator diagramGenerator) {
 //		this.diagramGenerator

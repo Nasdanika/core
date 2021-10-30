@@ -12,7 +12,7 @@ import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.End;
 import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Start;
-import org.nasdanika.diagram.gen.plantuml.Generator;
+import org.nasdanika.diagram.gen.PlantumlGenerator;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
 
@@ -84,7 +84,7 @@ public class TestStateDiagram {
 		c3.setTarget(end);				
 		
 		
-		Generator generator = new Generator();
+		PlantumlGenerator generator = new PlantumlGenerator();
 		
 		String spec = generator.generateSpec(diagram);
 		System.out.println(spec);

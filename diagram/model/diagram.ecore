@@ -163,6 +163,12 @@
         <details key="documentation" value="Hides footbox on sequence diagrams."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="plantuml:uml">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/diagram-type.md"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//Style">
     <eAnnotations source="urn:org.nasdanika">

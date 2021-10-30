@@ -31,6 +31,7 @@ import org.nasdanika.diagram.DiagramPackage;
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideFootbox <em>Hide Footbox</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getType <em>Type</em>}</li>
  * </ul>
  *
  * @generated
@@ -65,6 +66,16 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @ordered
 	 */
 	protected static final boolean HIDE_FOOTBOX_EDEFAULT = true;
+
+	/**
+	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String TYPE_EDEFAULT = "plantuml:uml";
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -172,6 +183,26 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 	 * @generated
 	 */
 	@Override
+	public String getType() {
+		return (String)eDynamicGet(DiagramPackage.DIAGRAM__TYPE, DiagramPackage.Literals.DIAGRAM__TYPE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setType(String newType) {
+		eDynamicSet(DiagramPackage.DIAGRAM__TYPE, DiagramPackage.Literals.DIAGRAM__TYPE, newType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DiagramPackage.DIAGRAM__ELEMENTS:
@@ -196,6 +227,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return isHideEmptyDescription();
 			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
 				return isHideFootbox();
+			case DiagramPackage.DIAGRAM__TYPE:
+				return getType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -222,6 +255,9 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
 				setHideFootbox((Boolean)newValue);
 				return;
+			case DiagramPackage.DIAGRAM__TYPE:
+				setType((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -246,6 +282,9 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
 				setHideFootbox(HIDE_FOOTBOX_EDEFAULT);
 				return;
+			case DiagramPackage.DIAGRAM__TYPE:
+				setType(TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -266,6 +305,8 @@ public class DiagramImpl extends MinimalEObjectImpl.Container implements Diagram
 				return isHideEmptyDescription() != HIDE_EMPTY_DESCRIPTION_EDEFAULT;
 			case DiagramPackage.DIAGRAM__HIDE_FOOTBOX:
 				return isHideFootbox() != HIDE_FOOTBOX_EDEFAULT;
+			case DiagramPackage.DIAGRAM__TYPE:
+				return TYPE_EDEFAULT == null ? getType() != null : !TYPE_EDEFAULT.equals(getType());
 		}
 		return super.eIsSet(featureID);
 	}

@@ -449,6 +449,16 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getDiagram_Type() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getConnection() {
 		return connectionEClass;
 	}
@@ -565,6 +575,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEAttribute(diagramEClass, DIAGRAM__VERTICAL);
 		createEAttribute(diagramEClass, DIAGRAM__HIDE_EMPTY_DESCRIPTION);
 		createEAttribute(diagramEClass, DIAGRAM__HIDE_FOOTBOX);
+		createEAttribute(diagramEClass, DIAGRAM__TYPE);
 
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__TARGET);
@@ -646,6 +657,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEAttribute(getDiagram_Vertical(), ecorePackage.getEBoolean(), "vertical", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_HideEmptyDescription(), ecorePackage.getEBoolean(), "hideEmptyDescription", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_HideFootbox(), ecorePackage.getEBoolean(), "hideFootbox", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_Type(), ecorePackage.getEString(), "type", "plantuml:uml", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Target(), this.getDiagramElement(), null, "target", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -728,6 +740,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/diagram.md"
+		   });
+		addAnnotation
+		  (getDiagram_Type(),
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/diagram-type.md"
 		   });
 		addAnnotation
 		  (connectionEClass,

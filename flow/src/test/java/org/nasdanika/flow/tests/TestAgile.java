@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Status;
 import org.nasdanika.diagram.Diagram;
-import org.nasdanika.diagram.gen.plantuml.Generator;
+import org.nasdanika.diagram.gen.PlantumlGenerator;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.Flow;
@@ -77,7 +77,7 @@ public class TestAgile extends TestBase {
 		
 		Diagram diagram = flowStateDiagramGenerator.generateFlowDiagram(flow);
 		
-		Generator generator = new Generator();
+		PlantumlGenerator generator = new PlantumlGenerator();
 		
 		String spec = generator.generateSpec(diagram);
 		System.out.println(spec);
