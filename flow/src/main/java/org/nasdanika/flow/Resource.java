@@ -3,6 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.Resource#getUsedIn <em>Used In</em>}</li>
  *   <li>{@link org.nasdanika.flow.Resource#getUsedBy <em>Used By</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Resource#getChildren <em>Children</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getResource()
@@ -74,4 +76,20 @@ public interface Resource extends ServiceProvider<Resource> {
 	 * @generated
 	 */
 	EList<Participant> getUsedBy();
+
+	/**
+	 * Returns the value of the '<em><b>Children</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link org.nasdanika.flow.Resource},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resources can be organized into a hierarchy (Domains).
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Children</em>' map.
+	 * @see org.nasdanika.flow.FlowPackage#getResource_Children()
+	 * @model mapType="org.nasdanika.flow.ResourceEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Resource&gt;"
+	 * @generated
+	 */
+	EMap<String, Resource> getChildren();
 } // Resource

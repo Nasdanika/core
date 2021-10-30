@@ -447,6 +447,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPackageElement_Representations() {
+		return (EReference)packageElementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getPackageElement__Create() {
 		return packageElementEClass.getEOperations().get(0);
 	}
@@ -707,6 +717,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getParticipant_Children() {
+		return (EReference)participantEClass.getEStructuralFeatures().get(10);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getParticipantEntry() {
 		return participantEntryEClass;
 	}
@@ -769,6 +789,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EReference getResource_UsedBy() {
 		return (EReference)resourceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getResource_Children() {
+		return (EReference)resourceEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1756,6 +1786,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__EXTENDS);
 		createEAttribute(packageElementEClass, PACKAGE_ELEMENT__MODIFIERS);
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__DOCUMENTATION);
+		createEReference(packageElementEClass, PACKAGE_ELEMENT__REPRESENTATIONS);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___CREATE);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT);
@@ -1786,6 +1817,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(participantEClass, PARTICIPANT__ACCOUNTABLE);
 		createEReference(participantEClass, PARTICIPANT__CONSULTED);
 		createEReference(participantEClass, PARTICIPANT__INFORMED);
+		createEReference(participantEClass, PARTICIPANT__CHILDREN);
 
 		participantEntryEClass = createEClass(PARTICIPANT_ENTRY);
 		createEAttribute(participantEntryEClass, PARTICIPANT_ENTRY__KEY);
@@ -1795,6 +1827,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(resourceEClass, RESOURCE__ARTIFACTS);
 		createEReference(resourceEClass, RESOURCE__USED_IN);
 		createEReference(resourceEClass, RESOURCE__USED_BY);
+		createEReference(resourceEClass, RESOURCE__CHILDREN);
 
 		resourceEntryEClass = createEClass(RESOURCE_ENTRY);
 		createEAttribute(resourceEntryEClass, RESOURCE_ENTRY__KEY);
@@ -2062,6 +2095,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getPackageElement_Extends(), g1, this.getPackageElement_Extensions(), "extends", null, 0, -1, PackageElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPackageElement_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackageElement_Representations(), theDiagramPackage.getDiagram(), null, "representations", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getPackageElement__Create(), null, "create", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
@@ -2116,6 +2150,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
 		initEReference(getParticipant_Informed(), g1, this.getParticipantResponsibility_Informed(), "informed", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getParticipant_Children(), this.getParticipantEntry(), null, "children", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(participantEntryEClass, Map.Entry.class, "ParticipantEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getParticipantEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2128,6 +2163,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getResource_UsedIn(), g1, this.getFlowElement_Resources(), "usedIn", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getResource_UsedBy(), this.getParticipant(), this.getParticipant_Resources(), "usedBy", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getResource_Children(), this.getResourceEntry(), null, "children", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEntryEClass, Map.Entry.class, "ResourceEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResourceEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2305,6 +2341,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation-reference", "doc/package-element.md"
 		   });
 		addAnnotation
+		  (getPackageElement_Representations(),
+		   source,
+		   new String[] {
+			   "homogenous", "true"
+		   });
+		addAnnotation
 		  (packageEClass,
 		   source,
 		   new String[] {
@@ -2314,7 +2356,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getPackage_SuperPackages(),
 		   source,
 		   new String[] {
-			   "load-key", "extends"
+			   "feature-key", "extends"
 		   });
 		addAnnotation
 		  (getPackageEntry_Value(),
@@ -2338,7 +2380,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getParticipant_BaseKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "bases"
+			   "feature-key", "bases"
 		   });
 		addAnnotation
 		  (getParticipantEntry_Value(),
@@ -2356,31 +2398,31 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getParticipantResponsibility_ResponsibleKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "responsible"
+			   "feature-key", "responsible"
 		   });
 		addAnnotation
 		  (getParticipantResponsibility_AccountableKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "accountable"
+			   "feature-key", "accountable"
 		   });
 		addAnnotation
 		  (getParticipantResponsibility_ConsultedKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "consulted"
+			   "feature-key", "consulted"
 		   });
 		addAnnotation
 		  (getParticipantResponsibility_InformedKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "informed"
+			   "feature-key", "informed"
 		   });
 		addAnnotation
 		  (getArtifact_RepositoryKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "repositories"
+			   "feature-key", "repositories"
 		   });
 		addAnnotation
 		  (getArtifact_OutboundRelationships(),
@@ -2388,7 +2430,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   new String[] {
 			   "homogenous", "true",
 			   "strict-containment", "true",
-			   "load-key", "relationships"
+			   "feature-key", "relationships"
 		   });
 		addAnnotation
 		  (getArtifact_Style(),
@@ -2406,7 +2448,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifactParticipantResponsibility_ArtifactKey(),
 		   source,
 		   new String[] {
-			   "load-key", "artifact"
+			   "feature-key", "artifact"
 		   });
 		addAnnotation
 		  (relationshipEClass,
@@ -2418,7 +2460,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRelationship_TargetKey(),
 		   source,
 		   new String[] {
-			   "load-key", "target",
+			   "feature-key", "target",
 			   "default-feature", "true"
 		   });
 		addAnnotation
@@ -2458,25 +2500,25 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlowElement_InputArtifactKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "input-artifacts"
+			   "feature-key", "input-artifacts"
 		   });
 		addAnnotation
 		  (getFlowElement_OutputArtifactKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "output-artifacts"
+			   "feature-key", "output-artifacts"
 		   });
 		addAnnotation
 		  (getFlowElement_ParticipantKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "participants"
+			   "feature-key", "participants"
 		   });
 		addAnnotation
 		  (getFlowElement_ResourceKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "resources"
+			   "feature-key", "resources"
 		   });
 		addAnnotation
 		  (getFlowElement_ArtifactResponsibilities(),
@@ -2494,13 +2536,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getTransition_PayloadKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "payload"
+			   "feature-key", "payload"
 		   });
 		addAnnotation
 		  (getTransition_TargetKey(),
 		   source,
 		   new String[] {
-			   "load-key", "target",
+			   "feature-key", "target",
 			   "default-feature", "true"
 		   });
 		addAnnotation
@@ -2520,7 +2562,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getCall_ResponseKeys(),
 		   source,
 		   new String[] {
-			   "load-key", "response"
+			   "feature-key", "response"
 		   });
 		addAnnotation
 		  (getCallEntry_Value(),
@@ -2544,7 +2586,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getService_TargetKey(),
 		   source,
 		   new String[] {
-			   "load-key", "target"
+			   "feature-key", "target"
 		   });
 		addAnnotation
 		  (flowEClass,
@@ -2761,6 +2803,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Keys of base participants, which this participant is a specialization of, relative to the containing package ``participants/`` reference."
 		   });
 		addAnnotation
+		  (getParticipant_Children(),
+		   source,
+		   new String[] {
+			   "documentation", "Participants can be organized into a hierarchy (Organizational Structure)."
+		   });
+		addAnnotation
 		  (participantEntryEClass,
 		   source,
 		   new String[] {
@@ -2795,6 +2843,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Participants use this resource in their activities."
+		   });
+		addAnnotation
+		  (getResource_Children(),
+		   source,
+		   new String[] {
+			   "documentation", "Resources can be organized into a hierarchy (Domains)."
 		   });
 		addAnnotation
 		  (resourceEntryEClass,

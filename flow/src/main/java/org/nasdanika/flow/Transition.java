@@ -51,7 +51,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_PayloadKeys()
-	 * @model annotation="urn:org.nasdanika load-key='payload'"
+	 * @model annotation="urn:org.nasdanika feature-key='payload'"
 	 * @generated
 	 */
 	EList<String> getPayloadKeys();
@@ -67,7 +67,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * @see #setTargetKey(String)
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_TargetKey()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika load-key='target' default-feature='true'"
+	 *        annotation="urn:org.nasdanika feature-key='target' default-feature='true'"
 	 * @generated
 	 */
 	String getTargetKey();

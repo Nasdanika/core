@@ -3,6 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +24,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.nasdanika.flow.Participant#getAccountable <em>Accountable</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getConsulted <em>Consulted</em>}</li>
  *   <li>{@link org.nasdanika.flow.Participant#getInformed <em>Informed</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Participant#getChildren <em>Children</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
@@ -105,7 +107,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Base Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_BaseKeys()
-	 * @model annotation="urn:org.nasdanika load-key='bases'"
+	 * @model annotation="urn:org.nasdanika feature-key='bases'"
 	 * @generated
 	 */
 	EList<String> getBaseKeys();
@@ -179,5 +181,21 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * @generated
 	 */
 	EList<ParticipantResponsibility<?>> getInformed();
+
+	/**
+	 * Returns the value of the '<em><b>Children</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link org.nasdanika.flow.Participant},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participants can be organized into a hierarchy (Organizational Structure).
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Children</em>' map.
+	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Children()
+	 * @model mapType="org.nasdanika.flow.ParticipantEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Participant&gt;"
+	 * @generated
+	 */
+	EMap<String, Participant> getChildren();
 
 } // Participant

@@ -15,6 +15,7 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/extends"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PackageElement/modifiers"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/documentation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/representations"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/create"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/apply">
         <genParameters ecoreParameter="flow.ecore#//PackageElement/apply/instance"/>
@@ -50,6 +51,7 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/accountable"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/consulted"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Participant/informed"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Participant/children"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ParticipantEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ParticipantEntry/key"/>
@@ -59,6 +61,7 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/artifacts"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/usedIn"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Resource/usedBy"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Resource/children"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ResourceEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ResourceEntry/key"/>

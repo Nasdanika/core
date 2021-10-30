@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
@@ -45,6 +46,7 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getAccountable <em>Accountable</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getConsulted <em>Consulted</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getInformed <em>Informed</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ParticipantImpl#getChildren <em>Children</em>}</li>
  * </ul>
  *
  * @generated
@@ -206,6 +208,17 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EMap<String, Participant> getChildren() {
+		return (EMap<String, Participant>)eDynamicGet(FlowPackage.PARTICIPANT__CHILDREN, FlowPackage.Literals.PARTICIPANT__CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__PARTICIPATES:
@@ -256,6 +269,8 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return ((InternalEList<?>)getConsulted()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__INFORMED:
 				return ((InternalEList<?>)getInformed()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PARTICIPANT__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -288,6 +303,9 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return getConsulted();
 			case FlowPackage.PARTICIPANT__INFORMED:
 				return getInformed();
+			case FlowPackage.PARTICIPANT__CHILDREN:
+				if (coreType) return getChildren();
+				else return getChildren().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -305,6 +323,9 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				getBaseKeys().clear();
 				getBaseKeys().addAll((Collection<? extends String>)newValue);
 				return;
+			case FlowPackage.PARTICIPANT__CHILDREN:
+				((EStructuralFeature.Setting)getChildren()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -319,6 +340,9 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 		switch (featureID) {
 			case FlowPackage.PARTICIPANT__BASE_KEYS:
 				getBaseKeys().clear();
+				return;
+			case FlowPackage.PARTICIPANT__CHILDREN:
+				getChildren().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -352,6 +376,8 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return !getConsulted().isEmpty();
 			case FlowPackage.PARTICIPANT__INFORMED:
 				return !getInformed().isEmpty();
+			case FlowPackage.PARTICIPANT__CHILDREN:
+				return !getChildren().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

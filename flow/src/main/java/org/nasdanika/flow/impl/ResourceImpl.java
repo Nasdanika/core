@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.flow.Activity;
@@ -34,6 +35,7 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getArtifacts <em>Artifacts</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedIn <em>Used In</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getUsedBy <em>Used By</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ResourceImpl#getChildren <em>Children</em>}</li>
  * </ul>
  *
  * @generated
@@ -102,6 +104,17 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EMap<String, Resource> getChildren() {
+		return (EMap<String, Resource>)eDynamicGet(FlowPackage.RESOURCE__CHILDREN, FlowPackage.Literals.RESOURCE__CHILDREN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.RESOURCE__ARTIFACTS:
@@ -128,6 +141,8 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 				return ((InternalEList<?>)getUsedIn()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_BY:
 				return ((InternalEList<?>)getUsedBy()).basicRemove(otherEnd, msgs);
+			case FlowPackage.RESOURCE__CHILDREN:
+				return ((InternalEList<?>)getChildren()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -146,8 +161,41 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 				return getUsedIn();
 			case FlowPackage.RESOURCE__USED_BY:
 				return getUsedBy();
+			case FlowPackage.RESOURCE__CHILDREN:
+				if (coreType) return getChildren();
+				else return getChildren().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void eSet(int featureID, Object newValue) {
+		switch (featureID) {
+			case FlowPackage.RESOURCE__CHILDREN:
+				((EStructuralFeature.Setting)getChildren()).set(newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void eUnset(int featureID) {
+		switch (featureID) {
+			case FlowPackage.RESOURCE__CHILDREN:
+				getChildren().clear();
+				return;
+		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -164,6 +212,8 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 				return !getUsedIn().isEmpty();
 			case FlowPackage.RESOURCE__USED_BY:
 				return !getUsedBy().isEmpty();
+			case FlowPackage.RESOURCE__CHILDREN:
+				return !getChildren().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

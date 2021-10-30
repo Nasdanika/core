@@ -49,7 +49,7 @@ public interface Call extends Transition {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Response Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getCall_ResponseKeys()
-	 * @model annotation="urn:org.nasdanika load-key='response'"
+	 * @model annotation="urn:org.nasdanika feature-key='response'"
 	 * @generated
 	 */
 	EList<String> getResponseKeys();

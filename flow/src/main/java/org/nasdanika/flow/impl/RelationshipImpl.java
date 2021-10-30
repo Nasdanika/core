@@ -9,16 +9,13 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Relationship;
-import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**

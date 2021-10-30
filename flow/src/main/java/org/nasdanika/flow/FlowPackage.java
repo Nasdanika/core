@@ -160,13 +160,22 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT__DOCUMENTATION = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT__REPRESENTATIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Package Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -303,6 +312,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PACKAGE__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Super Packages</b></em>' reference list.
@@ -550,6 +568,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE_PROVIDER__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_PROVIDER__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -704,6 +731,15 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__REPRESENTATIONS = SERVICE_PROVIDER__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -803,13 +839,22 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__INFORMED = SERVICE_PROVIDER_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Children</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__CHILDREN = SERVICE_PROVIDER_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Participant</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 10;
+	int PARTICIPANT_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -994,6 +1039,15 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__REPRESENTATIONS = SERVICE_PROVIDER__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1030,13 +1084,22 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__USED_BY = SERVICE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Children</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__CHILDREN = SERVICE_PROVIDER_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 3;
+	int RESOURCE_FEATURE_COUNT = SERVICE_PROVIDER_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -1219,6 +1282,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -1436,6 +1508,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARTIFACT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -1847,6 +1928,15 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2081,6 +2171,15 @@ public interface FlowPackage extends EPackage {
 	int RELATIONSHIP__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2287,6 +2386,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW_ELEMENT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -2699,6 +2807,15 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2924,6 +3041,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__DOCUMENTATION = TRANSITION__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__REPRESENTATIONS = TRANSITION__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
@@ -3159,6 +3285,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -3530,6 +3665,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3880,6 +4024,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__DOCUMENTATION = ACTIVITY__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__REPRESENTATIONS = ACTIVITY__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -4243,6 +4396,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4584,6 +4746,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -4929,6 +5100,15 @@ public interface FlowPackage extends EPackage {
 	int END__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5270,6 +5450,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -5615,6 +5804,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5956,6 +6154,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -6301,6 +6508,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6642,6 +6858,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -6987,6 +7212,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7328,6 +7562,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -7673,6 +7916,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8016,6 +8268,15 @@ public interface FlowPackage extends EPackage {
 	int START__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8325,6 +8586,17 @@ public interface FlowPackage extends EPackage {
 	EReference getPackageElement_Documentation();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.PackageElement#getRepresentations <em>Representations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Representations</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getRepresentations()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Representations();
+
+	/**
 	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#create() <em>Create</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8607,6 +8879,17 @@ public interface FlowPackage extends EPackage {
 	EReference getParticipant_Informed();
 
 	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.Participant#getChildren <em>Children</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Children</em>'.
+	 * @see org.nasdanika.flow.Participant#getChildren()
+	 * @see #getParticipant()
+	 * @generated
+	 */
+	EReference getParticipant_Children();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Participant Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8683,6 +8966,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getResource_UsedBy();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.Resource#getChildren <em>Children</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Children</em>'.
+	 * @see org.nasdanika.flow.Resource#getChildren()
+	 * @see #getResource()
+	 * @generated
+	 */
+	EReference getResource_Children();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Resource Entry</em>}'.
@@ -9793,6 +10087,14 @@ public interface FlowPackage extends EPackage {
 		EReference PACKAGE_ELEMENT__DOCUMENTATION = eINSTANCE.getPackageElement_Documentation();
 
 		/**
+		 * The meta object literal for the '<em><b>Representations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__REPRESENTATIONS = eINSTANCE.getPackageElement_Representations();
+
+		/**
 		 * The meta object literal for the '<em><b>Create</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10009,6 +10311,14 @@ public interface FlowPackage extends EPackage {
 		EReference PARTICIPANT__INFORMED = eINSTANCE.getParticipant_Informed();
 
 		/**
+		 * The meta object literal for the '<em><b>Children</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PARTICIPANT__CHILDREN = eINSTANCE.getParticipant_Children();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ParticipantEntryImpl <em>Participant Entry</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10067,6 +10377,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RESOURCE__USED_BY = eINSTANCE.getResource_UsedBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Children</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RESOURCE__CHILDREN = eINSTANCE.getResource_Children();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ResourceEntryImpl <em>Resource Entry</em>}' class.

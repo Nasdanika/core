@@ -33,7 +33,7 @@ public interface ArtifactParticipantResponsibility extends ParticipantResponsibi
 	 * @see #setArtifactKey(String)
 	 * @see org.nasdanika.flow.FlowPackage#getArtifactParticipantResponsibility_ArtifactKey()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika load-key='artifact'"
+	 *        annotation="urn:org.nasdanika feature-key='artifact'"
 	 * @generated
 	 */
 	String getArtifactKey();

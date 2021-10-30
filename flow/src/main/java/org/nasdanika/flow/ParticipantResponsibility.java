@@ -54,7 +54,7 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Responsible Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_ResponsibleKeys()
-	 * @model annotation="urn:org.nasdanika load-key='responsible'"
+	 * @model annotation="urn:org.nasdanika feature-key='responsible'"
 	 * @generated
 	 */
 	EList<String> getResponsibleKeys();
@@ -83,7 +83,7 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Accountable Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_AccountableKeys()
-	 * @model annotation="urn:org.nasdanika load-key='accountable'"
+	 * @model annotation="urn:org.nasdanika feature-key='accountable'"
 	 * @generated
 	 */
 	EList<String> getAccountableKeys();
@@ -112,7 +112,7 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Consulted Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_ConsultedKeys()
-	 * @model annotation="urn:org.nasdanika load-key='consulted'"
+	 * @model annotation="urn:org.nasdanika feature-key='consulted'"
 	 * @generated
 	 */
 	EList<String> getConsultedKeys();
@@ -141,7 +141,7 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Informed Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_InformedKeys()
-	 * @model annotation="urn:org.nasdanika load-key='informed'"
+	 * @model annotation="urn:org.nasdanika feature-key='informed'"
 	 * @generated
 	 */
 	EList<String> getInformedKeys();

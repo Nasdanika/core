@@ -108,7 +108,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Input Artifact Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_InputArtifactKeys()
-	 * @model annotation="urn:org.nasdanika load-key='input-artifacts'"
+	 * @model annotation="urn:org.nasdanika feature-key='input-artifacts'"
 	 * @generated
 	 */
 	EList<String> getInputArtifactKeys();
@@ -157,7 +157,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Output Artifact Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_OutputArtifactKeys()
-	 * @model annotation="urn:org.nasdanika load-key='output-artifacts'"
+	 * @model annotation="urn:org.nasdanika feature-key='output-artifacts'"
 	 * @generated
 	 */
 	EList<String> getOutputArtifactKeys();
@@ -189,7 +189,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Participant Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ParticipantKeys()
-	 * @model annotation="urn:org.nasdanika load-key='participants'"
+	 * @model annotation="urn:org.nasdanika feature-key='participants'"
 	 * @generated
 	 */
 	EList<String> getParticipantKeys();
@@ -218,7 +218,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resource Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ResourceKeys()
-	 * @model annotation="urn:org.nasdanika load-key='resources'"
+	 * @model annotation="urn:org.nasdanika feature-key='resources'"
 	 * @generated
 	 */
 	EList<String> getResourceKeys();

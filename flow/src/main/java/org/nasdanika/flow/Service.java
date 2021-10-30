@@ -48,7 +48,7 @@ public interface Service extends FlowElement<Service> {
 	 * @see #setTargetKey(String)
 	 * @see org.nasdanika.flow.FlowPackage#getService_TargetKey()
 	 * @model required="true"
-	 *        annotation="urn:org.nasdanika load-key='target'"
+	 *        annotation="urn:org.nasdanika feature-key='target'"
 	 * @generated
 	 */
 	String getTargetKey();

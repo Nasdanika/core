@@ -59,7 +59,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Repository Keys</em>' attribute list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_RepositoryKeys()
-	 * @model annotation="urn:org.nasdanika load-key='repositories'"
+	 * @model annotation="urn:org.nasdanika feature-key='repositories'"
 	 * @generated
 	 */
 	EList<String> getRepositoryKeys();
@@ -194,7 +194,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * @return the value of the '<em>Outbound Relationships</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_OutboundRelationships()
 	 * @model mapType="org.nasdanika.flow.RelationshipEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.flow.Relationship&gt;"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true' load-key='relationships'"
+	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true' feature-key='relationships'"
 	 * @generated
 	 */
 	EMap<String, Relationship> getOutboundRelationships();
