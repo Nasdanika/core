@@ -3,6 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.ncore.NamedElement;
@@ -131,17 +132,18 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	EList<EObject> getDocumentation();
 
 	/**
-	 * Returns the value of the '<em><b>Representations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.diagram.Diagram}.
+	 * Returns the value of the '<em><b>Representations</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link org.nasdanika.diagram.Diagram},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Representations</em>' containment reference list.
+	 * @return the value of the '<em>Representations</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Representations()
-	 * @model containment="true"
+	 * @model mapType="org.nasdanika.flow.RepresentationEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.diagram.Diagram&gt;"
 	 *        annotation="urn:org.nasdanika homogenous='true'"
 	 * @generated
 	 */
-	EList<Diagram> getRepresentations();
+	EMap<String, Diagram> getRepresentations();
 
 	/**
 	 * <!-- begin-user-doc -->

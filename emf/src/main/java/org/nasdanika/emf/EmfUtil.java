@@ -141,13 +141,14 @@ public class EmfUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static URL resolveReference(Resource resource, String reference) throws Exception {
-		
+	public static URL resolveReference(Resource resource, String reference) throws Exception {		
 		if (resource != null) {
-			URI resUri = resource.getURI();
 			URI refUri = URI.createURI(reference);
-			URI resolvedUri = refUri.resolve(resUri);
-			return new URL(resolvedUri.toString());			
+			URI resUri = resource.getURI();
+			if (resUri.isHierarchical()) {
+				refUri = refUri.resolve(resUri);
+			}			
+			return Util.isBlank(refUri.scheme()) ? null : new URL(refUri.toString());			
 		}
 		
 		return new URL(reference);
@@ -165,7 +166,8 @@ public class EmfUtil {
 			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
 			if (!Util.isBlank(docRef)) {
 				try {
-					return DefaultConverter.INSTANCE.toString(resolveReference(modelElement.eResource(), docRef).openStream());
+					URL docURL = resolveReference(modelElement.eResource(), docRef);
+					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
 				} catch (Exception e) {
 					e.printStackTrace();
 					return "Error loading documentation: " + e;

@@ -66,6 +66,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass representationEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass packageEClass = null;
 
 	/**
@@ -479,6 +486,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EOperation getPackageElement__Resolve__PackageElement() {
 		return packageElementEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRepresentationEntry() {
+		return representationEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRepresentationEntry_Key() {
+		return (EAttribute)representationEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getRepresentationEntry_Value() {
+		return (EReference)representationEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1791,6 +1828,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT);
 
+		representationEntryEClass = createEClass(REPRESENTATION_ENTRY);
+		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__KEY);
+		createEReference(representationEntryEClass, REPRESENTATION_ENTRY__VALUE);
+
 		packageEClass = createEClass(PACKAGE);
 		createEReference(packageEClass, PACKAGE__SUPER_PACKAGES);
 		createEReference(packageEClass, PACKAGE__SUB_PACKAGES);
@@ -2095,7 +2136,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getPackageElement_Extends(), g1, this.getPackageElement_Extensions(), "extends", null, 0, -1, PackageElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPackageElement_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPackageElement_Representations(), theDiagramPackage.getDiagram(), null, "representations", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackageElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = initEOperation(getPackageElement__Create(), null, "create", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
@@ -2108,6 +2149,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		op = initEOperation(getPackageElement__Resolve__PackageElement(), null, "resolve", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
 		addEParameter(op, g1, "instance", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(representationEntryEClass, Map.Entry.class, "RepresentationEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRepresentationEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRepresentationEntry_Value(), theDiagramPackage.getDiagram(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(packageEClass, org.nasdanika.flow.Package.class, "Package", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPackage_SuperPackages(), this.getPackage(), null, "superPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2342,6 +2387,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   });
 		addAnnotation
 		  (getPackageElement_Representations(),
+		   source,
+		   new String[] {
+			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Value(),
 		   source,
 		   new String[] {
 			   "homogenous", "true"
@@ -2717,6 +2768,24 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "A collection of boolean flags:\n\n* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.\n* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.\n* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.\n* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.\n* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.\n* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.\n* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.\n"
+		   });
+		addAnnotation
+		  (representationEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of representation key to a representation (diagram). Null value suppresses inherited entry."
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Representation key."
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Representation (diagram). Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
 		  (getPackage_SuperPackages(),

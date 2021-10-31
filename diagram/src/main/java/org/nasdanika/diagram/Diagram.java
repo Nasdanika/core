@@ -4,7 +4,8 @@ package org.nasdanika.diagram;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.common.util.EMap;
+import org.nasdanika.ncore.NamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,13 +21,17 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#getType <em>Type</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getNotes <em>Notes</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getProperties <em>Properties</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getContext <em>Context</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getDepth <em>Depth</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getDiagram()
  * @model annotation="urn:org.nasdanika documentation-reference='doc/diagram.md'"
  * @generated
  */
-public interface Diagram extends EObject {
+public interface Diagram extends NamedElement {
 	/**
 	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.diagram.DiagramElement}.
@@ -136,5 +141,87 @@ public interface Diagram extends EObject {
 	 * @generated
 	 */
 	void setType(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.diagram.Note}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Diagram notes (legend).
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Notes</em>' containment reference list.
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Notes()
+	 * @model containment="true"
+	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 * @generated
+	 */
+	EList<Note> getNotes();
+
+	/**
+	 * Returns the value of the '<em><b>Properties</b></em>' map.
+	 * The key is of type {@link java.lang.String},
+	 * and the value is of type {@link java.lang.String},
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Properties</em>' map.
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Properties()
+	 * @model mapType="org.nasdanika.diagram.Property&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString&gt;"
+	 *        annotation="urn:org.nasdanika documentation-reference='doc/diagram-properties.md'"
+	 * @generated
+	 */
+	EMap<String, String> getProperties();
+
+	/**
+	 * Returns the value of the '<em><b>Context</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Depth of context elements to show on the diagram. Default is 0. -1 means no limit.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Context</em>' attribute.
+	 * @see #setContext(int)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Context()
+	 * @model default="0"
+	 * @generated
+	 */
+	int getContext();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#getContext <em>Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Context</em>' attribute.
+	 * @see #getContext()
+	 * @generated
+	 */
+	void setContext(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Depth</b></em>' attribute.
+	 * The default value is <code>"-1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Depth of the diagram partition elements. Default is -1 (no limit). Once the depth is reached content of partitions is not shown.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Depth</em>' attribute.
+	 * @see #setDepth(int)
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Depth()
+	 * @model default="-1"
+	 * @generated
+	 */
+	int getDepth();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.diagram.Diagram#getDepth <em>Depth</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Depth</em>' attribute.
+	 * @see #getDepth()
+	 * @generated
+	 */
+	void setDepth(int value);
 
 } // Diagram

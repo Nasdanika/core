@@ -2,6 +2,7 @@
  */
 package org.nasdanika.diagram.impl;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -21,6 +22,7 @@ import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.NotePlacement;
 import org.nasdanika.diagram.Start;
 import org.nasdanika.diagram.Style;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -56,6 +58,13 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	private EClass diagramElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass propertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -138,6 +147,9 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		DiagramPackageImpl theDiagramPackage = registeredDiagramPackage instanceof DiagramPackageImpl ? (DiagramPackageImpl)registeredDiagramPackage : new DiagramPackageImpl();
 
 		isInited = true;
+
+		// Initialize simple dependencies
+		NcorePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theDiagramPackage.createPackageContents();
@@ -399,6 +411,36 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getProperty() {
+		return propertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProperty_Key() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProperty_Value() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDiagram() {
 		return diagramEClass;
 	}
@@ -451,6 +493,46 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	@Override
 	public EAttribute getDiagram_Type() {
 		return (EAttribute)diagramEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDiagram_Notes() {
+		return (EReference)diagramEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDiagram_Properties() {
+		return (EReference)diagramEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagram_Context() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDiagram_Depth() {
+		return (EAttribute)diagramEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -570,12 +652,20 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__GRADIENT);
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__BORDER);
 
+		propertyEClass = createEClass(PROPERTY);
+		createEAttribute(propertyEClass, PROPERTY__KEY);
+		createEAttribute(propertyEClass, PROPERTY__VALUE);
+
 		diagramEClass = createEClass(DIAGRAM);
 		createEReference(diagramEClass, DIAGRAM__ELEMENTS);
 		createEAttribute(diagramEClass, DIAGRAM__VERTICAL);
 		createEAttribute(diagramEClass, DIAGRAM__HIDE_EMPTY_DESCRIPTION);
 		createEAttribute(diagramEClass, DIAGRAM__HIDE_FOOTBOX);
 		createEAttribute(diagramEClass, DIAGRAM__TYPE);
+		createEReference(diagramEClass, DIAGRAM__NOTES);
+		createEReference(diagramEClass, DIAGRAM__PROPERTIES);
+		createEAttribute(diagramEClass, DIAGRAM__CONTEXT);
+		createEAttribute(diagramEClass, DIAGRAM__DEPTH);
 
 		connectionEClass = createEClass(CONNECTION);
 		createEReference(connectionEClass, CONNECTION__TARGET);
@@ -612,6 +702,9 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		NcorePackage theNcorePackage = (NcorePackage)EPackage.Registry.INSTANCE.getEPackage(NcorePackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -619,6 +712,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		// Add supertypes to classes
 		diagramElementEClass.getESuperTypes().add(this.getLink());
 		diagramElementEClass.getESuperTypes().add(this.getStyle());
+		diagramEClass.getESuperTypes().add(theNcorePackage.getNamedElement());
 		connectionEClass.getESuperTypes().add(this.getStyle());
 		startEClass.getESuperTypes().add(this.getDiagramElement());
 		endEClass.getESuperTypes().add(this.getDiagramElement());
@@ -652,12 +746,20 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEAttribute(getDiagramElement_Gradient(), ecorePackage.getEString(), "gradient", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagramElement_Border(), ecorePackage.getEString(), "border", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(propertyEClass, Map.Entry.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiagram_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Vertical(), ecorePackage.getEBoolean(), "vertical", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_HideEmptyDescription(), ecorePackage.getEBoolean(), "hideEmptyDescription", null, 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_HideFootbox(), ecorePackage.getEBoolean(), "hideFootbox", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Type(), ecorePackage.getEString(), "type", "plantuml:uml", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagram_Notes(), this.getNote(), null, "notes", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagram_Properties(), this.getProperty(), null, "properties", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_Context(), ecorePackage.getEInt(), "context", "0", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDiagram_Depth(), ecorePackage.getEInt(), "depth", "-1", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionEClass, Connection.class, "Connection", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConnection_Target(), this.getDiagramElement(), null, "target", null, 0, 1, Connection.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -736,6 +838,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 			   "documentation-reference", "doc/diagram-element.md"
 		   });
 		addAnnotation
+		  (propertyEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/property.md"
+		   });
+		addAnnotation
 		  (diagramEClass,
 		   source,
 		   new String[] {
@@ -746,6 +854,19 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/diagram-type.md"
+		   });
+		addAnnotation
+		  (getDiagram_Notes(),
+		   source,
+		   new String[] {
+			   "homogenous", "true",
+			   "strict-containment", "true"
+		   });
+		addAnnotation
+		  (getDiagram_Properties(),
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/diagram-properties.md"
 		   });
 		addAnnotation
 		  (connectionEClass,
@@ -894,6 +1015,24 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Hides footbox on sequence diagrams."
+		   });
+		addAnnotation
+		  (getDiagram_Notes(),
+		   source,
+		   new String[] {
+			   "documentation", "Diagram notes (legend)."
+		   });
+		addAnnotation
+		  (getDiagram_Context(),
+		   source,
+		   new String[] {
+			   "documentation", "Depth of context elements to show on the diagram. Default is 0. -1 means no limit."
+		   });
+		addAnnotation
+		  (getDiagram_Depth(),
+		   source,
+		   new String[] {
+			   "documentation", "Depth of the diagram partition elements. Default is -1 (no limit). Once the depth is reached content of partitions is not shown."
 		   });
 		addAnnotation
 		  (getConnection_Thickness(),

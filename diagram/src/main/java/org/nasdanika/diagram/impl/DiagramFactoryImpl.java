@@ -2,6 +2,7 @@
  */
 package org.nasdanika.diagram.impl;
 
+import java.util.Map;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -61,6 +62,7 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 			case DiagramPackage.NOTE: return createNote();
 			case DiagramPackage.STYLE: return createStyle();
 			case DiagramPackage.DIAGRAM_ELEMENT: return createDiagramElement();
+			case DiagramPackage.PROPERTY: return (EObject)createProperty();
 			case DiagramPackage.DIAGRAM: return createDiagram();
 			case DiagramPackage.CONNECTION: return createConnection();
 			case DiagramPackage.START: return createStart();
@@ -142,6 +144,16 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public DiagramElement createDiagramElement() {
 		DiagramElementImpl diagramElement = new DiagramElementImpl();
 		return diagramElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Map.Entry<String, String> createProperty() {
+		PropertyImpl property = new PropertyImpl();
+		return property;
 	}
 
 	/**

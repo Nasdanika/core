@@ -32,7 +32,7 @@ public class Generator {
 			if (dResource != null) {
 				URI rURI = dResource.getURI();
 				if (rURI != null) {
-					uri.resolve(rURI);
+					uri = uri.resolve(rURI);
 				}
 			}
 			URL url = new URL(uri.toString());

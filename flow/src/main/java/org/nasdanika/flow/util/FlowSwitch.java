@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.diagram.Diagram;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.ArtifactParticipantResponsibility;
@@ -104,6 +105,12 @@ public class FlowSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseMarked(packageElement);
 				if (result == null) result = caseAdaptable(packageElement);
 				if (result == null) result = caseIMarked(packageElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case FlowPackage.REPRESENTATION_ENTRY: {
+				@SuppressWarnings("unchecked") Map.Entry<String, Diagram> representationEntry = (Map.Entry<String, Diagram>)theEObject;
+				T1 result = caseRepresentationEntry(representationEntry);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -538,6 +545,21 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T extends PackageElement<T>> T1 casePackageElement(PackageElement<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Representation Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Representation Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseRepresentationEntry(Map.Entry<String, Diagram> object) {
 		return null;
 	}
 

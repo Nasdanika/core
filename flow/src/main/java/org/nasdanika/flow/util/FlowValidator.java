@@ -112,6 +112,8 @@ public class FlowValidator extends EObjectValidator {
 		switch (classifierID) {
 			case FlowPackage.PACKAGE_ELEMENT:
 				return validatePackageElement((PackageElement<?>)value, diagnostics, context);
+			case FlowPackage.REPRESENTATION_ENTRY:
+				return validateRepresentationEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case FlowPackage.PACKAGE:
 				return validatePackage((org.nasdanika.flow.Package)value, diagnostics, context);
 			case FlowPackage.PACKAGE_ENTRY:
@@ -244,6 +246,15 @@ public class FlowValidator extends EObjectValidator {
 			return helper.isSuccess();
 		}
 		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateRepresentationEntry(Map.Entry<?, ?> representationEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)representationEntry, diagnostics, context);
 	}
 
 	/**

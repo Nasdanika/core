@@ -160,7 +160,7 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT__DOCUMENTATION = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -214,6 +214,52 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.flow.impl.RepresentationEntryImpl <em>Representation Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.flow.impl.RepresentationEntryImpl
+	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRepresentationEntry()
+	 * @generated
+	 */
+	int REPRESENTATION_ENTRY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Representation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Representation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -221,7 +267,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackage()
 	 * @generated
 	 */
-	int PACKAGE = 1;
+	int PACKAGE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -314,7 +360,7 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -429,7 +475,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPackageEntry()
 	 * @generated
 	 */
-	int PACKAGE_ENTRY = 2;
+	int PACKAGE_ENTRY = 3;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -475,7 +521,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getServiceProvider()
 	 * @generated
 	 */
-	int SERVICE_PROVIDER = 3;
+	int SERVICE_PROVIDER = 4;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -568,7 +614,7 @@ public interface FlowPackage extends EPackage {
 	int SERVICE_PROVIDER__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -638,7 +684,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipant()
 	 * @generated
 	 */
-	int PARTICIPANT = 4;
+	int PARTICIPANT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -731,7 +777,7 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -900,7 +946,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantEntry()
 	 * @generated
 	 */
-	int PARTICIPANT_ENTRY = 5;
+	int PARTICIPANT_ENTRY = 6;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -946,7 +992,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 6;
+	int RESOURCE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1039,7 +1085,7 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__DOCUMENTATION = SERVICE_PROVIDER__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1145,7 +1191,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getResourceEntry()
 	 * @generated
 	 */
-	int RESOURCE_ENTRY = 7;
+	int RESOURCE_ENTRY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1191,7 +1237,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getParticipantResponsibility()
 	 * @generated
 	 */
-	int PARTICIPANT_RESPONSIBILITY = 8;
+	int PARTICIPANT_RESPONSIBILITY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1284,7 +1330,7 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1417,7 +1463,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifact()
 	 * @generated
 	 */
-	int ARTIFACT = 9;
+	int ARTIFACT = 10;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -1510,7 +1556,7 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1769,7 +1815,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactParticipantResponsibility()
 	 * @generated
 	 */
-	int ARTIFACT_PARTICIPANT_RESPONSIBILITY = 11;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY = 12;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.RelationshipImpl <em>Relationship</em>}' class.
@@ -1779,7 +1825,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationship()
 	 * @generated
 	 */
-	int RELATIONSHIP = 12;
+	int RELATIONSHIP = 13;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.RelationshipEntryImpl <em>Relationship Entry</em>}' class.
@@ -1789,7 +1835,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRelationshipEntry()
 	 * @generated
 	 */
-	int RELATIONSHIP_ENTRY = 13;
+	int RELATIONSHIP_ENTRY = 14;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ArtifactEntryImpl <em>Artifact Entry</em>}' class.
@@ -1799,7 +1845,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getArtifactEntry()
 	 * @generated
 	 */
-	int ARTIFACT_ENTRY = 10;
+	int ARTIFACT_ENTRY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1928,7 +1974,7 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2171,7 +2217,7 @@ public interface FlowPackage extends EPackage {
 	int RELATIONSHIP__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2295,7 +2341,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElement()
 	 * @generated
 	 */
-	int FLOW_ELEMENT = 14;
+	int FLOW_ELEMENT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2388,7 +2434,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__DOCUMENTATION = PARTICIPANT_RESPONSIBILITY__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2638,7 +2684,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlowElementEntry()
 	 * @generated
 	 */
-	int FLOW_ELEMENT_ENTRY = 15;
+	int FLOW_ELEMENT_ENTRY = 16;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -2684,7 +2730,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivity()
 	 * @generated
 	 */
-	int ACTIVITY = 20;
+	int ACTIVITY = 21;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ActivityEntryImpl <em>Activity Entry</em>}' class.
@@ -2694,7 +2740,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getActivityEntry()
 	 * @generated
 	 */
-	int ACTIVITY_ENTRY = 21;
+	int ACTIVITY_ENTRY = 22;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.ServiceImpl <em>Service</em>}' class.
@@ -2704,7 +2750,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getService()
 	 * @generated
 	 */
-	int SERVICE = 22;
+	int SERVICE = 23;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.flow.impl.TransitionImpl <em>Transition</em>}' class.
@@ -2714,7 +2760,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransition()
 	 * @generated
 	 */
-	int TRANSITION = 16;
+	int TRANSITION = 17;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -2807,7 +2853,7 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__DOCUMENTATION = PACKAGE_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2904,7 +2950,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getTransitionEntry()
 	 * @generated
 	 */
-	int TRANSITION_ENTRY = 17;
+	int TRANSITION_ENTRY = 18;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -2950,7 +2996,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCall()
 	 * @generated
 	 */
-	int CALL = 18;
+	int CALL = 19;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -3043,7 +3089,7 @@ public interface FlowPackage extends EPackage {
 	int CALL__DOCUMENTATION = TRANSITION__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3158,7 +3204,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getCallEntry()
 	 * @generated
 	 */
-	int CALL_ENTRY = 19;
+	int CALL_ENTRY = 20;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -3287,7 +3333,7 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3665,7 +3711,7 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3933,7 +3979,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFlow()
 	 * @generated
 	 */
-	int FLOW = 23;
+	int FLOW = 24;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4026,7 +4072,7 @@ public interface FlowPackage extends EPackage {
 	int FLOW__DOCUMENTATION = ACTIVITY__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4303,7 +4349,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getPseudoState()
 	 * @generated
 	 */
-	int PSEUDO_STATE = 24;
+	int PSEUDO_STATE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4396,7 +4442,7 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__DOCUMENTATION = FLOW_ELEMENT__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4655,7 +4701,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getChoice()
 	 * @generated
 	 */
-	int CHOICE = 25;
+	int CHOICE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -4748,7 +4794,7 @@ public interface FlowPackage extends EPackage {
 	int CHOICE__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5007,7 +5053,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 26;
+	int END = 27;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5100,7 +5146,7 @@ public interface FlowPackage extends EPackage {
 	int END__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5359,7 +5405,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getEntryPoint()
 	 * @generated
 	 */
-	int ENTRY_POINT = 27;
+	int ENTRY_POINT = 28;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5452,7 +5498,7 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -5711,7 +5757,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExitPoint()
 	 * @generated
 	 */
-	int EXIT_POINT = 28;
+	int EXIT_POINT = 29;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -5804,7 +5850,7 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6063,7 +6109,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionInput()
 	 * @generated
 	 */
-	int EXPANSION_INPUT = 29;
+	int EXPANSION_INPUT = 30;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -6156,7 +6202,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6415,7 +6461,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getExpansionOutput()
 	 * @generated
 	 */
-	int EXPANSION_OUTPUT = 30;
+	int EXPANSION_OUTPUT = 31;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -6508,7 +6554,7 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6767,7 +6813,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getFork()
 	 * @generated
 	 */
-	int FORK = 31;
+	int FORK = 32;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -6860,7 +6906,7 @@ public interface FlowPackage extends EPackage {
 	int FORK__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -7119,7 +7165,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getInputPin()
 	 * @generated
 	 */
-	int INPUT_PIN = 32;
+	int INPUT_PIN = 33;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -7212,7 +7258,7 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -7471,7 +7517,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getJoin()
 	 * @generated
 	 */
-	int JOIN = 33;
+	int JOIN = 34;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -7564,7 +7610,7 @@ public interface FlowPackage extends EPackage {
 	int JOIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -7823,7 +7869,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getOutputPin()
 	 * @generated
 	 */
-	int OUTPUT_PIN = 34;
+	int OUTPUT_PIN = 35;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -7916,7 +7962,7 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -8175,7 +8221,7 @@ public interface FlowPackage extends EPackage {
 	 * @see org.nasdanika.flow.impl.FlowPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 35;
+	int START = 36;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -8268,7 +8314,7 @@ public interface FlowPackage extends EPackage {
 	int START__DOCUMENTATION = PSEUDO_STATE__DOCUMENTATION;
 
 	/**
-	 * The feature id for the '<em><b>Representations</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Representations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -8586,10 +8632,10 @@ public interface FlowPackage extends EPackage {
 	EReference getPackageElement_Documentation();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.PackageElement#getRepresentations <em>Representations</em>}'.
+	 * Returns the meta object for the map '{@link org.nasdanika.flow.PackageElement#getRepresentations <em>Representations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Representations</em>'.
+	 * @return the meta object for the map '<em>Representations</em>'.
 	 * @see org.nasdanika.flow.PackageElement#getRepresentations()
 	 * @see #getPackageElement()
 	 * @generated
@@ -8625,6 +8671,41 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getPackageElement__Resolve__PackageElement();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Representation Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Representation Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueType="org.nasdanika.diagram.Diagram" valueContainment="true"
+	 *        valueAnnotation="urn:org.nasdanika homogenous='true'"
+	 * @generated
+	 */
+	EClass getRepresentationEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRepresentationEntry()
+	 * @generated
+	 */
+	EAttribute getRepresentationEntry_Key();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRepresentationEntry()
+	 * @generated
+	 */
+	EReference getRepresentationEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.Package <em>Package</em>}'.
@@ -10087,7 +10168,7 @@ public interface FlowPackage extends EPackage {
 		EReference PACKAGE_ELEMENT__DOCUMENTATION = eINSTANCE.getPackageElement_Documentation();
 
 		/**
-		 * The meta object literal for the '<em><b>Representations</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Representations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -10117,6 +10198,32 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT = eINSTANCE.getPackageElement__Resolve__PackageElement();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.flow.impl.RepresentationEntryImpl <em>Representation Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.flow.impl.RepresentationEntryImpl
+		 * @see org.nasdanika.flow.impl.FlowPackageImpl#getRepresentationEntry()
+		 * @generated
+		 */
+		EClass REPRESENTATION_ENTRY = eINSTANCE.getRepresentationEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPRESENTATION_ENTRY__KEY = eINSTANCE.getRepresentationEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REPRESENTATION_ENTRY__VALUE = eINSTANCE.getRepresentationEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.PackageImpl <em>Package</em>}' class.

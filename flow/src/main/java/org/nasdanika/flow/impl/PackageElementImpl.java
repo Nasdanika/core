@@ -5,12 +5,14 @@ package org.nasdanika.flow.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -150,8 +152,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Diagram> getRepresentations() {
-		return (EList<Diagram>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS, FlowPackage.Literals.PACKAGE_ELEMENT__REPRESENTATIONS, true, true);
+	public EMap<String, Diagram> getRepresentations() {
+		return (EMap<String, Diagram>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS, FlowPackage.Literals.PACKAGE_ELEMENT__REPRESENTATIONS, true, true);
 	}
 
 	/**
@@ -199,6 +201,18 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 		Marker marker = getMarker();
 		if (marker != null) {
 			instance.setMarker(EcoreUtil.copy(marker));
+		}
+		
+		// Representations
+		for (Entry<String, Diagram> re: getRepresentations().entrySet()) {
+			Diagram representation = re.getValue();
+			EMap<String, Diagram> instanceRepresentations = instance.getRepresentations();
+			String representationKey = re.getKey();
+			if (representation == null) {
+				instanceRepresentations.removeKey(representationKey);
+			} else {
+				instanceRepresentations.put(representationKey, EcoreUtil.copy(representation));
+			}
 		}
 	}
 
@@ -269,7 +283,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
 				return getDocumentation();
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				return getRepresentations();
+				if (coreType) return getRepresentations();
+				else return getRepresentations().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -295,8 +310,7 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				getDocumentation().addAll((Collection<? extends EObject>)newValue);
 				return;
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				getRepresentations().clear();
-				getRepresentations().addAll((Collection<? extends Diagram>)newValue);
+				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

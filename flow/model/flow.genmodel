@@ -24,6 +24,10 @@
         <genParameters ecoreParameter="flow.ecore#//PackageElement/resolve/instance"/>
       </genOperations>
     </genClasses>
+    <genClasses ecoreClass="flow.ecore#//RepresentationEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//RepresentationEntry/key"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//RepresentationEntry/value"/>
+    </genClasses>
     <genClasses ecoreClass="flow.ecore#//Package">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//Package/superPackages"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Package/subPackages"/>
