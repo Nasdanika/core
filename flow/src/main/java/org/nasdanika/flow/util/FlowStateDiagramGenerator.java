@@ -36,33 +36,28 @@ public class FlowStateDiagramGenerator {
 	
 	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 
-	public Diagram generateFlowDiagram(Flow flow) {
-		Diagram ret = createDiagram(flow);
+	public void generateFlowDiagram(Flow flow, Diagram diagram) {
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		ret.getElements().addAll(createDiagramElements(flow.getElements().values(), semanticMap, null));
+		diagram.getElements().addAll(createDiagramElements(flow.getElements().values(), semanticMap, null));
 		
 		for (FlowElement<?> fe: semanticMap.keySet()) {
 			wire(fe, semanticMap);
 		}
 		
 		// Auto start/end
-		
-		return ret;
 	}
 	
-	public Diagram generateContextDiagram(FlowElement<?> flowElement) {
+	// TODO - single method taking context and depth into account.
+	public void generateContextDiagram(FlowElement<?> flowElement, Diagram diagram) {
 		Collection<FlowElement<?>> diagramElements = new HashSet<>();
 		collectRelatedElements(flowElement, diagramElements);
 		
-		Diagram ret = createDiagram(flowElement);
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		ret.getElements().addAll(createDiagramElements(diagramElements, semanticMap, flowElement));
+		diagram.getElements().addAll(createDiagramElements(diagramElements, semanticMap, flowElement));
 		
 		for (FlowElement<?> fe: diagramElements) {
 			wire(fe, semanticMap);
 		}
-		
-		return ret;
 	}
 
 	private void collectRelatedElements(FlowElement<?> flowElement, Collection<FlowElement<?>> accumulator) { 
@@ -284,11 +279,6 @@ public class FlowStateDiagramGenerator {
 	
 	protected String getCallTooltip(Call call) {
 		return null;
-	}
-	
-	protected Diagram createDiagram(FlowElement<?> flowElement) {
-		return diagramFactory.createDiagram();
-//		diagram.setHideEmptyDescription(true);
 	}
 	
 	protected boolean isGroupByParticipant() {

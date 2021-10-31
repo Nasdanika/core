@@ -27,31 +27,26 @@ public class ArtifactComponentDiagramGenerator {
 	
 	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 
-	public Diagram generateDiagram(Collection<Artifact> semanticElements) {
-		Diagram ret = createDiagram();
+	public void generateDiagram(Collection<Artifact> semanticElements, Diagram diagram) {
 		Map<Artifact,DiagramElement> semanticMap = new HashMap<>();
-		ret.getElements().addAll(createDiagramElements(semanticElements, semanticMap, null));
+		diagram.getElements().addAll(createDiagramElements(semanticElements, semanticMap, null));
 		
 		for (Artifact se: semanticMap.keySet()) {
 			wire(se, semanticMap);
 		}
-		
-		return ret;
 	}
 	
-	public Diagram generateContextDiagram(Artifact artifact) {
+	// TODO - single method - depth, context.
+	public void generateContextDiagram(Artifact artifact, Diagram diagram) {
 		Collection<Artifact> semanticElements = new HashSet<>();
 		collectRelatedElements(artifact, semanticElements);
 		
-		Diagram ret = createDiagram();
 		Map<Artifact,DiagramElement> semanticMap = new HashMap<>();
-		ret.getElements().addAll(createDiagramElements(semanticElements, semanticMap, artifact));
+		diagram.getElements().addAll(createDiagramElements(semanticElements, semanticMap, artifact));
 		
 		for (Artifact se: semanticElements) {
 			wire(se, semanticMap);
 		}
-		
-		return ret;
 	}
 
 	private void collectRelatedElements(Artifact semanticElement, Collection<Artifact> accumulator) { 
@@ -173,10 +168,6 @@ public class ArtifactComponentDiagramGenerator {
 	
 	protected String getRelationshipTooltip(Relationship relationship) {
 		return null;
-	}
-	
-	protected Diagram createDiagram() {
-		return diagramFactory.createDiagram();
 	}
 	
 }
