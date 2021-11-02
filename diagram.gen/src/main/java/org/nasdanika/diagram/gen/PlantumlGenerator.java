@@ -42,6 +42,13 @@ public class PlantumlGenerator {
 			ret.append("hide footbox").append(System.lineSeparator());
 		}
 		
+		int noteIdx = 0;
+		for (Note note: diagram.getNotes()) {
+			ret.append("note as note_").append(++noteIdx);
+			ret.append(renderNote(note));
+			ret.append("end note");
+		}
+		
 		List<Connection> connections = new ArrayList<>();
 		for (DiagramElement de: diagram.getElements()) {
 			ret.append(generate(de, connections, 0));

@@ -96,6 +96,9 @@
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/inboundRelationships"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Artifact/partition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/style"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Artifact/templateKeys"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/templates"/>
+      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/instances"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//ArtifactEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//ArtifactEntry/key"/>

@@ -1,1 +1,1 @@
-content-resource: classpath:org/nasdanika/exec/gen/tests/content/resource/hello.txt
+content-resource: classpath://org/nasdanika/exec/gen/tests/content/resource/hello.txt

@@ -2,13 +2,17 @@ package org.nasdanika.flow.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
@@ -36,129 +40,135 @@ public class FlowStateDiagramGenerator {
 	
 	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 
-	public void generateFlowDiagram(Flow flow, Diagram diagram) {
-		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		diagram.getElements().addAll(createDiagramElements(flow.getElements().values(), semanticMap, null));
-		
-		for (FlowElement<?> fe: semanticMap.keySet()) {
-			wire(fe, semanticMap);
-		}
-		
-		// Auto start/end
+	public void generateDiagram(Flow flow, Diagram diagram) {
+		generateDiagram(flow.getElements().values(), diagram, null);
 	}
 	
-	// TODO - single method taking context and depth into account.
-	public void generateContextDiagram(FlowElement<?> flowElement, Diagram diagram) {
-		Collection<FlowElement<?>> diagramElements = new HashSet<>();
-		collectRelatedElements(flowElement, diagramElements);
+	public void generateDiagram(FlowElement<?> flowElement, Diagram diagram) {
+		generateDiagram(Collections.singleton(flowElement), diagram, flowElement);
+	}
+	
+	public void generateDiagram(Collection<FlowElement<?>> flowElements, Diagram diagram, FlowElement<?> contextElement) {
+		// Collecting all elements to be included
+		Map<FlowElement<?>,Integer> semanticElements = new HashMap<>();
+		for (FlowElement<?> flowElement: flowElements) {
+			collectRelatedElements(flowElement, semanticElements, diagram.getContext());
+		}
+		
+		// Selecting top-level elements
+		Collection<FlowElement<?>> topLevelElements = new HashSet<>();
+		semanticElements.keySet().stream()
+			.filter(se -> !EcoreUtil.isAncestor(topLevelElements, se))
+			.forEach(se -> {
+				topLevelElements.removeIf(topLevelElement -> EcoreUtil.isAncestor(se, topLevelElement));
+				topLevelElements.add(se);
+			});
 		
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		diagram.getElements().addAll(createDiagramElements(diagramElements, semanticMap, flowElement));
+		diagram.getElements().addAll(createDiagramElements(topLevelElements, semanticMap, contextElement, diagram.getDepth()));
 		
-		for (FlowElement<?> fe: diagramElements) {
-			wire(fe, semanticMap);
+		for (FlowElement<?> se: topLevelElements) {
+			wire(se, semanticMap);
 		}
 	}
 
-	private void collectRelatedElements(FlowElement<?> flowElement, Collection<FlowElement<?>> accumulator) { 
-		if (flowElement != null && accumulator.add(flowElement)) {
-			for (Transition input: flowElement.getInputs()) {
-				FlowElement<?> target = (FlowElement<?>) input.eContainer().eContainer(); 
-				if (target instanceof PseudoState) {
-					collectRelatedElements(target, accumulator);
-				} else {					
-					accumulator.add(target);
-				}
+	private void collectRelatedElements(FlowElement<?> semanticElement, Map<FlowElement<?>,Integer> accumulator, int depth) { 
+		if (semanticElement == null) {
+			return;
+		}
+		Integer sDepth = accumulator.get(semanticElement);
+		if (sDepth != null && (sDepth < 0 || depth <= sDepth)) {
+			return; // Do not traverse if existing depth is negative or depth is less than already traversed depth.
+		}
+		accumulator.put(semanticElement, depth);
+		
+		if (depth != 0) {
+			for (Transition input: semanticElement.getInputs()) {
+				FlowElement<?> source = (FlowElement<?>) input.eContainer().eContainer(); 
+				collectRelatedElements(source, accumulator, source instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
 			}
 
-			for (Transition output: flowElement.getOutputs().values()) {
+			for (Transition output: semanticElement.getOutputs().values()) {
 				FlowElement<?> target = output.getTarget(); 
-				if (target instanceof PseudoState) {
-					collectRelatedElements(target, accumulator);
-				} else if (target != null) {
-					accumulator.add(target);
-				}
+				collectRelatedElements(target, accumulator, target instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
 			}
 
-			for (Call invocation: flowElement.getInvocations()) {
-				FlowElement<?> target = (FlowElement<?>) invocation.eContainer().eContainer(); 
-				if (target instanceof PseudoState) {
-					collectRelatedElements(target, accumulator);
-				} else if (target != null) {
-					accumulator.add(target);
-				}
+			for (Call invocation: semanticElement.getInvocations()) {
+				FlowElement<?> source = (FlowElement<?>) invocation.eContainer().eContainer(); 
+				collectRelatedElements(source, accumulator, source instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
 			}
 
-			for (Call call: flowElement.getCalls().values()) {
+			for (Call call: semanticElement.getCalls().values()) {
 				FlowElement<?> target = call.getTarget(); 
-				if (target instanceof PseudoState) {
-					collectRelatedElements(target, accumulator);
-				} else if (target != null) {
-					accumulator.add(target);
-				}
+				collectRelatedElements(target, accumulator, target instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
 			}
-			
-//			if (flowElement instanceof Flow && ((Flow) flowElement).isPartition()) {
-//				for (FlowElement<?> subElement: ((Flow) flowElement).getElements().values()) {
-//					collectRelatedElements(subElement, accumulator);
-//				}
-//			}
+		}
+		
+		if (semanticElement instanceof Flow) {
+			for (FlowElement<?> subElement: ((Flow) semanticElement).getElements().values()) {
+				collectRelatedElements(subElement, accumulator, depth);
+			}
 		}
 	}
 	
-	protected DiagramElement createDiagramElement(FlowElement<?> flowElement, Map<FlowElement<?>, DiagramElement> semanticMap, FlowElement<?> contextElement) {
-		if (flowElement instanceof org.nasdanika.flow.Start) {
+	protected DiagramElement createDiagramElement(
+			FlowElement<?> semanticElement, 
+			Map<FlowElement<?>, DiagramElement> semanticMap, 
+			FlowElement<?> contextElement,
+			int depth) {
+		
+		if (semanticElement instanceof org.nasdanika.flow.Start) {
 			org.nasdanika.diagram.Start ret = diagramFactory.createStart();
-			semanticMap.put(flowElement, ret);
+			semanticMap.put(semanticElement, ret);
 			return ret;
 		}
 		
-		if (flowElement instanceof org.nasdanika.flow.End) {
+		if (semanticElement instanceof org.nasdanika.flow.End) {
 			org.nasdanika.diagram.End ret = diagramFactory.createEnd();
-			semanticMap.put(flowElement, ret);
+			semanticMap.put(semanticElement, ret);
 			return ret;
 		}
 		
 		org.nasdanika.diagram.DiagramElement ret = diagramFactory.createDiagramElement();
-		semanticMap.put(flowElement, ret);
+		semanticMap.put(semanticElement, ret);
 		ret.setType("state");
 		
-		if (flowElement instanceof PseudoState) {
-			if (flowElement instanceof Choice) {
+		if (semanticElement instanceof PseudoState) {
+			if (semanticElement instanceof Choice) {
 				ret.setStereotype("choice");
-			} else if (flowElement instanceof EntryPoint) { 
+			} else if (semanticElement instanceof EntryPoint) { 
 				ret.setStereotype("entryPoint");
-			} else if (flowElement instanceof ExitPoint) { 
+			} else if (semanticElement instanceof ExitPoint) { 
 				ret.setStereotype("exitPoint");
-			} else if (flowElement instanceof ExpansionInput) { 
+			} else if (semanticElement instanceof ExpansionInput) { 
 				ret.setStereotype("expansionInput");
-			} else if (flowElement instanceof ExpansionOutput) { 
+			} else if (semanticElement instanceof ExpansionOutput) { 
 				ret.setStereotype("expansioinOutput");
-			} else if (flowElement instanceof Fork) { 
+			} else if (semanticElement instanceof Fork) { 
 				ret.setStereotype("fork");
-			} else if (flowElement instanceof InputPin) { 
+			} else if (semanticElement instanceof InputPin) { 
 				ret.setStereotype("inputPin");
-			} else if (flowElement instanceof Join) { 
+			} else if (semanticElement instanceof Join) { 
 				ret.setStereotype("join");
-			} else if (flowElement instanceof OutputPin) { 
+			} else if (semanticElement instanceof OutputPin) { 
 				ret.setStereotype("outputPin");				
 			}
-			String name = flowElement.getName();
+			String name = semanticElement.getName();
 			if (!Util.isBlank(name)) {
 				Note nameNote = diagramFactory.createNote();
 				nameNote.setText(name);
 				ret.getNotes().add(nameNote);				
 			}
 		} else {
-			ret.setText(flowElement.getName());
-			ret.setLocation(getFlowElementLocation(flowElement));
-			ret.setTooltip(getFlowElementTooltip(flowElement));
+			ret.setText(semanticElement.getName());
+			ret.setLocation(getFlowElementLocation(semanticElement));
+			ret.setTooltip(getFlowElementTooltip(semanticElement));
 			
-			if (flowElement instanceof Flow && ((Flow) flowElement).isPartition()) {
-				ret.getElements().addAll(createDiagramElements(((Flow) flowElement).getElements().values(), semanticMap, contextElement));
+			if (depth != 0 && semanticElement instanceof Flow && ((Flow) semanticElement).isPartition()) {
+				ret.getElements().addAll(createDiagramElements(((Flow) semanticElement).getElements().values(), semanticMap, contextElement, depth - 1));
 			}
 		}
-		EList<String> modifiers = flowElement.getModifiers();
+		EList<String> modifiers = semanticElement.getModifiers();
 		if (modifiers.contains("final")) {
 			ret.setBold(true);
 		} else if (modifiers.contains("abstract")) {
@@ -169,7 +179,7 @@ public class FlowStateDiagramGenerator {
 			ret.setBorder("grey");
 		}
 		
-		if (contextElement == null || flowElement == contextElement) {
+		if (contextElement == null || semanticElement == contextElement || EcoreUtil.isAncestor(contextElement, semanticElement)) {
 			if (Util.isBlank(ret.getColor())) {
 				ret.setColor("FEFECE"); 				
 			}
@@ -182,33 +192,34 @@ public class FlowStateDiagramGenerator {
 
 	/**
 	 * Creates diagram for flow elements potentially grouping them.
-	 * @param flowElements 
+	 * @param semanticElements 
 	 * @param semanticMap
 	 * @param contextElement
 	 * @return
 	 */
 	protected List<DiagramElement> createDiagramElements(
-			Collection<FlowElement<?>> flowElements,
+			Collection<FlowElement<?>> semanticElements,
 			Map<FlowElement<?>, DiagramElement> semanticMap, 
-			FlowElement<?> contextElement) {		
+			FlowElement<?> contextElement,
+			int depth) {		
 		List<DiagramElement> ret = new ArrayList<>();
 		if (isGroupByParticipant()) {
 			java.util.function.Function<FlowElement<?>, Participant> keyExtractor = fe -> {
 				EList<Participant> participants = fe.getParticipants();
 				return participants.isEmpty() ? null : participants.get(0);
 			};
-			for (Entry<Participant, List<FlowElement<?>>> ge: Util.groupBy(flowElements, keyExtractor).entrySet()) {
+			for (Entry<Participant, List<FlowElement<?>>> ge: Util.groupBy(semanticElements, keyExtractor).entrySet()) {
 				if (ge.getKey() == null) {
 					for (FlowElement<?> subElement: ge.getValue()) {
-						ret.add(createDiagramElement(subElement, semanticMap, contextElement));
+						ret.add(createDiagramElement(subElement, semanticMap, contextElement, depth));
 					}							
 				} else {
-					ret.add(createParticipantGroup(ge.getKey(), ge.getValue(), semanticMap, contextElement));
+					ret.add(createParticipantGroup(ge.getKey(), ge.getValue(), semanticMap, contextElement, depth));
 				}
 			}
 		} else {				
-			for (FlowElement<?> subElement: flowElements) {
-				ret.add(createDiagramElement(subElement, semanticMap, contextElement));
+			for (FlowElement<?> subElement: semanticElements) {
+				ret.add(createDiagramElement(subElement, semanticMap, contextElement, depth));
 			}
 		}
 		return ret;
@@ -222,48 +233,146 @@ public class FlowStateDiagramGenerator {
 		return null;
 	}
 	
-	protected void wire(FlowElement<?> value, Map<FlowElement<?>, DiagramElement> semanticMap) {
-		EList<Connection> connections = semanticMap.get(value).getConnections();
+	/**
+	 * Collects outputs from the argument and unmapped children.
+	 * @param semanticElement
+	 * @param semanticMap
+	 * @return
+	 */
+	protected Collection<Transition> collectAllOutputs(FlowElement<?> semanticElement, Map<FlowElement<?>, DiagramElement> semanticMap) {
+		Collection<Transition> ret = new ArrayList<>();
+		ret.addAll(semanticElement.getOutputs().values());
+		if (semanticElement instanceof Flow) {
+			for (FlowElement<?> child: ((Flow) semanticElement).getElements().values()) {
+				if (!semanticMap.containsKey(child)) {
+					ret.addAll(collectAllOutputs(child, semanticMap));
+				}
+			}
+		}
+		return ret;
+	}	
+	
+	/**
+	 * Collects outputs from the argument and unmapped children.
+	 * @param semanticElement
+	 * @param semanticMap
+	 * @return
+	 */
+	protected Collection<Call> collectAllCalls(FlowElement<?> semanticElement, Map<FlowElement<?>, DiagramElement> semanticMap) {
+		Collection<Call> ret = new ArrayList<>();
+		ret.addAll(semanticElement.getCalls().values());
+		if (semanticElement instanceof Flow) {
+			for (FlowElement<?> child: ((Flow) semanticElement).getElements().values()) {
+				if (!semanticMap.containsKey(child)) {
+					ret.addAll(collectAllCalls(child, semanticMap));
+				}
+			}
+		}
+		return ret;
+	}	
+	
+	protected void wire(FlowElement<?> semanticElement, Map<FlowElement<?>, DiagramElement> semanticMap) {
+		EList<Connection> connections = semanticMap.get(semanticElement).getConnections();
+		
+		Function<Transition,FlowElement<?>> groupByMappedTarget = transition -> {
+			FlowElement<? >target = transition.getTarget(); 
+			while (!semanticMap.containsKey(target)) {
+				EObject superContainer = target.eContainer().eContainer();
+				if (superContainer instanceof FlowElement<?>) {
+					target = (FlowElement<?>) superContainer;
+				} else {
+					return null;
+				}
+			}
+			return target;		
+		};
 		
 		// Transitions
-		for (Transition output: value.getOutputs().values()) {
-			DiagramElement connectionTarget = semanticMap.get((FlowElement<?>) output.getTarget());
-			if (connectionTarget != null) {
-				Connection transition = diagramFactory.createConnection();
-				connections.add(transition);
-				transition.setTarget(connectionTarget);
-				transition.setType("-->");
-				String name = output.getName();
-				if (!Util.isBlank(name)) {
-					Link link = diagramFactory.createLink();
-					link.setText(name);
-					link.setLocation(getTransitionLocation(output));
-					link.setTooltip(getTransitionTooltip(output));
-					transition.getDescription().add(link);
+		for (Entry<FlowElement<?>, List<Transition>> outputEntry: Util.groupBy(collectAllOutputs(semanticElement, semanticMap), groupByMappedTarget).entrySet()) {			
+			FlowElement<?> target = outputEntry.getKey();
+			if (target != null && target != semanticElement) {
+				DiagramElement connectionTarget = semanticMap.get(target);
+				if (connectionTarget != null) {
+					List<Transition> transitions = outputEntry.getValue();
+					Connection connection;
+					if (transitions.size() == 1) {
+						// Single relationship
+						Transition output = transitions.get(0);
+						connection = diagramFactory.createConnection();
+						String name = output.getName();
+						if (!Util.isBlank(name)) {
+							Link link = diagramFactory.createLink();
+							link.setText(name);
+							link.setLocation(getTransitionLocation(output));
+							link.setTooltip(getTransitionTooltip(output));
+							connection.getDescription().add(link);
+						}
+					} else {
+						// Grouped relationship
+						connection = createGroupConnection(semanticElement, target, transitions);
+					}
+					connection.setType("-->");
+					connections.add(connection);
+					connection.setTarget(connectionTarget);
 				}
 			}
 		}
 		
 		// Calls
-		for (Call call: value.getCalls().values()) {
-			DiagramElement connectionTarget = semanticMap.get((FlowElement<?>) call.getTarget());
-			if (connectionTarget != null) {
-				Connection connection = diagramFactory.createConnection();
-				connections.add(connection);
-				connection.setTarget(connectionTarget);
-				connection.setType("-left${style}->");
-				connection.setColor("black");
-				String name = call.getName();
-				if (!Util.isBlank(name)) {
-					Link link = diagramFactory.createLink();
-					link.setText(name);
-					link.setLocation(getCallLocation(call));
-					link.setTooltip(getCallTooltip(call));
-					connection.getDescription().add(link);
+		for (Entry<FlowElement<?>, List<Call>> callEntry: Util.groupBy(collectAllCalls(semanticElement, semanticMap), groupByMappedTarget).entrySet()) {			
+			FlowElement<?> target = callEntry.getKey();
+			if (target != null && target != semanticElement) {
+				DiagramElement connectionTarget = semanticMap.get(target);
+				if (connectionTarget != null) {
+					List<Call> calls = callEntry.getValue();
+					Connection connection;
+					if (calls.size() == 1) {
+						// Single relationship
+						Call call= calls.get(0);						
+						connection = diagramFactory.createConnection();
+						String name = call.getName();
+						if (!Util.isBlank(name)) {
+							Link link = diagramFactory.createLink();
+							link.setText(name);
+							link.setLocation(getCallLocation(call));
+							link.setTooltip(getCallTooltip(call));
+							connection.getDescription().add(link);
+						}
+					} else {
+						// Grouped relationship
+						connection = createGroupConnection(semanticElement, target, calls);
+					}
+					connections.add(connection);
+					connection.setTarget(connectionTarget);
+					connection.setType("-left${style}->");
+					connection.setColor("black");
+				}
+			}
+		}
+
+		// Flow elements
+		if (semanticElement instanceof Flow) {
+			for (FlowElement<?> child: ((Flow) semanticElement).getElements().values()) {
+				if (semanticMap.containsKey(child)) {
+					wire(child, semanticMap);
 				}
 			}
 		}
 	}
+	
+	/**
+	 * Creates a connection between to elements from a group of relationships. 
+	 * @param source
+	 * @param target
+	 * @param relationships
+	 * @return
+	 */
+	protected Connection createGroupConnection(FlowElement<?> source, FlowElement<?> target, List<? extends Transition> transitions) {
+		Connection connection = diagramFactory.createConnection();
+		connection.setThickness(3);
+		// ports # and o to indicate connections to internal things?
+		return connection;
+	}	
 		
 	protected String getTransitionLocation(Transition transition) {
 		return null;
@@ -289,7 +398,8 @@ public class FlowStateDiagramGenerator {
 			Participant participant, 
 			Collection<FlowElement<?>> groupElements, 
 			Map<FlowElement<?>, DiagramElement> semanticMap, 
-			FlowElement<?> contextElement) {
+			FlowElement<?> contextElement,
+			int depth) {
 		
 		org.nasdanika.diagram.DiagramElement ret = diagramFactory.createDiagramElement();
 		ret.setColor("E0E0FF");
@@ -301,7 +411,7 @@ public class FlowStateDiagramGenerator {
 		
 		
 		for (FlowElement<?> groupElement: groupElements) {
-			DiagramElement diagramElement = createDiagramElement(groupElement, semanticMap, contextElement);
+			DiagramElement diagramElement = createDiagramElement(groupElement, semanticMap, contextElement, depth);
 			if (diagramElement != null) {
 				ret.getElements().add(diagramElement);
 			}

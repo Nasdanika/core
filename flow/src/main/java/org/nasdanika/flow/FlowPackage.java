@@ -1763,13 +1763,40 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__STYLE = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
 
 	/**
+	 * The feature id for the '<em><b>Template Keys</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__TEMPLATE_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Templates</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__TEMPLATES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Instances</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__INSTANCES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 16;
+
+	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
+	int ARTIFACT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -9346,6 +9373,39 @@ public interface FlowPackage extends EPackage {
 	EReference getArtifact_Style();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Artifact#getTemplateKeys <em>Template Keys</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Template Keys</em>'.
+	 * @see org.nasdanika.flow.Artifact#getTemplateKeys()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EAttribute getArtifact_TemplateKeys();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getTemplates <em>Templates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Templates</em>'.
+	 * @see org.nasdanika.flow.Artifact#getTemplates()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_Templates();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.flow.Artifact#getInstances <em>Instances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Instances</em>'.
+	 * @see org.nasdanika.flow.Artifact#getInstances()
+	 * @see #getArtifact()
+	 * @generated
+	 */
+	EReference getArtifact_Instances();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.flow.ArtifactParticipantResponsibility <em>Artifact Participant Responsibility</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10706,6 +10766,30 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ARTIFACT__STYLE = eINSTANCE.getArtifact_Style();
+
+		/**
+		 * The meta object literal for the '<em><b>Template Keys</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ARTIFACT__TEMPLATE_KEYS = eINSTANCE.getArtifact_TemplateKeys();
+
+		/**
+		 * The meta object literal for the '<em><b>Templates</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__TEMPLATES = eINSTANCE.getArtifact_Templates();
+
+		/**
+		 * The meta object literal for the '<em><b>Instances</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ARTIFACT__INSTANCES = eINSTANCE.getArtifact_Instances();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.ArtifactParticipantResponsibilityImpl <em>Artifact Participant Responsibility</em>}' class.

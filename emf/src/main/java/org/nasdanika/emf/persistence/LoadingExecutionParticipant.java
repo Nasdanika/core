@@ -27,6 +27,7 @@ import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
@@ -41,8 +42,6 @@ import org.nasdanika.ncore.util.NcoreResourceSet;
  *
  */
 public abstract class LoadingExecutionParticipant implements ExecutionParticipant {
-	
-	public static final String CLASSPATH_SCHEME = "classpath";		
 	
 	protected Context context;
 	protected List<EObject> roots;
@@ -84,12 +83,12 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
 		
 		// replacing URI and delegating to resource set so it loads using extension factories.
-		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(CLASSPATH_SCHEME, new ResourceFactoryImpl() {
+		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(Util.CLASSPATH_SCHEME, new ResourceFactoryImpl() {
 			
 			@Override
 			public Resource createResource(URI uri) {
 				ClassLoader classLoader = getClassLoader();
-				String resourcePath = uri.toString().substring(CLASSPATH_SCHEME.length() + 1);
+				String resourcePath = uri.toString().substring(Util.CLASSPATH_SCHEME.length() + 1);
 				URL resource = classLoader.getResource(resourcePath);
 				if (resource == null) {
 					throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);

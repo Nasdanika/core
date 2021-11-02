@@ -28,6 +28,9 @@ import org.nasdanika.diagram.DiagramElement;
  *   <li>{@link org.nasdanika.flow.Artifact#getInboundRelationships <em>Inbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#isPartition <em>Partition</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getStyle <em>Style</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getTemplateKeys <em>Template Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getTemplates <em>Templates</em>}</li>
+ *   <li>{@link org.nasdanika.flow.Artifact#getInstances <em>Instances</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
@@ -266,5 +269,51 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * @generated
 	 */
 	void setStyle(DiagramElement value);
+
+	/**
+	 * Returns the value of the '<em><b>Template Keys</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Keys of artifact's templates relative to the artifact URI.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Template Keys</em>' attribute list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_TemplateKeys()
+	 * @model annotation="urn:org.nasdanika feature-key='templates'"
+	 * @generated
+	 */
+	EList<String> getTemplateKeys();
+
+	/**
+	 * Returns the value of the '<em><b>Templates</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getInstances <em>Instances</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Templates</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Templates()
+	 * @see org.nasdanika.flow.Artifact#getInstances
+	 * @model opposite="instances" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Artifact> getTemplates();
+
+	/**
+	 * Returns the value of the '<em><b>Instances</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getTemplates <em>Templates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Derived opposite to templates.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Instances</em>' reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Instances()
+	 * @see org.nasdanika.flow.Artifact#getTemplates
+	 * @model opposite="templates" transient="true" changeable="false" derived="true"
+	 * @generated
+	 */
+	EList<Artifact> getInstances();
 
 } // Artifact

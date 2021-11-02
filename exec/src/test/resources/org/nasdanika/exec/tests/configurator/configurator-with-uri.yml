@@ -1,6 +1,6 @@
 exec-configurator:
    target: ../content/resource/resource.yml 
-   uri: nasdanika:exec/configurator
+   uri: nasdanika://exec/configurator
    properties: 
      name: 
        content-text: Extended ${name}

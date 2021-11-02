@@ -8,10 +8,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.json.JSONObject;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.DiagramGenerator.Dialect;
 import org.nasdanika.diagram.Diagram;
 
 public class Generator {
+	
+	public static Generator INSTANCE = new Generator();
 
 	private static final String PLANTUML_SCHEMA = "plantuml:";
 	private static final String DRAWIO_SCHEMA = "drawio:";
@@ -48,20 +51,8 @@ public class Generator {
 	 * @return
 	 * @throws IOException
 	 */
-	public String generateDrawioHtml(URL diagram) throws IOException {
-		JSONObject data = new JSONObject();
-		data.put("highlight", "#0000ff");
-		data.put("nav", true);
-		data.put("resize",true);
-		data.put("toolbar", "zoom layers tags lightbox");
-		data.put("edit","_blank");
-		
-		String mxFile = DefaultConverter.INSTANCE.stringContent(diagram);
-		data.put("xml", mxFile);
-		
-		String diagramDiv = "<div class=\"mxgraph\" style=\"max-width:100%;border:1px solid transparent;\" data-mxgraph=\"" + StringEscapeUtils.escapeHtml4(data.toString()) + "\"></div>";
-		String script = "<script type=\"text/javascript\" src=\"https://viewer.diagrams.net/js/viewer-static.min.js\"></script>";
-		return diagramDiv + System.lineSeparator() + script;		
+	public String generateDrawioHtml(URL diagram) throws Exception {
+		return DiagramGenerator.INSTANCE.generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
 	}
 	
 	protected PlantumlGenerator createPlantumlGenerator() {

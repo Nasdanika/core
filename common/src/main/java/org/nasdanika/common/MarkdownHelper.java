@@ -1,5 +1,6 @@
 package org.nasdanika.common;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -52,27 +53,32 @@ public class MarkdownHelper {
 	private static final String START_UML_BLOCK = "```uml";
 	private static final String START_UML_RESOURCE_BLOCK = "```uml-resource";
 	private static final Pattern START_UML_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_UML_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_UML_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String START_WIREFRAME_BLOCK = "```wireframe";
 	private static final String START_WIREFRAME_RESOURCE_BLOCK = "```wireframe-resource";
 	private static final Pattern START_WIREFRAME_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_WIREFRAME_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WIREFRAME_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String START_GANTT_BLOCK = "```gantt";
 	private static final String START_GANTT_RESOURCE_BLOCK = "```gantt-resource";
 	private static final Pattern START_GANTT_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_GANTT_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_GANTT_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String START_MINDMAP_BLOCK = "```mindmap";
 	private static final String START_MINDMAP_RESOURCE_BLOCK = "```mindmap-resource";
 	private static final Pattern START_MINDMAP_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_MINDMAP_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_MINDMAP_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String START_WBS_BLOCK = "```wbs";
 	private static final String START_WBS_RESOURCE_BLOCK = "```wbs-resource";
 	private static final Pattern START_WBS_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_WBS_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WBS_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_RESOURCE_BLOCK+"(\\s)*\\R");
+	
+	private static final String START_DRAWIO_BLOCK = "```drawio";
+	private static final String START_DRAWIO_RESOURCE_BLOCK = "```drawio-resource";
+	private static final Pattern START_DRAWIO_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_DRAWIO_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String FENCED_BLOCK = "```";
 	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");	
@@ -96,13 +102,19 @@ public class MarkdownHelper {
 	 */
 	protected String preProcessMarkdown(String markdown, Map<String,String> replacements) {
 		if (isProcessFendedBlocks()) {
-			String ret = processFencedBlocks(markdown, DiagramGenerator.Dialect.UML, START_UML_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements);
+			String ret = processFencedBlocks(markdown, DiagramGenerator.Dialect.UML, START_UML_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_PATTERN, replacements, false);
 					
-			// TODO - resource blocks
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.UML, START_UML_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_RESOURCE_PATTERN, replacements, true);
 					
 			return ret;		
 		}
@@ -110,13 +122,17 @@ public class MarkdownHelper {
 		
 		return markdown;
 	}
-	
-//	private String processUmlResourceBlocks(String markdown) {
-//		// TODO
-//		return markdown;
-//	}
 
-	private String processFencedBlocks(String input, DiagramGenerator.Dialect dialect, Pattern startPattern, Map<String,String> replacements) {
+	/**
+	 * 
+	 * @param input
+	 * @param dialect
+	 * @param startPattern
+	 * @param replacements
+	 * @param resource Indicates that spec is a URL of a resource resolved relative to the URL returned by getResourceBase(). The URL supports <code>classpath</code> schema for classloader resources.
+	 * @return
+	 */
+	private String processFencedBlocks(String input, DiagramGenerator.Dialect dialect, Pattern startPattern, Map<String,String> replacements, boolean resource) {
 		StringBuilder output = new StringBuilder();
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
@@ -127,7 +143,16 @@ public class MarkdownHelper {
 			    output.append(input.substring(i, startMatcher.start()));
 
 				String bareSpec = input.substring(startMatcher.end(), startMatcher.end() + endMatcher.start());
-
+				
+				if (resource) {					
+					try {						
+						URL resourceURL = new URL(getResourceBase(), bareSpec);
+						bareSpec = loadResource(resourceURL);
+					} catch (Exception e) {					
+						output.append("<div>Error loading resource " + bareSpec + ": " + e); 
+					}
+				}
+				
 				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
 				
 				StringBuilder replacementBuilder = new StringBuilder();
@@ -162,12 +187,28 @@ public class MarkdownHelper {
 		output.append(input.substring(i, input.length()));
 		return output.toString();
 	}
+	
+	protected ClassLoader getResourceClassLoader() {
+		return getClass().getClassLoader();
+	}
+	
+	protected String loadResource(URL resource) throws Exception {
+		if (Util.CLASSPATH_SCHEME.equals(resource.getProtocol())) {
+			String resPath = resource.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
+			URL cResource = getResourceClassLoader().getResource(resPath);
+			if (cResource == null) {
+				throw new IllegalArgumentException("Classpath resource not found: " + resPath);
+			}
+			resource = cResource;
+		}
+		return DefaultConverter.INSTANCE.stringContent(resource);
+	}
 
 	/**
 	 * Override to return base URL for resolving resource references in UML resource blocks.
 	 * @return
 	 */
-	protected String getResourceBase() {
+	protected URL getResourceBase() {
 		return null;
 	}
 	

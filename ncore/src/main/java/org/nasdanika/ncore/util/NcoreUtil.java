@@ -230,6 +230,9 @@ public final class NcoreUtil {
 			}
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
+			if (containmentPath == null) {
+				return null;
+			}
 			EObject container = containmentPath.getFirst();
 			if (container == null) {
 	//			Leads to stack overflow during loading.			

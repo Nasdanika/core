@@ -1104,6 +1104,36 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getArtifact_TemplateKeys() {
+		return (EAttribute)artifactEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArtifact_Templates() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getArtifact_Instances() {
+		return (EReference)artifactEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getArtifactParticipantResponsibility() {
 		return artifactParticipantResponsibilityEClass;
 	}
@@ -1898,6 +1928,9 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(artifactEClass, ARTIFACT__INBOUND_RELATIONSHIPS);
 		createEAttribute(artifactEClass, ARTIFACT__PARTITION);
 		createEReference(artifactEClass, ARTIFACT__STYLE);
+		createEAttribute(artifactEClass, ARTIFACT__TEMPLATE_KEYS);
+		createEReference(artifactEClass, ARTIFACT__TEMPLATES);
+		createEReference(artifactEClass, ARTIFACT__INSTANCES);
 
 		artifactEntryEClass = createEClass(ARTIFACT_ENTRY);
 		createEAttribute(artifactEntryEClass, ARTIFACT_ENTRY__KEY);
@@ -2244,6 +2277,9 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getArtifact_InboundRelationships(), this.getRelationship(), this.getRelationship_Target(), "inboundRelationships", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtifact_Partition(), ecorePackage.getEBoolean(), "partition", null, 0, 1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getArtifact_Style(), theDiagramPackage.getDiagramElement(), null, "style", null, 0, 1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getArtifact_TemplateKeys(), ecorePackage.getEString(), "templateKeys", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifact_Templates(), this.getArtifact(), this.getArtifact_Instances(), "templates", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifact_Instances(), this.getArtifact(), this.getArtifact_Templates(), "instances", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		initEClass(artifactEntryEClass, Map.Entry.class, "ArtifactEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getArtifactEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2488,6 +2524,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (getArtifact_TemplateKeys(),
+		   source,
+		   new String[] {
+			   "feature-key", "templates"
 		   });
 		addAnnotation
 		  (getArtifactEntry_Value(),
@@ -3032,6 +3074,18 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Diagram element style for component diagrams."
+		   });
+		addAnnotation
+		  (getArtifact_TemplateKeys(),
+		   source,
+		   new String[] {
+			   "documentation", "Keys of artifact\'s templates relative to the artifact URI."
+		   });
+		addAnnotation
+		  (getArtifact_Instances(),
+		   source,
+		   new String[] {
+			   "documentation", "Derived opposite to templates."
 		   });
 		addAnnotation
 		  (artifactEntryEClass,

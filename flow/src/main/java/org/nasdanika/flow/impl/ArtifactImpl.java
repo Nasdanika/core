@@ -6,12 +6,14 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -32,6 +34,7 @@ import org.nasdanika.flow.Resource;
 import org.nasdanika.flow.ServiceProvider;
 import org.nasdanika.flow.Transition;
 import org.nasdanika.ncore.util.NamedElementComparator;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -55,6 +58,9 @@ import org.nasdanika.ncore.util.NamedElementComparator;
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInboundRelationships <em>Inbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#isPartition <em>Partition</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getStyle <em>Style</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getTemplateKeys <em>Template Keys</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getTemplates <em>Templates</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInstances <em>Instances</em>}</li>
  * </ul>
  *
  * @generated
@@ -115,6 +121,14 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 	protected Object computeCachedFeature(EStructuralFeature feature) {
 		if (feature == FlowPackage.Literals.ARTIFACT__REPOSITORIES) {
 			return resolveResources(getRepositoryKeys());
+		}
+		if (feature == FlowPackage.Literals.ARTIFACT__TEMPLATES) {
+			URI thisURI = NcoreUtil.getUri(this);
+			return getTemplateKeys().stream()
+					.map(URI::createURI)
+					.map(templateURI -> thisURI == null ? templateURI : templateURI.resolve(thisURI))			
+					.map(this::resolveArtifact)
+					.collect(Collectors.toCollection(ECollections::newBasicEList));
 		}
 		return super.computeCachedFeature(feature);
 	}
@@ -297,6 +311,38 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
+	public EList<String> getTemplateKeys() {
+		return (EList<String>)eDynamicGet(FlowPackage.ARTIFACT__TEMPLATE_KEYS, FlowPackage.Literals.ARTIFACT__TEMPLATE_KEYS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Artifact> getTemplates() {
+		return (EList<Artifact>) getCachedFeature(FlowPackage.Literals.ARTIFACT__TEMPLATES);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public EList<Artifact> getInstances() {
+		return getOppositeReferrers(FlowPackage.Literals.ARTIFACT__INSTANCES);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__REPOSITORIES:
@@ -315,6 +361,10 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponsibilities()).basicAdd(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__INBOUND_RELATIONSHIPS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInboundRelationships()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__TEMPLATES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getTemplates()).basicAdd(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__INSTANCES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInstances()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -351,6 +401,10 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return ((InternalEList<?>)getInboundRelationships()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__STYLE:
 				return basicSetStyle(null, msgs);
+			case FlowPackage.ARTIFACT__TEMPLATES:
+				return ((InternalEList<?>)getTemplates()).basicRemove(otherEnd, msgs);
+			case FlowPackage.ARTIFACT__INSTANCES:
+				return ((InternalEList<?>)getInstances()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -394,6 +448,12 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return isPartition();
 			case FlowPackage.ARTIFACT__STYLE:
 				return getStyle();
+			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
+				return getTemplateKeys();
+			case FlowPackage.ARTIFACT__TEMPLATES:
+				return getTemplates();
+			case FlowPackage.ARTIFACT__INSTANCES:
+				return getInstances();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -426,6 +486,10 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 			case FlowPackage.ARTIFACT__STYLE:
 				setStyle((DiagramElement)newValue);
 				return;
+			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
+				getTemplateKeys().clear();
+				getTemplateKeys().addAll((Collection<? extends String>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -455,6 +519,9 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return;
 			case FlowPackage.ARTIFACT__STYLE:
 				setStyle((DiagramElement)null);
+				return;
+			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
+				getTemplateKeys().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -496,6 +563,12 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return isPartition() != PARTITION_EDEFAULT;
 			case FlowPackage.ARTIFACT__STYLE:
 				return getStyle() != null;
+			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
+				return !getTemplateKeys().isEmpty();
+			case FlowPackage.ARTIFACT__TEMPLATES:
+				return !getTemplates().isEmpty();
+			case FlowPackage.ARTIFACT__INSTANCES:
+				return !getInstances().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

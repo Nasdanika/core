@@ -127,5 +127,10 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + getName();
+	}
 
 } //NamedElementImpl

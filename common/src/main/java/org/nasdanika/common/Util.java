@@ -46,7 +46,7 @@ public class Util {
 	
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 		
-	public static BiFunction<String, Object, InputStream> OBJECT_TO_INPUT_STREAM_ENCODER = (path, contents) -> {
+	public static final BiFunction<String, Object, InputStream> OBJECT_TO_INPUT_STREAM_ENCODER = (path, contents) -> {
 		InputStream ret = DefaultConverter.INSTANCE.convert(contents, InputStream.class);
 		if (ret == null) {
 			// toString() conversion
@@ -55,7 +55,11 @@ public class Util {
 		return ret;
 	};		
 	
-	public static BiFunction<String, InputStream, String> INPUT_STREAM_TO_STRING_DECODER = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
+	public static final BiFunction<String, InputStream, String> INPUT_STREAM_TO_STRING_DECODER = (path, state) -> DefaultConverter.INSTANCE.convert(state, String.class);
+
+	public static final String CLASSPATH_SCHEME = "classpath";
+
+	public static final String CLASSPATH_URL_PREFIX = CLASSPATH_SCHEME + "://";
 
 	private Util() {
 		// Singleton

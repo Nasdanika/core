@@ -3,12 +3,14 @@ package org.nasdanika.exec.tests;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.junit.Test;
 import org.nasdanika.common.Status;
 import org.nasdanika.exec.Configurator;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.content.Text;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * Tests of descriptor view parts and wizards.
@@ -44,9 +46,9 @@ public class TestConfigurator extends TestBase {
 					assertThat(properties).hasSize(1);
 					EObject nameProperty = properties.get("name");
 					assertThat(nameProperty).isNotNull().isInstanceOf(Text.class);
-					String namePropertyURI = ((Text) nameProperty).getUri();
+					URI namePropertyURI = NcoreUtil.getUri(nameProperty);
 					assertThat(namePropertyURI).isNotNull();
-					assertThat(namePropertyURI).isEqualTo("nasdanika:exec/configurator/properties/name");
+					assertThat(namePropertyURI.toString()).isEqualTo("nasdanika://exec/configurator/properties/name");
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.ERROR) {

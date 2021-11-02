@@ -12,6 +12,8 @@ import java.util.Base64;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.text.StringEscapeUtils;
+import org.json.JSONObject;
 import org.nasdanika.common.resources.Container;
 
 import net.sourceforge.plantuml.FileFormat;
@@ -55,7 +57,12 @@ public interface DiagramGenerator {
 		/**
 		 * For work breakdown structures - https://plantuml.com/wbs-diagram
 		 */
-		WBS
+		WBS,
+		
+		/**
+		 * For generating drawio (https://app.diagrams.net/) embedded diagram HTML from diagram file contents as a spec. 
+		 */
+		DRAWIO
 		
 	}
 	
@@ -66,6 +73,21 @@ public interface DiagramGenerator {
 
 		@Override
 		public String generateDiagram(String spec, Dialect dialect) throws IOException {
+			if (dialect == Dialect.DRAWIO) {
+				JSONObject data = new JSONObject();
+				data.put("highlight", "#0000ff");
+				data.put("nav", true);
+				data.put("resize",true);
+				data.put("toolbar", "zoom layers tags lightbox");
+				data.put("edit","_blank");
+				
+				data.put("xml", spec);
+				
+				String diagramDiv = "<div class=\"mxgraph\" style=\"max-width:100%;border:1px solid transparent;\" data-mxgraph=\"" + StringEscapeUtils.escapeHtml4(data.toString()) + "\"></div>";
+				String script = "<script type=\"text/javascript\" src=\"https://viewer.diagrams.net/js/viewer-static.min.js\"></script>";
+				return diagramDiv + System.lineSeparator() + script;		
+			}
+			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			StringBuilder sb = new StringBuilder("@start")
 					.append(dialect.name().toLowerCase())
@@ -188,6 +210,10 @@ public interface DiagramGenerator {
 	
 	default String generateWbsDiagram(String spec) throws Exception {
 		return generateDiagram(spec, Dialect.WBS);
+	}
+	
+	default String generateDrawioDiagram(String spec) throws Exception {
+		return generateDiagram(spec, Dialect.DRAWIO);
 	}
 	
 	/**

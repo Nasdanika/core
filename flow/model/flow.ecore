@@ -477,6 +477,23 @@
         <details key="documentation" value="Diagram element style for component diagrams."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="templateKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="feature-key" value="templates"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keys of artifact's templates relative to the artifact URI."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templates" upperBound="-1"
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/instances"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/templates">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Derived opposite to templates."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//ParticipantResponsibility">
       <eTypeArguments eClassifier="#//Artifact"/>
     </eGenericSuperTypes>
