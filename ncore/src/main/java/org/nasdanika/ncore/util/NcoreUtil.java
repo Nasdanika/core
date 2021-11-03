@@ -202,9 +202,12 @@ public final class NcoreUtil {
 			if (eKeys.isEmpty()) {
 				return String.valueOf(((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj));
 			}
-			StringBuilder pathBuilder = new StringBuilder(eContainmentFeature.getName());
+			StringBuilder pathBuilder = new StringBuilder();
 			for (EAttribute eKey: eKeys) {
-				pathBuilder.append("/").append(eObj.eGet(eKey));
+				if (pathBuilder.length() > 0) {
+					pathBuilder.append("/");
+				}
+				pathBuilder.append(eObj.eGet(eKey));
 			}
 			return pathBuilder.toString();
 		}
