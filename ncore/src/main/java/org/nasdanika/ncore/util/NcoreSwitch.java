@@ -110,6 +110,16 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.PERIOD: {
+				Period period = (Period)theEObject;
+				T1 result = casePeriod(period);
+				if (result == null) result = caseModelElement(period);
+				if (result == null) result = caseMarked(period);
+				if (result == null) result = caseAdaptable(period);
+				if (result == null) result = caseIMarked(period);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.MODEL_ELEMENT: {
 				ModelElement modelElement = (ModelElement)theEObject;
 				T1 result = caseModelElement(modelElement);
@@ -226,6 +236,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseTemporal(Temporal object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Period</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Period</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 casePeriod(Period object) {
 		return null;
 	}
 

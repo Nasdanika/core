@@ -103,6 +103,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateMarker((org.nasdanika.ncore.Marker)value, diagnostics, context);
 			case NcorePackage.TEMPORAL:
 				return validateTemporal((Temporal)value, diagnostics, context);
+			case NcorePackage.PERIOD:
+				return validatePeriod((Period)value, diagnostics, context);
 			case NcorePackage.MODEL_ELEMENT:
 				return validateModelElement((ModelElement)value, diagnostics, context);
 			case NcorePackage.NAMED_ELEMENT:
@@ -232,6 +234,53 @@ public class NcoreValidator extends EObjectValidator {
 						 "_UI_GenericConstraint_diagnostic",
 						 new Object[] { "offset", getObjectLabel(temporal, context) },
 						 new Object[] { temporal },
+						 context));
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validatePeriod(Period period, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		if (!validate_NoCircularContainment(period, diagnostics, context)) return false;
+		boolean result = validate_EveryMultiplicityConforms(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryDataValueConforms(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryReferenceIsContained(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryBidirectionalReferenceIsPaired(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryProxyResolves(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_UniqueID(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryKeyUnique(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validate_EveryMapEntryUnique(period, diagnostics, context);
+		if (result || diagnostics != null) result &= validatePeriod_start_end(period, diagnostics, context);
+		return result;
+	}
+
+	/**
+	 * Validates the start_end constraint of '<em>Period</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validatePeriod_start_end(Period period, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		// TODO implement the constraint
+		// -> specify the condition that violates the constraint
+		// -> verify the diagnostic details, including severity, code, and message
+		// Ensure that you remove @generated or mark it @generated NOT
+		if (false) {
+			if (diagnostics != null) {
+				diagnostics.add
+					(createDiagnostic
+						(Diagnostic.ERROR,
+						 DIAGNOSTIC_SOURCE,
+						 0,
+						 "_UI_GenericConstraint_diagnostic",
+						 new Object[] { "start_end", getObjectLabel(period, context) },
+						 new Object[] { period },
 						 context));
 			}
 			return false;

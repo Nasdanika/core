@@ -254,7 +254,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getModelElement()
 	 * @generated
 	 */
-	int MODEL_ELEMENT = 6;
+	int MODEL_ELEMENT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -491,6 +491,97 @@ public interface NcorePackage extends EPackage {
 	int TEMPORAL_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 8;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PeriodImpl <em>Period</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.PeriodImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPeriod()
+	 * @generated
+	 */
+	int PERIOD = 6;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__MARKER = MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__URI = MODEL_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__DESCRIPTION = MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__UUID = MODEL_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__START = MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__END = MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__DURATION = MODEL_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Period</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_FEATURE_COUNT = MODEL_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of operations of the '<em>Period</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.NamedElementImpl <em>Named Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -498,7 +589,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNamedElement()
 	 * @generated
 	 */
-	int NAMED_ELEMENT = 7;
+	int NAMED_ELEMENT = 8;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -571,7 +662,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getReference()
 	 * @generated
 	 */
-	int REFERENCE = 8;
+	int REFERENCE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -608,7 +699,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 9;
+	int INSTANT = 10;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -618,7 +709,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 10;
+	int DURATION = 11;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -872,6 +963,49 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getTemporal__Copy();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Period <em>Period</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Period</em>'.
+	 * @see org.nasdanika.ncore.Period
+	 * @generated
+	 */
+	EClass getPeriod();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.Period#getStart <em>Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Start</em>'.
+	 * @see org.nasdanika.ncore.Period#getStart()
+	 * @see #getPeriod()
+	 * @generated
+	 */
+	EReference getPeriod_Start();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.Period#getEnd <em>End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>End</em>'.
+	 * @see org.nasdanika.ncore.Period#getEnd()
+	 * @see #getPeriod()
+	 * @generated
+	 */
+	EReference getPeriod_End();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Period#getDuration <em>Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration</em>'.
+	 * @see org.nasdanika.ncore.Period#getDuration()
+	 * @see #getPeriod()
+	 * @generated
+	 */
+	EAttribute getPeriod_Duration();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.ModelElement <em>Model Element</em>}'.
@@ -1221,6 +1355,40 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation TEMPORAL___COPY = eINSTANCE.getTemporal__Copy();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PeriodImpl <em>Period</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.PeriodImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getPeriod()
+		 * @generated
+		 */
+		EClass PERIOD = eINSTANCE.getPeriod();
+
+		/**
+		 * The meta object literal for the '<em><b>Start</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PERIOD__START = eINSTANCE.getPeriod_Start();
+
+		/**
+		 * The meta object literal for the '<em><b>End</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PERIOD__END = eINSTANCE.getPeriod_End();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PERIOD__DURATION = eINSTANCE.getPeriod_Duration();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ModelElementImpl <em>Model Element</em>}' class.

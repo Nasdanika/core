@@ -60,6 +60,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 		switch (eClass.getClassifierID()) {
 			case NcorePackage.MARKER: return createMarker();
 			case NcorePackage.TEMPORAL: return createTemporal();
+			case NcorePackage.PERIOD: return createPeriod();
 			case NcorePackage.NAMED_ELEMENT: return createNamedElement();
 			case NcorePackage.REFERENCE: return createReference();
 			default:
@@ -107,7 +108,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public org.nasdanika.ncore.Marker createMarker() {
+	public Marker createMarker() {
 		MarkerImpl marker = new MarkerImpl();
 		return marker;
 	}
@@ -121,6 +122,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Temporal createTemporal() {
 		TemporalImpl temporal = new TemporalImpl();
 		return temporal;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Period createPeriod() {
+		PeriodImpl period = new PeriodImpl();
+		return period;
 	}
 
 	/**

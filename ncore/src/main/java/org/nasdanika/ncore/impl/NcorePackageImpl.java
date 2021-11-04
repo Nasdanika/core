@@ -22,6 +22,7 @@ import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.util.NcoreValidator;
@@ -74,6 +75,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass temporalEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass periodEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -427,6 +435,46 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getPeriod() {
+		return periodEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPeriod_Start() {
+		return (EReference)periodEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getPeriod_End() {
+		return (EReference)periodEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getPeriod_Duration() {
+		return (EAttribute)periodEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getModelElement() {
 		return modelElementEClass;
 	}
@@ -580,6 +628,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEOperation(temporalEClass, TEMPORAL___PLUS__DURATION);
 		createEOperation(temporalEClass, TEMPORAL___COPY);
 
+		periodEClass = createEClass(PERIOD);
+		createEReference(periodEClass, PERIOD__START);
+		createEReference(periodEClass, PERIOD__END);
+		createEAttribute(periodEClass, PERIOD__DURATION);
+
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__URI);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
@@ -628,6 +681,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		markedEClass.getESuperTypes().add(this.getIMarked());
 		markerEClass.getESuperTypes().add(this.getIMarker());
 		temporalEClass.getESuperTypes().add(this.getModelElement());
+		periodEClass.getESuperTypes().add(this.getModelElement());
 		modelElementEClass.getESuperTypes().add(this.getMarked());
 		modelElementEClass.getESuperTypes().add(this.getAdaptable());
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
@@ -676,6 +730,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		addEParameter(op, this.getDuration(), "offset", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getTemporal__Copy(), this.getTemporal(), "copy", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(periodEClass, Period.class, "Period", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getPeriod_Start(), this.getTemporal(), null, "start", null, 0, 1, Period.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPeriod_End(), this.getTemporal(), null, "end", null, 0, 1, Period.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPeriod_Duration(), this.getDuration(), "duration", null, 0, 1, Period.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElement_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -753,6 +812,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   });
 		addAnnotation
 		  (getTemporal_UpperBounds(),
+		   source,
+		   new String[] {
+			   "homogenous", "true",
+			   "strict-containment", "true"
+		   });
+		addAnnotation
+		  (periodEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/period.md"
+		   });
+		addAnnotation
+		  (getPeriod_Start(),
+		   source,
+		   new String[] {
+			   "homogenous", "true",
+			   "strict-containment", "true"
+		   });
+		addAnnotation
+		  (getPeriod_End(),
 		   source,
 		   new String[] {
 			   "homogenous", "true",
@@ -883,6 +962,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Upper bounds of a temporal. E.g. exact time of some temporal might not be known at a moment, but it might be known that it should not be after some other temporal - an upper bound. Upper bounds are used in validations and before/after computations. "
 		   });
 		addAnnotation
+		  (getPeriod_Start(),
+		   source,
+		   new String[] {
+			   "documentation", "Period start."
+		   });
+		addAnnotation
+		  (getPeriod_End(),
+		   source,
+		   new String[] {
+			   "documentation", "Period end."
+		   });
+		addAnnotation
+		  (getPeriod_Duration(),
+		   source,
+		   new String[] {
+			   "documentation", "Positive period duration in [ISO-8601 durations](https://en.wikipedia.org/wiki/ISO_8601#Durations) format. E.g. ``P1M`` for one month or ``P20D`` for 20 days."
+		   });
+		addAnnotation
 		  (getModelElement_Uri(),
 		   source,
 		   new String[] {
@@ -915,6 +1012,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "constraints", "bounds offset"
+		   });
+		addAnnotation
+		  (periodEClass,
+		   source,
+		   new String[] {
+			   "constraints", "start_end"
 		   });
 	}
 

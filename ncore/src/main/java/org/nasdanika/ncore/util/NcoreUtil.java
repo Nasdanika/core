@@ -199,11 +199,15 @@ public final class NcoreUtil {
 		EReference eContainmentFeature = eObj.eContainmentFeature();
 		if (eContainmentFeature.isMany()) {
 			EList<EAttribute> eKeys = eContainmentFeature.getEKeys();
+			String position = String.valueOf(((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj));
 			if (eKeys.isEmpty()) {
-				return String.valueOf(((List<?>) container.eGet(eContainmentFeature)).indexOf(eObj));
+				return position;
 			}
 			StringBuilder pathBuilder = new StringBuilder();
 			for (EAttribute eKey: eKeys) {
+				if (!eObj.eIsSet(eKey)) {
+					return position;
+				}
 				if (pathBuilder.length() > 0) {
 					pathBuilder.append("/");
 				}

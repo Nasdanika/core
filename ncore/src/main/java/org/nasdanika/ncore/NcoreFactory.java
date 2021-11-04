@@ -28,7 +28,7 @@ public interface NcoreFactory extends EFactory {
 	 * @return a new object of class '<em>Marker</em>'.
 	 * @generated
 	 */
-	org.nasdanika.ncore.Marker createMarker();
+	Marker createMarker();
 
 	/**
 	 * Returns a new object of class '<em>Temporal</em>'.
@@ -38,6 +38,15 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	Temporal createTemporal();
+
+	/**
+	 * Returns a new object of class '<em>Period</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Period</em>'.
+	 * @generated
+	 */
+	Period createPeriod();
 
 	/**
 	 * Returns a new object of class '<em>Named Element</em>'.

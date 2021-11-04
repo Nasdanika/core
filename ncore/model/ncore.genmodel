@@ -49,6 +49,11 @@
       </genOperations>
       <genOperations ecoreOperation="ncore.ecore#//Temporal/copy"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Period">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Period/start"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Period/end"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Period/duration"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="ncore.ecore#//ModelElement">
       <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/uri"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/description"/>
