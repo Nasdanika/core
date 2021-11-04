@@ -340,7 +340,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @return
 	 */
 	protected <T extends EObject> EList<T> getOppositeReferrers(EReference reference) {
-		return getReferrers(Objects.requireNonNull(reference.getEOpposite(), "Opposite is null: " + reference));
+		return getReferrers(Objects.requireNonNull(NcoreUtil.getOpposite(reference), "Opposite is null: " + reference));
 	}
 	
 	/**

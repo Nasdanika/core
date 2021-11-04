@@ -328,5 +328,26 @@ public final class NcoreUtil {
 		}
 		return Util.camelToKebab(feature.getName());
 	}
+
+	/**
+	 * 
+	 * @param eReference
+	 * @return "Logical" opposite - either the "physical" opposite returned by {@link EReference}.getEOpposite() or a reference with a name specified in "opposite" Nasdanika annotation
+	 * or a reference which specifies this reference in its "opposite" Nasdanika annotation.
+	 */
+	public static EReference getOpposite(EReference eReference) {
+		EReference opposite = eReference.getEOpposite();
+		if (opposite != null) {
+			return opposite;
+		}
+		String oName = getNasdanikaAnnotationDetail(eReference, "opposite");
+		EClass refType = eReference.getEReferenceType();
+		for (EReference ref: refType.getEAllReferences()) {
+			if (ref.getName().equals(oName) || eReference.getName().equals(getNasdanikaAnnotationDetail(ref, "opposite"))) {
+				return ref;
+			}
+		}
+		return null;
+	}
 	
 }
