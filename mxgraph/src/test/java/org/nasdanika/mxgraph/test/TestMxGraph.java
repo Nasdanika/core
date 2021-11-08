@@ -23,12 +23,16 @@ import java.util.zip.InflaterOutputStream;
 import org.junit.Test;
 import org.nasdanika.common.DefaultConverter;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.mxgraph.io.mxCodec;
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 
@@ -69,12 +73,10 @@ public class TestMxGraph {
 		mxIGraphModel graphModel = (mxIGraphModel) codec.decode(diagramDoc.getDocumentElement());
 		mxGraph graph = new mxGraph(graphModel);
 		
-//		Object root = graph.roo.getCurrentRoot();
-//		System.out.println(root);
-		System.out.println(graph);
 		
-//		mxCell root = (mxCell) graphModel.getRoot();
-//		dump(root, 0);
+		System.out.println(diagramDoc.hashCode());
+		mxCell root = (mxCell) graphModel.getRoot();
+		dump(root, 0);
 
 		codec = new mxCodec();
 
@@ -84,6 +86,55 @@ public class TestMxGraph {
 		File encodedFile = new File("target/aws-encoded-uncompressed.drawio");
 		Files.writeString(encodedFile.toPath(), encoded);
 	}
+	
+	@Test
+	public void testNewDiagram() throws Exception {
+//		String templateFile = DefaultConverter.INSTANCE.stringContent(getClass().getResource("template.drawio"));
+//		Document xmlDocument = mxXmlUtils.parseXml(templateFile);
+//        Element diagram = (Element) xmlDocument.getElementsByTagName("diagram").item(0);
+//        Node model = diagram.getElementsByTagName("mxGraphModel").item(0);
+//		mxCodec codec = new mxCodec(xmlDocument);
+//		mxIGraphModel graphModel = (mxIGraphModel) codec.decode(model);
+		mxGraph graph = new mxGraph(/* graphModel */);
+		
+		mxIGraphModel graphModel = graph.getModel();
+		graphModel.beginUpdate();
+		Object parent = graph.getDefaultParent();
+		try	{
+			Document doc = mxDomUtils.createDocument();
+			Element v1uo = doc.createElement("UserObject");
+			v1uo.setAttribute("label", "Hren");
+			v1uo.setAttribute("link", "https://nasdanika.org");
+			v1uo.setAttribute("uri", "nasdanika://hmmm");
+			mxCell v1 = (mxCell) graph.insertVertex(parent, null, v1uo, 40, 40, 160, 60);
+			v1.setStyle("verticalAlign=top");
+			Object v11 = graph.insertVertex(v1, null, "Purum", 20, 20, 80, 30);
+			Object v2 = graph.insertVertex(parent, null, "World!", 280, 250, 160, 60);
+			Object v21 = graph.insertVertex(parent, null, "Govno", 20, 20, 80, 30);
+			graph.insertEdge(parent, null, "Edge", v1, v2);
+			graph.insertEdge(parent, null, "Cross Edge", v11, v21);
+			
+			mxIGraphLayout layout = new mxCircleLayout(graph);
+			layout.execute(parent);
+		} finally {
+			graphModel.endUpdate();
+		}		
+		
+		// User object
+		// layout
+		
+		mxCell root = (mxCell) graphModel.getRoot();
+		dump(root, 0);
+
+		mxCodec codec = new mxCodec();
+
+		Node encodedNode = codec.encode(graphModel);
+		
+		String encoded = encodeDiagram(encodedNode);
+		File encodedFile = new File("target/new.drawio");
+		Files.writeString(encodedFile.toPath(), encoded);
+	}
+	
 	
 	@Test
 	public void testDecodeEncodeDiagram() throws Exception {
@@ -176,7 +227,8 @@ public class TestMxGraph {
 		for (int i = 0; i < indent; ++i) {
 			System.out.print("  ");
 		}
-		System.out.println(cell + " " + cell.getValue());
+		Object cellValue = cell.getValue();
+		System.out.println(cell + " " + cellValue);
 		for (int i = 0; i < cell.getChildCount(); ++i) {
         	mxICell child = cell.getChildAt(i);
 			dump(child, indent + 1);
