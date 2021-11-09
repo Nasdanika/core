@@ -103,7 +103,7 @@ public class TestMxGraph {
 		try	{
 			Document doc = mxDomUtils.createDocument();
 			Element v1uo = doc.createElement("UserObject");
-			v1uo.setAttribute("label", "Hren");
+			v1uo.setAttribute("label", "Hren\nsobachya");
 			v1uo.setAttribute("link", "https://nasdanika.org");
 			v1uo.setAttribute("uri", "nasdanika://hmmm");
 			mxCell v1 = (mxCell) graph.insertVertex(parent, null, v1uo, 40, 40, 160, 60);
