@@ -24,9 +24,15 @@ import org.nasdanika.exec.content.Text;
  */
 public class PlantumlGenerator {
 	
-//	public Generator(DiagramGenerator diagramGenerator) {
-//		this.diagramGenerator
-//	}
+	private DiagramGenerator diagramGenerator;
+
+	public PlantumlGenerator(DiagramGenerator diagramGenerator) {
+		this.diagramGenerator = diagramGenerator;
+	}
+	
+	public PlantumlGenerator() {
+		this(DiagramGenerator.INSTANCE);
+	}
 	
 	public String generateSpec(Diagram diagram) {
 		StringBuilder ret = new StringBuilder();
@@ -324,7 +330,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateDiagram(Diagram diagram, DiagramGenerator.Dialect dialect) throws Exception {
-		return DiagramGenerator.INSTANCE.generateDiagram(generateSpec(diagram), dialect);
+		return diagramGenerator.generateDiagram(generateSpec(diagram), dialect);
 	}
 	
 	/**
@@ -346,7 +352,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateUmlDiagram(Diagram diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateUmlDiagram(generateSpec(diagram));
+		return diagramGenerator.generateUmlDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -368,7 +374,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateWireframeDiagram(Diagram diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateWireframeDiagram(generateSpec(diagram));
+		return diagramGenerator.generateWireframeDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -390,7 +396,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateGanttDiagram(Diagram diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateGanttDiagram(generateSpec(diagram));
+		return diagramGenerator.generateGanttDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -412,7 +418,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateMindmapDiagram(Diagram diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateMindmapDiagram(generateSpec(diagram));
+		return diagramGenerator.generateMindmapDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -434,7 +440,7 @@ public class PlantumlGenerator {
 	 * @throws Exception 
 	 */
 	public String generateWbsDiagram(Diagram diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateWbsDiagram(generateSpec(diagram));
+		return diagramGenerator.generateWbsDiagram(generateSpec(diagram));
 	}
 	
 

@@ -12,6 +12,11 @@ import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.DiagramGenerator.Dialect;
 import org.nasdanika.diagram.Diagram;
 
+/**
+ * Generates diagram HTML delegating to different generators based on diagram type.
+ * @author Pavel
+ *
+ */
 public class Generator {
 	
 	public static Generator INSTANCE = new Generator();
@@ -42,6 +47,10 @@ public class Generator {
 			return generateDrawioHtml(url);
 		}
 		
+		if (type.equals("drawio")) {
+			return createDrawioGenerator().generateDiagram(diagram);
+		}
+		
 		throw new IllegalArgumentException("Unsupported diagram type: " + type);
 	}
 	
@@ -52,11 +61,19 @@ public class Generator {
 	 * @throws IOException
 	 */
 	public String generateDrawioHtml(URL diagram) throws Exception {
-		return DiagramGenerator.INSTANCE.generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
+		return getDiagramGenerator().generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
+	}
+	
+	protected DiagramGenerator getDiagramGenerator() {
+		return DiagramGenerator.INSTANCE;
 	}
 	
 	protected PlantumlGenerator createPlantumlGenerator() {
-		return new PlantumlGenerator();
+		return new PlantumlGenerator(getDiagramGenerator());
+	}
+	
+	protected DrawioGenerator createDrawioGenerator() {
+		return new DrawioGenerator(getDiagramGenerator());
 	}
 
 }
