@@ -13,15 +13,17 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterOutputStream;
 
@@ -32,7 +34,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
@@ -217,8 +221,37 @@ public class DrawioGenerator {
 		for (DiagramElement element: elements) {
 			ret.put(element, createElementRectangle(element, offset, geometryConsumer));
 		}
-
-		position(new LinkedList<>(ret.entrySet()), new HashMap<>(), offset);
+		
+		// Sort
+		List<Map.Entry<DiagramElement, Rectangle>> remaining = new ArrayList<>(ret.entrySet());
+		List<Map.Entry<DiagramElement, Rectangle>> sorted = new ArrayList<>();
+		Map<Rectangle,Boolean> downMap = new IdentityHashMap<>();
+		while (!remaining.isEmpty()) {
+			Entry<DiagramElement, Rectangle> candidate = null;
+			int candidateAffinity = 0;
+			boolean isCandidateDown = false;
+			for (Entry<DiagramElement, Rectangle> e: remaining) {
+				Collection<Map.Entry<DiagramElement, Rectangle>> els;
+				if (sorted.isEmpty()) {
+					els = new ArrayList<>(remaining);
+					els.remove(e);
+				} else {
+					els = sorted;
+				}
+				int[] eAffinity = affinity(e.getKey(), els.stream().map(Map.Entry::getKey).collect(Collectors.toList()));
+				int teAffinity = eAffinity[0] + eAffinity[1];
+				if (candidate == null || (candidateAffinity < teAffinity)) {
+					candidate = e;
+					candidateAffinity = teAffinity;
+					isCandidateDown = eAffinity[1] > eAffinity[0];
+				}		
+			}
+			sorted.add(candidate);
+			downMap.put(candidate.getValue(), isCandidateDown);
+			remaining.remove(candidate);
+		}				
+		
+		position(sorted, new HashMap<>(), offset, downMap::get);
 		
 		double minX = Integer.MAX_VALUE;
 		double minY = Integer.MAX_VALUE;
@@ -235,6 +268,45 @@ public class DrawioGenerator {
 	}
 	
 	/**
+	 * Computes affinity of a given diagram element to a collection of other elements.
+	 * Affinity is a two-elements array with the first element containing a total number of 
+	 * connections from the first argument element to the second argument elements recursively including child elements on both sides.
+	 * The second array element contains a total number of connections from the second argument elements to the first argument element also recursively
+	 * including child elements on both sides. Affinity is used to layout elements in a top-down   
+	 * @param element
+	 * @param elements
+	 * @return
+	 */
+	protected int[] affinity(DiagramElement element, Collection<DiagramElement> elements) {
+		int outbound = 0;
+		TreeIterator<EObject> oit = element.eAllContents();
+		while (oit.hasNext()) {
+			EObject next = oit.next();
+			if (next instanceof Connection) {
+				DiagramElement target = ((Connection) next).getTarget();
+				if (elements.contains(target) || EcoreUtil.isAncestor(elements, target)) {
+					++outbound;
+				}
+			}
+		}
+		int inbound = 0;
+		for (EObject el: elements) {
+			TreeIterator<EObject> iit = el.eAllContents();
+			while (iit.hasNext()) {
+				EObject next = iit.next();
+				if (next instanceof Connection) {
+					DiagramElement target = ((Connection) next).getTarget();
+					if (target == element || EcoreUtil.isAncestor(element, target)) {
+						++inbound;
+					}
+				}
+			}
+		}
+		
+		return new int[] { outbound, inbound };
+	}
+	
+	/**
 	 * Sorts rectangles entry set by size and affinity to positioned offset rectangles.
 	 * Then positions the first element so it doesn't overlap with the offset rectangles. 
 	 * Then passes the remaining elements for positioning.
@@ -244,23 +316,21 @@ public class DrawioGenerator {
 	protected void position(
 			List<Map.Entry<DiagramElement, Rectangle>> rectangles, 
 			Map<DiagramElement, Rectangle> offsetRectangles,
-			Point offset) {
+			Point offset,
+			Predicate<Rectangle> downPredicate) {
 		if (rectangles.isEmpty()) {
 			return;
 		}
 		
-		// Sort
-		
-		
 		Entry<DiagramElement, Rectangle> firstEntry = rectangles.get(0);
 		Rectangle firstRectangle = firstEntry.getValue();
-		position(firstRectangle, offsetRectangles.values(), true); // TODO direction based on affinity.
+		position(firstRectangle, offsetRectangles.values(), downPredicate.test(firstRectangle)); 
 		Rectangle offsetRectangle = new Rectangle(firstRectangle);
 		offsetRectangle.translate((int) -offset.getX(), (int) - offset.getY());
 		offsetRectangle.grow(2 * (int) offset.getX(), 2 * (int) offset.getY());
 		offsetRectangles.put(firstEntry.getKey(), offsetRectangle);			
 		
-		position(rectangles.subList(1, rectangles.size()), offsetRectangles, offset);
+		position(rectangles.subList(1, rectangles.size()), offsetRectangles, offset, downPredicate);
 	}
 
 	/**
