@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
@@ -279,6 +280,24 @@ public final class NcoreUtil {
 		return false;
 	}
 		
+	public static EObject commonAncestor(EObject a, EObject b) {
+		if (a == null || b == null) {
+			return null;
+		}
+		if (EcoreUtil.isAncestor(a, b)) {
+			return a.eContainer();
+		}
+		if (EcoreUtil.isAncestor(b, a)) {
+			b.eContainer();
+		}
+		for (EObject ancestor = a.eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+			if (EcoreUtil.isAncestor(ancestor, b)) {
+				return ancestor;
+			}
+		}
+		return null;
+	}		
+	
 //	public static String relativeContainmentPath(EObject obj, EObject base) {
 //		if (obj == null || base == null) {
 //			return null;

@@ -130,7 +130,7 @@ public class PlantumlGenerator {
 		if (!Util.isBlank(text)) {
 			nameBuilder.append(text);
 			if (!name.isEmpty()) {
-				ret.append(" ");
+				nameBuilder.append(" ");
 			}
 		}
 		
@@ -318,30 +318,8 @@ public class PlantumlGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public String generateDiagram(Diagram diagram, DiagramGenerator.Dialect dialect, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateDiagram(generateSpec(diagram), dialect);
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
 	public String generateDiagram(Diagram diagram, DiagramGenerator.Dialect dialect) throws Exception {
 		return diagramGenerator.generateDiagram(generateSpec(diagram), dialect);
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
-	public String generateUmlDiagram(Diagram diagram, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateUmlDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -362,30 +340,8 @@ public class PlantumlGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public String generateWireframeDiagram(Diagram diagram, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateWireframeDiagram(generateSpec(diagram));
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
 	public String generateWireframeDiagram(Diagram diagram) throws Exception {
 		return diagramGenerator.generateWireframeDiagram(generateSpec(diagram));
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
-	public String generateGanttDiagram(Diagram diagram, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateGanttDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -406,30 +362,8 @@ public class PlantumlGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public String generateMindmapDiagram(Diagram diagram, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateMindmapDiagram(generateSpec(diagram));
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
 	public String generateMindmapDiagram(Diagram diagram) throws Exception {
 		return diagramGenerator.generateMindmapDiagram(generateSpec(diagram));
-	}
-	
-	/**
-	 * Generates a diagram image using provided diagram generator.
-	 * @param diagram
-	 * @param diagramGenerator
-	 * @return
-	 * @throws Exception 
-	 */
-	public String generateWbsDiagram(Diagram diagram, DiagramGenerator diagramGenerator) throws Exception {
-		return diagramGenerator.generateWbsDiagram(generateSpec(diagram));
 	}
 	
 	/**
@@ -442,6 +376,5 @@ public class PlantumlGenerator {
 	public String generateWbsDiagram(Diagram diagram) throws Exception {
 		return diagramGenerator.generateWbsDiagram(generateSpec(diagram));
 	}
-	
 
 }

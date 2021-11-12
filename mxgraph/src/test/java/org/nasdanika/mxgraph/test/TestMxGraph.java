@@ -3,6 +3,7 @@ package org.nasdanika.mxgraph.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.Rectangle;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,6 +31,7 @@ import com.mxgraph.io.mxCodec;
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.util.mxDomUtils;
@@ -260,6 +262,16 @@ public class TestMxGraph {
     	}
     	
     	return baos.toByteArray();
+    }
+    
+    @Test
+    public void testGeometry() {
+    	mxGeometry g1 = new mxGeometry(10, 15, 20, 30);
+    	Rectangle gr = g1.getRectangle();
+    	Rectangle r1 = new Rectangle(10, 15, 20, 30);
+    	Rectangle r2 = new Rectangle(35, 45, 20, 30);
+    	Rectangle r3 = r1.union(r2);
+    	
     }
     
 }

@@ -1,12 +1,12 @@
 package org.nasdanika.diagram.gen;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 
-import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.json.JSONObject;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.DiagramGenerator.Dialect;
@@ -43,7 +43,21 @@ public class Generator {
 					uri = uri.resolve(rURI);
 				}
 			}
+			if (uri.isFile()) {
+				String fileStr = uri.toFileString();
+				File diagramFile = new File(fileStr);
+				if (diagramFile.exists()) {
+					// TODO - merging - read, merge models, write if result is not null.
+				} else {
+					File container = diagramFile.getParentFile();
+					if (container.isDirectory() || container.mkdirs()) {
+						Files.writeString(diagramFile.toPath(), createDrawioGenerator().generateModel(diagram));
+					}
+				}
+			}						
+			
 			URL url = new URL(uri.toString());
+			
 			return generateDrawioHtml(url);
 		}
 		
