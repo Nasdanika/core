@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.String;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
@@ -692,6 +693,292 @@ public interface NcorePackage extends EPackage {
 	int REFERENCE_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.StringImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getString()
+	 * @generated
+	 */
+	int STRING = 10;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING__VALUE = 0;
+
+	/**
+	 * The number of structural features of the '<em>String</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>String</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ListImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
+	 * @generated
+	 */
+	int LIST = 11;
+
+	/**
+	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__VALUES = 0;
+
+	/**
+	 * The number of structural features of the '<em>List</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>List</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.MapImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
+	 * @generated
+	 */
+	int MAP = 12;
+
+	/**
+	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__VALUES = 0;
+
+	/**
+	 * The number of structural features of the '<em>Map</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Map</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.PropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
+	 * @generated
+	 */
+	int PROPERTY = 13;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROPERTY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringPropertyImpl <em>String Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.StringPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
+	 * @generated
+	 */
+	int STRING_PROPERTY = 14;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>String Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>String Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapPropertyImpl <em>Map Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.MapPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMapProperty()
+	 * @generated
+	 */
+	int MAP_PROPERTY = 15;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY__VALUES = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Map Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Map Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListPropertyImpl <em>List Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.ListPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getListProperty()
+	 * @generated
+	 */
+	int LIST_PROPERTY = 16;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY__VALUES = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>List Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>List Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -699,7 +986,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 10;
+	int INSTANT = 17;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -709,7 +996,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 11;
+	int DURATION = 18;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -1093,6 +1380,120 @@ public interface NcorePackage extends EPackage {
 	EReference getReference_Target();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.String <em>String</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>String</em>'.
+	 * @see org.nasdanika.ncore.String
+	 * @generated
+	 */
+	EClass getString();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.String#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.String#getValue()
+	 * @see #getString()
+	 * @generated
+	 */
+	EAttribute getString_Value();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.List <em>List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>List</em>'.
+	 * @see org.nasdanika.ncore.List
+	 * @generated
+	 */
+	EClass getList();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.List#getValues <em>Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Values</em>'.
+	 * @see org.nasdanika.ncore.List#getValues()
+	 * @see #getList()
+	 * @generated
+	 */
+	EReference getList_Values();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Map <em>Map</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Map</em>'.
+	 * @see org.nasdanika.ncore.Map
+	 * @generated
+	 */
+	EClass getMap();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.Map#getValues <em>Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Values</em>'.
+	 * @see org.nasdanika.ncore.Map#getValues()
+	 * @see #getMap()
+	 * @generated
+	 */
+	EReference getMap_Values();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Property</em>'.
+	 * @see org.nasdanika.ncore.Property
+	 * @generated
+	 */
+	EClass getProperty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Property#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.nasdanika.ncore.Property#getName()
+	 * @see #getProperty()
+	 * @generated
+	 */
+	EAttribute getProperty_Name();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.StringProperty <em>String Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>String Property</em>'.
+	 * @see org.nasdanika.ncore.StringProperty
+	 * @generated
+	 */
+	EClass getStringProperty();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.MapProperty <em>Map Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Map Property</em>'.
+	 * @see org.nasdanika.ncore.MapProperty
+	 * @generated
+	 */
+	EClass getMapProperty();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ListProperty <em>List Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>List Property</em>'.
+	 * @see org.nasdanika.ncore.ListProperty
+	 * @generated
+	 */
+	EClass getListProperty();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1459,6 +1860,108 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference REFERENCE__TARGET = eINSTANCE.getReference_Target();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.StringImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getString()
+		 * @generated
+		 */
+		EClass STRING = eINSTANCE.getString();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STRING__VALUE = eINSTANCE.getString_Value();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ListImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
+		 * @generated
+		 */
+		EClass LIST = eINSTANCE.getList();
+
+		/**
+		 * The meta object literal for the '<em><b>Values</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LIST__VALUES = eINSTANCE.getList_Values();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.MapImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
+		 * @generated
+		 */
+		EClass MAP = eINSTANCE.getMap();
+
+		/**
+		 * The meta object literal for the '<em><b>Values</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MAP__VALUES = eINSTANCE.getMap_Values();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.PropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
+		 * @generated
+		 */
+		EClass PROPERTY = eINSTANCE.getProperty();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROPERTY__NAME = eINSTANCE.getProperty_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StringPropertyImpl <em>String Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.StringPropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
+		 * @generated
+		 */
+		EClass STRING_PROPERTY = eINSTANCE.getStringProperty();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.MapPropertyImpl <em>Map Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.MapPropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMapProperty()
+		 * @generated
+		 */
+		EClass MAP_PROPERTY = eINSTANCE.getMapProperty();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ListPropertyImpl <em>List Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ListPropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getListProperty()
+		 * @generated
+		 */
+		EClass LIST_PROPERTY = eINSTANCE.getListProperty();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.

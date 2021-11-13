@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.String;
 import org.nasdanika.common.Adaptable;
 
 /**

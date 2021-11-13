@@ -529,7 +529,7 @@ public interface Temporal extends ModelElement {
 		return ret;		
 	}
 
-	static String formatDuration(Duration duration) {
+	static java.lang.String formatDuration(Duration duration) {
 		if (duration == null || duration.equals(Duration.ZERO)) {
 			return "Zero";
 		}

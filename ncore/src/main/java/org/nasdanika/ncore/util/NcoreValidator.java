@@ -17,7 +17,17 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.ncore.*;
+import org.nasdanika.ncore.List;
+import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.MapProperty;
+import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Period;
+import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringProperty;
+import org.nasdanika.ncore.Temporal;
 
 /**
  * <!-- begin-user-doc -->
@@ -111,6 +121,20 @@ public class NcoreValidator extends EObjectValidator {
 				return validateNamedElement((NamedElement)value, diagnostics, context);
 			case NcorePackage.REFERENCE:
 				return validateReference((Reference<?>)value, diagnostics, context);
+			case NcorePackage.STRING:
+				return validateString((org.nasdanika.ncore.String)value, diagnostics, context);
+			case NcorePackage.LIST:
+				return validateList((List)value, diagnostics, context);
+			case NcorePackage.MAP:
+				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
+			case NcorePackage.PROPERTY:
+				return validateProperty((Property)value, diagnostics, context);
+			case NcorePackage.STRING_PROPERTY:
+				return validateStringProperty((StringProperty)value, diagnostics, context);
+			case NcorePackage.MAP_PROPERTY:
+				return validateMapProperty((MapProperty)value, diagnostics, context);
+			case NcorePackage.LIST_PROPERTY:
+				return validateListProperty((ListProperty)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -313,6 +337,69 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateReference(Reference<?> reference, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(reference, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateString(org.nasdanika.ncore.String string, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(string, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateList(List list, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(list, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMap(org.nasdanika.ncore.Map map, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(map, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateProperty(Property property, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(property, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateStringProperty(StringProperty stringProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(stringProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateMapProperty(MapProperty mapProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(mapProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateListProperty(ListProperty listProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(listProperty, diagnostics, context);
 	}
 
 	/**

@@ -67,6 +67,60 @@ public interface NcoreFactory extends EFactory {
 	<T> Reference<T> createReference();
 
 	/**
+	 * Returns a new object of class '<em>String</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>String</em>'.
+	 * @generated
+	 */
+	String createString();
+
+	/**
+	 * Returns a new object of class '<em>List</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>List</em>'.
+	 * @generated
+	 */
+	List createList();
+
+	/**
+	 * Returns a new object of class '<em>Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Map</em>'.
+	 * @generated
+	 */
+	Map createMap();
+
+	/**
+	 * Returns a new object of class '<em>String Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>String Property</em>'.
+	 * @generated
+	 */
+	StringProperty createStringProperty();
+
+	/**
+	 * Returns a new object of class '<em>Map Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Map Property</em>'.
+	 * @generated
+	 */
+	MapProperty createMapProperty();
+
+	/**
+	 * Returns a new object of class '<em>List Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>List Property</em>'.
+	 * @generated
+	 */
+	ListProperty createListProperty();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

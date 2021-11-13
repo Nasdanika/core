@@ -3,41 +3,43 @@
 package org.nasdanika.ncore.impl;
 
 import java.lang.String;
+
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.ncore.NamedElement;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.nasdanika.ncore.NcorePackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Named Element</b></em>'.
+ * An implementation of the model object '<em><b>String</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.NamedElementImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.StringImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class NamedElementImpl extends ModelElementImpl implements NamedElement {
+public class StringImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.String {
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String NAME_EDEFAULT = null;
+	protected static final String VALUE_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected NamedElementImpl() {
+	protected StringImpl() {
 		super();
 	}
 
@@ -48,7 +50,7 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.NAMED_ELEMENT;
+		return NcorePackage.Literals.STRING;
 	}
 
 	/**
@@ -57,8 +59,8 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	 * @generated
 	 */
 	@Override
-	public String getName() {
-		return (String)eDynamicGet(NcorePackage.NAMED_ELEMENT__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, true, true);
+	protected int eStaticFeatureCount() {
+		return 0;
 	}
 
 	/**
@@ -67,8 +69,18 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	 * @generated
 	 */
 	@Override
-	public void setName(String newName) {
-		eDynamicSet(NcorePackage.NAMED_ELEMENT__NAME, NcorePackage.Literals.NAMED_ELEMENT__NAME, newName);
+	public String getValue() {
+		return (String)eDynamicGet(NcorePackage.STRING__VALUE, NcorePackage.Literals.STRING__VALUE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setValue(String newValue) {
+		eDynamicSet(NcorePackage.STRING__VALUE, NcorePackage.Literals.STRING__VALUE, newValue);
 	}
 
 	/**
@@ -79,8 +91,8 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.NAMED_ELEMENT__NAME:
-				return getName();
+			case NcorePackage.STRING__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -93,8 +105,8 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.NAMED_ELEMENT__NAME:
-				setName((String)newValue);
+			case NcorePackage.STRING__VALUE:
+				setValue((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -108,8 +120,8 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.NAMED_ELEMENT__NAME:
-				setName(NAME_EDEFAULT);
+			case NcorePackage.STRING__VALUE:
+				setValue(VALUE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -123,15 +135,10 @@ public class NamedElementImpl extends ModelElementImpl implements NamedElement {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.NAMED_ELEMENT__NAME:
-				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
+			case NcorePackage.STRING__VALUE:
+				return VALUE_EDEFAULT == null ? getValue() != null : !VALUE_EDEFAULT.equals(getValue());
 		}
 		return super.eIsSet(featureID);
 	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + " " + getName();
-	}
 
-} //NamedElementImpl
+} //StringImpl

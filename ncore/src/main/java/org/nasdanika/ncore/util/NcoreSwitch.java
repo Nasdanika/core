@@ -9,7 +9,18 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.ncore.*;
+import org.nasdanika.ncore.List;
+import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.Map;
+import org.nasdanika.ncore.MapProperty;
+import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Period;
+import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringProperty;
+import org.nasdanika.ncore.Temporal;
 
 /**
  * <!-- begin-user-doc -->
@@ -142,6 +153,54 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 			case NcorePackage.REFERENCE: {
 				Reference<?> reference = (Reference<?>)theEObject;
 				T1 result = caseReference(reference);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.STRING: {
+				org.nasdanika.ncore.String string = (org.nasdanika.ncore.String)theEObject;
+				T1 result = caseString(string);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.LIST: {
+				List list = (List)theEObject;
+				T1 result = caseList(list);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.MAP: {
+				Map map = (Map)theEObject;
+				T1 result = caseMap(map);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.PROPERTY: {
+				Property property = (Property)theEObject;
+				T1 result = caseProperty(property);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.STRING_PROPERTY: {
+				StringProperty stringProperty = (StringProperty)theEObject;
+				T1 result = caseStringProperty(stringProperty);
+				if (result == null) result = caseProperty(stringProperty);
+				if (result == null) result = caseString(stringProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.MAP_PROPERTY: {
+				MapProperty mapProperty = (MapProperty)theEObject;
+				T1 result = caseMapProperty(mapProperty);
+				if (result == null) result = caseProperty(mapProperty);
+				if (result == null) result = caseMap(mapProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.LIST_PROPERTY: {
+				ListProperty listProperty = (ListProperty)theEObject;
+				T1 result = caseListProperty(listProperty);
+				if (result == null) result = caseProperty(listProperty);
+				if (result == null) result = caseList(listProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -296,6 +355,111 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <T> T1 caseReference(Reference<T> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseString(org.nasdanika.ncore.String object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>List</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>List</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseList(List object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMap(Map object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseProperty(Property object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseStringProperty(StringProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Map Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Map Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseMapProperty(MapProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>List Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>List Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseListProperty(ListProperty object) {
 		return null;
 	}
 

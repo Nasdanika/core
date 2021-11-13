@@ -11,7 +11,18 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.ncore.*;
+import org.nasdanika.ncore.List;
+import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.Map;
+import org.nasdanika.ncore.MapProperty;
+import org.nasdanika.ncore.ModelElement;
+import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Period;
+import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringProperty;
+import org.nasdanika.ncore.Temporal;
 
 /**
  * <!-- begin-user-doc -->
@@ -108,6 +119,34 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public <T> Adapter caseReference(Reference<T> object) {
 				return createReferenceAdapter();
+			}
+			@Override
+			public Adapter caseString(org.nasdanika.ncore.String object) {
+				return createStringAdapter();
+			}
+			@Override
+			public Adapter caseList(List object) {
+				return createListAdapter();
+			}
+			@Override
+			public Adapter caseMap(Map object) {
+				return createMapAdapter();
+			}
+			@Override
+			public Adapter caseProperty(Property object) {
+				return createPropertyAdapter();
+			}
+			@Override
+			public Adapter caseStringProperty(StringProperty object) {
+				return createStringPropertyAdapter();
+			}
+			@Override
+			public Adapter caseMapProperty(MapProperty object) {
+				return createMapPropertyAdapter();
+			}
+			@Override
+			public Adapter caseListProperty(ListProperty object) {
+				return createListPropertyAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -266,6 +305,104 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.String <em>String</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.String
+	 * @generated
+	 */
+	public Adapter createStringAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.List <em>List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.List
+	 * @generated
+	 */
+	public Adapter createListAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Map <em>Map</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Map
+	 * @generated
+	 */
+	public Adapter createMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Property
+	 * @generated
+	 */
+	public Adapter createPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.StringProperty <em>String Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.StringProperty
+	 * @generated
+	 */
+	public Adapter createStringPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.MapProperty <em>Map Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.MapProperty
+	 * @generated
+	 */
+	public Adapter createMapPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ListProperty <em>List Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.ListProperty
+	 * @generated
+	 */
+	public Adapter createListPropertyAdapter() {
 		return null;
 	}
 

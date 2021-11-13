@@ -16,6 +16,10 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.ncore.List;
+import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.Map;
+import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
@@ -23,7 +27,9 @@ import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
+import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.util.NcoreValidator;
 
@@ -103,6 +109,55 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass referenceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stringEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass listEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mapEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass propertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stringPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass mapPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass listPropertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -555,6 +610,116 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getString() {
+		return stringEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getString_Value() {
+		return (EAttribute)stringEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getList() {
+		return listEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getList_Values() {
+		return (EReference)listEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMap() {
+		return mapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getMap_Values() {
+		return (EReference)mapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getProperty() {
+		return propertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProperty_Name() {
+		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getStringProperty() {
+		return stringPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getMapProperty() {
+		return mapPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getListProperty() {
+		return listPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -644,6 +809,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		referenceEClass = createEClass(REFERENCE);
 		createEReference(referenceEClass, REFERENCE__TARGET);
 
+		stringEClass = createEClass(STRING);
+		createEAttribute(stringEClass, STRING__VALUE);
+
+		listEClass = createEClass(LIST);
+		createEReference(listEClass, LIST__VALUES);
+
+		mapEClass = createEClass(MAP);
+		createEReference(mapEClass, MAP__VALUES);
+
+		propertyEClass = createEClass(PROPERTY);
+		createEAttribute(propertyEClass, PROPERTY__NAME);
+
+		stringPropertyEClass = createEClass(STRING_PROPERTY);
+
+		mapPropertyEClass = createEClass(MAP_PROPERTY);
+
+		listPropertyEClass = createEClass(LIST_PROPERTY);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -685,6 +868,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		modelElementEClass.getESuperTypes().add(this.getMarked());
 		modelElementEClass.getESuperTypes().add(this.getAdaptable());
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
+		stringPropertyEClass.getESuperTypes().add(this.getProperty());
+		stringPropertyEClass.getESuperTypes().add(this.getString());
+		mapPropertyEClass.getESuperTypes().add(this.getProperty());
+		mapPropertyEClass.getESuperTypes().add(this.getMap());
+		listPropertyEClass.getESuperTypes().add(this.getProperty());
+		listPropertyEClass.getESuperTypes().add(this.getList());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -747,6 +936,25 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(referenceEClass, Reference.class, "Reference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		EGenericType g1 = createEGenericType(referenceEClass_T);
 		initEReference(getReference_Target(), g1, null, "target", null, 1, 1, Reference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(stringEClass, org.nasdanika.ncore.String.class, "String", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getString_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.nasdanika.ncore.String.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getList_Values(), ecorePackage.getEObject(), null, "values", null, 0, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getMap_Values(), this.getProperty(), null, "values", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getMap_Values().getEKeys().add(this.getProperty_Name());
+
+		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(stringPropertyEClass, StringProperty.class, "StringProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(mapPropertyEClass, MapProperty.class, "MapProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(listPropertyEClass, ListProperty.class, "ListProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -854,6 +1062,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (getString_Value(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (getList_Values(),
+		   source,
+		   new String[] {
+			   "reference-type", "map: Map\nlist: List\nstring: String",
+			   "value-feature", "true"
+		   });
+		addAnnotation
+		  (getMap_Values(),
+		   source,
+		   new String[] {
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty",
+			   "value-feature", "true"
 		   });
 	}
 
