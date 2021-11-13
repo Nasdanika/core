@@ -25,8 +25,8 @@ import org.nasdanika.common.persistence.Storable;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
-import org.yaml.snakeyaml.error.MarkedYAMLException;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.error.MarkedYAMLException;
 
 /**
  * Loads EMF classes from YAML using {@link ObjectLoader}s. 

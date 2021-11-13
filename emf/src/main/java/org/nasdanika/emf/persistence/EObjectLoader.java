@@ -64,6 +64,13 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
 	
 	/**
+	 * {@link EReference} annotation with a name of value feature as a value. 
+	 * Value feature is loaded with the configuration map value for reference with eKeys. 
+	 * If this annotation is not set then the object itself is loaded with the value. 
+	 */
+	public static final String VALUE_FEATURE = "value-feature";
+	
+	/**
 	 * If this Nasdanika annotation details is set to "true" on a {@link EAttribute} and configuration object is a {@link String}
 	 * then the configuration object is resolved relative to the model resource {@link URI} (base). 
 	 */
@@ -76,6 +83,16 @@ public class EObjectLoader extends DispatchingLoader {
 	 * EClass is looked up in the loader's {@link ResourceSet} package registry.
 	 */
 	public static final String REFERENCE_TYPES = "reference-types";
+	
+	/**
+	 * This annotation allows to customize element types for homogenous references based on configuration element type
+	 * The value shall be a YAML map of configuration types (string, map, list, number, boolean) to reference types. 
+	 * If entry value is a string it is treated as a class name from the same
+	 * {@link EPackage} as the annotated {@link EReference}'s {@link EClass}. 
+	 * If it is a map then it shall contain <code>ns-uri</code> and <code>name</code> keys.
+	 * EClass is looked up in the loader's {@link ResourceSet} package registry.
+	 */
+	public static final String REFERENCE_TYPE = "reference-type";
 	
 	/**
 	 * This annotation allows to load keys for features.
@@ -110,6 +127,10 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		return false;
 	}
+	
+	public static String getValueFeature(EReference eReference) {
+		return NcoreUtil.getNasdanikaAnnotationDetail(eReference, VALUE_FEATURE);
+	}	
 	
 	/**
 	 * If this Nasdanika annotation details is set to "false" on a {@link EStructuralFeature} or {@link EClass} then this feature or class is not loaded from configuration. 
@@ -249,7 +270,6 @@ public class EObjectLoader extends DispatchingLoader {
 		return null;		
 	}
 	
-
 	/**
 	 * Creates an instance of EClass or a supplier factory
 	 * @param loader
