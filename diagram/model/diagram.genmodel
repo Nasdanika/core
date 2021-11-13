@@ -32,6 +32,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Style/dashed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Style/dotted"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Style/bold"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Style/properties"/>
     </genClasses>
     <genClasses image="false" ecoreClass="diagram.ecore#//DiagramElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/id"/>
@@ -41,10 +42,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/stereotype"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/gradient"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/border"/>
-    </genClasses>
-    <genClasses ecoreClass="diagram.ecore#//Property">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Property/key"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Property/value"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Diagram">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>

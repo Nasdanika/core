@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.Map#getValues <em>Values</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Map#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMap()
@@ -24,16 +24,16 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Map extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Values</b></em>' reference list.
+	 * Returns the value of the '<em><b>Value</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Values</em>' reference list.
-	 * @see org.nasdanika.ncore.NcorePackage#getMap_Values()
+	 * @return the value of the '<em>Value</em>' reference list.
+	 * @see org.nasdanika.ncore.NcorePackage#getMap_Value()
 	 * @model keys="name"
-	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty' value-feature='true'"
+	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty'"
 	 * @generated
 	 */
-	EList<Property> getValues();
+	EList<Property> getValue();
 
 } // Map

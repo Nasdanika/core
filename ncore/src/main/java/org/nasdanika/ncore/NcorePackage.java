@@ -740,13 +740,13 @@ public interface NcorePackage extends EPackage {
 	int LIST = 11;
 
 	/**
-	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__VALUES = 0;
+	int LIST__VALUE = 0;
 
 	/**
 	 * The number of structural features of the '<em>List</em>' class.
@@ -777,13 +777,13 @@ public interface NcorePackage extends EPackage {
 	int MAP = 12;
 
 	/**
-	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__VALUES = 0;
+	int MAP__VALUE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Map</em>' class.
@@ -906,13 +906,13 @@ public interface NcorePackage extends EPackage {
 	int MAP_PROPERTY__NAME = PROPERTY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP_PROPERTY__VALUES = PROPERTY_FEATURE_COUNT + 0;
+	int MAP_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Map Property</em>' class.
@@ -952,13 +952,13 @@ public interface NcorePackage extends EPackage {
 	int LIST_PROPERTY__NAME = PROPERTY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Values</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST_PROPERTY__VALUES = PROPERTY_FEATURE_COUNT + 0;
+	int LIST_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>List Property</em>' class.
@@ -1411,15 +1411,15 @@ public interface NcorePackage extends EPackage {
 	EClass getList();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.List#getValues <em>Values</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.List#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Values</em>'.
-	 * @see org.nasdanika.ncore.List#getValues()
+	 * @return the meta object for the reference list '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.List#getValue()
 	 * @see #getList()
 	 * @generated
 	 */
-	EReference getList_Values();
+	EReference getList_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Map <em>Map</em>}'.
@@ -1432,15 +1432,15 @@ public interface NcorePackage extends EPackage {
 	EClass getMap();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.Map#getValues <em>Values</em>}'.
+	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.Map#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Values</em>'.
-	 * @see org.nasdanika.ncore.Map#getValues()
+	 * @return the meta object for the reference list '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.Map#getValue()
 	 * @see #getMap()
 	 * @generated
 	 */
-	EReference getMap_Values();
+	EReference getMap_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
@@ -1890,12 +1890,12 @@ public interface NcorePackage extends EPackage {
 		EClass LIST = eINSTANCE.getList();
 
 		/**
-		 * The meta object literal for the '<em><b>Values</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference LIST__VALUES = eINSTANCE.getList_Values();
+		EReference LIST__VALUE = eINSTANCE.getList_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
@@ -1908,12 +1908,12 @@ public interface NcorePackage extends EPackage {
 		EClass MAP = eINSTANCE.getMap();
 
 		/**
-		 * The meta object literal for the '<em><b>Values</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MAP__VALUES = eINSTANCE.getMap_Values();
+		EReference MAP__VALUE = eINSTANCE.getMap_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.

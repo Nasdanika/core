@@ -2,7 +2,6 @@
  */
 package org.nasdanika.diagram.util;
 
-import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -94,12 +93,6 @@ public class DiagramSwitch<T> extends Switch<T> {
 				T result = caseDiagramElement(diagramElement);
 				if (result == null) result = caseLink(diagramElement);
 				if (result == null) result = caseStyle(diagramElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DiagramPackage.PROPERTY: {
-				@SuppressWarnings("unchecked") Map.Entry<String, String> property = (Map.Entry<String, String>)theEObject;
-				T result = caseProperty(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -200,21 +193,6 @@ public class DiagramSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDiagramElement(DiagramElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Property</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Property</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseProperty(Map.Entry<String, String> object) {
 		return null;
 	}
 

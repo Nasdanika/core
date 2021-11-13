@@ -640,7 +640,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getList_Values() {
+	public EReference getList_Value() {
 		return (EReference)listEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -660,7 +660,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getMap_Values() {
+	public EReference getMap_Value() {
 		return (EReference)mapEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -813,10 +813,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(stringEClass, STRING__VALUE);
 
 		listEClass = createEClass(LIST);
-		createEReference(listEClass, LIST__VALUES);
+		createEReference(listEClass, LIST__VALUE);
 
 		mapEClass = createEClass(MAP);
-		createEReference(mapEClass, MAP__VALUES);
+		createEReference(mapEClass, MAP__VALUE);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
@@ -941,11 +941,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getString_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.nasdanika.ncore.String.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getList_Values(), ecorePackage.getEObject(), null, "values", null, 0, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getList_Value(), ecorePackage.getEObject(), null, "value", null, 0, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMap_Values(), this.getProperty(), null, "values", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		getMap_Values().getEKeys().add(this.getProperty_Name());
+		initEReference(getMap_Value(), this.getProperty(), null, "value", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getMap_Value().getEKeys().add(this.getProperty_Name());
 
 		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1070,18 +1070,17 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "default-feature", "true"
 		   });
 		addAnnotation
-		  (getList_Values(),
+		  (getList_Value(),
 		   source,
 		   new String[] {
 			   "reference-type", "map: Map\nlist: List\nstring: String",
 			   "value-feature", "true"
 		   });
 		addAnnotation
-		  (getMap_Values(),
+		  (getMap_Value(),
 		   source,
 		   new String[] {
-			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty",
-			   "value-feature", "true"
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty"
 		   });
 	}
 

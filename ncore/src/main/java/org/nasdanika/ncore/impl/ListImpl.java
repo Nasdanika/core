@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ListImpl#getValues <em>Values</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ListImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,8 +64,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<EObject> getValues() {
-		return (EList<EObject>)eDynamicGet(NcorePackage.LIST__VALUES, NcorePackage.Literals.LIST__VALUES, true, true);
+	public EList<EObject> getValue() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.LIST__VALUE, NcorePackage.Literals.LIST__VALUE, true, true);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.LIST__VALUES:
-				return getValues();
+			case NcorePackage.LIST__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,9 +91,9 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.LIST__VALUES:
-				getValues().clear();
-				getValues().addAll((Collection<? extends EObject>)newValue);
+			case NcorePackage.LIST__VALUE:
+				getValue().clear();
+				getValue().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -107,8 +107,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.LIST__VALUES:
-				getValues().clear();
+			case NcorePackage.LIST__VALUE:
+				getValue().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -122,8 +122,8 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.LIST__VALUES:
-				return !getValues().isEmpty();
+			case NcorePackage.LIST__VALUE:
+				return !getValue().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

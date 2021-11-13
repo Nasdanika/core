@@ -74,7 +74,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		this.resolveProxies = !eReference.isResolveProxies();
 		this.keyProvider = keyProvider;
 		
-		this.isHomogenous = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_HOMOGENOUS));			
+		this.isHomogenous = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_HOMOGENOUS)) || NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.REFERENCE_TYPE) != null;			
 		this.isStrictContainment = isHomogenous && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_STRICT_CONTAINMENT));			
 	}
 	
@@ -197,7 +197,13 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		if (!Util.isBlank(rTypes)) {
 			Yaml yaml = new Yaml();
 			Map<String,Object> rTypesMap = yaml.load(rTypes);
-			Object refType = rTypesMap.get(referenceTypeName(element));
+			String valueFeature = EObjectLoader.getValueFeature(eReference);
+			Object refType;
+			if (!Util.isBlank(valueFeature) && element instanceof Map) {
+				refType = rTypesMap.get(referenceTypeName(((Map<?,?>) element).get(valueFeature)));
+			} else {
+				refType = rTypesMap.get(referenceTypeName(element));				
+			}
 			if (refType != null) {
 				return resolveEClass(refType, eReference.getEContainingClass().getEPackage());
 			}				

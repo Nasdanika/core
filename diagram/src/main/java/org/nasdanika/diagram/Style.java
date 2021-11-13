@@ -5,6 +5,7 @@ package org.nasdanika.diagram;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.ncore.Property;
 
 /**
  * <!-- begin-user-doc -->
@@ -22,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.diagram.Style#isDashed <em>Dashed</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Style#isDotted <em>Dotted</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Style#isBold <em>Bold</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Style#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getStyle()
@@ -35,7 +37,8 @@ public interface Style extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Connection type. E.g. ``-->`` or ``..>``. To support styling connection type shall contain ``${style}`` token which will be expanded during generation. E.g. ``-${style}->``.
+	 * For connections - connection type. E.g. ``-->`` or ``..>``. To support styling connection type shall contain ``${style}`` token which will be expanded during generation. E.g. ``-${style}->``.
+	 * For diagram elements - element type e.g. component, join, ...
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
@@ -185,5 +188,18 @@ public interface Style extends EObject {
 	 * @generated
 	 */
 	void setBold(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Properties</em>' containment reference list.
+	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Properties()
+	 * @model containment="true" keys="name"
+	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty'"
+	 * @generated
+	 */
+	EList<Property> getProperties();
 
 } // Style

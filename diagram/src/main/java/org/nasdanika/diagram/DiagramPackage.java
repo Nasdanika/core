@@ -243,13 +243,22 @@ public interface DiagramPackage extends EPackage {
 	int STYLE__BOLD = 6;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STYLE__PROPERTIES = 7;
+
+	/**
 	 * The number of structural features of the '<em>Style</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STYLE_FEATURE_COUNT = 7;
+	int STYLE_FEATURE_COUNT = 8;
 
 	/**
 	 * The number of operations of the '<em>Style</em>' class.
@@ -361,13 +370,22 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM_ELEMENT__BOLD = LINK_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM_ELEMENT__PROPERTIES = LINK_FEATURE_COUNT + 7;
+
+	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__ID = LINK_FEATURE_COUNT + 7;
+	int DIAGRAM_ELEMENT__ID = LINK_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' containment reference list.
@@ -376,7 +394,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__NAME = LINK_FEATURE_COUNT + 8;
+	int DIAGRAM_ELEMENT__NAME = LINK_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -385,7 +403,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__ELEMENTS = LINK_FEATURE_COUNT + 9;
+	int DIAGRAM_ELEMENT__ELEMENTS = LINK_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Connections</b></em>' containment reference list.
@@ -394,7 +412,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__CONNECTIONS = LINK_FEATURE_COUNT + 10;
+	int DIAGRAM_ELEMENT__CONNECTIONS = LINK_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Stereotype</b></em>' attribute.
@@ -403,7 +421,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__STEREOTYPE = LINK_FEATURE_COUNT + 11;
+	int DIAGRAM_ELEMENT__STEREOTYPE = LINK_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Gradient</b></em>' attribute.
@@ -412,7 +430,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__GRADIENT = LINK_FEATURE_COUNT + 12;
+	int DIAGRAM_ELEMENT__GRADIENT = LINK_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Border</b></em>' attribute.
@@ -421,7 +439,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT__BORDER = LINK_FEATURE_COUNT + 13;
+	int DIAGRAM_ELEMENT__BORDER = LINK_FEATURE_COUNT + 14;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -430,7 +448,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_ELEMENT_FEATURE_COUNT = LINK_FEATURE_COUNT + 14;
+	int DIAGRAM_ELEMENT_FEATURE_COUNT = LINK_FEATURE_COUNT + 15;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -442,52 +460,6 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM_ELEMENT_OPERATION_COUNT = LINK_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.diagram.impl.PropertyImpl <em>Property</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.diagram.impl.PropertyImpl
-	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getProperty()
-	 * @generated
-	 */
-	int PROPERTY = 4;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY__KEY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROPERTY_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -495,7 +467,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagram()
 	 * @generated
 	 */
-	int DIAGRAM = 5;
+	int DIAGRAM = 4;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -597,7 +569,7 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM__NOTES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -649,7 +621,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 6;
+	int CONNECTION = 5;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -715,6 +687,15 @@ public interface DiagramPackage extends EPackage {
 	int CONNECTION__BOLD = STYLE__BOLD;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__PROPERTIES = STYLE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -759,7 +740,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 7;
+	int START = 6;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -852,6 +833,15 @@ public interface DiagramPackage extends EPackage {
 	int START__BOLD = DIAGRAM_ELEMENT__BOLD;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__PROPERTIES = DIAGRAM_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -940,7 +930,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 8;
+	int END = 7;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -1033,6 +1023,15 @@ public interface DiagramPackage extends EPackage {
 	int END__BOLD = DIAGRAM_ELEMENT__BOLD;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__PROPERTIES = DIAGRAM_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1122,7 +1121,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getNotePlacement()
 	 * @generated
 	 */
-	int NOTE_PLACEMENT = 9;
+	int NOTE_PLACEMENT = 8;
 
 
 	/**
@@ -1299,6 +1298,17 @@ public interface DiagramPackage extends EPackage {
 	EAttribute getStyle_Bold();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Style#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see org.nasdanika.diagram.Style#getProperties()
+	 * @see #getStyle()
+	 * @generated
+	 */
+	EReference getStyle_Properties();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.DiagramElement <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1386,41 +1396,6 @@ public interface DiagramPackage extends EPackage {
 	EAttribute getDiagramElement_Border();
 
 	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Property</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Property</em>'.
-	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
-	 *        valueDataType="org.eclipse.emf.ecore.EString" valueRequired="true"
-	 *        annotation="urn:org.nasdanika documentation-reference='doc/property.md'"
-	 * @generated
-	 */
-	EClass getProperty();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getProperty()
-	 * @generated
-	 */
-	EAttribute getProperty_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getProperty()
-	 * @generated
-	 */
-	EAttribute getProperty_Value();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Diagram <em>Diagram</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1497,10 +1472,10 @@ public interface DiagramPackage extends EPackage {
 	EReference getDiagram_Notes();
 
 	/**
-	 * Returns the meta object for the map '{@link org.nasdanika.diagram.Diagram#getProperties <em>Properties</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Diagram#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the map '<em>Properties</em>'.
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
 	 * @see org.nasdanika.diagram.Diagram#getProperties()
 	 * @see #getDiagram()
 	 * @generated
@@ -1749,6 +1724,14 @@ public interface DiagramPackage extends EPackage {
 		EAttribute STYLE__BOLD = eINSTANCE.getStyle_Bold();
 
 		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STYLE__PROPERTIES = eINSTANCE.getStyle_Properties();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramElementImpl <em>Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1815,32 +1798,6 @@ public interface DiagramPackage extends EPackage {
 		EAttribute DIAGRAM_ELEMENT__BORDER = eINSTANCE.getDiagramElement_Border();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.PropertyImpl <em>Property</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.diagram.impl.PropertyImpl
-		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getProperty()
-		 * @generated
-		 */
-		EClass PROPERTY = eINSTANCE.getProperty();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PROPERTY__KEY = eINSTANCE.getProperty_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PROPERTY__VALUE = eINSTANCE.getProperty_Value();
-
-		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1899,7 +1856,7 @@ public interface DiagramPackage extends EPackage {
 		EReference DIAGRAM__NOTES = eINSTANCE.getDiagram_Notes();
 
 		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' map feature.
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

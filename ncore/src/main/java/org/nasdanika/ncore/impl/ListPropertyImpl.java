@@ -21,7 +21,7 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ListPropertyImpl#getValues <em>Values</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ListPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -53,8 +53,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<EObject> getValues() {
-		return (EList<EObject>)eDynamicGet(NcorePackage.LIST_PROPERTY__VALUES, NcorePackage.Literals.LIST__VALUES, true, true);
+	public EList<EObject> getValue() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.LIST_PROPERTY__VALUE, NcorePackage.Literals.LIST__VALUE, true, true);
 	}
 
 	/**
@@ -65,8 +65,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.LIST_PROPERTY__VALUES:
-				return getValues();
+			case NcorePackage.LIST_PROPERTY__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -80,9 +80,9 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.LIST_PROPERTY__VALUES:
-				getValues().clear();
-				getValues().addAll((Collection<? extends EObject>)newValue);
+			case NcorePackage.LIST_PROPERTY__VALUE:
+				getValue().clear();
+				getValue().addAll((Collection<? extends EObject>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -96,8 +96,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.LIST_PROPERTY__VALUES:
-				getValues().clear();
+			case NcorePackage.LIST_PROPERTY__VALUE:
+				getValue().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -111,8 +111,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.LIST_PROPERTY__VALUES:
-				return !getValues().isEmpty();
+			case NcorePackage.LIST_PROPERTY__VALUE:
+				return !getValue().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -126,7 +126,7 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == List.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.LIST_PROPERTY__VALUES: return NcorePackage.LIST__VALUES;
+				case NcorePackage.LIST_PROPERTY__VALUE: return NcorePackage.LIST__VALUE;
 				default: return -1;
 			}
 		}
@@ -142,7 +142,7 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == List.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.LIST__VALUES: return NcorePackage.LIST_PROPERTY__VALUES;
+				case NcorePackage.LIST__VALUE: return NcorePackage.LIST_PROPERTY__VALUE;
 				default: return -1;
 			}
 		}

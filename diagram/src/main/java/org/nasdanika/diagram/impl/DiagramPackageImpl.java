@@ -2,7 +2,6 @@
  */
 package org.nasdanika.diagram.impl;
 
-import java.util.Map;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -58,13 +57,6 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	private EClass diagramElementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass propertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -331,6 +323,16 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getStyle_Properties() {
+		return (EReference)styleEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDiagramElement() {
 		return diagramElementEClass;
 	}
@@ -403,36 +405,6 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 	@Override
 	public EAttribute getDiagramElement_Border() {
 		return (EAttribute)diagramElementEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getProperty() {
-		return propertyEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProperty_Key() {
-		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getProperty_Value() {
-		return (EAttribute)propertyEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -642,6 +614,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEAttribute(styleEClass, STYLE__DASHED);
 		createEAttribute(styleEClass, STYLE__DOTTED);
 		createEAttribute(styleEClass, STYLE__BOLD);
+		createEReference(styleEClass, STYLE__PROPERTIES);
 
 		diagramElementEClass = createEClass(DIAGRAM_ELEMENT);
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__ID);
@@ -651,10 +624,6 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__STEREOTYPE);
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__GRADIENT);
 		createEAttribute(diagramElementEClass, DIAGRAM_ELEMENT__BORDER);
-
-		propertyEClass = createEClass(PROPERTY);
-		createEAttribute(propertyEClass, PROPERTY__KEY);
-		createEAttribute(propertyEClass, PROPERTY__VALUE);
 
 		diagramEClass = createEClass(DIAGRAM);
 		createEReference(diagramEClass, DIAGRAM__ELEMENTS);
@@ -736,6 +705,8 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEAttribute(getStyle_Dashed(), ecorePackage.getEBoolean(), "dashed", null, 0, 1, Style.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStyle_Dotted(), ecorePackage.getEBoolean(), "dotted", null, 0, 1, Style.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStyle_Bold(), ecorePackage.getEBoolean(), "bold", null, 0, 1, Style.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStyle_Properties(), theNcorePackage.getProperty(), null, "properties", null, 0, -1, Style.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getStyle_Properties().getEKeys().add(theNcorePackage.getProperty_Name());
 
 		initEClass(diagramElementEClass, DiagramElement.class, "DiagramElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDiagramElement_Id(), ecorePackage.getEString(), "id", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -746,10 +717,6 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEAttribute(getDiagramElement_Gradient(), ecorePackage.getEString(), "gradient", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagramElement_Border(), ecorePackage.getEString(), "border", null, 0, 1, DiagramElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(propertyEClass, Map.Entry.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProperty_Value(), ecorePackage.getEString(), "value", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(diagramEClass, Diagram.class, "Diagram", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDiagram_Elements(), this.getDiagramElement(), null, "elements", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Vertical(), ecorePackage.getEBoolean(), "vertical", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -757,7 +724,8 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		initEAttribute(getDiagram_HideFootbox(), ecorePackage.getEBoolean(), "hideFootbox", "true", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Type(), ecorePackage.getEString(), "type", "plantuml:uml", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDiagram_Notes(), this.getNote(), null, "notes", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getDiagram_Properties(), this.getProperty(), null, "properties", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDiagram_Properties(), theNcorePackage.getProperty(), null, "properties", null, 0, -1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getDiagram_Properties().getEKeys().add(theNcorePackage.getProperty_Name());
 		initEAttribute(getDiagram_Context(), ecorePackage.getEInt(), "context", "0", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDiagram_Depth(), ecorePackage.getEInt(), "depth", "-1", 0, 1, Diagram.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -832,16 +800,16 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 			   "strict-containment", "true"
 		   });
 		addAnnotation
+		  (getStyle_Properties(),
+		   source,
+		   new String[] {
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty"
+		   });
+		addAnnotation
 		  (diagramElementEClass,
 		   source,
 		   new String[] {
 			   "documentation-reference", "doc/diagram-element.md"
-		   });
-		addAnnotation
-		  (propertyEClass,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/property.md"
 		   });
 		addAnnotation
 		  (diagramEClass,
@@ -866,7 +834,9 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		  (getDiagram_Properties(),
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/diagram-properties.md"
+			   "documentation-reference", "doc/diagram-properties.md",
+			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
+			   "value-feature", "value"
 		   });
 		addAnnotation
 		  (connectionEClass,
@@ -930,7 +900,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		  (getStyle_Type(),
 		   source,
 		   new String[] {
-			   "documentation", "Connection type. E.g. ``-->`` or ``..>``. To support styling connection type shall contain ``${style}`` token which will be expanded during generation. E.g. ``-${style}->``."
+			   "documentation", "For connections - connection type. E.g. ``-->`` or ``..>``. To support styling connection type shall contain ``${style}`` token which will be expanded during generation. E.g. ``-${style}->``.\nFor diagram elements - element type e.g. component, join, ..."
 		   });
 		addAnnotation
 		  (getStyle_Notes(),

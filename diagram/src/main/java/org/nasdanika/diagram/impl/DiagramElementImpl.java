@@ -19,6 +19,7 @@ import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramPackage;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Style;
+import org.nasdanika.ncore.Property;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +36,7 @@ import org.nasdanika.diagram.Style;
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isDashed <em>Dashed</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isDotted <em>Dotted</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#isBold <em>Bold</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramElementImpl#getElements <em>Elements</em>}</li>
@@ -397,6 +399,17 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Property> getProperties() {
+		return (EList<Property>)eDynamicGet(DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES, DiagramPackage.Literals.STYLE__PROPERTIES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -404,6 +417,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return ((InternalEList<?>)getNotes()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__DESCRIPTION:
 				return ((InternalEList<?>)getDescription()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES:
+				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__NAME:
 				return ((InternalEList<?>)getName()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM_ELEMENT__ELEMENTS:
@@ -436,6 +451,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return isDotted();
 			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
 				return isBold();
+			case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES:
+				return getProperties();
 			case DiagramPackage.DIAGRAM_ELEMENT__ID:
 				return getId();
 			case DiagramPackage.DIAGRAM_ELEMENT__NAME:
@@ -485,6 +502,10 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return;
 			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
 				setBold((Boolean)newValue);
+				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES:
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends Property>)newValue);
 				return;
 			case DiagramPackage.DIAGRAM_ELEMENT__ID:
 				setId((String)newValue);
@@ -543,6 +564,9 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
 				setBold(BOLD_EDEFAULT);
 				return;
+			case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES:
+				getProperties().clear();
+				return;
 			case DiagramPackage.DIAGRAM_ELEMENT__ID:
 				setId(ID_EDEFAULT);
 				return;
@@ -590,6 +614,8 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				return isDotted() != DOTTED_EDEFAULT;
 			case DiagramPackage.DIAGRAM_ELEMENT__BOLD:
 				return isBold() != BOLD_EDEFAULT;
+			case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES:
+				return !getProperties().isEmpty();
 			case DiagramPackage.DIAGRAM_ELEMENT__ID:
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 			case DiagramPackage.DIAGRAM_ELEMENT__NAME:
@@ -624,6 +650,7 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				case DiagramPackage.DIAGRAM_ELEMENT__DASHED: return DiagramPackage.STYLE__DASHED;
 				case DiagramPackage.DIAGRAM_ELEMENT__DOTTED: return DiagramPackage.STYLE__DOTTED;
 				case DiagramPackage.DIAGRAM_ELEMENT__BOLD: return DiagramPackage.STYLE__BOLD;
+				case DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES: return DiagramPackage.STYLE__PROPERTIES;
 				default: return -1;
 			}
 		}
@@ -646,6 +673,7 @@ public class DiagramElementImpl extends LinkImpl implements DiagramElement {
 				case DiagramPackage.STYLE__DASHED: return DiagramPackage.DIAGRAM_ELEMENT__DASHED;
 				case DiagramPackage.STYLE__DOTTED: return DiagramPackage.DIAGRAM_ELEMENT__DOTTED;
 				case DiagramPackage.STYLE__BOLD: return DiagramPackage.DIAGRAM_ELEMENT__BOLD;
+				case DiagramPackage.STYLE__PROPERTIES: return DiagramPackage.DIAGRAM_ELEMENT__PROPERTIES;
 				default: return -1;
 			}
 		}

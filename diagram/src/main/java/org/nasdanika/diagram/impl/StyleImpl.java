@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.diagram.DiagramPackage;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Style;
+import org.nasdanika.ncore.Property;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,6 +36,7 @@ import org.nasdanika.diagram.Style;
  *   <li>{@link org.nasdanika.diagram.impl.StyleImpl#isDashed <em>Dashed</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.StyleImpl#isDotted <em>Dotted</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.StyleImpl#isBold <em>Bold</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.StyleImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -246,6 +248,17 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Property> getProperties() {
+		return (EList<Property>)eDynamicGet(DiagramPackage.STYLE__PROPERTIES, DiagramPackage.Literals.STYLE__PROPERTIES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -253,6 +266,8 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 				return ((InternalEList<?>)getNotes()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.STYLE__DESCRIPTION:
 				return ((InternalEList<?>)getDescription()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.STYLE__PROPERTIES:
+				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -279,6 +294,8 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 				return isDotted();
 			case DiagramPackage.STYLE__BOLD:
 				return isBold();
+			case DiagramPackage.STYLE__PROPERTIES:
+				return getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -315,6 +332,10 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 			case DiagramPackage.STYLE__BOLD:
 				setBold((Boolean)newValue);
 				return;
+			case DiagramPackage.STYLE__PROPERTIES:
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends Property>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -348,6 +369,9 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 			case DiagramPackage.STYLE__BOLD:
 				setBold(BOLD_EDEFAULT);
 				return;
+			case DiagramPackage.STYLE__PROPERTIES:
+				getProperties().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -374,6 +398,8 @@ public class StyleImpl extends MinimalEObjectImpl.Container implements Style {
 				return isDotted() != DOTTED_EDEFAULT;
 			case DiagramPackage.STYLE__BOLD:
 				return isBold() != BOLD_EDEFAULT;
+			case DiagramPackage.STYLE__PROPERTIES:
+				return !getProperties().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

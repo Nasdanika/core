@@ -22,7 +22,7 @@ import org.nasdanika.ncore.Property;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.MapImpl#getValues <em>Values</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.MapImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -64,8 +64,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Property> getValues() {
-		return (EList<Property>)eDynamicGet(NcorePackage.MAP__VALUES, NcorePackage.Literals.MAP__VALUES, true, true);
+	public EList<Property> getValue() {
+		return (EList<Property>)eDynamicGet(NcorePackage.MAP__VALUE, NcorePackage.Literals.MAP__VALUE, true, true);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.MAP__VALUES:
-				return getValues();
+			case NcorePackage.MAP__VALUE:
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -91,9 +91,9 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.MAP__VALUES:
-				getValues().clear();
-				getValues().addAll((Collection<? extends Property>)newValue);
+			case NcorePackage.MAP__VALUE:
+				getValue().clear();
+				getValue().addAll((Collection<? extends Property>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -107,8 +107,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MAP__VALUES:
-				getValues().clear();
+			case NcorePackage.MAP__VALUE:
+				getValue().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -122,8 +122,8 @@ public class MapImpl extends MinimalEObjectImpl.Container implements Map {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MAP__VALUES:
-				return !getValues().isEmpty();
+			case NcorePackage.MAP__VALUE:
+				return !getValue().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

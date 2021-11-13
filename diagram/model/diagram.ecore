@@ -104,6 +104,13 @@
         <details key="documentation" value="Bold border style."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//Property"
+        containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//Property/name">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DiagramElement" eSuperTypes="#//Link #//Style">
     <eAnnotations source="urn:org.nasdanika">
@@ -144,13 +151,6 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Property" instanceClassName="java.util.Map$Entry">
-    <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/property.md"/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/diagram.md"/>
@@ -187,9 +187,12 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
-        eType="#//Property" containment="true">
+        eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//Property"
+        containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//Property/name">
       <eAnnotations source="urn:org.nasdanika">
         <details key="documentation-reference" value="doc/diagram-properties.md"/>
+        <details key="reference-type" value="map: &#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: MapProperty&#xA;list:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: ListProperty&#xA;string:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: StringProperty&#xA;"/>
+        <details key="value-feature" value="value"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

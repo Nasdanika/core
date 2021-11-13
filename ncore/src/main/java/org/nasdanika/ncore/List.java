@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.List#getValues <em>Values</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.List#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getList()
@@ -24,15 +24,15 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface List extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Values</b></em>' reference list.
+	 * Returns the value of the '<em><b>Value</b></em>' reference list.
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Values</em>' reference list.
-	 * @see org.nasdanika.ncore.NcorePackage#getList_Values()
+	 * @return the value of the '<em>Value</em>' reference list.
+	 * @see org.nasdanika.ncore.NcorePackage#getList_Value()
 	 * @model annotation="urn:org.nasdanika reference-type='map: Map\nlist: List\nstring: String' value-feature='true'"
 	 * @generated
 	 */
-	EList<EObject> getValues();
+	EList<EObject> getValue();
 
 } // List

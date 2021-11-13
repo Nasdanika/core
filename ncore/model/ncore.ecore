@@ -212,7 +212,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="List">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
       <eAnnotations source="urn:org.nasdanika">
         <details key="reference-type" value="map: Map&#xA;list: List&#xA;string: String"/>
@@ -221,11 +221,10 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Map">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
         eType="#//Property" eKeys="#//Property/name">
       <eAnnotations source="urn:org.nasdanika">
         <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty"/>
-        <details key="value-feature" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

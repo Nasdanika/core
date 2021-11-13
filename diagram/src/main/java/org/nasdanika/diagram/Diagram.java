@@ -3,9 +3,8 @@
 package org.nasdanika.diagram;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.common.util.EMap;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.Property;
 
 /**
  * <!-- begin-user-doc -->
@@ -159,18 +158,17 @@ public interface Diagram extends NamedElement {
 	EList<Note> getNotes();
 
 	/**
-	 * Returns the value of the '<em><b>Properties</b></em>' map.
-	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link java.lang.String},
+	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Properties</em>' map.
+	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Properties()
-	 * @model mapType="org.nasdanika.diagram.Property&lt;org.eclipse.emf.ecore.EString, org.eclipse.emf.ecore.EString&gt;"
-	 *        annotation="urn:org.nasdanika documentation-reference='doc/diagram-properties.md'"
+	 * @model containment="true" keys="name"
+	 *        annotation="urn:org.nasdanika documentation-reference='doc/diagram-properties.md' reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value'"
 	 * @generated
 	 */
-	EMap<String, String> getProperties();
+	EList<Property> getProperties();
 
 	/**
 	 * Returns the value of the '<em><b>Context</b></em>' attribute.

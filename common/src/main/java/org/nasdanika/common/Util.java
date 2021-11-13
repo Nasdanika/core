@@ -421,7 +421,7 @@ public class Util {
 	 * @return
 	 */
 	public static Marker getMarker(Collection<?> collection, int index) {
-		return collection instanceof MarkedArrayList && index > -1 && index < collection.size() ? ((MarkedArrayList<?>) collection).getMarkers().get(index) : null;
+		return collection instanceof MarkedArrayList && index > -1 && index < ((MarkedArrayList<?>) collection).getMarkers().size() ? ((MarkedArrayList<?>) collection).getMarkers().get(index) : null;
 	}
 		
 	/**

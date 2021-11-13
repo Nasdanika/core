@@ -7,10 +7,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -18,6 +15,7 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramPackage;
 import org.nasdanika.diagram.Note;
+import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
@@ -230,8 +228,8 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, String> getProperties() {
-		return (EMap<String, String>)eDynamicGet(DiagramPackage.DIAGRAM__PROPERTIES, DiagramPackage.Literals.DIAGRAM__PROPERTIES, true, true);
+	public EList<Property> getProperties() {
+		return (EList<Property>)eDynamicGet(DiagramPackage.DIAGRAM__PROPERTIES, DiagramPackage.Literals.DIAGRAM__PROPERTIES, true, true);
 	}
 
 	/**
@@ -313,8 +311,7 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 			case DiagramPackage.DIAGRAM__NOTES:
 				return getNotes();
 			case DiagramPackage.DIAGRAM__PROPERTIES:
-				if (coreType) return getProperties();
-				else return getProperties().map();
+				return getProperties();
 			case DiagramPackage.DIAGRAM__CONTEXT:
 				return getContext();
 			case DiagramPackage.DIAGRAM__DEPTH:
@@ -353,7 +350,8 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 				getNotes().addAll((Collection<? extends Note>)newValue);
 				return;
 			case DiagramPackage.DIAGRAM__PROPERTIES:
-				((EStructuralFeature.Setting)getProperties()).set(newValue);
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends Property>)newValue);
 				return;
 			case DiagramPackage.DIAGRAM__CONTEXT:
 				setContext((Integer)newValue);

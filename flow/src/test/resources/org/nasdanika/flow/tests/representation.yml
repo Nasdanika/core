@@ -1,0 +1,8 @@
+flow-package:
+  uri: nasdanika://representation
+  description: Representations test.
+  representations:
+    package:
+      properties:
+        style: Text style
+            
