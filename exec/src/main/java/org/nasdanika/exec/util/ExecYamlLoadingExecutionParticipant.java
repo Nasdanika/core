@@ -1,15 +1,13 @@
 package org.nasdanika.exec.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.nasdanika.common.Context;
-import org.nasdanika.emf.persistence.YamlLoadingExecutionParticipant;
+import org.nasdanika.emf.persistence.NcoreYamlLoadingExecutionParticipant;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.resources.ResourcesPackage;
-import org.nasdanika.ncore.NcorePackage;
 
 /**
  * {@link YamlLoadingSupplier} for Engineering {@link EPackage}s.
@@ -17,7 +15,7 @@ import org.nasdanika.ncore.NcorePackage;
  * @author Pavel
  *
  */
-public abstract class ExecYamlLoadingExecutionParticipant extends YamlLoadingExecutionParticipant {
+public abstract class ExecYamlLoadingExecutionParticipant extends NcoreYamlLoadingExecutionParticipant {
 
 	public ExecYamlLoadingExecutionParticipant(Context context) {
 		super(context);
@@ -25,8 +23,7 @@ public abstract class ExecYamlLoadingExecutionParticipant extends YamlLoadingExe
 
 	@Override
 	protected Collection<EPackage> getEPackages() {
-		Collection<EPackage> ret = new ArrayList<>(); 
-		ret.add(NcorePackage.eINSTANCE);
+		Collection<EPackage> ret = super.getEPackages(); 
 		ret.add(ExecPackage.eINSTANCE);
 		ret.add(ContentPackage.eINSTANCE);
 		ret.add(ResourcesPackage.eINSTANCE);
