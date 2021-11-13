@@ -15,8 +15,15 @@ public class FunctionAttribute<T> extends Attribute<T> {
 
 	private Function<Object,T> function;
 
-	public FunctionAttribute(Object key, Function<Object,T> function, boolean required, T defaultValue, Object[] exclusiveWith) {
-		super(key, false, required, defaultValue, null, exclusiveWith);
+	public FunctionAttribute(
+			Object key,
+			boolean isDefault,
+			Function<Object,T> function, 
+			boolean required, 
+			T defaultValue,
+			String description,
+			Object[] exclusiveWith) {
+		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		this.function = function;
 	}
 	
