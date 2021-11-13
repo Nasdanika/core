@@ -32,6 +32,7 @@ import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.Resource;
 import org.nasdanika.ncore.Marker;
+import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.impl.NamedElementImpl;
 import org.nasdanika.ncore.util.NcoreUtil;
 
@@ -49,6 +50,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getDocumentation <em>Documentation</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getRepresentations <em>Representations</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -159,6 +161,17 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Property> getProperties() {
+		return (EList<Property>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__PROPERTIES, FlowPackage.Literals.PACKAGE_ELEMENT__PROPERTIES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@SuppressWarnings("unchecked")
@@ -214,6 +227,14 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				instanceRepresentations.put(representationKey, EcoreUtil.copy(representation));
 			}
 		}
+		
+		// Properties - TODO - Deep merging, replacement for now.
+		for (Property property: getProperties()) {
+			EList<Property> instanceProperties = instance.getProperties();
+			instanceProperties.removeIf(p -> p.getName().equals(property.getName()));
+			instanceProperties.add(EcoreUtil.copy(property));
+		}
+		
 	}
 
 	/**
@@ -259,6 +280,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return ((InternalEList<?>)getDocumentation()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
 				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
+			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
+				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -285,6 +308,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
 				if (coreType) return getRepresentations();
 				else return getRepresentations().map();
+			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
+				return getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -312,6 +337,10 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
 				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
 				return;
+			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
+				getProperties().clear();
+				getProperties().addAll((Collection<? extends Property>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -335,6 +364,9 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return;
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
 				getRepresentations().clear();
+				return;
+			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
+				getProperties().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -360,6 +392,8 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return !getDocumentation().isEmpty();
 			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
 				return !getRepresentations().isEmpty();
+			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
+				return !getProperties().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

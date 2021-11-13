@@ -167,14 +167,14 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		if (element instanceof String) {
 			return "string";
 		}
+		if (element instanceof Integer) {
+			return "integer";
+		}
 		if (element instanceof Map) {
 			return "map";
 		}
 		if (element instanceof Collection) {
 			return "list";
-		}
-		if (element instanceof Number) {
-			return "number";
 		}
 		if (element instanceof Boolean) {
 			return "boolean";

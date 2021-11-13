@@ -75,10 +75,14 @@
     <genClasses ecoreClass="ncore.ecore#//Map">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ncore.ecore#//Map/value"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Integer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Integer/value"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="ncore.ecore#//Property">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Property/name"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//StringProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//IntegerProperty"/>
     <genClasses ecoreClass="ncore.ecore#//MapProperty"/>
     <genClasses ecoreClass="ncore.ecore#//ListProperty"/>
   </genPackages>

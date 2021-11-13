@@ -169,13 +169,22 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT__REPRESENTATIONS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE_ELEMENT__PROPERTIES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Package Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int PACKAGE_ELEMENT_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -367,6 +376,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PACKAGE__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PACKAGE__PROPERTIES = PACKAGE_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Super Packages</b></em>' reference list.
@@ -623,6 +641,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE_PROVIDER__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_PROVIDER__PROPERTIES = PACKAGE_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -784,6 +811,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int PARTICIPANT__REPRESENTATIONS = SERVICE_PROVIDER__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT__PROPERTIES = SERVICE_PROVIDER__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
@@ -1094,6 +1130,15 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE__REPRESENTATIONS = SERVICE_PROVIDER__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__PROPERTIES = SERVICE_PROVIDER__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1339,6 +1384,15 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PARTICIPANT_RESPONSIBILITY__PROPERTIES = PACKAGE_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1563,6 +1617,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ARTIFACT__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT__PROPERTIES = PARTICIPANT_RESPONSIBILITY__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -2010,6 +2073,15 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__PROPERTIES = PARTICIPANT_RESPONSIBILITY__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2253,6 +2325,15 @@ public interface FlowPackage extends EPackage {
 	int RELATIONSHIP__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RELATIONSHIP__PROPERTIES = PACKAGE_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Target Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2468,6 +2549,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW_ELEMENT__REPRESENTATIONS = PARTICIPANT_RESPONSIBILITY__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__PROPERTIES = PARTICIPANT_RESPONSIBILITY__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -2889,6 +2979,15 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION__REPRESENTATIONS = PACKAGE_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TRANSITION__PROPERTIES = PACKAGE_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3123,6 +3222,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__REPRESENTATIONS = TRANSITION__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__PROPERTIES = TRANSITION__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Payload</b></em>' reference list.
@@ -3367,6 +3475,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACTIVITY__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__PROPERTIES = FLOW_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -3747,6 +3864,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__PROPERTIES = FLOW_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4106,6 +4232,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__REPRESENTATIONS = ACTIVITY__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__PROPERTIES = ACTIVITY__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -4478,6 +4613,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__REPRESENTATIONS = FLOW_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__PROPERTIES = FLOW_ELEMENT__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4828,6 +4972,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__PROPERTIES = PSEUDO_STATE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -5182,6 +5335,15 @@ public interface FlowPackage extends EPackage {
 	int END__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5532,6 +5694,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__PROPERTIES = PSEUDO_STATE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -5886,6 +6057,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6236,6 +6416,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__PROPERTIES = PSEUDO_STATE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -6590,6 +6779,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6940,6 +7138,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__PROPERTIES = PSEUDO_STATE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -7294,6 +7501,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7644,6 +7860,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__PROPERTIES = PSEUDO_STATE__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
@@ -7998,6 +8223,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8350,6 +8584,15 @@ public interface FlowPackage extends EPackage {
 	int START__REPRESENTATIONS = PSEUDO_STATE__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__PROPERTIES = PSEUDO_STATE__PROPERTIES;
+
+	/**
 	 * The feature id for the '<em><b>Responsible</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8668,6 +8911,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPackageElement_Representations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.flow.PackageElement#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see org.nasdanika.flow.PackageElement#getProperties()
+	 * @see #getPackageElement()
+	 * @generated
+	 */
+	EReference getPackageElement_Properties();
 
 	/**
 	 * Returns the meta object for the '{@link org.nasdanika.flow.PackageElement#create() <em>Create</em>}' operation.
@@ -10234,6 +10488,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PACKAGE_ELEMENT__REPRESENTATIONS = eINSTANCE.getPackageElement_Representations();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PACKAGE_ELEMENT__PROPERTIES = eINSTANCE.getPackageElement_Properties();
 
 		/**
 		 * The meta object literal for the '<em><b>Create</b></em>' operation.

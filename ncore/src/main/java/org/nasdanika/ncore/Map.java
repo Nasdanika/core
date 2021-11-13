@@ -31,7 +31,7 @@ public interface Map extends EObject {
 	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getMap_Value()
 	 * @model containment="true" keys="name"
-	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty' value-feature='value'"
+	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty' value-feature='value'"
 	 * @generated
 	 */
 	EList<Property> getValue();

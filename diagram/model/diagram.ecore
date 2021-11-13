@@ -109,6 +109,7 @@
         containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//Property/name">
       <eAnnotations source="urn:org.nasdanika">
         <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty"/>
+        <details key="value-feature" value="value"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

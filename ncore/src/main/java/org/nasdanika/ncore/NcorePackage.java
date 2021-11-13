@@ -804,6 +804,43 @@ public interface NcorePackage extends EPackage {
 	int MAP_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerImpl <em>Integer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.IntegerImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInteger()
+	 * @generated
+	 */
+	int INTEGER = 13;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER__VALUE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Integer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Integer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -811,7 +848,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 13;
+	int PROPERTY = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -848,7 +885,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
 	 * @generated
 	 */
-	int STRING_PROPERTY = 14;
+	int STRING_PROPERTY = 15;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -887,6 +924,52 @@ public interface NcorePackage extends EPackage {
 	int STRING_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerPropertyImpl <em>Integer Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.IntegerPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerProperty()
+	 * @generated
+	 */
+	int INTEGER_PROPERTY = 16;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Integer Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Integer Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapPropertyImpl <em>Map Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -894,7 +977,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMapProperty()
 	 * @generated
 	 */
-	int MAP_PROPERTY = 15;
+	int MAP_PROPERTY = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -940,7 +1023,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getListProperty()
 	 * @generated
 	 */
-	int LIST_PROPERTY = 16;
+	int LIST_PROPERTY = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -986,7 +1069,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 17;
+	int INSTANT = 19;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -996,7 +1079,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 18;
+	int DURATION = 20;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -1443,6 +1526,27 @@ public interface NcorePackage extends EPackage {
 	EReference getMap_Value();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.Integer <em>Integer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Integer</em>'.
+	 * @see org.nasdanika.ncore.Integer
+	 * @generated
+	 */
+	EClass getInteger();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Integer#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.Integer#getValue()
+	 * @see #getInteger()
+	 * @generated
+	 */
+	EAttribute getInteger_Value();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1472,6 +1576,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getStringProperty();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.IntegerProperty <em>Integer Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Integer Property</em>'.
+	 * @see org.nasdanika.ncore.IntegerProperty
+	 * @generated
+	 */
+	EClass getIntegerProperty();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.MapProperty <em>Map Property</em>}'.
@@ -1916,6 +2030,24 @@ public interface NcorePackage extends EPackage {
 		EReference MAP__VALUE = eINSTANCE.getMap_Value();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.IntegerImpl <em>Integer</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.IntegerImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInteger()
+		 * @generated
+		 */
+		EClass INTEGER = eINSTANCE.getInteger();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INTEGER__VALUE = eINSTANCE.getInteger_Value();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1942,6 +2074,16 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass STRING_PROPERTY = eINSTANCE.getStringProperty();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.IntegerPropertyImpl <em>Integer Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.IntegerPropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerProperty()
+		 * @generated
+		 */
+		EClass INTEGER_PROPERTY = eINSTANCE.getIntegerProperty();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.MapPropertyImpl <em>Map Property</em>}' class.

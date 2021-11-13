@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.Property;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +24,7 @@ import org.nasdanika.ncore.NamedElement;
  *   <li>{@link org.nasdanika.flow.PackageElement#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getDocumentation <em>Documentation</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getRepresentations <em>Representations</em>}</li>
+ *   <li>{@link org.nasdanika.flow.PackageElement#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getPackageElement()
@@ -144,6 +146,19 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @generated
 	 */
 	EMap<String, Diagram> getRepresentations();
+
+	/**
+	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Properties</em>' containment reference list.
+	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Properties()
+	 * @model containment="true" keys="name"
+	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value'"
+	 * @generated
+	 */
+	EList<Property> getProperties();
 
 	/**
 	 * <!-- begin-user-doc -->

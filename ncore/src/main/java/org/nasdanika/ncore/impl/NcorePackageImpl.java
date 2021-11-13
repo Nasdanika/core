@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.Map;
@@ -136,6 +137,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass integerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass propertyEClass = null;
 
 	/**
@@ -144,6 +152,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass stringPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass integerPropertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -670,6 +685,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getInteger() {
+		return integerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getInteger_Value() {
+		return (EAttribute)integerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getProperty() {
 		return propertyEClass;
 	}
@@ -692,6 +727,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EClass getStringProperty() {
 		return stringPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getIntegerProperty() {
+		return integerPropertyEClass;
 	}
 
 	/**
@@ -818,10 +863,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		mapEClass = createEClass(MAP);
 		createEReference(mapEClass, MAP__VALUE);
 
+		integerEClass = createEClass(INTEGER);
+		createEAttribute(integerEClass, INTEGER__VALUE);
+
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
 
 		stringPropertyEClass = createEClass(STRING_PROPERTY);
+
+		integerPropertyEClass = createEClass(INTEGER_PROPERTY);
 
 		mapPropertyEClass = createEClass(MAP_PROPERTY);
 
@@ -870,6 +920,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
 		stringPropertyEClass.getESuperTypes().add(this.getProperty());
 		stringPropertyEClass.getESuperTypes().add(this.getString());
+		integerPropertyEClass.getESuperTypes().add(this.getProperty());
+		integerPropertyEClass.getESuperTypes().add(this.getInteger());
 		mapPropertyEClass.getESuperTypes().add(this.getProperty());
 		mapPropertyEClass.getESuperTypes().add(this.getMap());
 		listPropertyEClass.getESuperTypes().add(this.getProperty());
@@ -947,10 +999,15 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getMap_Value(), this.getProperty(), null, "value", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getMap_Value().getEKeys().add(this.getProperty_Name());
 
+		initEClass(integerEClass, org.nasdanika.ncore.Integer.class, "Integer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getInteger_Value(), ecorePackage.getEInt(), "value", null, 0, 1, org.nasdanika.ncore.Integer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(stringPropertyEClass, StringProperty.class, "StringProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(integerPropertyEClass, IntegerProperty.class, "IntegerProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mapPropertyEClass, MapProperty.class, "MapProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -1080,8 +1137,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getMap_Value(),
 		   source,
 		   new String[] {
-			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty",
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty",
 			   "value-feature", "value"
+		   });
+		addAnnotation
+		  (getInteger_Value(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
 		   });
 	}
 

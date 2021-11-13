@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.MapProperty;
@@ -127,10 +128,14 @@ public class NcoreValidator extends EObjectValidator {
 				return validateList((List)value, diagnostics, context);
 			case NcorePackage.MAP:
 				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
+			case NcorePackage.INTEGER:
+				return validateInteger((org.nasdanika.ncore.Integer)value, diagnostics, context);
 			case NcorePackage.PROPERTY:
 				return validateProperty((Property)value, diagnostics, context);
 			case NcorePackage.STRING_PROPERTY:
 				return validateStringProperty((StringProperty)value, diagnostics, context);
+			case NcorePackage.INTEGER_PROPERTY:
+				return validateIntegerProperty((IntegerProperty)value, diagnostics, context);
 			case NcorePackage.MAP_PROPERTY:
 				return validateMapProperty((MapProperty)value, diagnostics, context);
 			case NcorePackage.LIST_PROPERTY:
@@ -371,6 +376,15 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateInteger(org.nasdanika.ncore.Integer integer, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(integer, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateProperty(Property property, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(property, diagnostics, context);
 	}
@@ -382,6 +396,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateStringProperty(StringProperty stringProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(stringProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateIntegerProperty(IntegerProperty integerProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(integerProperty, diagnostics, context);
 	}
 
 	/**

@@ -464,6 +464,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getPackageElement_Properties() {
+		return (EReference)packageElementEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getPackageElement__Create() {
 		return packageElementEClass.getEOperations().get(0);
 	}
@@ -1854,6 +1864,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEAttribute(packageElementEClass, PACKAGE_ELEMENT__MODIFIERS);
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__DOCUMENTATION);
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__REPRESENTATIONS);
+		createEReference(packageElementEClass, PACKAGE_ELEMENT__PROPERTIES);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___CREATE);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT);
@@ -2170,6 +2181,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEAttribute(getPackageElement_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPackageElement_Properties(), theNcorePackage.getProperty(), null, "properties", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getPackageElement_Properties().getEKeys().add(theNcorePackage.getProperty_Name());
 
 		EOperation op = initEOperation(getPackageElement__Create(), null, "create", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
@@ -2426,6 +2439,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (getPackageElement_Properties(),
+		   source,
+		   new String[] {
+			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
+			   "value-feature", "value"
 		   });
 		addAnnotation
 		  (getRepresentationEntry_Value(),

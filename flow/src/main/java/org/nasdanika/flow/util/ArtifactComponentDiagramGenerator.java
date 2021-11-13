@@ -18,8 +18,12 @@ import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Style;
 import org.nasdanika.flow.Artifact;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Relationship;
+import org.nasdanika.ncore.MapProperty;
+import org.nasdanika.ncore.Property;
 
 /**
  * Generates component diagrams for a collection of artifacts and an artifact context diagram. 
@@ -119,7 +123,21 @@ public class ArtifactComponentDiagramGenerator {
 			ret.setColor("DDDDDD");
 		}
 		
+		setProperties(semanticElement, ret);
 		return ret;
+	}
+	
+	/**
+	 * Copies semantic element properties under "representation" property, if it is present, to style properties. 
+	 * @param semanticElement
+	 * @param style
+	 */
+	public static void setProperties(PackageElement<?> semanticElement, Style style) {
+		for (Property property: semanticElement.getProperties()) {
+			if ("representation".equals(property.getName()) && property instanceof MapProperty) {
+				style.getProperties().addAll(EcoreUtil.copyAll(((MapProperty) property).getValue()));
+			}
+		}
 	}
 
 	/**

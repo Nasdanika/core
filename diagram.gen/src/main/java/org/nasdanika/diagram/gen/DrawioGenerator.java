@@ -49,6 +49,10 @@ import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
 import org.nasdanika.exec.content.Text;
+import org.nasdanika.ncore.IntegerProperty;
+import org.nasdanika.ncore.MapProperty;
+import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,6 +73,9 @@ import com.mxgraph.view.mxGraph;
  *
  */
 public class DrawioGenerator {
+	
+	private static final String HEIGHT_PROPERTY = "height";
+	private static final String WIDTH_PROPERTY = "width";
 
 	private DiagramGenerator diagramGenerator;
 
@@ -428,7 +435,8 @@ public class DrawioGenerator {
 	 * @return
 	 */
 	private Rectangle createElementRectangle(DiagramElement element, Point offset, BiConsumer<DiagramElement, Rectangle> geometryConsumer) {
-		Rectangle rectangle = new Rectangle(0, 0, (renderName(element).length() + 2) * 7, 30);
+		
+		Rectangle rectangle = new Rectangle(0, 0, elementWidth(element), elementHeight(element));
 		EList<DiagramElement> children = element.getElements();
 		if (!children.isEmpty()) {
 			Point childOffset = new Point((int) offset.getX(), (int) offset.getY() + 30);
@@ -441,6 +449,33 @@ public class DrawioGenerator {
 		}
 		geometryConsumer.accept(element, rectangle);
 		return rectangle;
+	}
+
+	private int elementWidth(DiagramElement element) {
+		for (Property property: element.getProperties()) {
+			if ("drawio".equals(property.getName()) && property instanceof MapProperty) {
+				for (Property drawioProperty: ((MapProperty) property).getValue()) {
+					if (WIDTH_PROPERTY.equals(drawioProperty.getName()) && drawioProperty instanceof IntegerProperty) {
+						return ((IntegerProperty) drawioProperty).getValue();
+					}
+				}
+			}
+		}
+		
+		return (renderName(element).length() + 2) * 7;
+	}
+
+	private int elementHeight(DiagramElement element) {
+		for (Property property: element.getProperties()) {
+			if ("drawio".equals(property.getName()) && property instanceof MapProperty) {
+				for (Property drawioProperty: ((MapProperty) property).getValue()) {
+					if (HEIGHT_PROPERTY.equals(drawioProperty.getName()) && drawioProperty instanceof IntegerProperty) {
+						return ((IntegerProperty) drawioProperty).getValue();
+					}
+				}
+			}
+		}
+		return 30;
 	}
 
 	protected void createConnection(
@@ -648,16 +683,36 @@ public class DrawioGenerator {
 //			ret.append(render(description));
 //		}
 //
-		String styleStr = null;
+		StringBuilder styleBuilder = new StringBuilder();
+		for (Property property: element.getProperties()) {
+			if ("drawio".equals(property.getName()) && property instanceof MapProperty) {
+				for (Property drawioProperty: ((MapProperty) property).getValue()) {
+					if ("style".equals(drawioProperty.getName())) {
+						if (drawioProperty instanceof StringProperty) {
+							styleBuilder.append(((StringProperty) drawioProperty).getName());
+						} else if (drawioProperty instanceof MapProperty) {
+							for (Property styleProperty: ((MapProperty) drawioProperty).getValue()) {
+								if (styleProperty instanceof StringProperty) {
+									style.put(styleProperty.getName(), ((StringProperty) styleProperty).getValue());
+								}							
+							}
+						}
+					} else if (!HEIGHT_PROPERTY.equals(drawioProperty.getName()) && !WIDTH_PROPERTY.equals(drawioProperty.getName())) {
+						if (drawioProperty instanceof StringProperty) {
+							userObject.setAttribute(drawioProperty.getName(), ((StringProperty) drawioProperty).getValue());
+						}
+					}
+				}
+			}
+		}
+		
 		if (!style.isEmpty()) {
-			StringBuilder styleBuilder = new StringBuilder();
 			for (Entry<String, String> se: style.entrySet()) {
 				if (styleBuilder.length() > 0) {
 					styleBuilder.append(";");
 				}
 				styleBuilder.append(se.getKey()).append("=").append(se.getValue());
 			}
-			styleStr = styleBuilder.toString();
 		}		
 		Rectangle cellGeometry = Objects.requireNonNull(geometry.apply(element), "Element geometry not found");
 		mxCell cell = (mxCell) graph.insertVertex(
@@ -668,7 +723,7 @@ public class DrawioGenerator {
 				cellGeometry.getY(), 
 				cellGeometry.getWidth(), 
 				cellGeometry.getHeight(), 
-				styleStr);
+				styleBuilder.length() == 0 ? null : styleBuilder.toString());
 		
 		elementsMap.put(element, cell);
 		

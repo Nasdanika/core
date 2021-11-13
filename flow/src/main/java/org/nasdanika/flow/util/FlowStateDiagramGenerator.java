@@ -187,6 +187,7 @@ public class FlowStateDiagramGenerator {
 			ret.setColor("DDDDDD");
 		}
 		
+		ArtifactComponentDiagramGenerator.setProperties(semanticElement, ret);
 		return ret;
 	}
 

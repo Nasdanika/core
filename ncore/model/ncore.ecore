@@ -224,8 +224,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
         eType="#//Property" containment="true" eKeys="#//Property/name">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty"/>
+        <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty&#xA;integer: IntegerProperty"/>
         <details key="value-feature" value="value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Integer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="default-feature" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -233,6 +240,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringProperty" eSuperTypes="#//Property #//String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerProperty" eSuperTypes="#//Property #//Integer"/>
   <eClassifiers xsi:type="ecore:EClass" name="MapProperty" eSuperTypes="#//Property #//Map"/>
   <eClassifiers xsi:type="ecore:EClass" name="ListProperty" eSuperTypes="#//Property #//List"/>
 </ecore:EPackage>

@@ -94,6 +94,15 @@ public interface NcoreFactory extends EFactory {
 	Map createMap();
 
 	/**
+	 * Returns a new object of class '<em>Integer</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Integer</em>'.
+	 * @generated
+	 */
+	Integer createInteger();
+
+	/**
 	 * Returns a new object of class '<em>String Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,6 +110,15 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	StringProperty createStringProperty();
+
+	/**
+	 * Returns a new object of class '<em>Integer Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Integer Property</em>'.
+	 * @generated
+	 */
+	IntegerProperty createIntegerProperty();
 
 	/**
 	 * Returns a new object of class '<em>Map Property</em>'.

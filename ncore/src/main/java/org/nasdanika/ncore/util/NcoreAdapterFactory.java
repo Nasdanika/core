@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.Map;
@@ -133,12 +134,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createMapAdapter();
 			}
 			@Override
+			public Adapter caseInteger(org.nasdanika.ncore.Integer object) {
+				return createIntegerAdapter();
+			}
+			@Override
 			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
 			}
 			@Override
 			public Adapter caseStringProperty(StringProperty object) {
 				return createStringPropertyAdapter();
+			}
+			@Override
+			public Adapter caseIntegerProperty(IntegerProperty object) {
+				return createIntegerPropertyAdapter();
 			}
 			@Override
 			public Adapter caseMapProperty(MapProperty object) {
@@ -351,6 +360,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Integer <em>Integer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Integer
+	 * @generated
+	 */
+	public Adapter createIntegerAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -375,6 +398,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStringPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.IntegerProperty <em>Integer Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.IntegerProperty
+	 * @generated
+	 */
+	public Adapter createIntegerPropertyAdapter() {
 		return null;
 	}
 

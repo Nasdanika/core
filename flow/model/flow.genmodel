@@ -16,6 +16,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//PackageElement/modifiers"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/documentation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/representations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//PackageElement/properties"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/create"/>
       <genOperations ecoreOperation="flow.ecore#//PackageElement/apply">
         <genParameters ecoreParameter="flow.ecore#//PackageElement/apply/instance"/>

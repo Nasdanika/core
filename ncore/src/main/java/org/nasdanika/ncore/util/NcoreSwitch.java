@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.Map;
@@ -174,6 +175,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.INTEGER: {
+				org.nasdanika.ncore.Integer integer = (org.nasdanika.ncore.Integer)theEObject;
+				T1 result = caseInteger(integer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T1 result = caseProperty(property);
@@ -185,6 +192,14 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseStringProperty(stringProperty);
 				if (result == null) result = caseProperty(stringProperty);
 				if (result == null) result = caseString(stringProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.INTEGER_PROPERTY: {
+				IntegerProperty integerProperty = (IntegerProperty)theEObject;
+				T1 result = caseIntegerProperty(integerProperty);
+				if (result == null) result = caseProperty(integerProperty);
+				if (result == null) result = caseInteger(integerProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -404,6 +419,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Integer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Integer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseInteger(org.nasdanika.ncore.Integer object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -430,6 +460,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseStringProperty(StringProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Integer Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Integer Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseIntegerProperty(IntegerProperty object) {
 		return null;
 	}
 

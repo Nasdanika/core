@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.Map;
@@ -77,7 +78,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.STRING: return createString();
 			case NcorePackage.LIST: return createList();
 			case NcorePackage.MAP: return createMap();
+			case NcorePackage.INTEGER: return createInteger();
 			case NcorePackage.STRING_PROPERTY: return createStringProperty();
+			case NcorePackage.INTEGER_PROPERTY: return createIntegerProperty();
 			case NcorePackage.MAP_PROPERTY: return createMapProperty();
 			case NcorePackage.LIST_PROPERTY: return createListProperty();
 			default:
@@ -213,9 +216,31 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
+	public org.nasdanika.ncore.Integer createInteger() {
+		IntegerImpl integer = new IntegerImpl();
+		return integer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public StringProperty createStringProperty() {
 		StringPropertyImpl stringProperty = new StringPropertyImpl();
 		return stringProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public IntegerProperty createIntegerProperty() {
+		IntegerPropertyImpl integerProperty = new IntegerPropertyImpl();
+		return integerProperty;
 	}
 
 	/**
