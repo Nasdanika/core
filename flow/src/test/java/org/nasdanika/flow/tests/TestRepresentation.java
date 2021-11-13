@@ -7,6 +7,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.junit.Test;
 import org.nasdanika.common.Status;
 import org.nasdanika.diagram.Diagram;
+import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.StringProperty;
 
@@ -27,7 +28,7 @@ public class TestRepresentation extends TestBase {
 					Diagram diagram = representations.get("package");
 					EList<Property> properties = diagram.getProperties();
 					for (Property property: properties) {
-						System.out.println(property.getName() + " " + ((StringProperty) property).getValue());
+						dump(property, 0);
 					}
 				},
 				diagnostic -> {
@@ -39,6 +40,21 @@ public class TestRepresentation extends TestBase {
 					}
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
 				});		
+	}
+	
+	private static void dump(Property property, int indent) {
+		for (int i = 0; i < indent; ++i) {
+			System.out.print("  ");
+		}
+		System.out.print(property.getName() + " " + property.eClass().getName());
+		if (property instanceof StringProperty) {
+			System.out.println(" " + ((StringProperty) property).getValue());
+		} else if (property instanceof MapProperty) {
+			System.out.println();
+			for (Property subProperty: ((MapProperty) property).getValue()) {
+				dump(subProperty, indent + 1);
+			}
+		}		
 	}
 	
 }

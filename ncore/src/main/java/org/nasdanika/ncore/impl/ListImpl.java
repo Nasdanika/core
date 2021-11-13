@@ -4,13 +4,16 @@ package org.nasdanika.ncore.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -66,6 +69,20 @@ public class ListImpl extends MinimalEObjectImpl.Container implements List {
 	@Override
 	public EList<EObject> getValue() {
 		return (EList<EObject>)eDynamicGet(NcorePackage.LIST__VALUE, NcorePackage.Literals.LIST__VALUE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case NcorePackage.LIST__VALUE:
+				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

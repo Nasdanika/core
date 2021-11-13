@@ -740,7 +740,7 @@ public interface NcorePackage extends EPackage {
 	int LIST = 11;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -777,7 +777,7 @@ public interface NcorePackage extends EPackage {
 	int MAP = 12;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -906,7 +906,7 @@ public interface NcorePackage extends EPackage {
 	int MAP_PROPERTY__NAME = PROPERTY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -952,7 +952,7 @@ public interface NcorePackage extends EPackage {
 	int LIST_PROPERTY__NAME = PROPERTY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Value</b></em>' reference list.
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1411,10 +1411,10 @@ public interface NcorePackage extends EPackage {
 	EClass getList();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.List#getValue <em>Value</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.List#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Value</em>'.
+	 * @return the meta object for the containment reference list '<em>Value</em>'.
 	 * @see org.nasdanika.ncore.List#getValue()
 	 * @see #getList()
 	 * @generated
@@ -1432,10 +1432,10 @@ public interface NcorePackage extends EPackage {
 	EClass getMap();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.nasdanika.ncore.Map#getValue <em>Value</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Map#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Value</em>'.
+	 * @return the meta object for the containment reference list '<em>Value</em>'.
 	 * @see org.nasdanika.ncore.Map#getValue()
 	 * @see #getMap()
 	 * @generated
@@ -1890,7 +1890,7 @@ public interface NcorePackage extends EPackage {
 		EClass LIST = eINSTANCE.getList();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -1908,7 +1908,7 @@ public interface NcorePackage extends EPackage {
 		EClass MAP = eINSTANCE.getMap();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

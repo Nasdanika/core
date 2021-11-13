@@ -4,11 +4,14 @@ package org.nasdanika.ncore.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
 import org.nasdanika.ncore.NcorePackage;
@@ -55,6 +58,20 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public EList<EObject> getValue() {
 		return (EList<EObject>)eDynamicGet(NcorePackage.LIST_PROPERTY__VALUE, NcorePackage.Literals.LIST__VALUE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case NcorePackage.LIST_PROPERTY__VALUE:
+				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

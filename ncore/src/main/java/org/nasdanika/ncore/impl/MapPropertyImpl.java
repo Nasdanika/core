@@ -4,10 +4,13 @@ package org.nasdanika.ncore.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.NcorePackage;
@@ -55,6 +58,20 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	public EList<Property> getValue() {
 		return (EList<Property>)eDynamicGet(NcorePackage.MAP_PROPERTY__VALUE, NcorePackage.Literals.MAP__VALUE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case NcorePackage.MAP_PROPERTY__VALUE:
+				return ((InternalEList<?>)getValue()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

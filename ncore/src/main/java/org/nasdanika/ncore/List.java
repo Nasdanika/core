@@ -24,13 +24,14 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface List extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Value</b></em>' reference list.
+	 * Returns the value of the '<em><b>Value</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Value</em>' reference list.
+	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getList_Value()
-	 * @model annotation="urn:org.nasdanika reference-type='map: Map\nlist: List\nstring: String' value-feature='true'"
+	 * @model containment="true"
+	 *        annotation="urn:org.nasdanika reference-type='map: Map\nlist: List\nstring: String' value-feature='true'"
 	 * @generated
 	 */
 	EList<EObject> getValue();
