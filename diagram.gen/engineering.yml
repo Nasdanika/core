@@ -1,7 +1,9 @@
 engineering-module:
-   name: Diagram Generation
-   path: exec-gen
-   issues:
-     - name: Interfaces for generation targets, e.g. PlantUML. Adapters and adapter factories. No need in a resource set - the generator creates an instance of adapter factory and adapters on demand. Or use a resource set to avoid writing extra code.
+  name: Diagram Generation
+  path: diagram-gen
+  dependencies:
+    - engineering://nasdanika/modules/core/modules/diagram
+    - engineering://nasdanika/modules/core/modules/mxgraph
+    - engineering://nasdanika/modules/core/modules/exec
      
    

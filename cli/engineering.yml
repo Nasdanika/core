@@ -1,8 +1,6 @@
 engineering-module:
   name: CLI
   path: cli
-  representations:
-    - representation-component-diagram: true
   dependencies:
-    - nasdanika:modules/core/modules/common
+    - engineering://nasdanika/modules/core/modules/common
     

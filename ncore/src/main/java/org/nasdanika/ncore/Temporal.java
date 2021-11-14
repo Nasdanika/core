@@ -539,34 +539,34 @@ public interface Temporal extends ModelElement {
 		if (days != 0) {
 			ret.append(days).append(days == 1 ? " day" : " days");
 		}
-		long hours = duration.toHoursPart();
+		long hours = duration.toHours() % 24;
 		if (hours != 0) {
 			if (ret.length() > 0) {
 				ret.append(" ");
 			}
 			ret.append(hours).append(hours == 1 ? " hour" : " hours");			
 		}		
-		long minutes = duration.toMinutesPart();
+		long minutes = duration.toMinutes() % 60;
 		if (minutes != 0) {
 			if (ret.length() > 0) {
 				ret.append(" ");
 			}	
 			ret.append(minutes).append(minutes == 1 ? " minute" : " minutes");
 		}
-		long seconds = duration.toSecondsPart();
+		long seconds = (duration.toMillis() * 1000) % 60;
 		if (seconds != 0) {
 			if (ret.length() > 0) {
 				ret.append(" ");
 			}			
 			ret.append(seconds).append(seconds == 1 ? " second" : " seconds");
 		}
-		long nanos = duration.toNanosPart();
-		if (nanos != 0) {
-			if (ret.length() > 0) {
-				ret.append(" ");
-			}			
-			ret.append(nanos).append(nanos == 1 ? " nanosecond" : " nanoseconds");
-		}
+//		long nanos = duration.toNanos();
+//		if (nanos != 0) {
+//			if (ret.length() > 0) {
+//				ret.append(" ");
+//			}			
+//			ret.append(nanos).append(nanos == 1 ? " nanosecond" : " nanoseconds");
+//		}
 		
 		return ret.toString();
 	}		

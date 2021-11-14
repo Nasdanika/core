@@ -1,21 +1,7 @@
 engineering-module:
    name: Exec
    path: exec
-   representations:
-     - representation-component-diagram: true
    dependencies:
-     - nasdanika:modules/core/modules/emf
-   issues:
-     - name: Links to the execution model doc in common
-       description: Once the entire site is generated and URI's are available.
-       effort: 2                         
-     - name: Pipe?
-       description: Function chaining
-       effort: 2                         
-     - name: Command and Consumer adapters for Call. Maybe Function adater too.
-       effort: 2                         
-     - name: Call validation tests
-       description: Init arguments on service or property, service and property at the same time, etc.
-       effort: 2                         
+     - engineering://nasdanika/modules/core/modules/emf
      
    

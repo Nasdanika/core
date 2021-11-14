@@ -1,22 +1,14 @@
 engineering-product:
    name: Core
    path: core
-   representations:
-     - representation-component-diagram: true
-   appearance:
-     features:
-       modules:
-         category: false
    modules:
-      - common/engineering.yml
       - cli/engineering.yml
+      - common/engineering.yml
+      - diagram/engineering.yml
+      - diagram.gen/engineering.yml
       - emf/engineering.yml
       - exec/engineering.yml
-      - exec-gen/engineering.yml
-   issues:
-     - name: Diagramming model       
-       description: EMF model or API for PlantUML diagramming. Start with state diagrams. Consider support of multiple outputs for the same model, e.g. state or sequence or activity. 
-     - name: MongoDB EMF Resource       
-       description: YAML file with connection and collection details and reserved name or extension for the resource set to recognize. 
-     - name: Models refactoring       
-       description: Ncore to Exec model, Party and common classes from Engineering to Ncore - ModelElement, NamedElement, Document, Property and PropertyEntry.
+      - exec.gen/engineering.yml
+      - flow/engineering.yml
+      - mxgraph/engineering.yml
+      - ncore/engineering.yml

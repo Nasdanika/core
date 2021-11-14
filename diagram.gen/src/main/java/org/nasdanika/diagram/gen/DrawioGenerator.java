@@ -138,22 +138,22 @@ public class DrawioGenerator {
 		return dest.getWriter().toString();
 	}
 	
-	/**
-	 * Decodes compressed text content of the diagram element.
-	 * @param diagramSource
-	 * @return
-	 * @throws Exception
-	 */
-	protected String decodeDiagram(String diagramSource) throws Exception {
-		Document xmlDocument = mxXmlUtils.parseXml(diagramSource);
-        Node diagram = xmlDocument.getElementsByTagName("diagram").item(0);
-        String textContent = diagram.getTextContent();
-
-        byte[] compressed = Base64.getDecoder().decode(textContent);
-        byte[] decompressed = inflate(compressed);
-        String decompressedStr = new String(decompressed, getCharset());
-        return URLDecoder.decode(decompressedStr, getCharset());
-	}
+//	/**
+//	 * Decodes compressed text content of the diagram element.
+//	 * @param diagramSource
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	protected String decodeDiagram(String diagramSource) throws Exception {
+//		Document xmlDocument = mxXmlUtils.parseXml(diagramSource);
+//        Node diagram = xmlDocument.getElementsByTagName("diagram").item(0);
+//        String textContent = diagram.getTextContent();
+//
+//        byte[] compressed = Base64.getDecoder().decode(textContent);
+//        byte[] decompressed = inflate(compressed);
+//        String decompressedStr = new String(decompressed, getCharset());
+//        return URLDecoder.decode(decompressedStr, getCharset().name());
+//	}
 		
     private byte[] inflate(byte[] content) throws Exception {
     	ByteArrayOutputStream baos = new ByteArrayOutputStream();

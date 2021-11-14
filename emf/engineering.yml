@@ -1,34 +1,8 @@
 engineering-module:
   name: EMF
   path: emf
-  representations:
-    - representation-component-diagram: true
   dependencies:
-    - nasdanika:modules/core/modules/cli
-  issues:
-     - name: Support of mutually exclusive features   
-       markdown-description: Annotation exclusive-with - space-separated list of keys.                                    
-     - name: EClass descriptor
-       description: From annotations. Choices from overriden methods. Use in UI and CLI. May also be constructed from EObject - values, choices from resource set.                         
-     - name: load-default annotation
-       markdown-description: |+2
-         YAML to load if configuration key is not present. E.g. if representations key is not present use a particular representation. 
-         In this case to suppress representations just provide an empty list of representations.
-         Maybe load-default-yaml and load-default-json.
-         This would alow allow to load defaults from external locations using exec-resource, for example.                          
-     - name: Computed features (mostly attributes)
-       description: |+2
-         Some way to indicate that value is computed. 
-         If so, wrap value being set into function taking the object as argument (this) and returing computed value.
-         Support calling Java and JavaScript.
-         Perhaps support for derived values which are not loaded by default - load them and access raw value in getters.  
-     - name: ResourceManager
-       description: |+2
-         YAMLResourceFactory. Resource tokens replaced if there is resource manager. E.g. image or video link.
-         DiagramGenerator which stores to resource manager. One option is to recognize data URI, decode, and replace.
-         Image tags - an option to use resource manager if present and embed if not.
-     - name: Handle nested collections, e.g. lists as map values
-       description: |+2
-         Perhaps at MapSupplierFactoryAttribute - check type of value and wrap in List or Map compound factory for lists/maps. Do the same for list elements.
+    - engineering://nasdanika/modules/core/modules/cli
+    - engineering://nasdanika/modules/core/modules/ncore
       
      

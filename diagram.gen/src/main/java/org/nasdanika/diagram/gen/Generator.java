@@ -51,7 +51,7 @@ public class Generator {
 				} else {
 					File container = diagramFile.getParentFile();
 					if (container.isDirectory() || container.mkdirs()) {
-						Files.writeString(diagramFile.toPath(), createDrawioGenerator().generateModel(diagram));
+						Files.write(diagramFile.toPath(), DefaultConverter.INSTANCE.toByteArray(createDrawioGenerator().generateModel(diagram)));
 					}
 				}
 			}						

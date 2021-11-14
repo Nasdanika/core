@@ -1,7 +1,6 @@
 engineering-module:
-   name: Diagram
-   path: diagram
-   issues:
-     - name: Packages for diagram types, specializations of Diagram and DiagramElement
-     
-   
+  name: Diagram
+  path: diagram
+  dependencies:
+    - engineering://nasdanika/modules/core/modules/ncore
+    
