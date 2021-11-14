@@ -4,5 +4,14 @@ engineering-module:
   dependencies:
     - engineering://nasdanika/modules/core/modules/cli
     - engineering://nasdanika/modules/core/modules/ncore
-      
+  issues:
+    - path: map-markers
+      name: Carry-over markers from Map entries to List elements
+      description: ReferenceList - 81, 93.      
+    - path: multiple-e-keys
+      name: Add support of multiple e-keys
+      description: ReferenceList - 98. Nested maps.      
+    - path: default-features-with-e-keys
+      name: Add support of default features with e-keys
+      description: ReferenceList. Implemented for homogenous - needs to be tested, implement for heterogenous.      
      

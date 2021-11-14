@@ -2,15 +2,10 @@ package org.nasdanika.diagram.gen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
-import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
@@ -24,8 +19,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.zip.Inflater;
-import java.util.zip.InflaterOutputStream;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -154,19 +147,19 @@ public class DrawioGenerator {
 //        String decompressedStr = new String(decompressed, getCharset());
 //        return URLDecoder.decode(decompressedStr, getCharset().name());
 //	}
-		
-    private byte[] inflate(byte[] content) throws Exception {
-    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    	try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new InflaterOutputStream(baos, new Inflater(true))) {
-            byte[] buf = new byte[8192];
-            int length;
-            while ((length = source.read(buf)) > 0) {
-                target.write(buf, 0, length);
-            }
-    	}
-    	
-    	return baos.toByteArray();
-    }
+//		
+//    private byte[] inflate(byte[] content) throws Exception {
+//    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//    	try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new InflaterOutputStream(baos, new Inflater(true))) {
+//            byte[] buf = new byte[8192];
+//            int length;
+//            while ((length = source.read(buf)) > 0) {
+//                target.write(buf, 0, length);
+//            }
+//    	}
+//    	
+//    	return baos.toByteArray();
+//    }
     
     /**
      * {@link Charset} for encoding/decoding.

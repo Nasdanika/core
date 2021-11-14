@@ -4,4 +4,10 @@ engineering-module:
   dependencies:
     - engineering://nasdanika/modules/core/modules/exec-gen
     - engineering://nasdanika/modules/core/modules/diagram
+  issues:
+    - path: style-inheritance-from-templates
+      name: Artifact inheritance of representation properties from templates
+      description: |+2
+        Cascading inheritance, merging of properties. Would allow to define a library of artifact templates (building blocks) and assemble composite artifacts from them. 
+        E.g. cloud components - storage, compute, cache, networking. Generated diagrams would have styles like images readily available. 
     

@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.ListAttribute;
@@ -29,6 +30,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 
 	private ReferenceFactory<T> referenceFactory;
 	private List<String> keys = new ArrayList<>();
+	private BiFunction<EClass, ENamedElement, String> keyProvider;
 	
 	/**
 	 * 
@@ -55,6 +57,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
+		this.keyProvider = keyProvider;
 		for (EAttribute rKey: eReference.getEKeys()) {
 			keys.add(keyProvider.apply(eClass, rKey));
 		}
@@ -73,24 +76,55 @@ public class ReferenceList<T> extends ListAttribute<T> {
 						entryList.setMarker(((Marked) config).getMarker());
 					}
 					for (Entry<?, ?> entry: ((Map<?,?>) config).entrySet()) {
-						MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
-						entryConfig.put(keyName, entry.getKey());
 						Object value = entry.getValue();
-						if (valueFeature == null) {
-							if (value instanceof Map) {
-								entryConfig.putAll((Map<?,?>) value); // TODO - markers.
-							} else {
-								Marker valueMarker = null;
-								if (config instanceof MarkedLinkedHashMap) {
-									valueMarker = ((MarkedLinkedHashMap<?, ?>) config).getMarker(entry.getKey());
-								} else {
-									throw new ConfigurationException("Configuration shall be a map: " + value, valueMarker);
-								}
-							}
-						} else {
-							entryConfig.put(valueFeature, value);
+						Marker valueMarker = null;
+						if (config instanceof MarkedLinkedHashMap) {
+							valueMarker = ((MarkedLinkedHashMap<?, ?>) config).getMarker(entry.getKey());
 						}
-						entryList.add(entryConfig); // TODO - markers.						
+						
+						if (referenceFactory.isHomogenous()) {
+							// Config shall be a map with potentially multiple entries, type is already known
+							MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
+							entryConfig.put(keyName, entry.getKey());
+							if (valueFeature == null) {
+								if (value instanceof Map) {
+									entryConfig.putAll((Map<?,?>) value); // TODO - markers.
+								} else {
+									EStructuralFeature defaultFeature = referenceFactory.effectiveDefaultFeature(value);
+									if (defaultFeature == null) {
+										throw new ConfigurationException("Configuration shall be a map: " + value, valueMarker);
+									}
+									entryConfig.put(keyProvider.apply(null, defaultFeature), value);
+								}
+							} else {
+								entryConfig.put(valueFeature, value);
+							}
+							entryList.add(entryConfig); // TODO - markers.
+						} else {
+							// Config (value) must be a singleton map with type as a key. We need to inject things into the value.
+							if (value instanceof Map && ((Map<?,?>) value).size() == 1) {
+								for (Entry<?, ?> valueEntry: ((Map<?,?>) value).entrySet()) {
+									MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
+									entryConfig.put(keyName, entry.getKey());
+									if (valueFeature == null) {
+										if (valueEntry.getValue() instanceof Map) {
+											entryConfig.putAll((Map<?,?>) valueEntry.getValue()); // TODO - markers.
+										} else {
+											// TODO - Default feature
+											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), (Marker) null); // TODO - marker 
+										}
+									} else {
+										entryConfig.put(valueFeature, valueEntry.getValue());
+									}
+									
+									MarkedLinkedHashMap<Object, Object> singleton = new MarkedLinkedHashMap<>();
+									singleton.put(valueEntry.getKey(), entryConfig);
+									entryList.add(singleton); // TODO - markers.
+								}
+							} else {
+								throw new ConfigurationException("Configuration shall be a singleton map: " + value, valueMarker);								
+							}
+						}
 					}
 					return super.create(loader, entryList, base, progressMonitor, marker);			
 				} 

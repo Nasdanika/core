@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -47,6 +48,10 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	
 	public EReference getEReference() {
 		return eReference;
+	}
+	
+	public boolean isHomogenous() {
+		return isHomogenous;
 	}
 
 	/**
@@ -185,11 +190,11 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		// More types?
 		return null;
 	}
-
+		
 	/**
 	 * @return Effective reference type which defaults to the reference type, but can be overridden by the <code>reference-types</code> annotation. 
 	 */
-	protected EClass effectiveReferenceType(Object element) {
+	public EClass effectiveReferenceType(Object element) {
 		EGenericType eGenericReferenceType = eClass.getFeatureType(eReference);
 		EClass eReferenceType = (EClass) eGenericReferenceType.getEClassifier();
 		
@@ -222,6 +227,16 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		}
 		return eReferenceType;
 	}	
+	
+	public EStructuralFeature effectiveDefaultFeature(Object element) { 
+		EClass effectiveReferenceType = effectiveReferenceType(element);
+		for (EStructuralFeature feature: effectiveReferenceType.getEAllStructuralFeatures()) {
+			if (EObjectLoader.isDefaultFeature(effectiveReferenceType, feature)) {
+				return feature;
+			}
+		}
+		return null;
+	}
 	
 	protected EClass resolveEClass(Object typeSpec, EPackage ePackage) {
 		String typeName;
