@@ -1,6 +1,9 @@
 engineering-product:
    name: Core
    path: core
+   releases:
+     - path: "2021-11-2"
+       name: "2021.11.2"
    modules:
       - cli/engineering.yml
       - common/engineering.yml
