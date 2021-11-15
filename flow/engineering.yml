@@ -5,9 +5,28 @@ engineering-module:
     - engineering://nasdanika/modules/core/modules/exec-gen
     - engineering://nasdanika/modules/core/modules/diagram
   issues:
-    - path: style-inheritance-from-templates
+    style-inheritance-from-templates:
       name: Artifact inheritance of representation properties from templates
       description: |+2
         Cascading inheritance, merging of properties. Would allow to define a library of artifact templates (building blocks) and assemble composite artifacts from them. 
         E.g. cloud components - storage, compute, cache, networking. Generated diagrams would have styles like images readily available. 
+    model-documentation:
+      name: Fully document the model
+      description: Link to this file - template-action. 
+    children-only-representation:
+      name: Children only representation
+      description: A flag to diagram or a property to indicate that the element itself shall not appear on the diagram, only children. May use something like context = -1.
+    drawio-styling:
+      name: Drawio styling for pseudo-states
+      description: Choice, join, ... PlantUML layout shall take care of port positioning.
+    document-features:
+      name: Document features
+    git-provenance:
+      name: Git provenance
+      description: |+2
+        Conversion of file URI's in markers to Git upstream URI's using jGit and then to URL's of, say, GitHub.
+        Generic marker processing approach and then Git implementation with GitHub implementation as an extension.
+        Would allow to navigate to the source location of model elements. Shall be very useful in the case of 
+        flow inheritance where elements may reside in multiple source repositories. 
+       
     

@@ -6,7 +6,7 @@ engineering-module:
     - engineering://nasdanika/modules/core/modules/mxgraph
     - engineering://nasdanika/modules/core/modules/exec
   issues:
-    - path: plant-uml-layout
+    plant-uml-layout:
       name: Use PlantUML to layout
       description: |+2
         Generate PlantUML diagram, parse image map and use to position and size diagram element rectangles, if parsing is successful.
@@ -14,8 +14,10 @@ engineering-module:
         Use the existing algorithm to move overlapping resized rectangle from the center of union of all rectangles. Pass initial delta between the center points of the union
         rectangle and the rectangle to be positioned to the generator factory - it will define initial radius and angle. An advanced implementation may be some kind of of a force
         algorithm where positioning iteration goes over an increase from the force equilibrium - offset generator may compute a certain amount of positions (e.g. 1000 or 10000), compute 
-        force for each point, sort them and then return in the order of increasing energy - difference from the equilibrium where the force is zero.          
-    - path: drawio-diagram-processing
+        force for each point, sort them and then return in the order of increasing energy - difference from the equilibrium where the force is zero.     
+        For border rectangles such as entry/exit points - reposition proportionally to keep them on the border.
+      effort: 4     
+    drawio-diagram-processing:
       name: Processing of Drawio diagrams
       description: |+2
         For existing diagrams - loading, building a graph, passing it to a method which returns a graph - the same or a different.
@@ -26,7 +28,19 @@ engineering-module:
         URI processing - if a cell has uri attribute - resolve, set relative links. If there is style - merge. 
         Element style overrides uri style entries. Size - boolean property to indicate that cell shall be resized if element at the URI specifies size.
         This approach would allow to create manual diagrams referencing existing model elements and have a consistent appearance of diagram elements across
-        multiple diagrams. Also element look will be automatically updated on all diagrams if it changes. 
+        multiple diagrams. Also element look will be automatically updated on all diagrams if it changes.
+      effort: 4 
+    styling-of-mxcells:
+      name: Implement styling of mxcells
+      description: DrawioGenerator - for diagram elements and connections. Translation of style types to shapes, e.g. node to cube. Shapes for start and end.
+      effort: 4
+    support-mermaid-js:
+      name: Add support of Mermaid-js
+      description: |+2
+        https://mermaid-js.github.io/mermaid/#/, 
+        Specifically add support of user journey diagram to use in flows - https://mermaid-js.github.io/mermaid/#/user-journey.
+        Sentiment value and participants from properties or element description.
+      effort: 4 
            
      
    

@@ -1,4 +1,8 @@
 engineering-module:
   name: mxgraph
   path: mxgraph
+  issues:
+    bundle-resources:
+      name: Bundle resources
+      description: Modify pom.xml to include non-java files from the source folder - take a look at git history for model projects. Will need to modify version, e.g. 4.2.2.1 or 4.2.2-a
     
