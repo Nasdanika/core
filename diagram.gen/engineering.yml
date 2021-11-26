@@ -29,10 +29,21 @@ engineering-module:
         Element style overrides uri style entries. Size - boolean property to indicate that cell shall be resized if element at the URI specifies size.
         This approach would allow to create manual diagrams referencing existing model elements and have a consistent appearance of diagram elements across
         multiple diagrams. Also element look will be automatically updated on all diagrams if it changes.
-      effort: 4 
+        Sync boolean property in diagram elements and diagrams - if true the diagram (representation) and the element shall be updated when the backing model
+        changes, e.g. label, or deleted if the element is not present in the model anymore. True by default, can be set to false by the modeler in the model (YAML)
+        or in Drawio editor. URI is used for correlation. Perhaps sync may be a list of what should be synced with true meaning all, false nothing and a comma-separated list
+        for fine-grained definitions. For example, it might be needed to update style if it was generated from the model and the model definition changed.
+        One option of deling with style is to compute style digest during generation and store as a property. Update style only if the style was not changed since last generation,
+        i.e. computed digest is the same as stored digest. In this case sync style would have some value e.g. sync=style=unmodified;label=true - i.e. sync style only if it was not changed manually
+        and always update label. May use the same approach for label - label-digest (or hash) property. Users can force update of style or label by removing/clearing respective -hash property.  
+        One more aspect of processing is validation. E.g. validation of links, especially relative links.
+      effort: 8 
     styling-of-mxcells:
       name: Implement styling of mxcells
-      description: DrawioGenerator - for diagram elements and connections. Translation of style types to shapes, e.g. node to cube. Shapes for start and end.
+      description: |+2
+        DrawioGenerator - for diagram elements and connections. Translation of style types to shapes, e.g. node to cube. Shapes for start and end.
+        A library of styles - from the drawio palette, exensible. Protected method in the generator, perhaps a service so multiple jars can contribute.
+        Create a feature with documentation how to use. Or maybe Drawio support feature and document there, or a hierarchy of features.
       effort: 4
     support-mermaid-js:
       name: Add support of Mermaid-js
@@ -41,6 +52,18 @@ engineering-module:
         Specifically add support of user journey diagram to use in flows - https://mermaid-js.github.io/mermaid/#/user-journey.
         Sentiment value and participants from properties or element description.
       effort: 4 
-           
-     
-   
+    drawio-multi-page:
+      name: Support of multi-page diagrams
+      description: |+2
+        Low level: Encoding methods which take a colleciton of diagrams, single diagram methods delegate to them.
+        High level (flow and state diagrams) - a flag specifying that a diagram element with child elements which is not a partition shall be generated as 
+        another page rather than navigating to that element's HTML page. Maybe refactor partition attribute to some kind of enum attribute with partition and page as possible values.
+        For PlantUML use table by default, as it is now, but with an anchor for cross-referencing. Protected method to override to use, say, bootstrap tabs, instead of tables.              
+      effort: 4 
+    drawio-customize-editor-url:
+      name: Customize drawio editor URL
+      description: Ability to send to edit to a site other than diagrams.net
+      effort: 4
+    connection-ids:
+      name: Connection ID's
+      description: Own GUID or as source ID and connection role/key e.g. xxxx-outputs-xyz

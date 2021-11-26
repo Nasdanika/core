@@ -33,12 +33,19 @@ import org.nasdanika.ncore.Property;
 public class ArtifactComponentDiagramGenerator {
 	
 	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
-
 	
 	public void generateDiagram(Artifact artifact, Diagram diagram) {
 		// Collecting all elements to be included
 		Map<Artifact,Integer> semanticElements = new HashMap<>();
-		collectRelatedElements(artifact, semanticElements, diagram.getContext());
+		int context = diagram.getContext();
+		if (context == -1) {
+			// Only child elements
+			for (Artifact child: artifact.getChildren().values()) {
+				collectRelatedElements(child, semanticElements, 0);				
+			}
+		} else {
+			collectRelatedElements(artifact, semanticElements, context);
+		}
 		
 		// Selecting top-level elements
 		Collection<Artifact> topLevelElements = new HashSet<>();
@@ -50,7 +57,7 @@ public class ArtifactComponentDiagramGenerator {
 			});
 		
 		Map<Artifact,DiagramElement> semanticMap = new HashMap<>();
-		diagram.getElements().addAll(createDiagramElements(topLevelElements, semanticMap, diagram.getContext() == 0 ? null : artifact, diagram.getDepth()));
+		diagram.getElements().addAll(createDiagramElements(topLevelElements, semanticMap, context == 0 ? null : artifact, diagram.getDepth()));
 		
 		for (Artifact se: topLevelElements) {
 			wire(se, semanticMap);

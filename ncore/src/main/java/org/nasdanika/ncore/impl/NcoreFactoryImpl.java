@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -268,10 +269,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public Instant createInstantFromString(EDataType eDataType, String initialValue) {
-		return (Instant)super.createFromString(eDataType, initialValue);
+		return DefaultConverter.INSTANCE.toInstant(initialValue);
 	}
 
 	/**

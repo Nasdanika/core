@@ -20,6 +20,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/line"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/column"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/origin"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Temporal">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Temporal/instant"/>

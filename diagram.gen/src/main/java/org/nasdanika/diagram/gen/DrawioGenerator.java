@@ -480,6 +480,9 @@ public class DrawioGenerator {
 			Document userObjectFactory) {
 		
 		Element userObject = userObjectFactory.createElement("UserObject");
+//		String dataLink = "data:action/json,{\"actions\":[{\"open\":\"javascript:alert(\\\"Hello World\\\")\"}]}";
+//		userObject.setAttribute("link", dataLink);
+//		userObject.setAttribute("linkTarget", "self");
 //		userObject.setAttribute("label", renderConconnection.get); TODO
 				
 		mxCell edge = (mxCell) graph.insertEdge(parent, null, userObject, source, target); // TODO - ID
@@ -612,13 +615,15 @@ public class DrawioGenerator {
 		if (!Util.isBlank(renderedName)) {
 			userObject.setAttribute("label", renderedName);
 		}
-		
+				
+		Map<String,String> style = new LinkedHashMap<>();
+
 		String location = element.getLocation();
 		if (!Util.isBlank(location)) {
 			userObject.setAttribute("link", location);
 		}
-		
-		Map<String,String> style = new LinkedHashMap<>();
+
+		style.put("recursiveResize", "0");
 //		
 //		ret.append(diagramElement.getId());
 //		
@@ -687,7 +692,8 @@ public class DrawioGenerator {
 							for (Property styleProperty: ((MapProperty) drawioProperty).getValue()) {
 								if (styleProperty instanceof StringProperty) {
 									style.put(styleProperty.getName(), ((StringProperty) styleProperty).getValue());
-								}							
+								}
+								// TODO - Integer and boolean properties.
 							}
 						}
 					} else if (!HEIGHT_PROPERTY.equals(drawioProperty.getName()) && !WIDTH_PROPERTY.equals(drawioProperty.getName())) {

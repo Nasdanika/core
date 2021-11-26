@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.ncore.Marker#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getLine <em>Line</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getColumn <em>Column</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Marker#getOrigin <em>Origin</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMarker()
@@ -89,5 +90,27 @@ public interface Marker extends EObject, org.nasdanika.common.persistence.Marker
 	 * @generated
 	 */
 	void setColumn(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Origin</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Origin</em>' attribute.
+	 * @see #setOrigin(String)
+	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Origin()
+	 * @model
+	 * @generated
+	 */
+	String getOrigin();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getOrigin <em>Origin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Origin</em>' attribute.
+	 * @see #getOrigin()
+	 * @generated
+	 */
+	void setOrigin(String value);
 
 } // Marker

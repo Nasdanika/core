@@ -20,6 +20,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getLine <em>Line</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getColumn <em>Column</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getOrigin <em>Origin</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,6 +55,16 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	 * @ordered
 	 */
 	protected static final int COLUMN_EDEFAULT = 0;
+
+	/**
+	 * The default value of the '{@link #getOrigin() <em>Origin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOrigin()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ORIGIN_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -150,6 +161,26 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	 * @generated
 	 */
 	@Override
+	public String getOrigin() {
+		return (String)eDynamicGet(NcorePackage.MARKER__ORIGIN, NcorePackage.Literals.MARKER__ORIGIN, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOrigin(String newOrigin) {
+		eDynamicSet(NcorePackage.MARKER__ORIGIN, NcorePackage.Literals.MARKER__ORIGIN, newOrigin);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NcorePackage.MARKER__LOCATION:
@@ -158,6 +189,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return getLine();
 			case NcorePackage.MARKER__COLUMN:
 				return getColumn();
+			case NcorePackage.MARKER__ORIGIN:
+				return getOrigin();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -178,6 +211,9 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return;
 			case NcorePackage.MARKER__COLUMN:
 				setColumn((Integer)newValue);
+				return;
+			case NcorePackage.MARKER__ORIGIN:
+				setOrigin((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -200,6 +236,9 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 			case NcorePackage.MARKER__COLUMN:
 				setColumn(COLUMN_EDEFAULT);
 				return;
+			case NcorePackage.MARKER__ORIGIN:
+				setOrigin(ORIGIN_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -218,6 +257,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return getLine() != LINE_EDEFAULT;
 			case NcorePackage.MARKER__COLUMN:
 				return getColumn() != COLUMN_EDEFAULT;
+			case NcorePackage.MARKER__ORIGIN:
+				return ORIGIN_EDEFAULT == null ? getOrigin() != null : !ORIGIN_EDEFAULT.equals(getOrigin());
 		}
 		return super.eIsSet(featureID);
 	}

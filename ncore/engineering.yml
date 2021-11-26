@@ -1,7 +1,15 @@
 engineering-module:
-   name: Ncore
-   path: ncore
-   dependencies:
-     - engineering://nasdanika/modules/core/modules/common
-     
+  name: Ncore
+  path: ncore
+  dependencies:
+    - engineering://nasdanika/modules/core/modules/common
+  issues:
+    object-signing:
+      name: Object signing
+      description: |+2
+        Similar to code signing - during the load process digests are computed for objects and stored in the object if it implements Signed interface.
+        For nested objects signatures are used in computing the container signature for contained objects which implement Signed.
+        Signing is performed if the loading context provides Signer service. Object signing can be used in combination with markers to track and prove
+        data provenance. Possibly use JWT - build a JSON Object, sign, get the signature and store in the object.
+        Perhaps sign the root object and just compute hashes of contained objects.       
    

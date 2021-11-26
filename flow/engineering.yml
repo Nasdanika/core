@@ -28,5 +28,23 @@ engineering-module:
         Generic marker processing approach and then Git implementation with GitHub implementation as an extension.
         Would allow to navigate to the source location of model elements. Shall be very useful in the case of 
         flow inheritance where elements may reside in multiple source repositories. 
+    pseudo-state-links:
+      name: Pseudo-state links
+      description: Add links to pseudo-states - supported by Drawio. If linked then shall have an action - need a flag to indicate that it is a real state. Maybe a way to have real states rendered as pseudo-states. 
+    change-comment:
+      name: Change comment
+      description: Add support for providing a reason for adding/suppressing/overriding package elements. Generate a changelog. 
+    inputs-outputs-validation:
+      name: Inputs/Outputs validation
+      description: |+2
+        If both element and transitions/calls specify artifacts - input, output, payload, response - then validate consistency, e.g. that transition payload is in the list of activity output artifacts.
+        Take resources into account which serve as artifact repositories. The goal is to catch situations when input artifacts appear from nowhere - don't come through inputs or call responses and 
+        cannot be retrieved from repository resorces. For output artifacts - make sure that an artifact does not disappear - it shall either be listed as a payload of a call or transition, or stored into a repository resource.    
+    builders:
+      name: Builders
+      description: |+2
+        A list of EObjects adapted to Consumer and invoked in apply(). Context and progress monitor, apply and createInstance either throws Exception or wraps it maybe in ConfigurationException and injects builder's marker.
+        InterpolatingBuilder - interpolates tokens in features. Own properties, flag to chain with context and path. Features to interpolate - all String features by default. 
+        CallBuilder - similar to Call in Exec, possibly extract common functionality to Ncore or use Call as-is - shall be adaptable to consumer then.     
        
     

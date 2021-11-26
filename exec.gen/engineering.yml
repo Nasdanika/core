@@ -1,7 +1,13 @@
 engineering-module:
-   name: Exec Generation Adapters
-   path: exec-gen
-   dependencies:
-     - engineering://nasdanika/modules/core/modules/exec
-     
+  name: Exec Generation Adapters
+  path: exec-gen
+  dependencies:
+    - engineering://nasdanika/modules/core/modules/exec
+  issues:
+    embedded-image-data:
+      name: Embedded image data
+      description: Add embedded image data interpolation for markdown.      
+    include-base:
+      name: Include base
+      description: Base shall be resolved relative to the target resource or marker. Use marker first.
    

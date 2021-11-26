@@ -276,9 +276,16 @@ public class FlowStateDiagramGenerator {
 		EList<Connection> connections = semanticMap.get(semanticElement).getConnections();
 		
 		Function<Transition,FlowElement<?>> groupByMappedTarget = transition -> {
-			FlowElement<? >target = transition.getTarget(); 
+			FlowElement<?> target = transition.getTarget(); 
 			while (!semanticMap.containsKey(target)) {
-				EObject superContainer = target.eContainer().eContainer();
+				if (target.eIsProxy()) {
+					throw new IllegalStateException("Target is an unresolved proxy: " + target);
+				}
+				EObject eContainer = target.eContainer();
+				if (eContainer == null) {
+					throw new NullPointerException("Transition target does not have super-container, cannot group: " + transition);
+				}
+				EObject superContainer = eContainer.eContainer();
 				if (superContainer instanceof FlowElement<?>) {
 					target = (FlowElement<?>) superContainer;
 				} else {

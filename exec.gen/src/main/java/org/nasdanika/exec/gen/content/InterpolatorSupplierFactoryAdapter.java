@@ -18,8 +18,8 @@ import org.nasdanika.exec.content.Interpolator;
 
 public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAdapter<Interpolator> {
 
-	protected InterpolatorSupplierFactoryAdapter(Interpolator markdown) {
-		super(markdown);
+	protected InterpolatorSupplierFactoryAdapter(Interpolator interpolator) {
+		super(interpolator);
 	}
 
 	@SuppressWarnings("unchecked")
