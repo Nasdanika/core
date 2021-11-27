@@ -67,3 +67,6 @@ engineering-module:
     connection-ids:
       name: Connection ID's
       description: Own GUID or as source ID and connection role/key e.g. xxxx-outputs-xyz
+    word-wrapping:
+      name: Word wrapping
+      description: If there are new lines - replace with space, set word wrapping to true, count lines and adjust width and heights according to the longes line and the number of lines.
