@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Util;
+import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
@@ -279,7 +280,7 @@ public class FlowStateDiagramGenerator {
 			FlowElement<?> target = transition.getTarget(); 
 			while (!semanticMap.containsKey(target)) {
 				if (target.eIsProxy()) {
-					throw new IllegalStateException("Target is an unresolved proxy: " + target);
+					throw new ConfigurationException("Target is an unresolved proxy: " + target, semanticElement);
 				}
 				EObject eContainer = target.eContainer();
 				if (eContainer == null) {

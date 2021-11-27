@@ -288,7 +288,10 @@ public class TransitionImpl extends PackageElementImpl<Transition> implements Tr
 	 * @return URI relative to the containing flow elements reference or null if there is no containing flow.
 	 */
 	protected URI getFlowElementsURI() {
-		for (EObject ancestor = eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
+		if (eContainer() == null) {
+			return null;
+		}
+		for (EObject ancestor = eContainer().eContainer().eContainer(); ancestor != null; ancestor = ancestor.eContainer()) {
 			if (ancestor instanceof Flow) {
 				return NcoreUtil.getUri(ancestor).appendSegment("elements").appendSegment(""); 
 			}

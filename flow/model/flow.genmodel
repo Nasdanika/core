@@ -134,6 +134,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/resources"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/resourceKeys"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//FlowElement/artifactResponsibilities"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElement/sortGroup"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//FlowElementEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//FlowElementEntry/key"/>

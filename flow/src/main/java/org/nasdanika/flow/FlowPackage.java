@@ -2749,13 +2749,22 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW_ELEMENT__SORT_GROUP = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
+	int FLOW_ELEMENT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -3675,6 +3684,15 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTIVITY__SORT_GROUP = FLOW_ELEMENT__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4062,6 +4080,15 @@ public interface FlowPackage extends EPackage {
 	int SERVICE__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE__SORT_GROUP = FLOW_ELEMENT__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4430,6 +4457,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FLOW__ARTIFACT_RESPONSIBILITIES = ACTIVITY__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLOW__SORT_GROUP = ACTIVITY__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Services</b></em>' reference list.
@@ -4811,6 +4847,15 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES = FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PSEUDO_STATE__SORT_GROUP = FLOW_ELEMENT__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5170,6 +5215,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHOICE__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHOICE__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -5533,6 +5587,15 @@ public interface FlowPackage extends EPackage {
 	int END__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5892,6 +5955,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int ENTRY_POINT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTRY_POINT__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -6255,6 +6327,15 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXIT_POINT__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6614,6 +6695,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPANSION_INPUT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_INPUT__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -6977,6 +7067,15 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPANSION_OUTPUT__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7336,6 +7435,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int FORK__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FORK__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -7699,6 +7807,15 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_PIN__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8058,6 +8175,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int JOIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOIN__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -8421,6 +8547,15 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
 
 	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OUTPUT_PIN__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
+
+	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -8780,6 +8915,15 @@ public interface FlowPackage extends EPackage {
 	 * @ordered
 	 */
 	int START__ARTIFACT_RESPONSIBILITIES = PSEUDO_STATE__ARTIFACT_RESPONSIBILITIES;
+
+	/**
+	 * The feature id for the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START__SORT_GROUP = PSEUDO_STATE__SORT_GROUP;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -9967,6 +10111,17 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFlowElement_ArtifactResponsibilities();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.flow.FlowElement#getSortGroup <em>Sort Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sort Group</em>'.
+	 * @see org.nasdanika.flow.FlowElement#getSortGroup()
+	 * @see #getFlowElement()
+	 * @generated
+	 */
+	EAttribute getFlowElement_SortGroup();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Element Entry</em>}'.
@@ -11286,6 +11441,14 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES = eINSTANCE.getFlowElement_ArtifactResponsibilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Sort Group</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FLOW_ELEMENT__SORT_GROUP = eINSTANCE.getFlowElement_SortGroup();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.FlowElementEntryImpl <em>Element Entry</em>}' class.

@@ -47,11 +47,22 @@ import org.nasdanika.flow.Transition;
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getResourceKeys <em>Resource Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getArtifactResponsibilities <em>Artifact Responsibilities</em>}</li>
+ *   <li>{@link org.nasdanika.flow.impl.FlowElementImpl#getSortGroup <em>Sort Group</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantResponsibilityImpl<T> implements FlowElement<T> {
+	/**
+	 * The default value of the '{@link #getSortGroup() <em>Sort Group</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSortGroup()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SORT_GROUP_EDEFAULT = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -236,6 +247,26 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public String getSortGroup() {
+		return (String)eDynamicGet(FlowPackage.FLOW_ELEMENT__SORT_GROUP, FlowPackage.Literals.FLOW_ELEMENT__SORT_GROUP, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSortGroup(String newSortGroup) {
+		eDynamicSet(FlowPackage.FLOW_ELEMENT__SORT_GROUP, FlowPackage.Literals.FLOW_ELEMENT__SORT_GROUP, newSortGroup);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -314,6 +345,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				return getResourceKeys();
 			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
 				return getArtifactResponsibilities();
+			case FlowPackage.FLOW_ELEMENT__SORT_GROUP:
+				return getSortGroup();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -353,6 +386,9 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				getArtifactResponsibilities().clear();
 				getArtifactResponsibilities().addAll((Collection<? extends ArtifactParticipantResponsibility>)newValue);
 				return;
+			case FlowPackage.FLOW_ELEMENT__SORT_GROUP:
+				setSortGroup((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -385,6 +421,9 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				return;
 			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
 				getArtifactResponsibilities().clear();
+				return;
+			case FlowPackage.FLOW_ELEMENT__SORT_GROUP:
+				setSortGroup(SORT_GROUP_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -424,6 +463,8 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				return !getResourceKeys().isEmpty();
 			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
 				return !getArtifactResponsibilities().isEmpty();
+			case FlowPackage.FLOW_ELEMENT__SORT_GROUP:
+				return SORT_GROUP_EDEFAULT == null ? getSortGroup() != null : !SORT_GROUP_EDEFAULT.equals(getSortGroup());
 		}
 		return super.eIsSet(featureID);
 	}

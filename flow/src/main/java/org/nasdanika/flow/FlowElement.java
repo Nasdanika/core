@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getResourceKeys <em>Resource Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.FlowElement#getArtifactResponsibilities <em>Artifact Responsibilities</em>}</li>
+ *   <li>{@link org.nasdanika.flow.FlowElement#getSortGroup <em>Sort Group</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlowElement()
@@ -235,5 +236,27 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * @generated
 	 */
 	EList<ArtifactParticipantResponsibility> getArtifactResponsibilities();
+
+	/**
+	 * Returns the value of the '<em><b>Sort Group</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sort Group</em>' attribute.
+	 * @see #setSortGroup(String)
+	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_SortGroup()
+	 * @model
+	 * @generated
+	 */
+	String getSortGroup();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.flow.FlowElement#getSortGroup <em>Sort Group</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sort Group</em>' attribute.
+	 * @see #getSortGroup()
+	 * @generated
+	 */
+	void setSortGroup(String value);
 
 } // FlowElement

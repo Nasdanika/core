@@ -717,6 +717,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sortGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eGenericSuperTypes eClassifier="#//ParticipantResponsibility">
       <eTypeArguments eTypeParameter="#//FlowElement/T"/>
     </eGenericSuperTypes>

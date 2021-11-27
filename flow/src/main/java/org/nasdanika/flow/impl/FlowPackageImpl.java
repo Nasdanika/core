@@ -1424,6 +1424,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getFlowElement_SortGroup() {
+		return (EAttribute)flowElementEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getFlowElementEntry() {
 		return flowElementEntryEClass;
 	}
@@ -1975,6 +1985,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(flowElementEClass, FLOW_ELEMENT__RESOURCES);
 		createEAttribute(flowElementEClass, FLOW_ELEMENT__RESOURCE_KEYS);
 		createEReference(flowElementEClass, FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES);
+		createEAttribute(flowElementEClass, FLOW_ELEMENT__SORT_GROUP);
 
 		flowElementEntryEClass = createEClass(FLOW_ELEMENT_ENTRY);
 		createEAttribute(flowElementEntryEClass, FLOW_ELEMENT_ENTRY__KEY);
@@ -2327,6 +2338,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEAttribute(getFlowElement_ResourceKeys(), ecorePackage.getEString(), "resourceKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_ArtifactResponsibilities(), this.getArtifactParticipantResponsibility(), null, "artifactResponsibilities", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getFlowElement_ArtifactResponsibilities().getEKeys().add(this.getArtifactParticipantResponsibility_ArtifactKey());
+		initEAttribute(getFlowElement_SortGroup(), ecorePackage.getEString(), "sortGroup", null, 0, 1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(flowElementEntryEClass, Map.Entry.class, "FlowElementEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFlowElementEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
