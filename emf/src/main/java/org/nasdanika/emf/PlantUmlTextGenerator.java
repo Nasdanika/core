@@ -292,7 +292,7 @@ public class PlantUmlTextGenerator {
 				for (EReference ref: ((EClass) c).getEReferences()) {
 					if (!processedOpposites.contains(ref) && allClassifiers.contains(ref.getEReferenceType())) {
 						appendEReference(ref);
-						EReference opposite = ref.getEOpposite();
+						EReference opposite = NcoreUtil.getOpposite(ref);
 						if (opposite!=null) {
 							processedOpposites.add(opposite);
 						}
@@ -330,7 +330,7 @@ public class PlantUmlTextGenerator {
 	protected void appendEReference(EReference ref) throws IOException {
 		collector.append(qualifiedName(ref.getEContainingClass()));
 		collector.append(" ");
-		EReference opposite = ref.getEOpposite();
+		EReference opposite = NcoreUtil.getOpposite(ref);
 		if (ref.isContainment()) {
 			collector.append("*");
 		} else if (opposite!=null) {

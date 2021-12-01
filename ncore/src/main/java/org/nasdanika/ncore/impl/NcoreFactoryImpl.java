@@ -287,10 +287,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public Duration createDurationFromString(EDataType eDataType, String initialValue) {
-		return (Duration)super.createFromString(eDataType, initialValue);
+		return DefaultConverter.INSTANCE.toDuration(initialValue);
 	}
 
 	/**
