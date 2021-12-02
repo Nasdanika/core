@@ -6,6 +6,13 @@ engineering-product:
        name: "2021.12.0"
        start: 2021/12/01
        end: 2021/12/05
+       increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
+       objectives:
+         test-objective:
+           name: Test Objective
+           key-results:
+             do-something:
+               name: Do something
    modules:
       - cli/engineering.yml
       - common/engineering.yml
