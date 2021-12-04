@@ -362,7 +362,10 @@ public final class NcoreUtil {
 		String oName = getNasdanikaAnnotationDetail(eReference, "opposite");
 		EClass refType = eReference.getEReferenceType();
 		for (EReference ref: refType.getEAllReferences()) {
-			if (ref.getName().equals(oName) || eReference.getName().equals(getNasdanikaAnnotationDetail(ref, "opposite"))) {
+			if (ref.getName().equals(oName)) {
+				return ref;
+			}
+			if (ref.getEReferenceType() == eReference.getEContainingClass() && eReference.getName().equals(getNasdanikaAnnotationDetail(ref, "opposite"))) {
 				return ref;
 			}
 		}
