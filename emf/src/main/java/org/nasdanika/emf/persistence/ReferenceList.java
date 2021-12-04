@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.ListAttribute;
-import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.MarkedArrayList;
 import org.nasdanika.common.persistence.MarkedLinkedHashMap;
 import org.nasdanika.common.persistence.Marker;
@@ -72,9 +71,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 					// Converting entry set to a list of maps
 					String keyName = keys.get(0);
 					MarkedArrayList<Map<?,?>> entryList = new MarkedArrayList<>();
-					if (config instanceof Marked) {
-						entryList.setMarker(((Marked) config).getMarker());
-					}
+					entryList.setMarker(marker);
 					for (Entry<?, ?> entry: ((Map<?,?>) config).entrySet()) {
 						Object value = entry.getValue();
 						Marker valueMarker = null;
@@ -85,17 +82,12 @@ public class ReferenceList<T> extends ListAttribute<T> {
 						if (referenceFactory.isHomogenous()) {
 							// Config shall be a map with potentially multiple entries, type is already known
 							MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
+							entryConfig.setMarker(valueMarker);
 							entryConfig.put(keyName, entry.getKey());
+							entryConfig.mark(keyName, valueMarker);
 							if (valueFeature == null) {
 								if (value instanceof Map) {
 									entryConfig.putAll((Map<?,?>) value);
-									if (value instanceof MarkedLinkedHashMap) {
-										MarkedLinkedHashMap<?,?> markedValue = (MarkedLinkedHashMap<?,?>) value;
-										entryConfig.setMarker(markedValue.getMarker());
-										for (Object key: markedValue.keySet()) {
-											entryConfig.mark(keyName, markedValue.getMarker(key));
-										}
-									}
 								} else {
 									EStructuralFeature defaultFeature = referenceFactory.effectiveDefaultFeature(value);
 									if (defaultFeature == null) {
@@ -112,20 +104,16 @@ public class ReferenceList<T> extends ListAttribute<T> {
 							if (value instanceof Map && ((Map<?,?>) value).size() == 1) {
 								for (Entry<?, ?> valueEntry: ((Map<?,?>) value).entrySet()) {
 									MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
+									entryConfig.setMarker(valueMarker);
 									entryConfig.put(keyName, entry.getKey());
+									entryConfig.mark(keyName, valueMarker);
 									if (valueFeature == null) {
-										if (valueEntry.getValue() instanceof Map) {
-											entryConfig.putAll((Map<?,?>) valueEntry.getValue());
-											if (valueEntry.getValue() instanceof MarkedLinkedHashMap) {
-												MarkedLinkedHashMap<?,?> markedValueEntry = (MarkedLinkedHashMap<?,?>) valueEntry.getValue();
-												entryConfig.setMarker(markedValueEntry.getMarker());
-												for (Object key: markedValueEntry.keySet()) {
-													entryConfig.mark(keyName, markedValueEntry.getMarker(key));
-												}
-											}
+										Object valueEntryValue = valueEntry.getValue();
+										if (valueEntryValue instanceof Map) {
+											entryConfig.putAll((Map<?,?>) valueEntryValue);
 										} else {
-											// TODO - Default feature
-											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), (Marker) null); // TODO - marker 
+											// TODO - Default feature											
+											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), valueMarker); // TODO - marker 
 										}
 									} else {
 										entryConfig.put(valueFeature, valueEntry.getValue());
@@ -133,6 +121,8 @@ public class ReferenceList<T> extends ListAttribute<T> {
 									
 									MarkedLinkedHashMap<Object, Object> singleton = new MarkedLinkedHashMap<>();
 									singleton.put(valueEntry.getKey(), entryConfig);
+									singleton.setMarker(valueMarker);
+									singleton.mark(valueEntry.getKey(), valueMarker);
 									entryList.add(singleton); 
 								}
 							} else {
