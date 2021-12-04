@@ -42,4 +42,18 @@ public class MarkedLinkedHashMap<K, V> extends LinkedHashMap<K, V> implements Ma
 		return marker;
 	}
 	
+	/**
+	 * Also carries over markers
+	 */
+	@Override
+	public void putAll(Map<? extends K, ? extends V> m) {
+		super.putAll(m);
+		if (m instanceof MarkedLinkedHashMap) {
+			MarkedLinkedHashMap<? extends K,?> mm = (MarkedLinkedHashMap<? extends K,?>) m;
+			for (K key: mm.keySet()) {
+				mark(key, mm.getMarker(key));
+			}
+		}
+	}
+	
 }
