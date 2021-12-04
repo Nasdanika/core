@@ -88,7 +88,14 @@ public class ReferenceList<T> extends ListAttribute<T> {
 							entryConfig.put(keyName, entry.getKey());
 							if (valueFeature == null) {
 								if (value instanceof Map) {
-									entryConfig.putAll((Map<?,?>) value); // TODO - markers.
+									entryConfig.putAll((Map<?,?>) value);
+									if (value instanceof MarkedLinkedHashMap) {
+										MarkedLinkedHashMap<?,?> markedValue = (MarkedLinkedHashMap<?,?>) value;
+										entryConfig.setMarker(markedValue.getMarker());
+										for (Object key: markedValue.keySet()) {
+											entryConfig.mark(keyName, markedValue.getMarker(key));
+										}
+									}
 								} else {
 									EStructuralFeature defaultFeature = referenceFactory.effectiveDefaultFeature(value);
 									if (defaultFeature == null) {
@@ -99,7 +106,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 							} else {
 								entryConfig.put(valueFeature, value);
 							}
-							entryList.add(entryConfig); // TODO - markers.
+							entryList.add(entryConfig);
 						} else {
 							// Config (value) must be a singleton map with type as a key. We need to inject things into the value.
 							if (value instanceof Map && ((Map<?,?>) value).size() == 1) {
@@ -108,7 +115,14 @@ public class ReferenceList<T> extends ListAttribute<T> {
 									entryConfig.put(keyName, entry.getKey());
 									if (valueFeature == null) {
 										if (valueEntry.getValue() instanceof Map) {
-											entryConfig.putAll((Map<?,?>) valueEntry.getValue()); // TODO - markers.
+											entryConfig.putAll((Map<?,?>) valueEntry.getValue());
+											if (valueEntry.getValue() instanceof MarkedLinkedHashMap) {
+												MarkedLinkedHashMap<?,?> markedValueEntry = (MarkedLinkedHashMap<?,?>) valueEntry.getValue();
+												entryConfig.setMarker(markedValueEntry.getMarker());
+												for (Object key: markedValueEntry.keySet()) {
+													entryConfig.mark(keyName, markedValueEntry.getMarker(key));
+												}
+											}
 										} else {
 											// TODO - Default feature
 											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), (Marker) null); // TODO - marker 
@@ -119,12 +133,13 @@ public class ReferenceList<T> extends ListAttribute<T> {
 									
 									MarkedLinkedHashMap<Object, Object> singleton = new MarkedLinkedHashMap<>();
 									singleton.put(valueEntry.getKey(), entryConfig);
-									entryList.add(singleton); // TODO - markers.
+									entryList.add(singleton); 
 								}
 							} else {
 								throw new ConfigurationException("Configuration shall be a singleton map: " + value, valueMarker);								
 							}
 						}
+						entryList.getMarkers().add(valueMarker);
 					}
 					return super.create(loader, entryList, base, progressMonitor, marker);			
 				} 
