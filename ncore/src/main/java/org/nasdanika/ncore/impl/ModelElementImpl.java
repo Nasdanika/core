@@ -41,6 +41,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUri <em>Uri</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getActionPrototype <em>Action Prototype</em>}</li>
  * </ul>
  *
  * @generated
@@ -202,6 +203,35 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public EObject getActionPrototype() {
+		return (EObject)eDynamicGet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EObject basicGetActionPrototype() {
+		return (EObject)eDynamicGet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, false, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setActionPrototype(EObject newActionPrototype) {
+		eDynamicSet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, newActionPrototype);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKER:
@@ -226,6 +256,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getDescription();
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return getUuid();
+			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
+				if (resolve) return getActionPrototype();
+				return basicGetActionPrototype();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -249,6 +282,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return;
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				setUuid((String)newValue);
+				return;
+			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
+				setActionPrototype((EObject)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,6 +310,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				setUuid(UUID_EDEFAULT);
 				return;
+			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
+				setActionPrototype((EObject)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -294,6 +333,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return UUID_EDEFAULT == null ? getUuid() != null : !UUID_EDEFAULT.equals(getUuid());
+			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
+				return basicGetActionPrototype() != null;
 		}
 		return super.eIsSet(featureID);
 	}

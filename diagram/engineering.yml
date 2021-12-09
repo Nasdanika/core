@@ -1,6 +1,6 @@
 engineering-module:
-  name: Diagram
-  path: diagram
+  name: Model
+  path: model
   dependencies:
     - engineering://nasdanika/modules/core/modules/ncore
     

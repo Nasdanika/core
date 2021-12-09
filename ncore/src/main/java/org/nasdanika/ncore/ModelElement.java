@@ -3,6 +3,7 @@
 package org.nasdanika.ncore;
 
 import java.lang.String;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 
 /**
@@ -17,6 +18,7 @@ import org.nasdanika.common.Adaptable;
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUri <em>Uri</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
@@ -98,5 +100,33 @@ public interface ModelElement extends Marked, Adaptable {
 	 * @generated
 	 */
 	void setUuid(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. 
+	 * If this reference is set and is Action then a copy of the action is created and returned.
+	 * Otherwise the reference value it is adapted to ActionProvider which is used to create an action. 
+	 * This allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Action Prototype</em>' reference.
+	 * @see #setActionPrototype(EObject)
+	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_ActionPrototype()
+	 * @model
+	 * @generated
+	 */
+	EObject getActionPrototype();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Action Prototype</em>' reference.
+	 * @see #getActionPrototype()
+	 * @generated
+	 */
+	void setActionPrototype(EObject value);
 
 } // ModelElement

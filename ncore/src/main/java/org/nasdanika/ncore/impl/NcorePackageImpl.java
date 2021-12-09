@@ -595,6 +595,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getModelElement_ActionPrototype() {
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNamedElement() {
 		return namedElementEClass;
 	}
@@ -858,6 +868,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__URI);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__UUID);
+		createEReference(modelElementEClass, MODEL_ELEMENT__ACTION_PROTOTYPE);
 
 		namedElementEClass = createEClass(NAMED_ELEMENT);
 		createEAttribute(namedElementEClass, NAMED_ELEMENT__NAME);
@@ -993,6 +1004,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getModelElement_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Uuid(), ecorePackage.getEString(), "uuid", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_ActionPrototype(), ecorePackage.getEObject(), null, "actionPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1293,6 +1305,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Description in HTML."
+		   });
+		addAnnotation
+		  (getModelElement_ActionPrototype(),
+		   source,
+		   new String[] {
+			   "documentation", "If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. \nIf this reference is set and is Action then a copy of the action is created and returned.\nOtherwise the reference value it is adapted to ActionProvider which is used to create an action. \nThis allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."
 		   });
 		addAnnotation
 		  (getNamedElement_Name(),

@@ -2,8 +2,9 @@ engineering-module:
   name: Flow
   path: flow
   dependencies:
-    - engineering://nasdanika/modules/core/modules/exec-gen
-    - engineering://nasdanika/modules/core/modules/diagram
+    - engineering://nasdanika/modules/core/modules/exec/modules/gen
+    - engineering://nasdanika/modules/core/modules/diagram/modules/model
+    - engineering://nasdanika/modules/core/modules/diagram/modules/gen
   issues:
     style-inheritance-from-templates:
       name: Artifact inheritance of representation properties from templates
@@ -57,5 +58,8 @@ engineering-module:
         The number of simulations to run shall configurable via flow attribute(s). Options - total number, absolute, relative number - computed from the number of elements, time bound - no more than, say, 10 seconds,
         combination of thereof, e.g. no more than 10 seconds, but at least 1000 iterations even if it takes more than 10 seconds.
         Create a feature explaining how it works and how to use it.       
+    in-browser-editing:
+      name: In-browsing editing feature
+      description: Collaboration, inner source. Create pull request. Related to Data Provenance.
        
     

@@ -1,10 +1,10 @@
 engineering-module:
-  name: Diagram Generation
-  path: diagram-gen
+  name: Generators
+  path: gen
   dependencies:
-    - engineering://nasdanika/modules/core/modules/diagram
+    - engineering://nasdanika/modules/core/modules/diagram/modules/model
     - engineering://nasdanika/modules/core/modules/mxgraph
-    - engineering://nasdanika/modules/core/modules/exec
+    - engineering://nasdanika/modules/core/modules/exec/modules/model
   issues:
     plant-uml-layout:
       name: Use PlantUML to layout

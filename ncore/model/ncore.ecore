@@ -185,6 +185,11 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="uuid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionPrototype" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. &#xA;If this reference is set and is Action then a copy of the action is created and returned.&#xA;Otherwise the reference value it is adapted to ActionProvider which is used to create an action. &#xA;This allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//ModelElement">
     <eAnnotations source="urn:org.nasdanika">

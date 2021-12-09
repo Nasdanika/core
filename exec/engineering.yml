@@ -1,6 +1,6 @@
 engineering-module:
-   name: Exec
-   path: exec
+   name: Model
+   path: model
    dependencies:
      - engineering://nasdanika/modules/core/modules/emf
      

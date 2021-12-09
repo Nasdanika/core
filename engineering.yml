@@ -1,26 +1,33 @@
 engineering-product:
-   name: Core
-   path: core
-   releases:
-     - path: "2021-12-0"
-       name: "2021.12.0"
-       start: 2021/12/01
-       end: 2021/12/05
-       increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
-       objectives:
-         test-objective:
-           name: Test Objective
-           key-results:
-             do-something:
-               name: Do something
-   modules:
-      - cli/engineering.yml
-      - common/engineering.yml
-      - diagram/engineering.yml
-      - diagram.gen/engineering.yml
-      - emf/engineering.yml
-      - exec/engineering.yml
-      - exec.gen/engineering.yml
-      - flow/engineering.yml
-      - mxgraph/engineering.yml
-      - ncore/engineering.yml
+  name: Core
+  path: core
+  releases:
+    "2021-12-2":
+      name: "2021.12.2"
+      start: 2021/12/06
+      end: 2021/12/13
+      increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
+  modules:
+     - cli/engineering.yml
+     - common/engineering.yml
+     - engineering-module:
+         path: diagram
+         name: Diagram
+         modules:
+           - diagram/engineering.yml
+           - diagram.gen/engineering.yml
+     - emf/engineering.yml
+     - engineering-module:
+         path: exec
+         name: Exec
+         modules:
+           - exec/engineering.yml
+           - exec.gen/engineering.yml
+     - flow/engineering.yml
+     - mxgraph/engineering.yml
+     - ncore/engineering.yml
+  issues:
+    merge-to-master:
+      name: Merge to master 
+    update-dependencies:
+      name: Update dependencies - end of 2021

@@ -155,12 +155,14 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		try {
 			EClass eReferenceType = effectiveReferenceType(ref);
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
-				// Can create proxy instead of loading object
+				// Can create proxy, if possible, instead of loading object
 				EObject proxy = EObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, marker);
-				if (marker != null) {
-					proxy.eAdapters().add(new MarkedAdapter(marker));
+				if (proxy != null) {
+					if ( marker != null) {
+						proxy.eAdapters().add(new MarkedAdapter(marker));
+					}
+					return (T) proxy;
 				}
-				return (T) proxy;
 			}
 			return (T) resolver.getResourceSet().getEObject(refURI, true);
 		} finally {

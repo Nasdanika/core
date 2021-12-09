@@ -303,13 +303,22 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__UUID = MARKED_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__ACTION_PROTOTYPE = MARKED_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 3;
+	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -355,6 +364,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int TEMPORAL__UUID = MODEL_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEMPORAL__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Instant</b></em>' attribute.
@@ -547,6 +565,15 @@ public interface NcorePackage extends EPackage {
 	int PERIOD__UUID = MODEL_ELEMENT__UUID;
 
 	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
 	 * The feature id for the '<em><b>Start</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -636,6 +663,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int NAMED_ELEMENT__UUID = MODEL_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1441,6 +1477,17 @@ public interface NcorePackage extends EPackage {
 	EAttribute getModelElement_Uuid();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Action Prototype</em>'.
+	 * @see org.nasdanika.ncore.ModelElement#getActionPrototype()
+	 * @see #getModelElement()
+	 * @generated
+	 */
+	EReference getModelElement_ActionPrototype();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.NamedElement <em>Named Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1966,6 +2013,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_ELEMENT__UUID = eINSTANCE.getModelElement_Uuid();
+
+		/**
+		 * The meta object literal for the '<em><b>Action Prototype</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MODEL_ELEMENT__ACTION_PROTOTYPE = eINSTANCE.getModelElement_ActionPrototype();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.NamedElementImpl <em>Named Element</em>}' class.
