@@ -803,7 +803,8 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		  (getStyle_Properties(),
 		   source,
 		   new String[] {
-			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty"
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty",
+			   "value-feature", "value"
 		   });
 		addAnnotation
 		  (diagramElementEClass,

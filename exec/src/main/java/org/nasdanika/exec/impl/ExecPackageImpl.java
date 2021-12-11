@@ -632,7 +632,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (getCall_Type(),
 		   source,
 		   new String[] {
-			   "load-key", "class",
+			   "feature-key", "class",
 			   "exclusive-with", "service property",
 			   "default-feature", "true"
 		   });

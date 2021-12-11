@@ -23,7 +23,8 @@ engineering-module:
         Info dialog in the UI showing Git info.
         Remotes, origin remote is a special case. Or take the first remote and use it as the property label.
         Analyze whether Marker is GitMarker at the time of injection to EObject. Another option is to handle it at even lower level - YAML/persistence.
-        Would need GitMarker interface and impl. class at that level as well. Optional behavior, true by default - may slow down loading, but should be worth it.          
+        Would need GitMarker interface and impl. class at that level as well. Optional behavior, true by default - may slow down loading, but should be worth it.     
+        Can be used for (remote) branch-specific publishing, e.g. <Base URL>origin/branches/master or <Base URL>origin/branches/tags/rel-1.0     
     action-prototype:
       name: Action prototype
       releases: engineering://nasdanika/modules/core/releases/2021-12-2

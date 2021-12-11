@@ -74,6 +74,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(resource);
 				if (result == null) result = caseMarked(resource);
 				if (result == null) result = caseAdaptable(resource);
+				if (result == null) result = caseIMarked(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -84,6 +85,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(container);
 				if (result == null) result = caseMarked(container);
 				if (result == null) result = caseAdaptable(container);
+				if (result == null) result = caseIMarked(container);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -94,6 +96,7 @@ public class ResourcesSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(file);
 				if (result == null) result = caseMarked(file);
 				if (result == null) result = caseAdaptable(file);
+				if (result == null) result = caseIMarked(file);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -143,6 +146,21 @@ public class ResourcesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFile(File object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIMarked(org.nasdanika.common.persistence.Marked object) {
 		return null;
 	}
 

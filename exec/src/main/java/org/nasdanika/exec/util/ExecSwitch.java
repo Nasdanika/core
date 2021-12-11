@@ -76,6 +76,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(block);
 				if (result == null) result = caseMarked(block);
 				if (result == null) result = caseAdaptable(block);
+				if (result == null) result = caseIMarked(block);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -85,6 +86,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(call);
 				if (result == null) result = caseMarked(call);
 				if (result == null) result = caseAdaptable(call);
+				if (result == null) result = caseIMarked(call);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -100,6 +102,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(configurator);
 				if (result == null) result = caseMarked(configurator);
 				if (result == null) result = caseAdaptable(configurator);
+				if (result == null) result = caseIMarked(configurator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -109,6 +112,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(eval);
 				if (result == null) result = caseMarked(eval);
 				if (result == null) result = caseAdaptable(eval);
+				if (result == null) result = caseIMarked(eval);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -118,6 +122,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(fail);
 				if (result == null) result = caseMarked(fail);
 				if (result == null) result = caseAdaptable(fail);
+				if (result == null) result = caseIMarked(fail);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -127,6 +132,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(list);
 				if (result == null) result = caseMarked(list);
 				if (result == null) result = caseAdaptable(list);
+				if (result == null) result = caseIMarked(list);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -136,6 +142,7 @@ public class ExecSwitch<T> extends Switch<T> {
 				if (result == null) result = caseModelElement(map);
 				if (result == null) result = caseMarked(map);
 				if (result == null) result = caseAdaptable(map);
+				if (result == null) result = caseIMarked(map);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -275,6 +282,21 @@ public class ExecSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMap(org.nasdanika.exec.Map object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IMarked</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIMarked(org.nasdanika.common.persistence.Marked object) {
 		return null;
 	}
 
