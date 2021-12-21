@@ -31,3 +31,12 @@ engineering-product:
       name: Merge to master 
     update-dependencies:
       name: Update dependencies - end of 2021
+    persistence-service:
+      name: Persistence Service
+      description: |+2
+        A service for storing state by single-page applications generated from YAML models
+        Likely a template/framework. Space (origin), reference/environment (branch, tag), containment path.
+        REST API, backed by container. Container is configurable - file system, NO-SQL, Git, relational, ...
+        MongoDB - JSON/Map entity container? Rating, analytics (page visits). SpringBoot, Waffle for windows authentication
+        For file/git containers extension means file, e.g. something.yml. Ability to CRUD on internal pieces, e.g. something.json/mything
+        Some kind of application-level auth - what an application can do, specified at generation time - JWT?

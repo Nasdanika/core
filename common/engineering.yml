@@ -1,3 +1,14 @@
 engineering-module:
   name: Common
   path: common  
+  issues:
+    nsdiagram-dialect:
+      name: Add support of nsdiagram dialect
+      description: |+2 
+        Diagram YAML in a fenced block - might be easier to author in some cases than, say, PlantUML.
+        As it will result in a circular dependency use a service or some other type of registration.
+        A more radical way is to drop the enum altogether and switch to services.
+    drawio-escaping:
+      name: Extract shape text from drawio XML for searching
+      description: MarkdownHelper.escapeDiagramSpec(). Parse using mxgraph api, need to add/verify support for decompression - both compressed and uncompressed diagrams shall be supported.
+      categories: engineering://nasdanika/issue-categories/good-first-issue     

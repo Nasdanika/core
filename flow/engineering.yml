@@ -61,5 +61,8 @@ engineering-module:
     in-browser-editing:
       name: In-browsing editing feature
       description: Collaboration, inner source. Create pull request. Related to Data Provenance.
+    critical-path:
+      name: Critical path
+      description: Computation. Probability/frequency/distribution. Visualization - arrow width, thick border.
        
     

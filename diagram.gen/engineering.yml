@@ -70,3 +70,6 @@ engineering-module:
     word-wrapping:
       name: Word wrapping
       description: If there are new lines - replace with space, set word wrapping to true, count lines and adjust width and heights according to the longes line and the number of lines.
+    gantt-representation:
+      name: Gantt representation
+      description: With support of events and relative durations. Transition durations.

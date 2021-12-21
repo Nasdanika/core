@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
+import org.nasdanika.common.DiagramGenerator.Dialect;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -149,36 +150,46 @@ public class MarkdownHelper {
 						URL resourceURL = new URL(getResourceBase(), bareSpec);
 						bareSpec = loadResource(resourceURL);
 					} catch (Exception e) {					
-						output.append("<div>Error loading resource " + bareSpec + ": " + e); 
+						output
+							.append(System.lineSeparator())
+							.append("```").append(System.lineSeparator())
+							.append("Error loading resource " + bareSpec + ": " + e) 
+							.append(System.lineSeparator()).append("```")
+							.append(System.lineSeparator());
+						bareSpec = null;
 					}
 				}
 				
-				String escapedBareSpec = StringEscapeUtils.escapeHtml4(bareSpec).trim();
-				
-				StringBuilder replacementBuilder = new StringBuilder();
-				replacementBuilder
-					.append(System.lineSeparator())
-					.append("<div> ").append(System.lineSeparator())
-					.append("    <div style='display:none;white-space:pre-wrap' title='Diagram definition for search'>").append(System.lineSeparator())
-					.append(escapedBareSpec).append(System.lineSeparator()) 
-					.append("    </div>").append(System.lineSeparator())
-					.append("</div> ").append(System.lineSeparator());
-				
-				try {
-					String token = nextToken();
-					replacementBuilder
-						.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
-						.append(System.lineSeparator());
+				if (bareSpec != null) {
+					String escapedBareSpec = escapeDiagramSpec(dialect, bareSpec);
 					
-					replacements.put(token, replacementBuilder.toString());
-					output
-						.append(System.lineSeparator())
-						.append(System.lineSeparator())
-						.append(token)
-						.append(System.lineSeparator())
-						.append(System.lineSeparator());
-				} catch (Exception e) {
-					output.append("Error during diagram rendering: " + e);
+					StringBuilder replacementBuilder = new StringBuilder();
+					if (!Util.isBlank(escapedBareSpec)) {
+						replacementBuilder
+							.append(System.lineSeparator())
+							.append("<div> ").append(System.lineSeparator())
+							.append("    <div style='display:none;white-space:pre-wrap' title='Diagram escaped spec for search'>").append(System.lineSeparator())
+							.append(escapedBareSpec).append(System.lineSeparator()) 
+							.append("    </div>").append(System.lineSeparator())
+							.append("</div> ").append(System.lineSeparator());
+					}
+					
+					try {
+						String token = nextToken();
+						replacementBuilder
+							.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
+							.append(System.lineSeparator());
+						
+						replacements.put(token, replacementBuilder.toString());
+						output
+							.append(System.lineSeparator())
+							.append(System.lineSeparator())
+							.append(token)
+							.append(System.lineSeparator())
+							.append(System.lineSeparator());
+					} catch (Exception e) {
+						output.append("Error during diagram rendering: " + e);
+					}
 				}
 				
 				i = startMatcher.end()+endMatcher.end();
@@ -186,6 +197,14 @@ public class MarkdownHelper {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+
+	protected String escapeDiagramSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
+		if (dialect == Dialect.DRAWIO) {
+			// TODO - Extract text from XML, return null for now.
+			return null;
+		}
+		return StringEscapeUtils.escapeHtml4(bareSpec).trim();
 	}
 	
 	protected ClassLoader getResourceClassLoader() {
