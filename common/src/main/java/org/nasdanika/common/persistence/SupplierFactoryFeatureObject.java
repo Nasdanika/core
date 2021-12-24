@@ -19,6 +19,7 @@ public abstract class SupplierFactoryFeatureObject<T> extends FeatureObject impl
 
 	@Override
 	public Supplier<T> create(Context context) throws Exception {
+		// TODO - handling of prototype here - prototype supplier factory, bi-supplier
 		MapCompoundSupplierFactory<Object, Object> featureMapFactory = new MapCompoundSupplierFactory<>("Feature map factory");
 		for (Feature<?> feature: features) {			
 			@SuppressWarnings("unchecked")

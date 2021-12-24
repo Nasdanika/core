@@ -55,14 +55,23 @@ engineering-module:
         For flows without explicitly provided durations compute durations from elements. For a low number of permutations use all permutations, for a high use something like
         Monte Carlo method. In both cases computed results can be grouped into "slices" with different weights. Number of computed durations is an attribute with default value, say 10 or 20.
         Slicing may use the same weight for slices with a large number of samples and make the number of samples equal in each slice. For the tails of distribution and outliers it would use lower weights.
-        The number of simulations to run shall configurable via flow attribute(s). Options - total number, absolute, relative number - computed from the number of elements, time bound - no more than, say, 10 seconds,
+        The number of simulations to run shall be configurable via flow attribute(s). Options - total number, absolute, relative number - computed from the number of elements, time bound - no more than, say, 10 seconds,
         combination of thereof, e.g. no more than 10 seconds, but at least 1000 iterations even if it takes more than 10 seconds.
-        Create a feature explaining how it works and how to use it.       
+        Create a feature explaining how it works and how to use it.
+        getDuration(double) method returning duration for a number between 0 and 1 - sum all weights, find an entry which the argument "falls in" and return it - running weight (sum) previous is lower, next is higher or there is no next (1).
+        For a single element simply return its duration.
+        Transition type - end-to-start (default), the other 3. Not applicable to calls - may have a diagnostic or throw an error if used on calls.
+        Consider adding support of Duration Observation - value, when, maybe description. Derive distribution from observations if no durations were specified. Consider using some weight scale based on how far in the past, i.e. recent observations
+        have more weight. Maybe a generic observation in Flow or Ncore model which may have individual named metrics - duration, sentiment (rating). Metrics may have individual comments. Observations may be captured in some 
+        system using, say, URI as a correlation id, and then be "injected" into the model during load. Then clear feature cache. Clear it on any mutation or have some dependency thing to know which mutations clear which cached feature - annotation, say "depends"?       
     in-browser-editing:
       name: In-browsing editing feature
       description: Collaboration, inner source. Create pull request. Related to Data Provenance.
     critical-path:
       name: Critical path
       description: Computation. Probability/frequency/distribution. Visualization - arrow width, thick border.
+    group-by:
+      name: Group-by
+      description: Support of grouping by not only participants, but, say, responsible.
        
     

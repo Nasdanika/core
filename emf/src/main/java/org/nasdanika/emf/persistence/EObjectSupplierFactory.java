@@ -50,7 +50,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EClass eClass, 
 			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
-		this.eClass = eClass;	
+		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
 		}		
@@ -235,7 +235,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
-				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass);
+				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass); // TODO - handling prototype
 				EObjectLoader.mark(ret, getMarker());
 				Marker marker = getMarker();
 				EObjectLoader.mark(ret, marker);
