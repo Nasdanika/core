@@ -13,6 +13,7 @@ import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceStringReader;
 
 public class DiagramGeneratorImpl implements DiagramGenerator {
+	
 	@Override
 	public String generateDiagram(String spec, Dialect dialect) throws IOException {
 		if (dialect == Dialect.DRAWIO) {

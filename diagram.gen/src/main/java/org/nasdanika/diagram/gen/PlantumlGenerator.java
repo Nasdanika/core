@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.Util;
@@ -197,10 +198,20 @@ public class PlantumlGenerator {
 		EList<DiagramElement> elements = diagramElement.getElements();
 		if (!elements.isEmpty()) {
 			ret.append(" {").append(System.lineSeparator());
+
 			
+			List<Connection> connections = new ArrayList<>();
 			for (DiagramElement element: elements) {
-				ret.append(generate(element, connectionsCollector, depth + 1));
+				ret.append(generate(element, connections, depth + 1)); 
 			}
+			
+			for (Connection c: connections) {
+				if (EcoreUtil.isAncestor(diagramElement, c.eContainer()) && EcoreUtil.isAncestor(diagramElement, c.getTarget())) {
+					ret.append(generate(c));
+				} else {				
+					connectionsCollector.add(c);
+				}
+			}			
 			
 			for (int i = 0; i < depth; ++i) {
 				ret.append("  ");
