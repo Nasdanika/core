@@ -80,6 +80,9 @@
     <genClasses ecoreClass="ncore.ecore#//Integer">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Integer/value"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Boolean">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Boolean/value"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="ncore.ecore#//Property">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Property/name"/>
     </genClasses>
@@ -87,5 +90,9 @@
     <genClasses ecoreClass="ncore.ecore#//IntegerProperty"/>
     <genClasses ecoreClass="ncore.ecore#//MapProperty"/>
     <genClasses ecoreClass="ncore.ecore#//ListProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//BooleanProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//EObjectProperty">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//EObjectProperty/value"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

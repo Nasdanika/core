@@ -103,6 +103,15 @@ public interface NcoreFactory extends EFactory {
 	Integer createInteger();
 
 	/**
+	 * Returns a new object of class '<em>Boolean</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Boolean</em>'.
+	 * @generated
+	 */
+	Boolean createBoolean();
+
+	/**
 	 * Returns a new object of class '<em>String Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -137,6 +146,24 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	ListProperty createListProperty();
+
+	/**
+	 * Returns a new object of class '<em>Boolean Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Boolean Property</em>'.
+	 * @generated
+	 */
+	BooleanProperty createBooleanProperty();
+
+	/**
+	 * Returns a new object of class '<em>EObject Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>EObject Property</em>'.
+	 * @generated
+	 */
+	EObjectProperty createEObjectProperty();
 
 	/**
 	 * Returns the package supported by this factory.

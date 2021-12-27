@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -130,6 +132,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
 			case NcorePackage.INTEGER:
 				return validateInteger((org.nasdanika.ncore.Integer)value, diagnostics, context);
+			case NcorePackage.BOOLEAN:
+				return validateBoolean((org.nasdanika.ncore.Boolean)value, diagnostics, context);
 			case NcorePackage.PROPERTY:
 				return validateProperty((Property)value, diagnostics, context);
 			case NcorePackage.STRING_PROPERTY:
@@ -140,6 +144,10 @@ public class NcoreValidator extends EObjectValidator {
 				return validateMapProperty((MapProperty)value, diagnostics, context);
 			case NcorePackage.LIST_PROPERTY:
 				return validateListProperty((ListProperty)value, diagnostics, context);
+			case NcorePackage.BOOLEAN_PROPERTY:
+				return validateBooleanProperty((BooleanProperty)value, diagnostics, context);
+			case NcorePackage.EOBJECT_PROPERTY:
+				return validateEObjectProperty((EObjectProperty)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -385,6 +393,15 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateBoolean(org.nasdanika.ncore.Boolean boolean_, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(boolean_, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateProperty(Property property, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(property, diagnostics, context);
 	}
@@ -423,6 +440,24 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateListProperty(ListProperty listProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(listProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBooleanProperty(BooleanProperty booleanProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(booleanProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateEObjectProperty(EObjectProperty eObjectProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(eObjectProperty, diagnostics, context);
 	}
 
 	/**

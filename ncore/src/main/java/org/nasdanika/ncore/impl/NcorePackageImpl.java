@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
+import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -144,6 +146,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass booleanEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass propertyEClass = null;
 
 	/**
@@ -173,6 +182,20 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass listPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass booleanPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass eObjectPropertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -725,6 +748,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getBoolean() {
+		return booleanEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBoolean_Value() {
+		return (EAttribute)booleanEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getProperty() {
 		return propertyEClass;
 	}
@@ -777,6 +820,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EClass getListProperty() {
 		return listPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getBooleanProperty() {
+		return booleanPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getEObjectProperty() {
+		return eObjectPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getEObjectProperty_Value() {
+		return (EReference)eObjectPropertyEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -888,6 +961,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		integerEClass = createEClass(INTEGER);
 		createEAttribute(integerEClass, INTEGER__VALUE);
 
+		booleanEClass = createEClass(BOOLEAN);
+		createEAttribute(booleanEClass, BOOLEAN__VALUE);
+
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
 
@@ -898,6 +974,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		mapPropertyEClass = createEClass(MAP_PROPERTY);
 
 		listPropertyEClass = createEClass(LIST_PROPERTY);
+
+		booleanPropertyEClass = createEClass(BOOLEAN_PROPERTY);
+
+		eObjectPropertyEClass = createEClass(EOBJECT_PROPERTY);
+		createEReference(eObjectPropertyEClass, EOBJECT_PROPERTY__VALUE);
 
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
@@ -948,6 +1029,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		mapPropertyEClass.getESuperTypes().add(this.getMap());
 		listPropertyEClass.getESuperTypes().add(this.getProperty());
 		listPropertyEClass.getESuperTypes().add(this.getList());
+		booleanPropertyEClass.getESuperTypes().add(this.getProperty());
+		booleanPropertyEClass.getESuperTypes().add(this.getBoolean());
+		eObjectPropertyEClass.getESuperTypes().add(this.getProperty());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1026,6 +1110,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(integerEClass, org.nasdanika.ncore.Integer.class, "Integer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getInteger_Value(), ecorePackage.getEInt(), "value", null, 0, 1, org.nasdanika.ncore.Integer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(booleanEClass, org.nasdanika.ncore.Boolean.class, "Boolean", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBoolean_Value(), ecorePackage.getEBoolean(), "value", null, 0, 1, org.nasdanika.ncore.Boolean.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1036,6 +1123,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(mapPropertyEClass, MapProperty.class, "MapProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(listPropertyEClass, ListProperty.class, "ListProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(booleanPropertyEClass, BooleanProperty.class, "BooleanProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(eObjectPropertyEClass, EObjectProperty.class, "EObjectProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEObjectProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, EObjectProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1166,6 +1258,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   });
 		addAnnotation
 		  (getInteger_Value(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (getBoolean_Value(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (getEObjectProperty_Value(),
 		   source,
 		   new String[] {
 			   "default-feature", "true"

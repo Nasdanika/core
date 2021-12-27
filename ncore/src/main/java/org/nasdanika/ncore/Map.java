@@ -2,8 +2,9 @@
  */
 package org.nasdanika.ncore;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.Iterator;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -35,5 +36,92 @@ public interface Map extends EObject {
 	 * @generated
 	 */
 	EList<Property> getValue();
+	
+	default Property get(java.lang.String key) {
+		if (key == null) {
+			return null;
+		}
+		for (Property property: getValue()) {
+			if (key.equals(property.getName())) {
+				return property;
+			}
+		}
+		
+		return null;
+	}
+	
+	default Property put(java.lang.String key, boolean value) {
+		BooleanProperty property = NcoreFactory.eINSTANCE.createBooleanProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, int value) {
+		IntegerProperty property = NcoreFactory.eINSTANCE.createIntegerProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, java.lang.String value) {
+		StringProperty property = NcoreFactory.eINSTANCE.createStringProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, EObject value) {
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			EObjectProperty property = NcoreFactory.eINSTANCE.createEObjectProperty();
+			property.setName(key);
+			property.setValue(value);
+			getValue().add(property);
+		}
+		return ret;
+	}
 
 } // Map

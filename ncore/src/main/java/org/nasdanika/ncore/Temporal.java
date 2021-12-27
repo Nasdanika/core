@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.Boolean;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;

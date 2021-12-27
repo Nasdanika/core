@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -181,6 +183,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.BOOLEAN: {
+				org.nasdanika.ncore.Boolean boolean_ = (org.nasdanika.ncore.Boolean)theEObject;
+				T1 result = caseBoolean(boolean_);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T1 result = caseProperty(property);
@@ -216,6 +224,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseListProperty(listProperty);
 				if (result == null) result = caseProperty(listProperty);
 				if (result == null) result = caseList(listProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.BOOLEAN_PROPERTY: {
+				BooleanProperty booleanProperty = (BooleanProperty)theEObject;
+				T1 result = caseBooleanProperty(booleanProperty);
+				if (result == null) result = caseProperty(booleanProperty);
+				if (result == null) result = caseBoolean(booleanProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.EOBJECT_PROPERTY: {
+				EObjectProperty eObjectProperty = (EObjectProperty)theEObject;
+				T1 result = caseEObjectProperty(eObjectProperty);
+				if (result == null) result = caseProperty(eObjectProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -434,6 +457,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Boolean</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Boolean</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseBoolean(org.nasdanika.ncore.Boolean object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -505,6 +543,36 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseListProperty(ListProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Boolean Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Boolean Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseBooleanProperty(BooleanProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>EObject Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>EObject Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseEObjectProperty(EObjectProperty object) {
 		return null;
 	}
 

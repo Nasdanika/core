@@ -13,6 +13,8 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -80,10 +82,13 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.LIST: return createList();
 			case NcorePackage.MAP: return createMap();
 			case NcorePackage.INTEGER: return createInteger();
+			case NcorePackage.BOOLEAN: return createBoolean();
 			case NcorePackage.STRING_PROPERTY: return createStringProperty();
 			case NcorePackage.INTEGER_PROPERTY: return createIntegerProperty();
 			case NcorePackage.MAP_PROPERTY: return createMapProperty();
 			case NcorePackage.LIST_PROPERTY: return createListProperty();
+			case NcorePackage.BOOLEAN_PROPERTY: return createBooleanProperty();
+			case NcorePackage.EOBJECT_PROPERTY: return createEObjectProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -228,6 +233,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
+	public org.nasdanika.ncore.Boolean createBoolean() {
+		BooleanImpl boolean_ = new BooleanImpl();
+		return boolean_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public StringProperty createStringProperty() {
 		StringPropertyImpl stringProperty = new StringPropertyImpl();
 		return stringProperty;
@@ -264,6 +280,28 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public ListProperty createListProperty() {
 		ListPropertyImpl listProperty = new ListPropertyImpl();
 		return listProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BooleanProperty createBooleanProperty() {
+		BooleanPropertyImpl booleanProperty = new BooleanPropertyImpl();
+		return booleanProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EObjectProperty createEObjectProperty() {
+		EObjectPropertyImpl eObjectProperty = new EObjectPropertyImpl();
+		return eObjectProperty;
 	}
 
 	/**

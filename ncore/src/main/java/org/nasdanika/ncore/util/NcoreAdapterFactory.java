@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -138,6 +140,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createIntegerAdapter();
 			}
 			@Override
+			public Adapter caseBoolean(org.nasdanika.ncore.Boolean object) {
+				return createBooleanAdapter();
+			}
+			@Override
 			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
 			}
@@ -156,6 +162,14 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseListProperty(ListProperty object) {
 				return createListPropertyAdapter();
+			}
+			@Override
+			public Adapter caseBooleanProperty(BooleanProperty object) {
+				return createBooleanPropertyAdapter();
+			}
+			@Override
+			public Adapter caseEObjectProperty(EObjectProperty object) {
+				return createEObjectPropertyAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -374,6 +388,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Boolean <em>Boolean</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Boolean
+	 * @generated
+	 */
+	public Adapter createBooleanAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -440,6 +468,34 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createListPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.BooleanProperty <em>Boolean Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.BooleanProperty
+	 * @generated
+	 */
+	public Adapter createBooleanPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.EObjectProperty <em>EObject Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.EObjectProperty
+	 * @generated
+	 */
+	public Adapter createEObjectPropertyAdapter() {
 		return null;
 	}
 

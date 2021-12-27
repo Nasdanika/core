@@ -35,5 +35,23 @@ public interface List extends EObject {
 	 * @generated
 	 */
 	EList<EObject> getValue();
+	
+	default void add(boolean value) {
+		org.nasdanika.ncore.Boolean valueObject = NcoreFactory.eINSTANCE.createBoolean();
+		valueObject.setValue(value);
+		getValue().add(valueObject);
+	}
+	
+	default void add(int value) {
+		org.nasdanika.ncore.Integer valueObject = NcoreFactory.eINSTANCE.createInteger();
+		valueObject.setValue(value);
+		getValue().add(valueObject);
+	}
+	
+	default void add(java.lang.String value) {
+		org.nasdanika.ncore.String valueObject = NcoreFactory.eINSTANCE.createString();
+		valueObject.setValue(value);
+		getValue().add(valueObject);
+	}	
 
 } // List

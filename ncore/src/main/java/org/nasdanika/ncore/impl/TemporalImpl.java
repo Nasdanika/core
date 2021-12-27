@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.Boolean;
 import java.lang.reflect.InvocationTargetException;
 
 import java.time.Duration;
