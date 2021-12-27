@@ -233,6 +233,25 @@ public class Util {
 		
 	};
 	
+	public static FunctionFactory<String,String> TRIM = context -> new Function<String,String>() {
+		
+		@Override
+		public double size() {
+			return 1;
+		}
+		
+		@Override
+		public String name() {
+			return "Trim";
+		}
+		
+		@Override
+		public String execute(String str, ProgressMonitor progressMonitor) throws Exception {
+			return str == null ? "" : str.trim();
+		}
+		
+	};
+	
 	public static FunctionFactory<String,String> INTERPOLATE_TO_STRING = context -> new Function<String,String>() {
 		
 		@Override
