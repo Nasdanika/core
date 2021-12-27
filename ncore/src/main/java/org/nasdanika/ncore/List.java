@@ -3,7 +3,6 @@
 package org.nasdanika.ncore;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -52,6 +51,6 @@ public interface List extends EObject {
 		org.nasdanika.ncore.String valueObject = NcoreFactory.eINSTANCE.createString();
 		valueObject.setValue(value);
 		getValue().add(valueObject);
-	}	
+	}
 
 } // List
