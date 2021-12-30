@@ -1,7 +1,8 @@
 engineering-module:
-   name: Model
-   path: model
-   dependencies:
-     - engineering://nasdanika/modules/core/modules/emf
+  name: Model
+  path: model
+  action-prototype: "../../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"    
+  dependencies:
+    - engineering://nasdanika/modules/core/modules/emf
      
    

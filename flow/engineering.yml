@@ -1,6 +1,7 @@
 engineering-module:
   name: Flow
   path: flow
+  action-prototype: "../../nasdanika.github.io/target/model-doc/actions/flow.genmodel.xml#/"    
   dependencies:
     - engineering://nasdanika/modules/core/modules/exec/modules/gen
     - engineering://nasdanika/modules/core/modules/diagram/modules/model
