@@ -2438,7 +2438,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-summary.md"
+			   "documentation-reference", "doc/package-summary.md",
+			   "diagram", "navigation"
 		   });
 		addAnnotation
 		  (packageElementEClass,

@@ -9,7 +9,7 @@ engineering-product:
       increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
   modules:
      - cli/engineering.yml
-     - common/engineering.yml
+     - common/engineering/engineering.yml
      - engineering-module:
          path: diagram
          name: Diagram
@@ -23,7 +23,7 @@ engineering-product:
          modules:
            - exec/engineering.yml
            - exec.gen/engineering.yml
-     - flow/engineering.yml
+     - flow/engineering/engineering.yml
      - mxgraph/engineering.yml
      - ncore/engineering.yml
   issues:

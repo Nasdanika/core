@@ -1,11 +1,53 @@
-engineering-module:
+engineering-product:
   name: Flow
   path: flow
-  action-prototype: "../../nasdanika.github.io/target/model-doc/actions/flow.genmodel.xml#/"    
+  action-prototype: "../../../nasdanika.github.io/target/model-doc/actions/flow.genmodel.xml#/"    
   dependencies:
     - engineering://nasdanika/modules/core/modules/exec/modules/gen
     - engineering://nasdanika/modules/core/modules/diagram/modules/model
     - engineering://nasdanika/modules/core/modules/diagram/modules/gen
+  documentation:
+    content-markdown:
+      style: true
+      source:
+        content-resource: flow.md
+  features: 
+    visualizations:
+      name: Visualizations
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/visualizations.md      
+    inheritance:
+      name: Inheritance
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/inheritance.md      
+    raci:
+      name: Responsibility Assignments (RACI)
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/raci.md      
+    data-provenance:
+      name: Data Provenance
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/data-provenance.md      
+    validation:
+      name: Validation
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/validation.md      
+            
   issues:
     style-inheritance-from-templates:
       name: Artifact inheritance of representation properties from templates

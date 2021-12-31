@@ -1,6 +1,14 @@
-engineering-module:
+engineering-product:
   name: Common
-  path: common  
+  path: common
+  features:
+    execution-model:
+      name: Execution Model
+      documentation:
+        content-markdown:
+          style: true
+          source:
+            content-resource: features/execution-model.md  
   issues:
     nsdiagram-dialect:
       name: Add support of nsdiagram dialect

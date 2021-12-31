@@ -16,7 +16,7 @@ package org.nasdanika.exec.content;
  * </ul>
  *
  * @see org.nasdanika.exec.content.ContentPackage#getMarkdown()
- * @model
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md'"
  * @generated
  */
 public interface Markdown extends Filter {

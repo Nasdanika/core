@@ -212,6 +212,9 @@
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="base" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Markdown" eSuperTypes="#//content/Filter">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="documentation-reference" value="doc/package-summary.md"/>
+      </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     </eClassifiers>
   </eSubpackages>

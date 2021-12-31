@@ -459,6 +459,12 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   new String[] {
 			   "default-feature", "true"
 		   });
+		addAnnotation
+		  (markdownEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/package-summary.md"
+		   });
 	}
 
 	/**
