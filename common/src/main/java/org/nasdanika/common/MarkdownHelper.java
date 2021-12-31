@@ -119,8 +119,7 @@ public class MarkdownHelper {
 					
 			return ret;		
 		}
-		
-		
+				
 		return markdown;
 	}
 

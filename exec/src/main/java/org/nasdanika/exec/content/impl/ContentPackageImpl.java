@@ -463,7 +463,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		  (markdownEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-summary.md"
+			   "documentation-reference", "doc/content/markdown.md"
 		   });
 	}
 
