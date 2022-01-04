@@ -1,6 +1,7 @@
 engineering-product:
   name: Common
   path: common
+  action-prototype: "../../javadoc-action-prototype.xml#/"
   features:
     execution-model:
       name: Execution Model

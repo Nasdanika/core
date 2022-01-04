@@ -1,6 +1,7 @@
 engineering-module:
   name: CLI
   path: cli
+  action-prototype: "../javadoc-action-prototype.xml#/"
   dependencies:
     - engineering://nasdanika/modules/core/modules/common
     

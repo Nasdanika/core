@@ -1,6 +1,7 @@
 engineering-module:
   name: Generators
   path: gen
+  action-prototype: "../javadoc-action-prototype.xml#/"
   dependencies:
     - engineering://nasdanika/modules/core/modules/diagram/modules/model
     - engineering://nasdanika/modules/core/modules/mxgraph

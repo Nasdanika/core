@@ -1,6 +1,7 @@
 engineering-module:
   name: Generation Adapters
   path: gen
+  action-prototype: "../javadoc-action-prototype.xml#/"
   dependencies:
     - engineering://nasdanika/modules/core/modules/exec
   issues:

@@ -4,7 +4,7 @@
 	  <parent>
 	    <artifactId>parent</artifactId>
 	    <groupId>org.nasdanika.core</groupId>
-	    <version>2021.12.0</version>
+	    <version>2022.1.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
 	<artifactId>exec-legacy</artifactId>

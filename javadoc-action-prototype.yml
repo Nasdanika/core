@@ -1,0 +1,7 @@
+app-action:
+  navigation:
+    - app-action:
+        text: Javadoc
+        icon: fab fa-java
+        location: apidocs/index.html
+          
