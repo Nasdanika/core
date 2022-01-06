@@ -11,8 +11,7 @@ import org.nasdanika.ncore.ModelElement;
 public class NcoreResourceSet extends ResourceSetImpl {
 
 	@Override
-	public EObject getEObject(URI uri, boolean loadOnDemand) {
-		
+	public EObject getEObject(URI uri, boolean loadOnDemand) {		
 		TreeIterator<Notifier> cit = getAllContents();
 		while (cit.hasNext()) {
 			Notifier next = cit.next();
