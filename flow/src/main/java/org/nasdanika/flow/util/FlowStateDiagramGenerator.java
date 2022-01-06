@@ -53,7 +53,7 @@ public class FlowStateDiagramGenerator {
 		// Collecting all elements to be included
 		Map<FlowElement<?>,Integer> semanticElements = new HashMap<>();
 		for (FlowElement<?> flowElement: flowElements) {
-			collectRelatedElements(flowElement, semanticElements, diagram.getContext());
+			collectRelatedElements(flowElement, semanticElements, diagram.getContext(), Direction.BOTH);
 		}
 		
 		// Selecting top-level elements
@@ -72,8 +72,17 @@ public class FlowStateDiagramGenerator {
 			wire(se, semanticMap);
 		}
 	}
+	
+	private enum Direction { IN, OUT, BOTH }
 
-	private void collectRelatedElements(FlowElement<?> semanticElement, Map<FlowElement<?>,Integer> accumulator, int depth) { 
+	/**
+	 * Collects related elements
+	 * @param semanticElement Semantic element
+	 * @param accumulator Accumulator of related elements
+	 * @param depth Collection depth. 
+	 * @param in If true, collect in the direction of related inputs/invocations, otherwise in the direction of outputs/calls.
+	 */
+	private void collectRelatedElements(FlowElement<?> semanticElement, Map<FlowElement<?>,Integer> accumulator, int depth, Direction direction) { 
 		if (semanticElement == null) {
 			return;
 		}
@@ -84,30 +93,38 @@ public class FlowStateDiagramGenerator {
 		accumulator.put(semanticElement, depth);
 		
 		if (depth != 0) {
-			for (Transition input: semanticElement.getInputs()) {
-				FlowElement<?> source = (FlowElement<?>) input.eContainer().eContainer(); 
-				collectRelatedElements(source, accumulator, source instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
+			if (direction == Direction.BOTH || direction == Direction.IN) {
+				for (Transition input: semanticElement.getInputs()) {
+					FlowElement<?> source = (FlowElement<?>) input.eContainer().eContainer(); 
+					boolean isPseudoSource = source instanceof PseudoState;
+					collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH);
+				}
+	
+				for (Call invocation: semanticElement.getInvocations()) {
+					FlowElement<?> source = (FlowElement<?>) invocation.eContainer().eContainer(); 
+					boolean isPseudoSource = source instanceof PseudoState;
+					collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH);
+				}
 			}
-
-			for (Transition output: semanticElement.getOutputs().values()) {
-				FlowElement<?> target = output.getTarget(); 
-				collectRelatedElements(target, accumulator, target instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
-			}
-
-			for (Call invocation: semanticElement.getInvocations()) {
-				FlowElement<?> source = (FlowElement<?>) invocation.eContainer().eContainer(); 
-				collectRelatedElements(source, accumulator, source instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
-			}
-
-			for (Call call: semanticElement.getCalls().values()) {
-				FlowElement<?> target = call.getTarget(); 
-				collectRelatedElements(target, accumulator, target instanceof PseudoState || semanticElement instanceof PseudoState ? depth : depth - 1);
+			
+			if (direction == Direction.BOTH || direction == Direction.OUT) {
+				for (Transition output: semanticElement.getOutputs().values()) {
+					FlowElement<?> target = output.getTarget(); 
+					boolean isPseudoTarget = target instanceof PseudoState;
+					collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH);
+				}
+	
+				for (Call call: semanticElement.getCalls().values()) {
+					FlowElement<?> target = call.getTarget(); 
+					boolean isPseudoTarget = target instanceof PseudoState;
+					collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH);
+				}
 			}
 		}
 		
 		if (semanticElement instanceof Flow) {
 			for (FlowElement<?> subElement: ((Flow) semanticElement).getElements().values()) {
-				collectRelatedElements(subElement, accumulator, depth);
+				collectRelatedElements(subElement, accumulator, depth, Direction.BOTH);
 			}
 		}
 	}
