@@ -401,8 +401,8 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		initEReference(getFilter_Source(), ecorePackage.getEObject(), null, "source", null, 1, 1, Filter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(interpolatorEClass, Interpolator.class, "Interpolator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getInterpolator_ProcessIncludes(), ecorePackage.getEBoolean(), "processIncludes", null, 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getInterpolator_Base(), ecorePackage.getEString(), "base", null, 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInterpolator_ProcessIncludes(), ecorePackage.getEBoolean(), "processIncludes", "true", 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getInterpolator_Base(), ecorePackage.getEString(), "base", "", 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(markdownEClass, Markdown.class, "Markdown", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMarkdown_Style(), ecorePackage.getEBoolean(), "style", null, 0, 1, Markdown.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -460,6 +460,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 			   "default-feature", "true"
 		   });
 		addAnnotation
+		  (getInterpolator_ProcessIncludes(),
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/content/interpolator--process-includes.md"
+		   });
+		addAnnotation
+		  (getInterpolator_Base(),
+		   source,
+		   new String[] {
+			   "resolve-uri", "true"
+		   });
+		addAnnotation
 		  (markdownEClass,
 		   source,
 		   new String[] {
@@ -498,6 +510,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		   source,
 		   new String[] {
 			   "documentation", "If ``true`` (default), content is interpolated."
+		   });
+		addAnnotation
+		  (interpolatorEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Converts input stream to String using context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using context charset."
+		   });
+		addAnnotation
+		  (getInterpolator_Base(),
+		   source,
+		   new String[] {
+			   "documentation", "Optional base URL for resolving include and image URL\'s. The base itself is resolved relative to the specification resource URL."
 		   });
 	}
 

@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 
+import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
@@ -15,6 +16,7 @@ import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.ncore.Marker;
 
 public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAdapter<Interpolator> {
 
@@ -24,7 +26,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 
 	@SuppressWarnings("unchecked")
 	private <T> T computeEmbeddedImage(Context context, String key, String path, Class<T> type) {
-		if (type == null || type == String.class) {
+		if (type == null || type.isAssignableFrom(String.class)) {
 			int idx = path.indexOf("/");
 			if (idx == -1) {
 				return null;
@@ -49,8 +51,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 	
 	@SuppressWarnings("unchecked")
 	private <T> T computeInclude(Context context, String key, String path, Class<T> type) {
-		if (type == null || type == String.class) {
-
+		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
 				URL includeURL = new URL(getBase(), path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
@@ -62,16 +63,35 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 		}
 		return null;
 	}
-
+	
 	protected URL getBase() throws MalformedURLException {
-		URL base = Util.isBlank(getTarget().getBase()) ? null : new URL(getTarget().getBase());
-		return base;
+		URL markerBase = null;
+		Marker marker = getTarget().getMarker();
+		if (marker != null && !Util.isBlank(marker.getLocation())) {
+			markerBase = new URL(marker.getLocation());
+		}
+
+		URL resourceBase = null;
+		Resource resource = getTarget().eResource();
+		if (resource != null) {
+			resourceBase = new URL(resource.getURI().toString());
+		}
+		
+		String targetBase = getTarget().getBase();
+		if (Util.isBlank(targetBase)) {
+			return markerBase == null ? resourceBase : markerBase;
+		}
+		
+		if (markerBase != null && targetBase.startsWith("./")) {
+			return new URL(markerBase, targetBase);
+		}
+		
+		return new URL(resourceBase, targetBase);
 	}	
 	
 	@SuppressWarnings("unchecked")
 	private <T> T computeIncludeMarkdown(Context context, String key, String path, Class<T> type) {
-		if (type == null || type == String.class) {
-
+		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
 				URL includeURL = new URL(getBase(), path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);

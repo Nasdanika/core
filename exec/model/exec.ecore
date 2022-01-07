@@ -208,8 +208,24 @@
           eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Interpolator" eSuperTypes="#//content/Filter">
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="processIncludes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="base" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Converts input stream to String using context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using context charset."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="processIncludes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true">
+        <eAnnotations source="urn:org.nasdanika">
+          <details key="documentation-reference" value="doc/content/interpolator--process-includes.md"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="base" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Optional base URL for resolving include and image URL's. &#xA;If the base is blank then marker location is used as the base, if marker is present and location is not null. &#xA;Otherwise, resource URL is used as the base. &#xA;Marker location is the URL of a YAML resource from which interpolator specification was loaded. &#xA;It may be different from the resource URL if a model was loaded from YAML and then saved to XML.&#xA;&#xA;If the base is not blank then it is resolved relative to the marker location if it starts with ``./`` and marker location is not null or the resource base otherwise.&#xA;"/>
+        </eAnnotations>
+        <eAnnotations source="urn:org.nasdanika">
+          <details key="resolve-uri" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Markdown" eSuperTypes="#//content/Filter">
       <eAnnotations source="urn:org.nasdanika">

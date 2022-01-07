@@ -2382,7 +2382,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		g1 = createEGenericType(this.getActivity());
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
-		initEReference(getService_Target(), g1, this.getActivity_Services(), "target", null, 1, 1, Service.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getService_Target(), g1, this.getActivity_Services(), "target", null, 0, 1, Service.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getService_TargetKey(), ecorePackage.getEString(), "targetKey", null, 1, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(flowEClass, Flow.class, "Flow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2438,7 +2438,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-summary.md",
 			   "diagram", "navigation"
 		   });
 		addAnnotation

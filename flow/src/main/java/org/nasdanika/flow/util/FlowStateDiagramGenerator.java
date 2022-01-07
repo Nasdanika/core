@@ -370,7 +370,7 @@ public class FlowStateDiagramGenerator {
 					}
 					connections.add(connection);
 					connection.setTarget(connectionTarget);
-					connection.setType("-left${style}->");
+					connection.setType("-right${style}->");
 					connection.setColor("black");
 				}
 			}

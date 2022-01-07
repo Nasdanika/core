@@ -30,7 +30,7 @@ public class InterpolatorImpl extends FilterImpl implements Interpolator {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean PROCESS_INCLUDES_EDEFAULT = false;
+	protected static final boolean PROCESS_INCLUDES_EDEFAULT = true;
 	/**
 	 * The default value of the '{@link #getBase() <em>Base</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -39,7 +39,7 @@ public class InterpolatorImpl extends FilterImpl implements Interpolator {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String BASE_EDEFAULT = null;
+	protected static final String BASE_EDEFAULT = "";
 
 	/**
 	 * <!-- begin-user-doc -->

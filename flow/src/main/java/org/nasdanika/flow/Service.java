@@ -32,7 +32,7 @@ public interface Service extends FlowElement<Service> {
 	 * @return the value of the '<em>Target</em>' reference.
 	 * @see org.nasdanika.flow.FlowPackage#getService_Target()
 	 * @see org.nasdanika.flow.Activity#getServices
-	 * @model opposite="services" required="true" transient="true" changeable="false" derived="true"
+	 * @model opposite="services" transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	Activity<?> getTarget();

@@ -23,7 +23,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.flow.FlowFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md' diagram='navigation'"
+ *        annotation="urn:org.nasdanika diagram='navigation'"
  * @generated
  */
 public interface FlowPackage extends EPackage {
