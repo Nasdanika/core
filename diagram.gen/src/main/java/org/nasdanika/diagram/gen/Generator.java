@@ -9,8 +9,10 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
+import org.nasdanika.common.Util;
 import org.nasdanika.common.DiagramGenerator.Dialect;
 import org.nasdanika.diagram.Diagram;
+import org.nasdanika.ncore.Marker;
 
 /**
  * Generates diagram HTML delegating to different generators based on diagram type.
@@ -35,14 +37,27 @@ public class Generator {
 		}
 		
 		if (type.startsWith(DRAWIO_SCHEMA)) {
-			URI uri = URI.createURI(type.substring(DRAWIO_SCHEMA.length()));
-			Resource dResource = diagram.eResource();
-			if (dResource != null) {
-				URI rURI = dResource.getURI();
-				if (rURI != null) {
-					uri = uri.resolve(rURI);
-				}
+			String diagramURI = type.substring(DRAWIO_SCHEMA.length());
+			URI uri = URI.createURI(diagramURI);
+			
+			URI markerBase = null;
+			Marker marker = diagram.getMarker();
+			if (marker != null && !Util.isBlank(marker.getLocation())) {
+				markerBase = URI.createURI(marker.getLocation());
 			}
+
+			URI resourceBase = null;
+			Resource resource = diagram.eResource();
+			if (resource != null) {
+				resourceBase = resource.getURI();
+			}
+			
+			if (markerBase != null && diagramURI.startsWith("./")) {
+				uri = uri.resolve(markerBase);
+			} else if (resourceBase != null) {
+				uri = uri.resolve(resourceBase);
+			}
+			
 			if (uri.isFile()) {
 				String fileStr = uri.toFileString();
 				File diagramFile = new File(fileStr);
