@@ -18,7 +18,6 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -373,5 +372,18 @@ public class TestCommon {
 //		URI appendSegment = base.appendSegment("elements").appendSegment("").appendSegment("purum");
 //		System.out.println(appendSegment);
 //	}
+	
+	@Test
+	public void testJavadocResolver() throws Exception {
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+
+		Function<String, String> java8Resolver = Util.createJavadocResolver(Collections.singleton(new URL("https://docs.oracle.com/javase/8/docs/api/")), progressMonitor);
+		String java8MapLink = java8Resolver.apply("java.util.Map");
+		assertEquals("<a href='https://docs.oracle.com/javase/8/docs/api/java/util/Map.html'>java.util.Map</a>", java8MapLink);
+
+		Function<String, String> java11Resolver = Util.createJavadocResolver(Collections.singleton(new URL("https://docs.oracle.com/en/java/javase/11/docs/api/")), progressMonitor);
+		String java11MapLink = java11Resolver.apply("java.util.Map");
+		assertEquals("<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html'>java.util.Map</a>", java11MapLink);		
+	}
 	
 }

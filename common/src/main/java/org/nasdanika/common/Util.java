@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,7 @@ import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.resources.BinaryEntityContainer;
 
 public class Util {
-	
+
 	public static final Pattern SENTENCE_PATTERN = Pattern.compile(".+?[\\.?!]+\\s+");		
 		
 	public static final BiFunction<String, Object, InputStream> OBJECT_TO_INPUT_STREAM_ENCODER = (path, contents) -> {
@@ -1300,6 +1302,135 @@ public class Util {
 	
 	private static double quadraticRoot(double a, double b, double c) { 
 		return (-b + Math.sqrt(b*b - 4 * a * c)) / (2 * a);
+	}
+	
+	private static final String PACKAGE_SUMMARY_HTML = "package-summary.html";
+	
+	/**
+	 * Java 8 uses package-list, Java 11 uses element-list.
+	 */
+	private static final String[] PACKAGE_LIST_LOCATIONS = { "package-list", "element-list" };	
+	
+	private static final String MODULE_PREFIX = "module:";
+	
+	/**
+	 * @param urls Mapping of online URL's (to build links) to offline URL's (to load package lists from).  
+	 * @return Function which given a fully qualified class name returns an anchor linking to Javadoc page for the class. The argument may contain a hash symbol (fragment). 
+	 * Everything after the hash gets transfered to the computed URL providing ability to address fields and methods.
+	 * 
+	 */
+	public static java.util.function.Function<String, String> createJavadocResolver(Map<URL,URL> urls, ProgressMonitor progressMonitor) {
+		// package -> Base URL.
+		Map<String,String> unsortedPackageMap = new HashMap<>();		
+		progressMonitor.setWorkRemaining(urls.size());
+		Z: for (Map.Entry<URL, URL> urlEntry: urls.entrySet()) {
+			for (String packageListLocation: PACKAGE_LIST_LOCATIONS) {
+				try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(urlEntry.getValue(), packageListLocation).openStream()))) {
+					String module = null;
+					String line;
+					while ((line = br.readLine()) != null) {
+						if (line.startsWith(MODULE_PREFIX)) {
+							module = line.substring(MODULE_PREFIX.length()); 
+						} else {
+							String packageLocation = urlEntry.getKey().toString();
+							if (module != null) {
+								packageLocation += module + "/";
+							}
+							unsortedPackageMap.put(line.trim(), packageLocation);
+						}
+					}
+					progressMonitor.worked(Status.SUCCESS, 1, "Loaded package list from " + urlEntry.getValue() + " for " + urlEntry.getKey());
+					continue Z;
+				} catch (Exception e) {
+					progressMonitor.worked(Status.ERROR, 1, "Could not download package list from " + urlEntry.getValue() + " - " + e);
+				}
+			}
+		}
+		
+		Map<String,String> sortedPackageMap = new LinkedHashMap<>();
+		unsortedPackageMap.keySet().stream().sorted((k1,k2) -> k2.length() - k1.length()).forEach(k -> sortedPackageMap.put(k, unsortedPackageMap.get(k)));
+		
+		return new java.util.function.Function<String, String>() {
+			
+			private String getRef(String spec) {
+				int hashIdx = spec.indexOf("#");
+				if (hashIdx != -1) {
+					spec = spec.substring(0, hashIdx);
+				}
+				for (Entry<String, String> location: sortedPackageMap.entrySet()) {
+					String key = location.getKey();
+					String value = location.getValue();
+					if (key.equals(spec)) { // Package
+						return value + spec.replace('.', '/') + "/" + PACKAGE_SUMMARY_HTML;
+					}
+					
+					int idx = spec.lastIndexOf('.');
+					if (idx != -1 && spec.substring(0, idx).equals(key)) { // Class
+						return value + spec.replace('.', '/').replace('$', '.') + ".html";				
+					}
+				}
+				return null;				
+			}
+
+			@Override
+			public String apply(String key) {
+				if (key == null) {
+					return key;
+				}
+				
+				int spaceIdx = key.indexOf(' ');
+				String spec = spaceIdx == -1 ? key : key.substring(0, spaceIdx);
+				String text = spaceIdx == -1 ? null : key.substring(spaceIdx + 1);
+				
+				String href = getRef(spec);
+				if (href == null) {
+					return spec;
+				}
+								
+				int hashIdx = spec.indexOf("#");
+				if (hashIdx != -1) {
+					String fragment = spec.substring(hashIdx+1);
+					int firstParenthesisIdx = fragment.indexOf("(");
+					if (firstParenthesisIdx > 0 && fragment.endsWith(")")) {
+						// Convert (type[,type]) to -type-type-						
+						StringBuilder fragmentBuilder = new StringBuilder(fragment.substring(0, firstParenthesisIdx)).append("-");
+						String[] pTypes = fragment.substring(firstParenthesisIdx+1, fragment.length()-1).split(",");
+						for (String pType: pTypes) {
+							pType = pType.trim();
+							int bIdx = pType.indexOf("[]");
+							if (bIdx == -1) {
+								fragmentBuilder.append(pType);
+							} else {
+								fragmentBuilder.append(pType.substring(0, bIdx));
+								for (int bc = bIdx; bc < pType.length(); bc+=2) {
+									fragmentBuilder.append(":A");
+								}
+							}
+							fragmentBuilder.append("-");
+						}
+						fragment = fragmentBuilder.toString();
+					} 
+					href += "#" + fragment;
+				}
+				return new StringBuilder("<a href='")
+						.append(href)
+						.append("'>")
+						.append(Util.isBlank(text) ? spec.replace('#', '.').replace('$', '.') : text)
+						.append("</a>").toString();
+			}
+			
+		};
+		
+	}
+	
+	/**
+	 * @param urls List of URL's.  
+	 * @return Function which given a fully qualified class name returns a URL of Javadoc page for the class.
+	 */
+	public static java.util.function.Function<String, String> createJavadocResolver(Collection<URL> urls, ProgressMonitor progressMonitor) {
+		Map<URL,URL> urlMap = new HashMap<>();
+		urls.forEach(url -> urlMap.put(url, url));
+		return createJavadocResolver(urlMap, progressMonitor);
 	}
 	
 }

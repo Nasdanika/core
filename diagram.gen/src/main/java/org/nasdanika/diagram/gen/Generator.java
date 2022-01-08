@@ -71,8 +71,7 @@ public class Generator {
 				}
 			}						
 			
-			URL url = new URL(uri.toString());
-			
+			URL url = new URL(uri.toString());			
 			return generateDrawioHtml(url);
 		}
 		
