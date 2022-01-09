@@ -521,7 +521,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		  (getInterpolator_Base(),
 		   source,
 		   new String[] {
-			   "documentation", "Optional base URL for resolving include and image URL\'s. The base itself is resolved relative to the specification resource URL."
+			   "documentation", "Optional base URL for resolving include and image URL\'s. \nIf the base is blank then marker location is used as the base, if marker is present and location is not null. \nOtherwise, resource URL is used as the base. \nMarker location is the URL of a YAML resource from which interpolator specification was loaded. \nIt may be different from the resource URL if a model was loaded from YAML and then saved to XML.\n\nIf the base is not blank then it is resolved relative to the marker location if it starts with ``./`` and marker location is not null or the resource base otherwise.\n"
 		   });
 	}
 

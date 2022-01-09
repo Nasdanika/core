@@ -56,7 +56,14 @@ public interface Interpolator extends Filter {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Optional base URL for resolving include and image URL's. The base itself is resolved relative to the specification resource URL.
+	 * Optional base URL for resolving include and image URL's. 
+	 * If the base is blank then marker location is used as the base, if marker is present and location is not null. 
+	 * Otherwise, resource URL is used as the base. 
+	 * Marker location is the URL of a YAML resource from which interpolator specification was loaded. 
+	 * It may be different from the resource URL if a model was loaded from YAML and then saved to XML.
+	 * 
+	 * If the base is not blank then it is resolved relative to the marker location if it starts with ``./`` and marker location is not null or the resource base otherwise.
+	 * 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Base</em>' attribute.
 	 * @see #setBase(String)
