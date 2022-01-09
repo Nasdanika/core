@@ -380,7 +380,7 @@ public class TestCommon {
 
 		Function<String, String> java8Resolver = Util.createJavadocResolver(Collections.singleton(new URL("https://docs.oracle.com/javase/8/docs/api/")), progressMonitor);
 		String java8MapLink = java8Resolver.apply("java.util.Map");
-		assertEquals("<a href='https://docs.oracle.com/javase/8/docs/api/java/util/Map.html'>java.util.Map</a>", java8MapLink);
+		assertEquals("<a href='https://docs.oracle.com/javase/8/docs/api/index.html?java/util/Map.html'>java.util.Map</a>", java8MapLink);
 
 		Function<String, String> java11Resolver = Util.createJavadocResolver(Collections.singleton(new URL("https://docs.oracle.com/en/java/javase/11/docs/api/")), progressMonitor);
 		String java11MapLink = java11Resolver.apply("java.util.Map");
@@ -388,7 +388,7 @@ public class TestCommon {
 		
 		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		String contextLink = nasdanikaResolver.apply("org.nasdanika.common.Context");
-		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
+		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
 	}
 	
 	@Test
@@ -398,7 +398,7 @@ public class TestCommon {
 		
 		MutableContext context = Context.EMPTY_CONTEXT.fork();
 		context.put("javadoc", Util.createJavadocPropertyComputer(nasdanikaResolver));
-		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
+		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
 		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));		
 	}
 	

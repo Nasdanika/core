@@ -1334,10 +1334,7 @@ public class Util {
 						if (line.startsWith(MODULE_PREFIX)) {
 							module = line.substring(MODULE_PREFIX.length()); 
 						} else {
-							String packageLocation = urlEntry.getKey().toString();
-							if (module != null) {
-								packageLocation += module + "/";
-							}
+							String packageLocation = urlEntry.getKey().toString() + (module == null ? "index.html?" : module + "/");
 							unsortedPackageMap.put(line.trim(), packageLocation);
 						}
 					}
@@ -1368,7 +1365,7 @@ public class Util {
 					
 					int idx = spec.lastIndexOf('.');
 					if (idx != -1 && spec.substring(0, idx).equals(key)) { // Class
-						return value + "index.html?" + spec.replace('.', '/').replace('$', '.') + ".html";				
+						return value + spec.replace('.', '/').replace('$', '.') + ".html";				
 					}
 				}
 				return null;				

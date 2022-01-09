@@ -2,10 +2,10 @@ This page explains the Nasdanika execution model, which is used by a number of N
 
 The execution process consists of the following steps:
 
-* Create a participant factory (``org.nasdanika.common.ExecutionParticipantFactory``. Factories can be composed as explained in the subsequent sections.
-* Create an instance of ``org.nasdanika.common.Context``.
+* Create a participant factory (``${javadoc/org.nasdanika.common.ExecutionParticipantFactory}``). Factories can be composed as explained in the subsequent sections.
+* Create an instance of ``${javadoc/org.nasdanika.common.Context}``.
 * Pass the context to the factory ``create()`` method to create a participant.
-* Create an instance of ``org.nasdanika.common.ProgressMonitor``.
+* Create an instance of ``${javadoc/org.nasdanika.common.ProgressMonitor}``.
 * Walk the participant through the lifecycle methods. All lifecycle methods except ``execute()`` have the same signature for all paricipant types. 
     * ``diagnose()`` - performs diagnostic of the participant configuration and returns ``org.nasdanika.common.Diagnostic``. If the diagnostic status is ``ERROR`` further execution is aborted. Diagnose may prepare the participant for further execution by initializing internal structures, e.g. resolving URL's. However, this method shall not perform any modifications in resources which might have to be rolled back, e.g. it shall not create or delete files or database records. The default implementation returns status ``SUCCESS``.
     * ``execute()`` - Executes participant's logic. May modify resources, e.g. write to files, create database records. Different participant types have different signatures of this method. There is no default implementation for this method.
@@ -15,14 +15,14 @@ The execution process consists of the following steps:
     
 ### Execution participant types
 
-* ``org.nasdanika.common.Supplier<T>`` - ``T execute(ProgressMonitor)`` - returns value.      
-* ``org.nasdanika.common.Function<T,R>`` - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
-* ``org.nasdanika.common.Consumer<T>`` - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
-* ``org.nasdanika.common.Command`` - ``void execute(ProgressMonitor)``      
+* ``${javadoc/org.nasdanika.common.Supplier<T>}`` - ``T execute(ProgressMonitor)`` - returns value.      
+* ``${javadoc/org.nasdanika.common.Function<T,R>}`` - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
+* ``${javadoc/org.nasdanika.common.Consumer<T>}`` - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
+* ``${javadoc/org.nasdanika.common.Command}`` - ``void execute(ProgressMonitor)``      
 
 ### Composition
 
-Execution participants can be composed using subclasses of ``org.nasdanika.common.CompoundExecutionParticipant``.
+Execution participants can be composed using subclasses of ``${javadoc/org.nasdanika.common.CompoundExecutionParticipant}``.
 Result producing participants - suppliers and functions - can be composed as lists or maps.
 Consumers can be composed as list and maps. Commands are always composed as lists. 
 
@@ -46,16 +46,17 @@ For consumers ``asFunction`` creates a pass-through function which executes the 
 
 ### Contextification
 
-Contextification is a form of chaining of execution participant factories where the first factory is a SupplierFactory<Context>. Context returned by the first factory's supplier is passed to the execution participant created by the second factory. 
+Contextification is a form of chaining of execution participant factories where the first factory is a ``SupplierFactory<Context>``.
+Context returned by the first factory's supplier is passed to the execution participant created by the second factory. 
 Contextification is done using ``contextify()`` method of execution participant factories.
 
 ### Bridging to java.util.function
 
-Execution participants have static ``fromXXX`` methods for constructing from objects implementing ``java.util.function`` interfaces, e.g. ${javadoc/java.util.function.Function}.  
+Execution participants have static ``fromXXX`` methods for constructing from objects implementing ``java.util.function`` interfaces, e.g. ``${javadoc/java.util.function.Function}``.  
 
 ### Utility methods
 
-``org.nasdanika.common.Util`` class contains methods for walking execution participants through their lifecycle (``call`` methods) as well as helper execution participant factories.
+``${javadoc/org.nasdanika.common.Util}`` class contains methods for walking execution participants through their lifecycle (``call`` methods) as well as helper execution participant factories.
 
 ### Client code
 
