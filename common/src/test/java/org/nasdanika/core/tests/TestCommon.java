@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -383,7 +384,12 @@ public class TestCommon {
 
 		Function<String, String> java11Resolver = Util.createJavadocResolver(Collections.singleton(new URL("https://docs.oracle.com/en/java/javase/11/docs/api/")), progressMonitor);
 		String java11MapLink = java11Resolver.apply("java.util.Map");
-		assertEquals("<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html'>java.util.Map</a>", java11MapLink);		
+		assertEquals("<a href='https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html'>java.util.Map</a>", java11MapLink);	
+		
+		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
+		String contextLink = nasdanikaResolver.apply("org.nasdanika.common.Context");
+		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);	
+		
 	}
 	
 }

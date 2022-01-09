@@ -4,12 +4,14 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -1431,6 +1433,64 @@ public class Util {
 		Map<URL,URL> urlMap = new HashMap<>();
 		urls.forEach(url -> urlMap.put(url, url));
 		return createJavadocResolver(urlMap, progressMonitor);
+	}
+	
+	/**
+	 * Creates a Javadoc resolver for Nasdanika products and their dependencies.
+	 * @param gitDir Git directory with Nasdanika products locally built using Maven so they contain local API docs in their target/apidocs folders to use as offline URL's. If null of if some of apidocs directories do not exist, online URL's are used as offline URL's for those cases.  
+	 * @param progressMonitor
+	 * @return
+	 */
+	public static java.util.function.Function<String, String> createNasdanikaJavadocResolver(File gitDir, ProgressMonitor progressMonitor) throws MalformedURLException {
+		Map<URL,URL> urls = new HashMap<>();
+
+		URL java8 = new URL("https://docs.oracle.com/javase/8/docs/api/");
+		urls.put(java8, java8);
+		
+		// Core
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/common/apidocs/"), gitDir, "core/common/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/ncore/apidocs/"), gitDir, "core/ncore/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/flow/apidocs/"), gitDir, "core/flow/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/apidocs/"), gitDir, "core/diagram/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/diagram/modules/gen/apidocs/"), gitDir, "core/diagram.gen/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/exec/modules/model/apidocs/"), gitDir, "core/exec/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/exec/modules/gen/apidocs/"), gitDir, "core/exec.gen/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/cli/apidocs/"), gitDir, "core/cli/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/modules/emf/apidocs/"), gitDir, "core/emf/target/apidocs");
+		
+		// HTML
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/html/apidocs/"), gitDir, "html/html/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/bootstrap/apidocs/"), gitDir, "html/bootstrap/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/jstree/apidocs/"), gitDir, "html/jstree/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/knockout/apidocs/"), gitDir, "html/knockout/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/fontawesome/apidocs/"), gitDir, "html/fontawesome/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/echarts/apidocs/"), gitDir, "html/echarts/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/emf/apidocs/"), gitDir, "html/emf/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/html/modules/model/apidocs/"), gitDir, "html/model/html/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/html/modules/gen/apidocs/"), gitDir, "html/model/html.gen/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/bootstrap/modules/model/apidocs/"), gitDir, "html/model/bootstrap/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/bootstrap/modules/gen/apidocs/"), gitDir, "html/model/bootstrap.gen/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/apidocs/"), gitDir, "html/model/app/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/gen/apidocs/"), gitDir, "html/model/app.gen/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/ecore/apidocs/"), gitDir, "html/ecore/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/flow/apidocs/"), gitDir, "html/flow/target/apidocs");
+		
+		// Engineering		
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/engineering/modules/model/apidocs/"), gitDir, "engineering/model/target/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/modules/engineerng/modules/gen/apidocs/"), gitDir, "engineering/gen/target/apidocs");
+		
+		return createJavadocResolver(urls, progressMonitor);
+	}
+	
+	private static void addUrl(Map<URL,URL> urls, URL onlineURL, File gitDir, String offlinePath) throws MalformedURLException {
+		URL offlineURL = onlineURL;
+		if (gitDir != null && gitDir.isDirectory()) {
+			File offlineDir = new File(gitDir, offlinePath);
+			if (offlineDir.isDirectory()) {
+				offlineURL = offlineDir.toURI().toURL();
+			}
+		}
+		urls.put(onlineURL, offlineURL);
 	}
 	
 }
