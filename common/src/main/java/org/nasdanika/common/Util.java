@@ -1368,7 +1368,7 @@ public class Util {
 					
 					int idx = spec.lastIndexOf('.');
 					if (idx != -1 && spec.substring(0, idx).equals(key)) { // Class
-						return value + spec.replace('.', '/').replace('$', '.') + ".html";				
+						return value + "index.html?" + spec.replace('.', '/').replace('$', '.') + ".html";				
 					}
 				}
 				return null;				
