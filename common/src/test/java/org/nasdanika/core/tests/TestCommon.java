@@ -388,8 +388,18 @@ public class TestCommon {
 		
 		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		String contextLink = nasdanikaResolver.apply("org.nasdanika.common.Context");
-		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);	
+		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
+	}
+	
+	@Test
+	public void testJavadocPropertyComputer() throws Exception {
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		
+		MutableContext context = Context.EMPTY_CONTEXT.fork();
+		context.put("javadoc", Util.createJavadocPropertyComputer(nasdanikaResolver));
+		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
+		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));		
 	}
 	
 }

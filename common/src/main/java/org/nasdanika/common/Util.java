@@ -1493,4 +1493,18 @@ public class Util {
 		urls.put(onlineURL, offlineURL);
 	}
 	
+	public static PropertyComputer createJavadocPropertyComputer(java.util.function.Function<String, String> javadocResolver) {
+		return new PropertyComputer() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> T compute(Context context, String key, String path, Class<T> type) {
+				if (type == null || type.isAssignableFrom(String.class)) {
+					return (T) javadocResolver.apply(path);
+				}
+				return null;
+			}
+		};
+	}
+	
 }
