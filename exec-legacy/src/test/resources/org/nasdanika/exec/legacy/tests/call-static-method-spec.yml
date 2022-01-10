@@ -1,4 +1,0 @@
-call: 
-   class: org.nasdanika.common.Util
-   method: camelToKebab
-   arguments: MyMethod

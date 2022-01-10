@@ -1,2 +1,0 @@
-for-each:
-   a/a2: ' * ${data} * '

@@ -1,4 +1,0 @@
-call: 
-   property: person
-   method: get
-   arguments: age

@@ -1,5 +1,0 @@
-replace:
-   source:
-      resource: hello-replace-template.txt
-   patterns:
-      "World": ${name}

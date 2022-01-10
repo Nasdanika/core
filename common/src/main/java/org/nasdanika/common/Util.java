@@ -1459,9 +1459,6 @@ public class Util {
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/html/apidocs/"), gitDir, "html/html/target/apidocs");
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/bootstrap/apidocs/"), gitDir, "html/bootstrap/target/apidocs");
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/jstree/apidocs/"), gitDir, "html/jstree/target/apidocs");
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/knockout/apidocs/"), gitDir, "html/knockout/target/apidocs");
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/fontawesome/apidocs/"), gitDir, "html/fontawesome/target/apidocs");
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/echarts/apidocs/"), gitDir, "html/echarts/target/apidocs");
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/emf/apidocs/"), gitDir, "html/emf/target/apidocs");
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/html/modules/model/apidocs/"), gitDir, "html/model/html/target/apidocs");
 		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/modules/models/modules/html/modules/gen/apidocs/"), gitDir, "html/model/html.gen/target/apidocs");
