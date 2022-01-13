@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
@@ -34,7 +35,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 
 			try {
 				StringBuilder ret = new StringBuilder("<img src=\"data:image/" + path.substring(0, idx) + ";base64, ");
-				URL imageURL = new URL(getBase(), path.substring(idx + 1));
+				URL imageURL = resolve(path.substring(idx + 1));
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
 				byte[] imageBytes = converter.convert(imageURL.openStream(), byte[].class);
 				ret
@@ -53,7 +54,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 	private <T> T computeInclude(Context context, String key, String path, Class<T> type) {
 		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
-				URL includeURL = new URL(getBase(), path);
+				URL includeURL = resolve(path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
 				String includeContent = converter.convert(includeURL.openStream(), String.class);
 				return (T) context.interpolateToString(includeContent);
@@ -64,36 +65,35 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 		return null;
 	}
 	
-	protected URL getBase() throws MalformedURLException {
-		URL markerBase = null;
+	protected URL resolve(String path) throws MalformedURLException {
+		URI uri = URI.createURI(path);
+		
+		URI markerBase = null;
 		Marker marker = getTarget().getMarker();
 		if (marker != null && !Util.isBlank(marker.getLocation())) {
-			markerBase = new URL(marker.getLocation());
+			markerBase = URI.createURI(marker.getLocation());
 		}
 
-		URL resourceBase = null;
+		URI resourceBase = null;
 		Resource resource = getTarget().eResource();
 		if (resource != null) {
-			resourceBase = new URL(resource.getURI().toString());
+			resourceBase = resource.getURI();
 		}
 		
-		String targetBase = getTarget().getBase();
-		if (Util.isBlank(targetBase)) {
-			return markerBase == null ? resourceBase : markerBase;
+		if (markerBase != null && markerBase.hasAbsolutePath() && path.startsWith("./")) {
+			uri = uri.resolve(markerBase);
+		} else if (resourceBase != null) {
+			uri = uri.resolve(resourceBase);
 		}
 		
-		if (markerBase != null && targetBase.startsWith("./")) {
-			return new URL(markerBase, targetBase);
-		}
-		
-		return new URL(resourceBase, targetBase);
-	}	
+		return new URL(uri.toString());					
+	}
 	
 	@SuppressWarnings("unchecked")
 	private <T> T computeIncludeMarkdown(Context context, String key, String path, Class<T> type) {
 		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
-				URL includeURL = new URL(getBase(), path);
+				URL includeURL = resolve(path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
 				String markdown = converter.convert(includeURL.openStream(), String.class);
 				String html = context.computingContext().get(MarkdownHelper.class, MarkdownHelper.INSTANCE).markdownToHtml(markdown);
