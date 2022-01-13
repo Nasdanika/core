@@ -15,9 +15,9 @@ The execution process consists of the following steps:
     
 ### Execution participant types
 
-* ``${javadoc/org.nasdanika.common.Supplier<T>}`` - ``T execute(ProgressMonitor)`` - returns value.      
-* ``${javadoc/org.nasdanika.common.Function<T,R>}`` - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
-* ``${javadoc/org.nasdanika.common.Consumer<T>}`` - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
+* ``${javadoc/org.nasdanika.common.Supplier}<T>`` - ``T execute(ProgressMonitor)`` - returns value.      
+* ``${javadoc/org.nasdanika.common.Function}<T,R>`` - ``R execute(T,ProgressMonitor)`` - takes an argument and returns value.     
+* ``${javadoc/org.nasdanika.common.Consumer}<T>`` - ``void execute(T,ProgressMonitor)`` - takes an argument, does not return value.      
 * ``${javadoc/org.nasdanika.common.Command}`` - ``void execute(ProgressMonitor)``      
 
 ### Composition
