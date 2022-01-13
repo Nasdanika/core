@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -401,5 +402,12 @@ public class TestCommon {
 		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
 		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));		
 	}
+	
+//	@Test
+//	public void testURI() throws Exception {
+//		URI fileURI = URI.createURI(new File(".").getCanonicalFile().toURI().toString());
+//		System.out.println(fileURI + " " + fileURI.hasAbsolutePath());
+//		System.out.println(URI.createURI("https://www.nasdanika.org/something/").hasAbsolutePath());
+//	}
 	
 }

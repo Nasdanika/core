@@ -52,7 +52,7 @@ public class Generator {
 				resourceBase = resource.getURI();
 			}
 			
-			if (markerBase != null && diagramURI.startsWith("./")) {
+			if (markerBase != null && markerBase.hasAbsolutePath() && diagramURI.startsWith("./")) {
 				uri = uri.resolve(markerBase);
 			} else if (resourceBase != null) {
 				uri = uri.resolve(resourceBase);
