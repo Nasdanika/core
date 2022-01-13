@@ -200,6 +200,20 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 	}
 	
+	public BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> getMarkerFactory() {
+		return markerFactory;
+	}
+	
+	public void setMarkerFactory(BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> markerFactory) {
+		this.markerFactory = markerFactory;
+	}
+	
+	private BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> markerFactory = (location, progressMonitor) -> {
+		org.nasdanika.ncore.Marker marker = NcoreFactory.eINSTANCE.createMarker();
+		marker.setLocation(location);
+		return marker;
+	};
+	
 	public EObjectLoader(EPackage... ePackages) {
 		this(null, null, ePackages);
 	}
@@ -298,7 +312,7 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		
 		// Proxy
-		Object proxy = createProxy(eClass, config, base, marker);
+		Object proxy = createProxy(eClass, config, base, marker, progressMonitor);
 		if (proxy != null) {
 			return proxy;
 		}
@@ -351,7 +365,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param base
 	 * @return Proxy object or null if config is not a proxy config.
 	 */
-	public static EObject createProxy(EClass eClass, Object config, URL base, Marker marker) {
+	public EObject createProxy(EClass eClass, Object config, URL base, Marker marker, ProgressMonitor progressMonitor) {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
@@ -377,7 +391,7 @@ public class EObjectLoader extends DispatchingLoader {
 						proxyURI = proxyURI.resolve(baseURI);
 					}
 					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
-					mark(eObject, marker);
+					mark(eObject, marker, progressMonitor);
 					
 					return eObject;
 				}
@@ -391,12 +405,11 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param eObject
 	 * @param marker
 	 */
-	public static void mark(EObject eObject, Marker marker) {
+	public void mark(EObject eObject, Marker marker, ProgressMonitor progressMonitor) {
 		if (marker != null) {
 			eObject.eAdapters().add(new MarkedAdapter(marker));
-			if (eObject instanceof Marked) {
-				org.nasdanika.ncore.Marker mMarker = NcoreFactory.eINSTANCE.createMarker();
-				mMarker.setLocation(marker.getLocation());
+			if (eObject instanceof Marked) {				
+				org.nasdanika.ncore.Marker mMarker = markerFactory.apply(marker.getLocation(), progressMonitor);
 				mMarker.setLine(marker.getLine());
 				mMarker.setColumn(marker.getColumn());
 				((Marked) eObject).setMarker(mMarker);

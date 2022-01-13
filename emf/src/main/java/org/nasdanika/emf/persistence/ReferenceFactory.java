@@ -109,7 +109,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	
 								@Override
 								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
-									return (EObject) loadReference(ref, base, marker);
+									return (EObject) loadReference(ref, base, marker, progressMonitor);
 								}
 								
 							};
@@ -117,7 +117,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 						
 					};
 				}
-				return loadReference((String) element, base, marker);
+				return loadReference((String) element, base, marker, progressMonitor);
 			}
 			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, marker, keyProvider) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
@@ -145,7 +145,8 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	protected T loadReference(
 			String ref, 
 			URL base,
-			Marker marker) {
+			Marker marker, 
+			ProgressMonitor progressMonitor) {
 		
 		URI refURI = URI.createURI(ref);
 		if (base != null && !ref.startsWith(EObjectLoader.LATE_PROXY_RESOLUTION_URI_PREFIX)) {
@@ -156,7 +157,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 			EClass eReferenceType = effectiveReferenceType(ref);
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy, if possible, instead of loading object
-				EObject proxy = EObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, marker);
+				EObject proxy = resolver.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, marker, progressMonitor);
 				if (proxy != null) {
 					if ( marker != null) {
 						proxy.eAdapters().add(new MarkedAdapter(marker));

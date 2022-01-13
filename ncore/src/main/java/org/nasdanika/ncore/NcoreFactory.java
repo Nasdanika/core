@@ -166,6 +166,15 @@ public interface NcoreFactory extends EFactory {
 	EObjectProperty createEObjectProperty();
 
 	/**
+	 * Returns a new object of class '<em>Git Marker</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Git Marker</em>'.
+	 * @generated
+	 */
+	GitMarker createGitMarker();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

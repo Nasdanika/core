@@ -13,6 +13,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -170,6 +171,22 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseEObjectProperty(EObjectProperty object) {
 				return createEObjectPropertyAdapter();
+			}
+			@Override
+			public Adapter caseStringEntry(java.util.Map.Entry<String, String> object) {
+				return createStringEntryAdapter();
+			}
+			@Override
+			public Adapter caseIntegerEntry(java.util.Map.Entry<String, Integer> object) {
+				return createIntegerEntryAdapter();
+			}
+			@Override
+			public Adapter caseBooleanEntry(java.util.Map.Entry<String, Boolean> object) {
+				return createBooleanEntryAdapter();
+			}
+			@Override
+			public Adapter caseGitMarker(GitMarker object) {
+				return createGitMarkerAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -496,6 +513,62 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEObjectPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>String Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createStringEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Integer Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createIntegerEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Boolean Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createBooleanEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.GitMarker <em>Git Marker</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.GitMarker
+	 * @generated
+	 */
+	public Adapter createGitMarkerAdapter() {
 		return null;
 	}
 

@@ -116,5 +116,8 @@ engineering-product:
     group-by:
       name: Group-by
       description: Support of grouping by not only participants, but, say, responsible.
+    categories:
+      name: Categories
+      description: Grouping mechanism, maybe have it in Ncore. A category is a named element with id (use uuid?). Elements have a list of categories. If it is not empty, elements may be grouped into categories with categories list being a (tree) path. Can be used to group service activities into "domains". Categorization does not affect URI's.
        
     

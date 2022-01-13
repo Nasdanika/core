@@ -19,6 +19,7 @@ import org.nasdanika.common.persistence.Marked;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -148,6 +149,14 @@ public class NcoreValidator extends EObjectValidator {
 				return validateBooleanProperty((BooleanProperty)value, diagnostics, context);
 			case NcorePackage.EOBJECT_PROPERTY:
 				return validateEObjectProperty((EObjectProperty)value, diagnostics, context);
+			case NcorePackage.STRING_ENTRY:
+				return validateStringEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case NcorePackage.INTEGER_ENTRY:
+				return validateIntegerEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case NcorePackage.BOOLEAN_ENTRY:
+				return validateBooleanEntry((Map.Entry<?, ?>)value, diagnostics, context);
+			case NcorePackage.GIT_MARKER:
+				return validateGitMarker((GitMarker)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -458,6 +467,42 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateEObjectProperty(EObjectProperty eObjectProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(eObjectProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateStringEntry(Map.Entry<?, ?> stringEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)stringEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateIntegerEntry(Map.Entry<?, ?> integerEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)integerEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateBooleanEntry(Map.Entry<?, ?> booleanEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)booleanEntry, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateGitMarker(GitMarker gitMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(gitMarker, diagnostics, context);
 	}
 
 	/**

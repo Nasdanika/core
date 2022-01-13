@@ -44,12 +44,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	private Map<String, EStructuralFeature> featureMap = new LinkedHashMap<>();
 
 	private EClass eClass;
+	private EObjectLoader loader;
 
 	public EObjectSupplierFactory(
 			EObjectLoader loader, 
 			EClass eClass, 
 			BiFunction<EClass,ENamedElement,String> keyProvider) {
-		
+
+		this.loader = loader;
 		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
@@ -236,9 +238,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass); // TODO - handling prototype
-				EObjectLoader.mark(ret, getMarker());
 				Marker marker = getMarker();
-				EObjectLoader.mark(ret, marker);
+				loader.mark(ret, marker, progressMonitor);
 				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
 				EStructuralFeature[] loadingFeature = { null };
 				ret.eAdapters().add(new LoadTrackerAdapter() {

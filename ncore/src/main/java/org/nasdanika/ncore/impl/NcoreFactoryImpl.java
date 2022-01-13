@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -89,6 +90,10 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.LIST_PROPERTY: return createListProperty();
 			case NcorePackage.BOOLEAN_PROPERTY: return createBooleanProperty();
 			case NcorePackage.EOBJECT_PROPERTY: return createEObjectProperty();
+			case NcorePackage.STRING_ENTRY: return (EObject)createStringEntry();
+			case NcorePackage.INTEGER_ENTRY: return (EObject)createIntegerEntry();
+			case NcorePackage.BOOLEAN_ENTRY: return (EObject)createBooleanEntry();
+			case NcorePackage.GIT_MARKER: return createGitMarker();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -302,6 +307,47 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public EObjectProperty createEObjectProperty() {
 		EObjectPropertyImpl eObjectProperty = new EObjectPropertyImpl();
 		return eObjectProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public java.util.Map.Entry<String, String> createStringEntry() {
+		StringEntryImpl stringEntry = new StringEntryImpl();
+		return stringEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public java.util.Map.Entry<String, Integer> createIntegerEntry() {
+		IntegerEntryImpl integerEntry = new IntegerEntryImpl();
+		return integerEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public java.util.Map.Entry<String, Boolean> createBooleanEntry() {
+		BooleanEntryImpl booleanEntry = new BooleanEntryImpl();
+		return booleanEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public GitMarker createGitMarker() {
+		GitMarkerImpl gitMarker = new GitMarkerImpl();
+		return gitMarker;
 	}
 
 	/**

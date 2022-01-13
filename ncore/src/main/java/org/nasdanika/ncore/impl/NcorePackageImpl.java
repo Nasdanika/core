@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
+import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -202,6 +203,34 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass stringEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass integerEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass booleanEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass gitMarkerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EDataType instantEDataType = null;
 
 	/**
@@ -370,16 +399,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EAttribute getMarker_Column() {
 		return (EAttribute)markerEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getMarker_Origin() {
-		return (EAttribute)markerEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -858,6 +877,146 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getStringEntry() {
+		return stringEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStringEntry_Key() {
+		return (EAttribute)stringEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getStringEntry_Value() {
+		return (EAttribute)stringEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getIntegerEntry() {
+		return integerEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegerEntry_Key() {
+		return (EAttribute)integerEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getIntegerEntry_Value() {
+		return (EAttribute)integerEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getBooleanEntry() {
+		return booleanEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBooleanEntry_Key() {
+		return (EAttribute)booleanEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getBooleanEntry_Value() {
+		return (EAttribute)booleanEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getGitMarker() {
+		return gitMarkerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getGitMarker_Path() {
+		return (EAttribute)gitMarkerEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getGitMarker_Remotes() {
+		return (EReference)gitMarkerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getGitMarker_Branch() {
+		return (EAttribute)gitMarkerEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getGitMarker_Head() {
+		return (EAttribute)gitMarkerEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -914,7 +1073,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(markerEClass, MARKER__LOCATION);
 		createEAttribute(markerEClass, MARKER__LINE);
 		createEAttribute(markerEClass, MARKER__COLUMN);
-		createEAttribute(markerEClass, MARKER__ORIGIN);
 
 		temporalEClass = createEClass(TEMPORAL);
 		createEAttribute(temporalEClass, TEMPORAL__INSTANT);
@@ -980,6 +1138,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		eObjectPropertyEClass = createEClass(EOBJECT_PROPERTY);
 		createEReference(eObjectPropertyEClass, EOBJECT_PROPERTY__VALUE);
 
+		stringEntryEClass = createEClass(STRING_ENTRY);
+		createEAttribute(stringEntryEClass, STRING_ENTRY__KEY);
+		createEAttribute(stringEntryEClass, STRING_ENTRY__VALUE);
+
+		integerEntryEClass = createEClass(INTEGER_ENTRY);
+		createEAttribute(integerEntryEClass, INTEGER_ENTRY__KEY);
+		createEAttribute(integerEntryEClass, INTEGER_ENTRY__VALUE);
+
+		booleanEntryEClass = createEClass(BOOLEAN_ENTRY);
+		createEAttribute(booleanEntryEClass, BOOLEAN_ENTRY__KEY);
+		createEAttribute(booleanEntryEClass, BOOLEAN_ENTRY__VALUE);
+
+		gitMarkerEClass = createEClass(GIT_MARKER);
+		createEAttribute(gitMarkerEClass, GIT_MARKER__PATH);
+		createEReference(gitMarkerEClass, GIT_MARKER__REMOTES);
+		createEAttribute(gitMarkerEClass, GIT_MARKER__BRANCH);
+		createEAttribute(gitMarkerEClass, GIT_MARKER__HEAD);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -1032,6 +1208,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		booleanPropertyEClass.getESuperTypes().add(this.getProperty());
 		booleanPropertyEClass.getESuperTypes().add(this.getBoolean());
 		eObjectPropertyEClass.getESuperTypes().add(this.getProperty());
+		gitMarkerEClass.getESuperTypes().add(this.getMarker());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1047,7 +1224,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getMarker_Location(), ecorePackage.getEString(), "location", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Line(), ecorePackage.getEInt(), "line", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Column(), ecorePackage.getEInt(), "column", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarker_Origin(), ecorePackage.getEString(), "origin", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(temporalEClass, Temporal.class, "Temporal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTemporal_Instant(), this.getInstant(), "instant", null, 0, 1, Temporal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1128,6 +1304,24 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(eObjectPropertyEClass, EObjectProperty.class, "EObjectProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEObjectProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, EObjectProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(stringEntryEClass, java.util.Map.Entry.class, "StringEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStringEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getStringEntry_Value(), ecorePackage.getEString(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(integerEntryEClass, java.util.Map.Entry.class, "IntegerEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getIntegerEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIntegerEntry_Value(), ecorePackage.getEInt(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(booleanEntryEClass, java.util.Map.Entry.class, "BooleanEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBooleanEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBooleanEntry_Value(), ecorePackage.getEBoolean(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(gitMarkerEClass, GitMarker.class, "GitMarker", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGitMarker_Path(), ecorePackage.getEString(), "path", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getGitMarker_Remotes(), this.getStringEntry(), null, "remotes", null, 0, -1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGitMarker_Branch(), ecorePackage.getEString(), "branch", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGitMarker_Head(), ecorePackage.getEString(), "head", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1421,6 +1615,72 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Element name."
+		   });
+		addAnnotation
+		  (stringEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "EMap entry with String value"
+		   });
+		addAnnotation
+		  (getStringEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifact key."
+		   });
+		addAnnotation
+		  (integerEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "EMap entry with int value"
+		   });
+		addAnnotation
+		  (getIntegerEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifact key."
+		   });
+		addAnnotation
+		  (booleanEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "EMap entry with boolean value"
+		   });
+		addAnnotation
+		  (getBooleanEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifact key."
+		   });
+		addAnnotation
+		  (gitMarkerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Marker with Git information such as a map of remotes."
+		   });
+		addAnnotation
+		  (getGitMarker_Path(),
+		   source,
+		   new String[] {
+			   "documentation", "Path in the repository"
+		   });
+		addAnnotation
+		  (getGitMarker_Remotes(),
+		   source,
+		   new String[] {
+			   "documentation", "A map of remote names to url\'s."
+		   });
+		addAnnotation
+		  (getGitMarker_Branch(),
+		   source,
+		   new String[] {
+			   "documentation", "Short branch name"
+		   });
+		addAnnotation
+		  (getGitMarker_Head(),
+		   source,
+		   new String[] {
+			   "documentation", "Commit ID of the head"
 		   });
 	}
 

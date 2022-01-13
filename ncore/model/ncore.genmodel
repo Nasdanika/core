@@ -20,7 +20,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/line"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/column"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/origin"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Temporal">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Temporal/instant"/>
@@ -93,6 +92,24 @@
     <genClasses ecoreClass="ncore.ecore#//BooleanProperty"/>
     <genClasses ecoreClass="ncore.ecore#//EObjectProperty">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//EObjectProperty/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//StringEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StringEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//StringEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//IntegerEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//IntegerEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//IntegerEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//BooleanEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//BooleanEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//BooleanEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//GitMarker">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/path"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//GitMarker/remotes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/branch"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/head"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
