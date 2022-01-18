@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -80,6 +81,16 @@ public class MarkdownHelper {
 	private static final String START_DRAWIO_RESOURCE_BLOCK = "```drawio-resource";
 	private static final Pattern START_DRAWIO_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_BLOCK+"(\\s)*\\R");
 	private static final Pattern START_DRAWIO_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_RESOURCE_BLOCK+"(\\s)*\\R");
+	
+	private static final String START_PNG_BLOCK = "```png";
+	private static final String START_PNG_RESOURCE_BLOCK = "```png-resource";
+	private static final Pattern START_PNG_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_PNG_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_PNG_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_PNG_RESOURCE_BLOCK+"(\\s)*\\R");
+	
+	private static final String START_JPEG_BLOCK = "```jpeg";
+	private static final String START_JPEG_RESOURCE_BLOCK = "```jpeg-resource";
+	private static final Pattern START_JPEG_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_JPEG_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_JPEG_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_JPEG_RESOURCE_BLOCK+"(\\s)*\\R");
 
 	private static final String FENCED_BLOCK = "```";
 	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");	
@@ -109,6 +120,8 @@ public class MarkdownHelper {
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, null, START_PNG_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, null, START_JPEG_PATTERN, replacements, false);
 					
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.UML, START_UML_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_RESOURCE_PATTERN, replacements, true);
@@ -116,6 +129,8 @@ public class MarkdownHelper {
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, null, START_PNG_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, null, START_JPEG_RESOURCE_PATTERN, replacements, true);
 					
 			return ret;		
 		}
@@ -147,7 +162,7 @@ public class MarkdownHelper {
 				if (resource) {					
 					try {						
 						URL resourceURL = new URL(getResourceBase(), bareSpec);
-						bareSpec = loadResource(resourceURL);
+						bareSpec = loadResource(resourceURL, dialect == null);
 					} catch (Exception e) {					
 						output
 							.append(System.lineSeparator())
@@ -175,9 +190,24 @@ public class MarkdownHelper {
 					
 					try {
 						String token = nextToken();
-						replacementBuilder
-							.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
-							.append(System.lineSeparator());
+						
+						if (dialect == null) {
+							replacementBuilder.append("<img src=\"data:image/");
+							if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
+								replacementBuilder.append("png");
+							} else if (startPattern == START_JPEG_PATTERN || startPattern == START_JPEG_RESOURCE_PATTERN) {
+								replacementBuilder.append("jpeg");
+							}
+							replacementBuilder
+								.append(";base64, ")
+								.append(bareSpec)
+								.append("\"/>")
+								.append(System.lineSeparator());
+						} else {
+							replacementBuilder
+								.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
+								.append(System.lineSeparator());
+						}
 						
 						replacements.put(token, replacementBuilder.toString());
 						output
@@ -199,6 +229,9 @@ public class MarkdownHelper {
 	}
 
 	protected String escapeDiagramSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
+		if (dialect == null) {
+			return null; // For PNG and JPEG
+		}
 		if (dialect == Dialect.DRAWIO) {
 			// TODO - Extract text from XML, return null for now.
 			return null;
@@ -210,7 +243,14 @@ public class MarkdownHelper {
 		return getClass().getClassLoader();
 	}
 	
-	protected String loadResource(URL resource) throws Exception {
+	/**
+	 * Loads resource and optionally encodes it to Base64.
+	 * @param resource
+	 * @param encode
+	 * @return
+	 * @throws Exception
+	 */
+	protected String loadResource(URL resource, boolean encode) throws Exception {
 		if (Util.CLASSPATH_SCHEME.equals(resource.getProtocol())) {
 			String resPath = resource.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
 			URL cResource = getResourceClassLoader().getResource(resPath);
@@ -218,6 +258,10 @@ public class MarkdownHelper {
 				throw new IllegalArgumentException("Classpath resource not found: " + resPath);
 			}
 			resource = cResource;
+		}
+		if (encode) {
+			byte[] bytes = DefaultConverter.INSTANCE.toByteArray(resource);
+			return Base64.getEncoder().encodeToString(bytes);
 		}
 		return DefaultConverter.INSTANCE.stringContent(resource);
 	}
