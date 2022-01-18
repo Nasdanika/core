@@ -39,6 +39,7 @@ import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.persistence.EObjectLoader;
 import org.nasdanika.emf.persistence.FeatureCacheAdapter;
 import org.nasdanika.ncore.util.NcoreUtil;
 
@@ -177,6 +178,33 @@ public class EmfUtil {
 		
 		return null;
 	}
+	
+	/**
+	 * Loads element load documentation from load-doc annotation of or a documentation resource specified in load-doc-reference nasdanika (urn:org.nasdanika) annotation resolved relative to the 
+	 * model element resource. 
+	 * @param modelElement
+	 * @return
+	 */
+	public static String getLoadDocumentation(EModelElement modelElement) {
+		EAnnotation nasdanikaAnnotation = NcoreUtil.getNasdanikaAnnotation(modelElement);
+		if (nasdanikaAnnotation != null) {
+			String docRef = nasdanikaAnnotation.getDetails().get(EObjectLoader.LOAD_DOC_REF);
+			if (!Util.isBlank(docRef)) {
+				try {
+					URL docURL = resolveReference(modelElement.eResource(), docRef);
+					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "Error loading documentation: " + e;
+				}
+			}
+			
+			return nasdanikaAnnotation.getDetails().get(EObjectLoader.LOAD_DOC);
+		}
+		
+		return null;
+	}
+	
 	
 	public static Diagnostic wrap(org.eclipse.emf.common.util.Diagnostic diagnostic) {
 		Status status;

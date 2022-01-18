@@ -58,6 +58,11 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String LOAD_DOC = "load-doc";
 	
 	/**
+	 * Reference to a resource with information about how element is loaded in markdown. For {@link EStructuralFeature}s overrides feature documentation if present.  
+	 */
+	public static final String LOAD_DOC_REF = "load-doc-reference";
+	
+	/**
 	 * If this Nasdanika annotation details is set to "true" on a {@link EStructuralFeature} and configuration object is not a map
 	 * then the configuration object is loaded into this feature. 
 	 */
