@@ -14,6 +14,10 @@ import org.nasdanika.ncore.Property;
  * A representation of the model object '<em><b>Package Element</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Base class for elements which can be contained in a package and as such inherited.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -29,7 +33,6 @@ import org.nasdanika.ncore.Property;
  *
  * @see org.nasdanika.flow.FlowPackage#getPackageElement()
  * @model abstract="true"
- *        annotation="urn:org.nasdanika documentation-reference='doc/package-element.md'"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore constraints='final extension'"
  * @generated
  */
@@ -126,9 +129,15 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Element documentation. Documentation elements are adapted to ``SupplierFactory<InputStream>`` during generation. 
+	 * [Exec content](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/package-summary.html) classes such as [Markdown](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Markdown.html) and [Interpolator](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Interpolator.html) can be used as documentation elements. 
+	 * 
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Documentation</em>' containment reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Documentation()
 	 * @model containment="true"
+	 *        annotation="urn:org.nasdanika load-doc-reference='doc/package-element--documentation.md'"
 	 * @generated
 	 */
 	EList<EObject> getDocumentation();

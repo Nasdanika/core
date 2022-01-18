@@ -37,8 +37,36 @@ content-markdown:
     content-resource: features/execution-model.md  
 ```
 
-## Embedded diagrams
+## Embedded images
 
+Markdown filter allows to embed PNG and JPEG using fenced blocks.
+
+### PNG resource
+
+	```png-resource
+	my.png
+	```
+
+Resource location is resolved relative to the YAML resource containing filter definition.
+
+### JPEG resource
+
+	```jpeg-resource
+	my.jpeg
+	```
+
+### PNG
+
+	```png
+	Base 64 encoded png 
+	```
+### JPEG
+
+	```jpeg
+	Base 64 encoded jpeg
+	```
+
+## Embedded diagrams
 
 Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](https://app.diagrams.net/) diagrams using fenced blocks.
 

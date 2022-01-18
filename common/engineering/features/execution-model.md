@@ -1,4 +1,4 @@
-This page explains the Nasdanika execution model, which is used by a number of Nasdanika products and modules [Exec](../../../exec/index.html).
+This page explains the Nasdanika execution model, which is used by a number of Nasdanika products and modules, e.g. [Exec](../../../exec/index.html).
 
 The execution process consists of the following steps:
 

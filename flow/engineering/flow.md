@@ -2,14 +2,16 @@ With Nasdanika Flow you can model organizational processes as [flows](Flow.html)
 and [calls](Call.html) and performed by [participants](Participant.html) using [resources](Resource.html) and consuming and producing [artifacts](Artifact.html).
 Flow extends activity and as such flows can be nested. Artifacts can also be nested, which allows to model composite artifacts such as modular and distributed systems, e.g. a cloud application.
 
-Flow models are defined in a set of cross-referencing [YAML](https://en.wikipedia.org/wiki/YAML) files with supporting [Markdown](../exec/modules/model/content/Markdown.html) documentation either embedded in YAML or stored in files. 
+Flow models can be defined in a set of cross-referencing [YAML](https://en.wikipedia.org/wiki/YAML) files with supporting [Markdown](../exec/modules/model/content/Markdown.html) documentation either embedded in YAML or stored in files. 
 Markdown documentation supports embedding of diagrams and token interpolation/substitution. Textual definitions of flows in multiple files allow to work with them in the same way as with source code, say, Java - branch, create a pull request, merge.
-In a way, Nasdanika Flow allows to write "programs" to be executed by an organization similar to how Java programs are executed by a JVM. 
+In a way, Nasdanika Flow allows to write "programs" to be executed by an organization similar to how Java programs are executed by a JVM or how distributed systems, such as cloud applications, operate. 
 Textual format also means that flow definitions can be edited and viewed using a wide variety of tools, including viewing and editing in a web browser using native facilities of source control systems such as GitHub.
 
-A static web site is generated from flow models. Generated site includes generated [visualizations](features/visualizations/index.html) - [PlantUML State diagrams](https://plantuml.com/state-diagram) or [Draw.io](https://app.diagrams.net/) diagrams.
-Draw.io diagrams can be manually edited after generation. Dynamic behavior can be added to generated pages using Single Page Applications, e.g. applications built with [Vue.js](https://vuejs.org/), [VueRouter](https://router.vuejs.org/), and [BootstrapVue](https://bootstrap-vue.org/).
-It allows to inject fine-grained productivity tools into activities where they are used. Such tools may use more generic tools behind the scenes and "bind" some contextual parameters to reduce participant's mental load and probability of mistakes.
+A static web site is generated from flow models. Generated site includes generated [visualizations](features/visualizations/index.html) - [PlantUML State diagrams](https://plantuml.com/state-diagram) or [Diagrams.net](https://diagrams.net/) diagrams.
+Diagrams.net diagrams can be manually edited after generation. 
+Dynamic behavior can be added to generated pages using Single Page Applications, e.g. applications built with [Vue.js](https://vuejs.org/), [VueRouter](https://router.vuejs.org/), and [BootstrapVue](https://bootstrap-vue.org/).
+It allows to inject fine-grained productivity tools into activities where they are used.
+Such tools may use more generic tools behind the scenes and "bind" some contextual parameters to reduce participant's mental load and probability of mistakes.
 
 Flows can [extend](features/inheritance/index.html) other flows forming an inheritance hierarchy similar to inheritance in languages such as Java or Docker images specifying base images.
 This allows to define base process/flow packages and extend/tailor them to specific needs.
@@ -44,11 +46,13 @@ Nasdanika Flow also [features](features.html):
   
 ## Process overview   
 
-TODO:
+An example of generating a [web site](https://docs.nasdanika.org/togaf/adm/activities/adm/index.html) from a flow model can be found here - [TestTogafAdmGen.java](https://github.com/Nasdanika/togaf/blob/main/adm/src/test/java/org/nasdanika/togaf/adm/tests/TestTogafAdmGen.java).
 
-* Load, validate
-* Create instance, process, e.g. GitMarkers or data from external systems - metrics etc, save
-* Generate action model
-* Generate resource model
-* Generate site.
+Generation steps:
+
+* Load the model from YAML or other resource. Optionally validate. Abstract and mix-in models may contain validation errors such as unresolved proxies "by design" and therefore shall not be validated upon load.
+* Create an instance model. At this step you may save the instance model to XMI to logically separate processing steps. You may also enrich the model by loading data from external systems.
+* Generate an action model from the instance model.
+* Generate a resource model from the action model. At this step you may combine multiple action models.
+* Generate a site (container) from the resource model.
   

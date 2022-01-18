@@ -4,5 +4,9 @@ engineering-module:
   action-prototype: "../../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"    
   dependencies:
     - engineering://nasdanika/modules/core/modules/emf
+  issues:
+    includes:
+      name: Includes
+      description: Fenced blocks for includes similar to Interpolator - include, include-markdown. No need in include-styled-markdown. Handle include-markdown not as tokens but by actually including markdown, include recursively.
      
    

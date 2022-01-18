@@ -5,11 +5,11 @@
     <details key="diagram" value="navigation"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="PackageElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//NamedElement">
-    <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/package-element.md"/>
-    </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="final extension"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base class for elements which can be contained in a package and as such inherited."/>
     </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//PackageElement">
@@ -65,7 +65,14 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" upperBound="-1"
-        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-doc-reference" value="doc/package-element--documentation.md"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Element documentation. Documentation elements are adapted to ``SupplierFactory&lt;InputStream>`` during generation. &#xA;[Exec content](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/package-summary.html) classes such as [Markdown](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Markdown.html) and [Interpolator](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Interpolator.html) can be used as documentation elements. &#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="representations" upperBound="-1"
         eType="#//RepresentationEntry" containment="true">
       <eAnnotations source="urn:org.nasdanika">

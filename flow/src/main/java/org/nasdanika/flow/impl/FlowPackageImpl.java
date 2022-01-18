@@ -2441,10 +2441,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "diagram", "navigation"
 		   });
 		addAnnotation
-		  (packageElementEClass,
+		  (getPackageElement_Documentation(),
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-element.md"
+			   "load-doc-reference", "doc/package-element--documentation.md"
 		   });
 		addAnnotation
 		  (getPackageElement_Representations(),
@@ -2802,6 +2802,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
 		addAnnotation
+		  (packageElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for elements which can be contained in a package and as such inherited."
+		   });
+		addAnnotation
 		  (getPackageElement__Create(),
 		   source,
 		   new String[] {
@@ -2842,6 +2848,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "A collection of boolean flags:\n\n* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.\n* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.\n* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.\n* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.\n* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.\n* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.\n* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.\n"
+		   });
+		addAnnotation
+		  (getPackageElement_Documentation(),
+		   source,
+		   new String[] {
+			   "documentation", "Element documentation. Documentation elements are adapted to ``SupplierFactory<InputStream>`` during generation. \n[Exec content](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/package-summary.html) classes such as [Markdown](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Markdown.html) and [Interpolator](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Interpolator.html) can be used as documentation elements. \n"
 		   });
 		addAnnotation
 		  (representationEntryEClass,
