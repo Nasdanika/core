@@ -33,7 +33,7 @@ Nasdanika Flow also [features](features.html):
 * [Resource](Resource.html) - something used to complete activities. E.g. IDE or Cl/CD pipeline. Resources can be repositories of artifacts and can provide shared activities - services, which can be referenced from flows. 
 * [Artifact](Artifact.html) - inputs and outputs of activities passed between activities via transitions and calls and stored in repository resources. E.g., a design document or source code. Artifacts can form a containment hierarchy and can reference template artifacts.
 * [Service](Service.html) - a flow element referencing an activity provided by a participant or resource.
-* [Pseudo-states](PseudoState.html) - used combine and direct transitions. 
+* [Pseudo-states](PseudoState.html) - used to combine and direct transitions. 
 
 ## Examples
 
@@ -56,3 +56,16 @@ Generation steps:
 * Generate a resource model from the action model. At this step you may combine multiple action models.
 * Generate a site (container) from the resource model.
   
+## Maven dependency
+
+To use the flow model add the following dependency to ``pom.xml``:
+
+```xml
+<dependency>
+  <groupId>org.nasdanika.core</groupId>
+  <artifactId>flow</artifactId>
+  <version>2022.1.2</version>
+</dependency>
+```
+
+A list of versions can be found [here](https://search.maven.org/search?q=g:org.nasdanika.core%20AND%20a:flow).

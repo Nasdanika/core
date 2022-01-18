@@ -2450,14 +2450,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getPackageElement_Representations(),
 		   source,
 		   new String[] {
-			   "homogenous", "true"
+			   "homogenous", "true",
+			   "load-doc-reference", "doc/package-element--representations.md"
 		   });
 		addAnnotation
 		  (getPackageElement_Properties(),
 		   source,
 		   new String[] {
 			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
-			   "value-feature", "value"
+			   "value-feature", "value",
+			   "load-doc-reference", "doc/package-element--properties.md"
 		   });
 		addAnnotation
 		  (getRepresentationEntry_Value(),
@@ -2805,7 +2807,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (packageElementEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Base class for elements which can be contained in a package and as such inherited."
+			   "documentation", "Base class for elements which can be contained in a package and as such inherited, overridden, and suppressed."
 		   });
 		addAnnotation
 		  (getPackageElement__Create(),
@@ -2854,6 +2856,18 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Element documentation. Documentation elements are adapted to ``SupplierFactory<InputStream>`` during generation. \n[Exec content](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/package-summary.html) classes such as [Markdown](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Markdown.html) and [Interpolator](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Interpolator.html) can be used as documentation elements. \n"
+		   });
+		addAnnotation
+		  (getPackageElement_Representations(),
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of representation names to values - [Diagrams](https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/Diagram.html) which serve as templates for generating diagram content from the package element."
+		   });
+		addAnnotation
+		  (getPackageElement_Properties(),
+		   source,
+		   new String[] {
+			   "documentation", "Properties can be used to customize the documentation generation process, e.g. provide configuration for generation of representation diagram elements."
 		   });
 		addAnnotation
 		  (representationEntryEClass,

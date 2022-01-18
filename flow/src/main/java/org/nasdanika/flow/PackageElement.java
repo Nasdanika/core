@@ -15,7 +15,7 @@ import org.nasdanika.ncore.Property;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Base class for elements which can be contained in a package and as such inherited.
+ * Base class for elements which can be contained in a package and as such inherited, overridden, and suppressed.
  * <!-- end-model-doc -->
  *
  * <p>
@@ -148,10 +148,13 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * and the value is of type {@link org.nasdanika.diagram.Diagram},
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Mapping of representation names to values - [Diagrams](https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/Diagram.html) which serve as templates for generating diagram content from the package element.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Representations</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Representations()
 	 * @model mapType="org.nasdanika.flow.RepresentationEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.diagram.Diagram&gt;"
-	 *        annotation="urn:org.nasdanika homogenous='true'"
+	 *        annotation="urn:org.nasdanika homogenous='true' load-doc-reference='doc/package-element--representations.md'"
 	 * @generated
 	 */
 	EMap<String, Diagram> getRepresentations();
@@ -161,10 +164,13 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Properties can be used to customize the documentation generation process, e.g. provide configuration for generation of representation diagram elements.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Properties()
 	 * @model containment="true" keys="name"
-	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value'"
+	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value' load-doc-reference='doc/package-element--properties.md'"
 	 * @generated
 	 */
 	EList<Property> getProperties();
