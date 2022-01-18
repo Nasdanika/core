@@ -231,7 +231,7 @@ public class PlantUmlTextGenerator {
 	 * @throws IOException 
 	 */
 	public void appendWithRelationships(
-			Collection<EClassifier> coreClassifiers,
+			Collection<? extends EClassifier> coreClassifiers,
 			RelationshipDirection direction,
 			int depth) throws IOException {
 		Set<EClassifier> coreSet = new HashSet<>(coreClassifiers);				
