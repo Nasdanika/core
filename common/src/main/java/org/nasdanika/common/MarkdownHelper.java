@@ -100,7 +100,7 @@ public class MarkdownHelper {
 	}	
 	
 	protected String nextToken() {
-		return "diagram_token_"+UUID.randomUUID().toString().replace("-", "_");
+		return "fenced_block_token_"+UUID.randomUUID().toString().replace("-", "_");
 	}
 	
 	protected DiagramGenerator getDiagramGenerator() {
@@ -152,12 +152,14 @@ public class MarkdownHelper {
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
 		while (startMatcher.find()) {
-			String endMatcherContent = input.substring(startMatcher.end());
-			Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);
+			int startMatcherEnd = startMatcher.end();
+			String endMatcherContent = input.substring(startMatcherEnd);
+			Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);			
 			if (endMatcher.find()) {
 			    output.append(input.substring(i, startMatcher.start()));
-
-				String bareSpec = input.substring(startMatcher.end(), startMatcher.end() + endMatcher.start());
+				String bareSpec = endMatcherContent.substring(0, endMatcher.start());
+				String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
+			    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 				
 				if (resource) {					
 					try {						
@@ -219,9 +221,7 @@ public class MarkdownHelper {
 					} catch (Exception e) {
 						output.append("Error during diagram rendering: " + e);
 					}
-				}
-				
-				i = startMatcher.end()+endMatcher.end();
+				}				
 			}
 		}
 		output.append(input.substring(i, input.length()));
