@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -42,14 +43,23 @@ public class FlowStateDiagramGenerator {
 	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 
 	public void generateDiagram(Flow flow, Diagram diagram) {
-		generateDiagram(flow.getElements().values(), diagram, null);
+		Collection<FlowElement<?>> elements = new ArrayList<>(flow.getElements().values());
+		boolean isContext = diagram.getContext() > 0;
+		if (isContext) {
+			elements.add(flow);
+		}
+		generateDiagram(elements, diagram, isContext ? flow : null, isContext ? DEFAULT_PARTITION_PREDICATE.or(fe -> fe == flow) : DEFAULT_PARTITION_PREDICATE);
 	}
 	
 	public void generateDiagram(FlowElement<?> flowElement, Diagram diagram) {
-		generateDiagram(Collections.singleton(flowElement), diagram, flowElement);
+		generateDiagram(Collections.singleton(flowElement), diagram, flowElement, DEFAULT_PARTITION_PREDICATE);
 	}
 	
-	public void generateDiagram(Collection<FlowElement<?>> flowElements, Diagram diagram, FlowElement<?> contextElement) {
+	public void generateDiagram(
+			Collection<FlowElement<?>> flowElements, 
+			Diagram diagram, 
+			FlowElement<?> contextElement,
+			Predicate<FlowElement<?>> partitionPredicate) {
 		// Collecting all elements to be included
 		Map<FlowElement<?>,Integer> semanticElements = new HashMap<>();
 		for (FlowElement<?> flowElement: flowElements) {
@@ -66,7 +76,7 @@ public class FlowStateDiagramGenerator {
 			});
 		
 		Map<FlowElement<?>,DiagramElement> semanticMap = new HashMap<>();
-		diagram.getElements().addAll(createDiagramElements(topLevelElements, semanticMap, contextElement, diagram.getDepth()));
+		diagram.getElements().addAll(createDiagramElements(topLevelElements, semanticMap, contextElement, partitionPredicate, diagram.getDepth()));
 		
 		for (FlowElement<?> se: topLevelElements) {
 			wire(se, semanticMap);
@@ -129,10 +139,13 @@ public class FlowStateDiagramGenerator {
 		}
 	}
 	
+	private static final Predicate<FlowElement<?>> DEFAULT_PARTITION_PREDICATE = fe -> fe instanceof Flow && ((Flow) fe).isPartition();
+	
 	protected DiagramElement createDiagramElement(
 			FlowElement<?> semanticElement, 
 			Map<FlowElement<?>, DiagramElement> semanticMap, 
 			FlowElement<?> contextElement,
+			Predicate<FlowElement<?>> partitionPredicate,
 			int depth) {
 		
 		if (semanticElement instanceof org.nasdanika.flow.Start) {
@@ -182,8 +195,12 @@ public class FlowStateDiagramGenerator {
 			ret.setLocation(getFlowElementLocation(semanticElement));
 			ret.setTooltip(getFlowElementTooltip(semanticElement));
 			
-			if (depth != 0 && semanticElement instanceof Flow && ((Flow) semanticElement).isPartition()) {
-				ret.getElements().addAll(createDiagramElements(((Flow) semanticElement).getElements().values(), semanticMap, contextElement, depth - 1));
+			if (partitionPredicate == null) {
+				partitionPredicate = DEFAULT_PARTITION_PREDICATE;
+			}
+			
+			if (depth != 0 && partitionPredicate.test(semanticElement)) {
+				ret.getElements().addAll(createDiagramElements(((Flow) semanticElement).getElements().values(), semanticMap, contextElement, partitionPredicate, depth - 1));
 			}
 		}
 		EList<String> modifiers = semanticElement.getModifiers();
@@ -220,6 +237,7 @@ public class FlowStateDiagramGenerator {
 			Collection<FlowElement<?>> semanticElements,
 			Map<FlowElement<?>, DiagramElement> semanticMap, 
 			FlowElement<?> contextElement,
+			Predicate<FlowElement<?>> partitionPredicate,
 			int depth) {		
 		List<DiagramElement> ret = new ArrayList<>();
 		if (isGroupByParticipant()) {
@@ -230,15 +248,15 @@ public class FlowStateDiagramGenerator {
 			for (Entry<Participant, List<FlowElement<?>>> ge: Util.groupBy(semanticElements, keyExtractor).entrySet()) {
 				if (ge.getKey() == null) {
 					for (FlowElement<?> subElement: ge.getValue()) {
-						ret.add(createDiagramElement(subElement, semanticMap, contextElement, depth));
+						ret.add(createDiagramElement(subElement, semanticMap, contextElement, partitionPredicate, depth));
 					}							
 				} else {
-					ret.add(createParticipantGroup(ge.getKey(), ge.getValue(), semanticMap, contextElement, depth));
+					ret.add(createParticipantGroup(ge.getKey(), ge.getValue(), semanticMap, contextElement, partitionPredicate, depth));
 				}
 			}
 		} else {				
 			for (FlowElement<?> subElement: semanticElements) {
-				ret.add(createDiagramElement(subElement, semanticMap, contextElement, depth));
+				ret.add(createDiagramElement(subElement, semanticMap, contextElement, partitionPredicate, depth));
 			}
 		}
 		return ret;
@@ -425,6 +443,7 @@ public class FlowStateDiagramGenerator {
 			Collection<FlowElement<?>> groupElements, 
 			Map<FlowElement<?>, DiagramElement> semanticMap, 
 			FlowElement<?> contextElement,
+			Predicate<FlowElement<?>> partitionPredicate,
 			int depth) {
 		
 		org.nasdanika.diagram.DiagramElement ret = diagramFactory.createDiagramElement();
@@ -437,7 +456,7 @@ public class FlowStateDiagramGenerator {
 		
 		
 		for (FlowElement<?> groupElement: groupElements) {
-			DiagramElement diagramElement = createDiagramElement(groupElement, semanticMap, contextElement, depth);
+			DiagramElement diagramElement = createDiagramElement(groupElement, semanticMap, contextElement, partitionPredicate, depth);
 			if (diagramElement != null) {
 				ret.getElements().add(diagramElement);
 			}
