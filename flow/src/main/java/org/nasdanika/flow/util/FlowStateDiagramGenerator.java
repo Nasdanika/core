@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -40,30 +41,76 @@ import org.nasdanika.flow.Transition;
 
 public class FlowStateDiagramGenerator {
 	
-	DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
-
-	public void generateDiagram(Flow flow, Diagram diagram) {
+	private DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
+		
+	private static final Predicate<FlowElement<?>> DEFAULT_PARTITION_PREDICATE = fe -> fe instanceof Flow && ((Flow) fe).isPartition();
+	
+	public void generateDiagram(
+			Flow flow, 
+			Diagram diagram,
+			BiPredicate<FlowElement<?>, Transition> semanticElementPredicate) {
 		Collection<FlowElement<?>> elements = new ArrayList<>(flow.getElements().values());
 		boolean isContext = diagram.getContext() > 0;
 		if (isContext) {
 			elements.add(flow);
 		}
-		generateDiagram(elements, diagram, isContext ? flow : null, isContext ? DEFAULT_PARTITION_PREDICATE.or(fe -> fe == flow) : DEFAULT_PARTITION_PREDICATE);
+		
+		if (semanticElementPredicate == null && isContext) {
+			semanticElementPredicate = (fe, t) -> {
+				// Only own calls and invocations.
+				if (t instanceof Call) {
+					boolean isSource = t.eContainer() != null && t.eContainer().eContainer() == flow;
+					return isSource || t.getTarget() == flow;
+				}
+				
+				return true;
+			}; 
+		}		
+		
+		generateDiagram(
+				elements, 
+				diagram, 
+				isContext ? flow : null, 
+				isContext ? DEFAULT_PARTITION_PREDICATE.or(fe -> fe == flow).and(fe -> EcoreUtil.isAncestor(flow, fe)) : DEFAULT_PARTITION_PREDICATE,
+				semanticElementPredicate);
 	}
 	
-	public void generateDiagram(FlowElement<?> flowElement, Diagram diagram) {
-		generateDiagram(Collections.singleton(flowElement), diagram, flowElement, DEFAULT_PARTITION_PREDICATE);
+	public void generateDiagram(
+			FlowElement<?> flowElement, 
+			Diagram diagram,
+			BiPredicate<FlowElement<?>, Transition> semanticElementPredicate) {
+		
+		if (semanticElementPredicate == null && diagram.getContext() > 0) {
+			semanticElementPredicate = (fe, t) -> {
+				// Only own calls and invocations.
+				if (t instanceof Call) {
+					boolean isSource = t.eContainer() != null && t.eContainer().eContainer() == flowElement;
+					return isSource || t.getTarget() == flowElement;
+				}
+				
+				return true;
+			}; 
+		}		
+	
+		generateDiagram(
+				Collections.singleton(flowElement), 
+				diagram, 
+				flowElement, 
+				diagram.getContext() > 0 ? DEFAULT_PARTITION_PREDICATE.and(fe -> EcoreUtil.isAncestor(flowElement, fe)) : DEFAULT_PARTITION_PREDICATE,
+				semanticElementPredicate);
 	}
 	
 	public void generateDiagram(
 			Collection<FlowElement<?>> flowElements, 
 			Diagram diagram, 
 			FlowElement<?> contextElement,
-			Predicate<FlowElement<?>> partitionPredicate) {
+			Predicate<FlowElement<?>> partitionPredicate,
+			BiPredicate<FlowElement<?>, Transition> semanticElementPredicate) {
+		
 		// Collecting all elements to be included
 		Map<FlowElement<?>,Integer> semanticElements = new HashMap<>();
 		for (FlowElement<?> flowElement: flowElements) {
-			collectRelatedElements(flowElement, semanticElements, diagram.getContext(), Direction.BOTH);
+			collectRelatedElements(flowElement, semanticElements, diagram.getContext(), Direction.BOTH, semanticElementPredicate);
 		}
 		
 		// Selecting top-level elements
@@ -92,7 +139,14 @@ public class FlowStateDiagramGenerator {
 	 * @param depth Collection depth. 
 	 * @param in If true, collect in the direction of related inputs/invocations, otherwise in the direction of outputs/calls.
 	 */
-	private void collectRelatedElements(FlowElement<?> semanticElement, Map<FlowElement<?>,Integer> accumulator, int depth, Direction direction) { 
+	private void collectRelatedElements(
+			FlowElement<?> semanticElement, 
+			Map<FlowElement<?>,Integer> accumulator, 
+			int depth, 
+			Direction direction,
+			BiPredicate<FlowElement<?>, Transition> semanticElementPredicate
+			) {
+		
 		if (semanticElement == null) {
 			return;
 		}
@@ -107,13 +161,17 @@ public class FlowStateDiagramGenerator {
 				for (Transition input: semanticElement.getInputs()) {
 					FlowElement<?> source = (FlowElement<?>) input.eContainer().eContainer(); 
 					boolean isPseudoSource = source instanceof PseudoState;
-					collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH);
+					if (semanticElementPredicate == null || semanticElementPredicate.test(semanticElement, input)) {
+						collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH, semanticElementPredicate);
+					}
 				}
 	
 				for (Call invocation: semanticElement.getInvocations()) {
 					FlowElement<?> source = (FlowElement<?>) invocation.eContainer().eContainer(); 
 					boolean isPseudoSource = source instanceof PseudoState;
-					collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH);
+					if (semanticElementPredicate == null || semanticElementPredicate.test(semanticElement, invocation)) {
+						collectRelatedElements(source, accumulator, isPseudoSource ? depth : depth - 1, isPseudoSource ? Direction.IN : Direction.BOTH, semanticElementPredicate);
+					}
 				}
 			}
 			
@@ -121,25 +179,29 @@ public class FlowStateDiagramGenerator {
 				for (Transition output: semanticElement.getOutputs().values()) {
 					FlowElement<?> target = output.getTarget(); 
 					boolean isPseudoTarget = target instanceof PseudoState;
-					collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH);
+					if (semanticElementPredicate == null || semanticElementPredicate.test(semanticElement, output)) {
+						collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH, semanticElementPredicate);
+					}
 				}
 	
 				for (Call call: semanticElement.getCalls().values()) {
 					FlowElement<?> target = call.getTarget(); 
 					boolean isPseudoTarget = target instanceof PseudoState;
-					collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH);
+					if (semanticElementPredicate == null || semanticElementPredicate.test(semanticElement, call)) {
+						collectRelatedElements(target, accumulator, isPseudoTarget ? depth : depth - 1, isPseudoTarget ? Direction.OUT : Direction.BOTH, semanticElementPredicate);
+					}
 				}
 			}
 		}
 		
 		if (semanticElement instanceof Flow) {
 			for (FlowElement<?> subElement: ((Flow) semanticElement).getElements().values()) {
-				collectRelatedElements(subElement, accumulator, depth, Direction.BOTH);
+				if (semanticElementPredicate == null || semanticElementPredicate.test(semanticElement, null)) {
+					collectRelatedElements(subElement, accumulator, depth, Direction.BOTH, semanticElementPredicate);
+				}
 			}
 		}
 	}
-	
-	private static final Predicate<FlowElement<?>> DEFAULT_PARTITION_PREDICATE = fe -> fe instanceof Flow && ((Flow) fe).isPartition();
 	
 	protected DiagramElement createDiagramElement(
 			FlowElement<?> semanticElement, 
