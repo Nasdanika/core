@@ -110,6 +110,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//GitMarker/remotes"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/branch"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/head"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//GitMarker/headRefs"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

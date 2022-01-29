@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -70,12 +69,11 @@ public class GitMarkerFactory implements BiFunction<String, ProgressMonitor, org
 					for (Ref ref: repository.getRefDatabase().getRefs()) {
 						if (ref.getName().equals(Constants.HEAD)) {
 							template.setHead(ref.getObjectId().getName());
-							// TODO - refs at head to git marker if any, e.g. branch, tag. Timestamp and author/committer as well?
-//							for (Ref refTwo: repository.getRefDatabase().getRefs()) {
-//								if (!refTwo.getName().equals(Constants.HEAD) && refTwo.getObjectId().equals(ref.getObjectId())) {
-//									System.out.println(refTwo.getName());
-//								}
-//							}							
+							for (Ref refTwo: repository.getRefDatabase().getRefs()) {
+								if (!refTwo.getName().equals(Constants.HEAD) && refTwo.getObjectId().equals(ref.getObjectId())) {
+									template.getHeadRefs().add(refTwo.getName());
+								}
+							}							
 						}
 					}
 					templates.put(repository.getWorkTree(), template);

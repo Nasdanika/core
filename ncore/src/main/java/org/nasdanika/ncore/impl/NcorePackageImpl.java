@@ -1017,6 +1017,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getGitMarker_HeadRefs() {
+		return (EAttribute)gitMarkerEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1155,6 +1165,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEReference(gitMarkerEClass, GIT_MARKER__REMOTES);
 		createEAttribute(gitMarkerEClass, GIT_MARKER__BRANCH);
 		createEAttribute(gitMarkerEClass, GIT_MARKER__HEAD);
+		createEAttribute(gitMarkerEClass, GIT_MARKER__HEAD_REFS);
 
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
@@ -1322,6 +1333,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getGitMarker_Remotes(), this.getStringEntry(), null, "remotes", null, 0, -1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGitMarker_Branch(), ecorePackage.getEString(), "branch", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGitMarker_Head(), ecorePackage.getEString(), "head", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGitMarker_HeadRefs(), ecorePackage.getEString(), "headRefs", null, 0, -1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1681,6 +1693,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Commit ID of the head"
+		   });
+		addAnnotation
+		  (getGitMarker_HeadRefs(),
+		   source,
+		   new String[] {
+			   "documentation", "Refs on the head commit excluding the head itself. E.g. branch, tags."
 		   });
 	}
 

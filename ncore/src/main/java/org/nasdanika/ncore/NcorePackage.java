@@ -1438,13 +1438,22 @@ public interface NcorePackage extends EPackage {
 	int GIT_MARKER__HEAD = MARKER_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Head Refs</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GIT_MARKER__HEAD_REFS = MARKER_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Git Marker</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GIT_MARKER_FEATURE_COUNT = MARKER_FEATURE_COUNT + 4;
+	int GIT_MARKER_FEATURE_COUNT = MARKER_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Git Marker</em>' class.
@@ -2221,6 +2230,17 @@ public interface NcorePackage extends EPackage {
 	EAttribute getGitMarker_Head();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.ncore.GitMarker#getHeadRefs <em>Head Refs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Head Refs</em>'.
+	 * @see org.nasdanika.ncore.GitMarker#getHeadRefs()
+	 * @see #getGitMarker()
+	 * @generated
+	 */
+	EAttribute getGitMarker_HeadRefs();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2891,6 +2911,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GIT_MARKER__HEAD = eINSTANCE.getGitMarker_Head();
+
+		/**
+		 * The meta object literal for the '<em><b>Head Refs</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GIT_MARKER__HEAD_REFS = eINSTANCE.getGitMarker_HeadRefs();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.

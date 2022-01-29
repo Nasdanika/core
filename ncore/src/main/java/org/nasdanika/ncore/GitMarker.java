@@ -4,6 +4,7 @@ package org.nasdanika.ncore;
 
 import java.lang.String;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 /**
@@ -23,6 +24,7 @@ import org.eclipse.emf.common.util.EMap;
  *   <li>{@link org.nasdanika.ncore.GitMarker#getRemotes <em>Remotes</em>}</li>
  *   <li>{@link org.nasdanika.ncore.GitMarker#getBranch <em>Branch</em>}</li>
  *   <li>{@link org.nasdanika.ncore.GitMarker#getHead <em>Head</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.GitMarker#getHeadRefs <em>Head Refs</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getGitMarker()
@@ -120,5 +122,20 @@ public interface GitMarker extends Marker {
 	 * @generated
 	 */
 	void setHead(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Head Refs</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Refs on the head commit excluding the head itself. E.g. branch, tags.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Head Refs</em>' attribute list.
+	 * @see org.nasdanika.ncore.NcorePackage#getGitMarker_HeadRefs()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getHeadRefs();
 
 } // GitMarker

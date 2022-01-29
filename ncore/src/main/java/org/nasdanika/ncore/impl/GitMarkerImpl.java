@@ -4,8 +4,10 @@ package org.nasdanika.ncore.impl;
 
 import java.lang.String;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -29,6 +31,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.ncore.impl.GitMarkerImpl#getRemotes <em>Remotes</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.GitMarkerImpl#getBranch <em>Branch</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.GitMarkerImpl#getHead <em>Head</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.GitMarkerImpl#getHeadRefs <em>Head Refs</em>}</li>
  * </ul>
  *
  * @generated
@@ -159,6 +162,17 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<String> getHeadRefs() {
+		return (EList<String>)eDynamicGet(NcorePackage.GIT_MARKER__HEAD_REFS, NcorePackage.Literals.GIT_MARKER__HEAD_REFS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -185,6 +199,8 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 				return getBranch();
 			case NcorePackage.GIT_MARKER__HEAD:
 				return getHead();
+			case NcorePackage.GIT_MARKER__HEAD_REFS:
+				return getHeadRefs();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -194,6 +210,7 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -208,6 +225,10 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 				return;
 			case NcorePackage.GIT_MARKER__HEAD:
 				setHead((String)newValue);
+				return;
+			case NcorePackage.GIT_MARKER__HEAD_REFS:
+				getHeadRefs().clear();
+				getHeadRefs().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -233,6 +254,9 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 			case NcorePackage.GIT_MARKER__HEAD:
 				setHead(HEAD_EDEFAULT);
 				return;
+			case NcorePackage.GIT_MARKER__HEAD_REFS:
+				getHeadRefs().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -253,6 +277,8 @@ public class GitMarkerImpl extends MarkerImpl implements GitMarker {
 				return BRANCH_EDEFAULT == null ? getBranch() != null : !BRANCH_EDEFAULT.equals(getBranch());
 			case NcorePackage.GIT_MARKER__HEAD:
 				return HEAD_EDEFAULT == null ? getHead() != null : !HEAD_EDEFAULT.equals(getHead());
+			case NcorePackage.GIT_MARKER__HEAD_REFS:
+				return !getHeadRefs().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
