@@ -1,12 +1,12 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -116,10 +116,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation) {
 					
 					@Override
-					public Object create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
+					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
 						Object ret = super.create(loader, config, base, progressMonitor, marker);
-						if (ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
-							return base.toURI().resolve((String) ret).toString();
+						if (base != null && base.hasAbsolutePath() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
+							return URI.createURI((String) ret).resolve(base).toString();
 						}
 						return ret;
 					}

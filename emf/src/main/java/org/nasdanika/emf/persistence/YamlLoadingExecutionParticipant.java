@@ -35,7 +35,9 @@ public abstract class YamlLoadingExecutionParticipant extends LoadingExecutionPa
 	}
 
 	protected ObjectLoader createLoader(ResourceSet resourceSet) {
-		return new EObjectLoader(null, null, resourceSet);
+		EObjectLoader eObjectLoader = new EObjectLoader(null, null, resourceSet);
+		eObjectLoader.setMarkerFactory(new GitMarkerFactory());
+		return eObjectLoader;
 	}
 
 }

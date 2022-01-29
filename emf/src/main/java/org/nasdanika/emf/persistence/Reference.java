@@ -1,8 +1,8 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.function.BiFunction;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
@@ -49,7 +49,7 @@ public class Reference<T> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return referenceFactory.create(loader, element, base, progressMonitor, marker);
 	}
 

@@ -1,10 +1,10 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -34,7 +34,7 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		for (Entry<String, ObjectLoader> re: registry.entrySet()) {
 			if (type.startsWith(re.getKey())) {
 				return re.getValue().create(loader, type.substring(re.getKey().length()), config, base, progressMonitor, marker);

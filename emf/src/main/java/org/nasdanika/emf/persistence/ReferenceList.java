@@ -1,12 +1,12 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
@@ -63,7 +63,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
 		if (config instanceof Map) {
 			if (!keys.isEmpty()) {
 				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getEReference());
@@ -141,7 +141,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	}
 	
 	@Override
-	protected T createElement(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return referenceFactory.create(loader, element, base, progressMonitor, marker);
 	}
 

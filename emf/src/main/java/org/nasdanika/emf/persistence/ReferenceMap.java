@@ -1,10 +1,10 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.Map;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
@@ -53,7 +53,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	}
 	
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return valueFactory == null ? super.createValue(loader, key, value, base, progressMonitor, marker) : valueFactory.create(loader, value, base, progressMonitor, marker);
 	}
 	

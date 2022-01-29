@@ -53,7 +53,7 @@ public class YamlResource extends ResourceImpl {
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
-			Object data = loader.loadYaml(inputStream, new URL(getURI().toString()), progressMonitor);
+			Object data = loader.loadYaml(inputStream, getURI(), progressMonitor);
 			if (data instanceof Collection) {
 				getContents().addAll((Collection<EObject>) data);
 			} else {

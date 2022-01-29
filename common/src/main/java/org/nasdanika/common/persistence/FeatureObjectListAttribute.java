@@ -1,9 +1,9 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.List;
 import java.util.function.Supplier;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -38,7 +38,7 @@ public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAtt
 	 * @return
 	 * @throws Exception
 	 */
-	protected T createElement(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
 		T ret = elementFactory.get();
 		ret.load(loader, element, base, progressMonitor, marker);
 		return ret;

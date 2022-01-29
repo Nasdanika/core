@@ -1,8 +1,8 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -38,7 +38,7 @@ public class Choice<T> extends Attribute<T> {
 	 * @throws Exception
 	 */
 	@Override
-	public T create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return selector.apply(config).create(loader, config, base, progressMonitor, marker);
 	}
 	

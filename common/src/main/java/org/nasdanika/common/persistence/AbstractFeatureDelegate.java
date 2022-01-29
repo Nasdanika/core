@@ -1,8 +1,8 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -35,7 +35,7 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		return delegate.isLoaded();
 	}
 
-	public void load(ObjectLoader loader, Map<?, ?> source, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		delegate.load(loader, source, base, progressMonitor, marker);		
 	}
 	

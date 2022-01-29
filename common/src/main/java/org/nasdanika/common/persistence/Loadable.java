@@ -1,7 +1,6 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
-
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -13,6 +12,6 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public interface Loadable {
 	
-	void load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;	
+	void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception;	
 
 }

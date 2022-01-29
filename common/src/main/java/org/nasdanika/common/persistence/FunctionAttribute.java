@@ -1,8 +1,8 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -28,7 +28,7 @@ public class FunctionAttribute<T> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return function.apply(config);
 	}
 

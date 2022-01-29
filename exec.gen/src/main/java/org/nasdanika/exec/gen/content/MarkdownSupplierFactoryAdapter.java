@@ -1,8 +1,6 @@
 package org.nasdanika.exec.gen.content;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
@@ -21,16 +19,17 @@ public class MarkdownSupplierFactoryAdapter extends FilterSupplierFactoryAdapter
 		MarkdownHelper markdownHelper = new MarkdownHelper() {
 			
 			@Override
-			protected URL getResourceBase() {
+			protected URI getResourceBase() {
 				Marker marker = getTarget().getMarker();
 				if (marker == null || Util.isBlank(marker.getLocation())) {
 					return super.getResourceBase();
 				}
 				
+				
 				try {
-					return new URL(marker.getLocation());
-				} catch (MalformedURLException e) {
-					throw new ConfigurationException("Malformed location: " + marker.getLocation(), marker);
+					return URI.createURI(marker.getLocation());
+				} catch (Exception e) {
+					throw new ConfigurationException("Invalid location: " + marker.getLocation(), e, marker);
 				}
 			}
 			

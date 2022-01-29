@@ -1,9 +1,9 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -50,7 +50,7 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 	 * @throws Exception
 	 */
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
 		V ret = valueFactory.apply(key);
 		ret.load(loader, value, base, progressMonitor, marker);
 		return ret;

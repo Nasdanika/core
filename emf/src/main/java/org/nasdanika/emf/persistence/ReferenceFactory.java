@@ -1,6 +1,5 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -85,7 +84,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
@@ -144,7 +143,7 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	@SuppressWarnings("unchecked")
 	protected T loadReference(
 			String ref, 
-			URL base,
+			URI base,
 			Marker marker, 
 			ProgressMonitor progressMonitor) {
 		

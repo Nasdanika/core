@@ -1,8 +1,8 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 /**
@@ -23,7 +23,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected V createValue(ObjectLoader loader, Object key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected V createValue(ObjectLoader loader, Object key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		return (V) loader.load(value, base, progressMonitor);
 	}
 

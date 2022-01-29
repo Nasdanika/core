@@ -2,15 +2,14 @@ package org.nasdanika.diagram.gen;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
-import org.nasdanika.common.Util;
 import org.nasdanika.common.DiagramGenerator.Dialect;
+import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.ncore.Marker;
 
@@ -71,8 +70,7 @@ public class Generator {
 				}
 			}						
 			
-			URL url = new URL(uri.toString());			
-			return generateDrawioHtml(url);
+			return generateDrawioHtml(uri);
 		}
 		
 		if (type.equals("drawio")) {
@@ -88,7 +86,7 @@ public class Generator {
 	 * @return
 	 * @throws IOException
 	 */
-	public String generateDrawioHtml(URL diagram) throws Exception {
+	public String generateDrawioHtml(URI diagram) throws Exception {
 		return getDiagramGenerator().generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
 	}
 	

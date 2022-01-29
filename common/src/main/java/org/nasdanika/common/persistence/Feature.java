@@ -1,8 +1,8 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 public interface Feature<T> extends Marked {
@@ -21,7 +21,7 @@ public interface Feature<T> extends Marked {
 	 */
 	boolean isDefault();
 
-	void load(ObjectLoader loader, Map<?,?> source, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
+	void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
 	
 	/**
 	 * @return Feature description in Markdown.

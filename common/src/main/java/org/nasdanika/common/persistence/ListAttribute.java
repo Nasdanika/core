@@ -1,11 +1,11 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
@@ -27,7 +27,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
 		if (config instanceof Collection) {
 			List<T> ret = new ArrayList<>();
 			int idx = 0;
@@ -51,7 +51,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createElement(ObjectLoader loader, Object element, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
 		return (T) element; 
 	}
 	

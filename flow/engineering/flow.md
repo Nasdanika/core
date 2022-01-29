@@ -35,6 +35,26 @@ Nasdanika Flow also [features](features.html):
 * [Service](Service.html) - a flow element referencing an activity provided by a participant or resource.
 * [Pseudo-states](PseudoState.html) - used to combine and direct transitions. 
 
+## Knowledge continuum
+
+One way to think about a flow model is as of a "knowledge continuum" where knowledge of how to do things is organized in progression from generic to specific with bi-directional links between more generic and more specific pieces.
+
+Activity documentation would be the most specific unit of knowledge, or, to be more precise, a mix of bits and pieces of knowledge from multiple domains/disciplines. 
+For example, to perform a microservice development activity a developer need to know how to use IDE, source control system, an issue tracking system, etc. 
+However, they don't need to know all of that at the expert level. E.g. they just need to know how to commit their code to the source control system and how to update an issue. 
+They don't necessarily need to know how to do branching, merging, rebasing. 
+Activity documentation may contain links to specific parts of reference manuals for resources and artifacts used by the activity, e.g. a specific chapter in a source control reference manual.
+Bi-directional references between activities and participants, resources, and artifacts used in activity are automatically generated.
+
+Resource, Artifact, and Participant documentation is more generic, but still specific to the flow package.
+E.g. documentation for a build tool resource may provide a description how the tool is used in the flow and contain references to external resources - manuals, book, video courses.
+Bi-directional links between participants and tools/artifacts they use in all activities are automatically generated. 
+A person who is new to playing a role of a particular participant may study participant documentation including resources the participant uses and activities it participates in.
+
+And finally, resources referenced from the flow documentation are most generic and flow-independent. 
+These resources can also be categorized, if needed, from specific to generic. 
+E.g. there might be documentation on how to use a particular tool within the organization and documentation on how to use the tool in general.
+
 ## Examples
 
 * [TOGAF ADM](../../../togaf/modules/adm/index.html) 

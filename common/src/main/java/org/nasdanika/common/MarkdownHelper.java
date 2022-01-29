@@ -1,6 +1,5 @@
 package org.nasdanika.common;
 
-import java.net.URL;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.eclipse.emf.common.util.URI;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.DiagramGenerator.Dialect;
 
@@ -162,9 +162,13 @@ public class MarkdownHelper {
 			    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 				
 				if (resource) {					
-					try {						
-						URL resourceURL = new URL(getResourceBase(), bareSpec);
-						bareSpec = loadResource(resourceURL, dialect == null);
+					try {		
+						URI resourceURI = URI.createURI(bareSpec);
+						URI resourceBase = getResourceBase();
+						if (resourceBase != null && resourceBase.hasAbsolutePath()) {
+							resourceURI = resourceURI.resolve(resourceBase);
+						}
+						bareSpec = loadResource(resourceURI, dialect == null);
 					} catch (Exception e) {					
 						output
 							.append(System.lineSeparator())
@@ -250,15 +254,7 @@ public class MarkdownHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	protected String loadResource(URL resource, boolean encode) throws Exception {
-		if (Util.CLASSPATH_SCHEME.equals(resource.getProtocol())) {
-			String resPath = resource.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
-			URL cResource = getResourceClassLoader().getResource(resPath);
-			if (cResource == null) {
-				throw new IllegalArgumentException("Classpath resource not found: " + resPath);
-			}
-			resource = cResource;
-		}
+	protected String loadResource(URI resource, boolean encode) throws Exception {
 		if (encode) {
 			byte[] bytes = DefaultConverter.INSTANCE.toByteArray(resource);
 			return Base64.getEncoder().encodeToString(bytes);
@@ -270,7 +266,7 @@ public class MarkdownHelper {
 	 * Override to return base URL for resolving resource references in UML resource blocks.
 	 * @return
 	 */
-	protected URL getResourceBase() {
+	protected URI getResourceBase() {
 		return null;
 	}
 	

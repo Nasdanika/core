@@ -1,7 +1,7 @@
 package org.nasdanika.exec.gen.content;
 
+import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Base64;
 
 import org.eclipse.emf.common.util.URI;
@@ -35,9 +35,8 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 
 			try {
 				StringBuilder ret = new StringBuilder("<img src=\"data:image/" + path.substring(0, idx) + ";base64, ");
-				URL imageURL = resolve(path.substring(idx + 1));
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
-				byte[] imageBytes = converter.convert(imageURL.openStream(), byte[].class);
+				byte[] imageBytes = converter.convert(converter.convert(resolve(path.substring(idx + 1)), InputStream.class), byte[].class);
 				ret
 					.append(Base64.getEncoder().encodeToString(imageBytes))
 					.append("\"/>");
@@ -54,9 +53,8 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 	private <T> T computeInclude(Context context, String key, String path, Class<T> type) {
 		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
-				URL includeURL = resolve(path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
-				String includeContent = converter.convert(includeURL.openStream(), String.class);
+				String includeContent = converter.convert(converter.convert(resolve(path), InputStream.class), String.class);
 				return (T) context.interpolateToString(includeContent);
 			} catch (Exception e) {
 				throw new ConfigurationException("Error including '" + path + "': " + e, e, EObjectAdaptable.adaptTo(getTarget(), Marked.class));
@@ -65,7 +63,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 		return null;
 	}
 	
-	protected URL resolve(String path) throws MalformedURLException {
+	protected URI resolve(String path) throws MalformedURLException {
 		URI uri = URI.createURI(path);
 		
 		URI markerBase = null;
@@ -86,16 +84,15 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 			uri = uri.resolve(resourceBase);
 		}
 		
-		return new URL(uri.toString());					
+		return uri;					
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <T> T computeIncludeMarkdown(Context context, String key, String path, Class<T> type) {
 		if (type == null || type.isAssignableFrom(String.class)) {
 			try {
-				URL includeURL = resolve(path);
 				Converter converter = context.get(Converter.class, DefaultConverter.INSTANCE);
-				String markdown = converter.convert(includeURL.openStream(), String.class);
+				String markdown = converter.convert(converter.convert(resolve(path), InputStream.class), String.class);
 				String html = context.computingContext().get(MarkdownHelper.class, MarkdownHelper.INSTANCE).markdownToHtml(markdown);
 				return (T) context.interpolateToString(html);
 			} catch (Exception e) {

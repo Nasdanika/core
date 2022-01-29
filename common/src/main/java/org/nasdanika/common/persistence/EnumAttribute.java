@@ -1,7 +1,6 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
-
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
 public class EnumAttribute<T extends Enum<T>> extends Attribute<T> {
@@ -21,7 +20,7 @@ public class EnumAttribute<T extends Enum<T>> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		try {
 			return Enum.valueOf(type, (String) config);
 		} catch (IllegalArgumentException e) {

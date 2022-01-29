@@ -1,6 +1,7 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,12 +18,13 @@ import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.resource.impl.URIHandlerImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.ProgressMonitor;
@@ -82,18 +84,32 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		// XMI as default.
 		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
 		
-		// replacing URI and delegating to resource set so it loads using extension factories.
-		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(Util.CLASSPATH_SCHEME, new ResourceFactoryImpl() {
-			
+//		// replacing URI and delegating to resource set so it loads using extension factories.
+//		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(Util.CLASSPATH_SCHEME, new ResourceFactoryImpl() {
+//			
+//			@Override
+//			public Resource createResource(URI uri) {
+//				ClassLoader classLoader = getClassLoader();
+//				String resourcePath = uri.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
+//				URL resource = classLoader.getResource(resourcePath);
+//				if (resource == null) {
+//					throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);
+//				}
+//				return ret.createResource(URI.createURI(resource.toString()));
+//			}
+//			
+//		});
+		
+		ret.getURIConverter().getURIHandlers().add(0, new URIHandlerImpl() {
+
 			@Override
-			public Resource createResource(URI uri) {
-				ClassLoader classLoader = getClassLoader();
-				String resourcePath = uri.toString().substring(Util.CLASSPATH_SCHEME.length() + 1);
-				URL resource = classLoader.getResource(resourcePath);
-				if (resource == null) {
-					throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);
-				}
-				return ret.createResource(URI.createURI(resource.toString()));
+			public boolean canHandle(URI uri) {
+				return uri != null && Util.CLASSPATH_SCHEME.equals(uri.scheme());
+			}
+
+			@Override
+			public InputStream createInputStream(URI uri, Map<?, ?> options) throws IOException {
+				return DefaultConverter.INSTANCE.toInputStream(uri);
 			}
 			
 		});

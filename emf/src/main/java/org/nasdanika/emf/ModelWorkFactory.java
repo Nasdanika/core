@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.ncore.NcorePackage;
 
 /**
  * This class loads a model with the root element, adapts it to {@link SupplierFactory}, and delegates its methods to it. 

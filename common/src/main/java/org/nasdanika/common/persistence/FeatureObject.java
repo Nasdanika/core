@@ -1,6 +1,5 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
@@ -54,7 +54,8 @@ public class FeatureObject implements Marked, Loadable {
 	 * @return this object.
 	 * @throws Exception
 	 */
-	public void load(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	@Override
+	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		this.marker = marker;			
 		if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;

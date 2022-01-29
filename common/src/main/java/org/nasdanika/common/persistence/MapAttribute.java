@@ -1,10 +1,10 @@
 package org.nasdanika.common.persistence;
 
-import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 
@@ -27,7 +27,7 @@ public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 	}
 	
 	@Override
-	public Map<K,V> create(ObjectLoader loader, Object config, URL base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public Map<K,V> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
 		if (config instanceof Map) {
 			Map<K,V> ret = new LinkedHashMap<>();
 			for (Entry<?, ?> e: ((Map<?,?>) config).entrySet()) {
@@ -56,7 +56,7 @@ public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected V createValue(ObjectLoader loader, K key, Object value, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
 		return (V) value; 
 	}
 	

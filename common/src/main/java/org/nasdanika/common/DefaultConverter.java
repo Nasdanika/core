@@ -19,6 +19,7 @@ import java.time.Period;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
@@ -244,6 +245,13 @@ public class DefaultConverter extends ReflectiveConverter {
 		Object data = MarkingYamlConstructor.createMarkingYaml(url.toString()).load(url.openStream());
 		return data instanceof Map ? (Map<String, Object>) data : null;		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public Map<String, Object> toYamlMap(URI uri) throws IOException {
+		Object data = MarkingYamlConstructor.createMarkingYaml(uri.toString()).load(toInputStream(uri));
+		return data instanceof Map ? (Map<String, Object>) data : null;		
+	}
 
 	/**
 	 * Parses string as YAML.
@@ -275,6 +283,13 @@ public class DefaultConverter extends ReflectiveConverter {
 	@ConverterMethod
 	public List<Object> toYamlList(URL url) throws IOException {
 		Object data = MarkingYamlConstructor.createMarkingYaml(url.toString()).load(url.openStream());
+		return data instanceof List ? (List<Object>) data : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ConverterMethod
+	public List<Object> toYamlList(URI uri) throws IOException {
+		Object data = MarkingYamlConstructor.createMarkingYaml(uri.toString()).load(toInputStream(uri));
 		return data instanceof List ? (List<Object>) data : null;
 	}
 	
@@ -327,5 +342,59 @@ public class DefaultConverter extends ReflectiveConverter {
 		return URI.createURI(str);
 	}
 	
+	
+	// URI
+	
+	@ConverterMethod
+	public InputStream toInputStream(URI uri) throws IOException {
+		if (Util.CLASSPATH_SCHEME.equals(uri.scheme())) {
+			String resource = uri.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
+			return Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(resource), "ClassLoader resource not found: " + resource);
+		}
+		return toInputStream(new URL(uri.toString()));
+	}
+	
+	/**
+	 * Reads input stream into a byte array. 
+	 * @param in
+	 * @return
+	 * @throws IOException 
+	 */
+	@ConverterMethod
+	public byte[] toByteArray(URI uri) throws IOException {
+		return toByteArray(toInputStream(uri));
+	}
+	
+	/**
+	 * Always UTF-8.
+	 * @param in
+	 * @return
+	 * @throws IOException 
+	 */
+	@ConverterMethod
+	public Reader toReader(URI uri) throws IOException {
+		return toReader(toInputStream(uri));
+	}
+	
+	/**
+	 * Reads URL to String
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+//	@ConverterMethod - Not a converter method because conversion breaks getting base URI property.
+	public String stringContent(URI uri) throws IOException {
+		return toString(toReader(uri));
+	}
+	
+	@ConverterMethod
+	public JSONArray toJSONArray(URI uri) throws IOException {
+		return toJSONArray(toReader(uri));
+	}
+	
+	@ConverterMethod
+	public JSONObject toJSONObject(URI uri) throws IOException {
+		return new JSONObject(toReader(uri));
+	}
 	
 }

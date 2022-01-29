@@ -1,6 +1,5 @@
 package org.nasdanika.emf.persistence;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -247,7 +246,7 @@ public class EObjectLoader extends DispatchingLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
 		if (result != null) {
 			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond());
@@ -306,7 +305,7 @@ public class EObjectLoader extends DispatchingLoader {
 			ObjectLoader loader, 
 			EClass eClass, 
 			Object config, 
-			URL base, 
+			URI base, 
 			ProgressMonitor progressMonitor, 
 			Marker marker, 
 			BiFunction<EClass,ENamedElement,String> keyProvider) throws Exception {
@@ -370,7 +369,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param base
 	 * @return Proxy object or null if config is not a proxy config.
 	 */
-	public EObject createProxy(EClass eClass, Object config, URL base, Marker marker, ProgressMonitor progressMonitor) {
+	public EObject createProxy(EClass eClass, Object config, URI base, Marker marker, ProgressMonitor progressMonitor) {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
@@ -392,8 +391,7 @@ public class EObjectLoader extends DispatchingLoader {
 					if (proxyURIStr.startsWith(LATE_PROXY_RESOLUTION_URI_PREFIX)) {
 						proxyURI = URI.createURI(proxyURIStr.substring(LATE_PROXY_RESOLUTION_URI_PREFIX.length()));
 					} else if (base != null) {
-						URI baseURI = URI.createURI(base.toString());
-						proxyURI = proxyURI.resolve(baseURI);
+						proxyURI = proxyURI.resolve(base);
 					}
 					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
 					mark(eObject, marker, progressMonitor);

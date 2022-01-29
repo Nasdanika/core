@@ -3,6 +3,7 @@ package org.nasdanika.common;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 
@@ -31,7 +32,7 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URL base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		String fqn = resolver == null ? type : resolver.apply(type);
 		if (fqn == null) {
 			if (resolver == null) {
