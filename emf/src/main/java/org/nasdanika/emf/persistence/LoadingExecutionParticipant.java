@@ -84,22 +84,6 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 		// XMI as default.
 		ret.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
 		
-//		// replacing URI and delegating to resource set so it loads using extension factories.
-//		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put(Util.CLASSPATH_SCHEME, new ResourceFactoryImpl() {
-//			
-//			@Override
-//			public Resource createResource(URI uri) {
-//				ClassLoader classLoader = getClassLoader();
-//				String resourcePath = uri.toString().substring(Util.CLASSPATH_URL_PREFIX.length());
-//				URL resource = classLoader.getResource(resourcePath);
-//				if (resource == null) {
-//					throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);
-//				}
-//				return ret.createResource(URI.createURI(resource.toString()));
-//			}
-//			
-//		});
-		
 		ret.getURIConverter().getURIHandlers().add(0, new URIHandlerImpl() {
 
 			@Override
