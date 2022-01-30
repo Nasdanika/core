@@ -345,8 +345,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.ARTIFACT__REPOSITORIES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRepositories()).basicAdd(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__INPUT_FOR:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputFor()).basicAdd(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:
@@ -379,8 +377,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 		switch (featureID) {
 			case FlowPackage.ARTIFACT__SERVICES:
 				return ((InternalEList<?>)getServices()).basicRemove(otherEnd, msgs);
-			case FlowPackage.ARTIFACT__REPOSITORIES:
-				return ((InternalEList<?>)getRepositories()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__INPUT_FOR:
 				return ((InternalEList<?>)getInputFor()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__OUTPUT_FOR:

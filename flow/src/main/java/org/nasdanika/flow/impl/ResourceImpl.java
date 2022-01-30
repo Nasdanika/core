@@ -117,10 +117,6 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.RESOURCE__ARTIFACTS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
-			case FlowPackage.RESOURCE__USED_IN:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedIn()).basicAdd(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_BY:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getUsedBy()).basicAdd(otherEnd, msgs);
 		}
@@ -135,10 +131,6 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FlowPackage.RESOURCE__ARTIFACTS:
-				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
-			case FlowPackage.RESOURCE__USED_IN:
-				return ((InternalEList<?>)getUsedIn()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__USED_BY:
 				return ((InternalEList<?>)getUsedBy()).basicRemove(otherEnd, msgs);
 			case FlowPackage.RESOURCE__CHILDREN:

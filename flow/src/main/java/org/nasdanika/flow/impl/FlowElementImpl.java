@@ -277,8 +277,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputArtifacts()).basicAdd(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getParticipants()).basicAdd(otherEnd, msgs);
-			case FlowPackage.FLOW_ELEMENT__RESOURCES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResources()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -301,8 +299,6 @@ public class FlowElementImpl<T extends FlowElement<T>> extends ParticipantRespon
 				return ((InternalEList<?>)getOutputArtifacts()).basicRemove(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__PARTICIPANTS:
 				return ((InternalEList<?>)getParticipants()).basicRemove(otherEnd, msgs);
-			case FlowPackage.FLOW_ELEMENT__RESOURCES:
-				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
 			case FlowPackage.FLOW_ELEMENT__ARTIFACT_RESPONSIBILITIES:
 				return ((InternalEList<?>)getArtifactResponsibilities()).basicRemove(otherEnd, msgs);
 		}

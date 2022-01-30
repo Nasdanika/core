@@ -2259,11 +2259,11 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getParticipantEntry_Value(), this.getParticipant(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResource_Artifacts(), this.getArtifact(), this.getArtifact_Repositories(), "artifacts", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getResource_Artifacts(), this.getArtifact(), null, "artifacts", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getFlowElement());
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
-		initEReference(getResource_UsedIn(), g1, this.getFlowElement_Resources(), "usedIn", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getResource_UsedIn(), g1, null, "usedIn", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getResource_UsedBy(), this.getParticipant(), this.getParticipant_Resources(), "usedBy", null, 0, -1, Resource.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getResource_Children(), this.getResourceEntry(), null, "children", null, 0, -1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -2282,7 +2282,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEAttribute(getParticipantResponsibility_InformedKeys(), ecorePackage.getEString(), "informedKeys", null, 0, -1, ParticipantResponsibility.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(artifactEClass, Artifact.class, "Artifact", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getArtifact_Repositories(), this.getResource(), this.getResource_Artifacts(), "repositories", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getArtifact_Repositories(), this.getResource(), null, "repositories", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtifact_RepositoryKeys(), ecorePackage.getEString(), "repositoryKeys", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getFlowElement());
 		g2 = createEGenericType();
@@ -2334,7 +2334,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEAttribute(getFlowElement_OutputArtifactKeys(), ecorePackage.getEString(), "outputArtifactKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_Participants(), this.getParticipant(), this.getParticipant_Participates(), "participants", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_ParticipantKeys(), ecorePackage.getEString(), "participantKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFlowElement_Resources(), this.getResource(), this.getResource_UsedIn(), "resources", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getFlowElement_Resources(), this.getResource(), null, "resources", null, 0, -1, FlowElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFlowElement_ResourceKeys(), ecorePackage.getEString(), "resourceKeys", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFlowElement_ArtifactResponsibilities(), this.getArtifactParticipantResponsibility(), null, "artifactResponsibilities", null, 0, -1, FlowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getFlowElement_ArtifactResponsibilities().getEKeys().add(this.getArtifactParticipantResponsibility_ArtifactKey());
@@ -2522,6 +2522,31 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "homogenous", "true"
+		   });
+		addAnnotation
+		  (resourceEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/participant.md",
+			   "load-doc-reference", "doc/participant-load-doc.md"
+		   });
+		addAnnotation
+		  (getResource_Artifacts(),
+		   source,
+		   new String[] {
+			   "opposite", "repositories"
+		   });
+		addAnnotation
+		  (getResource_UsedIn(),
+		   source,
+		   new String[] {
+			   "opposite", "resources"
+		   });
+		addAnnotation
+		  (getResource_UsedBy(),
+		   source,
+		   new String[] {
+			   "opposite", "resources"
 		   });
 		addAnnotation
 		  (getResourceEntry_Value(),
@@ -3049,7 +3074,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getResource_Artifacts(),
 		   source,
 		   new String[] {
-			   "documentation", "Derived opposite to Artifact.repositories."
+			   "documentation", "Artifacts which can be stored in this resource. E.g. source code can be stored in a source control system. Derived opposite to Artifact.repositories."
 		   });
 		addAnnotation
 		  (getResource_UsedIn(),
@@ -3085,7 +3110,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getResourceEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Resource. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Resource. Use ``null`` to suppress inherited resource."
 		   });
 		addAnnotation
 		  (getParticipantResponsibility_ResponsibleKeys(),

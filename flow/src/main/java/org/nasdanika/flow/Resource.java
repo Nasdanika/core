@@ -21,7 +21,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getResource()
- * @model
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/participant.md' load-doc-reference='doc/participant-load-doc.md'"
  * @generated
  */
 public interface Resource extends ServiceProvider<Resource> {
@@ -29,16 +29,15 @@ public interface Resource extends ServiceProvider<Resource> {
 	/**
 	 * Returns the value of the '<em><b>Artifacts</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Artifact}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getRepositories <em>Repositories</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Derived opposite to Artifact.repositories.
+	 * Artifacts which can be stored in this resource. E.g. source code can be stored in a source control system. Derived opposite to Artifact.repositories.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getResource_Artifacts()
-	 * @see org.nasdanika.flow.Artifact#getRepositories
-	 * @model opposite="repositories" transient="true" changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
+	 *        annotation="urn:org.nasdanika opposite='repositories'"
 	 * @generated
 	 */
 	EList<Artifact> getArtifacts();
@@ -46,7 +45,6 @@ public interface Resource extends ServiceProvider<Resource> {
 	/**
 	 * Returns the value of the '<em><b>Used In</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.FlowElement}<code>&lt;?&gt;</code>.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.FlowElement#getResources <em>Resources</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -54,8 +52,8 @@ public interface Resource extends ServiceProvider<Resource> {
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Used In</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedIn()
-	 * @see org.nasdanika.flow.FlowElement#getResources
-	 * @model opposite="resources" transient="true" changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
+	 *        annotation="urn:org.nasdanika opposite='resources'"
 	 * @generated
 	 */
 	EList<FlowElement<?>> getUsedIn();
@@ -73,6 +71,7 @@ public interface Resource extends ServiceProvider<Resource> {
 	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedBy()
 	 * @see org.nasdanika.flow.Participant#getResources
 	 * @model opposite="resources" transient="true" changeable="false" derived="true"
+	 *        annotation="urn:org.nasdanika opposite='resources'"
 	 * @generated
 	 */
 	EList<Participant> getUsedBy();

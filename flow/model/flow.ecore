@@ -323,16 +323,26 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Resource">
+    <eAnnotations source="urn:org.nasdanika">
+      <details key="documentation-reference" value="doc/participant.md"/>
+      <details key="load-doc-reference" value="doc/participant-load-doc.md"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
-        eType="#//Artifact" changeable="false" transient="true" derived="true" eOpposite="#//Artifact/repositories">
+        eType="#//Artifact" changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Derived opposite to Artifact.repositories."/>
+        <details key="documentation" value="Artifacts which can be stored in this resource. E.g. source code can be stored in a source control system. Derived opposite to Artifact.repositories."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="opposite" value="repositories"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="usedIn" upperBound="-1"
-        changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/resources">
+        changeable="false" transient="true" derived="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Flow elements which use this resource."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="opposite" value="resources"/>
       </eAnnotations>
       <eGenericType eClassifier="#//FlowElement">
         <eTypeArguments/>
@@ -343,6 +353,9 @@
         eOpposite="#//Participant/resources">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Participants use this resource in their activities."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="opposite" value="resources"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
@@ -370,7 +383,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Resource. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Resource. Use ``null`` to suppress inherited resource."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -434,7 +447,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Artifact">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
-        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/artifacts"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -741,7 +754,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
-        eType="#//Resource" changeable="false" transient="true" derived="true" eOpposite="#//Resource/usedIn"/>
+        eType="#//Resource" changeable="false" transient="true" derived="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">

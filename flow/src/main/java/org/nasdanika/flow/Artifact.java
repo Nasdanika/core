@@ -41,13 +41,11 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	/**
 	 * Returns the value of the '<em><b>Repositories</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Resource#getArtifacts <em>Artifacts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Repositories</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Repositories()
-	 * @see org.nasdanika.flow.Resource#getArtifacts
-	 * @model opposite="artifacts" transient="true" changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Resource> getRepositories();
