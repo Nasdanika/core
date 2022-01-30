@@ -2233,9 +2233,9 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getParticipant_Participates(), g1, this.getFlowElement_Participants(), "participates", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getParticipant_Resources(), this.getResource(), this.getResource_UsedBy(), "resources", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getParticipant_Artifacts(), this.getArtifact(), this.getArtifact_UsedBy(), "artifacts", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEReference(getParticipant_Specializations(), this.getParticipant(), this.getParticipant_Bases(), "specializations", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getParticipant_Specializations(), this.getParticipant(), null, "specializations", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getParticipant_BaseKeys(), ecorePackage.getEString(), "baseKeys", null, 0, -1, Participant.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getParticipant_Bases(), this.getParticipant(), this.getParticipant_Specializations(), "bases", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getParticipant_Bases(), this.getParticipant(), null, "bases", null, 0, -1, Participant.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(this.getParticipantResponsibility());
 		g2 = createEGenericType();
 		g1.getETypeArguments().add(g2);
@@ -2441,6 +2441,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "diagram", "navigation"
 		   });
 		addAnnotation
+		  (getPackageElement_Prototype(),
+		   source,
+		   new String[] {
+			   "loadable", "false"
+		   });
+		addAnnotation
 		  (getPackageElement_Documentation(),
 		   source,
 		   new String[] {
@@ -2471,7 +2477,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (packageEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package.md"
+			   "documentation-reference", "doc/package.md",
+			   "load-doc-reference", "doc/package-load-doc.md"
 		   });
 		addAnnotation
 		  (getPackage_SuperPackages(),
@@ -2495,13 +2502,20 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (participantEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/participant.md"
+			   "documentation-reference", "doc/participant.md",
+			   "load-doc-reference", "doc/participant-load-doc.md"
 		   });
 		addAnnotation
 		  (getParticipant_BaseKeys(),
 		   source,
 		   new String[] {
 			   "feature-key", "bases"
+		   });
+		addAnnotation
+		  (getParticipant_Bases(),
+		   source,
+		   new String[] {
+			   "opposite", "specializations"
 		   });
 		addAnnotation
 		  (getParticipantEntry_Value(),
@@ -2885,7 +2899,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRepresentationEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Representation (diagram). Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Representation (diagram)."
 		   });
 		addAnnotation
 		  (getPackage_SuperPackages(),
@@ -2945,7 +2959,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getServiceProvider_Services(),
 		   source,
 		   new String[] {
-			   "documentation", "Services provided by a participant. Participant service activities imply the containing participant. "
+			   "documentation", "Services provided by a this service provider. "
 		   });
 		addAnnotation
 		  (getParticipant_Participates(),
@@ -2966,10 +2980,46 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Artifacts this participant uses in their activities."
 		   });
 		addAnnotation
+		  (getParticipant_Specializations(),
+		   source,
+		   new String[] {
+			   "documentation", "Specializations of this participant."
+		   });
+		addAnnotation
 		  (getParticipant_BaseKeys(),
 		   source,
 		   new String[] {
 			   "documentation", "Keys of base participants, which this participant is a specialization of, relative to the containing package ``participants/`` reference."
+		   });
+		addAnnotation
+		  (getParticipant_Bases(),
+		   source,
+		   new String[] {
+			   "documentation", "Base participants, which this participant is a specialization of. E.g. Junior Developer and Senior Developer can be specializations of Developer, which in turn can be a specialization of Agile Team Member."
+		   });
+		addAnnotation
+		  (getParticipant_Responsible(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements (activities, journeys) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming."
+		   });
+		addAnnotation
+		  (getParticipant_Accountable(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements (activities, journeys) this participant is ultimately answerable for the correct and thorough completion."
+		   });
+		addAnnotation
+		  (getParticipant_Consulted(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements (activities, journeys) for which this participant\'s opinions are sought, e.g. the participant is a subject-matter expert."
+		   });
+		addAnnotation
+		  (getParticipant_Informed(),
+		   source,
+		   new String[] {
+			   "documentation", "Flow elements (activities, journeys) about which this participant is kept up-to-date on progress."
 		   });
 		addAnnotation
 		  (getParticipant_Children(),
@@ -2981,7 +3031,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (participantEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of participant key to a participant. Null value suppresses inherited entry."
+			   "documentation", "Mapping of a participant key to a participant. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getParticipantEntry_Key(),
@@ -2993,7 +3043,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getParticipantEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Participant. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Participant. Use ``null`` to suppress inherited participant."
 		   });
 		addAnnotation
 		  (getResource_Artifacts(),

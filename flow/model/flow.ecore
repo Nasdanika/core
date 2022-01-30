@@ -42,6 +42,9 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="This reference is set by ``create()`` method and points to a package element which created and configured this element."/>
       </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="loadable" value="false"/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//PackageElement/T"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
@@ -111,13 +114,14 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Representation (diagram). Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Representation (diagram)."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Package">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/package.md"/>
+      <details key="load-doc-reference" value="doc/package-load-doc.md"/>
     </eAnnotations>
     <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
       <details key="constraints" value="test"/>
@@ -196,7 +200,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
         eType="#//ActivityEntry" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Services provided by a participant. Participant service activities imply the containing participant. "/>
+        <details key="documentation" value="Services provided by a this service provider. "/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//PackageElement">
@@ -206,6 +210,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Participant">
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/participant.md"/>
+      <details key="load-doc-reference" value="doc/participant-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="participates" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//FlowElement/participants">
@@ -229,8 +234,11 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="specializations" upperBound="-1"
-        eType="#//Participant" changeable="false" transient="true" derived="true"
-        eOpposite="#//Participant/bases"/>
+        eType="#//Participant" changeable="false" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specializations of this participant."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseKeys" upperBound="-1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="urn:org.nasdanika">
@@ -241,28 +249,46 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="bases" upperBound="-1"
-        eType="#//Participant" changeable="false" transient="true" derived="true"
-        eOpposite="#//Participant/specializations"/>
+        eType="#//Participant" changeable="false" transient="true" derived="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="opposite" value="specializations"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Base participants, which this participant is a specialization of. E.g. Junior Developer and Senior Developer can be specializations of Developer, which in turn can be a specialization of Agile Team Member."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/responsible">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements (activities, journeys) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming."/>
+      </eAnnotations>
       <eGenericType eClassifier="#//ParticipantResponsibility">
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="accountable" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/accountable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements (activities, journeys) this participant is ultimately answerable for the correct and thorough completion."/>
+      </eAnnotations>
       <eGenericType eClassifier="#//ParticipantResponsibility">
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="consulted" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/consulted">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements (activities, journeys) for which this participant's opinions are sought, e.g. the participant is a subject-matter expert."/>
+      </eAnnotations>
       <eGenericType eClassifier="#//ParticipantResponsibility">
         <eTypeArguments/>
       </eGenericType>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="informed" upperBound="-1"
         changeable="false" transient="true" derived="true" eOpposite="#//ParticipantResponsibility/informed">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Flow elements (activities, journeys) about which this participant is kept up-to-date on progress."/>
+      </eAnnotations>
       <eGenericType eClassifier="#//ParticipantResponsibility">
         <eTypeArguments/>
       </eGenericType>
@@ -279,7 +305,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ParticipantEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="Mapping of participant key to a participant. Null value suppresses inherited entry."/>
+      <details key="documentation" value="Mapping of a participant key to a participant. Null value suppresses inherited entry."/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -292,7 +318,7 @@
         <details key="homogenous" value="true"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Participant. Use ``null`` to suppress inherited sub-package."/>
+        <details key="documentation" value="Participant. Use ``null`` to suppress inherited participant."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

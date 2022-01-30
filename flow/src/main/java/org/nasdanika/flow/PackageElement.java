@@ -48,6 +48,7 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @see #setPrototype(PackageElement)
 	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Prototype()
 	 * @model transient="true"
+	 *        annotation="urn:org.nasdanika loadable='false'"
 	 * @generated
 	 */
 	T getPrototype();

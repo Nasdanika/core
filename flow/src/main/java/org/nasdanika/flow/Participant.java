@@ -28,7 +28,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getParticipant()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/participant.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/participant.md' load-doc-reference='doc/participant-load-doc.md'"
  * @generated
  */
 public interface Participant extends ServiceProvider<Participant> {
@@ -86,13 +86,14 @@ public interface Participant extends ServiceProvider<Participant> {
 	/**
 	 * Returns the value of the '<em><b>Specializations</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getBases <em>Bases</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Specializations of this participant.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Specializations</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Specializations()
-	 * @see org.nasdanika.flow.Participant#getBases
-	 * @model opposite="bases" transient="true" changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
 	 * @generated
 	 */
 	EList<Participant> getSpecializations();
@@ -115,13 +116,15 @@ public interface Participant extends ServiceProvider<Participant> {
 	/**
 	 * Returns the value of the '<em><b>Bases</b></em>' reference list.
 	 * The list contents are of type {@link org.nasdanika.flow.Participant}.
-	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getSpecializations <em>Specializations</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Base participants, which this participant is a specialization of. E.g. Junior Developer and Senior Developer can be specializations of Developer, which in turn can be a specialization of Agile Team Member.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Bases</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Bases()
-	 * @see org.nasdanika.flow.Participant#getSpecializations
-	 * @model opposite="specializations" transient="true" changeable="false" derived="true"
+	 * @model transient="true" changeable="false" derived="true"
+	 *        annotation="urn:org.nasdanika opposite='specializations'"
 	 * @generated
 	 */
 	EList<Participant> getBases();
@@ -132,6 +135,9 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getResponsible <em>Responsible</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements (activities, journeys) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Responsible</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Responsible()
 	 * @see org.nasdanika.flow.ParticipantResponsibility#getResponsible
@@ -146,6 +152,9 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getAccountable <em>Accountable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements (activities, journeys) this participant is ultimately answerable for the correct and thorough completion.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Accountable</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Accountable()
 	 * @see org.nasdanika.flow.ParticipantResponsibility#getAccountable
@@ -160,6 +169,9 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getConsulted <em>Consulted</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements (activities, journeys) for which this participant's opinions are sought, e.g. the participant is a subject-matter expert.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Consulted</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Consulted()
 	 * @see org.nasdanika.flow.ParticipantResponsibility#getConsulted
@@ -174,6 +186,9 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.ParticipantResponsibility#getInformed <em>Informed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Flow elements (activities, journeys) about which this participant is kept up-to-date on progress.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Informed</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Informed()
 	 * @see org.nasdanika.flow.ParticipantResponsibility#getInformed

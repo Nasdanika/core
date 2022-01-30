@@ -28,7 +28,7 @@ public interface ServiceProvider<T extends PackageElement<T>> extends PackageEle
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Services provided by a participant. Participant service activities imply the containing participant. 
+	 * Services provided by a this service provider. 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Services</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getServiceProvider_Services()

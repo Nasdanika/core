@@ -1,0 +1,2 @@
+Something that participates in completion of activities - a human, an organization, a system.
+Association between activities and participants can be done with ``participants`` reference or with [RACI](https://en.wikipedia.org/wiki/Responsibility_assignment_matrix) - ``responsible``, ``accountable``, ``consulted``, ``informed``. 

@@ -227,10 +227,6 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResources()).basicAdd(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getArtifacts()).basicAdd(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getSpecializations()).basicAdd(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__BASES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getBases()).basicAdd(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__RESPONSIBLE:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getResponsible()).basicAdd(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
@@ -257,10 +253,6 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ARTIFACTS:
 				return ((InternalEList<?>)getArtifacts()).basicRemove(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__SPECIALIZATIONS:
-				return ((InternalEList<?>)getSpecializations()).basicRemove(otherEnd, msgs);
-			case FlowPackage.PARTICIPANT__BASES:
-				return ((InternalEList<?>)getBases()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__RESPONSIBLE:
 				return ((InternalEList<?>)getResponsible()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PARTICIPANT__ACCOUNTABLE:
