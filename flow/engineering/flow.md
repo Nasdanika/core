@@ -63,6 +63,11 @@ E.g. there might be documentation on how to use a particular tool within the org
 * Tests
     * [Sources](https://github.com/Nasdanika/html/tree/master/flow/src/test/java/org/nasdanika/html/flow/tests)  - JUnit tests to generate HTML from models.
     * [Resources](https://github.com/Nasdanika/html/tree/master/flow/src/test/resources/org/nasdanika/html/flow/tests) - flow definitions.
+    * Generated documentation
+        * [Core Agile](https://nasdanika.org/flow-demo/core/activities/development/index.html) - not a real Agile flow, just a demo.
+        * AWS - extends (inherits from) the Core Agile above, adds AWS-specific artifacts.
+            * [Flow](https://nasdanika.org/flow-demo/aws/activities/development/index.html)
+            * [Components](https://nasdanika.org/flow-demo/aws/artifacts/aws/index.html) - hierarchical artifacts.
   
 ## Process overview   
 
