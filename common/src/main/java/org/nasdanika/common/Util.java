@@ -79,7 +79,7 @@ public class Util {
 		for (int i=1; i<cca.length; ++i) {
 			cca[i] = cca[i].toLowerCase();
 		}
-		return StringUtils.join(cca, " ");
+		return String.join(" ", cca);
 	}
 		
 	/**

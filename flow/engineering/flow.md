@@ -66,8 +66,8 @@ E.g. there might be documentation on how to use a particular tool within the org
     * Generated documentation
         * [Core Agile](https://nasdanika.org/flow-demo/core/activities/development/index.html) - not a real Agile flow, just a demo.
         * AWS - extends (inherits from) the Core Agile above, adds AWS-specific artifacts.
-            * [Flow](https://nasdanika.org/flow-demo/aws/activities/development/index.html)
-            * [Components](https://nasdanika.org/flow-demo/aws/artifacts/aws/index.html) - hierarchical artifacts.
+            * [Flow](https://nasdanika.org/flow-demo/aws/activities/development/index.html) - inherited from the Core Agile.
+            * [Components](https://nasdanika.org/flow-demo/aws/artifacts/aws/index.html) - hierarchical AWS-specific artifacts.
   
 ## Process overview   
 
