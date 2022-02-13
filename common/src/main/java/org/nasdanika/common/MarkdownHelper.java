@@ -187,10 +187,8 @@ public class MarkdownHelper {
 					if (!Util.isBlank(escapedBareSpec)) {
 						replacementBuilder
 							.append(System.lineSeparator())
-							.append("<div> ").append(System.lineSeparator())
-							.append("    <div style='display:none;white-space:pre-wrap' title='Diagram escaped spec for search'>").append(System.lineSeparator())
+							.append("<div style='display:none;white-space:pre-wrap' title='Diagram escaped spec for search'>").append(System.lineSeparator())
 							.append(escapedBareSpec).append(System.lineSeparator()) 
-							.append("    </div>").append(System.lineSeparator())
 							.append("</div> ").append(System.lineSeparator());
 					}
 					
