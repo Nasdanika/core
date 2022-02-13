@@ -8,6 +8,10 @@ package org.nasdanika.flow;
  * A representation of the model object '<em><b>Artifact Participant Responsibility</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Responsibility assignments for an artifact at the activity level if different from the activity responsibility assignments. 
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -18,7 +22,7 @@ package org.nasdanika.flow;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifactParticipantResponsibility()
- * @model
+ * @model annotation="urn:org.nasdanika load-doc-reference='doc/artifact-participant-responsibility-load-doc.md'"
  * @generated
  */
 public interface ArtifactParticipantResponsibility extends ParticipantResponsibility<ArtifactParticipantResponsibility> {
@@ -54,7 +58,7 @@ public interface ArtifactParticipantResponsibility extends ParticipantResponsibi
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Transition target.
+	 * Artifact for which responsibilities are assigned.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Artifact</em>' reference.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifactParticipantResponsibility_Artifact()

@@ -17,7 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getActivity()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/activity.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/activity.md' load-doc-reference='doc/activity-load-doc.md'"
  * @generated
  */
 public interface Activity<T extends Activity<T>> extends FlowElement<T> {

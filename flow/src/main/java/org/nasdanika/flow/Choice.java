@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getChoice()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/choice.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/choice.md' load-doc-reference='doc/choice-load-doc.md'"
  * @generated
  */
 public interface Choice extends PseudoState {

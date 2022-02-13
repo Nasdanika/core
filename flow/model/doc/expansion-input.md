@@ -1,2 +1,2 @@
 Expansion input is a [pseudo-state](PseudoState.html) which can be used instead of partition [start](Start.html) pseudo-state
-to indicate that the partition [journey](Journey.html) input is a collection and the journey is executed for each element in the collection.
+to indicate that the partition [flow](Flow.html) input is a collection and the flow is executed for each element in the collection.

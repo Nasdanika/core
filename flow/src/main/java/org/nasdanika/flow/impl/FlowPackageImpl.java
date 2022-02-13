@@ -2579,6 +2579,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "feature-key", "informed"
 		   });
 		addAnnotation
+		  (artifactEClass,
+		   source,
+		   new String[] {
+			   "documentation-reference", "doc/artifact.md",
+			   "load-doc-reference", "doc/artifact-load-doc.md"
+		   });
+		addAnnotation
 		  (getArtifact_RepositoryKeys(),
 		   source,
 		   new String[] {
@@ -2611,6 +2618,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "homogenous", "true"
 		   });
 		addAnnotation
+		  (artifactParticipantResponsibilityEClass,
+		   source,
+		   new String[] {
+			   "load-doc-reference", "doc/artifact-participant-responsibility-load-doc.md"
+		   });
+		addAnnotation
 		  (getArtifactParticipantResponsibility_ArtifactKey(),
 		   source,
 		   new String[] {
@@ -2620,7 +2633,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (relationshipEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/relationship.md"
+			   "documentation-reference", "doc/flow/relationship.md",
+			   "load-doc-reference", "doc/relationship-load-doc.md"
 		   });
 		addAnnotation
 		  (getRelationship_TargetKey(),
@@ -2646,7 +2660,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (flowElementEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/journey-element.md"
+			   "documentation-reference", "doc/flow/flow-element.md"
 		   });
 		addAnnotation
 		  (getFlowElement_Outputs(),
@@ -2696,7 +2710,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (transitionEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/transition.md"
+			   "documentation-reference", "doc/flow/transition.md",
+			   "load-doc-reference", "doc/transition-load-doc.md"
 		   });
 		addAnnotation
 		  (getTransition_PayloadKeys(),
@@ -2722,7 +2737,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (callEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/call.md"
+			   "documentation-reference", "doc/flow/call.md",
+			   "load-doc-reference", "doc/call-load-doc.md"
 		   });
 		addAnnotation
 		  (getCall_ResponseKeys(),
@@ -2740,13 +2756,15 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (activityEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/activity.md"
+			   "documentation-reference", "doc/flow/activity.md",
+			   "load-doc-reference", "doc/activity-load-doc.md"
 		   });
 		addAnnotation
 		  (serviceEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/service.md"
+			   "documentation-reference", "doc/flow/service.md",
+			   "load-doc-reference", "doc/service-load-doc.md"
 		   });
 		addAnnotation
 		  (getService_TargetKey(),
@@ -2758,7 +2776,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (flowEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/journey.md"
+			   "documentation-reference", "doc/flow/journey.md",
+			   "load-doc-reference", "doc/flow-load-doc.md"
 		   });
 		addAnnotation
 		  (pseudoStateEClass,
@@ -2770,13 +2789,15 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (choiceEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/choice.md"
+			   "documentation-reference", "doc/flow/choice.md",
+			   "load-doc-reference", "doc/choice-load-doc.md"
 		   });
 		addAnnotation
 		  (endEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/end.md"
+			   "documentation-reference", "doc/flow/end.md",
+			   "load-doc-reference", "doc/end-load-doc.md"
 		   });
 		addAnnotation
 		  (entryPointEClass,
@@ -2830,7 +2851,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (startEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/start.md"
+			   "documentation-reference", "doc/flow/start.md",
+			   "load-doc-reference", "doc/start-load-doc.md"
 		   });
 	}
 
@@ -3113,10 +3135,28 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Resource. Use ``null`` to suppress inherited resource."
 		   });
 		addAnnotation
+		  (participantResponsibilityEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for elements for which participants can responsible for, accountable, consulted, or informed. See [Responsibility Assignment Matrix](https://en.wikipedia.org/wiki/Responsibility_assignment_matrix) for more details."
+		   });
+		addAnnotation
+		  (getParticipantResponsibility_Responsible(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant(s) responsible for the element, e.g. for completion of an activity."
+		   });
+		addAnnotation
 		  (getParticipantResponsibility_ResponsibleKeys(),
 		   source,
 		   new String[] {
 			   "documentation", "Keys of responsible participants relative to the containing package ``participants/`` reference."
+		   });
+		addAnnotation
+		  (getParticipantResponsibility_Accountable(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant(s) accountable for the element, i.e. ultimately answerable for the correct and thorough completion of an activity or artifact. Accountable must sign off (approve) work that _responsible_ provides."
 		   });
 		addAnnotation
 		  (getParticipantResponsibility_AccountableKeys(),
@@ -3125,16 +3165,34 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Keys of accountable participants relative to the containing package ``participants/`` reference."
 		   });
 		addAnnotation
+		  (getParticipantResponsibility_Consulted(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant(s) whose opinions are sought, typically subject-matter experts."
+		   });
+		addAnnotation
 		  (getParticipantResponsibility_ConsultedKeys(),
 		   source,
 		   new String[] {
 			   "documentation", "Keys of consulted participants relative to the containing package ``participants/`` reference."
 		   });
 		addAnnotation
+		  (getParticipantResponsibility_Informed(),
+		   source,
+		   new String[] {
+			   "documentation", "Participant(s) who are kept up-to-date on progress and with whom there is one-way communication."
+		   });
+		addAnnotation
 		  (getParticipantResponsibility_InformedKeys(),
 		   source,
 		   new String[] {
 			   "documentation", "Keys of informed participants relative to the containing package ``participants/`` reference."
+		   });
+		addAnnotation
+		  (getArtifact_Repositories(),
+		   source,
+		   new String[] {
+			   "documentation", "Resources in which this artifact can be stored. E.g. source code artifact can be stored in Git resource, and jar artifact can be stored in Maven repository resource."
 		   });
 		addAnnotation
 		  (getArtifact_RepositoryKeys(),
@@ -3158,25 +3216,25 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifact_PayloadFor(),
 		   source,
 		   new String[] {
-			   "documentation", "Derived opposite to Transition payload."
+			   "documentation", "Transitions for which this artifact is a part of their payload. Derived opposite to Transition payload."
 		   });
 		addAnnotation
 		  (getArtifact_ResponseFor(),
 		   source,
 		   new String[] {
-			   "documentation", "Derived opposite to Call response."
+			   "documentation", "Calls for which this artifact is a part of their response. Derived opposite to Call response."
 		   });
 		addAnnotation
 		  (getArtifact_UsedBy(),
 		   source,
 		   new String[] {
-			   "documentation", "Participants use this artifact in their activities."
+			   "documentation", "Participants which use this artifact in their activities."
 		   });
 		addAnnotation
 		  (getArtifact_Responsibilities(),
 		   source,
 		   new String[] {
-			   "documentation", "Responsibilities for this artifact at a flow element level."
+			   "documentation", "Responsibilities for this artifact at a flow element level if different from the flow element responsibilities. E.g. a participant responsible for an activity may delegate work on some artifact to another participant. In this case the activity responsible becomes accountable for the artifact and the delegate participant becomes responsible."
 		   });
 		addAnnotation
 		  (getArtifact_Children(),
@@ -3188,7 +3246,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifact_OutboundRelationships(),
 		   source,
 		   new String[] {
-			   "documentation", "Outbound relationships to other artifacts."
+			   "documentation", "Outbound relationships to other artifacts. Artifact relationships can be used for modeling composite artifacts, e.g. modular/distributed systems such as cloud applications."
 		   });
 		addAnnotation
 		  (getArtifact_InboundRelationships(),
@@ -3215,10 +3273,16 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Keys of artifact\'s templates relative to the artifact URI."
 		   });
 		addAnnotation
+		  (getArtifact_Templates(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifacts can be organized into an inheritance hierarchy using templates reference. Artifacts inherit visual representation of templates. E.g. there might be an artifact \"Cloud Cache\" with multiple instances in different cloud solutions."
+		   });
+		addAnnotation
 		  (getArtifact_Instances(),
 		   source,
 		   new String[] {
-			   "documentation", "Derived opposite to templates."
+			   "documentation", "Artifacts for which artifact is a template. Derived opposite to templates."
 		   });
 		addAnnotation
 		  (artifactEntryEClass,
@@ -3239,6 +3303,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
 		   });
 		addAnnotation
+		  (artifactParticipantResponsibilityEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Responsibility assignments for an artifact at the activity level if different from the activity responsibility assignments. "
+		   });
+		addAnnotation
 		  (getArtifactParticipantResponsibility_ArtifactKey(),
 		   source,
 		   new String[] {
@@ -3248,7 +3318,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifactParticipantResponsibility_Artifact(),
 		   source,
 		   new String[] {
-			   "documentation", "Transition target."
+			   "documentation", "Artifact for which responsibilities are assigned."
 		   });
 		addAnnotation
 		  (getArtifactParticipantResponsibility_Suppress(),
@@ -3260,7 +3330,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRelationship_TargetKey(),
 		   source,
 		   new String[] {
-			   "documentation", "Key of relationship target relative to the containing artifact."
+			   "documentation", "Key of the relationship target relative to the containing artifact."
 		   });
 		addAnnotation
 		  (getRelationship_Target(),
@@ -3272,7 +3342,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getRelationship_Style(),
 		   source,
 		   new String[] {
-			   "documentation", "Connection style for component diagrams."
+			   "documentation", "Connection style (template) for component diagrams."
 		   });
 		addAnnotation
 		  (relationshipEntryEClass,
@@ -3296,31 +3366,31 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlowElement_Outputs(),
 		   source,
 		   new String[] {
-			   "documentation", "Activity outbound transitions to other activities."
+			   "documentation", "Outbound transitions to other flow elements."
 		   });
 		addAnnotation
 		  (getFlowElement_Inputs(),
 		   source,
 		   new String[] {
-			   "documentation", "Transitions which have this flow element as a target."
+			   "documentation", "Transitions which have this flow element as their target."
 		   });
 		addAnnotation
 		  (getFlowElement_Calls(),
 		   source,
 		   new String[] {
-			   "documentation", "Calls to other activities."
+			   "documentation", "Calls to other flow elements."
 		   });
 		addAnnotation
 		  (getFlowElement_Invocations(),
 		   source,
 		   new String[] {
-			   "documentation", "Calls which have this flow element as a target."
+			   "documentation", "Calls which have this flow element as their target."
 		   });
 		addAnnotation
 		  (getFlowElement_InputArtifacts(),
 		   source,
 		   new String[] {
-			   "documentation", "Input artifacts required to start working on this activity."
+			   "documentation", "Input artifacts for this flow element. E.g. artifacts required to start working on an activity."
 		   });
 		addAnnotation
 		  (getFlowElement_InputArtifactKeys(),
@@ -3332,7 +3402,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlowElement_OutputArtifacts(),
 		   source,
 		   new String[] {
-			   "documentation", "Output artifacts of the activity."
+			   "documentation", "Output artifacts of this flow element."
 		   });
 		addAnnotation
 		  (getFlowElement_OutputArtifactKeys(),
@@ -3344,7 +3414,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlowElement_Participants(),
 		   source,
 		   new String[] {
-			   "documentation", "Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions."
+			   "documentation", "Participants of this flow element, e.g. people working on an activity. "
 		   });
 		addAnnotation
 		  (getFlowElement_ParticipantKeys(),
@@ -3353,16 +3423,34 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Keys of participants resolved relative to the containing package ``participants/`` reference."
 		   });
 		addAnnotation
+		  (getFlowElement_Resources(),
+		   source,
+		   new String[] {
+			   "documentation", "Resources used by participants of this flow element. E.g. tools used to complete an activity."
+		   });
+		addAnnotation
 		  (getFlowElement_ResourceKeys(),
 		   source,
 		   new String[] {
 			   "documentation", "Keys of resources resolved relative to the containing package ``resources/`` reference."
 		   });
 		addAnnotation
+		  (getFlowElement_ArtifactResponsibilities(),
+		   source,
+		   new String[] {
+			   "documentation", "Artifact responsibility assignments if different from the flow element responsibility assignments. E.g. a person responsible for an activity may delegate responsibility for some artifact to another participant. In this case another participant becomes responsible and the participant responsible for the activity becomes accounable for the artifact."
+		   });
+		addAnnotation
+		  (getFlowElement_SortGroup(),
+		   source,
+		   new String[] {
+			   "documentation", "During documentation generation flow elements in the flow are sorted in the order of dependency and then alphabetically.\nI.e. if there is a transition from \"Plan\" to \"Execute\" then \"Plan\" will appear in the list of flow elements before \"Execute\".\nSort groups can be used to customize the default sorting behavior by scoping sorting to a particular group of elements.\nGroups themselves are sorted alphabetically. Elements without sort group appear before elements with an assigned sort group.\nFor full control of sorting assign a different sort group for each flow element."
+		   });
+		addAnnotation
 		  (flowElementEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of flow element key to a flow element. Null value suppresses inherited entry."
+			   "documentation", "Mapping of a flow element key to a flow element. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getFlowElementEntry_Key(),
@@ -3380,7 +3468,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getTransition_Payload(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifacts passed from source to target activity."
+			   "documentation", "Artifacts passed from the source element to the target element."
 		   });
 		addAnnotation
 		  (getTransition_PayloadKeys(),
@@ -3404,7 +3492,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (transitionEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of output key to a transition. Null value suppresses inherited entry."
+			   "documentation", "Mapping of an output key to a transition. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getTransitionEntry_Key(),
@@ -3434,7 +3522,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (callEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of call key to a call. Null value suppresses inherited entry."
+			   "documentation", "Mapping of a call key to a call. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getCallEntry_Key(),
@@ -3446,7 +3534,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getCallEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Call. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Call. Use ``null`` to suppress inherited call."
 		   });
 		addAnnotation
 		  (getActivity_Services(),

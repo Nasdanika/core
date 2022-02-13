@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlow()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/journey.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/journey.md' load-doc-reference='doc/flow-load-doc.md'"
  * @generated
  */
 public interface Flow extends Activity<Flow> {

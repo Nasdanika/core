@@ -19,7 +19,7 @@ import org.nasdanika.diagram.Connection;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getRelationship()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/relationship.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/relationship.md' load-doc-reference='doc/relationship-load-doc.md'"
  * @generated
  */
 public interface Relationship extends PackageElement<Relationship> {
@@ -28,7 +28,7 @@ public interface Relationship extends PackageElement<Relationship> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Key of relationship target relative to the containing artifact.
+	 * Key of the relationship target relative to the containing artifact.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Target Key</em>' attribute.
 	 * @see #setTargetKey(String)
@@ -70,7 +70,7 @@ public interface Relationship extends PackageElement<Relationship> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Connection style for component diagrams.
+	 * Connection style (template) for component diagrams.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Style</em>' containment reference.
 	 * @see #setStyle(Connection)

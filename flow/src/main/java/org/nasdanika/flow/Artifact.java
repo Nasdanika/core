@@ -34,7 +34,7 @@ import org.nasdanika.diagram.DiagramElement;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getArtifact()
- * @model
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/artifact.md' load-doc-reference='doc/artifact-load-doc.md'"
  * @generated
  */
 public interface Artifact extends ParticipantResponsibility<Artifact>, ServiceProvider<Artifact> {
@@ -43,6 +43,9 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resources in which this artifact can be stored. E.g. source code artifact can be stored in Git resource, and jar artifact can be stored in Maven repository resource.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Repositories</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Repositories()
 	 * @model transient="true" changeable="false" derived="true"
@@ -106,7 +109,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Derived opposite to Transition payload.
+	 * Transitions for which this artifact is a part of their payload. Derived opposite to Transition payload.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload For</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_PayloadFor()
@@ -123,7 +126,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Derived opposite to Call response.
+	 * Calls for which this artifact is a part of their response. Derived opposite to Call response.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Response For</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_ResponseFor()
@@ -140,7 +143,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Participants use this artifact in their activities.
+	 * Participants which use this artifact in their activities.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Used By</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_UsedBy()
@@ -157,7 +160,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Responsibilities for this artifact at a flow element level.
+	 * Responsibilities for this artifact at a flow element level if different from the flow element responsibilities. E.g. a participant responsible for an activity may delegate work on some artifact to another participant. In this case the activity responsible becomes accountable for the artifact and the delegate participant becomes responsible.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Responsibilities</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Responsibilities()
@@ -190,7 +193,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Outbound relationships to other artifacts.
+	 * Outbound relationships to other artifacts. Artifact relationships can be used for modeling composite artifacts, e.g. modular/distributed systems such as cloud applications.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Outbound Relationships</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_OutboundRelationships()
@@ -289,6 +292,9 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Artifact#getInstances <em>Instances</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Artifacts can be organized into an inheritance hierarchy using templates reference. Artifacts inherit visual representation of templates. E.g. there might be an artifact "Cloud Cache" with multiple instances in different cloud solutions.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Templates</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Templates()
 	 * @see org.nasdanika.flow.Artifact#getInstances
@@ -304,7 +310,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Derived opposite to templates.
+	 * Artifacts for which artifact is a template. Derived opposite to templates.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Instances</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Instances()

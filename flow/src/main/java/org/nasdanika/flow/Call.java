@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getCall()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/call.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/call.md' load-doc-reference='doc/call-load-doc.md'"
  * @generated
  */
 public interface Call extends Transition {

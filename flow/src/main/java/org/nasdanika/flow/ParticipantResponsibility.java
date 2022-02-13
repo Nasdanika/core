@@ -10,6 +10,10 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Participant Responsibility</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Base class for elements for which participants can responsible for, accountable, consulted, or informed. See [Responsibility Assignment Matrix](https://en.wikipedia.org/wiki/Responsibility_assignment_matrix) for more details.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -36,6 +40,9 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getResponsible <em>Responsible</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participant(s) responsible for the element, e.g. for completion of an activity.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Responsible</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_Responsible()
 	 * @see org.nasdanika.flow.Participant#getResponsible
@@ -65,6 +72,9 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getAccountable <em>Accountable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participant(s) accountable for the element, i.e. ultimately answerable for the correct and thorough completion of an activity or artifact. Accountable must sign off (approve) work that _responsible_ provides.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Accountable</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_Accountable()
 	 * @see org.nasdanika.flow.Participant#getAccountable
@@ -94,6 +104,9 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getConsulted <em>Consulted</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participant(s) whose opinions are sought, typically subject-matter experts.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Consulted</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_Consulted()
 	 * @see org.nasdanika.flow.Participant#getConsulted
@@ -123,6 +136,9 @@ public interface ParticipantResponsibility<T extends PackageElement<T>> extends 
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.flow.Participant#getInformed <em>Informed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Participant(s) who are kept up-to-date on progress and with whom there is one-way communication.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Informed</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipantResponsibility_Informed()
 	 * @see org.nasdanika.flow.Participant#getInformed

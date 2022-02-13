@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getTransition()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/transition.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/transition.md' load-doc-reference='doc/transition-load-doc.md'"
  * @generated
  */
 public interface Transition extends PackageElement<Transition> {
@@ -31,7 +31,7 @@ public interface Transition extends PackageElement<Transition> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Artifacts passed from source to target activity.
+	 * Artifacts passed from the source element to the target element.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Payload</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getTransition_Payload()

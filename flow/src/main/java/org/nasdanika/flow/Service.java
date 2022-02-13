@@ -17,7 +17,7 @@ package org.nasdanika.flow;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getService()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/service.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/service.md' load-doc-reference='doc/service-load-doc.md'"
  * @generated
  */
 public interface Service extends FlowElement<Service> {

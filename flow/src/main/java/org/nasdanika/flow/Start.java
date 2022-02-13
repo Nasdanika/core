@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getStart()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/start.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/start.md' load-doc-reference='doc/start-load-doc.md'"
  * @generated
  */
 public interface Start extends PseudoState {

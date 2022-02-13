@@ -1,4 +1,4 @@
-An example of participant YAML definitions, lines 5+:
+An example of a participant YAML definitions:
 
 ```yaml
 flow-package:

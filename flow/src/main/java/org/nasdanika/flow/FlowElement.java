@@ -31,7 +31,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlowElement()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/journey-element.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/flow-element.md'"
  * @generated
  */
 public interface FlowElement<T extends FlowElement<T>> extends ParticipantResponsibility<T> {
@@ -42,7 +42,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Activity outbound transitions to other activities.
+	 * Outbound transitions to other flow elements.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Outputs</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Outputs()
@@ -58,7 +58,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Transitions which have this flow element as a target.
+	 * Transitions which have this flow element as their target.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Inputs</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Inputs()
@@ -74,7 +74,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Calls to other activities.
+	 * Calls to other flow elements.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Calls</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Calls()
@@ -90,7 +90,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Calls which have this flow element as a target.
+	 * Calls which have this flow element as their target.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Invocations</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Invocations()
@@ -121,7 +121,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Input artifacts required to start working on this activity.
+	 * Input artifacts for this flow element. E.g. artifacts required to start working on an activity.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Input Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_InputArtifacts()
@@ -138,7 +138,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Output artifacts of the activity.
+	 * Output artifacts of this flow element.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Output Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_OutputArtifacts()
@@ -170,7 +170,7 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Personas performing this journey element if it is an activity. Applies to all journey elements in order to group them into persona partitions.
+	 * Participants of this flow element, e.g. people working on an activity. 
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Participants</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Participants()
@@ -200,6 +200,9 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * The list contents are of type {@link org.nasdanika.flow.Resource}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Resources used by participants of this flow element. E.g. tools used to complete an activity.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_Resources()
 	 * @model transient="true" changeable="false" derived="true"
@@ -227,6 +230,9 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * The list contents are of type {@link org.nasdanika.flow.ArtifactParticipantResponsibility}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Artifact responsibility assignments if different from the flow element responsibility assignments. E.g. a person responsible for an activity may delegate responsibility for some artifact to another participant. In this case another participant becomes responsible and the participant responsible for the activity becomes accounable for the artifact.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Artifact Responsibilities</em>' containment reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_ArtifactResponsibilities()
 	 * @model containment="true" keys="artifactKey"
@@ -239,6 +245,13 @@ public interface FlowElement<T extends FlowElement<T>> extends ParticipantRespon
 	 * Returns the value of the '<em><b>Sort Group</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * During documentation generation flow elements in the flow are sorted in the order of dependency and then alphabetically.
+	 * I.e. if there is a transition from "Plan" to "Execute" then "Plan" will appear in the list of flow elements before "Execute".
+	 * Sort groups can be used to customize the default sorting behavior by scoping sorting to a particular group of elements.
+	 * Groups themselves are sorted alphabetically. Elements without sort group appear before elements with an assigned sort group.
+	 * For full control of sorting assign a different sort group for each flow element.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Sort Group</em>' attribute.
 	 * @see #setSortGroup(String)
 	 * @see org.nasdanika.flow.FlowPackage#getFlowElement_SortGroup()
