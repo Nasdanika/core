@@ -1,8 +1,10 @@
 package org.nasdanika.emf.persistence;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
@@ -105,9 +107,29 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String LOAD_KEYS = "load-keys";
 	
 	/**
-	 * A space-separated list of load keys which are mutually exclusive with the annotated feature.
+	 * 
+	 * @param eClass
+	 * @param feature
+	 * @return Features in the argument class the argument feature is exclusive with.
 	 */
-	public static final String EXCLUSIVE_WITH = "exclusive-with";
+	public static Object[] getExclusiveWith(EClass eClass, EStructuralFeature feature, BiFunction<EClass,ENamedElement,String> keyProvider) {
+		Set<String> ret = new HashSet<>();
+		for (EStructuralFeature sf: eClass.getEAllStructuralFeatures()) {
+			String exclusiveWithStr = NcoreUtil.getNasdanikaAnnotationDetail(sf, "exclusive-with"); // A space-separated list of load keys which are mutually exclusive with the annotated feature.
+			if (!Util.isBlank(exclusiveWithStr)) {
+				for (String ew: exclusiveWithStr.split("\\s")) {
+					if (sf == feature) {
+						ret.add(ew);
+					} else if (ew.equals(keyProvider.apply(eClass, feature))) {
+						ret.add(keyProvider.apply(eClass, sf));
+					}
+					
+				}
+			}
+		}
+
+		return ret.toArray();
+	}
 	
 	/**
 	 * If true, feature is loaded even if it not changeable, but it is not injected into the object.

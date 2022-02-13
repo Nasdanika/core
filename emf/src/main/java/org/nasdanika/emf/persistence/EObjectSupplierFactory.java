@@ -99,9 +99,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			boolean isDefault) {
-
-		String exclusiveWithStr = NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.EXCLUSIVE_WITH);
-		Object[] exclusiveWith = exclusiveWithStr == null ? new String[0] : exclusiveWithStr.split("\\s");
+		
+		Object[] exclusiveWith = EObjectLoader.getExclusiveWith(eClass, feature, keyProvider);
 		
 		String documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
@@ -113,7 +112,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			Class<?> featureClass = featureType.getInstanceClass();
 			boolean interpolate = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
 			if (String.class == featureClass) {
-				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation) {
+				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation, exclusiveWith) {
 					
 					@Override
 					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
