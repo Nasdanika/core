@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getExpansionOutput()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/expansion-output.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/expansion-output.md'"
  * @generated
  */
 public interface ExpansionOutput extends PseudoState {

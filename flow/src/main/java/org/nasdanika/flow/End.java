@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getEnd()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/end.md' load-doc-reference='doc/end-load-doc.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/end.md' load-doc-reference='doc/end-load-doc.md'"
  * @generated
  */
 public interface End extends PseudoState {

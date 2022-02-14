@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getJoin()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/join.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/join.md'"
  * @generated
  */
 public interface Join extends PseudoState {

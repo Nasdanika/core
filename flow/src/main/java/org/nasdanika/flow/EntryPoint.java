@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getEntryPoint()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/entry-point.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/entry-point.md'"
  * @generated
  */
 public interface EntryPoint extends PseudoState {

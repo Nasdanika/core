@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getFork()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/fork.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/fork.md'"
  * @generated
  */
 public interface Fork extends PseudoState {

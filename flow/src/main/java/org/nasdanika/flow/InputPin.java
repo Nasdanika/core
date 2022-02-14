@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getInputPin()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/input-pin.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/input-pin.md'"
  * @generated
  */
 public interface InputPin extends PseudoState {

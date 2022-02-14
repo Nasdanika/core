@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getExitPoint()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/exit-point.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/exit-point.md'"
  * @generated
  */
 public interface ExitPoint extends PseudoState {

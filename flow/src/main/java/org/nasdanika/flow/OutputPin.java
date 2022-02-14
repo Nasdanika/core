@@ -10,7 +10,7 @@ package org.nasdanika.flow;
  *
  *
  * @see org.nasdanika.flow.FlowPackage#getOutputPin()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/output-pin.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/output-pin.md'"
  * @generated
  */
 public interface OutputPin extends PseudoState {

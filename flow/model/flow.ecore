@@ -646,7 +646,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Relationship">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/relationship.md"/>
+      <details key="documentation-reference" value="doc/relationship.md"/>
       <details key="load-doc-reference" value="doc/relationship-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetKey" lowerBound="1"
@@ -700,7 +700,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FlowElement">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/flow-element.md"/>
+      <details key="documentation-reference" value="doc/flow-element.md"/>
       <contents xsi:type="ecore:EAttribute" name="inputArtifactKeys" upperBound="-1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
         <eAnnotations source="urn:org.nasdanika">
@@ -845,7 +845,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Transition">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/transition.md"/>
+      <details key="documentation-reference" value="doc/transition.md"/>
       <details key="load-doc-reference" value="doc/transition-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="payload" upperBound="-1"
@@ -908,7 +908,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Call" eSuperTypes="#//Transition">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/call.md"/>
+      <details key="documentation-reference" value="doc/call.md"/>
       <details key="load-doc-reference" value="doc/call-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="response" upperBound="-1"
@@ -948,7 +948,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Activity">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/activity.md"/>
+      <details key="documentation-reference" value="doc/activity.md"/>
       <details key="load-doc-reference" value="doc/activity-load-doc.md"/>
     </eAnnotations>
     <eTypeParameters name="T">
@@ -986,7 +986,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/service.md"/>
+      <details key="documentation-reference" value="doc/service.md"/>
       <details key="load-doc-reference" value="doc/service-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" changeable="false"
@@ -1013,7 +1013,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Flow">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/journey.md"/>
+      <details key="documentation-reference" value="doc/flow.md"/>
       <details key="load-doc-reference" value="doc/flow-load-doc.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
@@ -1033,7 +1033,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/pseudo-state.md"/>
+      <details key="documentation-reference" value="doc/pseudo-state.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         changeable="false" derived="true">
@@ -1047,59 +1047,59 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/choice.md"/>
+      <details key="documentation-reference" value="doc/choice.md"/>
       <details key="load-doc-reference" value="doc/choice-load-doc.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="End" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/end.md"/>
+      <details key="documentation-reference" value="doc/end.md"/>
       <details key="load-doc-reference" value="doc/end-load-doc.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EntryPoint" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/entry-point.md"/>
+      <details key="documentation-reference" value="doc/entry-point.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExitPoint" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/exit-point.md"/>
+      <details key="documentation-reference" value="doc/exit-point.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpansionInput" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/expansion-input.md"/>
+      <details key="documentation-reference" value="doc/expansion-input.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ExpansionOutput" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/expansion-output.md"/>
+      <details key="documentation-reference" value="doc/expansion-output.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Fork" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/fork.md"/>
+      <details key="documentation-reference" value="doc/fork.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="InputPin" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/input-pin.md"/>
+      <details key="documentation-reference" value="doc/input-pin.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/join.md"/>
+      <details key="documentation-reference" value="doc/join.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="OutputPin" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/output-pin.md"/>
+      <details key="documentation-reference" value="doc/output-pin.md"/>
     </eAnnotations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Start" eSuperTypes="#//PseudoState">
     <eAnnotations source="urn:org.nasdanika">
-      <details key="documentation-reference" value="doc/flow/start.md"/>
+      <details key="documentation-reference" value="doc/start.md"/>
       <details key="load-doc-reference" value="doc/start-load-doc.md"/>
     </eAnnotations>
   </eClassifiers>

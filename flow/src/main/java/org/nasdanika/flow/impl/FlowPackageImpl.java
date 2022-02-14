@@ -2633,7 +2633,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (relationshipEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/relationship.md",
+			   "documentation-reference", "doc/relationship.md",
 			   "load-doc-reference", "doc/relationship-load-doc.md"
 		   });
 		addAnnotation
@@ -2660,7 +2660,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (flowElementEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/flow-element.md"
+			   "documentation-reference", "doc/flow-element.md"
 		   });
 		addAnnotation
 		  (getFlowElement_Outputs(),
@@ -2710,7 +2710,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (transitionEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/transition.md",
+			   "documentation-reference", "doc/transition.md",
 			   "load-doc-reference", "doc/transition-load-doc.md"
 		   });
 		addAnnotation
@@ -2737,7 +2737,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (callEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/call.md",
+			   "documentation-reference", "doc/call.md",
 			   "load-doc-reference", "doc/call-load-doc.md"
 		   });
 		addAnnotation
@@ -2756,14 +2756,14 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (activityEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/activity.md",
+			   "documentation-reference", "doc/activity.md",
 			   "load-doc-reference", "doc/activity-load-doc.md"
 		   });
 		addAnnotation
 		  (serviceEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/service.md",
+			   "documentation-reference", "doc/service.md",
 			   "load-doc-reference", "doc/service-load-doc.md"
 		   });
 		addAnnotation
@@ -2776,82 +2776,82 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (flowEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/journey.md",
+			   "documentation-reference", "doc/flow.md",
 			   "load-doc-reference", "doc/flow-load-doc.md"
 		   });
 		addAnnotation
 		  (pseudoStateEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/pseudo-state.md"
+			   "documentation-reference", "doc/pseudo-state.md"
 		   });
 		addAnnotation
 		  (choiceEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/choice.md",
+			   "documentation-reference", "doc/choice.md",
 			   "load-doc-reference", "doc/choice-load-doc.md"
 		   });
 		addAnnotation
 		  (endEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/end.md",
+			   "documentation-reference", "doc/end.md",
 			   "load-doc-reference", "doc/end-load-doc.md"
 		   });
 		addAnnotation
 		  (entryPointEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/entry-point.md"
+			   "documentation-reference", "doc/entry-point.md"
 		   });
 		addAnnotation
 		  (exitPointEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/exit-point.md"
+			   "documentation-reference", "doc/exit-point.md"
 		   });
 		addAnnotation
 		  (expansionInputEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/expansion-input.md"
+			   "documentation-reference", "doc/expansion-input.md"
 		   });
 		addAnnotation
 		  (expansionOutputEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/expansion-output.md"
+			   "documentation-reference", "doc/expansion-output.md"
 		   });
 		addAnnotation
 		  (forkEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/fork.md"
+			   "documentation-reference", "doc/fork.md"
 		   });
 		addAnnotation
 		  (inputPinEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/input-pin.md"
+			   "documentation-reference", "doc/input-pin.md"
 		   });
 		addAnnotation
 		  (joinEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/join.md"
+			   "documentation-reference", "doc/join.md"
 		   });
 		addAnnotation
 		  (outputPinEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/output-pin.md"
+			   "documentation-reference", "doc/output-pin.md"
 		   });
 		addAnnotation
 		  (startEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/flow/start.md",
+			   "documentation-reference", "doc/start.md",
 			   "load-doc-reference", "doc/start-load-doc.md"
 		   });
 	}

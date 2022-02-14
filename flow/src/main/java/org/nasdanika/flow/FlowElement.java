@@ -31,7 +31,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getFlowElement()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/flow-element.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/flow-element.md'"
  * @generated
  */
 public interface FlowElement<T extends FlowElement<T>> extends ParticipantResponsibility<T> {

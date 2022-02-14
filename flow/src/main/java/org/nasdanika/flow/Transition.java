@@ -20,7 +20,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getTransition()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/transition.md' load-doc-reference='doc/transition-load-doc.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/transition.md' load-doc-reference='doc/transition-load-doc.md'"
  * @generated
  */
 public interface Transition extends PackageElement<Transition> {

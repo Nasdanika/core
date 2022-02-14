@@ -16,7 +16,7 @@ package org.nasdanika.flow;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getPseudoState()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/pseudo-state.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/pseudo-state.md'"
  * @generated
  */
 public interface PseudoState extends FlowElement<PseudoState> {

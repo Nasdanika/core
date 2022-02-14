@@ -19,7 +19,7 @@ import org.nasdanika.diagram.Connection;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getRelationship()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/flow/relationship.md' load-doc-reference='doc/relationship-load-doc.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/relationship.md' load-doc-reference='doc/relationship-load-doc.md'"
  * @generated
  */
 public interface Relationship extends PackageElement<Relationship> {
