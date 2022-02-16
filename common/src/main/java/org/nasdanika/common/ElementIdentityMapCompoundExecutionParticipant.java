@@ -17,6 +17,16 @@ public abstract class ElementIdentityMapCompoundExecutionParticipant<E extends E
 	}
 
 	protected List<E> elements = new ArrayList<>();
+	
+	private Double size;
+	
+	@Override
+	public double size() {
+		if (size == null) { 
+			size = super.size();
+		}
+		return size;
+	}
 
 	@Override
 	protected List<E> getElements() {
@@ -26,6 +36,7 @@ public abstract class ElementIdentityMapCompoundExecutionParticipant<E extends E
 	public void put(E element) {
 		if (!elements.contains(element)) {
 			elements.add(element);
+			size = null;
 		}
 	}
 	

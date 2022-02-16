@@ -1,8 +1,7 @@
 package org.nasdanika.common;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public abstract class MapCompoundExecutionParticipant<K, E extends ExecutionParticipant> extends CompoundExecutionParticipant<E> {
@@ -12,14 +11,25 @@ public abstract class MapCompoundExecutionParticipant<K, E extends ExecutionPart
 	}
 
 	protected Map<K,E> elements = new LinkedHashMap<>();
+	
+	private Double size;
+	
+	@Override
+	public double size() {
+		if (size == null) { 
+			size = super.size();
+		}
+		return size;
+	}
 
 	@Override
-	protected List<E> getElements() {
-		return new ArrayList<E>(elements.values());
+	protected Collection<E> getElements() {
+		return elements.values();
 	}
 	
 	public void put(K key, E element) {
 		elements.put(key, element);
+		size = null;
 	}
 	
 }

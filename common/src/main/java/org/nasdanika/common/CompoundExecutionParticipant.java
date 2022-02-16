@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CancellationException;
@@ -33,11 +34,15 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 		return name;
 	}	
 	
-	protected abstract List<E> getElements();
+	protected abstract Collection<E> getElements();
 
 	@Override
 	public double size() {
-		return getElements().stream().mapToDouble(ExecutionParticipant::size).sum();
+		double ret = 0;
+		for (E e: getElements()) {
+			ret += e.size();
+		}
+		return ret;
 	}
 
 	@Override

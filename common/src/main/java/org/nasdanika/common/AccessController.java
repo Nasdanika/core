@@ -1,5 +1,7 @@
 package org.nasdanika.common;
 
+import org.eclipse.emf.ecore.EOperation;
+
 /**
  * Interface to adapt to for access decisions.
  * @author Pavel Vlasov

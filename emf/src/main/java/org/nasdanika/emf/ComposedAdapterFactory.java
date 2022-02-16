@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -24,9 +26,15 @@ import org.eclipse.emf.ecore.EcorePackage;
 public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 	
 	private ComposedAdapterFactory parentAdapterFactory;
+	
+	private Map<Object,Boolean> factoryForTypeCache = new ConcurrentHashMap<>();
 
 	@Override
 	public boolean isFactoryForType(Object type) {
+		return factoryForTypeCache.computeIfAbsent(type, this::_isFactoryForType);
+	}
+	
+	private boolean _isFactoryForType(Object type) {
 		for (AdapterFactoryEntry c: children) {
 			if (c.adapterFactory.isFactoryForType(type)) {
 				return true;
@@ -179,6 +187,7 @@ public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 		} else for (EClass eClass: eClasses) {
 			children.add(new AdapterFactoryEntry(eClass, child));			
 		}
+		factoryForTypeCache.clear();
 	}
 
 	@Override
