@@ -18,7 +18,7 @@ import org.nasdanika.cli.DelegatingCommand;
 import picocli.CommandLine.Option;
 
 /**
- * Base class for command which use {@link ResourceSet}. This command creates a resource set,
+ * Base class for commands which use {@link ResourceSet}. This command creates a resource set,
  * registers all known packages, 
  * loads resources specified with -r option.
  * @author Pavel

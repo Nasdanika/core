@@ -93,4 +93,4 @@ To use the flow model add the following dependency to ``pom.xml``:
 </dependency>
 ```
 
-A list of versions can be found [here](https://search.maven.org/search?q=g:org.nasdanika.core%20AND%20a:flow).
+A list of versions can be found [here](https://mvnrepository.maven.org/search?q=g:org.nasdanika.core%20AND%20a:flow).

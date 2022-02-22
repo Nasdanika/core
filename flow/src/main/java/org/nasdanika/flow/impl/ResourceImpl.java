@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -215,6 +216,20 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 	public void apply(Resource instance) {
 		super.apply(instance);
 		
+		// Child resources
+		for (Entry<String, Resource> ae: getChildren().entrySet()) {
+			Resource resource = ae.getValue();
+			EMap<String, Resource> instanceResources = instance.getChildren();
+			String resourceKey = ae.getKey();
+			if (resource == null) {
+				instanceResources.removeKey(resourceKey);
+			} else {
+				Resource instanceResource = resource.create();
+				instanceResources.put(resourceKey, instanceResource);
+				resource.apply(instanceResource);
+			}
+		}		
+		
 		// Services
 		for (Entry<String, Activity<?>> se: getServices().entrySet()) {
 			Activity service = se.getValue();
@@ -241,12 +256,21 @@ public class ResourceImpl extends ServiceProviderImpl<Resource> implements Resou
 		EList<Resource> ret = ECollections.newBasicEList();
 		if (eContainmentFeature() == FlowPackage.Literals.RESOURCE_ENTRY__VALUE) {
 			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
-			Package container = (Package) eContainer().eContainer();
-			for (Package cExtends: container.getExtends()) {
-				Resource ext = cExtends.getResources().get(key);
-				if (ext != null) {
-					ret.add(ext);
+			EObject cc = eContainer().eContainer();
+			if (cc instanceof Package) {
+				for (Package cExtends: ((Package) cc).getExtends()) {
+					Resource ext = cExtends.getResources().get(key);
+					if (ext != null) {
+						ret.add(ext);
+					}
 				}
+			} else if (cc instanceof Resource) {
+				for (Resource cExtends: ((Resource) cc).getExtends()) {
+					Resource ext = cExtends.getChildren().get(key);
+					if (ext != null) {
+						ret.add(ext);
+					}
+				}				
 			}
 		}
 		

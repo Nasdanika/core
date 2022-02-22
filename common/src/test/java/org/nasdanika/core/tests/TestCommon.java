@@ -19,7 +19,6 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -366,15 +365,6 @@ public class TestCommon {
 		System.out.println(generator.generateUmlDiagram("Alice -> Bob"));
 	}
 	
-//	@Test
-//	public void testUriSegment() {
-//		URI base = URI.createURI("http://nasdanika.org/s1/s2/");
-//		System.out.println(base.lastSegment());
-//		System.out.println(URI.createURI("elements/").resolve(base));
-//		URI appendSegment = base.appendSegment("elements").appendSegment("").appendSegment("purum");
-//		System.out.println(appendSegment);
-//	}
-	
 	@Test
 	public void testJavadocResolver() throws Exception {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
@@ -400,7 +390,9 @@ public class TestCommon {
 		MutableContext context = Context.EMPTY_CONTEXT.fork();
 		context.put("javadoc", Util.createJavadocPropertyComputer(nasdanikaResolver));
 		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
-		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));		
+		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));
+		
+//		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));
 	}
 	
 //	@Test
