@@ -2,6 +2,7 @@ package org.nasdanika.exec.gen.content;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ConfigurationException;
@@ -31,6 +32,11 @@ public class MarkdownSupplierFactoryAdapter extends FilterSupplierFactoryAdapter
 				} catch (Exception e) {
 					throw new ConfigurationException("Invalid location: " + marker.getLocation(), e, marker);
 				}
+			}
+			
+			@Override
+			protected DiagramGenerator getDiagramGenerator() {
+				return context == null ? super.getDiagramGenerator() : context.get(DiagramGenerator.class, super.getDiagramGenerator()); 
 			}
 			
 		};
