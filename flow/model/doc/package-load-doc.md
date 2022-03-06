@@ -3,6 +3,7 @@ A fragment of package definition:
 ```yaml
 flow-package:
   uri: nasdanika://togaf/adm
+  extends: "<path to the base package resource>#/"
   documentation:
     content-markdown:
       style: true

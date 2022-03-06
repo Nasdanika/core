@@ -10,4 +10,4 @@ e.g. if some activity must be done in one particular way for regulatory or legal
 to prevent overriding at lower levels.
 
 Flows also can be defined as final, i.e. they cannot be extended.
-Note that a final abstract journey makes no sense.
+Note that a final abstract flow makes no sense.
