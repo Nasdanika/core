@@ -68,15 +68,16 @@ Resource location is resolved relative to the YAML resource containing filter de
 
 ## Embedded diagrams
 
-Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](https://app.diagrams.net/) diagrams using fenced blocks.
+Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](https://www.diagrams.net/) diagrams using fenced blocks ([Online editor](https://app.diagrams.net/)).
 
 ### Draw.io
 
-	```drawio-resource
-	  aws.drawio
-	```
+    ```drawio-resource
+    aws.drawio
+    ```
 
 Resource location is resolved relative to the YAML resource containing filter definition.
+Diagrams shall be uncompressed - in the editor click File > Properties and uncheck "Compressed".
 
 ### PlantUML
 
@@ -84,9 +85,9 @@ PlantUML diagrams can be defined inline or loaded from resources.
 
 #### Loading from a resource
 
-	```uml-resource
-	sequence.plantuml
-	```
+    ```uml-resource
+    sequence.plantuml
+    ```
 
 In the above snippet ``uml`` is a dialect supported by PlantUML (see below) and ``sequence.plantuml`` is a resource location resolved relative to the YAML resource containing markdown filter definition.
 
