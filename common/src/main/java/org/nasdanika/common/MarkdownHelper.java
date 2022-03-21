@@ -172,9 +172,9 @@ public class MarkdownHelper {
 					} catch (Exception e) {					
 						output
 							.append(System.lineSeparator())
-							.append("```").append(System.lineSeparator())
+							.append("<div class=\"nsd-error\">").append(System.lineSeparator())
 							.append("Error loading resource " + bareSpec + ": " + e) 
-							.append(System.lineSeparator()).append("```")
+							.append(System.lineSeparator()).append("</div>")
 							.append(System.lineSeparator());
 						bareSpec = null;
 					}
