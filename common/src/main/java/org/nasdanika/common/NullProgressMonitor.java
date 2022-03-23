@@ -21,7 +21,7 @@ public class NullProgressMonitor implements ProgressMonitor {
 
 	@Override
 	public ProgressMonitor split(String taskName, double size, Object... data) {
-		return new NullProgressMonitor();
+		return this;
 	}
 
 	@Override

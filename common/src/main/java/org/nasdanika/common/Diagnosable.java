@@ -12,7 +12,7 @@ public interface Diagnosable {
 	 * @return Diagnostic result.
 	 */
 	default Diagnostic diagnose(ProgressMonitor progressMonitor) {
-		return new BasicDiagnostic(Status.SUCCESS, "Diagnostic of " + this, this);
+		return new BasicDiagnostic(Status.SUCCESS, null);
 	};
 
 }
