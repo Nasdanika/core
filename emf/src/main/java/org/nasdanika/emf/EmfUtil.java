@@ -171,7 +171,7 @@ public class EmfUtil {
 					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
 				} catch (Exception e) {
 					e.printStackTrace();
-					return "Error loading documentation: " + e;
+					return "<div class='nsd-error'>Error loading documentation: " + e + "</div>";
 				}
 			}
 		}
@@ -195,7 +195,7 @@ public class EmfUtil {
 					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
 				} catch (Exception e) {
 					e.printStackTrace();
-					return "Error loading documentation: " + e;
+					return "<div class='nsd-error'>Error loading documentation: " + e + "</div>";
 				}
 			}
 			
