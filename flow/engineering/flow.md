@@ -19,7 +19,7 @@ This allows to define base process/flow packages and extend/tailor them to speci
 Nasdanika Flow also [features](features.html):
 
 * [Responsibility Assignment Matrices](features/raci/index.html), 
-* [Validation](features/validations/index.html), 
+* [Validation](features/validation/index.html), 
 * [Data Provenance](features/data-provenance/index.html).
 
 ## Core concepts

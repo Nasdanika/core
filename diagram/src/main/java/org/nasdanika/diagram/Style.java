@@ -197,7 +197,7 @@ public interface Style extends EObject {
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Properties()
 	 * @model containment="true" keys="name"
-	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty' value-feature='value'"
+	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value'"
 	 * @generated
 	 */
 	EList<Property> getProperties();

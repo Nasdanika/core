@@ -29,7 +29,7 @@ public interface Flow extends Activity<Flow> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Elements of this journey.
+	 * Elements of this flow.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' map.
 	 * @see org.nasdanika.flow.FlowPackage#getFlow_Elements()

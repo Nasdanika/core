@@ -108,7 +108,7 @@
         eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//Property"
         containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//Property/name">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="reference-type" value="map: MapProperty&#xA;list: ListProperty&#xA;string: StringProperty"/>
+        <details key="reference-type" value="map: &#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: MapProperty&#xA;list:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: ListProperty&#xA;string:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: StringProperty&#xA;"/>
         <details key="value-feature" value="value"/>
       </eAnnotations>
     </eStructuralFeatures>

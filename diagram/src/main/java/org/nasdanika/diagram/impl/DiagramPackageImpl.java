@@ -803,7 +803,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		  (getStyle_Properties(),
 		   source,
 		   new String[] {
-			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty",
+			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
 			   "value-feature", "value"
 		   });
 		addAnnotation

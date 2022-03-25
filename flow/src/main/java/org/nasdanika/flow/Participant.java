@@ -56,7 +56,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Resources this participant uses in their activities.
+	 * Resources which this participant uses in their activities.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Resources()
@@ -73,7 +73,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Artifacts this participant uses in their activities.
+	 * Artifacts which this participant uses in their activities.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Artifacts</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Artifacts()
@@ -136,7 +136,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Flow elements (activities, journeys) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming.
+	 * Flow elements (activities, flows) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Responsible</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Responsible()
@@ -153,7 +153,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Flow elements (activities, journeys) this participant is ultimately answerable for the correct and thorough completion.
+	 * Flow elements (activities, flows) this participant is ultimately answerable for the correct and thorough completion.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Accountable</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Accountable()
@@ -170,7 +170,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Flow elements (activities, journeys) for which this participant's opinions are sought, e.g. the participant is a subject-matter expert.
+	 * Flow elements (activities, flows) for which this participant's opinions are sought, e.g. the participant is a subject-matter expert.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Consulted</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Consulted()
@@ -187,7 +187,7 @@ public interface Participant extends ServiceProvider<Participant> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Flow elements (activities, journeys) about which this participant is kept up-to-date on progress.
+	 * Flow elements (activities, flows) about which this participant is kept up-to-date on progress.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Informed</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getParticipant_Informed()

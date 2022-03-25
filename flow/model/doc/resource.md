@@ -1,1 +1,1 @@
-Something that is used by participants for completion of activities. For example, a tool.
+Something that is used by [participants](Participant.html) for completion of [flow elements](FlowElement.html). For example, a tool.

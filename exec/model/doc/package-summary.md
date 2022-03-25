@@ -1,6 +1,6 @@
 Nasdanika Core Exec model classes can be used to create models for generation of resources such as files and their content.
 Exec models can be used on their own or in other models.
-For example, [markdown](content/Markdown.html) can be used as a documentation source for [flow](../../../flow/index.html) [package elements](](../../../flow/PackageElement.html)).
+For example, [markdown](content/Markdown.html) can be used as a documentation source for [flow](../../../flow/index.html) [package elements](../../../flow/PackageElement.html).
 
 ### Maven dependency
 
@@ -19,7 +19,7 @@ Example as of the time of writing:
 
 #### Suppliers
 
-To load and execute [content components](content/index.html) which implement ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream> from a YAML resource use code like this:
+To load and execute [content components](content/package-summary.html) which implement ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream> from a YAML resource use code like this:
 
 ```java
 import static org.assertj.core.api.Assertions.assertThat;
@@ -82,7 +82,7 @@ try (ProgressMonitor progressMonitor = new PrintStreamProgressMonitor()) {
 
 TODO
 
-To load and execute [resource components](resource/index.html) which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> from a YAML resource use code like this:
+To load and execute [resource components](resource/package-summary.html) which implement ${javadoc/org.nasdanika.common.ConsumerFactory}<${javadoc/org.nasdanika.common.resources.BinaryEntityContainer}> from a YAML resource use code like this:
 
 ```java
 import org.nasdanika.common.Context;

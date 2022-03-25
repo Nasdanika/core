@@ -38,7 +38,7 @@ public interface Package extends PackageElement<Package> {
 	 * This reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.
 	 * For top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.
 	 * 
-	 * Package own elements overide inherited elements with the same keys. 
+	 * Package own elements override inherited elements with the same keys. 
 	 * To suppress an inheriIted element define an element with the same key and ``null`` value.
 	 * 
 	 * Multiple inheritance allows to have "mix-in" packages. 

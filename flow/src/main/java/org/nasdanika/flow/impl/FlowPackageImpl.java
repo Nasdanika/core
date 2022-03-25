@@ -2527,7 +2527,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (resourceEClass,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/participant.md",
+			   "documentation-reference", "doc/resource.md",
 			   "load-doc-reference", "doc/participant-load-doc.md"
 		   });
 		addAnnotation
@@ -2603,7 +2603,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifact_Style(),
 		   source,
 		   new String[] {
-			   "homogenous", "true"
+			   "homogenous", "true",
+			   "load-doc-reference", "doc/artifact--style-load-doc.md"
 		   });
 		addAnnotation
 		  (getArtifact_TemplateKeys(),
@@ -2910,7 +2911,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getPackageElement_Modifiers(),
 		   source,
 		   new String[] {
-			   "documentation", "A collection of boolean flags:\n\n* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.\n* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.\n* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.\n* ``final`` - Specifies that this journey element cannot be overriden in journeys extending this journey. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as journeys at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level journey as final indicates that it cannot have extensions.\n* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.\n* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.\n* ``partition`` - Applies to flows and specifies that the flow shall be rendered as a partition (e.g. a composite state) on a digarm.\n"
+			   "documentation", "A collection of boolean flags:\n\n* ``abstract`` - Specifies that this package element is abstract. For packages and flows it means that they contain abstract elements and must be extended to become concrete. If a package or a flow contains abstract elements and does not have abstract modifier, it is diagnosed as an error. If concrete packages and flows extend abstract ones they must override (implement) all abstract elements.\n* ``explicit-end`` - Applies to [flows](Flow.html). Specifies that the [end](End.html) [pseudo-state](PseudoState.html) shall not be inferred by finding flow elements with no outputs. End will either be explicitly specified or the diagram will not have an end pseudo-state.\n* ``explicit-start`` - Applies to flows. Specifies that the [start](Start.html) pseudo-state shall not be inferred by finding flow elements with no inputs. Start will either be explicitly specified or the diagram will not have a start pseudo-state.\n* ``final`` - Specifies that this flow element cannot be overridden in flows extending this flow. Overriding a final elemen will be diagnosed as an error. For example, in an organization some processes can be defined as flows at higher levels of the orgnization and extended at lower levels. ``final`` modifier allows to specify what can be extended and what cannot. Specifying a top-level flow as final indicates that it cannot have extensions.\n* ``optional`` - Specifies that this element is optional. Optional elements have different apperance on diagrams.\n* ``extension`` - Specifies that this element is an extension for an element in one of extended packages/flows. If this modifier is present and ``extends`` reference is empty, then it results in a diagnostic error.\n* ``partition`` - Applies to flows and specifies that a flow shall be rendered as a partition (e.g. a composite state) on a diagram.\n"
 		   });
 		addAnnotation
 		  (getPackageElement_Documentation(),
@@ -2952,7 +2953,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getPackage_SuperPackages(),
 		   source,
 		   new String[] {
-			   "documentation", "Package can extend other packages and inherit their elements. \nThis reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.\nFor top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.\n\nPackage own elements overide inherited elements with the same keys. \nTo suppress an inheriIted element define an element with the same key and ``null`` value.\n\nMultiple inheritance allows to have \"mix-in\" packages. \nFor example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows \nand then specializing at the lower levels of the organization, say to specific tools. \nThen there can be a technology tree, for example different cloud platforms. \nA set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.\n\n"
+			   "documentation", "Package can extend other packages and inherit their elements. \nThis reference is required because ``extends`` reference is already defined in [PackageElement](PackageElement.html) as derived and immutable.\nFor top-level packages ``extends`` is the same as this reference. For nested packages ``extends`` is a union of containment-derived extensions and this reference.\n\nPackage own elements override inherited elements with the same keys. \nTo suppress an inheriIted element define an element with the same key and ``null`` value.\n\nMultiple inheritance allows to have \"mix-in\" packages. \nFor example, the primary lineage can follow the organizational hierarchy with base packages defining generic flows \nand then specializing at the lower levels of the organization, say to specific tools. \nThen there can be a technology tree, for example different cloud platforms. \nA set of flows defining development processes for a particular organization and a particular cloud technology would be a mix of the two inheritance hierarchies.\n\n"
 		   });
 		addAnnotation
 		  (getPackage_SubPackages(),
@@ -2988,7 +2989,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (packageEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of sub-package key to a sub-package. Null value suppresses inherited entry."
+			   "documentation", "Mapping of a sub-package key to a sub-package. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getPackageEntry_Key(),
@@ -3018,13 +3019,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getParticipant_Resources(),
 		   source,
 		   new String[] {
-			   "documentation", "Resources this participant uses in their activities."
+			   "documentation", "Resources which this participant uses in their activities."
 		   });
 		addAnnotation
 		  (getParticipant_Artifacts(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifacts this participant uses in their activities."
+			   "documentation", "Artifacts which this participant uses in their activities."
 		   });
 		addAnnotation
 		  (getParticipant_Specializations(),
@@ -3048,25 +3049,25 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getParticipant_Responsible(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow elements (activities, journeys) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming."
+			   "documentation", "Flow elements (activities, flows) this participant is responsible for, i.e. does the work to complete them. E.g. Product Owner is responsible for backlog grooming."
 		   });
 		addAnnotation
 		  (getParticipant_Accountable(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow elements (activities, journeys) this participant is ultimately answerable for the correct and thorough completion."
+			   "documentation", "Flow elements (activities, flows) this participant is ultimately answerable for the correct and thorough completion."
 		   });
 		addAnnotation
 		  (getParticipant_Consulted(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow elements (activities, journeys) for which this participant\'s opinions are sought, e.g. the participant is a subject-matter expert."
+			   "documentation", "Flow elements (activities, flows) for which this participant\'s opinions are sought, e.g. the participant is a subject-matter expert."
 		   });
 		addAnnotation
 		  (getParticipant_Informed(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow elements (activities, journeys) about which this participant is kept up-to-date on progress."
+			   "documentation", "Flow elements (activities, flows) about which this participant is kept up-to-date on progress."
 		   });
 		addAnnotation
 		  (getParticipant_Children(),
@@ -3108,7 +3109,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getResource_UsedBy(),
 		   source,
 		   new String[] {
-			   "documentation", "Participants use this resource in their activities."
+			   "documentation", "Participants which use this resource in their activities."
 		   });
 		addAnnotation
 		  (getResource_Children(),
@@ -3264,7 +3265,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifact_Style(),
 		   source,
 		   new String[] {
-			   "documentation", "Diagram element style for component diagrams."
+			   "documentation", "Diagram element style for component diagrams. If specified, the style diagram element is used as a template for a diagram element created to represent this artiact on a diagram."
 		   });
 		addAnnotation
 		  (getArtifact_TemplateKeys(),
@@ -3282,13 +3283,13 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifact_Instances(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifacts for which artifact is a template. Derived opposite to templates."
+			   "documentation", "Artifacts for which this artifact is a template. Derived opposite to templates."
 		   });
 		addAnnotation
 		  (artifactEntryEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Mapping of artifact key to an artifact. Null value suppresses inherited entry."
+			   "documentation", "A mapping of an artifact key to an artifact. Null value suppresses inherited entry."
 		   });
 		addAnnotation
 		  (getArtifactEntry_Key(),
@@ -3300,7 +3301,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getArtifactEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow artifact. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Flow artifact. Use ``null`` to suppress inherited artifact."
 		   });
 		addAnnotation
 		  (artifactParticipantResponsibilityEClass,
@@ -3462,7 +3463,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlowElementEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Flow element. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Flow element. Use ``null`` to suppress inherited flow element."
 		   });
 		addAnnotation
 		  (getTransition_Payload(),
@@ -3504,7 +3505,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getTransitionEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Output transition. Use ``null`` to suppress inherited relationship."
+			   "documentation", "Output transition. Use ``null`` to suppress inherited transition."
 		   });
 		addAnnotation
 		  (getCall_Response(),
@@ -3558,7 +3559,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getActivityEntry_Value(),
 		   source,
 		   new String[] {
-			   "documentation", "Activity or flow. Use ``null`` to suppress inherited sub-package."
+			   "documentation", "Activity or flow. Use ``null`` to suppress inherited activity."
 		   });
 		addAnnotation
 		  (getService_Target(),
@@ -3576,7 +3577,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		  (getFlow_Elements(),
 		   source,
 		   new String[] {
-			   "documentation", "Elements of this journey."
+			   "documentation", "Elements of this flow."
 		   });
 		addAnnotation
 		  (getFlow_Partition(),

@@ -21,7 +21,7 @@ import org.eclipse.emf.common.util.EMap;
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getResource()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/participant.md' load-doc-reference='doc/participant-load-doc.md'"
+ * @model annotation="urn:org.nasdanika documentation-reference='doc/resource.md' load-doc-reference='doc/participant-load-doc.md'"
  * @generated
  */
 public interface Resource extends ServiceProvider<Resource> {
@@ -65,7 +65,7 @@ public interface Resource extends ServiceProvider<Resource> {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Participants use this resource in their activities.
+	 * Participants which use this resource in their activities.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Used By</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getResource_UsedBy()

@@ -250,13 +250,13 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Diagram element style for component diagrams.
+	 * Diagram element style for component diagrams. If specified, the style diagram element is used as a template for a diagram element created to represent this artiact on a diagram.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Style</em>' containment reference.
 	 * @see #setStyle(DiagramElement)
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Style()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true'"
+	 *        annotation="urn:org.nasdanika homogenous='true' load-doc-reference='doc/artifact--style-load-doc.md'"
 	 * @generated
 	 */
 	DiagramElement getStyle();
@@ -310,7 +310,7 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Artifacts for which artifact is a template. Derived opposite to templates.
+	 * Artifacts for which this artifact is a template. Derived opposite to templates.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Instances</em>' reference list.
 	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Instances()
