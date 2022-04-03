@@ -21,5 +21,15 @@ engineering-product:
         A more radical way is to drop the enum altogether and switch to services.
     drawio-escaping:
       name: Extract shape text from drawio XML for searching
-      description: MarkdownHelper.escapeDiagramSpec(). Parse using mxgraph api, need to add/verify support for decompression - both compressed and uncompressed diagrams shall be supported.
+      description: Extract from html.app.Util.createSearchDocument().
       categories: engineering://nasdanika/issue-categories/good-first-issue     
+    diagram-dialect:
+      name: Diagram dialect
+      description: |+2
+        And also extensible dialects via services - use Java services to find DiagramGenerator service for a dialect.
+        Get rid of enum in favor dialect name discovery via services.
+        One of dialect providers - org.nasdanika.diagram.gen - reads the fenced block as diagram YAML load spec. Generates
+        PlantUML, Drawio, etc. Possible advantages - ease of switch between generation targets, one spec to learn,
+        higher level of abstraction, ability to define drawio diagrams in text.
+        Disadvantages - may be more verbose and may not provide all the features of the underlying diagramming engine.    
+      
