@@ -162,16 +162,6 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getBase64_Sources() {
-		return (EReference)base64EClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getResource() {
 		return resourceEClass;
 	}
@@ -325,8 +315,10 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		filterEClass = createEClass(FILTER);
+		createEReference(filterEClass, FILTER__SOURCE);
+
 		base64EClass = createEClass(BASE64);
-		createEReference(base64EClass, BASE64__SOURCES);
 
 		resourceEClass = createEClass(RESOURCE);
 		createEAttribute(resourceEClass, RESOURCE__LOCATION);
@@ -335,9 +327,6 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		textEClass = createEClass(TEXT);
 		createEAttribute(textEClass, TEXT__CONTENT);
 		createEAttribute(textEClass, TEXT__INTERPOLATE);
-
-		filterEClass = createEClass(FILTER);
-		createEReference(filterEClass, FILTER__SOURCE);
 
 		interpolatorEClass = createEClass(INTERPOLATOR);
 		createEAttribute(interpolatorEClass, INTERPOLATOR__PROCESS_INCLUDES);
@@ -378,16 +367,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
-		base64EClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		filterEClass.getESuperTypes().add(theNcorePackage.getModelElement());
+		base64EClass.getESuperTypes().add(this.getFilter());
 		resourceEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		textEClass.getESuperTypes().add(theNcorePackage.getModelElement());
-		filterEClass.getESuperTypes().add(theNcorePackage.getModelElement());
 		interpolatorEClass.getESuperTypes().add(this.getFilter());
 		markdownEClass.getESuperTypes().add(this.getFilter());
 
 		// Initialize classes, features, and operations; add parameters
+		initEClass(filterEClass, Filter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFilter_Source(), ecorePackage.getEObject(), null, "source", null, 1, 1, Filter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(base64EClass, Base64.class, "Base64", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBase64_Sources(), ecorePackage.getEObject(), null, "sources", null, 0, -1, Base64.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getResource_Location(), ecorePackage.getEString(), "location", null, 1, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -396,9 +387,6 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		initEClass(textEClass, Text.class, "Text", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getText_Content(), ecorePackage.getEString(), "content", null, 1, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getText_Interpolate(), ecorePackage.getEBoolean(), "interpolate", "true", 0, 1, Text.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(filterEClass, Filter.class, "Filter", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFilter_Source(), ecorePackage.getEObject(), null, "source", null, 1, 1, Filter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(interpolatorEClass, Interpolator.class, "Interpolator", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getInterpolator_ProcessIncludes(), ecorePackage.getEBoolean(), "processIncludes", "true", 0, 1, Interpolator.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -460,6 +448,12 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 			   "default-feature", "true"
 		   });
 		addAnnotation
+		  (interpolatorEClass,
+		   source,
+		   new String[] {
+			   "load-doc-reference", "doc/content/interpolator-load-doc.md"
+		   });
+		addAnnotation
 		  (getInterpolator_ProcessIncludes(),
 		   source,
 		   new String[] {
@@ -488,6 +482,18 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
 		addAnnotation
+		  (filterEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for filters which take an object, adapt to ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream>, obtain a stream and produce another stream from it."
+		   });
+		addAnnotation
+		  (getFilter_Source(),
+		   source,
+		   new String[] {
+			   "documentation", "Source to be filtered. The source is adapted to ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream>."
+		   });
+		addAnnotation
 		  (getResource_Location(),
 		   source,
 		   new String[] {
@@ -515,7 +521,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		  (interpolatorEClass,
 		   source,
 		   new String[] {
-			   "documentation", "Converts input stream to String using context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using context charset."
+			   "documentation", "Converts input stream to String using the context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using the context charset."
 		   });
 		addAnnotation
 		  (getInterpolator_Base(),

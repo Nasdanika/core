@@ -10,6 +10,10 @@ import org.nasdanika.ncore.ModelElement;
  * A representation of the model object '<em><b>Filter</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Base class for filters which take an object, adapt to ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream>, obtain a stream and produce another stream from it.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -26,6 +30,9 @@ public interface Filter extends ModelElement {
 	 * Returns the value of the '<em><b>Source</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Source to be filtered. The source is adapted to ${javadoc/org.nasdanika.common.SupplierFactory}<InputStream>.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Source</em>' containment reference.
 	 * @see #setSource(EObject)
 	 * @see org.nasdanika.exec.content.ContentPackage#getFilter_Source()

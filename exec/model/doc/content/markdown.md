@@ -293,6 +293,31 @@ Diagram:
 ** Complete innovate phase
 ```
 
+### Mermaid
+
+You can define [Mermaid](https://mermaid-js.github.io/mermaid/#/) diagrams in ``mermaid`` fenced blocks:
+
+  ```mermaid
+  flowchart LR
+     Alice --> Bob & Chuck --> Deb
+  ```
+
+results in this diagram:
+
+```mermaid
+flowchart LR
+   Alice --> Bob & Chuck --> Deb
+```
+
+#### Loading from a resource
+
+It is also possible to load a diagram definition from a resource resolved relative to the model resource:
+
+    ```mermaid-resource
+    sequence.mermaid
+    ```
+
+
 ## Extensions
 
 * [Table of contents](https://github.com/vsch/flexmark-java/wiki/Table-of-Contents-Extension) - add ``[TOC]`` to the document as explained in the documentation. This extension will create a table of contents from markdown headers. 

@@ -56,10 +56,10 @@ public class ContentFactoryImpl extends EFactoryImpl implements ContentFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ContentPackage.FILTER: return createFilter();
 			case ContentPackage.BASE64: return createBase64();
 			case ContentPackage.RESOURCE: return createResource();
 			case ContentPackage.TEXT: return createText();
-			case ContentPackage.FILTER: return createFilter();
 			case ContentPackage.INTERPOLATOR: return createInterpolator();
 			case ContentPackage.MARKDOWN: return createMarkdown();
 			default:

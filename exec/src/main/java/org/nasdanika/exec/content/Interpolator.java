@@ -9,7 +9,7 @@ package org.nasdanika.exec.content;
  * <!-- end-user-doc -->
  *
  * <!-- begin-model-doc -->
- * Converts input stream to String using context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using context charset.
+ * Converts input stream to String using the context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using the context charset.
  * <!-- end-model-doc -->
  *
  * <p>
@@ -21,7 +21,7 @@ package org.nasdanika.exec.content;
  * </ul>
  *
  * @see org.nasdanika.exec.content.ContentPackage#getInterpolator()
- * @model
+ * @model annotation="urn:org.nasdanika load-doc-reference='doc/content/interpolator-load-doc.md'"
  * @generated
  */
 public interface Interpolator extends Filter {

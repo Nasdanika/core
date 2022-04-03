@@ -45,9 +45,10 @@
     </genClasses>
     <nestedGenPackages prefix="Content" basePackage="org.nasdanika.exec" disposableProviderFactory="true"
         ecorePackage="exec.ecore#//content">
-      <genClasses ecoreClass="exec.ecore#//content/Base64">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Base64/sources"/>
+      <genClasses ecoreClass="exec.ecore#//content/Filter">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Filter/source"/>
       </genClasses>
+      <genClasses ecoreClass="exec.ecore#//content/Base64"/>
       <genClasses ecoreClass="exec.ecore#//content/Resource">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/location"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Resource/interpolate"/>
@@ -55,9 +56,6 @@
       <genClasses ecoreClass="exec.ecore#//content/Text">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/content"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Text/interpolate"/>
-      </genClasses>
-      <genClasses ecoreClass="exec.ecore#//content/Filter">
-        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference exec.ecore#//content/Filter/source"/>
       </genClasses>
       <genClasses ecoreClass="exec.ecore#//content/Interpolator">
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute exec.ecore#//content/Interpolator/processIncludes"/>

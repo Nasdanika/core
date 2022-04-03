@@ -70,6 +70,10 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 	protected ContentSwitch<Adapter> modelSwitch =
 		new ContentSwitch<Adapter>() {
 			@Override
+			public Adapter caseFilter(Filter object) {
+				return createFilterAdapter();
+			}
+			@Override
 			public Adapter caseBase64(Base64 object) {
 				return createBase64Adapter();
 			}
@@ -80,10 +84,6 @@ public class ContentAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseText(Text object) {
 				return createTextAdapter();
-			}
-			@Override
-			public Adapter caseFilter(Filter object) {
-				return createFilterAdapter();
 			}
 			@Override
 			public Adapter caseInterpolator(Interpolator object) {

@@ -156,12 +156,21 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/content/package-summary.md"/>
     </eAnnotations>
-    <eClassifiers xsi:type="ecore:EClass" name="Base64" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
+    <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Base class for filters which take an object, adapt to ${javadoc/org.nasdanika.common.SupplierFactory}&lt;InputStream>, obtain a stream and produce another stream from it."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Source to be filtered. The source is adapted to ${javadoc/org.nasdanika.common.SupplierFactory}&lt;InputStream>."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Base64" eSuperTypes="#//content/Filter">
       <eAnnotations source="urn:org.nasdanika">
         <details key="documentation-reference" value="doc/content/base-64.md"/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
-          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
       <eAnnotations source="urn:org.nasdanika">
@@ -203,13 +212,12 @@
         </eAnnotations>
       </eStructuralFeatures>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
-      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
-          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
-    </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Interpolator" eSuperTypes="#//content/Filter">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Converts input stream to String using context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using context charset."/>
+        <details key="documentation" value="Converts input stream to String using the context charset, which defaults to ``UTF-8``, interpolates, and converts back to input stream using the context charset."/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="load-doc-reference" value="doc/content/interpolator-load-doc.md"/>
       </eAnnotations>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="processIncludes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
           defaultValueLiteral="true">

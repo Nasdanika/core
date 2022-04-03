@@ -67,79 +67,7 @@ public interface ContentPackage extends EPackage {
 	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getBase64()
 	 * @generated
 	 */
-	int BASE64 = 0;
-
-	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__URI = NcorePackage.MODEL_ELEMENT__URI;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__UUID = NcorePackage.MODEL_ELEMENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
-
-	/**
-	 * The feature id for the '<em><b>Sources</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64__SOURCES = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Base64</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Base64</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE64_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+	int BASE64 = 1;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.ResourceImpl <em>Resource</em>}' class.
@@ -149,7 +77,171 @@ public interface ContentPackage extends EPackage {
 	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 1;
+	int RESOURCE = 2;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.TextImpl <em>Text</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.content.impl.TextImpl
+	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getText()
+	 * @generated
+	 */
+	int TEXT = 3;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.FilterImpl <em>Filter</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.exec.content.impl.FilterImpl
+	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getFilter()
+	 * @generated
+	 */
+	int FILTER = 0;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__URI = NcorePackage.MODEL_ELEMENT__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__UUID = NcorePackage.MODEL_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__SOURCE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Filter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Filter</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__MARKER = FILTER__MARKER;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__URI = FILTER__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__DESCRIPTION = FILTER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__UUID = FILTER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__ACTION_PROTOTYPE = FILTER__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Source</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__SOURCE = FILTER__SOURCE;
+
+	/**
+	 * The number of structural features of the '<em>Base64</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64_FEATURE_COUNT = FILTER_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Base64</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64_OPERATION_COUNT = FILTER_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
@@ -232,17 +324,6 @@ public interface ContentPackage extends EPackage {
 	 */
 	int RESOURCE_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.TextImpl <em>Text</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.exec.content.impl.TextImpl
-	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getText()
-	 * @generated
-	 */
-	int TEXT = 2;
-
 	/**
 	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
@@ -323,89 +404,6 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
-
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.exec.content.impl.FilterImpl <em>Filter</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.exec.content.impl.FilterImpl
-	 * @see org.nasdanika.exec.content.impl.ContentPackageImpl#getFilter()
-	 * @generated
-	 */
-	int FILTER = 3;
-
-	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
-
-	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__URI = NcorePackage.MODEL_ELEMENT__URI;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__DESCRIPTION = NcorePackage.MODEL_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__UUID = NcorePackage.MODEL_ELEMENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
-
-	/**
-	 * The feature id for the '<em><b>Source</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER__SOURCE = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Filter</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER_FEATURE_COUNT = NcorePackage.MODEL_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Filter</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILTER_OPERATION_COUNT = NcorePackage.MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 
 	/**
@@ -611,17 +609,6 @@ public interface ContentPackage extends EPackage {
 	EClass getBase64();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.exec.content.Base64#getSources <em>Sources</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Sources</em>'.
-	 * @see org.nasdanika.exec.content.Base64#getSources()
-	 * @see #getBase64()
-	 * @generated
-	 */
-	EReference getBase64_Sources();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.exec.content.Resource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -791,14 +778,6 @@ public interface ContentPackage extends EPackage {
 		 * @generated
 		 */
 		EClass BASE64 = eINSTANCE.getBase64();
-
-		/**
-		 * The meta object literal for the '<em><b>Sources</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference BASE64__SOURCES = eINSTANCE.getBase64_Sources();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.exec.content.impl.ResourceImpl <em>Resource</em>}' class.

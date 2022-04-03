@@ -68,9 +68,20 @@ public class ContentSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case ContentPackage.FILTER: {
+				Filter filter = (Filter)theEObject;
+				T result = caseFilter(filter);
+				if (result == null) result = caseModelElement(filter);
+				if (result == null) result = caseMarked(filter);
+				if (result == null) result = caseAdaptable(filter);
+				if (result == null) result = caseIMarked(filter);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case ContentPackage.BASE64: {
 				Base64 base64 = (Base64)theEObject;
 				T result = caseBase64(base64);
+				if (result == null) result = caseFilter(base64);
 				if (result == null) result = caseModelElement(base64);
 				if (result == null) result = caseMarked(base64);
 				if (result == null) result = caseAdaptable(base64);
@@ -95,16 +106,6 @@ public class ContentSwitch<T> extends Switch<T> {
 				if (result == null) result = caseMarked(text);
 				if (result == null) result = caseAdaptable(text);
 				if (result == null) result = caseIMarked(text);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case ContentPackage.FILTER: {
-				Filter filter = (Filter)theEObject;
-				T result = caseFilter(filter);
-				if (result == null) result = caseModelElement(filter);
-				if (result == null) result = caseMarked(filter);
-				if (result == null) result = caseAdaptable(filter);
-				if (result == null) result = caseIMarked(filter);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
