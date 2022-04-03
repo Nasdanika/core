@@ -51,9 +51,14 @@ public interface DiagramGenerator {
 		WBS,
 		
 		/**
-		 * For generating drawio (https://app.diagrams.net/) embedded diagram HTML from diagram file contents as a spec. 
+		 * For generating drawio (https://diagrams.net/) embedded diagram HTML from diagram file contents as a spec. 
 		 */
-		DRAWIO
+		DRAWIO,
+		
+		/**
+		 * For generating Mermaid (https://mermaid-js.github.io/mermaid/#/) diagrams.
+		 */
+		MERMAID
 		
 	}
 	

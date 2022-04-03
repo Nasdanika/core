@@ -82,6 +82,11 @@ public class MarkdownHelper {
 	private static final Pattern START_DRAWIO_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_BLOCK+"(\\s)*\\R");
 	private static final Pattern START_DRAWIO_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_RESOURCE_BLOCK+"(\\s)*\\R");
 	
+	private static final String START_MERMAID_BLOCK = "```mermaid";
+	private static final String START_MERMAID_RESOURCE_BLOCK = "```mermaid-resource";
+	private static final Pattern START_MERMAID_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MERMAID_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_MERMAID_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MERMAID_RESOURCE_BLOCK+"(\\s)*\\R");
+	
 	private static final String START_PNG_BLOCK = "```png";
 	private static final String START_PNG_RESOURCE_BLOCK = "```png-resource";
 	private static final Pattern START_PNG_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_PNG_BLOCK+"(\\s)*\\R");
@@ -120,6 +125,7 @@ public class MarkdownHelper {
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MERMAID, START_MERMAID_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, null, START_PNG_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, null, START_JPEG_PATTERN, replacements, false);
 					
@@ -129,6 +135,7 @@ public class MarkdownHelper {
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MERMAID, START_MERMAID_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_PNG_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_JPEG_RESOURCE_PATTERN, replacements, true);
 					
@@ -236,6 +243,11 @@ public class MarkdownHelper {
 		}
 		if (dialect == Dialect.DRAWIO) {
 			// TODO - Extract text from XML, return null for now.
+			// Not needed with Nasdanika search - it extracts text from Drawio diagrams.
+			return null;
+		}
+		if (dialect == Dialect.MERMAID) {
+			// No need - spec is available as plain text. 
 			return null;
 		}
 		return StringEscapeUtils.escapeHtml4(bareSpec).trim();

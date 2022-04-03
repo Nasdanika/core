@@ -27,8 +27,27 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 			data.put("xml", spec);
 			
 			String diagramDiv = "<div class=\"mxgraph\" style=\"max-width:100%;border:1px solid transparent;\" data-mxgraph=\"" + StringEscapeUtils.escapeHtml4(data.toString()) + "\"></div>";
-			String script = "<script type=\"text/javascript\" src=\"" + getDrawioViewer() + "\"></script>";
+			String drawioViewer = getDrawioViewer();
+			if (Util.isBlank(drawioViewer)) {
+				return diagramDiv;
+			}
+			String script = "<script type=\"text/javascript\" src=\"" + drawioViewer + "\"></script>";
 			return diagramDiv + System.lineSeparator() + script;		
+		}
+		
+		if (dialect == Dialect.MERMAID) {
+			String mermaidDiv = "<div class=\"mermaid\">"  + System.lineSeparator() + spec + System.lineSeparator() + "</div>";
+			String mermaidInitialize = getMermaidInitialize();
+			if (Util.isBlank(mermaidInitialize)) {
+				return mermaidDiv;
+			}
+			return mermaidDiv
+					+ System.lineSeparator()
+					+ "<script>"
+					+ System.lineSeparator()
+					+ mermaidInitialize
+					+ System.lineSeparator()
+					+ "</script>";					
 		}
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -86,5 +105,9 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 
 	protected String getDrawioViewer() {
 		return "https://viewer.diagrams.net/js/viewer-static.min.js";
+	}
+	
+	protected String getMermaidInitialize() {
+		return "mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });";
 	}
 }
