@@ -5,6 +5,7 @@ import java.io.InputStream;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
+import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Markdown;
@@ -48,6 +49,13 @@ public class ContentAdapterFactory extends ComposedAdapterFactory {
 					getInputStreamSupplierFactoryClass(), 
 					this.getClass().getClassLoader(), 
 					InterpolatorSupplierFactoryAdapter::new));
+		
+		registerAdapterFactory(
+				new FunctionAdapterFactory<SupplierFactory<InputStream>, Base64>(
+					ContentPackage.Literals.BASE64, 
+					getInputStreamSupplierFactoryClass(), 
+					this.getClass().getClassLoader(), 
+					Base64SupplierFactoryAdapter::new));
 				
 	}
 	
