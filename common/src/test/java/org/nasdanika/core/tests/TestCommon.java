@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -395,11 +396,11 @@ public class TestCommon {
 //		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));
 	}
 	
-//	@Test
-//	public void testURI() throws Exception {
-//		URI fileURI = URI.createURI(new File(".").getCanonicalFile().toURI().toString());
-//		System.out.println(fileURI + " " + fileURI.hasAbsolutePath());
-//		System.out.println(URI.createURI("https://www.nasdanika.org/something/").hasAbsolutePath());
-//	}
+	@Test
+	public void testURI() throws Exception {
+		URI sourceURI = URI.createURI("https://docs.nasdanika.org/modules/core/modules/emf/index.html");
+		URI targetURI = URI.createURI("https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html");
+		System.out.println(targetURI.deresolve(sourceURI, true, true, true));
+	}
 	
 }

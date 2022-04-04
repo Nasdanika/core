@@ -2,6 +2,13 @@ engineering-module:
   name: EMF
   path: emf
   action-prototype: "../javadoc-action-prototype.xml#/"
+  documentation:
+    content-interpolator:
+      source:
+        content-markdown:
+          style: true
+          source:
+            content-resource: readme.md
   dependencies:
     - engineering://nasdanika/modules/core/modules/cli
     - engineering://nasdanika/modules/core/modules/ncore

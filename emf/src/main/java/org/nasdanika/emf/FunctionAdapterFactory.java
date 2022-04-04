@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
 /**
+ * Creates an adapter using a {@link Function} passing the notifier (target) as an argument.
  * @param <T> Adapter type.
  * @param <N> Notifier type.
  */

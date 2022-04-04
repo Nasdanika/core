@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
 /**
- * Adapter factory which creates adapter using a {@link BiFunction}, e.g. constructor with two arguments.
+ * Adapter factory which creates an adapter using a {@link BiFunction}, e.g. a constructor with two parameters.
  * The first argument is the notifier, the second is the factory. The second argument can be used to get access to the root adapter factory, 
  * e.g. for retrieval of contextual information.
  * @param <T> Adapter type.
