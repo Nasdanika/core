@@ -66,8 +66,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			featureMap.put(featureKey, feature);
 			addFeature(wrapFeature(featureKey, feature, loader, keyProvider));
-		}			
-		
+		}					
 	}
 	
 	/**

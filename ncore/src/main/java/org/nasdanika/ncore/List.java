@@ -30,7 +30,7 @@ public interface List extends EObject {
 	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getList_Value()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika reference-type='map: Map\nlist: List\nstring: String' value-feature='true'"
+	 *        annotation="urn:org.nasdanika reference-type='map: Map\nlist: List\nstring: String'"
 	 * @generated
 	 */
 	EList<EObject> getValue();

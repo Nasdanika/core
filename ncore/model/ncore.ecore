@@ -221,7 +221,6 @@
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
       <eAnnotations source="urn:org.nasdanika">
         <details key="reference-type" value="map: Map&#xA;list: List&#xA;string: String"/>
-        <details key="value-feature" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

@@ -1452,8 +1452,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getList_Value(),
 		   source,
 		   new String[] {
-			   "reference-type", "map: Map\nlist: List\nstring: String",
-			   "value-feature", "true"
+			   "reference-type", "map: Map\nlist: List\nstring: String"
 		   });
 		addAnnotation
 		  (getMap_Value(),

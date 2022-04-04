@@ -399,7 +399,7 @@ public class TestCommon {
 	@Test
 	public void testURI() throws Exception {
 		URI sourceURI = URI.createURI("https://docs.nasdanika.org/modules/core/modules/emf/index.html");
-		URI targetURI = URI.createURI("https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html");
+		URI targetURI = URI.createURI("https://docs.nasdanika.org/modules/core/modules/ncore/Marked.html");
 		System.out.println(targetURI.deresolve(sourceURI, true, true, true));
 	}
 	
