@@ -98,7 +98,7 @@ EObject features are loaded using load keys.
 By default load keys are derived from feature names by converting camel case to kebab case.
 E.g. ``firstName`` becomes ``first-name``.
 
-Load key can be customized using the nasdanika annotation ``:
+Load key can be customized using the Nasdanika annotation:
 
 * ``load-key`` detail key at the feature level. The value shall be a string.
 * ``load-keys`` detail key at the class level. The value shall be a YAML map of feature names to load keys. This approach allows to override feature load key in subclasses.
@@ -113,8 +113,8 @@ Load keys can be customized by passing a non-default load key provider to ${java
 
 Default load keys for classes and packages are computed in the same way as for features by converting class or package name from came to kebab case.
 
-Default behavior can be customized using the ``load-key`` nasdanika annotation detail key with the load key as value.
-It is also possible to suppress loading of a class or a package by setting ``loadable`` nasdanika annotation detail key to ``false``.
+Default behavior can be customized using the ``load-key`` Nasdanika annotation detail key with the load key as value.
+It is also possible to suppress loading of a class or a package by setting ``loadable`` Nasdanika annotation detail key to ``false``.
 
 As with features, it is possible to provide a custom key loader to ``EObjectLoader`` constructor to change the default
 behavior if annotations are not enough. 
@@ -135,7 +135,7 @@ content-text:
 
 #### Default feature
 
-A feature can be defined as a default feature by setting ``default-feature`` nasdanika annotation to ``true`` at the feature level or to the feature name at the class level.
+A feature can be defined as a default feature by setting ``default-feature`` Nasdanika annotation to ``true`` at the feature level or to the feature name at the class level.
 Default features are used when object configuration value is not a map, e.g. a String.
 
 For example, Exec ``Text`` defines ``content`` as its default feature.
@@ -199,9 +199,9 @@ In many cases reference values are either of the same type or their type can be 
 In this case explicitly specifying the type is unnecessary and may lead to configuration errors.
 For example, in the above code snippet ``releases`` reference can contain only instances of its reference type - [Release](../../../engineering/modules/model/Release.html).
 
-To specify that the type of refernce elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogenous`` nasdanika annotation details key to ``true`` on the reference. 
+To specify that the type of refernce elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogenous`` Nasdanika annotation details key to ``true`` on the reference. 
 
-In some situations the type of reference element can be derived from the type of its configuration - string, integer, map, list, boolean, date. In such cases add ``reference-type`` nasdanika annotation key with a value containing a YAML map of configuration value types to element types.
+In some situations the type of reference element can be derived from the type of its configuration - string, integer, map, list, boolean, date. In such cases add ``reference-type`` Nasdanika annotation key with a value containing a YAML map of configuration value types to element types.
 
 For example:
 
@@ -217,12 +217,12 @@ Map values can be strings for types in the same EPackage or maps with the follow
 * ``ns-uri`` - Namespace URI of the EPackage.
 * ``name`` - EClass name.
 
-In situations when it is necessary to override reference type in a subclass add ``reference-types`` nasdanika annotation to the subclass. The value shall be a YAML map of reference names to element types.
+In situations when it is necessary to override reference type in a subclass add ``reference-types`` Nasdanika annotation to the subclass. The value shall be a YAML map of reference names to element types.
 Element types can be strings for the types in the same package or maps with ``ns-uri`` and ``name`` keys as explained above.
 
 By default, if an element value of a homogenous reference is a string then it is treated as a relative URI of a resource from which the element shall be loaded. 
 In this case that resource has to contain type definition.
-For elements with a default feature this behavior can be modified by setting ``strict-containment`` nasdanika annotation detail to ``true`` to treat the string value in configuration as the value of the default feature. In this case it is not possible to load reference elements from external resources.
+For elements with a default feature this behavior can be modified by setting ``strict-containment`` Nasdanika annotation detail to ``true`` to treat the string value in configuration as the value of the default feature. In this case it is not possible to load reference elements from external resources.
 
 ##### Reference keys (EKeys)
 
@@ -237,11 +237,11 @@ The map entry value is used to either set up element features or "value feature"
 ##### Value feature
 
 When using EKeys you may want to use map entry value to set a specific feature of the reference element instead of using it to configure the element itself.
-In this case set ``value-feature`` nasdanika annotation on the reference to the name of the feature which shall be configured with the map entry value.
+In this case set ``value-feature`` Nasdanika annotation on the reference to the name of the feature which shall be configured with the map entry value.
 
 #### Mutually exclusive features
 
-Features may have ``exclusive-with`` nasdanika annotation details containing a space-separated list of feature keys which are exclusive with the annotated feature.
+Features may have ``exclusive-with`` Nasdanika annotation details containing a space-separated list of feature keys which are exclusive with the annotated feature.
 It is not necessary to declare exclusivity on both features, just on one of them.
 
 If object configuration contains keys for mutually exclusive features, loading will fail.
