@@ -246,7 +246,7 @@ It is not necessary to declare exclusivity on both features, just on one of them
 
 If object configuration contains keys for mutually exclusive features, loading will fail.
 
-### Load tracker
+#### Load tracker
 
 During load a ${javadoc/org.nasdanika.emf.persistence.LoadTracker} adapter is added to objects being loaded.
 This adapter allows, for example, to compute derived values for features unless they were already loaded.
@@ -256,7 +256,7 @@ An example of using a computed feature - the feature type is an object which is 
 Feature configuration value is a string, e.g. an issue ID. 
 During load issue ID is stored in the load tracker adapter and then is used to contact the issue tracker system, retrieve issue details and create an issue object to be returned from the feature getter.
 
-### Marker
+#### Marker
 
 When objects are loaded from YAML information about source file line and number is injected into the objects as follows:
 
@@ -266,6 +266,6 @@ When objects are loaded from YAML information about source file line and number 
 It is possible to customize marker type by calling ``EObjectLoader.setMarkerFactory()``. 
 For example, [GitMarker](../ncore/GitMarker.html) can be created with ${javadoc/org.nasdanika.emf.persistence.GitMarkerFactory}.
 
-### Examples
+#### Examples
 
 For examples see [Exec tests](https://github.com/Nasdanika/core/tree/master/exec.gen/src/test).

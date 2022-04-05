@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jgit.lib.Constants;
@@ -28,12 +27,12 @@ import org.nasdanika.ncore.NcoreFactory;
  * @author Pavel
  *
  */
-public class GitMarkerFactory implements BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> {
+public class GitMarkerFactory implements MarkerFactory {
 	
 	private Map<File, GitMarker> templates = new HashMap<>();
 
 	@Override
-	public Marker apply(String location, ProgressMonitor progressMonitor) {		
+	public Marker createMarker(String location, ProgressMonitor progressMonitor) {		
 		try {
 			if (!Util.isBlank(location) && location.startsWith("file:/")) {
 				URI locationURI = new URL(location).toURI();

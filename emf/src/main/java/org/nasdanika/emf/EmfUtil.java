@@ -136,23 +136,58 @@ public class EmfUtil {
 	}
 	
 	/**
-	 * Resolves reference relative to the resource. <code>bundle://</code> protocol can be used to reference resources in OSGi bundles similarly to <code>plugin://</code> protocol.  
+	 * Resolves reference relative to the resource.   
 	 * @param resource Used to resolve relative references if not null.
 	 * @param reference Reference.
 	 * @return
 	 * @throws Exception
 	 */
-	public static URL resolveReference(Resource resource, String reference) throws Exception {		
+	public static URI resolveReference(Resource resource, String reference) throws Exception {		
+		URI refUri = Util.isBlank(reference) ? null : URI.createURI(reference);
 		if (resource != null) {
-			URI refUri = URI.createURI(reference);
 			URI resUri = resource.getURI();
+			if (refUri == null) {
+				return resUri;
+			}
 			if (resUri.isHierarchical()) {
 				refUri = refUri.resolve(resUri);
 			}			
-			return Util.isBlank(refUri.scheme()) ? null : new URL(refUri.toString());			
 		}
+		return refUri;
+	}
+	
+	/**
+	 * Provides access to documentation and its location for resolving resource references. 
+	 * @author Pavel
+	 *
+	 */
+	public interface EModelElementDocumentation {
 		
-		return new URL(reference);
+		/**
+		 * @return Documentation loaded from an annotation of external resource.
+		 */
+		String getDocumentation();
+		
+		/**
+		 * @return URI of the model resource for documentation loaded from an annotation, URI of a resource if loaded from a resource.
+		 */
+		URI getLocation();
+		
+		static EModelElementDocumentation from(String documentation, URI location) {
+			return new EModelElementDocumentation() {
+				
+				@Override
+				public URI getLocation() {
+					return location;
+				}
+				
+				@Override
+				public String getDocumentation() {
+					return documentation;
+				}
+			}; 
+		}		
+		
 	}
 	
 	/**
@@ -161,17 +196,22 @@ public class EmfUtil {
 	 * @param modelElement
 	 * @return
 	 */
-	public static String getDocumentation(EModelElement modelElement) {
+	public static EModelElementDocumentation getDocumentation(EModelElement modelElement) {
 		EAnnotation nasdanikaAnnotation = NcoreUtil.getNasdanikaAnnotation(modelElement);
 		if (nasdanikaAnnotation != null) {
 			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
 			if (!Util.isBlank(docRef)) {
 				try {
-					URL docURL = resolveReference(modelElement.eResource(), docRef);
-					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
+					URI refUri = resolveReference(modelElement.eResource(), docRef);
+					if (Util.isBlank(refUri.scheme())) {
+						return null;			
+					}
+
+					String doc = DefaultConverter.INSTANCE.toString(new URL(refUri.toString()).openStream());
+					return EModelElementDocumentation.from(doc, refUri);
 				} catch (Exception e) {
 					e.printStackTrace();
-					return "<div class='nsd-error'>Error loading documentation: " + e + "</div>";
+					return EModelElementDocumentation.from("<div class='nsd-error'>Error loading documentation: " + e + "</div>", null);
 				}
 			}
 		}
@@ -185,21 +225,42 @@ public class EmfUtil {
 	 * @param modelElement
 	 * @return
 	 */
-	public static String getLoadDocumentation(EModelElement modelElement) {
+	public static EModelElementDocumentation getLoadDocumentation(EModelElement modelElement) {
 		EAnnotation nasdanikaAnnotation = NcoreUtil.getNasdanikaAnnotation(modelElement);
 		if (nasdanikaAnnotation != null) {
 			String docRef = nasdanikaAnnotation.getDetails().get(EObjectLoader.LOAD_DOC_REF);
 			if (!Util.isBlank(docRef)) {
 				try {
-					URL docURL = resolveReference(modelElement.eResource(), docRef);
-					return docURL == null ? null : DefaultConverter.INSTANCE.toString(docURL.openStream());
+					URI refUri = resolveReference(modelElement.eResource(), docRef);
+					if (Util.isBlank(refUri.scheme())) {
+						return null;			
+					}
+
+					String doc = DefaultConverter.INSTANCE.toString(new URL(refUri.toString()).openStream());
+					return EModelElementDocumentation.from(doc, refUri);
 				} catch (Exception e) {
 					e.printStackTrace();
-					return "<div class='nsd-error'>Error loading documentation: " + e + "</div>";
+					return EModelElementDocumentation.from("<div class='nsd-error'>Error loading documentation: " + e + "</div>", null);
 				}
 			}
 			
-			return nasdanikaAnnotation.getDetails().get(EObjectLoader.LOAD_DOC);
+			String loadDoc = nasdanikaAnnotation.getDetails().get(EObjectLoader.LOAD_DOC);
+			if (Util.isBlank(loadDoc)) {
+				return null;
+			}
+			return new EModelElementDocumentation() {
+				
+				@Override
+				public URI getLocation() {
+					Resource res = modelElement.eResource();
+					return res == null ? null : res.getURI();
+				}
+				
+				@Override
+				public String getDocumentation() {
+					return loadDoc;
+				}
+			};
 		}
 		
 		return null;

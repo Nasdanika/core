@@ -226,15 +226,15 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 	}
 	
-	public BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> getMarkerFactory() {
+	public MarkerFactory getMarkerFactory() {
 		return markerFactory;
 	}
 	
-	public void setMarkerFactory(BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> markerFactory) {
+	public void setMarkerFactory(MarkerFactory markerFactory) {
 		this.markerFactory = markerFactory;
 	}
 	
-	private BiFunction<String, ProgressMonitor, org.nasdanika.ncore.Marker> markerFactory = (location, progressMonitor) -> {
+	private MarkerFactory markerFactory = (location, progressMonitor) -> {
 		org.nasdanika.ncore.Marker marker = NcoreFactory.eINSTANCE.createMarker();
 		marker.setLocation(location);
 		return marker;
@@ -434,7 +434,7 @@ public class EObjectLoader extends DispatchingLoader {
 		if (marker != null) {
 			eObject.eAdapters().add(new MarkedAdapter(marker));
 			if (eObject instanceof Marked) {				
-				org.nasdanika.ncore.Marker mMarker = markerFactory.apply(marker.getLocation(), progressMonitor);
+				org.nasdanika.ncore.Marker mMarker = markerFactory.createMarker(marker.getLocation(), progressMonitor);
 				mMarker.setLine(marker.getLine());
 				mMarker.setColumn(marker.getColumn());
 				((Marked) eObject).setMarker(mMarker);

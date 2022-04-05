@@ -44,10 +44,16 @@ Markdown filter allows to embed PNG and JPEG using fenced blocks.
 ### PNG resource
 
 	```png-resource
-	my.png
+	nasdanika-logo.png
 	```
 
-Resource location is resolved relative to the YAML resource containing filter definition.
+Resource location is resolved relative to the model resource containing filter definition.
+If the filter model element has a marker, e.g. it was loaded from YAML, then the resource location is resolved to the location of that YAML file
+even if the model was saved to, say, XML after that.  
+
+```png-resource
+nasdanika-logo.png
+```
 
 ### JPEG resource
 
@@ -68,7 +74,7 @@ Resource location is resolved relative to the YAML resource containing filter de
 
 ## Embedded diagrams
 
-Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](https://www.diagrams.net/) diagrams using fenced blocks ([Online editor](https://app.diagrams.net/)).
+Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](https://www.diagrams.net/) diagrams using fenced blocks. Draw.io diagrams can be edited in a desktop editor or [Online editor](https://app.diagrams.net/).
 
 ### Draw.io
 
@@ -76,8 +82,11 @@ Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](
     aws.drawio
     ```
 
-Resource location is resolved relative to the YAML resource containing filter definition.
-Diagrams shall be uncompressed - in the editor click File > Properties and uncheck "Compressed".
+Resource location is resolved in the same as for image files as explained above.
+
+```drawio-resource
+aws.drawio
+```
 
 ### PlantUML
 
@@ -89,7 +98,12 @@ PlantUML diagrams can be defined inline or loaded from resources.
     sequence.plantuml
     ```
 
-In the above snippet ``uml`` is a dialect supported by PlantUML (see below) and ``sequence.plantuml`` is a resource location resolved relative to the YAML resource containing markdown filter definition.
+In the above snippet ``uml`` is a dialect supported by PlantUML (see below) and ``sequence.plantuml`` is a resource containing a diagram definition without ``@startuml`` and ``@enduml``.
+Resource location is resolved in the same as for image files as explained above.
+
+```uml-resource
+sequence.plantuml
+```
 
 #### Inline 
 
