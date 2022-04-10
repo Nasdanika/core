@@ -22,8 +22,8 @@ public class Generator {
 	
 	public static Generator INSTANCE = new Generator();
 
-	private static final String PLANTUML_SCHEMA = "plantuml:";
-	private static final String DRAWIO_SCHEMA = "drawio:";
+	public static final String PLANTUML_SCHEMA = "plantuml:";
+	public static final String DRAWIO_SCHEMA = "drawio:";
 
 	public String generate(Diagram diagram) throws Exception {
 		String type = diagram.getType();

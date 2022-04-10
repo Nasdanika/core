@@ -16,11 +16,6 @@ import org.nasdanika.diagram.gen.PlantumlGenerator;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.Text;
 
-/**
- * Common methods for testing
- * @author Pavel
- *
- */
 public class TestStateDiagram {
 	
 	@Test
@@ -43,7 +38,6 @@ public class TestStateDiagram {
 		source.getElements().add(nested);
 		nested.setType("state");
 		nested.setText("Nested");	
-//		nested.setStereotype("choice");
 		nested.setBorder("red");
 		nested.setDashed(true);
 		
