@@ -8,6 +8,10 @@ package org.nasdanika.ncore;
  * A representation of the model object '<em><b>String Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A named/keyed string.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.ncore.NcorePackage#getStringProperty()
  * @model

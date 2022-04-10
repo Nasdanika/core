@@ -13,6 +13,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Map</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A set of key-value pairs.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -30,6 +34,9 @@ public interface Map extends EObject {
 	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Map entries
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getMap_Value()
 	 * @model containment="true" keys="name"

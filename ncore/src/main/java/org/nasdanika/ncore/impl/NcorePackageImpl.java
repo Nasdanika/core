@@ -1425,18 +1425,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "strict-containment", "true"
 		   });
 		addAnnotation
-		  (modelElementEClass,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/model-element.md"
-		   });
-		addAnnotation
-		  (namedElementEClass,
-		   source,
-		   new String[] {
-			   "documentation-reference", "doc/named-element.md"
-		   });
-		addAnnotation
 		  (getReference_Target(),
 		   source,
 		   new String[] {
@@ -1490,6 +1478,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
 		addAnnotation
+		  (getMarked_Marker(),
+		   source,
+		   new String[] {
+			   "documentation", "Marker pointing to where this model element was loaded from - location, line and column numbers."
+		   });
+		addAnnotation
+		  (markerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Provides information about location for a model element definition - URI, line and column numbers."
+		   });
+		addAnnotation
+		  (getMarker_Location(),
+		   source,
+		   new String[] {
+			   "documentation", "URI of a resource."
+		   });
+		addAnnotation
+		  (getMarker_Line(),
+		   source,
+		   new String[] {
+			   "documentation", "Line number."
+		   });
+		addAnnotation
+		  (getMarker_Column(),
+		   source,
+		   new String[] {
+			   "documentation", "Column number."
+		   });
+		addAnnotation
 		  (instantEDataType,
 		   source,
 		   new String[] {
@@ -1505,31 +1523,31 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getTemporal__After__Temporal(),
 		   source,
 		   new String[] {
-			   "documentation", "Tests if this temporal is after the specified temporal. Returns null if unknown, e.g. two unrelated events."
+			   "documentation", "Tests if this temporal is after the specified temporal. Returns null if unknown, i.e. two unrelated points in time."
 		   });
 		addAnnotation
 		  (getTemporal__Before__Temporal(),
 		   source,
 		   new String[] {
-			   "documentation", "Tests if this temporal is before the specified temporal. Returns null if unknown, e.g. two unrelated events."
+			   "documentation", "Tests if this temporal is before the specified temporal. Returns null if unknown, i.e. two unrelated points in time."
 		   });
 		addAnnotation
 		  (getTemporal__Coincides__Temporal(),
 		   source,
 		   new String[] {
-			   "documentation", "Tests if this temporal occurs at the same point on the time-line as the specified temporal. Returns null if unknown, e.g. two unrelated events."
+			   "documentation", "Tests if this temporal occurs at the same point on the time-line as the specified temporal. Returns null if unknown, i.e. two unrelated points in time."
 		   });
 		addAnnotation
 		  (getTemporal__Normalize(),
 		   source,
 		   new String[] {
-			   "documentation", "Returns a normalized instance of this temporal not contained in the model. Normalization walks through the temporal chain to the root temporal. If that root temporal is instant/absolute then the normalized instance would be instant/absolute. Otherwise the normalized instance would contain the root temporal as its base and offset would be the sum of all offsets."
+			   "documentation", "Returns a normalized instance of this temporal not contained in the model. Normalization walks through the temporal chain from a temporal to its base to the root temporal. If that root temporal is instant/absolute then the normalized instance would be instant/absolute. Otherwise the normalized instance would contain the root temporal as its base and the offset would be the sum of all offsets."
 		   });
 		addAnnotation
 		  (getTemporal__Minus__Temporal(),
 		   source,
 		   new String[] {
-			   "documentation", "Returns [duration](Duration.html) difference between this temporal and the argument temporal - how much this temporal is after the argument on the time-line, if difference can be computed, e.g. both this temporal and the argument temporal are instant or trace to the same base temporal. Returns null otherwise."
+			   "documentation", "Returns [duration](Duration.html) difference between this temporal and the argument temporal - how much this temporal is after the argument on the time-line, if difference can be computed, i.e. both this temporal and the argument temporal are instant or trace to the same base temporal. \nReturns null otherwise."
 		   });
 		addAnnotation
 		  (getTemporal__Minus__Duration(),
@@ -1541,7 +1559,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getTemporal__Plus__Duration(),
 		   source,
 		   new String[] {
-			   "documentation", "Returns a temporal based on this one offset by the argument [duration](Duration.html). Duration can be null."
+			   "documentation", "Returns a temporal based on this one offset by the argument [duration](Duration.html). Duration can be null - in this case it is treated as zero."
 		   });
 		addAnnotation
 		  (getTemporal__Copy(),
@@ -1604,6 +1622,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Positive period duration in [ISO-8601 durations](https://en.wikipedia.org/wiki/ISO_8601#Durations) format. E.g. ``P1M`` for one month or ``P20D`` for 20 days."
 		   });
 		addAnnotation
+		  (modelElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for many Nasdanika model classes."
+		   });
+		addAnnotation
 		  (getModelElement_Uri(),
 		   source,
 		   new String[] {
@@ -1616,16 +1640,154 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Description in HTML."
 		   });
 		addAnnotation
+		  (getModelElement_Uuid(),
+		   source,
+		   new String[] {
+			   "documentation", "Optional unique identifier for this model element. For root objects UUID is used to compute URI, if the URI is not set."
+		   });
+		addAnnotation
 		  (getModelElement_ActionPrototype(),
 		   source,
 		   new String[] {
 			   "documentation", "If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. \nIf this reference is set and is Action then a copy of the action is created and returned.\nOtherwise the reference value it is adapted to ActionProvider which is used to create an action. \nThis allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."
 		   });
 		addAnnotation
+		  (namedElementEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A model element with name."
+		   });
+		addAnnotation
 		  (getNamedElement_Name(),
 		   source,
 		   new String[] {
 			   "documentation", "Element name."
+		   });
+		addAnnotation
+		  (referenceEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Object reference. May be used in containment collections to point to an object contained elsewhere."
+		   });
+		addAnnotation
+		  (getReference_Target(),
+		   source,
+		   new String[] {
+			   "documentation", "Reference target."
+		   });
+		addAnnotation
+		  (stringEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Text/string."
+		   });
+		addAnnotation
+		  (getString_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "String value."
+		   });
+		addAnnotation
+		  (listEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A list of objects."
+		   });
+		addAnnotation
+		  (getList_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "List elements."
+		   });
+		addAnnotation
+		  (mapEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A set of key-value pairs."
+		   });
+		addAnnotation
+		  (getMap_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Map entries"
+		   });
+		addAnnotation
+		  (integerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents integer number."
+		   });
+		addAnnotation
+		  (getInteger_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Value."
+		   });
+		addAnnotation
+		  (booleanEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents boolean."
+		   });
+		addAnnotation
+		  (getBoolean_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Value."
+		   });
+		addAnnotation
+		  (propertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base class for keyed values."
+		   });
+		addAnnotation
+		  (getProperty_Name(),
+		   source,
+		   new String[] {
+			   "documentation", "Property name/key."
+		   });
+		addAnnotation
+		  (stringPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed string."
+		   });
+		addAnnotation
+		  (integerPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed integer."
+		   });
+		addAnnotation
+		  (mapPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed map."
+		   });
+		addAnnotation
+		  (listPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed list."
+		   });
+		addAnnotation
+		  (booleanPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed boolean."
+		   });
+		addAnnotation
+		  (eObjectPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed object."
+		   });
+		addAnnotation
+		  (getEObjectProperty_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Property value."
 		   });
 		addAnnotation
 		  (stringEntryEClass,
@@ -1637,7 +1799,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getStringEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Entry key."
+		   });
+		addAnnotation
+		  (getStringEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Entry value."
 		   });
 		addAnnotation
 		  (integerEntryEClass,
@@ -1649,7 +1817,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getIntegerEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Entry key."
+		   });
+		addAnnotation
+		  (getIntegerEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Entry value."
 		   });
 		addAnnotation
 		  (booleanEntryEClass,
@@ -1661,7 +1835,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getBooleanEntry_Key(),
 		   source,
 		   new String[] {
-			   "documentation", "Artifact key."
+			   "documentation", "Entry key."
+		   });
+		addAnnotation
+		  (getBooleanEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Entry value."
 		   });
 		addAnnotation
 		  (gitMarkerEClass,

@@ -9,6 +9,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>List Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A named/keyed list.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.ncore.NcorePackage#getListProperty()
  * @model

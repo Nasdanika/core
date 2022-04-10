@@ -26,6 +26,9 @@ public interface Marked extends EObject, org.nasdanika.common.persistence.Marked
 	 * Returns the value of the '<em><b>Marker</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Marker pointing to where this model element was loaded from - location, line and column numbers.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Marker</em>' containment reference.
 	 * @see #setMarker(Marker)
 	 * @see org.nasdanika.ncore.NcorePackage#getMarked_Marker()

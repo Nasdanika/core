@@ -11,6 +11,10 @@ import org.nasdanika.common.Adaptable;
  * A representation of the model object '<em><b>Model Element</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Base class for many Nasdanika model classes.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -23,7 +27,6 @@ import org.nasdanika.common.Adaptable;
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
  * @model abstract="true" superTypes="org.nasdanika.ncore.Marked org.nasdanika.ncore.Adaptable"
- *        annotation="urn:org.nasdanika documentation-reference='doc/model-element.md'"
  * @generated
  */
 public interface ModelElement extends Marked, Adaptable {
@@ -83,6 +86,9 @@ public interface ModelElement extends Marked, Adaptable {
 	 * Returns the value of the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Optional unique identifier for this model element. For root objects UUID is used to compute URI, if the URI is not set.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Uuid</em>' attribute.
 	 * @see #setUuid(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Uuid()

@@ -8,6 +8,10 @@ package org.nasdanika.ncore;
  * A representation of the model object '<em><b>Boolean Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A named/keyed boolean.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.ncore.NcorePackage#getBooleanProperty()
  * @model

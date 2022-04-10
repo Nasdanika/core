@@ -10,6 +10,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Marker</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Provides information about location for a model element definition - URI, line and column numbers.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -28,6 +32,9 @@ public interface Marker extends EObject, org.nasdanika.common.persistence.Marker
 	 * Returns the value of the '<em><b>Location</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * URI of a resource.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Location</em>' attribute.
 	 * @see #setLocation(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Location()
@@ -50,6 +57,9 @@ public interface Marker extends EObject, org.nasdanika.common.persistence.Marker
 	 * Returns the value of the '<em><b>Line</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Line number.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Line</em>' attribute.
 	 * @see #setLine(int)
 	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Line()
@@ -72,6 +82,9 @@ public interface Marker extends EObject, org.nasdanika.common.persistence.Marker
 	 * Returns the value of the '<em><b>Column</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Column number.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Column</em>' attribute.
 	 * @see #setColumn(int)
 	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Column()

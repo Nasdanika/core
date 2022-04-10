@@ -11,6 +11,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Map Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A named/keyed map.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.ncore.NcorePackage#getMapProperty()
  * @model

@@ -9,6 +9,10 @@ import java.lang.String;
  * A representation of the model object '<em><b>Named Element</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A model element with name.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -17,7 +21,7 @@ import java.lang.String;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getNamedElement()
- * @model annotation="urn:org.nasdanika documentation-reference='doc/named-element.md'"
+ * @model
  * @generated
  */
 public interface NamedElement extends ModelElement {

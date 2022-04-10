@@ -9,6 +9,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>EObject Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A named/keyed object.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -25,6 +29,9 @@ public interface EObjectProperty extends Property {
 	 * Returns the value of the '<em><b>Value</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Property value.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' containment reference.
 	 * @see #setValue(EObject)
 	 * @see org.nasdanika.ncore.NcorePackage#getEObjectProperty_Value()

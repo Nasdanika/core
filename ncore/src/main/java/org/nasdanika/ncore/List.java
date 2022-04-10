@@ -10,6 +10,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>List</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A list of objects.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -27,6 +31,9 @@ public interface List extends EObject {
 	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * List elements.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getList_Value()
 	 * @model containment="true"
