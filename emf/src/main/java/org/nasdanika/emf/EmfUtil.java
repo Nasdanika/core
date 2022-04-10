@@ -197,6 +197,12 @@ public class EmfUtil {
 	 * @return
 	 */
 	public static EModelElementDocumentation getDocumentation(EModelElement modelElement) {
+		String modelDoc = EcoreUtil.getDocumentation(modelElement);
+		if (!Util.isBlank(modelDoc)) {
+			Resource res = modelElement.eResource();
+			return EModelElementDocumentation.from(modelDoc, res == null ? null : res.getURI());			
+		}
+		
 		EAnnotation nasdanikaAnnotation = NcoreUtil.getNasdanikaAnnotation(modelElement);
 		if (nasdanikaAnnotation != null) {
 			String docRef = nasdanikaAnnotation.getDetails().get("documentation-reference");
