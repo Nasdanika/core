@@ -22,6 +22,7 @@ import org.nasdanika.flow.Call;
 import org.nasdanika.flow.FlowElement;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Package;
+import org.nasdanika.flow.PackageElement;
 import org.nasdanika.flow.Participant;
 import org.nasdanika.flow.ParticipantResponsibility;
 import org.nasdanika.flow.Resource;
@@ -379,6 +380,20 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 	public void apply(Participant instance) {
 		super.apply(instance);
 		
+		// Children
+		for (Entry<String, Participant> participantEntry: getChildren().entrySet()) {
+			Participant participant = participantEntry.getValue();
+			EMap<String, Participant> instanceParticipants = instance.getChildren();
+			String participantKey = participantEntry.getKey();
+			if (participant == null) {
+				instanceParticipants.removeKey(participantKey);
+			} else {
+				Participant	instanceParicipant = participant.create();
+				instanceParticipants.put(participantKey, instanceParicipant);
+				participant.apply(instanceParicipant);
+			}
+		}		
+		
 		// Services
 		for (Entry<String, Activity<?>> se: getServices().entrySet()) {
 			Activity service = se.getValue();
@@ -405,11 +420,18 @@ public class ParticipantImpl extends ServiceProviderImpl<Participant> implements
 		EList<Participant> ret = ECollections.newBasicEList();
 		if (eContainmentFeature() == FlowPackage.Literals.PARTICIPANT_ENTRY__VALUE) {
 			String key = ((Map.Entry<String, ?>) eContainer()).getKey();
-			Package container = (Package) eContainer().eContainer();
-			for (Package cExtends: container.getExtends()) {
-				Participant ext = cExtends.getParticipants().get(key);
-				if (ext != null) {
-					ret.add(ext);
+			PackageElement<?> container = (PackageElement<?>) eContainer().eContainer();
+			for (PackageElement<?> cExtends: container.getExtends()) { 
+				if (cExtends instanceof Package) {
+					Participant ext = ((Package) cExtends). getParticipants().get(key); 
+					if (ext != null) { 
+						ret.add(ext);
+					}
+				} else if (cExtends instanceof Participant) {
+					Participant ext = ((Participant) cExtends).getChildren().get(key); 
+					if (ext != null) { 
+						ret.add(ext);
+					}
 				}
 			}
 		}
