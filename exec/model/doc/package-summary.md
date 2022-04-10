@@ -1,6 +1,8 @@
 Nasdanika Core Exec model classes can be used to create models for generation of resources such as files and their content.
 Exec models can be used on their own or in other models.
-For example, [markdown](content/Markdown.html) can be used as a documentation source for [flow](../../../flow/index.html) [package elements](../../../flow/PackageElement.html).
+For example, [markdown](${classifier/Markdown@urn:org.nasdanika.exec.content}) can be used as a documentation source for [flow](../../../flow/index.html) [package elements](${classifier/PackageElement@urn:org.nasdanika.flow}).
+
+Classifier link test: ${classifier/Activity@urn:org.nasdanika.flow}.
 
 ### Maven dependency
 
