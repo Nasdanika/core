@@ -25,6 +25,7 @@ import org.nasdanika.common.persistence.EnumSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.FunctionSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
+import org.nasdanika.common.persistence.LoadTracker;
 import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -33,6 +34,7 @@ import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
 import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.emf.EmfUtil.EModelElementDocumentation;
+import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
@@ -266,7 +268,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							loadingFeature[0] = structuralFeature;
 							Object value = feature.get(data);
 							if (structuralFeature.isChangeable()) {
-								ret.eSet(structuralFeature, value);
+								setFeature(ret, structuralFeature, value);
 							}
 							loadedFeatures.put(structuralFeature, value);
 						} catch (ConfigurationException e) {
@@ -281,6 +283,16 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				return ret;
 			}
 		};
+	}
+
+	/**
+	 * Sets structural feature. This implementation calls eObj.eSet().  
+	 * @param eObj
+	 * @param structuralFeature
+	 * @param value
+	 */
+	protected void setFeature(EObject eObj, EStructuralFeature structuralFeature, Object value) {
+		eObj.eSet(structuralFeature, value);
 	}
 	
 }

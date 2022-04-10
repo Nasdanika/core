@@ -1,10 +1,11 @@
-package org.nasdanika.emf.persistence;
+package org.nasdanika.common.persistence;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 /**
  * Adapter interface to track features which were loaded. 
  * May be used when some features can be either loaded or computed.
+ * Defined in Common instead of EMF because it needs to be available in Ncore.
  * @author Pavel
  *
  */

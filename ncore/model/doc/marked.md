@@ -1,0 +1,4 @@
+A model element which can contain a [Marker](Marker.html) pointing to the source from which the element was loaded.
+When model elements are loaded from [YAML](https://en.wikipedia.org/wiki/YAML) with [Nasdanika EMF Persistence](../emf/index.html#persistence) markers are injected into model elements which implement ``Marked``.
+If model sources are under [Git](https://git-scm.com/) version control then the model loader can be configured to use ${javadoc/org.nasdanika.emf.persistence.GitMarkerFactory} to create [GitMarker](GitMarker.html) 
+instead of ``Marker`` to capture Git-specific information such as branch, commit ID, and remotes.

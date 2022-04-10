@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * <!-- begin-user-doc -->
@@ -81,11 +82,12 @@ public class PeriodImpl extends ModelElementImpl implements Period {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void setStart(Temporal newStart) {
 		eDynamicSet(NcorePackage.PERIOD__START, NcorePackage.Literals.PERIOD__START, newStart);
+		NcoreUtil.onStart(this, newStart);
 	}
 
 	/**
@@ -111,11 +113,12 @@ public class PeriodImpl extends ModelElementImpl implements Period {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void setEnd(Temporal newEnd) {
 		eDynamicSet(NcorePackage.PERIOD__END, NcorePackage.Literals.PERIOD__END, newEnd);
+		NcoreUtil.onEnd(this, newEnd);
 	}
 
 	/**
@@ -131,11 +134,12 @@ public class PeriodImpl extends ModelElementImpl implements Period {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void setDuration(Duration newDuration) {
 		eDynamicSet(NcorePackage.PERIOD__DURATION, NcorePackage.Literals.PERIOD__DURATION, newDuration);
+		NcoreUtil.onDuration(this, newDuration);
 	}
 
 	/**

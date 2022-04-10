@@ -14,14 +14,33 @@
       <details key="documentation-reference" value="doc/marked.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="marker" eType="#//Marker"
-        containment="true"/>
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Marker pointing to where this model element was loaded from - location, line and column numbers."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IMarker" instanceClassName="org.nasdanika.common.persistence.Marker"
       abstract="true" interface="true"/>
   <eClassifiers xsi:type="ecore:EClass" name="Marker" eSuperTypes="#//IMarker">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Provides information about location for a model element definition - URI, line and column numbers."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="URI of a resource."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Line number."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Column number."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Instant" instanceClassName="java.time.Instant">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -42,30 +61,30 @@
     </eAnnotations>
     <eOperations name="after" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Tests if this temporal is after the specified temporal. Returns null if unknown, e.g. two unrelated events."/>
+        <details key="documentation" value="Tests if this temporal is after the specified temporal. Returns null if unknown, i.e. two unrelated points in time."/>
       </eAnnotations>
       <eParameters name="when" eType="#//Temporal"/>
     </eOperations>
     <eOperations name="before" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Tests if this temporal is before the specified temporal. Returns null if unknown, e.g. two unrelated events."/>
+        <details key="documentation" value="Tests if this temporal is before the specified temporal. Returns null if unknown, i.e. two unrelated points in time."/>
       </eAnnotations>
       <eParameters name="when" eType="#//Temporal"/>
     </eOperations>
     <eOperations name="coincides" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Tests if this temporal occurs at the same point on the time-line as the specified temporal. Returns null if unknown, e.g. two unrelated events."/>
+        <details key="documentation" value="Tests if this temporal occurs at the same point on the time-line as the specified temporal. Returns null if unknown, i.e. two unrelated points in time."/>
       </eAnnotations>
       <eParameters name="when" eType="#//Temporal"/>
     </eOperations>
     <eOperations name="normalize" eType="#//Temporal">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Returns a normalized instance of this temporal not contained in the model. Normalization walks through the temporal chain to the root temporal. If that root temporal is instant/absolute then the normalized instance would be instant/absolute. Otherwise the normalized instance would contain the root temporal as its base and offset would be the sum of all offsets."/>
+        <details key="documentation" value="Returns a normalized instance of this temporal not contained in the model. Normalization walks through the temporal chain from a temporal to its base to the root temporal. If that root temporal is instant/absolute then the normalized instance would be instant/absolute. Otherwise the normalized instance would contain the root temporal as its base and the offset would be the sum of all offsets."/>
       </eAnnotations>
     </eOperations>
     <eOperations name="minus" eType="#//Duration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Returns [duration](Duration.html) difference between this temporal and the argument temporal - how much this temporal is after the argument on the time-line, if difference can be computed, e.g. both this temporal and the argument temporal are instant or trace to the same base temporal. Returns null otherwise."/>
+        <details key="documentation" value="Returns [duration](Duration.html) difference between this temporal and the argument temporal - how much this temporal is after the argument on the time-line, if difference can be computed, i.e. both this temporal and the argument temporal are instant or trace to the same base temporal. &#xA;Returns null otherwise."/>
       </eAnnotations>
       <eParameters name="when" eType="#//Temporal"/>
     </eOperations>
@@ -77,7 +96,7 @@
     </eOperations>
     <eOperations name="plus" eType="#//Temporal">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Returns a temporal based on this one offset by the argument [duration](Duration.html). Duration can be null."/>
+        <details key="documentation" value="Returns a temporal based on this one offset by the argument [duration](Duration.html). Duration can be null - in this case it is treated as zero."/>
       </eAnnotations>
       <eParameters name="offset" eType="#//Duration"/>
     </eOperations>

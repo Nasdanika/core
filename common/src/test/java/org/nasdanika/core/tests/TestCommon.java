@@ -398,8 +398,8 @@ public class TestCommon {
 	
 	@Test
 	public void testURI() throws Exception {
-		URI sourceURI = URI.createURI("https://docs.nasdanika.org/modules/html/modules/ecore/index.html");
-		URI targetURI = URI.createURI("https://docs.nasdanika.org/modules/html/modules/models/modules/app/index.html");
+		URI sourceURI = URI.createURI("https://docs.nasdanika.org/modules/core/modules/ncore/Marked.html");
+		URI targetURI = URI.createURI("https://docs.nasdanika.org/modules/core/modules/emf/index.html#persistence");
 		System.out.println(targetURI.deresolve(sourceURI, true, true, true));
 	}
 	

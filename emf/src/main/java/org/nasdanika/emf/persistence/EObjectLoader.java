@@ -29,6 +29,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.common.persistence.ContextLoadable;
 import org.nasdanika.common.persistence.DispatchingLoader;
+import org.nasdanika.common.persistence.LoadTracker;
 import org.nasdanika.common.persistence.Loadable;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -379,9 +380,21 @@ public class EObjectLoader extends DispatchingLoader {
 				}									
 			};
 		}							
-		EObjectSupplierFactory eObjectSupplierFactory = new EObjectSupplierFactory(this, eClass, keyProvider);
+		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider);
 		eObjectSupplierFactory.load(loader, config, base, progressMonitor, marker);
 		return eObjectSupplierFactory;
+	}
+
+	/**
+	 * Creates a new {@link EObjectSupplierFactory}. This implementation calls EObjectSupplierFactory constructor.
+	 * @param eClass
+	 * @param keyProvider
+	 * @return
+	 */
+	protected EObjectSupplierFactory createEObjectSupplierFactory(
+			EClass eClass,
+			BiFunction<EClass, ENamedElement, String> keyProvider) {		
+		return new EObjectSupplierFactory(this, eClass, keyProvider);
 	}
 
 	/**

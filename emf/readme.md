@@ -248,7 +248,7 @@ If object configuration contains keys for mutually exclusive features, loading w
 
 #### Load tracker
 
-During load a ${javadoc/org.nasdanika.emf.persistence.LoadTracker} adapter is added to objects being loaded.
+During load a ${javadoc/org.nasdanika.common.persistence.LoadTracker} adapter is added to objects being loaded.
 This adapter allows, for example, to compute derived values for features unless they were already loaded.
 It also allows to access values of computed features - these values are stored in the adapter, but not injected into the target object because these features are not changeable.
 
