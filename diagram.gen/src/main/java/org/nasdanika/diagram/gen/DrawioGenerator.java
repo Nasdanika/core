@@ -622,6 +622,10 @@ public class DrawioGenerator {
 		if (!Util.isBlank(location)) {
 			userObject.setAttribute("link", location);
 		}
+		String tooltip = element.getTooltip();
+		if (!Util.isBlank(tooltip)) {
+			userObject.setAttribute("tooltip", tooltip);
+		}
 
 		style.put("recursiveResize", "0");
 //		
