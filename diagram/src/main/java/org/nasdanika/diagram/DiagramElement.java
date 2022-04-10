@@ -33,6 +33,9 @@ public interface DiagramElement extends Link, Style {
 	 * Returns the value of the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Unique diagram element identifier. Randomly generated if not set explicitly.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see org.nasdanika.diagram.DiagramPackage#getDiagramElement_Id()

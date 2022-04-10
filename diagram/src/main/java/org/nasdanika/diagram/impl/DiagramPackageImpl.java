@@ -804,7 +804,8 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
-			   "value-feature", "value"
+			   "value-feature", "value",
+			   "documentation-reference", "doc/style--properties.md"
 		   });
 		addAnnotation
 		  (diagramElementEClass,
@@ -913,7 +914,7 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		  (getStyle_Description(),
 		   source,
 		   new String[] {
-			   "documentation", "Composite connection description to support having links in the description. Elements shall be of type Link of Exec.content.Text."
+			   "documentation", "Composite description to support having links in the description. Elements shall be of type Link or Exec.content.Text."
 		   });
 		addAnnotation
 		  (getStyle_Color(),
@@ -938,6 +939,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Bold border style."
+		   });
+		addAnnotation
+		  (getDiagramElement_Id(),
+		   source,
+		   new String[] {
+			   "documentation", "Unique diagram element identifier. Randomly generated if not set explicitly."
 		   });
 		addAnnotation
 		  (getDiagramElement_Name(),
@@ -976,6 +983,18 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 			   "documentation", "Border color. E.g. ``lightblue`` or ``DDDDDD``."
 		   });
 		addAnnotation
+		  (getDiagram_Elements(),
+		   source,
+		   new String[] {
+			   "documentation", "Diagram elements."
+		   });
+		addAnnotation
+		  (getDiagram_Vertical(),
+		   source,
+		   new String[] {
+			   "documentation", "Diagram direction - top-down if true (default), left to right if false."
+		   });
+		addAnnotation
 		  (getDiagram_HideEmptyDescription(),
 		   source,
 		   new String[] {
@@ -1004,6 +1023,12 @@ public class DiagramPackageImpl extends EPackageImpl implements DiagramPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Depth of the diagram partition elements. Default is -1 (no limit). Once the depth is reached content of partitions is not shown."
+		   });
+		addAnnotation
+		  (getConnection_Target(),
+		   source,
+		   new String[] {
+			   "documentation", "Connection target."
 		   });
 		addAnnotation
 		  (getConnection_Thickness(),

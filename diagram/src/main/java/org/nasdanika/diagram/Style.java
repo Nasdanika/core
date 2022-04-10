@@ -80,7 +80,7 @@ public interface Style extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Composite connection description to support having links in the description. Elements shall be of type Link of Exec.content.Text.
+	 * Composite description to support having links in the description. Elements shall be of type Link or Exec.content.Text.
 	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Description</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Description()
@@ -197,7 +197,7 @@ public interface Style extends EObject {
 	 * @return the value of the '<em>Properties</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getStyle_Properties()
 	 * @model containment="true" keys="name"
-	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value'"
+	 *        annotation="urn:org.nasdanika reference-type='map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n' value-feature='value' documentation-reference='doc/style--properties.md'"
 	 * @generated
 	 */
 	EList<Property> getProperties();

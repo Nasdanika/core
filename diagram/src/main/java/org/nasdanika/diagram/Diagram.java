@@ -36,6 +36,9 @@ public interface Diagram extends NamedElement {
 	 * The list contents are of type {@link org.nasdanika.diagram.DiagramElement}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Diagram elements.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Elements()
 	 * @model containment="true"
@@ -48,6 +51,9 @@ public interface Diagram extends NamedElement {
 	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Diagram direction - top-down if true (default), left to right if false.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Vertical</em>' attribute.
 	 * @see #setVertical(boolean)
 	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Vertical()

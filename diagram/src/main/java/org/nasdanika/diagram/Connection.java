@@ -24,6 +24,9 @@ public interface Connection extends Style {
 	 * Returns the value of the '<em><b>Target</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Connection target.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Target</em>' reference.
 	 * @see #setTarget(DiagramElement)
 	 * @see org.nasdanika.diagram.DiagramPackage#getConnection_Target()

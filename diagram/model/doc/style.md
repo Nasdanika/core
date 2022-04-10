@@ -1,0 +1,1 @@
+Base class for diagram elements and connections with common style features.

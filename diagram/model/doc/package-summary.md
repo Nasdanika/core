@@ -1,5 +1,10 @@
-Nasdanika Diagram Model provides an abstraction level for help with generating diagrams for multiple targets.
+Nasdanika Diagram Model provides an abstraction level to help with generating diagrams for multiple targets.
 See the [generators](../gen/index.html) module for available generators and code examples.
+The goal of the diagram model is to provide "cheap" visualizations with the focus or the ease of creation and maintenance (re-generation).
+
+A picture is worth of a thousand words.
+Humans are visual creatures - visuals improve learning up to 400%.
+However, if a visual is too "costly" to create or maintain it might be not worth it to create it in the first place.    
 
 Below is a quick overview of the model elements:
 

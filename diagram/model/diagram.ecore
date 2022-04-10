@@ -81,7 +81,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="description" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Composite connection description to support having links in the description. Elements shall be of type Link of Exec.content.Text."/>
+        <details key="documentation" value="Composite description to support having links in the description. Elements shall be of type Link or Exec.content.Text."/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
@@ -110,6 +110,7 @@
       <eAnnotations source="urn:org.nasdanika">
         <details key="reference-type" value="map: &#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: MapProperty&#xA;list:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: ListProperty&#xA;string:&#xA;  ns-uri: urn:org.nasdanika.ncore&#xA;  name: StringProperty&#xA;"/>
         <details key="value-feature" value="value"/>
+        <details key="documentation-reference" value="doc/style--properties.md"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -117,7 +118,11 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/diagram-element.md"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Unique diagram element identifier. Randomly generated if not set explicitly."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
         containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -157,9 +162,17 @@
       <details key="documentation-reference" value="doc/diagram.md"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        eType="#//DiagramElement" containment="true"/>
+        eType="#//DiagramElement" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Diagram elements."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="vertical" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        defaultValueLiteral="true"/>
+        defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Diagram direction - top-down if true (default), left to right if false."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hideEmptyDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Hides empty descriptions on state diagrams."/>
@@ -213,7 +226,11 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/connection.md"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//DiagramElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//DiagramElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connection target."/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="thickness" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Connection thickness."/>

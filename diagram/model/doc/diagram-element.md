@@ -1,1 +1,1 @@
-Base class for diagram elements.
+Represents a shape/node/vertex on a diagram.
