@@ -3,6 +3,7 @@
 package org.nasdanika.ncore;
 
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -123,5 +124,68 @@ public interface Map extends EObject {
 		}
 		return ret;
 	}
+		
+	default Property put(java.lang.String key, java.util.Map<java.lang.String, Object> value) {
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			MapProperty property = MapProperty.from(value);
+			property.setName(key);
+			getValue().add(property);
+		}
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, Iterable<?> value) {
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			ListProperty property = ListProperty.from(value);;
+			property.setName(key);
+			getValue().add(property);
+		}
+		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	static Map from(java.util.Map<java.lang.String, Object> map) {
+		Map ret = NcoreFactory.eINSTANCE.createMap();
+		for (Entry<java.lang.String, Object> entry: map.entrySet()) {
+			java.lang.String key = entry.getKey();
+			Object value = entry.getValue();
+			if (value instanceof Boolean) {
+				ret.put(key, (Boolean) value);
+			} else if (value instanceof EObject) {
+				ret.put(key, (EObject) value);
+			} else if (value instanceof Integer) {
+				ret.put(key, (Integer) value);
+			} else if (value instanceof Iterable) {
+				ret.put(key, (Iterable<?>) value);
+			} else if (value instanceof java.lang.String) {
+				ret.put(key, (java.lang.String) value);
+			} else if (value instanceof java.util.Map) {
+				ret.put(key, (java.util.Map<java.lang.String,Object>) value);
+			} else if (value != null) {
+				throw new IllegalArgumentException("Cannot put " + value.getClass() + " to Map. Value: " + value);
+			}
+		}
+		return ret;
+	}	
 
 } // Map

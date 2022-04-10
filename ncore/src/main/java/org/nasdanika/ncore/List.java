@@ -52,5 +52,40 @@ public interface List extends EObject {
 		valueObject.setValue(value);
 		getValue().add(valueObject);
 	}
+	
+	default void add(EObject value) {
+		getValue().add(value);
+	}
+	
+	default void add(java.util.Map<java.lang.String,Object> map) {
+		getValue().add(Map.from(map));
+	}
+	
+	default void add(Iterable<?> iterable) {
+		getValue().add(List.from(iterable));
+	}
+	
+	@SuppressWarnings("unchecked")
+	static List from(Iterable<?> iterable) {
+		List ret = NcoreFactory.eINSTANCE.createList();
+		for (Object element: iterable) {
+			if (element instanceof Boolean) {
+				ret.add((boolean) element);
+			} else if (element instanceof EObject) {
+				ret.add((EObject) element);
+			} else if (element instanceof Integer) {
+				ret.add((int) element);
+			} else if (element instanceof Iterable) {
+				ret.add((Iterable<?>) element);
+			} else if (element instanceof java.lang.String) {
+				ret.add((java.lang.String) element);
+			} else if (element instanceof java.util.Map) {
+				ret.add((java.util.Map<java.lang.String,Object>) element);
+			} else if (element != null) {
+				throw new IllegalArgumentException("Cannot add " + element.getClass() + " to List. Value: " + element);
+			}
+		}
+		return ret;
+	}		
 
 } // List
