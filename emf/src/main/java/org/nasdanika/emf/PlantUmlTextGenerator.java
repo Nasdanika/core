@@ -8,7 +8,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -327,6 +329,22 @@ public class PlantUmlTextGenerator {
 		return "";
 	}	
 	
+	/**
+	 * @param ref
+	 * @return Empty string if there are no EKeys, a comma separated list of EKeys in parenthesis otherwise.
+	 */
+	protected String eKeys(EReference ref) {
+		StringBuilder ret = new StringBuilder();
+		EList<EAttribute> eKeys = ref.getEKeys();
+		if (!eKeys.isEmpty()) {
+			ret.append("(");		
+			ret.append(String.join(",", eKeys.stream().map(this::getLocalizedName).collect(Collectors.toList())));
+			ret.append(")");
+		}
+		
+		return ret.toString();
+	}
+	
 	protected void appendEReference(EReference ref) throws IOException {
 		collector.append(qualifiedName(ref.getEContainingClass()));
 		collector.append(" ");
@@ -335,7 +353,8 @@ public class PlantUmlTextGenerator {
 			collector.append("*");
 		} else if (opposite!=null) {
 			collector.append("\"");
-			collector.append(getLocalizedName(opposite));			
+			collector.append(getLocalizedName(opposite));
+			collector.append(eKeys(opposite));
 			String multiplicity = getMultiplicity(opposite);
 			if (!multiplicity.isEmpty()) {
 				collector.append("["+multiplicity+"]");
@@ -368,6 +387,7 @@ public class PlantUmlTextGenerator {
 		} else {
 			collector.append("\"");
 			collector.append(getLocalizedName(ref));			
+			collector.append(eKeys(ref));
 			if (!multiplicity.isEmpty()) {
 				collector.append("["+multiplicity+"]");
 			}
@@ -380,7 +400,8 @@ public class PlantUmlTextGenerator {
 			collector
 				.append(" : ")
 				.append(getLocalizedName(ref));
-			
+
+			collector.append(eKeys(ref));			
 			collector.append(genericTypeArguments(ref.getEGenericType()));
 		}
 		
