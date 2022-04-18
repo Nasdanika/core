@@ -81,6 +81,14 @@ Nasdanika EMF persistence allows to load Ecore models from key-value sources suc
 * [JSON](https://en.wikipedia.org/wiki/JSON) 
 * [YAML](https://en.wikipedia.org/wiki/YAML)
 
+Loading from YAML and JSON can be used to implement ``<problem doman>-as-code``:
+
+* DEefine models in YAML or JSON, 
+* Edit in a text editor or in a web browser using version control system Web UI, 
+* Store in a version control system,
+* Keep track of model element definition source - file (URI), line, number, origin and commit (see [Marker](#marker) below),
+* Diff and merge as code.
+
 The persistence framework uses EAnnotation with ``urn:org.nasdanika`` source to customize loading.
 This annotation is referred further as "Nasdanika annotation"
 
@@ -109,7 +117,7 @@ Load key can be customized using the Nasdanika annotation:
 The above process of resolving load keys is used by the default load key provider.
 Load keys can be customized by passing a non-default load key provider to ${javadoc/org.nasdanika.emf.persistence.EObjectLoader} constructor.
 
-#### Classes and packages
+##### Classes and packages
 
 Default load keys for classes and packages are computed in the same way as for features by converting class or package name from came to kebab case.
 

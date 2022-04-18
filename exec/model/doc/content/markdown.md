@@ -82,7 +82,7 @@ Markdown filter allows to embed [PlantUML](https://plantuml.com/) and [Draw.io](
     aws.drawio
     ```
 
-Resource location is resolved in the same as for image files as explained above.
+Resource location is resolved in the same way as for image files as explained above.
 
 ```drawio-resource
 aws.drawio
