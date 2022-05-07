@@ -1,5 +1,3 @@
-# GCB Developer Experience Information Center Documentation.
-# See https://nasdanika.org/builds/develop/doc/reference/knowledge-base/html/app/factories/index.html for configuration reference
 app-action:
    text: Nasdanika
    href: ../index.html   
