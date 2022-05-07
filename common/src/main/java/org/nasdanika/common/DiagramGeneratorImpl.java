@@ -104,7 +104,7 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 	}
 
 	protected String getDrawioViewer() {
-		return "https://viewer.diagrams.net/js/viewer-static.min.js";
+		return "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js";
 	}
 	
 	protected String getMermaidInitialize() {
