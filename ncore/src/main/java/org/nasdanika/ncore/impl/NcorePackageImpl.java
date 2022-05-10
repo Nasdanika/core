@@ -1372,6 +1372,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation-reference", "doc/marked.md"
 		   });
 		addAnnotation
+		  (getMarked_Marker(),
+		   source,
+		   new String[] {
+			   "loadable", "false"
+		   });
+		addAnnotation
 		  (temporalEClass,
 		   source,
 		   new String[] {

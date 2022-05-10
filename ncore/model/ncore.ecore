@@ -18,6 +18,9 @@
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Marker pointing to where this model element was loaded from - location, line and column numbers."/>
       </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="loadable" value="false"/>
+      </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IMarker" instanceClassName="org.nasdanika.common.persistence.Marker"

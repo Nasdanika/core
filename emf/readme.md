@@ -110,7 +110,7 @@ Load key can be customized using the Nasdanika annotation:
 
 * ``load-key`` detail key at the feature level. The value shall be a string.
 * ``load-keys`` detail key at the class level. The value shall be a YAML map of feature names to load keys. This approach allows to override feature load key in subclasses.
-* ``loadable`` detail key at the feature level - set it to ``false`` to suppress loading of features even if they are changeable. Please not that it is different from ``computed`` - ``computed`` forces loading of values of non-changeable features, and ``loadable`` suppresses loading of changeable features.
+* ``loadable`` detail key at the feature level - set it to ``false`` to suppress loading of features even if they are changeable. Please note that it is different from ``computed`` - ``computed`` forces loading of values of non-changeable features, and ``loadable`` suppresses loading of changeable features.
 * ``feature-key`` detail key at the feature level. The value shall be a string. Feature key is used as a fallback value for a load key and also for computing containment path.
 * ``feature-keys`` detail key at the class level. The value shall be a YAML map. This annotation can be defined on a subclass of the class defining the feature, which allows to override the default (kebab case) feature key.
 

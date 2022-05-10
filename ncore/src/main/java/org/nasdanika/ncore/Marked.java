@@ -33,6 +33,7 @@ public interface Marked extends EObject, org.nasdanika.common.persistence.Marked
 	 * @see #setMarker(Marker)
 	 * @see org.nasdanika.ncore.NcorePackage#getMarked_Marker()
 	 * @model containment="true"
+	 *        annotation="urn:org.nasdanika loadable='false'"
 	 * @generated
 	 */
 	Marker getMarker();
