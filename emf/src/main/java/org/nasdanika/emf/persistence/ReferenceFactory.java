@@ -3,6 +3,7 @@ package org.nasdanika.emf.persistence;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -30,10 +31,11 @@ import org.yaml.snakeyaml.Yaml;
 
 /**
  * Creates reference value/element - {@link EObject} or proxy.
+ * May create zero or more elements for filesets and resourcesets.
  * @author Pavel
  *
  */
-public class ReferenceFactory<T> implements ObjectFactory<T> {
+public class ReferenceFactory implements ObjectFactory<List<?>> {
 	
 	private EObjectLoader resolver;
 	private BiFunction<EClass,ENamedElement, String> keyProvider;
@@ -82,19 +84,18 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 		this.isStrictContainment = isHomogenous && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eReference, EObjectLoader.IS_STRICT_CONTAINMENT));			
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
 				if (referenceSupplierFactory) {
-					return (T) new SupplierFactory<EObject>() {
+					return Collections.singletonList(new SupplierFactory<List<EObject>>() {  
 	
 						@Override
-						public Supplier<EObject> create(Context context) throws Exception {
+						public Supplier<List<EObject>> create(Context context) throws Exception {
 							String ref = context.interpolateToString((String) element);
-							return new Supplier<EObject>() {
+							return new Supplier<List<EObject>>() {
 	
 								@Override
 								public double size() {
@@ -107,22 +108,22 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 								}
 	
 								@Override
-								public EObject execute(ProgressMonitor progressMonitor) throws Exception {
-									return (EObject) loadReference(ref, base, marker, progressMonitor);
+								public List<EObject> execute(ProgressMonitor progressMonitor) throws Exception {
+									return loadReference(ref, base, marker, progressMonitor);
 								}
 								
 							};
 						}
 						
-					};
+					});
 				}
 				return loadReference((String) element, base, marker, progressMonitor);
 			}
 			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, marker, keyProvider) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
-				return (T) resolver.resolve((EObject) ret);
+				return Collections.singletonList(resolver.resolve((EObject) ret));
 			}
-			return (T) ret;
+			return Collections.singletonList(ret);
 		} catch (ConfigurationException e) {
 			throw e;
 		} catch (Exception e) {
@@ -140,13 +141,15 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 	 * @param marker
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	protected T loadReference(
+	protected List<EObject> loadReference(
 			String ref, 
 			URI base,
 			Marker marker, 
 			ProgressMonitor progressMonitor) {
 		
+		// TODO - handle fileset: and resourceset: here
+		
+		// Single value
 		URI refURI = URI.createURI(ref);
 		if (base != null && !ref.startsWith(EObjectLoader.LATE_PROXY_RESOLUTION_URI_PREFIX)) {
 			refURI = refURI.resolve(URI.createURI(base.toString()));
@@ -161,10 +164,10 @@ public class ReferenceFactory<T> implements ObjectFactory<T> {
 					if ( marker != null) {
 						proxy.eAdapters().add(new MarkedAdapter(marker));
 					}
-					return (T) proxy;
+					return Collections.singletonList(proxy);
 				}
 			}
-			return (T) resolver.getResourceSet().getEObject(refURI, true);
+			return Collections.singletonList(resolver.getResourceSet().getEObject(refURI, true));
 		} finally {
 			ConfigurationException.popThreadMarker();
 		}

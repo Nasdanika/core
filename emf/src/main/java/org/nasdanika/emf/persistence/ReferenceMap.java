@@ -1,5 +1,6 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -9,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.MapAttribute;
 import org.nasdanika.common.persistence.Marker;
@@ -21,7 +23,7 @@ import org.nasdanika.common.persistence.ObjectLoader;
  */
 public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 
-	private ReferenceFactory<V> valueFactory;
+	private ReferenceFactory valueFactory;
 	
 	/**
 	 * @param key
@@ -48,13 +50,26 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
 		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");
 		if (valueFeature instanceof EReference) {
-			this.valueFactory = new ReferenceFactory<>(eClass, (EReference) valueFeature, eReference.getName(), resolver, referenceSupplierFactory, keyProvider);
+			this.valueFactory = new ReferenceFactory(eClass, (EReference) valueFeature, eReference.getName(), resolver, referenceSupplierFactory, keyProvider);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return valueFactory == null ? super.createValue(loader, key, value, base, progressMonitor, marker) : valueFactory.create(loader, value, base, progressMonitor, marker);
+		if (valueFactory == null) {
+			return super.createValue(loader, key, value, base, progressMonitor, marker);
+		}
+		
+		List<?> result = valueFactory.create(loader, value, base, progressMonitor, marker);
+		if (result.size() == 0) {
+			return null;
+		}
+		
+		if (result.size() == 1) {
+			return (V) result.get(0);
+		}
+		throw new NasdanikaException("Expected result size of 0 or 1, got " + result.size() + ":" + result);		
 	}
 	
 }

@@ -1,7 +1,9 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
@@ -25,7 +27,6 @@ import org.nasdanika.common.persistence.EnumSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Feature;
 import org.nasdanika.common.persistence.FunctionSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.ListSupplierFactoryAttribute;
-import org.nasdanika.common.persistence.LoadTracker;
 import org.nasdanika.common.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
@@ -34,7 +35,6 @@ import org.nasdanika.common.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.common.persistence.TypedSupplierFactoryAttribute;
 import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.emf.EmfUtil.EModelElementDocumentation;
-import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
@@ -236,6 +236,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				return "Creating " + eClass.getName();
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
 				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass); // TODO - handling prototype
@@ -268,7 +269,32 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							loadingFeature[0] = structuralFeature;
 							Object value = feature.get(data);
 							if (structuralFeature.isChangeable()) {
-								setFeature(ret, structuralFeature, value);
+								// Unwrapping singleton lists
+								if (structuralFeature instanceof EReference) {
+									if (structuralFeature.isMany()) {
+										if (value instanceof List) {
+											List<Object> theValue = new ArrayList<>();
+											for (Object element: (List<?>) value) {
+												if (element instanceof List) {
+													theValue.addAll((List<Object>) element);
+												} else {
+													theValue.add(element);
+												}												
+											}
+											setFeature(ret, structuralFeature, theValue);
+										} else {
+											setFeature(ret, structuralFeature, value);											
+										}
+									} else {
+										if (value instanceof List && ((List<?>) value).size() == 1) {
+											setFeature(ret, structuralFeature, ((List<?>) value).get(0));
+										} else {
+											setFeature(ret, structuralFeature, value);
+										}
+									}
+								} else {
+									setFeature(ret, structuralFeature, value);
+								}
 							}
 							loadedFeatures.put(structuralFeature, value);
 						} catch (ConfigurationException e) {

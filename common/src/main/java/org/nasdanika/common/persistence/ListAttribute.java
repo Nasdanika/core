@@ -32,13 +32,29 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 			List<T> ret = new ArrayList<>();
 			int idx = 0;
 			for (Object element: (Collection<?>) config) {
-				ret.add(createElement(loader, element, base, progressMonitor, Util.getMarker((Collection<?>) config, idx++)));
+				ret.addAll(createElements(loader, element, base, progressMonitor, Util.getMarker((Collection<?>) config, idx++)));
 			}
 			return ret;
 		}
 		
-		return Collections.singletonList(createElement(loader, config, base, progressMonitor, marker));
+		return createElements(loader, config, base, progressMonitor, marker);
 	}
+	
+	/**
+	 * Creates list elements from a config element. May create zero or more elements. 
+	 * This implementation delegates to createElement(), i.e. creates a single element. 
+	 * @param loader
+	 * @param element
+	 * @param base
+	 * @param progressMonitor
+	 * @param marker
+	 * @return
+	 * @throws Exception
+	 */
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
+		return Collections.singletonList(createElement(loader, element, base, progressMonitor, marker)); 
+	}
+	
 
 	/**
 	 * Creates element list.

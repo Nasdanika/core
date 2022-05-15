@@ -1,25 +1,27 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.List;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.persistence.Attribute;
 import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.common.persistence.ObjectLoader;
 
 /**
- * If config is a list loads each element creating elements using element factory and then loading them, otherwise creates a singleton in the same way as explained before.
+ * Single value reference.
  * @author Pavel
  *
  * @param <T>
  */
 public class Reference<T> extends Attribute<T> {
 	
-	private ReferenceFactory<T> referenceFactory;
+	private ReferenceFactory referenceFactory;
 	
 	/**
 	 * 
@@ -45,12 +47,20 @@ public class Reference<T> extends Attribute<T> {
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
-		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
+		this.referenceFactory = new ReferenceFactory(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return referenceFactory.create(loader, element, base, progressMonitor, marker);
+		List<?> result = referenceFactory.create(loader, element, base, progressMonitor, marker);
+		if (result == null || result.isEmpty()) {
+			return null;
+		}
+		if (result.size() == 1) {
+			return (T) result.get(0);
+		}
+		throw new NasdanikaException("Expected result size of 0 or 1, got " + result.size() + ":" + result);
 	}
 
 }

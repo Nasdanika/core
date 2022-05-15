@@ -27,7 +27,7 @@ import org.nasdanika.common.persistence.ObjectLoader;
  */
 public class ReferenceList<T> extends ListAttribute<T> {
 
-	private ReferenceFactory<T> referenceFactory;
+	private ReferenceFactory referenceFactory;
 	private List<String> keys = new ArrayList<>();
 	private BiFunction<EClass, ENamedElement, String> keyProvider;
 	
@@ -55,7 +55,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
 		super(key, isDefault, required, defaultValue, description, exclusiveWith);
-		this.referenceFactory = new ReferenceFactory<>(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
+		this.referenceFactory = new ReferenceFactory(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
 		this.keyProvider = keyProvider;
 		for (EAttribute rKey: eReference.getEKeys()) {
 			keys.add(keyProvider.apply(eClass, rKey));
@@ -140,9 +140,10 @@ public class ReferenceList<T> extends ListAttribute<T> {
 		return super.create(loader, config, base, progressMonitor, marker);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return referenceFactory.create(loader, element, base, progressMonitor, marker);
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		return (List<T>) referenceFactory.create(loader, element, base, progressMonitor, marker);
 	}
 
 }
