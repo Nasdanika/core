@@ -107,6 +107,16 @@ public class EObjectLoader extends DispatchingLoader {
 	 */
 	public static final String LOAD_KEYS = "load-keys";
 	
+	private ThreadLocal<java.util.function.Function<EClass, EObject>> threadConstructor = new ThreadLocal<java.util.function.Function<EClass,EObject>>();
+	
+	/**
+	 * Sets thread constructor for creation of 
+	 * @param constructor
+	 */
+	public void setThreadConstructor(java.util.function.Function<EClass, EObject> constructor) {
+		threadConstructor.set(constructor);
+	}
+	
 	/**
 	 * 
 	 * @param eClass
@@ -268,15 +278,34 @@ public class EObjectLoader extends DispatchingLoader {
 		register(ePackage, null);
 	}
 
-	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	/**
+	 * Creates a new EObject from a prototype. 
+	 * @param loader
+	 * @param type
+	 * @param config
+	 * @param prototype Prototype EObject, can be null.
+	 * @param base
+	 * @param progressMonitor
+	 * @param marker
+	 * @return
+	 * @throws Exception
+	 */
+	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
 		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
 		if (result != null) {
-			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond());
+			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond(), constructor);
 		}
 		
 		return super.create(loader, type, config, base, progressMonitor, marker);
 	}
+	
+	/**
+	 * Creates an object by calling create() which takes constructor and passing thread constructor to it.
+	 */
+	@Override
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+		return create(loader, type, config, threadConstructor.get(), base, progressMonitor, marker);
+	}	
 	
 	/**
 	 * Resolves EClass and key provider from type name.
@@ -331,7 +360,8 @@ public class EObjectLoader extends DispatchingLoader {
 			URI base, 
 			ProgressMonitor progressMonitor, 
 			Marker marker, 
-			BiFunction<EClass,ENamedElement,String> keyProvider) throws Exception {
+			BiFunction<EClass,ENamedElement,String> keyProvider,
+			java.util.function.Function<EClass, EObject> constructor) throws Exception {
 		
 		// Nulls are nulls
 		if (config == null) {
@@ -380,7 +410,7 @@ public class EObjectLoader extends DispatchingLoader {
 				}									
 			};
 		}							
-		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider);
+		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider, constructor);
 		eObjectSupplierFactory.load(loader, config, base, progressMonitor, marker);
 		return eObjectSupplierFactory;
 	}
@@ -393,8 +423,9 @@ public class EObjectLoader extends DispatchingLoader {
 	 */
 	protected EObjectSupplierFactory createEObjectSupplierFactory(
 			EClass eClass,
-			BiFunction<EClass, ENamedElement, String> keyProvider) {		
-		return new EObjectSupplierFactory(this, eClass, keyProvider);
+			BiFunction<EClass, ENamedElement, String> keyProvider,
+			java.util.function.Function<EClass, EObject> constructor) {		
+		return new EObjectSupplierFactory(this, eClass, keyProvider, constructor);
 	}
 
 	/**

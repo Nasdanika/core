@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
@@ -48,11 +49,21 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 
 	private EClass eClass;
 	private EObjectLoader loader;
+		
+	private java.util.function.Function<EClass, EObject> constructor = this::instantiate;
 
+	/**
+	 * 
+	 * @param loader
+	 * @param eClass
+	 * @param keyProvider
+	 * @param constructor Constructs a new EObject instance for EClass. If null, EPackage factory is used to create a new object.
+	 */
 	public EObjectSupplierFactory(
 			EObjectLoader loader, 
 			EClass eClass, 
-			BiFunction<EClass,ENamedElement,String> keyProvider) {
+			BiFunction<EClass,ENamedElement,String> keyProvider,
+			java.util.function.Function<EClass, EObject> constructor) {
 
 		this.loader = loader;
 		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
@@ -69,7 +80,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			featureMap.put(featureKey, feature);
 			addFeature(wrapFeature(featureKey, feature, loader, keyProvider));
-		}					
+		}
+		if (constructor != null) {
+			this.constructor = constructor;
+		}
 	}
 	
 	/**
@@ -239,7 +253,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@SuppressWarnings("unchecked")
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
-				EObject ret = eClass.getEPackage().getEFactoryInstance().create(eClass); // TODO - handling prototype
+				EObject ret = constructor.apply(eClass);
+				if (ret == null) {
+					ret = instantiate(eClass);
+				}
 				Marker marker = getMarker();
 				loader.mark(ret, marker, progressMonitor);
 				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
@@ -282,6 +299,22 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 												}												
 											}
 											setFeature(ret, structuralFeature, theValue);
+										} else if (value instanceof Map) {
+											Map<Object,Object> theValue = new LinkedHashMap<>();
+											for (Entry<Object, Object> entry: ((Map<Object,Object>) value).entrySet()) {
+												Object entryValue = entry.getValue();
+												if (entryValue instanceof List) {
+													List<?> entryValueList = (List<?>) entryValue;
+													if (entryValueList.size() == 1) {
+														theValue.put(entry.getKey(), entryValueList.get(0));														
+													} else if (!entryValueList.isEmpty()) {
+														throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, marker);
+													}
+												} else {
+													theValue.put(entry.getKey(), entryValue);
+												}												
+											}
+											setFeature(ret, structuralFeature, theValue);											
 										} else {
 											setFeature(ret, structuralFeature, value);											
 										}
@@ -310,6 +343,10 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 		};
 	}
+	
+	protected EObject instantiate(EClass eClazz) {
+		return eClazz.getEPackage().getEFactoryInstance().create(eClazz);
+	}	
 
 	/**
 	 * Sets structural feature. This implementation calls eObj.eSet().  

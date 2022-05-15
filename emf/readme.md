@@ -247,6 +247,49 @@ The map entry value is used to either set up element features or "value feature"
 When using EKeys you may want to use map entry value to set a specific feature of the reference element instead of using it to configure the element itself.
 In this case set ``value-feature`` Nasdanika annotation on the reference to the name of the feature which shall be configured with the map entry value.
 
+##### File sets
+
+It is possible to load zero or more objects into a reference using ``fileset:`` URI schema followed by the file set specification. 
+
+The specification can be a string, a YAML array, or a YAML map. 
+
+###### String
+
+If it is a string, then it is treated as an [Ant path pattern](https://github.com/azagniotov/ant-style-path-matcher).
+
+Example: ``fileset:issues/*.yml``
+
+###### Array
+
+If it is an array, then elements are treated as Ant path patterns.
+
+Example: ``fileset:issues/*.yml``
+
+###### Map
+
+If it is a map, the following keys are supported:
+
+* ``include`` - a string or an array of strings with Ant path patterns to include into the result. 
+* ``exclude`` - a string or an array of strings with Ant path patterns to exclude from the matched includes result.
+* ``base`` - Base directory resolved relative to the context URI.
+
+Examples;
+
+Single line: ``fileset:{includes:*.yml;excludes:done_*.yml;base:issues/}``
+
+Multi-line:
+
+```
+  issues:
+    - |+2
+      fileset:
+        includes: 
+          - *.yml
+          - *.yaml
+        excludes: done_*.*
+        base: issues/  
+```
+
 #### Mutually exclusive features
 
 Features may have ``exclusive-with`` Nasdanika annotation details containing a space-separated list of feature keys which are exclusive with the annotated feature.

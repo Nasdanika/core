@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
@@ -1499,6 +1500,28 @@ public class Util {
 				return null;
 			}
 		};
+	}
+
+	/**
+	 * Walks the directory passing files and their paths to the listener.
+	 * @param source
+	 * @param target
+	 * @param cleanTarget
+	 * @param cleanPredicate
+	 * @param listener
+	 * @throws IOException
+	 */
+	public static void walk(String path, BiConsumer<File,String> listener, File... files) {
+		if (files != null) {
+			for (File file: files) {
+				String filePath = path == null ? file.getName() : path + "/" + file.getName();
+				if (file.isDirectory()) {
+					walk(filePath, listener, file.listFiles());
+				} else if (file.isFile() && listener != null) {
+					listener.accept(file, filePath);
+				}
+			}
+		}
 	}
 	
 }

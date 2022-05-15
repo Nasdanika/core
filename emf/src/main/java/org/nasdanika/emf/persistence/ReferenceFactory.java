@@ -1,11 +1,16 @@
 package org.nasdanika.emf.persistence;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -29,6 +34,9 @@ import org.nasdanika.common.persistence.ObjectLoader;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.yaml.snakeyaml.Yaml;
 
+import io.github.azagniotov.matcher.AntPathMatcher;
+import io.github.azagniotov.matcher.AntPathMatcher.Builder;
+
 /**
  * Creates reference value/element - {@link EObject} or proxy.
  * May create zero or more elements for filesets and resourcesets.
@@ -36,6 +44,12 @@ import org.yaml.snakeyaml.Yaml;
  *
  */
 public class ReferenceFactory implements ObjectFactory<List<?>> {
+	
+	private static final String FILESET_EXCLUDE_KEY = "exclude";
+	private static final String FILESET_INCLUDE_KEY = "include";
+	private static final String FILESET_BASE_KEY = "base";
+	public static final String FILESET_SCHEME = "fileset:";
+	public static final String FACTORY_SCHEME = "factory:";
 	
 	private EObjectLoader resolver;
 	private BiFunction<EClass,ENamedElement, String> keyProvider;
@@ -119,7 +133,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 				}
 				return loadReference((String) element, base, marker, progressMonitor);
 			}
-			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, marker, keyProvider) : loader.load(element, base, progressMonitor);
+			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, marker, keyProvider, null) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return Collections.singletonList(resolver.resolve((EObject) ret));
 			}
@@ -133,7 +147,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			throw new ConfigurationException("Error loading reference: " + e, e, marker);
 		}
 	}
-	
+		
 	/**
 	 * Loads reference. Creates a proxy if reference type is not abstract and resolve proxies is true.
 	 * @param ref
@@ -141,18 +155,63 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 	 * @param marker
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected List<EObject> loadReference(
 			String ref, 
 			URI base,
 			Marker marker, 
 			ProgressMonitor progressMonitor) {
 		
-		// TODO - handle fileset: and resourceset: here
+		if (ref.startsWith(FILESET_SCHEME)) {
+			// Includes, excludes, factory, prototype
+			String spec = ref.substring(FILESET_SCHEME.length());
+			Yaml yaml = new Yaml();
+			Object filesetSpec = yaml.load(spec);			
+			if (filesetSpec instanceof String) {				
+				return loadMatches(base, Collections.singleton((String) filesetSpec), null, base, marker, progressMonitor);
+			} 
+			
+			if (filesetSpec instanceof List) {
+				return loadMatches(base, (List<String>) filesetSpec, null, base, marker, progressMonitor);				
+			}
+			
+			if (filesetSpec instanceof Map) {
+				Map<String,Object> specMap = (Map<String,Object>) filesetSpec;
+				org.nasdanika.common.Util.checkUnsupportedKeys(specMap, FILESET_BASE_KEY, FILESET_INCLUDE_KEY, FILESET_EXCLUDE_KEY);
+				Object fsBase = specMap.get(FILESET_BASE_KEY);
+				if (fsBase == null || fsBase instanceof String) {
+					URI fsBaseURI = fsBase == null ? base : URI.createFileURI((String) fsBase).resolve(base);
+					java.util.function.Function<Object, Collection<String>> asCollection = obj -> {
+						if (obj == null) {
+							return null;
+						}
+						if (obj instanceof String) {
+							return Collections.singletonList((String) obj);
+						}
+						if (obj instanceof Collection) {
+							return (Collection<String>) obj;
+						}
+						throw new ConfigurationException("Expected a string or an array of strings, got " + obj.getClass() + ": " + obj, marker);
+					};
+					return loadMatches(fsBaseURI, asCollection.apply(specMap.get(FILESET_INCLUDE_KEY)), asCollection.apply(specMap.get(FILESET_EXCLUDE_KEY)), base, marker, progressMonitor);				
+				} else if (fsBase != null) {
+					throw new ConfigurationException("FileSet base shall be a string: " + fsBase.getClass() + ": " + fsBase, marker);			
+				}
+			}
+			
+			throw new ConfigurationException("Unsupported FileSet specification type: " + filesetSpec.getClass() + ": " + filesetSpec, marker);			
+		}
+		
+		if (ref.startsWith(FACTORY_SCHEME)) {
+			// Factory
+		
+			throw new UnsupportedOperationException("Factories are not supported yet");
+		}		
 		
 		// Single value
 		URI refURI = URI.createURI(ref);
 		if (base != null && !ref.startsWith(EObjectLoader.LATE_PROXY_RESOLUTION_URI_PREFIX)) {
-			refURI = refURI.resolve(URI.createURI(base.toString()));
+			refURI = refURI.resolve(base);
 		}
 		ConfigurationException.pushThreadMarker(marker);
 		try {
@@ -170,8 +229,56 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			return Collections.singletonList(resolver.getResourceSet().getEObject(refURI, true));
 		} finally {
 			ConfigurationException.popThreadMarker();
-		}
+		}	
 	}
+
+	private List<EObject> loadMatches(
+			URI fileSetBase,
+			Collection<String> includes, 
+			Collection<String> excludes, 
+			URI base,
+			Marker marker,
+			ProgressMonitor progressMonitor) {
+		if (!fileSetBase.isFile()) {
+			throw new ConfigurationException("Base URI for a fileset is not a file URI: " + fileSetBase, marker);
+		}
+		String baseFileStr = fileSetBase.toFileString();				
+		File baseDir = new File(baseFileStr);
+		if (baseDir.isFile()) {
+			baseDir = baseDir.getParentFile();
+		}
+		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, marker, progressMonitor)).flatMap(objs -> objs.stream()).collect(Collectors.toList());		
+	}
+	
+	private static Collection<File> match(File baseDir, Collection<String> includes, Collection<String> excludes) {
+		Builder builder = new AntPathMatcher.Builder();
+		AntPathMatcher matcher = builder.build();
+		Map<String,File> collector = new HashMap<>();
+		if (includes == null || includes.isEmpty()) {
+			include(baseDir, (file,path) -> true, collector);
+		} else {
+			for (String include: includes) {
+				include(baseDir, (file,path) -> matcher.isMatch(include, path), collector);
+			}
+		}
+		if (excludes != null) {
+			collector.keySet().removeIf(path -> excludes.stream().filter(exclude -> matcher.isMatch(exclude, path)).findAny().isPresent());
+		}				
+		return collector.values();
+	}
+	
+	private static void include(File baseDir, BiPredicate<File,String> predicate, Map<String, File> collector) {
+		BiConsumer<File, String> listener = new BiConsumer<File, String>() {
+			
+			@Override
+			public void accept(File file, String path) {
+				if (predicate.test(file, path)) {
+					collector.put(path, file);
+				}						
+			}
+		};
+		org.nasdanika.common.Util.walk(null, listener, baseDir.listFiles());		
+	}	
 	
 	protected String referenceTypeName(Object element) {
 		if (element instanceof String) {
