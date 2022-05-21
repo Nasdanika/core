@@ -300,15 +300,34 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 											}
 											setFeature(ret, structuralFeature, theValue);
 										} else if (value instanceof Map) {
+											EClass refType = ((EReference) structuralFeature).getEReferenceType();
+											boolean isManyValue = false;
+											Class<?> refTypeInstanceClass = refType.getInstanceClass();
+											if (refTypeInstanceClass != null && Map.Entry.class.isAssignableFrom(refTypeInstanceClass)) {
+												EStructuralFeature valueFeature = refType.getEStructuralFeature("value");
+												isManyValue = valueFeature != null && valueFeature.isMany();
+											}
 											Map<Object,Object> theValue = new LinkedHashMap<>();
 											for (Entry<Object, Object> entry: ((Map<Object,Object>) value).entrySet()) {
 												Object entryValue = entry.getValue();
 												if (entryValue instanceof List) {
 													List<?> entryValueList = (List<?>) entryValue;
-													if (entryValueList.size() == 1) {
-														theValue.put(entry.getKey(), entryValueList.get(0));														
-													} else if (!entryValueList.isEmpty()) {
-														throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, marker);
+													if (isManyValue) {
+														List<Object> theEntryValueList = new ArrayList<>();
+														for (Object entryValueElement: (List<?>) entryValueList) {
+															if (entryValueElement instanceof List) {
+																theEntryValueList.addAll((List<Object>) entryValueElement);
+															} else {
+																theEntryValueList.add(entryValueElement);
+															}												
+														}	
+														theValue.put(entry.getKey(), theEntryValueList);
+													} else {
+														if (entryValueList.size() == 1) {
+															theValue.put(entry.getKey(), entryValueList.get(0));														
+														} else if (!entryValueList.isEmpty()) {
+															throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, marker);
+														}
 													}
 												} else {
 													theValue.put(entry.getKey(), entryValue);

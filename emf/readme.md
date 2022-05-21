@@ -270,12 +270,12 @@ Example: ``fileset:issues/*.yml``
 If it is a map, the following keys are supported:
 
 * ``include`` - a string or an array of strings with Ant path patterns to include into the result. 
-* ``exclude`` - a string or an array of strings with Ant path patterns to exclude from the matched includes result.
+* ``exclude`` - a string or an array of strings with Ant path patterns to exclude from the matched include result.
 * ``base`` - Base directory resolved relative to the context URI.
 
 Examples;
 
-Single line: ``fileset:{includes:*.yml;excludes:done_*.yml;base:issues/}``
+Single line: ``fileset:{include:*.yml;exclude:done_*.yml;base:issues}``
 
 Multi-line:
 
@@ -283,11 +283,11 @@ Multi-line:
   issues:
     - |+2
       fileset:
-        includes: 
+        include: 
           - *.yml
           - *.yaml
-        excludes: done_*.*
-        base: issues/  
+        exclude: done_*.*
+        base: issues
 ```
 
 #### Mutually exclusive features
