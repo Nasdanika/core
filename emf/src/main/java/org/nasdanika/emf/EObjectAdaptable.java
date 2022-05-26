@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -61,9 +62,13 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	protected Context getResourceContext() {
 		return getResourceContext(target);
 	}
+	
+	public static <A> A adaptTo(EObject target, Class<A> type) {
+		return adaptTo(target, type, null);
+	}
 			
 	@SuppressWarnings("unchecked")
-	public static <A> A adaptTo(EObject target, Class<A> type) {
+	public static <A> A adaptTo(EObject target, Class<A> type, AdapterFactory adapterFactory) {
 		if (target == null) {
 			return null;
 		}
@@ -71,6 +76,9 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 			return (A) target;
 		}
 		A adapter = (A) EcoreUtil.getRegisteredAdapter(target, type);
+		if (adapter == null && adapterFactory != null) {
+			adapter = (A) adapterFactory.adaptNew(target, type);
+		}
 		
 		if (adapter == null && AccessController.class == type) {
 			// Delegating to the container with containment reference qualifier
@@ -362,6 +370,10 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	
 	// --- Adapting to execution participants factories
 	
+	public static <T> SupplierFactory<T> adaptToSupplierFactory(EObject target, Class<T> type) {
+		return adaptToSupplierFactory(target, type, null);
+	}	
+	
 	/**
 	 * Adapts to a {@link SupplierFactory} of specific type by adapting to {@link SupplierFactory.Provider} first and obtaining a typed factory from it.
 	 * If it doesn't work then adapts to SupplierFactory and then's it with a {@link FunctionFactory} which converts the result to requested type.
@@ -370,15 +382,15 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> SupplierFactory<T> adaptToSupplierFactory(EObject target, Class<T> type) {
-		SupplierFactory.Provider provider = adaptTo(target, SupplierFactory.Provider.class);
+	public static <T> SupplierFactory<T> adaptToSupplierFactory(EObject target, Class<T> type, AdapterFactory adapterFactory) {
+		SupplierFactory.Provider provider = adaptTo(target, SupplierFactory.Provider.class, adapterFactory);
 		if (provider != null) {
 			SupplierFactory<T> factory = provider.getFactory(type);
 			if (factory != null) {
 				return factory;
 			}
 		}
-		SupplierFactory<Object> factory = adaptTo(target, SupplierFactory.class);
+		SupplierFactory<Object> factory = adaptTo(target, SupplierFactory.class, adapterFactory);
 		if (factory == null) { 
 			return null;
 		}
@@ -423,8 +435,19 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @param type
 	 * @return
 	 */
+	public static <T> SupplierFactory<T> adaptToSupplierFactoryNonNull(EObject target, Class<T> type, AdapterFactory adapterFactory) {
+		return Objects.requireNonNull(adaptToSupplierFactory(target, type, adapterFactory), "Cannot adapt " + target + " to SupplierFactory<" + type + ">");
+	}
+	
+	/**
+	 * Adapts target to {@link SupplierFactory} and throws {@link NullPointerException} if result is null.
+	 * @param <T>
+	 * @param target
+	 * @param type
+	 * @return
+	 */
 	public static <T> SupplierFactory<T> adaptToSupplierFactoryNonNull(EObject target, Class<T> type) {
-		return Objects.requireNonNull(adaptToSupplierFactory(target, type), "Cannot adapt " + target + " to SupplierFactory<" + type + ">");
+		return adaptToSupplierFactoryNonNull(target, type, null);
 	}
 		
 	/**
