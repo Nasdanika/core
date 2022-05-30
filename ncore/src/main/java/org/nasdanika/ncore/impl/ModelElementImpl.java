@@ -3,6 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import java.lang.String;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
@@ -37,7 +39,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getMarker <em>Marker</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUri <em>Uri</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
@@ -112,31 +114,12 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Marker getMarker() {
-		return (Marker)eDynamicGet(NcorePackage.MODEL_ELEMENT__MARKER, NcorePackage.Literals.MARKED__MARKER, true, true);
+	public EList<Marker> getMarkers() {
+		return (EList<Marker>)eDynamicGet(NcorePackage.MODEL_ELEMENT__MARKERS, NcorePackage.Literals.MARKED__MARKERS, true, true);
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetMarker(Marker newMarker, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newMarker, NcorePackage.MODEL_ELEMENT__MARKER, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setMarker(Marker newMarker) {
-		eDynamicSet(NcorePackage.MODEL_ELEMENT__MARKER, NcorePackage.Literals.MARKED__MARKER, newMarker);
-	}
-	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -234,8 +217,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case NcorePackage.MODEL_ELEMENT__MARKER:
-				return basicSetMarker(null, msgs);
+			case NcorePackage.MODEL_ELEMENT__MARKERS:
+				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -248,8 +231,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.MODEL_ELEMENT__MARKER:
-				return getMarker();
+			case NcorePackage.MODEL_ELEMENT__MARKERS:
+				return getMarkers();
 			case NcorePackage.MODEL_ELEMENT__URI:
 				return getUri();
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
@@ -268,11 +251,13 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.MODEL_ELEMENT__MARKER:
-				setMarker((Marker)newValue);
+			case NcorePackage.MODEL_ELEMENT__MARKERS:
+				getMarkers().clear();
+				getMarkers().addAll((Collection<? extends Marker>)newValue);
 				return;
 			case NcorePackage.MODEL_ELEMENT__URI:
 				setUri((String)newValue);
@@ -298,8 +283,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MODEL_ELEMENT__MARKER:
-				setMarker((Marker)null);
+			case NcorePackage.MODEL_ELEMENT__MARKERS:
+				getMarkers().clear();
 				return;
 			case NcorePackage.MODEL_ELEMENT__URI:
 				setUri(URI_EDEFAULT);
@@ -325,8 +310,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.MODEL_ELEMENT__MARKER:
-				return getMarker() != null;
+			case NcorePackage.MODEL_ELEMENT__MARKERS:
+				return !getMarkers().isEmpty();
 			case NcorePackage.MODEL_ELEMENT__URI:
 				return URI_EDEFAULT == null ? getUri() != null : !URI_EDEFAULT.equals(getUri());
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
@@ -360,18 +345,18 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 					}
 				}
 			}
-		}
-		org.nasdanika.common.persistence.Marker pMarker = null; 
-		Marker mMarker = getMarker();
-		if (mMarker == null) {
+		}		
+		List<? extends org.nasdanika.common.persistence.Marker> pMarkers = new ArrayList<>();
+		List<? extends Marker> mMarkers = getMarkers();
+		if (mMarkers == null || mMarkers.isEmpty()) {
 			org.nasdanika.common.persistence.Marked pMarked = (org.nasdanika.common.persistence.Marked) EcoreUtil.getRegisteredAdapter(this, type);
 			if (pMarked != null) {
-				pMarker = pMarked.getMarker();
+				pMarkers = pMarked.getMarkers();
 			}
 		} else {
-			pMarker = new org.nasdanika.common.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getLine(), mMarker.getColumn());
+			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.common.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getLine(), mMarker.getColumn())).collect(Collectors.toList());
 		}		
-		throw new ConfigurationException("Could not find " + type.getName() + " with uri " + uri, pMarker);
+		throw new ConfigurationException("Could not find " + type.getName() + " with uri " + uri, pMarkers);
 	}
 	
 	/**
@@ -451,14 +436,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		if (eObject.eIsProxy()) {
 			eObject = (E) EcoreUtil.resolve(eObject, this);
 			if (eObject.eIsProxy()) { // Not resolved.
-				org.nasdanika.common.persistence.Marker marker = null;
+				List<? extends org.nasdanika.common.persistence.Marker> markers = null;
 				if (eObject instanceof org.nasdanika.common.persistence.Marked) {
-					marker = ((org.nasdanika.common.persistence.Marked) eObject).getMarker();
+					markers = ((org.nasdanika.common.persistence.Marked) eObject).getMarkers();
 				}
-				if (marker == null) {
-					marker = getMarker();
-				}
-				throw new ConfigurationException("Unresolved proxy: " + eObject, marker);
+				throw new ConfigurationException("Unresolved proxy: " + eObject, markers == null || markers.isEmpty() ? getMarkers() : markers);
 			}
 		}
 		return eObject;	

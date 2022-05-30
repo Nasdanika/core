@@ -1,6 +1,7 @@
 package org.nasdanika.common.persistence;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,22 +13,21 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class MarkedArrayList<E> extends ArrayList<E> implements Marked, Markable {
 	
-	private List<Marker> markers = new ArrayList<>();
+	private List<List<? extends Marker>> elementMarkers = new ArrayList<>();
+	private List<? extends Marker> markers;
 	
-	public List<Marker> getMarkers() {
-		return markers;
+	public List<List<? extends Marker>> getElementMarkers() {
+		return elementMarkers;
 	}
 	
-	private Marker marker;
-
 	@Override
-	public void setMarker(Marker marker) {
-		this.marker = marker;
+	public List<? extends Marker> getMarkers() {
+		return Collections.unmodifiableList(markers);
 	}
 
 	@Override
-	public Marker getMarker() {
-		return marker;
+	public void mark(List<? extends Marker> markers) {
+		this.markers = markers;
 	}
 
 }

@@ -56,12 +56,12 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		if (valueFactory == null) {
-			return super.createValue(loader, key, value, base, progressMonitor, marker);
+			return super.createValue(loader, key, value, base, progressMonitor, markers);
 		}
 		
-		List<?> result = valueFactory.create(loader, value, base, progressMonitor, marker);
+		List<?> result = valueFactory.create(loader, value, base, progressMonitor, markers);
 		if (result.size() == 0) {
 			return null;
 		}

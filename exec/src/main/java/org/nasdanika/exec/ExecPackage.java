@@ -69,13 +69,13 @@ public interface ExecPackage extends EPackage {
 	int BLOCK = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int BLOCK__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -170,13 +170,13 @@ public interface ExecPackage extends EPackage {
 	int CALL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int CALL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -353,13 +353,13 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR = 3;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int CONFIGURATOR__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -445,13 +445,13 @@ public interface ExecPackage extends EPackage {
 	int EVAL = 4;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int EVAL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -537,13 +537,13 @@ public interface ExecPackage extends EPackage {
 	int FAIL = 5;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int FAIL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -620,13 +620,13 @@ public interface ExecPackage extends EPackage {
 	int LIST = 6;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int LIST__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -703,13 +703,13 @@ public interface ExecPackage extends EPackage {
 	int MAP = 7;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int MAP__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.

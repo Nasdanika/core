@@ -2,6 +2,7 @@ package org.nasdanika.common;
 
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.persistence.Marker;
@@ -32,7 +33,7 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		String fqn = resolver == null ? type : resolver.apply(type);
 		if (fqn == null) {
 			if (resolver == null) {
@@ -42,12 +43,12 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 				throw new IllegalArgumentException("Type was resolved to null and there is no chain loader: " + type);
 			}
 			
-			return chain.create(loader, type, config, base, progressMonitor, marker);
+			return chain.create(loader, type, config, base, progressMonitor, markers);
 		}
 		
 		Class<?> clazz = classLoader.loadClass(fqn);		
 		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class, Marker.class); 		
-		return constructor.newInstance(loader, config, base, progressMonitor, marker);
+		return constructor.newInstance(loader, config, base, progressMonitor, markers);
 	}
 
 }

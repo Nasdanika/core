@@ -127,13 +127,13 @@ public interface NcorePackage extends EPackage {
 	int MARKED = 2;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKED__MARKER = IMARKED_FEATURE_COUNT + 0;
+	int MARKED__MARKERS = IMARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Marked</em>' class.
@@ -219,13 +219,22 @@ public interface NcorePackage extends EPackage {
 	int MARKER__COLUMN = IMARKER_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKER__COMMENT = IMARKER_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Marker</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 3;
+	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Marker</em>' class.
@@ -258,13 +267,13 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT = 7;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__MARKER = MARKED__MARKER;
+	int MODEL_ELEMENT__MARKERS = MARKED__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -321,13 +330,13 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT_OPERATION_COUNT = MARKED_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEMPORAL__MARKER = MODEL_ELEMENT__MARKER;
+	int TEMPORAL__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -520,13 +529,13 @@ public interface NcorePackage extends EPackage {
 	int PERIOD = 6;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PERIOD__MARKER = MODEL_ELEMENT__MARKER;
+	int PERIOD__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -620,13 +629,13 @@ public interface NcorePackage extends EPackage {
 	int NAMED_ELEMENT = 8;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_ELEMENT__MARKER = MODEL_ELEMENT__MARKER;
+	int NAMED_ELEMENT__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1402,6 +1411,15 @@ public interface NcorePackage extends EPackage {
 	int GIT_MARKER__COLUMN = MARKER__COLUMN;
 
 	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GIT_MARKER__COMMENT = MARKER__COMMENT;
+
+	/**
 	 * The feature id for the '<em><b>Path</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1517,15 +1535,15 @@ public interface NcorePackage extends EPackage {
 	EClass getMarked();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.Marked#getMarker <em>Marker</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Marked#getMarkers <em>Markers</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Marker</em>'.
-	 * @see org.nasdanika.ncore.Marked#getMarker()
+	 * @return the meta object for the containment reference list '<em>Markers</em>'.
+	 * @see org.nasdanika.ncore.Marked#getMarkers()
 	 * @see #getMarked()
 	 * @generated
 	 */
-	EReference getMarked_Marker();
+	EReference getMarked_Markers();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}'.
@@ -1580,6 +1598,17 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getMarker_Column();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Comment</em>'.
+	 * @see org.nasdanika.ncore.Marker#getComment()
+	 * @see #getMarker()
+	 * @generated
+	 */
+	EAttribute getMarker_Comment();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Temporal <em>Temporal</em>}'.
@@ -2331,12 +2360,12 @@ public interface NcorePackage extends EPackage {
 		EClass MARKED = eINSTANCE.getMarked();
 
 		/**
-		 * The meta object literal for the '<em><b>Marker</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Markers</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference MARKED__MARKER = eINSTANCE.getMarked_Marker();
+		EReference MARKED__MARKERS = eINSTANCE.getMarked_Markers();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}' class.
@@ -2381,6 +2410,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MARKER__COLUMN = eINSTANCE.getMarker_Column();
+
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKER__COMMENT = eINSTANCE.getMarker_Comment();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TemporalImpl <em>Temporal</em>}' class.

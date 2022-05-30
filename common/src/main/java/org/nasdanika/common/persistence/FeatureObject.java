@@ -18,11 +18,11 @@ import org.nasdanika.common.Util;
  */
 public class FeatureObject implements Marked, Loadable {
 	
-	private Marker marker;
+	private List<? extends Marker> markers = new ArrayList<>();
 	
 	@Override
-	public Marker getMarker() {
-		return marker;
+	public List<? extends Marker> getMarkers() {
+		return markers;
 	}
 	
 	protected List<Feature<?>> features = new ArrayList<>();
@@ -55,22 +55,22 @@ public class FeatureObject implements Marked, Loadable {
 	 * @throws Exception
 	 */
 	@Override
-	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		this.marker = marker;			
+	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		this.markers = markers;			
 		if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;
 			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).collect(Collectors.toList()));
 			for (Feature<?> feature: features) {
-				feature.load(loader, configMap, base, progressMonitor, marker);
+				feature.load(loader, configMap, base, progressMonitor, markers);
 			}
 		} else {
 			Optional<Feature<?>> defaultFeatureOptional = features.stream().filter(Feature::isDefault).findFirst();
 			if (defaultFeatureOptional.isPresent()) {				
 				Feature<?> defaultFeature = defaultFeatureOptional.get();
 				// Singleton map with a single entry default feature key -> config.
-				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, marker);
+				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, markers);
 			} else if (!Boolean.TRUE.equals(config)) {
-				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config, marker);
+				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config, markers);
 			}
 		}
 	}			

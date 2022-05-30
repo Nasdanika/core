@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +33,14 @@ public class MarkingYamlConstructor extends Constructor {
 	@Override
 	protected List<? extends Object> constructSequence(SequenceNode node) {
 		MarkedArrayList<? extends Object> ret = (MarkedArrayList<? extends Object>) super.constructSequence(node);
-		node.getValue().forEach(n -> ret.getMarkers().add(new MarkerImpl(location, n.getStartMark())));
+		node.getValue().forEach(n -> ret.getElementMarkers().add(Collections.singletonList(new MarkerImpl(location, n.getStartMark()))));
 		Iterator<? extends Object> eit = ret.iterator();
-		Iterator<Marker> mit = ret.getMarkers().iterator();
+		Iterator<List<? extends Marker>> mit = ret.getElementMarkers().iterator();
 		while (eit.hasNext() && mit.hasNext()) {
 			Object e = eit.next();
-			Marker m = mit.next();
+			List<? extends Marker> ml = mit.next();
 			if (e instanceof Markable) {
-				((Markable) e).setMarker(m);
+				((Markable) e).mark(ml);
 			}
 		}
 		return ret;
@@ -57,11 +58,11 @@ public class MarkingYamlConstructor extends Constructor {
 			.stream()
 			.map(NodeTuple::getKeyNode)
 			.filter(n -> n instanceof ScalarNode)
-			.forEach(keyNode -> ret.mark(((ScalarNode) keyNode).getValue(), new MarkerImpl(location, keyNode.getStartMark())));
+			.forEach(keyNode -> ret.markEntry(((ScalarNode) keyNode).getValue(), new MarkerImpl(location, keyNode.getStartMark())));
 		
 		for (Entry<Object, Object> e: ret.entrySet()) {
 			if (e.getValue() instanceof Markable) {
-				((Markable) e.getValue()).setMarker(ret.getMarker(e.getKey()));
+				((Markable) e.getValue()).mark(ret.getEntryMarkers(e.getKey()));
 			}
 		}
 		return ret;

@@ -1,5 +1,7 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -21,6 +23,6 @@ public interface ObjectFactory<T> {
 	 * @return Created object
 	 * @throws Exception
 	 */
-	T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception;	
+	T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;	
 
 }

@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -50,9 +51,9 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 	 * @throws Exception
 	 */
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception { 
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception { 
 		V ret = valueFactory.apply(key);
-		ret.load(loader, value, base, progressMonitor, marker);
+		ret.load(loader, value, base, progressMonitor, markers);
 		return ret;
 	}
 	

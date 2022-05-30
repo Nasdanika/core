@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -155,12 +156,12 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	 */
 	protected Diagnostic unresolvedProxyDiagnostic(EObject source, EReference containmentReference, EObject container) {
 		Marked marked = EObjectAdaptable.adaptTo(source, Marked.class);
-		Marker marker = marked == null ? null : marked.getMarker();
-		if (marker == null) {
+		List<? extends Marker> markers = marked == null ? null : marked.getMarkers();
+		if (markers == null || markers.isEmpty()) {
 			return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy: " + source, source, containmentReference, container);
 		}
 	
-		return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy at " + marker + ": " + source, source, marker, containmentReference, container);		
+		return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy at " + markers.stream().map(Object::toString).collect(Collectors.joining(", ")) + ": " + source, source, markers, containmentReference, container);		
 	}
 
 	/**

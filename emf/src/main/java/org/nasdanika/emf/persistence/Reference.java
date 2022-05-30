@@ -52,8 +52,8 @@ public class Reference<T> extends Attribute<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		List<?> result = referenceFactory.create(loader, element, base, progressMonitor, marker);
+	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		List<?> result = referenceFactory.create(loader, element, base, progressMonitor, markers);
 		if (result == null || result.isEmpty()) {
 			return null;
 		}

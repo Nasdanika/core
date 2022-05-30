@@ -470,13 +470,13 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM = 4;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int DIAGRAM__MARKERS = NcorePackage.NAMED_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.

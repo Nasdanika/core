@@ -1,6 +1,9 @@
 package org.nasdanika.common.persistence;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 import org.nasdanika.common.NasdanikaException;
 
@@ -12,40 +15,48 @@ import org.nasdanika.common.NasdanikaException;
 @SuppressWarnings("serial")
 public class ConfigurationException extends NasdanikaException {
 	
-	private Marker marker;
-
+	private List<? extends Marker> markers;
+	
 	public ConfigurationException(String message, Marker marker) {
-		super(marker == null ? message : message + " at " + Marker.toString(marker));
-		this.marker = marker;
+		this(message, marker == null ? null : Collections.singletonList(marker));
 	}
 
 	public ConfigurationException(String message, Throwable cause, Marker marker) {
-		super(marker == null ? message : message + " at " + Marker.toString(marker), cause);
-		this.marker = marker;
+		this(message, cause, marker == null ? null : Collections.singletonList(marker));
+	}	
+
+	public ConfigurationException(String message, List<? extends Marker> markers) {
+		super(markers == null || markers.isEmpty() ? message : message + " at " + markers.stream().map(m -> Marker.toString(m)).collect(Collectors.joining(", ")));
+		this.markers = markers;
+	}
+
+	public ConfigurationException(String message, Throwable cause, List<? extends Marker> markers) {
+		super(markers == null || markers.isEmpty() ? message : message + " at " + markers.stream().map(m -> Marker.toString(m)).collect(Collectors.joining(", ")));
+		this.markers = markers;
 	}
 
 	public ConfigurationException(String message, Marked marked) {
-		this(message, marked == null ? null : marked.getMarker());
+		this(message, marked == null ? null : marked.getMarkers());
 	}
 
 	public ConfigurationException(String message, Throwable cause, Marked marked) {
-		this(message, cause, marked == null ? null : marked.getMarker());
+		this(message, cause, marked == null ? null : marked.getMarkers());
 	}
 	
-	public Marker getMarker() {
-		return marker;
+	public List<? extends Marker> getMarkers() {
+		return markers;
 	}
 	
-	private static ThreadLocal<Stack<Marker>> threadMarkerStack = new ThreadLocal<Stack<Marker>>() {
+	private static ThreadLocal<Stack<List<? extends Marker>>> threadMarkerStack = new ThreadLocal<Stack<List<? extends Marker>>>() {
 
-		protected java.util.Stack<Marker> initialValue() {
+		protected java.util.Stack<List<? extends Marker>> initialValue() {
 			return new Stack<>();
 		};
 		
 	};
 	
-	public static void pushThreadMarker(Marker marker) {
-		threadMarkerStack.get().push(marker);
+	public static void pushThreadMarker(List<? extends Marker> markers) {
+		threadMarkerStack.get().push(markers);
 	}
 	
 	public static void popThreadMarker() {
@@ -53,11 +64,11 @@ public class ConfigurationException extends NasdanikaException {
 	}	
 	
 	public static void pushThreadMarked(Marked marked) {
-		pushThreadMarker(marked == null ? null : marked.getMarker());
+		pushThreadMarker(marked == null ? null : marked.getMarkers());
 	}
 	
-	public static Marker peekThreadMarker() {
-		Stack<Marker> stack = threadMarkerStack.get();
+	public static List<? extends Marker> peekThreadMarker() {
+		Stack<List<? extends Marker>> stack = threadMarkerStack.get();
 		return stack.isEmpty() ? null : stack.peek(); 
 	}
 

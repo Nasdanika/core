@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.script.ScriptException;
 
@@ -434,8 +435,11 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
-	public static Marker getMarker(Map<?,?> map, Object key) {
-		return map instanceof MarkedLinkedHashMap ? ((MarkedLinkedHashMap<?,?>) map).getMarker(key) : null;
+	public static List<? extends Marker> getMarkers(Map<?,?> map, Object key) {
+		if (map instanceof MarkedLinkedHashMap) {
+			return ((MarkedLinkedHashMap<?,?>) map).getEntryMarkers(key);
+		}
+		return null;
 	}
 		
 	/**
@@ -444,8 +448,8 @@ public class Util {
 	 * @param key
 	 * @return
 	 */
-	public static Marker getMarker(Collection<?> collection, int index) {
-		return collection instanceof MarkedArrayList && index > -1 && index < ((MarkedArrayList<?>) collection).getMarkers().size() ? ((MarkedArrayList<?>) collection).getMarkers().get(index) : null;
+	public static List<? extends Marker> getMarkers(Collection<?> collection, int index) {
+		return collection instanceof MarkedArrayList && index > -1 && index < ((MarkedArrayList<?>) collection).getElementMarkers().size() ? ((MarkedArrayList<?>) collection).getElementMarkers().get(index) : null;
 	}
 		
 	/**
@@ -456,10 +460,9 @@ public class Util {
 	 */
 	public static String mark(String prefix, Object source, String key) {
 		if (source instanceof MarkedLinkedHashMap) {
-			@SuppressWarnings({"rawtypes" })
-			Marker marker = ((MarkedLinkedHashMap) source).getMarker(key);
-			if (marker != null) {
-				return (prefix == null ? "" : prefix) + marker.toString();
+			List<? extends Marker> markers = ((MarkedLinkedHashMap<?,?>) source).getEntryMarkers(key);
+			if (markers != null && !markers.isEmpty()) {
+				return (prefix == null ? "" : prefix) + markers.stream().map(Object::toString).collect(Collectors.joining(", "));
 			}
 		}
 		
@@ -482,7 +485,7 @@ public class Util {
 		if (val instanceof String) {
 			return (String) val;
 		}
-		throw new ConfigurationException(key + " value must be a string", getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a string", getMarkers(map, key));		
 	}
 
 	/**
@@ -503,10 +506,10 @@ public class Util {
 			try {
 				return Integer.parseInt((String) val);
 			} catch (NumberFormatException e) {
-				throw new ConfigurationException(e.getMessage(), e, getMarker(map, key));						
+				throw new ConfigurationException(e.getMessage(), e, getMarkers(map, key));						
 			}
 		}
-		throw new ConfigurationException(key + " value must be a string", getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a string", getMarkers(map, key));		
 	}
 
 	/**
@@ -523,7 +526,7 @@ public class Util {
 		if (val instanceof Boolean) {
 			return (Boolean) val;
 		}
-		throw new ConfigurationException(key + " value must be a boolean", getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a boolean", getMarkers(map, key));		
 	}
 
 	/**
@@ -541,7 +544,7 @@ public class Util {
 		if (val instanceof Collection) {
 			return (Collection<T>) val;
 		}
-		throw new ConfigurationException(key + " value must be a collection", getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a collection", getMarkers(map, key));		
 	}
 
 	/**
@@ -559,7 +562,7 @@ public class Util {
 		if (val instanceof Map) {
 			return (Map<K,V>) val;
 		}
-		throw new ConfigurationException(key + " value must be a map", getMarker(map, key));		
+		throw new ConfigurationException(key + " value must be a map", getMarkers(map, key));		
 	}
 		
 	/**
@@ -637,7 +640,8 @@ public class Util {
 		if (missingKeyList.length() == 0) {
 			return config;
 		}
-		throw new ConfigurationException("Missing required configuration keys: " + missingKeyList, config instanceof Marked ? ((Marked) config).getMarker() : null);
+		
+		throw new ConfigurationException("Missing required configuration keys: " + missingKeyList, config instanceof Marked ? ((Marked) config).getMarkers() : null);
 	}
 
 	/**
@@ -659,7 +663,7 @@ public class Util {
 		
 		if (unsupportedKeys.size() == 1) {
 			Object unsupportedKey = unsupportedKeys.iterator().next();
-			throw new ConfigurationException("Unsupported configuration key: " + unsupportedKey, getMarker(config, unsupportedKey));
+			throw new ConfigurationException("Unsupported configuration key: " + unsupportedKey, getMarkers(config, unsupportedKey));
 		}
 		
 		StringBuilder keyList = new StringBuilder();
@@ -669,7 +673,7 @@ public class Util {
 			}
 			keyList.append(uk);
 		}
-		throw new ConfigurationException("Unsupported configuration keys: " + keyList, config instanceof Marked ? ((Marked) config).getMarker() : null);
+		throw new ConfigurationException("Unsupported configuration keys: " + keyList, config instanceof Marked ? ((Marked) config).getMarkers() : null);
 	}
 
 	/**
@@ -731,7 +735,7 @@ public class Util {
 	 * @param required
 	 * @return
 	 */
-	public static String getString(Map<?, ?> configMap, Object key, boolean required, Marker marker) {
+	public static String getString(Map<?, ?> configMap, Object key, boolean required, List<? extends Marker> markers) {
 		if (configMap.containsKey(key)) {
 			Object val = configMap.get(key);
 			if (val == null && !required) {
@@ -741,11 +745,11 @@ public class Util {
 				return (String) val;
 			} 
 			
-			throw new ConfigurationException(key + " value must be a string", getMarker(configMap, key));
+			throw new ConfigurationException(key + " value must be a string", getMarkers(configMap, key));
 		}
 		
 		if (required) {
-			throw new ConfigurationException(key + " is missing", marker);			
+			throw new ConfigurationException(key + " is missing", markers);			
 		}
 		
 		return null;
@@ -768,12 +772,12 @@ public class Util {
 					if (ve instanceof String) {
 						consumer.accept((String) ve);
 					} else {
-						throw new ConfigurationException(key + " element must be a string", getMarker((Collection<?>) val, idx));							
+						throw new ConfigurationException(key + " element must be a string", getMarkers((Collection<?>) val, idx));							
 					}
 					++idx;
 				}
 			} else {
-				throw new ConfigurationException(key + " value must be a string or list", getMarker(configMap, key));
+				throw new ConfigurationException(key + " value must be a string or list", getMarkers(configMap, key));
 			}
 		}		
 	}
@@ -998,7 +1002,7 @@ public class Util {
 	 * @throws Exception
 	 */
 	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj)  {
-		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarkers() : null);
 	}
 
 	/**
@@ -1008,12 +1012,12 @@ public class Util {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, Marker marker) {
+	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, List<? extends Marker> markers) {
 		if (obj instanceof Collection) {
 			CollectionCompoundConsumerFactory<T> ret = new CollectionCompoundConsumerFactory<>("Consumer collection");
 			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
-				ret.add(asConsumerFactory(e, getMarker((Collection<?>) obj, idx++)));
+				ret.add(asConsumerFactory(e, getMarkers((Collection<?>) obj, idx++)));
 			}
 			return ret;
 		}
@@ -1029,7 +1033,7 @@ public class Util {
 			}
 		}
 		
-		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", marker);
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory", markers);
 	}
 
 	/**
@@ -1039,7 +1043,7 @@ public class Util {
 	 * @throws Exception
 	 */
 	public static CommandFactory asCommandFactory(Object obj) {
-		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarker() : null);
+		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarkers() : null);
 	}
 
 	/**
@@ -1048,12 +1052,12 @@ public class Util {
 	 * @return
 	 * @throws Exception
 	 */
-	public static CommandFactory asCommandFactory(Object obj, Marker marker) {
+	public static CommandFactory asCommandFactory(Object obj, List<? extends Marker> markers) {
 		if (obj instanceof Collection) {
 			CompoundCommandFactory ret = new CompoundCommandFactory("Command collection");
 			int idx = 0;
 			for (Object e: (Collection<?>) obj) {
-				ret.add(asCommandFactory(e, getMarker((Collection<?>) obj, idx++)));
+				ret.add(asCommandFactory(e, getMarkers((Collection<?>) obj, idx++)));
 			}
 			return ret;
 		}
@@ -1069,7 +1073,7 @@ public class Util {
 			}
 		}
 				
-		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", marker);
+		throw new ConfigurationException(obj.getClass() + " cannot be wrapped/adapted to a command factory", markers);
 	}
 	
 	/**

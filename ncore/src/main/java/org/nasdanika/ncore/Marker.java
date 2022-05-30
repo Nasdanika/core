@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.ncore.Marker#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getLine <em>Line</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getColumn <em>Column</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMarker()
@@ -102,5 +103,30 @@ public interface Marker extends EObject, org.nasdanika.common.persistence.Marker
 	 * @generated
 	 */
 	void setColumn(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Optional marker comment providing additional information about the marker. E.g. for locations which do not support lines and colums it may provide position inside the resource identified by the location attribute, such as an XPath for XML documents or sheet name and a range for Excel documents.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Comment</em>' attribute.
+	 * @see #setComment(String)
+	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Comment()
+	 * @model
+	 * @generated
+	 */
+	String getComment();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Comment</em>' attribute.
+	 * @see #getComment()
+	 * @generated
+	 */
+	void setComment(String value);
 
 } // Marker

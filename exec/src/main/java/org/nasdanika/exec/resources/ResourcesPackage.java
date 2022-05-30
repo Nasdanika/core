@@ -71,13 +71,13 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__MARKER = NcorePackage.MODEL_ELEMENT__MARKER;
+	int RESOURCE__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -180,13 +180,13 @@ public interface ResourcesPackage extends EPackage {
 	int CONTAINER = 1;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER__MARKER = RESOURCE__MARKER;
+	int CONTAINER__MARKERS = RESOURCE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -316,13 +316,13 @@ public interface ResourcesPackage extends EPackage {
 	int FILE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILE__MARKER = RESOURCE__MARKER;
+	int FILE__MARKERS = RESOURCE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.

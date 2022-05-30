@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -19,8 +20,8 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		this.delegate = delegate;
 	}
 
-	public Marker getMarker() {
-		return delegate.getMarker();
+	public List<? extends Marker> getMarkers() {
+		return delegate.getMarkers();
 	}
 
 	public Object getKey() {
@@ -35,8 +36,8 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		return delegate.isLoaded();
 	}
 
-	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		delegate.load(loader, source, base, progressMonitor, marker);		
+	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		delegate.load(loader, source, base, progressMonitor, markers);		
 	}
 	
 	public boolean isDefault() {

@@ -347,7 +347,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getMarked_Marker() {
+	public EReference getMarked_Markers() {
 		return (EReference)markedEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -399,6 +399,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EAttribute getMarker_Column() {
 		return (EAttribute)markerEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getMarker_Comment() {
+		return (EAttribute)markerEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -1075,7 +1085,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		iMarkedEClass = createEClass(IMARKED);
 
 		markedEClass = createEClass(MARKED);
-		createEReference(markedEClass, MARKED__MARKER);
+		createEReference(markedEClass, MARKED__MARKERS);
 
 		iMarkerEClass = createEClass(IMARKER);
 
@@ -1083,6 +1093,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(markerEClass, MARKER__LOCATION);
 		createEAttribute(markerEClass, MARKER__LINE);
 		createEAttribute(markerEClass, MARKER__COLUMN);
+		createEAttribute(markerEClass, MARKER__COMMENT);
 
 		temporalEClass = createEClass(TEMPORAL);
 		createEAttribute(temporalEClass, TEMPORAL__INSTANT);
@@ -1227,7 +1238,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(iMarkedEClass, org.nasdanika.common.persistence.Marked.class, "IMarked", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(markedEClass, Marked.class, "Marked", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMarked_Marker(), this.getMarker(), null, "marker", null, 0, 1, Marked.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMarked_Markers(), this.getMarker(), null, "markers", null, 0, -1, Marked.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(iMarkerEClass, org.nasdanika.common.persistence.Marker.class, "IMarker", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 
@@ -1235,6 +1246,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getMarker_Location(), ecorePackage.getEString(), "location", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Line(), ecorePackage.getEInt(), "line", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Column(), ecorePackage.getEInt(), "column", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarker_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(temporalEClass, Temporal.class, "Temporal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTemporal_Instant(), this.getInstant(), "instant", null, 0, 1, Temporal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1372,7 +1384,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation-reference", "doc/marked.md"
 		   });
 		addAnnotation
-		  (getMarked_Marker(),
+		  (getMarked_Markers(),
 		   source,
 		   new String[] {
 			   "loadable", "false"
@@ -1484,10 +1496,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	protected void createGenModelAnnotations() {
 		String source = "http://www.eclipse.org/emf/2002/GenModel";
 		addAnnotation
-		  (getMarked_Marker(),
+		  (getMarked_Markers(),
 		   source,
 		   new String[] {
-			   "documentation", "Marker pointing to where this model element was loaded from - location, line and column numbers."
+			   "documentation", "Markers pointing to where this model element was loaded from - location, line and column numbers. \nMultiple markers are supported for situations when a single model element is loaded from multiple locations, e.g. a row in an Excel document or a database and then pom.xml and readme.md is a source repository.\nAnother possiblity is an element being created from a prototype and then loaded - in this case the object will inherit markers from its prototype and will have a marker point to the location where it was loaded from.\nMarkers are listed in the reverse order, i.e. the prototype marker would be after the load marker in the list."
 		   });
 		addAnnotation
 		  (markerEClass,
@@ -1512,6 +1524,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Column number."
+		   });
+		addAnnotation
+		  (getMarker_Comment(),
+		   source,
+		   new String[] {
+			   "documentation", "Optional marker comment providing additional information about the marker. E.g. for locations which do not support lines and colums it may provide position inside the resource identified by the location attribute, such as an XPath for XML documents or sheet name and a range for Excel documents."
 		   });
 		addAnnotation
 		  (instantEDataType,

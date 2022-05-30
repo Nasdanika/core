@@ -3,6 +3,8 @@ package org.nasdanika.exec.gen.content;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
@@ -21,12 +23,12 @@ import org.nasdanika.exec.content.Resource;
 
 public class ResourceSupplierFactoryAdapter extends AdapterImpl implements SupplierFactory<InputStream> {
 
-	private Marker marker;
+	private List<? extends Marker> markers;
 	
 	public ResourceSupplierFactoryAdapter(Resource resource) {
 		setTarget(resource);
 		Marked marked = EObjectAdaptable.adaptTo((EObject) getTarget(), Marked.class);
-		marker = marked == null ? null : marked.getMarker();
+		markers = marked == null ? null : marked.getMarkers();
 	}
 	
 	@Override
@@ -47,11 +49,11 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 					String iUrl = resource.isInterpolate() ? context.interpolateToString(resource.getLocation()) : resource.getLocation(); 
 					theURL = iUrl.startsWith(Util.CLASSPATH_URL_PREFIX) ? getClass().getClassLoader().getResource(iUrl.substring(Util.CLASSPATH_URL_PREFIX.length())) : new URL(iUrl);
 					if (theURL == null) {
-						return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, marker);						
+						return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, markers);						
 					}
 					return Supplier.super.diagnose(progressMonitor);
 				} catch (MalformedURLException e) {					
-					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (marker == null ? "" : " at " + marker));
+					return new BasicDiagnostic(Status.ERROR, e.getMessage() + (markers == null ? "" : " at " + markers.stream().map(Object::toString).collect(Collectors.joining(", "))));
 				}
 			}
 
@@ -62,7 +64,7 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 
 			@Override
 			public String name() {
-				return "Resource: " + marker;
+				return "Resource: " + markers == null ? "(undefined)" : markers.stream().map(Object::toString).collect(Collectors.joining(", "));
 			}
 
 			@Override

@@ -1,5 +1,7 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -26,8 +28,8 @@ public class FactoryFeature<T> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
-		return factory.create(loader, config, base, progressMonitor, marker);
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
+		return factory.create(loader, config, base, progressMonitor, markers);
 	}
 
 }

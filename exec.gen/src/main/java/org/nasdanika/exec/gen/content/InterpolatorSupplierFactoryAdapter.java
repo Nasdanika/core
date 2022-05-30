@@ -3,6 +3,7 @@ package org.nasdanika.exec.gen.content;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.util.Base64;
+import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -67,9 +68,14 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 		URI uri = URI.createURI(path);
 		
 		URI markerBase = null;
-		Marker marker = getTarget().getMarker();
-		if (marker != null && !Util.isBlank(marker.getLocation())) {
-			markerBase = URI.createURI(marker.getLocation());
+		List<? extends Marker> markers = getTarget().getMarkers();
+		if (markers != null) {
+			for (Marker marker: markers) {
+				if (!Util.isBlank(marker.getLocation())) {
+					markerBase = URI.createURI(marker.getLocation());
+					break;
+				}
+			}
 		}
 
 		URI resourceBase = null;

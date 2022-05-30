@@ -51,7 +51,7 @@ public interface ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception;
+	Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;
 	
 	@SuppressWarnings("unchecked")
 	default Object load(Object spec, URI base, ProgressMonitor progressMonitor) throws Exception {
@@ -61,7 +61,7 @@ public interface ObjectLoader {
 			// single
 			if (map.size() == 1) {
 				for (Entry<String, Object> e: map.entrySet()) {
-					return create(this, e.getKey(), e.getValue(), base, progressMonitor, Util.getMarker(map, e.getKey()));
+					return create(this, e.getKey(), e.getValue(), base, progressMonitor, Util.getMarkers(map, e.getKey()));
 				}
 			}
 			// otherwise

@@ -40,9 +40,11 @@ public class Generator {
 			URI uri = URI.createURI(diagramURI);
 			
 			URI markerBase = null;
-			Marker marker = diagram.getMarker();
-			if (marker != null && !Util.isBlank(marker.getLocation())) {
-				markerBase = URI.createURI(marker.getLocation());
+			for (Marker marker: diagram.getMarkers()) { 
+				if (marker != null && !Util.isBlank(marker.getLocation())) { // Finds a first marker with location
+					markerBase = URI.createURI(marker.getLocation());
+					break;
+				}				
 			}
 
 			URI resourceBase = null;

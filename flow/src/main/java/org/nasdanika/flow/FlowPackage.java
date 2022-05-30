@@ -70,13 +70,13 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE_ELEMENT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE_ELEMENT__MARKER = NcorePackage.NAMED_ELEMENT__MARKER;
+	int PACKAGE_ELEMENT__MARKERS = NcorePackage.NAMED_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -288,13 +288,13 @@ public interface FlowPackage extends EPackage {
 	int PACKAGE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PACKAGE__MARKER = PACKAGE_ELEMENT__MARKER;
+	int PACKAGE__MARKERS = PACKAGE_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -560,13 +560,13 @@ public interface FlowPackage extends EPackage {
 	int SERVICE_PROVIDER = 4;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_PROVIDER__MARKER = PACKAGE_ELEMENT__MARKER;
+	int SERVICE_PROVIDER__MARKERS = PACKAGE_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -741,13 +741,13 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT = 5;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT__MARKER = SERVICE_PROVIDER__MARKER;
+	int PARTICIPANT__MARKERS = SERVICE_PROVIDER__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1067,13 +1067,13 @@ public interface FlowPackage extends EPackage {
 	int RESOURCE = 7;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__MARKER = SERVICE_PROVIDER__MARKER;
+	int RESOURCE__MARKERS = SERVICE_PROVIDER__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1330,13 +1330,13 @@ public interface FlowPackage extends EPackage {
 	int PARTICIPANT_RESPONSIBILITY = 9;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PARTICIPANT_RESPONSIBILITY__MARKER = PACKAGE_ELEMENT__MARKER;
+	int PARTICIPANT_RESPONSIBILITY__MARKERS = PACKAGE_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -1574,13 +1574,13 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT = 10;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
+	int ARTIFACT__MARKERS = PARTICIPANT_RESPONSIBILITY__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -2037,13 +2037,13 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
+	int ARTIFACT_PARTICIPANT_RESPONSIBILITY__MARKERS = PARTICIPANT_RESPONSIBILITY__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -2298,13 +2298,13 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT_PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT = PARTICIPANT_RESPONSIBILITY_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RELATIONSHIP__MARKER = PACKAGE_ELEMENT__MARKER;
+	int RELATIONSHIP__MARKERS = PACKAGE_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -2533,13 +2533,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW_ELEMENT = 15;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW_ELEMENT__MARKER = PARTICIPANT_RESPONSIBILITY__MARKER;
+	int FLOW_ELEMENT__MARKERS = PARTICIPANT_RESPONSIBILITY__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -2979,13 +2979,13 @@ public interface FlowPackage extends EPackage {
 	int TRANSITION = 17;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRANSITION__MARKER = PACKAGE_ELEMENT__MARKER;
+	int TRANSITION__MARKERS = PACKAGE_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -3233,13 +3233,13 @@ public interface FlowPackage extends EPackage {
 	int CALL = 19;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__MARKER = TRANSITION__MARKER;
+	int CALL__MARKERS = TRANSITION__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -3495,13 +3495,13 @@ public interface FlowPackage extends EPackage {
 	int CALL_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ACTIVITY__MARKER = FLOW_ELEMENT__MARKER;
+	int ACTIVITY__MARKERS = FLOW_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -3900,13 +3900,13 @@ public interface FlowPackage extends EPackage {
 	int ACTIVITY_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE__MARKER = FLOW_ELEMENT__MARKER;
+	int SERVICE__MARKERS = FLOW_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -4288,13 +4288,13 @@ public interface FlowPackage extends EPackage {
 	int FLOW = 24;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLOW__MARKER = ACTIVITY__MARKER;
+	int FLOW__MARKERS = ACTIVITY__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -4685,13 +4685,13 @@ public interface FlowPackage extends EPackage {
 	int PSEUDO_STATE = 25;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PSEUDO_STATE__MARKER = FLOW_ELEMENT__MARKER;
+	int PSEUDO_STATE__MARKERS = FLOW_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -5064,13 +5064,13 @@ public interface FlowPackage extends EPackage {
 	int CHOICE = 26;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHOICE__MARKER = PSEUDO_STATE__MARKER;
+	int CHOICE__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -5443,13 +5443,13 @@ public interface FlowPackage extends EPackage {
 	int END = 27;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END__MARKER = PSEUDO_STATE__MARKER;
+	int END__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -5822,13 +5822,13 @@ public interface FlowPackage extends EPackage {
 	int ENTRY_POINT = 28;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENTRY_POINT__MARKER = PSEUDO_STATE__MARKER;
+	int ENTRY_POINT__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -6201,13 +6201,13 @@ public interface FlowPackage extends EPackage {
 	int EXIT_POINT = 29;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXIT_POINT__MARKER = PSEUDO_STATE__MARKER;
+	int EXIT_POINT__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -6580,13 +6580,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_INPUT = 30;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_INPUT__MARKER = PSEUDO_STATE__MARKER;
+	int EXPANSION_INPUT__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -6959,13 +6959,13 @@ public interface FlowPackage extends EPackage {
 	int EXPANSION_OUTPUT = 31;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXPANSION_OUTPUT__MARKER = PSEUDO_STATE__MARKER;
+	int EXPANSION_OUTPUT__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -7338,13 +7338,13 @@ public interface FlowPackage extends EPackage {
 	int FORK = 32;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FORK__MARKER = PSEUDO_STATE__MARKER;
+	int FORK__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -7717,13 +7717,13 @@ public interface FlowPackage extends EPackage {
 	int INPUT_PIN = 33;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_PIN__MARKER = PSEUDO_STATE__MARKER;
+	int INPUT_PIN__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -8096,13 +8096,13 @@ public interface FlowPackage extends EPackage {
 	int JOIN = 34;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int JOIN__MARKER = PSEUDO_STATE__MARKER;
+	int JOIN__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -8475,13 +8475,13 @@ public interface FlowPackage extends EPackage {
 	int OUTPUT_PIN = 35;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OUTPUT_PIN__MARKER = PSEUDO_STATE__MARKER;
+	int OUTPUT_PIN__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -8854,13 +8854,13 @@ public interface FlowPackage extends EPackage {
 	int START = 36;
 
 	/**
-	 * The feature id for the '<em><b>Marker</b></em>' containment reference.
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START__MARKER = PSEUDO_STATE__MARKER;
+	int START__MARKERS = PSEUDO_STATE__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.

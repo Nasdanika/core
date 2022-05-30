@@ -2,6 +2,8 @@ package org.nasdanika.exec.tests.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.junit.Test;
@@ -49,8 +51,8 @@ public class TestText {
 				assertThat(text.getDescription()).isEqualTo("Full text definition");
 				assertThat(text.getContent()).isEqualTo("Hello World.");
 				assertThat(text.isInterpolate()).isFalse();
-				Marker marker = text.getMarker();
-				assertThat(marker).isNotNull();
+				List<? extends Marker> markers = text.getMarkers();
+				assertThat(markers).isNotNull().isNotEmpty();
 			}
 		};
 		

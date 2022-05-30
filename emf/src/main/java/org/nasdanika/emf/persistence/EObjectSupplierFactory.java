@@ -131,8 +131,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.getDocumentation(), exclusiveWith) {
 					
 					@Override
-					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	Marker marker) throws Exception {
-						Object ret = super.create(loader, config, base, progressMonitor, marker);
+					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) throws Exception {
+						Object ret = super.create(loader, config, base, progressMonitor, markers);
 						if (base != null && base.hasAbsolutePath() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
 							return URI.createURI((String) ret).resolve(base).toString();
 						}
@@ -170,7 +170,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							public EClass execute(String type, ProgressMonitor progressMonitor) throws Exception {
 								BiSupplier<EClass, BiFunction<EClass,ENamedElement, String>> result = loader.resolveEClass(type);
 								if (result == null) {
-									throw new ConfigurationException("Cannot resolve " + type+ " to EClass", EObjectSupplierFactory.this.getMarker());
+									throw new ConfigurationException("Cannot resolve " + type+ " to EClass", EObjectSupplierFactory.this.getMarkers());
 								}
 								return result.getFirst();
 							}
@@ -257,8 +257,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				if (ret == null) {
 					ret = instantiate(eClass);
 				}
-				Marker marker = getMarker();
-				loader.mark(ret, marker, progressMonitor);
+				List<? extends Marker> markers = getMarkers();
+				loader.mark(ret, markers, progressMonitor);
 				Map<EStructuralFeature, Object> loadedFeatures = new HashMap<>();
 				EStructuralFeature[] loadingFeature = { null };
 				ret.eAdapters().add(new LoadTrackerAdapter() {
@@ -326,7 +326,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 														if (entryValueList.size() == 1) {
 															theValue.put(entry.getKey(), entryValueList.get(0));														
 														} else if (!entryValueList.isEmpty()) {
-															throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, marker);
+															throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, markers);
 														}
 													}
 												} else {
@@ -352,7 +352,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						} catch (ConfigurationException e) {
 							throw e;
 						} catch (Exception e) {
-							throw marker == null ? e : new ConfigurationException("Error setting feature " + feature.getKey() + " in " + ret + ": " + e, e, marker);
+							throw markers == null || markers.isEmpty() ? e : new ConfigurationException("Error setting feature " + feature.getKey() + " in " + ret + ": " + e, e, markers);
 						} finally {
 							loadingFeature[0] = null;
 						}

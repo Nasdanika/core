@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -290,21 +291,21 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
 		if (result != null) {
-			return create(loader, result.getFirst(), config, base, progressMonitor, marker, result.getSecond(), constructor);
+			return create(loader, result.getFirst(), config, base, progressMonitor, markers, result.getSecond(), constructor);
 		}
 		
-		return super.create(loader, type, config, base, progressMonitor, marker);
+		return super.create(loader, type, config, base, progressMonitor, markers);
 	}
 	
 	/**
 	 * Creates an object by calling create() which takes constructor and passing thread constructor to it.
 	 */
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return create(loader, type, config, threadConstructor.get(), base, progressMonitor, marker);
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		return create(loader, type, config, threadConstructor.get(), base, progressMonitor, markers);
 	}	
 	
 	/**
@@ -359,7 +360,7 @@ public class EObjectLoader extends DispatchingLoader {
 			Object config, 
 			URI base, 
 			ProgressMonitor progressMonitor, 
-			Marker marker, 
+			List<? extends Marker> markers, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			java.util.function.Function<EClass, EObject> constructor) throws Exception {
 		
@@ -369,7 +370,7 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		
 		// Proxy
-		Object proxy = createProxy(eClass, config, base, marker, progressMonitor);
+		Object proxy = createProxy(eClass, config, base, markers, progressMonitor);
 		if (proxy != null) {
 			return proxy;
 		}
@@ -379,7 +380,7 @@ public class EObjectLoader extends DispatchingLoader {
 		
 		if (Loadable.class.isAssignableFrom(instanceClass)) {
 			EObject eObject = factory.create(eClass);
-			((Loadable) eObject).load(loader, config, base, progressMonitor, marker);
+			((Loadable) eObject).load(loader, config, base, progressMonitor, markers);
 			return eObject;
 		}
 		if (ContextLoadable.class.isAssignableFrom(instanceClass)) {
@@ -402,7 +403,7 @@ public class EObjectLoader extends DispatchingLoader {
 						@Override
 						public EObject execute(ProgressMonitor pm) throws Exception {
 							EObject eObject = factory.create(eClass);
-							((ContextLoadable) eObject).load(context, loader, config, base, pm, marker);
+							((ContextLoadable) eObject).load(context, loader, config, base, pm, markers);
 							return eObject;
 						}
 						
@@ -411,7 +412,7 @@ public class EObjectLoader extends DispatchingLoader {
 			};
 		}							
 		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider, constructor);
-		eObjectSupplierFactory.load(loader, config, base, progressMonitor, marker);
+		eObjectSupplierFactory.load(loader, config, base, progressMonitor, markers);
 		return eObjectSupplierFactory;
 	}
 
@@ -435,7 +436,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param base
 	 * @return Proxy object or null if config is not a proxy config.
 	 */
-	public EObject createProxy(EClass eClass, Object config, URI base, Marker marker, ProgressMonitor progressMonitor) {
+	public EObject createProxy(EClass eClass, Object config, URI base, List<? extends Marker> markers, ProgressMonitor progressMonitor) {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
@@ -460,7 +461,7 @@ public class EObjectLoader extends DispatchingLoader {
 						proxyURI = proxyURI.resolve(base);
 					}
 					((MinimalEObjectImpl) eObject).eSetProxyURI(proxyURI);
-					mark(eObject, marker, progressMonitor);
+					mark(eObject, markers, progressMonitor);
 					
 					return eObject;
 				}
@@ -474,14 +475,16 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param eObject
 	 * @param marker
 	 */
-	public void mark(EObject eObject, Marker marker, ProgressMonitor progressMonitor) {
-		if (marker != null) {
-			eObject.eAdapters().add(new MarkedAdapter(marker));
-			if (eObject instanceof Marked) {				
-				org.nasdanika.ncore.Marker mMarker = markerFactory.createMarker(marker.getLocation(), progressMonitor);
-				mMarker.setLine(marker.getLine());
-				mMarker.setColumn(marker.getColumn());
-				((Marked) eObject).setMarker(mMarker);
+	public void mark(EObject eObject, List<? extends Marker> markers, ProgressMonitor progressMonitor) {
+		if (markers != null) {
+			eObject.eAdapters().add(new MarkedAdapter(markers));
+			if (eObject instanceof Marked) {		
+				for (Marker marker: markers) {
+					org.nasdanika.ncore.Marker mMarker = markerFactory.createMarker(marker.getLocation(), progressMonitor);
+					mMarker.setLine(marker.getLine());
+					mMarker.setColumn(marker.getColumn());
+					((Marked) eObject).getMarkers().add(0, mMarker);
+				}
 			}
 		}
 	}

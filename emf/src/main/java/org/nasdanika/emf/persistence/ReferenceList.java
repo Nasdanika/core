@@ -63,7 +63,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
 		if (config instanceof Map) {
 			if (!keys.isEmpty()) {
 				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getEReference());
@@ -71,27 +71,27 @@ public class ReferenceList<T> extends ListAttribute<T> {
 					// Converting entry set to a list of maps
 					String keyName = keys.get(0);
 					MarkedArrayList<Map<?,?>> entryList = new MarkedArrayList<>();
-					entryList.setMarker(marker);
+					entryList.mark(markers);
 					for (Entry<?, ?> entry: ((Map<?,?>) config).entrySet()) {
 						Object value = entry.getValue();
-						Marker valueMarker = null;
+						List<? extends Marker> valueMarkers = null;
 						if (config instanceof MarkedLinkedHashMap) {
-							valueMarker = ((MarkedLinkedHashMap<?, ?>) config).getMarker(entry.getKey());
+							valueMarkers = ((MarkedLinkedHashMap<?, ?>) config).getEntryMarkers(entry.getKey());
 						}
 						
 						if (referenceFactory.isHomogenous()) {
 							// Config shall be a map with potentially multiple entries, type is already known
 							MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
-							entryConfig.setMarker(valueMarker);
+							entryConfig.mark(valueMarkers);
 							entryConfig.put(keyName, entry.getKey());
-							entryConfig.mark(keyName, valueMarker);
+							entryConfig.markEntry(keyName, valueMarkers);
 							if (valueFeature == null) {
 								if (value instanceof Map) {
 									entryConfig.putAll((Map<?,?>) value);
 								} else {
 									EStructuralFeature defaultFeature = referenceFactory.effectiveDefaultFeature(value);
 									if (defaultFeature == null) {
-										throw new ConfigurationException("Configuration shall be a map: " + value, valueMarker);
+										throw new ConfigurationException("Configuration shall be a map: " + value, valueMarkers);
 									}
 									entryConfig.put(keyProvider.apply(null, defaultFeature), value);
 								}
@@ -104,16 +104,16 @@ public class ReferenceList<T> extends ListAttribute<T> {
 							if (value instanceof Map && ((Map<?,?>) value).size() == 1) {
 								for (Entry<?, ?> valueEntry: ((Map<?,?>) value).entrySet()) {
 									MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
-									entryConfig.setMarker(valueMarker);
+									entryConfig.mark(valueMarkers);
 									entryConfig.put(keyName, entry.getKey());
-									entryConfig.mark(keyName, valueMarker);
+									entryConfig.markEntry(keyName, valueMarkers);
 									if (valueFeature == null) {
 										Object valueEntryValue = valueEntry.getValue();
 										if (valueEntryValue instanceof Map) {
 											entryConfig.putAll((Map<?,?>) valueEntryValue);
 										} else {
 											// TODO - Default feature											
-											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), valueMarker); // TODO - marker 
+											throw new ConfigurationException("Configuration shall be a map: " + valueEntry.getValue(), valueMarkers); // TODO - marker 
 										}
 									} else {
 										entryConfig.put(valueFeature, valueEntry.getValue());
@@ -121,29 +121,29 @@ public class ReferenceList<T> extends ListAttribute<T> {
 									
 									MarkedLinkedHashMap<Object, Object> singleton = new MarkedLinkedHashMap<>();
 									singleton.put(valueEntry.getKey(), entryConfig);
-									singleton.setMarker(valueMarker);
-									singleton.mark(valueEntry.getKey(), valueMarker);
+									singleton.mark(valueMarkers);
+									singleton.markEntry(valueEntry.getKey(), valueMarkers);
 									entryList.add(singleton); 
 								}
 							} else {
-								throw new ConfigurationException("Configuration shall be a singleton map: " + value, valueMarker);								
+								throw new ConfigurationException("Configuration shall be a singleton map: " + value, valueMarkers);								
 							}
 						}
-						entryList.getMarkers().add(valueMarker);
+						entryList.getElementMarkers().add(valueMarkers);
 					}
-					return super.create(loader, entryList, base, progressMonitor, marker);			
+					return super.create(loader, entryList, base, progressMonitor, markers);			
 				} 
 				
 				throw new UnsupportedOperationException("Multiple e-keys are not supported yet");
 			}
 		}
-		return super.create(loader, config, base, progressMonitor, marker);
+		return super.create(loader, config, base, progressMonitor, markers);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return (List<T>) referenceFactory.create(loader, element, base, progressMonitor, marker);
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		return (List<T>) referenceFactory.create(loader, element, base, progressMonitor, markers);
 	}
 
 }

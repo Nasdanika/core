@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -8,7 +9,7 @@ import org.nasdanika.common.Util;
 
 public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	
-	private Marker marker;
+	private List<? extends Marker> markers;
 	private T value;
 	private boolean loaded;
 	private Object key;
@@ -45,23 +46,23 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	}
 	
 	@Override
-	public Marker getMarker() {
-		return marker;
+	public List<? extends Marker> getMarkers() {
+		return markers;
 	}
 
 	@Override
-	public void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		if (source.containsKey(getKey())) {
 			for (Object ek: exclusiveWith) {
 				if (source.containsKey(ek)) {
-					throw new ConfigurationException("Features '" + getKey() + " and " + ek + " are mutually exclusive", marker);					
+					throw new ConfigurationException("Features '" + getKey() + " and " + ek + " are mutually exclusive", markers);					
 				}
 			}
-			this.marker = Util.getMarker(source, getKey());
-			value = create(loader, source.get(getKey()), base, progressMonitor, this.marker);						
+			this.markers = Util.getMarkers(source, getKey());
+			value = create(loader, source.get(getKey()), base, progressMonitor, this.markers);						
 			loaded = true;
 		} else if (isRequired()) {
-			throw new ConfigurationException("Missing required feature: " + getKey(), marker);
+			throw new ConfigurationException("Missing required feature: " + getKey(), markers);
 		}		
 	}	
 	
@@ -77,7 +78,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		return (T) config;
 	}
 

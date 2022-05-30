@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.common.util.URI;
@@ -22,9 +23,9 @@ public class FeatureObjectAttribute<T extends FeatureObject> extends Attribute<T
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		T ret = factory.get();
-		ret.load(loader, config, base, progressMonitor, marker);
+		ret.load(loader, config, base, progressMonitor, markers);
 		return ret;
 	}
 

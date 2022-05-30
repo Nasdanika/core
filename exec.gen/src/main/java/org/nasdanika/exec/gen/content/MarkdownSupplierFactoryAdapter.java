@@ -1,5 +1,7 @@
 package org.nasdanika.exec.gen.content;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.Context;
@@ -24,17 +26,22 @@ public class MarkdownSupplierFactoryAdapter extends FilterSupplierFactoryAdapter
 			protected URI getResourceBase() {
 				Resource targetResource = getTarget().eResource();
 				URI resURI = targetResource == null ? null : targetResource.getURI();
-				Marker marker = getTarget().getMarker();
-				if (marker == null || Util.isBlank(marker.getLocation())) {
-					return resURI;
-				}
+				List<? extends Marker> markers = getTarget().getMarkers();
+				if (markers != null) {
+					for(Marker marker: markers) {
+						if (marker == null || Util.isBlank(marker.getLocation())) {
+							return resURI;
+						}
 				
-				try {
-					URI markerLocation = URI.createURI(marker.getLocation());
-					return resURI != null && resURI.isHierarchical() ? markerLocation.resolve(resURI) : markerLocation;
-				} catch (Exception e) {
-					throw new ConfigurationException("Invalid location: " + marker.getLocation(), e, marker);
+						try {
+							URI markerLocation = URI.createURI(marker.getLocation());
+							return resURI != null && resURI.isHierarchical() ? markerLocation.resolve(resURI) : markerLocation;
+						} catch (Exception e) {
+							throw new ConfigurationException("Invalid location: " + marker.getLocation(), e, marker);
+						}
+					}
 				}
+				return resURI;
 			}
 			
 			@Override

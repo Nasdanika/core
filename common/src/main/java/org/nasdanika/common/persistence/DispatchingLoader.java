@@ -1,6 +1,7 @@
 package org.nasdanika.common.persistence;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,18 +35,18 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		for (Entry<String, ObjectLoader> re: registry.entrySet()) {
 			if (type.startsWith(re.getKey())) {
-				return re.getValue().create(loader, type.substring(re.getKey().length()), config, base, progressMonitor, marker);
+				return re.getValue().create(loader, type.substring(re.getKey().length()), config, base, progressMonitor, markers);
 			}			
 		}
 		
 		if (chain == null) {
-			throw new ConfigurationException("Unsupported type: " + type, marker);
+			throw new ConfigurationException("Unsupported type: " + type, markers);
 		}
 		
-		return chain.create(loader, type, config, base, progressMonitor, marker);
+		return chain.create(loader, type, config, base, progressMonitor, markers);
 	}
 		
 }

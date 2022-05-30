@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -38,8 +39,8 @@ public class Choice<T> extends Attribute<T> {
 	 * @throws Exception
 	 */
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
-		return selector.apply(config).create(loader, config, base, progressMonitor, marker);
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+		return selector.apply(config).create(loader, config, base, progressMonitor, markers);
 	}
 	
 }

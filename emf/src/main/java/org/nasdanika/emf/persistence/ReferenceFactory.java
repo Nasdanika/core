@@ -99,7 +99,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 	}
 	
 	@Override
-	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
@@ -123,7 +123,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 	
 								@Override
 								public List<EObject> execute(ProgressMonitor progressMonitor) throws Exception {
-									return loadReference(ref, base, marker, progressMonitor);
+									return loadReference(ref, base, markers, progressMonitor);
 								}
 								
 							};
@@ -131,9 +131,9 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 						
 					});
 				}
-				return loadReference((String) element, base, marker, progressMonitor);
+				return loadReference((String) element, base, markers, progressMonitor);
 			}
-			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, marker, keyProvider, null) : loader.load(element, base, progressMonitor);
+			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return Collections.singletonList(resolver.resolve((EObject) ret));
 			}
@@ -141,10 +141,10 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 		} catch (ConfigurationException e) {
 			throw e;
 		} catch (Exception e) {
-			if (marker == null) {
+			if (markers == null || markers.isEmpty()) {
 				throw e;
 			}
-			throw new ConfigurationException("Error loading reference: " + e, e, marker);
+			throw new ConfigurationException("Error loading reference: " + e, e, markers);
 		}
 	}
 		
@@ -159,7 +159,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 	protected List<EObject> loadReference(
 			String ref, 
 			URI base,
-			Marker marker, 
+			List<? extends Marker> markers, 
 			ProgressMonitor progressMonitor) {
 		
 		if (ref.startsWith(FILESET_SCHEME)) {
@@ -168,11 +168,11 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			Yaml yaml = new Yaml();
 			Object filesetSpec = yaml.load(spec);			
 			if (filesetSpec instanceof String) {				
-				return loadMatches(base, Collections.singleton((String) filesetSpec), null, base, marker, progressMonitor);
+				return loadMatches(base, Collections.singleton((String) filesetSpec), null, base, markers, progressMonitor);
 			} 
 			
 			if (filesetSpec instanceof List) {
-				return loadMatches(base, (List<String>) filesetSpec, null, base, marker, progressMonitor);				
+				return loadMatches(base, (List<String>) filesetSpec, null, base, markers, progressMonitor);				
 			}
 			
 			if (filesetSpec instanceof Map) {
@@ -191,15 +191,15 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 						if (obj instanceof Collection) {
 							return (Collection<String>) obj;
 						}
-						throw new ConfigurationException("Expected a string or an array of strings, got " + obj.getClass() + ": " + obj, marker);
+						throw new ConfigurationException("Expected a string or an array of strings, got " + obj.getClass() + ": " + obj, markers);
 					};
-					return loadMatches(fsBaseURI, asCollection.apply(specMap.get(FILESET_INCLUDE_KEY)), asCollection.apply(specMap.get(FILESET_EXCLUDE_KEY)), base, marker, progressMonitor);				
+					return loadMatches(fsBaseURI, asCollection.apply(specMap.get(FILESET_INCLUDE_KEY)), asCollection.apply(specMap.get(FILESET_EXCLUDE_KEY)), base, markers, progressMonitor);				
 				} else if (fsBase != null) {
-					throw new ConfigurationException("FileSet base shall be a string: " + fsBase.getClass() + ": " + fsBase, marker);			
+					throw new ConfigurationException("FileSet base shall be a string: " + fsBase.getClass() + ": " + fsBase, markers);			
 				}
 			}
 			
-			throw new ConfigurationException("Unsupported FileSet specification type: " + filesetSpec.getClass() + ": " + filesetSpec, marker);			
+			throw new ConfigurationException("Unsupported FileSet specification type: " + filesetSpec.getClass() + ": " + filesetSpec, markers);			
 		}
 		
 		if (ref.startsWith(FACTORY_SCHEME)) {
@@ -213,15 +213,15 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 		if (base != null && !ref.startsWith(EObjectLoader.LATE_PROXY_RESOLUTION_URI_PREFIX)) {
 			refURI = refURI.resolve(base);
 		}
-		ConfigurationException.pushThreadMarker(marker);
+		ConfigurationException.pushThreadMarker(markers);
 		try {
 			EClass eReferenceType = effectiveReferenceType(ref);
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy, if possible, instead of loading object
-				EObject proxy = resolver.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, marker, progressMonitor);
+				EObject proxy = resolver.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, markers, progressMonitor);
 				if (proxy != null) {
-					if ( marker != null) {
-						proxy.eAdapters().add(new MarkedAdapter(marker));
+					if (markers != null && !markers.isEmpty()) {
+						proxy.eAdapters().add(new MarkedAdapter(markers));
 					}
 					return Collections.singletonList(proxy);
 				}
@@ -237,17 +237,17 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			Collection<String> includes, 
 			Collection<String> excludes, 
 			URI base,
-			Marker marker,
+			List<? extends Marker> markers,
 			ProgressMonitor progressMonitor) {
 		if (!fileSetBase.isFile()) {
-			throw new ConfigurationException("Base URI for a fileset is not a file URI: " + fileSetBase, marker);
+			throw new ConfigurationException("Base URI for a fileset is not a file URI: " + fileSetBase, markers);
 		}
 		String baseFileStr = fileSetBase.toFileString();				
 		File baseDir = new File(baseFileStr);
 		if (baseDir.isFile()) {
 			baseDir = baseDir.getParentFile();
 		}
-		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, marker, progressMonitor)).flatMap(objs -> objs.stream()).collect(Collectors.toList());		
+		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, markers, progressMonitor)).flatMap(objs -> objs.stream()).collect(Collectors.toList());		
 	}
 	
 	private static Collection<File> match(File baseDir, Collection<String> includes, Collection<String> excludes) {

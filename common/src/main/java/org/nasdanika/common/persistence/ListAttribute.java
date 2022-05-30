@@ -27,17 +27,17 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
 		if (config instanceof Collection) {
 			List<T> ret = new ArrayList<>();
 			int idx = 0;
 			for (Object element: (Collection<?>) config) {
-				ret.addAll(createElements(loader, element, base, progressMonitor, Util.getMarker((Collection<?>) config, idx++)));
+				ret.addAll(createElements(loader, element, base, progressMonitor, Util.getMarkers((Collection<?>) config, idx++)));
 			}
 			return ret;
 		}
 		
-		return createElements(loader, config, base, progressMonitor, marker);
+		return createElements(loader, config, base, progressMonitor, markers);
 	}
 	
 	/**
@@ -51,8 +51,8 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @return
 	 * @throws Exception
 	 */
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
-		return Collections.singletonList(createElement(loader, element, base, progressMonitor, marker)); 
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception { 
+		return Collections.singletonList(createElement(loader, element, base, progressMonitor, markers)); 
 	}
 	
 
@@ -67,7 +67,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception { 
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception { 
 		return (T) element; 
 	}
 	

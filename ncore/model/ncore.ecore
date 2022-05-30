@@ -13,10 +13,10 @@
     <eAnnotations source="urn:org.nasdanika">
       <details key="documentation-reference" value="doc/marked.md"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="marker" eType="#//Marker"
-        containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markers" upperBound="-1"
+        eType="#//Marker" containment="true">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="Marker pointing to where this model element was loaded from - location, line and column numbers."/>
+        <details key="documentation" value="Markers pointing to where this model element was loaded from - location, line and column numbers. &#xA;Multiple markers are supported for situations when a single model element is loaded from multiple locations, e.g. a row in an Excel document or a database and then pom.xml and readme.md is a source repository.&#xA;Another possiblity is an element being created from a prototype and then loaded - in this case the object will inherit markers from its prototype and will have a marker point to the location where it was loaded from.&#xA;Markers are listed in the reverse order, i.e. the prototype marker would be after the load marker in the list."/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
         <details key="loadable" value="false"/>
@@ -42,6 +42,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Column number."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Optional marker comment providing additional information about the marker. E.g. for locations which do not support lines and colums it may provide position inside the resource identified by the location attribute, such as an XPath for XML documents or sheet name and a range for Excel documents."/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

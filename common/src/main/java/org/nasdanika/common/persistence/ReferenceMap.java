@@ -1,5 +1,6 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
@@ -23,7 +24,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected V createValue(ObjectLoader loader, Object key, Object value, URI base, ProgressMonitor progressMonitor, Marker marker) throws Exception {
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
 		return (V) loader.load(value, base, progressMonitor);
 	}
 

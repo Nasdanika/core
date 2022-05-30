@@ -4,8 +4,9 @@ package org.nasdanika.flow.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -211,9 +212,11 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 		}
 		
 		// Marker
-		Marker marker = getMarker();
-		if (marker != null) {
-			instance.setMarker(EcoreUtil.copy(marker));
+		List<? extends Marker> markers = getMarkers();
+		if (markers != null) {
+			for (Marker marker: markers) {
+				instance.getMarkers().add(EcoreUtil.copy(marker));
+			}
 		}
 		
 		// Representations

@@ -13,13 +13,14 @@
     <genClasses ecoreClass="ncore.ecore#//Adaptable"/>
     <genClasses ecoreClass="ncore.ecore#//IMarked"/>
     <genClasses image="false" ecoreClass="ncore.ecore#//Marked">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Marked/marker"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Marked/markers"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//IMarker"/>
     <genClasses ecoreClass="ncore.ecore#//Marker">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/location"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/line"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/column"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/comment"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Temporal">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Temporal/instant"/>

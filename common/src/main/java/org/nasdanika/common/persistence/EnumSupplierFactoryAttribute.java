@@ -40,7 +40,7 @@ public class EnumSupplierFactoryAttribute<T extends Enum<T>> extends AbstractFea
 					try {
 						return Enum.valueOf(type, name);
 					} catch (IllegalArgumentException e) {
-						throw new ConfigurationException(e.getMessage(), e, getMarker());
+						throw new ConfigurationException(e.getMessage(), e, getMarkers());
 					}
 				}
 				return defaultValue;

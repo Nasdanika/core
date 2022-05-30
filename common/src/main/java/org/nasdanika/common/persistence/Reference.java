@@ -1,5 +1,7 @@
 package org.nasdanika.common.persistence;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
 
@@ -15,7 +17,7 @@ public class Reference extends Attribute<Object> {
 	}
 	
 	@Override
-	public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, Marker marker)	throws Exception {
+	public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
 		return loader.load(config, base, progressMonitor);
 	}
 
