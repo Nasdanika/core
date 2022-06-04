@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
@@ -46,7 +47,17 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 			public Diagnostic diagnose(ProgressMonitor progressMonitor) {
 				try {
 					Resource resource = (Resource) getTarget();
-					String iUrl = resource.isInterpolate() ? context.interpolateToString(resource.getLocation()) : resource.getLocation(); 
+					URI uri = URI.createURI(resource.isInterpolate() ? context.interpolateToString(resource.getLocation()) : resource.getLocation());
+					org.eclipse.emf.ecore.resource.Resource eResource = resource.eResource();
+					if (eResource != null) {
+						URI base = eResource.getURI();
+						if (base != null) {
+							uri = uri.resolve(base);
+						}
+					}
+					
+					String iUrl = uri.toString(); 
+					
 					theURL = iUrl.startsWith(Util.CLASSPATH_URL_PREFIX) ? getClass().getClassLoader().getResource(iUrl.substring(Util.CLASSPATH_URL_PREFIX.length())) : new URL(iUrl);
 					if (theURL == null) {
 						return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, markers);						

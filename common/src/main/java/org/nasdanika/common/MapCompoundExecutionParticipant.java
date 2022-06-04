@@ -11,16 +11,6 @@ public abstract class MapCompoundExecutionParticipant<K, E extends ExecutionPart
 	}
 
 	protected Map<K,E> elements = new LinkedHashMap<>();
-	
-	private Double size;
-	
-	@Override
-	public double size() {
-		if (size == null) { 
-			size = super.size();
-		}
-		return size;
-	}
 
 	@Override
 	protected Collection<E> getElements() {

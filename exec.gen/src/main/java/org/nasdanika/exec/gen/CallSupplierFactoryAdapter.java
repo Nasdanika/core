@@ -168,6 +168,15 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 					if (!call.getArguments().isEmpty()) {
 						return new BasicDiagnostic(Status.ERROR, "Cannot specify arguments without method", call);								
 					}
+					for (Constructor<?> constructor: clazz.getConstructors()) {
+						if (constructor.getParameterCount() == call.getInit().size()) {
+							this.constructor = constructor;
+							break;
+						}
+					}		
+					if (constructor == null) {
+						return new BasicDiagnostic(Status.ERROR, "There is no constructor for class '" + call.getType() + "' which takes " + call.getInit().size() + " arguments", call);
+					}
 				} else {
 					if (clazz == null) {
 						for (Method method: instance.getClass().getMethods()) {

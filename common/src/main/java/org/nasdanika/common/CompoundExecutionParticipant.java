@@ -35,14 +35,18 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 	}	
 	
 	protected abstract Collection<E> getElements();
+	
+	protected Double size; // Set to null to clear cached value
 
 	@Override
 	public double size() {
-		double ret = 0;
-		for (E e: getElements()) {
-			ret += e.size();
+		if (size == null) {
+			size = 0.0;
+			for (E e: getElements()) {
+				size += e.size();
+			}
 		}
-		return ret;
+		return size;
 	}
 
 	@Override
