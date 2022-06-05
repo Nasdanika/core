@@ -164,7 +164,7 @@ public class MarkdownHelper {
 			Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);			
 			if (endMatcher.find()) {
 			    output.append(input.substring(i, startMatcher.start()));
-				String bareSpec = endMatcherContent.substring(0, endMatcher.start());
+				String bareSpec = processSpec(dialect, endMatcherContent.substring(0, endMatcher.start())) ;
 				String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
 			    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 				
@@ -235,6 +235,16 @@ public class MarkdownHelper {
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();
+	}
+	
+	/**
+	 * Override to process bare spec.
+	 * @param dialect
+	 * @param bareSpec
+	 * @return
+	 */
+	protected String processSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
+		return bareSpec;
 	}
 
 	protected String escapeDiagramSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
