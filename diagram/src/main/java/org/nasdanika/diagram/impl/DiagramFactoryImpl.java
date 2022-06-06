@@ -61,6 +61,7 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 			case DiagramPackage.NOTE: return createNote();
 			case DiagramPackage.STYLE: return createStyle();
 			case DiagramPackage.DIAGRAM_ELEMENT: return createDiagramElement();
+			case DiagramPackage.LAYER: return createLayer();
 			case DiagramPackage.DIAGRAM: return createDiagram();
 			case DiagramPackage.CONNECTION: return createConnection();
 			case DiagramPackage.START: return createStart();
@@ -142,6 +143,17 @@ public class DiagramFactoryImpl extends EFactoryImpl implements DiagramFactory {
 	public DiagramElement createDiagramElement() {
 		DiagramElementImpl diagramElement = new DiagramElementImpl();
 		return diagramElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Layer createLayer() {
+		LayerImpl layer = new LayerImpl();
+		return layer;
 	}
 
 	/**

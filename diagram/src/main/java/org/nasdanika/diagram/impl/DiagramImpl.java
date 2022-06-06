@@ -12,11 +12,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.nasdanika.diagram.Diagram;
-import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramPackage;
-import org.nasdanika.diagram.Note;
+import org.nasdanika.diagram.Layer;
 import org.nasdanika.ncore.Property;
-import org.nasdanika.ncore.impl.NamedElementImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,20 +24,19 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#isHideFootbox <em>Hide Footbox</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getType <em>Type</em>}</li>
- *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getContext <em>Context</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getDepth <em>Depth</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.DiagramImpl#getLayers <em>Layers</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DiagramImpl extends NamedElementImpl implements Diagram {
+public class DiagramImpl extends LayerImpl implements Diagram {
 	/**
 	 * The default value of the '{@link #isVertical() <em>Vertical</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -117,17 +114,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	@Override
 	protected EClass eStaticClass() {
 		return DiagramPackage.Literals.DIAGRAM;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public EList<DiagramElement> getElements() {
-		return (EList<DiagramElement>)eDynamicGet(DiagramPackage.DIAGRAM__ELEMENTS, DiagramPackage.Literals.DIAGRAM__ELEMENTS, true, true);
 	}
 
 	/**
@@ -217,17 +203,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EList<Note> getNotes() {
-		return (EList<Note>)eDynamicGet(DiagramPackage.DIAGRAM__NOTES, DiagramPackage.Literals.DIAGRAM__NOTES, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public EList<Property> getProperties() {
 		return (EList<Property>)eDynamicGet(DiagramPackage.DIAGRAM__PROPERTIES, DiagramPackage.Literals.DIAGRAM__PROPERTIES, true, true);
 	}
@@ -277,15 +252,24 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Layer> getLayers() {
+		return (EList<Layer>)eDynamicGet(DiagramPackage.DIAGRAM__LAYERS, DiagramPackage.Literals.DIAGRAM__LAYERS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case DiagramPackage.DIAGRAM__ELEMENTS:
-				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
-			case DiagramPackage.DIAGRAM__NOTES:
-				return ((InternalEList<?>)getNotes()).basicRemove(otherEnd, msgs);
 			case DiagramPackage.DIAGRAM__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
+			case DiagramPackage.DIAGRAM__LAYERS:
+				return ((InternalEList<?>)getLayers()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -298,8 +282,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DiagramPackage.DIAGRAM__ELEMENTS:
-				return getElements();
 			case DiagramPackage.DIAGRAM__VERTICAL:
 				return isVertical();
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
@@ -308,14 +290,14 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 				return isHideFootbox();
 			case DiagramPackage.DIAGRAM__TYPE:
 				return getType();
-			case DiagramPackage.DIAGRAM__NOTES:
-				return getNotes();
 			case DiagramPackage.DIAGRAM__PROPERTIES:
 				return getProperties();
 			case DiagramPackage.DIAGRAM__CONTEXT:
 				return getContext();
 			case DiagramPackage.DIAGRAM__DEPTH:
 				return getDepth();
+			case DiagramPackage.DIAGRAM__LAYERS:
+				return getLayers();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -329,10 +311,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DiagramPackage.DIAGRAM__ELEMENTS:
-				getElements().clear();
-				getElements().addAll((Collection<? extends DiagramElement>)newValue);
-				return;
 			case DiagramPackage.DIAGRAM__VERTICAL:
 				setVertical((Boolean)newValue);
 				return;
@@ -345,10 +323,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 			case DiagramPackage.DIAGRAM__TYPE:
 				setType((String)newValue);
 				return;
-			case DiagramPackage.DIAGRAM__NOTES:
-				getNotes().clear();
-				getNotes().addAll((Collection<? extends Note>)newValue);
-				return;
 			case DiagramPackage.DIAGRAM__PROPERTIES:
 				getProperties().clear();
 				getProperties().addAll((Collection<? extends Property>)newValue);
@@ -358,6 +332,10 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 				return;
 			case DiagramPackage.DIAGRAM__DEPTH:
 				setDepth((Integer)newValue);
+				return;
+			case DiagramPackage.DIAGRAM__LAYERS:
+				getLayers().clear();
+				getLayers().addAll((Collection<? extends Layer>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -371,9 +349,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DiagramPackage.DIAGRAM__ELEMENTS:
-				getElements().clear();
-				return;
 			case DiagramPackage.DIAGRAM__VERTICAL:
 				setVertical(VERTICAL_EDEFAULT);
 				return;
@@ -386,9 +361,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 			case DiagramPackage.DIAGRAM__TYPE:
 				setType(TYPE_EDEFAULT);
 				return;
-			case DiagramPackage.DIAGRAM__NOTES:
-				getNotes().clear();
-				return;
 			case DiagramPackage.DIAGRAM__PROPERTIES:
 				getProperties().clear();
 				return;
@@ -397,6 +369,9 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 				return;
 			case DiagramPackage.DIAGRAM__DEPTH:
 				setDepth(DEPTH_EDEFAULT);
+				return;
+			case DiagramPackage.DIAGRAM__LAYERS:
+				getLayers().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -410,8 +385,6 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DiagramPackage.DIAGRAM__ELEMENTS:
-				return !getElements().isEmpty();
 			case DiagramPackage.DIAGRAM__VERTICAL:
 				return isVertical() != VERTICAL_EDEFAULT;
 			case DiagramPackage.DIAGRAM__HIDE_EMPTY_DESCRIPTION:
@@ -420,14 +393,14 @@ public class DiagramImpl extends NamedElementImpl implements Diagram {
 				return isHideFootbox() != HIDE_FOOTBOX_EDEFAULT;
 			case DiagramPackage.DIAGRAM__TYPE:
 				return TYPE_EDEFAULT == null ? getType() != null : !TYPE_EDEFAULT.equals(getType());
-			case DiagramPackage.DIAGRAM__NOTES:
-				return !getNotes().isEmpty();
 			case DiagramPackage.DIAGRAM__PROPERTIES:
 				return !getProperties().isEmpty();
 			case DiagramPackage.DIAGRAM__CONTEXT:
 				return getContext() != CONTEXT_EDEFAULT;
 			case DiagramPackage.DIAGRAM__DEPTH:
 				return getDepth() != DEPTH_EDEFAULT;
+			case DiagramPackage.DIAGRAM__LAYERS:
+				return !getLayers().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

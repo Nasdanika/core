@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,6 +39,7 @@ import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.End;
+import org.nasdanika.diagram.Layer;
 import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
@@ -183,11 +185,15 @@ public class DrawioGenerator {
 			Map<DiagramElement,mxCell> elementsMap = new HashMap<>();
 			Map<DiagramElement, Rectangle> geometry = new HashMap<>();
 			layout(diagram, geometry::put);
-			
+						
 			Collection<Connection> connections = new ArrayList<>(); 
 			for (DiagramElement element: diagram.getElements()) {
 				createElement(element, graph, parent, userObjectFactory, geometry::get, elementsMap, connections, 0);
 			}
+			
+			for (Layer layer: diagram.getLayers()) {
+				createLayer(layer, graph, userObjectFactory, geometry::get, elementsMap, connections, 0);
+			}			
 			
 			for (Connection connection: connections) {
 				mxCell source = Objects.requireNonNull(elementsMap.get(connection.eContainer()), "Source cell not found");
@@ -207,8 +213,12 @@ public class DrawioGenerator {
 	 * @param diagram
 	 * @return
 	 */
-	protected Map<DiagramElement, Rectangle> layout(Diagram diagram, BiConsumer<DiagramElement, Rectangle> geometryConsumer) {
-		return layout(diagram.getElements(), new Point(10,10), geometryConsumer);
+	protected Map<DiagramElement, Rectangle> layout(Diagram diagram, BiConsumer<DiagramElement, Rectangle> geometryConsumer) {		
+		List<DiagramElement> allElements = new ArrayList<>(diagram.getElements());
+		for (Layer layer: diagram.getLayers()) {
+			allElements.addAll(layer.getElements());
+		}
+		return layout(allElements, new Point(10,10), geometryConsumer);
 	}
 	
 	/**
@@ -561,6 +571,33 @@ public class DrawioGenerator {
 		
 		return ret.toString();
 	}	
+	
+	/**
+	 * Creates a cell for diagram element and puts element to cell entry to the elements map for creating connections.
+	 * @param element
+	 * @param graph
+	 * @param parent
+	 * @param userObjectFactory
+	 * @param elementsMap
+	 */
+	protected void createLayer(
+			Layer layer, 
+			mxGraph graph, 
+			Document userObjectFactory,
+			Function<DiagramElement, Rectangle> geometry,
+			Map<DiagramElement, mxCell> elementsMap,
+			Collection<Connection> connections,
+			int depth) {
+		
+		mxCell layerCell = (mxCell) graph.insertVertex(graph.getModel().getRoot(), UUID.randomUUID().toString(), layer.getName(), 0, 0, 0, 0);
+		layerCell.setVertex(false);
+		layerCell.setGeometry(null);
+		
+		for (DiagramElement element: layer.getElements()) {
+			createElement(element, graph, layerCell, userObjectFactory, geometry, elementsMap, connections, 0);
+		}
+	}
+	
 	
 	/**
 	 * Creates a cell for diagram element and puts element to cell entry to the elements map for creating connections.

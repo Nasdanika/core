@@ -96,9 +96,21 @@ public class DiagramSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DiagramPackage.LAYER: {
+				Layer layer = (Layer)theEObject;
+				T result = caseLayer(layer);
+				if (result == null) result = caseNamedElement(layer);
+				if (result == null) result = caseModelElement(layer);
+				if (result == null) result = caseMarked(layer);
+				if (result == null) result = caseAdaptable(layer);
+				if (result == null) result = caseIMarked(layer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DiagramPackage.DIAGRAM: {
 				Diagram diagram = (Diagram)theEObject;
 				T result = caseDiagram(diagram);
+				if (result == null) result = caseLayer(diagram);
 				if (result == null) result = caseNamedElement(diagram);
 				if (result == null) result = caseModelElement(diagram);
 				if (result == null) result = caseMarked(diagram);
@@ -193,6 +205,21 @@ public class DiagramSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDiagramElement(DiagramElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Layer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Layer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLayer(Layer object) {
 		return null;
 	}
 

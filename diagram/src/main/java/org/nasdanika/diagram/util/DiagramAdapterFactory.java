@@ -88,6 +88,10 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 				return createDiagramElementAdapter();
 			}
 			@Override
+			public Adapter caseLayer(Layer object) {
+				return createLayerAdapter();
+			}
+			@Override
 			public Adapter caseDiagram(Diagram object) {
 				return createDiagramAdapter();
 			}
@@ -196,6 +200,20 @@ public class DiagramAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDiagramElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.diagram.Layer <em>Layer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.diagram.Layer
+	 * @generated
+	 */
+	public Adapter createLayerAdapter() {
 		return null;
 	}
 

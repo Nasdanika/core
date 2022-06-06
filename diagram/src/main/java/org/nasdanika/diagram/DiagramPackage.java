@@ -460,14 +460,14 @@ public interface DiagramPackage extends EPackage {
 	int DIAGRAM_ELEMENT_OPERATION_COUNT = LINK_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.LayerImpl <em>Layer</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.diagram.impl.DiagramImpl
-	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagram()
+	 * @see org.nasdanika.diagram.impl.LayerImpl
+	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getLayer()
 	 * @generated
 	 */
-	int DIAGRAM = 4;
+	int LAYER = 4;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -476,7 +476,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__MARKERS = NcorePackage.NAMED_ELEMENT__MARKERS;
+	int LAYER__MARKERS = NcorePackage.NAMED_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uri</b></em>' attribute.
@@ -485,7 +485,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__URI = NcorePackage.NAMED_ELEMENT__URI;
+	int LAYER__URI = NcorePackage.NAMED_ELEMENT__URI;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -494,7 +494,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
+	int LAYER__DESCRIPTION = NcorePackage.NAMED_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -503,7 +503,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__UUID = NcorePackage.NAMED_ELEMENT__UUID;
+	int LAYER__UUID = NcorePackage.NAMED_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
@@ -512,7 +512,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__ACTION_PROTOTYPE = NcorePackage.NAMED_ELEMENT__ACTION_PROTOTYPE;
+	int LAYER__ACTION_PROTOTYPE = NcorePackage.NAMED_ELEMENT__ACTION_PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -521,7 +521,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__NAME = NcorePackage.NAMED_ELEMENT__NAME;
+	int LAYER__NAME = NcorePackage.NAMED_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -530,43 +530,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__ELEMENTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Vertical</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIAGRAM__VERTICAL = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Hide Empty Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIAGRAM__HIDE_EMPTY_DESCRIPTION = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Hide Footbox</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIAGRAM__HIDE_FOOTBOX = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DIAGRAM__TYPE = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 4;
+	int LAYER__ELEMENTS = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' containment reference list.
@@ -575,7 +539,143 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__NOTES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 5;
+	int LAYER__NOTES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Layer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Layer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.diagram.impl.DiagramImpl
+	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getDiagram()
+	 * @generated
+	 */
+	int DIAGRAM = 5;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__MARKERS = LAYER__MARKERS;
+
+	/**
+	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__URI = LAYER__URI;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__DESCRIPTION = LAYER__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__UUID = LAYER__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__ACTION_PROTOTYPE = LAYER__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__NAME = LAYER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__ELEMENTS = LAYER__ELEMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Notes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__NOTES = LAYER__NOTES;
+
+	/**
+	 * The feature id for the '<em><b>Vertical</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__VERTICAL = LAYER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Hide Empty Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__HIDE_EMPTY_DESCRIPTION = LAYER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Hide Footbox</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__HIDE_FOOTBOX = LAYER_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__TYPE = LAYER_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
@@ -584,7 +684,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__PROPERTIES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 6;
+	int DIAGRAM__PROPERTIES = LAYER_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Context</b></em>' attribute.
@@ -593,7 +693,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__CONTEXT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 7;
+	int DIAGRAM__CONTEXT = LAYER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Depth</b></em>' attribute.
@@ -602,7 +702,16 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM__DEPTH = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 8;
+	int DIAGRAM__DEPTH = LAYER_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Layers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__LAYERS = LAYER_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Diagram</em>' class.
@@ -611,7 +720,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 9;
+	int DIAGRAM_FEATURE_COUNT = LAYER_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Diagram</em>' class.
@@ -620,7 +729,7 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DIAGRAM_OPERATION_COUNT = NcorePackage.NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int DIAGRAM_OPERATION_COUNT = LAYER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.diagram.impl.ConnectionImpl <em>Connection</em>}' class.
@@ -630,7 +739,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getConnection()
 	 * @generated
 	 */
-	int CONNECTION = 5;
+	int CONNECTION = 6;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -749,7 +858,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getStart()
 	 * @generated
 	 */
-	int START = 6;
+	int START = 7;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -939,7 +1048,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getEnd()
 	 * @generated
 	 */
-	int END = 7;
+	int END = 8;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -1130,7 +1239,7 @@ public interface DiagramPackage extends EPackage {
 	 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getNotePlacement()
 	 * @generated
 	 */
-	int NOTE_PLACEMENT = 8;
+	int NOTE_PLACEMENT = 9;
 
 
 	/**
@@ -1405,6 +1514,38 @@ public interface DiagramPackage extends EPackage {
 	EAttribute getDiagramElement_Border();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.diagram.Layer <em>Layer</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Layer</em>'.
+	 * @see org.nasdanika.diagram.Layer
+	 * @generated
+	 */
+	EClass getLayer();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Layer#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.nasdanika.diagram.Layer#getElements()
+	 * @see #getLayer()
+	 * @generated
+	 */
+	EReference getLayer_Elements();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Layer#getNotes <em>Notes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Notes</em>'.
+	 * @see org.nasdanika.diagram.Layer#getNotes()
+	 * @see #getLayer()
+	 * @generated
+	 */
+	EReference getLayer_Notes();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Diagram <em>Diagram</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1413,17 +1554,6 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDiagram();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Diagram#getElements <em>Elements</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Elements</em>'.
-	 * @see org.nasdanika.diagram.Diagram#getElements()
-	 * @see #getDiagram()
-	 * @generated
-	 */
-	EReference getDiagram_Elements();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}'.
@@ -1470,17 +1600,6 @@ public interface DiagramPackage extends EPackage {
 	EAttribute getDiagram_Type();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Diagram#getNotes <em>Notes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Notes</em>'.
-	 * @see org.nasdanika.diagram.Diagram#getNotes()
-	 * @see #getDiagram()
-	 * @generated
-	 */
-	EReference getDiagram_Notes();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Diagram#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1512,6 +1631,17 @@ public interface DiagramPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDiagram_Depth();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.diagram.Diagram#getLayers <em>Layers</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Layers</em>'.
+	 * @see org.nasdanika.diagram.Diagram#getLayers()
+	 * @see #getDiagram()
+	 * @generated
+	 */
+	EReference getDiagram_Layers();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Connection <em>Connection</em>}'.
@@ -1807,6 +1937,32 @@ public interface DiagramPackage extends EPackage {
 		EAttribute DIAGRAM_ELEMENT__BORDER = eINSTANCE.getDiagramElement_Border();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.LayerImpl <em>Layer</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.diagram.impl.LayerImpl
+		 * @see org.nasdanika.diagram.impl.DiagramPackageImpl#getLayer()
+		 * @generated
+		 */
+		EClass LAYER = eINSTANCE.getLayer();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LAYER__ELEMENTS = eINSTANCE.getLayer_Elements();
+
+		/**
+		 * The meta object literal for the '<em><b>Notes</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LAYER__NOTES = eINSTANCE.getLayer_Notes();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1815,14 +1971,6 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EClass DIAGRAM = eINSTANCE.getDiagram();
-
-		/**
-		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DIAGRAM__ELEMENTS = eINSTANCE.getDiagram_Elements();
 
 		/**
 		 * The meta object literal for the '<em><b>Vertical</b></em>' attribute feature.
@@ -1857,14 +2005,6 @@ public interface DiagramPackage extends EPackage {
 		EAttribute DIAGRAM__TYPE = eINSTANCE.getDiagram_Type();
 
 		/**
-		 * The meta object literal for the '<em><b>Notes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference DIAGRAM__NOTES = eINSTANCE.getDiagram_Notes();
-
-		/**
 		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1887,6 +2027,14 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DIAGRAM__DEPTH = eINSTANCE.getDiagram_Depth();
+
+		/**
+		 * The meta object literal for the '<em><b>Layers</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DIAGRAM__LAYERS = eINSTANCE.getDiagram_Layers();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.ConnectionImpl <em>Connection</em>}' class.

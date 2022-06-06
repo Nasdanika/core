@@ -43,16 +43,19 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/gradient"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//DiagramElement/border"/>
     </genClasses>
+    <genClasses ecoreClass="diagram.ecore#//Layer">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Layer/elements"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Layer/notes"/>
+    </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Diagram">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/elements"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/vertical"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/hideEmptyDescription"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/hideFootbox"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/type"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/notes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/properties"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/context"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/depth"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Diagram/layers"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Connection">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference diagram.ecore#//Connection/target"/>

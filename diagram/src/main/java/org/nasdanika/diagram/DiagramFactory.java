@@ -58,6 +58,15 @@ public interface DiagramFactory extends EFactory {
 	DiagramElement createDiagramElement();
 
 	/**
+	 * Returns a new object of class '<em>Layer</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Layer</em>'.
+	 * @generated
+	 */
+	Layer createLayer();
+
+	/**
 	 * Returns a new object of class '<em>Diagram</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

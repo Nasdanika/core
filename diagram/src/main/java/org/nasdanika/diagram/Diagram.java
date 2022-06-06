@@ -3,7 +3,6 @@
 package org.nasdanika.diagram;
 
 import org.eclipse.emf.common.util.EList;
-import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.Property;
 
 /**
@@ -15,37 +14,21 @@ import org.nasdanika.ncore.Property;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.diagram.Diagram#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isVertical <em>Vertical</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideEmptyDescription <em>Hide Empty Description</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#isHideFootbox <em>Hide Footbox</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#getType <em>Type</em>}</li>
- *   <li>{@link org.nasdanika.diagram.Diagram#getNotes <em>Notes</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#getContext <em>Context</em>}</li>
  *   <li>{@link org.nasdanika.diagram.Diagram#getDepth <em>Depth</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.Diagram#getLayers <em>Layers</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.diagram.DiagramPackage#getDiagram()
  * @model annotation="urn:org.nasdanika documentation-reference='doc/diagram.md'"
  * @generated
  */
-public interface Diagram extends NamedElement {
-	/**
-	 * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.diagram.DiagramElement}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Diagram elements.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Elements</em>' containment reference list.
-	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Elements()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<DiagramElement> getElements();
-
+public interface Diagram extends Layer {
 	/**
 	 * Returns the value of the '<em><b>Vertical</b></em>' attribute.
 	 * The default value is <code>"true"</code>.
@@ -148,22 +131,6 @@ public interface Diagram extends NamedElement {
 	void setType(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Notes</b></em>' containment reference list.
-	 * The list contents are of type {@link org.nasdanika.diagram.Note}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Diagram notes (legend).
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Notes</em>' containment reference list.
-	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Notes()
-	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
-	 * @generated
-	 */
-	EList<Note> getNotes();
-
-	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
 	 * <!-- begin-user-doc -->
@@ -227,5 +194,20 @@ public interface Diagram extends NamedElement {
 	 * @generated
 	 */
 	void setDepth(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Layers</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.diagram.Layer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Diagram elements.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Layers</em>' containment reference list.
+	 * @see org.nasdanika.diagram.DiagramPackage#getDiagram_Layers()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<Layer> getLayers();
 
 } // Diagram

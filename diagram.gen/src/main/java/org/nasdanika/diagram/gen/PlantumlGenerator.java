@@ -13,6 +13,7 @@ import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.End;
+import org.nasdanika.diagram.Layer;
 import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
@@ -55,10 +56,22 @@ public class PlantumlGenerator {
 			ret.append(renderNote(note));
 			ret.append("end note");
 		}
+		for (Layer layer: diagram.getLayers()) {
+			for (Note note: layer.getNotes()) {
+				ret.append("note as note_").append(++noteIdx);
+				ret.append(renderNote(note));
+				ret.append("end note");
+			}
+		}
 		
 		List<Connection> connections = new ArrayList<>();
 		for (DiagramElement de: diagram.getElements()) {
 			ret.append(generate(de, connections, 0));
+		}
+		for (Layer layer: diagram.getLayers()) {
+			for (DiagramElement de: layer.getElements()) {
+				ret.append(generate(de, connections, 0));
+			}
 		}
 		
 		for (Connection c: connections) {
