@@ -585,7 +585,7 @@ public class PlantUmlTextGenerator {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
 		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), style);
 		if (isAppendAttributes(eClass)) {
-			for (EAttribute attribute: eClass.getEAttributes()) {			
+			for (EAttribute attribute: eClass.getEAttributes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {			
 				EGenericType eGenericType = attribute.getEGenericType();
 				if (eGenericType != null) {
 					appendAttribute(null, null, genericName(eGenericType) + (attribute.isMany() ? "[]" : ""), getLocalizedName(attribute));
@@ -593,7 +593,7 @@ public class PlantUmlTextGenerator {
 			}
 		}
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
-		for (EReference reference: eClass.getEReferences()) {
+		for (EReference reference: eClass.getEReferences().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
 			EGenericType eGenericType = reference.getEGenericType();			
 			if (eGenericType == null || !allClassifiers.contains(reference.getEReferenceType())) {
 				appendAttribute(null, null, genericName(eGenericType) + (reference.isMany() ? "[]" : ""), getLocalizedName(reference));
@@ -602,7 +602,7 @@ public class PlantUmlTextGenerator {
 		
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
 		if (isAppendOperations(eClass)) {
-			for (EOperation op : eClass.getEOperations()) {
+			for (EOperation op : eClass.getEOperations().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
 				Collection<String> parameters = new ArrayList<String>();
 				for (EParameter parameter : op.getEParameters()) {
 					String paramString = getLocalizedName(parameter);
