@@ -6,6 +6,7 @@ import java.nio.file.Files;
 
 import org.junit.Test;
 import org.nasdanika.common.DiagramGenerator;
+import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;
@@ -19,8 +20,19 @@ public class TestDrawioDiagram {
 	
 	@Test
 	public void generateDrawioDiagram() throws Exception {
+		Diagram diagram = createAwsDiagram(null);
+	
+		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
+		String diagramModel = generator.generateModel(diagram);
+		File outputDir = new File("target/diagrams");
+		outputDir.mkdirs();
+		Files.write(new File(outputDir, "aws.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+	}
+
+	protected Diagram createAwsDiagram(String pageUUID) {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 		Diagram diagram = diagramFactory.createDiagram();
+		diagram.setName("AWS");
 		
 		DiagramElement awsCloud = diagramFactory.createDiagramElement();
 		diagram.getElements().add(awsCloud);
@@ -29,7 +41,7 @@ public class TestDrawioDiagram {
 		DiagramElement awsS3 = diagramFactory.createDiagramElement();
 		awsCloud.getElements().add(awsS3);
 		awsS3.setText("AWS S3 Bucket");
-		awsS3.setLocation("https://aws.amazon.com/s3/");
+		awsS3.setLocation(Util.isBlank(pageUUID) ? "https://aws.amazon.com/s3/" : "data:page/id," + pageUUID);
 		awsS3.setTooltip("Object storage built to retrieve any amount of data from anywhere");
 		
 		// Styling
@@ -56,18 +68,24 @@ public class TestDrawioDiagram {
 		Connection connection = diagramFactory.createConnection();
 		awsS3.getConnections().add(connection);
 		connection.setTarget(awsCodePipeline);
+		return diagram;
+	}
+	
+	@Test
+	public void generateLayeredDrawioDiagram() throws Exception {
+		Diagram diagram = createLayeredAwsDiagram();
 	
 		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
 		String diagramModel = generator.generateModel(diagram);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.write(new File(outputDir, "aws.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+		Files.write(new File(outputDir, "aws-layered.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
 	}
-	
-	@Test
-	public void generateLayeredDrawioDiagram() throws Exception {
+
+	protected Diagram createLayeredAwsDiagram() {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
 		Diagram diagram = diagramFactory.createDiagram();
+		diagram.setName("Layered AWS");;
 		
 		Layer awsLayer = diagramFactory.createLayer();
 		awsLayer.setName("AWS");
@@ -107,12 +125,20 @@ public class TestDrawioDiagram {
 		Connection connection = diagramFactory.createConnection();
 		awsS3.getConnections().add(connection);
 		connection.setTarget(awsCodePipeline);
+		return diagram;
+	}
+	
+	@Test
+	public void generateMultiPageDrawioDiagram() throws Exception {
+		Diagram awsLayeredDiagram = createLayeredAwsDiagram();		
+		Diagram awsDiagram = createAwsDiagram(awsLayeredDiagram.getUuid());
 	
 		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
-		String diagramModel = generator.generateModel(diagram);
+		String diagramModel = generator.generateModel(awsDiagram, awsLayeredDiagram);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.write(new File(outputDir, "aws-layered.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+		Files.write(new File(outputDir, "aws-multi-page.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
 	}
+	
 
 }

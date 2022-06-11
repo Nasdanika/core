@@ -2,7 +2,6 @@ package org.nasdanika.diagram.gen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -21,18 +20,13 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.parsers.DocumentBuilder;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;
@@ -64,6 +58,7 @@ import com.mxgraph.view.mxGraph;
 
 /**
  * Generates Drawio diagrams.
+ * For cross-page links use the following format: data:page/id,<diagram uuid>
  * @author Pavel
  *
  */
@@ -94,43 +89,30 @@ public class DrawioGenerator {
 	 * @param diagram
 	 * @return
 	 */
-	public String generateModel(Diagram diagram) throws Exception {
+	public String generateModel(Diagram... diagrams) throws Exception {
 		mxCodec codec = new mxCodec();
-		mxIGraphModel model = generateGraph(diagram).getModel();
-		Node encodedNode = codec.encode(model);
-//		dump((mxCell) model.getRoot(), 0);
-		String encodedDiagram = encodeDiagram(encodedNode, diagram.getUuid(), diagram.getName());
-		return encodedDiagram;
-	}
-	
-	/**
-	 * Encodes diagram node to .drawio format without compression and with indenting to make it more human readable and comparable/mergeable.
-	 * @param diagramNode
-	 * @return
-	 * @throws Exception
-	 */
-	protected String encodeDiagram(Node diagramNode, String id, String name) throws Exception {
-		String templateSource = DefaultConverter.INSTANCE.stringContent(getClass().getResource("template.drawio"));
-		Document xmlDocument = mxXmlUtils.parseXml(templateSource);
-        Element diagram = (Element) xmlDocument.getElementsByTagName("diagram").item(0);
-        if (!Util.isBlank(id)) {
-        	diagram.setAttribute("id", id);
-        }
-        if (!Util.isBlank(name)) {
-        	diagram.setAttribute("name", name);
-        }
-        diagram.appendChild(xmlDocument.importNode(diagramNode, true));
-        
-		Transformer transformer = TransformerFactory.newInstance().newTransformer();
-
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
-		StreamResult dest = new StreamResult(new StringWriter());
-		transformer.transform(new DOMSource(xmlDocument), dest);
-
-		return dest.getWriter().toString();
+		DocumentBuilder documentBuilder = mxXmlUtils.getDocumentBuilder();
+		Document xmlDocument = documentBuilder.newDocument();
+		Element mxFileElement = xmlDocument.createElement("mxfile");
+		mxFileElement.setAttribute("type", "device");
+		mxFileElement.setAttribute("compressed", "false");
+		xmlDocument.appendChild(mxFileElement);
+		for (Diagram diagram: diagrams) {	
+			Element diagramElement = xmlDocument.createElement("diagram");
+	        mxFileElement.appendChild(diagramElement);
+	        if (!Util.isBlank(diagram.getUuid())) {
+	        	diagramElement.setAttribute("id", diagram.getUuid());
+	        }
+	        if (!Util.isBlank(diagram.getName())) {
+	        	diagramElement.setAttribute("name", diagram.getName());
+	        }
+	    
+	        // TODO - support of compression, copy from app util
+			mxIGraphModel model = generateGraph(diagram).getModel();
+			Node encodedNode = codec.encode(model);
+	        diagramElement.appendChild(xmlDocument.importNode(encodedNode, true));
+		}
+		return mxXmlUtils.getXml(xmlDocument);
 	}
 	
 //	/**
