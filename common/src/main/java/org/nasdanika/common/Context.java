@@ -619,14 +619,26 @@ public interface Context extends Composeable<Context> {
 				return get(key, Object.class);
 			}
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public <T> T get(String key, Class<T> type) {
+				Object value = Context.this.get(key, (Class<?>) null);
+				
+				if (value instanceof PropertyComputer) {
+					return ((PropertyComputer) value).compute(this, key, null, type);
+				}
+				
+				if (value instanceof Function) {
+					return ((Function<Context, T>) value).apply(this);
+				}
+				
+				if (value instanceof BiFunction) {
+					return ((BiFunction<Context, Class<?>, T>) value).apply(this, type);
+				}													
+				
 				T ret = Context.this.get(key, type);
 				
 				// At the spot computing of the property itself
-				if (ret instanceof PropertyComputer) {
-					return ((PropertyComputer) ret).compute(this, key, null, type);
-				}								
 				
 				return ret == null ? computeByParent(key, null, type) : ret;
 			}
