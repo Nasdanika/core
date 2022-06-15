@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -396,14 +397,22 @@ public class TestCommon {
 //		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));
 	}
 	
-	@Test
-	public void testURI() throws Exception {
-		URI sourceURI = URI.createURI("file:///C:/Users/Pavel/git/nasdanika.github.io/docs/modules/html/modules/models/modules/app/modules/model/index.html#content-left-navigation-panel");
-		URI targetURI = URI.createURI("file:///C:/Users/Pavel/git/nasdanika.github.io/docs/search.html");
-		URI deresolved = targetURI.deresolve(sourceURI, true, true, true);
-		System.out.println(deresolved);
-		URI pURI = deresolved.appendSegment("");
-		System.out.println(pURI + " -"+pURI.lastSegment()+"-");
-	}
+//	@Test
+//	public void testURI() throws Exception {
+//		URI uri = URI.createHierarchicalURI("z", "nasdanika", null, new String[] { "core", "", "pu", "" }, null, null);
+//		System.out.println(uri + " " + Arrays.toString(uri.segments()) + " " + uri.isHierarchical() + " " + uri.hasAbsolutePath());
+//		
+//		URI subURI = URI.createURI("common/persistence");
+//		System.out.println(subURI.resolve(uri));
+//		System.out.println(subURI.scheme() + ", " + subURI.authority() + ", " + Arrays.toString(subURI.segments()));
+//		
+//		
+//		URI sourceURI = URI.createURI("file:///C:/Users/Pavel/git/nasdanika.github.io/docs/modules/html/modules/models/modules/app/modules/model/index.html#content-left-navigation-panel");
+//		URI targetURI = URI.createURI("file:///C:/Users/Pavel/git/nasdanika.github.io/docs/search.html");
+//		URI deresolved = targetURI.deresolve(sourceURI, true, true, true);
+//		System.out.println(deresolved);
+//		URI pURI = deresolved.appendSegment("");
+//		System.out.println(pURI + " -"+pURI.lastSegment()+"-");
+//	}
 	
 }
