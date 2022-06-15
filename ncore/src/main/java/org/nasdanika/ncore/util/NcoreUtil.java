@@ -234,43 +234,81 @@ public final class NcoreUtil {
 			if (eObj == null || isEMapEntry(eObj)) {
 				return null; // EMap entries do not have URI's.
 			}
-			
+
+			URI ret = null;
 			if (eObj instanceof ModelElement) {
 				String uri = ((ModelElement) eObj).getUri();
 				if (!Util.isBlank(uri)) {
-					return URI.createURI(uri);
+					ret = URI.createURI(uri);
+					if (ret.hasAbsolutePath()) {
+						return ret;
+					}
 				}
-			}
+			}			
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
 			if (containmentPath == null) {
-				return null;
+				return ret;
 			}
 			EObject container = containmentPath.getFirst();
 			if (container == null) {
-	//			Leads to stack overflow during loading.			
-	//			for (EObject referrer: getReferrers(eObj, NcorePackage.Literals.REFERENCE__TARGET)) {
-	//				return getUri(referrer);
-	//			}
-				if (eObj instanceof ModelElement) {
+				if (ret == null && eObj instanceof ModelElement) {
 					String uuid = ((ModelElement) eObj).getUuid();
 					if (!Util.isBlank(uuid)) {
 						return URI.createURI("uuid://" + uuid);
 					}
 				}
-				return null;
+				return ret;
 			}
 			
 			URI cURI = getUri(container);
-			if (cURI == null || !cURI.isHierarchical()) {
-				return null;
+			if (cURI == null) {
+				return ret;
 			}
-			String cLastSegment = cURI.lastSegment();
-			if (cLastSegment == null || cLastSegment.length() > 0) {
-				cURI = cURI.appendSegment("");
-			}
+			
 			URI cpURI = URI.createURI(containmentPath.getSecond());
-			return cpURI.resolve(cURI);
+			
+			if (cURI.hasAbsolutePath()) {
+				String cLastSegment = cURI.lastSegment();
+				if (cLastSegment == null || cLastSegment.length() > 0) {
+					cURI = cURI.appendSegment("");
+				}
+				URI containementURI = cpURI.resolve(cURI);
+				return ret == null ? containementURI : ret.resolve(containementURI);
+			}
+			
+			// Resolving containment path URI against container URI by combining all segments and treating the first first segment as scheme, second as authority and the rest as segments.			
+			List<String> allParts = new ArrayList<>();
+			if (cURI.scheme() != null) {
+				allParts.add(cURI.scheme());
+			}
+			if (cURI.authority() != null) {
+				allParts.add(cURI.authority());
+			}
+			allParts.addAll(cURI.segmentsList());
+			
+			if (cpURI.scheme() != null) {
+				allParts.add(cpURI.scheme());
+			}
+			if (cpURI.authority() != null) {
+				allParts.add(cpURI.authority());
+			}
+			allParts.addAll(cpURI.segmentsList());
+			
+			if (allParts.size() == 0) {
+				return ret;
+			}
+			
+			if (allParts.size() == 1) {
+				return ret == null ? URI.createURI(allParts.get(0)) : ret;
+			}
+
+			if (allParts.size() == 2 && allParts.get(1).length() == 0) {
+				return URI.createURI(String.join("/", allParts) + (ret == null ? "" : ret));				
+			}
+			
+			URI allPartsURI = URI.createHierarchicalURI(allParts.get(0), allParts.get(1), null, allParts.subList(2, allParts.size()).toArray(new String[allParts.size() - 2]), null, null);
+			return ret == null ? allPartsURI : ret.resolve(allPartsURI);
 		}
 
 	/**
