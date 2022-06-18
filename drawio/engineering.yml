@@ -1,0 +1,5 @@
+engineering-module:
+  name: Drawio
+  path: drawio
+  action-prototype: "../javadoc-action-prototype.xml#/"
+    
