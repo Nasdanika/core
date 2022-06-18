@@ -1,7 +1,6 @@
 package org.nasdanika.cli;
 
 import java.io.File;
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -10,14 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.fusesource.jansi.HtmlAnsiOutputStream;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Help;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 
@@ -60,12 +57,13 @@ public class HelpCommand extends CommandBase {
 			out.print("</td></tr></table>");
 			
 			out.println("<pre style=\"background:black;color:white;padding:5px;width:max-content\">");
-			try (HtmlAnsiOutputStream haos = new HtmlAnsiOutputStream(new FilterOutputStream(out) { @Override public void close() {} })) {
-				try (PrintStream ps = new PrintStream(haos)) {
-					cmd.usage(ps, Help.Ansi.ON);
-				}
-				haos.flush();
-			}
+			out.println("TODO - implement, HtmlAnsiOutputStream is not available in jansi anymore");
+//			try (HtmlAnsiOutputStream haos = new HtmlAnsiOutputStream(new FilterOutputStream(out) { @Override public void close() {} })) {
+//				try (PrintStream ps = new PrintStream(haos)) {
+//					cmd.usage(ps, Help.Ansi.ON);
+//				}
+//				haos.flush();
+//			}
 			out.println("</pre>");
 
 			// Description 
