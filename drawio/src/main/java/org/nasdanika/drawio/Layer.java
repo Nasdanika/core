@@ -2,8 +2,8 @@ package org.nasdanika.drawio;
 
 import java.util.List;
 
-public interface Layer extends PageElement {
+public interface Layer extends ModelElement {
 
-	List<PageElement> getElements();
+	List<ModelElement> getElements();
 	
 }

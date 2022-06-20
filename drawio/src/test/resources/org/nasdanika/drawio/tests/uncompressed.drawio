@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2022-06-18T20:11:42.567Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36" etag="9HYPMPOXUuCbXvigfAZZ" compressed="false" version="19.0.3" type="device" pages="2">
+<mxfile host="Electron" modified="2022-06-20T01:57:52.080Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/19.0.3 Chrome/102.0.5005.63 Electron/19.0.3 Safari/537.36" etag="PDt1UQ_NUa20esZ00yTk" compressed="false" version="19.0.3" type="device" pages="2">
   <diagram id="ZnghoZRAUyGX2wOghst_" name="Page-1">
     <mxGraphModel dx="1102" dy="1025" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -6,20 +6,37 @@
           <mxCell />
         </object>
         <mxCell id="1" parent="0" />
-        <mxCell id="jjaQ23NKAjQkogvSnO1M-1" value="Background thingie" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;shadow=1;" vertex="1" parent="1">
-          <mxGeometry x="360" y="480" width="120" height="80" as="geometry" />
+        <object label="Connection with uri" uri="connection-uri" id="DXofuHY154QGWzICK8kG-2">
+          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jjaQ23NKAjQkogvSnO1M-1" target="1AnREogHo7OAvXgXjlUe-4" edge="1">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="DXofuHY154QGWzICK8kG-1" value="Simple Connection" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="1AnREogHo7OAvXgXjlUe-3" target="jjaQ23NKAjQkogvSnO1M-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="130" y="520" />
+              <mxPoint x="280" y="520" />
+              <mxPoint x="280" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DXofuHY154QGWzICK8kG-3" value="Vertical Container" style="swimlane;" parent="1" vertex="1">
+          <mxGeometry x="450" y="590" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="jjaQ23NKAjQkogvSnO1M-1" value="Background thingie" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;shadow=1;" parent="DXofuHY154QGWzICK8kG-3" vertex="1">
+          <mxGeometry x="40" y="70" width="120" height="80" as="geometry" />
         </mxCell>
         <object label="Layer Two" id="1AnREogHo7OAvXgXjlUe-1">
           <mxCell parent="0" />
         </object>
-        <mxCell id="1AnREogHo7OAvXgXjlUe-3" value="Simple Shape" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1AnREogHo7OAvXgXjlUe-1">
-          <mxGeometry x="100" y="100" width="120" height="60" as="geometry" />
+        <mxCell id="1AnREogHo7OAvXgXjlUe-3" value="Simple Shape" style="rounded=0;whiteSpace=wrap;html=1;" parent="1AnREogHo7OAvXgXjlUe-1" vertex="1">
+          <mxGeometry x="70" y="670" width="120" height="60" as="geometry" />
         </mxCell>
         <object label="Layer One" uri="layers://one" id="1AnREogHo7OAvXgXjlUe-2">
           <mxCell parent="0" />
         </object>
         <object label="&lt;b&gt;Formatted&lt;br&gt;Text&lt;br&gt;&lt;/b&gt;" uri="my-uri" tooltip="Shape tooltip" link="https://www.nasdanika.org" id="1AnREogHo7OAvXgXjlUe-4">
-          <mxCell style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;shadow=1;" vertex="1" parent="1AnREogHo7OAvXgXjlUe-2">
+          <mxCell style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;shadow=1;" parent="1AnREogHo7OAvXgXjlUe-2" vertex="1">
             <mxGeometry x="490" y="180" width="80" height="80" as="geometry" />
           </mxCell>
         </object>

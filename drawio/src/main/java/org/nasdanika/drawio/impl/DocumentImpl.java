@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class DocumentImpl implements Document {
+public class DocumentImpl extends ElementImpl implements Document {
 	
 	private org.w3c.dom.Document document;
 
@@ -62,7 +62,11 @@ public class DocumentImpl implements Document {
 
 			@Override
 			public Page get(int index) {
-				return new PageImpl(getChildrenElements(getElement(), "diagram").get(index));
+				try {
+					return new PageImpl(getChildrenElements(getElement(), "diagram").get(index));
+				} catch (IOException | ParserConfigurationException | SAXException e) {
+					throw new IllegalArgumentException("Error loading compressed page", e);
+				}
 			}
 
 			@Override
@@ -96,6 +100,5 @@ public class DocumentImpl implements Document {
 		}
 		return ret;
 	}
-	
 
 }

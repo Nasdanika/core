@@ -1,10 +1,16 @@
 package org.nasdanika.drawio;
 
+import java.util.List;
+
 public interface Page extends Element {
-	
+
 	/**
-	 * @return Diagram root which contains layers.
+	 * @return A list of models. Usually there is only one model, but technically multiple models are possible.
 	 */
-	Root getRoot();
+	List<Model> getModels();
+
+	String getName();
+	
+	void setName(String name);
 
 }

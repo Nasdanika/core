@@ -1,65 +1,125 @@
 package org.nasdanika.drawio.impl;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.AbstractList;
+import java.util.List;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.codec.binary.Base64;
+import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.Root;
-import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
-public class PageImpl implements Page {
+
+class PageImpl extends ElementImpl implements Page {
 	
-	private Element element;
-	private String id;
-
-	PageImpl(org.w3c.dom.Element element) {
+	/**
+	 * Decompressed and parsed model document for compressed diagrams.
+	 * Document root is the model.
+	 */
+	private org.w3c.dom.Document modelDocument;
+	
+	/**
+	 * Model elements for uncompressed documents
+	 */
+	private List<org.w3c.dom.Element> modelElements;
+	
+	PageImpl(org.w3c.dom.Element element) throws IOException, ParserConfigurationException, SAXException {
 		this.element = element;
-		if (element.hasAttribute("id")) {
-			id = element.getAttribute("id");
+		modelElements = DocumentImpl.getChildrenElements(element, "mxGraphModel");
+		if (modelElements.isEmpty()) {
+			String textContent = element.getTextContent();
+			if (!Base64.isBase64(textContent)) {
+				throw new IllegalArgumentException("Compressed diagram is not Base64 encoded");
+			}
+		    byte[] compressed = Base64.decodeBase64(textContent);
+		    byte[] decompressed = inflate(compressed);
+		    String decompressedStr = new String(decompressed, StandardCharsets.UTF_8);
+		    String decodedStr = URLDecoder.decode(decompressedStr, StandardCharsets.UTF_8.name());
+		    
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			modelDocument = dBuilder.parse(new InputSource(new StringReader(decodedStr)));
+		}		
+	}
+
+	private static  byte[] inflate(byte[] content) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new InflaterOutputStream(baos, new Inflater(true))) {
+	        byte[] buf = new byte[8192];
+	        int length;
+	        while ((length = source.read(buf)) > 0) {
+	            target.write(buf, 0, length);
+	        }
 		}
-	}
-
-	@Override
-	public Element getElement() {
-		return element;
-	}
-
-	@Override
-	public <T> T accept(BiFunction<org.nasdanika.drawio.Element, Map<org.nasdanika.drawio.Element, T>, T> visitor) {
-//		Map<org.nasdanika.drawio.Element, T> layerResults = new LinkedHashMap<>();  // TODO - change to root - singleton map
-//		for (Page page: getPages()) {
-//			pageResults.put(page, page.accept(visitor));
-//		}
-		Root root = getRoot();
-		return visitor.apply(this, root == null ? Collections.emptyMap() : Collections.singletonMap(root, root.accept(visitor)));
-	}
-
-	@Override
-	public int hashCode() {
-		return id == null ? super.hashCode() : id.hashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		PageImpl other = (PageImpl) obj;
-		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public Root getRoot() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return baos.toByteArray();
 	}
 	
+	private static  byte[] deflate(byte[] content) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new DeflaterOutputStream(baos, new Deflater(Deflater.DEFAULT_COMPRESSION, true))) {
+	        byte[] buf = new byte[8192];
+	        int length;
+	        while ((length = source.read(buf)) > 0) {
+	            target.write(buf, 0, length);
+	        }
+		}
+		
+		return baos.toByteArray();
+	}
 	
+	@Override
+	protected List<? extends Element> getChildren() {
+		return getModels();
+	}
+
+	@Override
+	public List<Model> getModels() {
+		return new AbstractList<Model>() {
+
+			@Override
+			public Model get(int index) {
+				if (modelDocument == null) {
+					return new ModelImpl(modelElements.get(index));
+				}
+				if (index == 0) {
+					return new ModelImpl(modelDocument.getDocumentElement());
+				}
+				throw new IndexOutOfBoundsException(index);
+			}
+
+			@Override
+			public int size() {
+				return modelDocument == null ? modelElements.size() : 1;
+			}
+			
+		};
+	}
+
+	@Override
+	public String getName() {
+		return element.getAttribute("name");
+	}
+
+	@Override
+	public void setName(String name) {
+		element.setAttribute("name", name);
+	}	
 
 }
