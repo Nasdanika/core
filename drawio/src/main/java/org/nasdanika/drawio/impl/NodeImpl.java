@@ -17,13 +17,20 @@ class NodeImpl extends ModelElementImpl implements Node {
 
 	@Override
 	public List<Connection> getInboundConnections() {
-		Predicate<ModelElement> predicate = pe -> element.hasAttribute(ATTRIBUTE_ID) && pe.getElement().hasAttribute(ATTRIBUTE_TARGET) && pe.getElement().getAttribute(ATTRIBUTE_TARGET).equals(element.getAttribute(ATTRIBUTE_ID));
+		Predicate<org.w3c.dom.Element> predicate = me -> element.hasAttribute(ATTRIBUTE_ID) 
+				&& getCellElement(me).hasAttribute(ATTRIBUTE_TARGET) 
+				&& getCellElement(me).getAttribute(ATTRIBUTE_TARGET).equals(element.getAttribute(ATTRIBUTE_ID));
+		
 		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Connection> getOutboundConnections() {
-		Predicate<ModelElement> predicate = pe -> element.hasAttribute(ATTRIBUTE_ID) && pe.getElement().hasAttribute(ATTRIBUTE_SOURCE) && pe.getElement().getAttribute(ATTRIBUTE_SOURCE).equals(element.getAttribute(ATTRIBUTE_ID));
+		Predicate<org.w3c.dom.Element> predicate = 
+				me -> element.hasAttribute(ATTRIBUTE_ID) 
+				&& getCellElement(me).hasAttribute(ATTRIBUTE_SOURCE) 
+				&& getCellElement(me).getAttribute(ATTRIBUTE_SOURCE).equals(element.getAttribute(ATTRIBUTE_ID));
+				
 		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).collect(Collectors.toList());
 	}
 	

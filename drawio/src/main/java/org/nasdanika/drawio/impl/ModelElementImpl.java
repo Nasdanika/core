@@ -33,8 +33,8 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public ModelElement getParent() {
-		if (getCellElement().hasAttribute(ATTRIBUTE_PARENT)) {
-			return model.find(pe -> pe.getElement().hasAttribute(ATTRIBUTE_ID) && pe.getElement().getAttribute("ID").equals(getCellElement().getAttribute(ATTRIBUTE_PARENT)));
+		if (getCellElement().hasAttribute(ATTRIBUTE_PARENT)) {	
+			return model.find(getCellElement().getAttribute(ATTRIBUTE_PARENT));
 		}
 		return null;
 	}
@@ -42,7 +42,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	@Override
 	protected List<? extends Element> getChildren() {
 		if (element.hasAttribute(ATTRIBUTE_ID)) {
-			return model.collect(pe -> ModelElementImpl.getCellElement(pe.getElement()).hasAttribute(ATTRIBUTE_PARENT) && ModelElementImpl.getCellElement(pe.getElement()).getAttribute(ATTRIBUTE_PARENT).equals(element.getAttribute(ATTRIBUTE_ID)));
+			return model.collect(e -> ModelElementImpl.getCellElement(e).hasAttribute(ATTRIBUTE_PARENT) && ModelElementImpl.getCellElement(e).getAttribute(ATTRIBUTE_PARENT).equals(element.getAttribute(ATTRIBUTE_ID)));
 		}
 		return Collections.emptyList();
 	}

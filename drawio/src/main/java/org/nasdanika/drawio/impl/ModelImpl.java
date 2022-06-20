@@ -1,5 +1,6 @@
 package org.nasdanika.drawio.impl;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -31,7 +32,14 @@ class ModelImpl extends ElementImpl implements Model {
 
 	@Override
 	public Root getRoot() {
-		return (Root) find(Root.class::isInstance);
+		List<ModelElement> result = collect(e -> !ModelElementImpl.getCellElement(e).hasAttribute(ModelElementImpl.ATTRIBUTE_PARENT));
+		if (result.isEmpty()) {
+			return null;
+		}
+		if (result.size() == 1) {
+			return (Root) result.get(0);
+		}
+		throw new IllegalArgumentException("More than one root");		
 	}
 	
 	private ModelElement create(org.w3c.dom.Element element) {
@@ -53,61 +61,53 @@ class ModelImpl extends ElementImpl implements Model {
 	}
 	
 	ModelElement find(String id) {
-		return find(e -> e.getElement().hasAttribute(ModelElementImpl.ATTRIBUTE_ID) && id.equals(e.getElement().getAttribute(ModelElementImpl.ATTRIBUTE_ID)));
+		List<ModelElement> result = collect(e -> e.hasAttribute(ModelElementImpl.ATTRIBUTE_ID) && id.equals(e.getAttribute(ModelElementImpl.ATTRIBUTE_ID)));
+		if (result.isEmpty()) {
+			return null;
+		}
+		if (result.size() == 1) {
+			return result.get(0);
+		}
+		throw new IllegalArgumentException("More than one element found with id: " + id);		
 	}
 	
-	List<ModelElement> collect(Predicate<ModelElement> predicate) {
+	/**
+	 * Collects elements children of root matching the predicate and transparently converts them to model elements on access.
+	 * @param predicate DOM element predicate
+	 * @return
+	 */
+	List<ModelElement> collect(Predicate<org.w3c.dom.Element> predicate) {
 		List<org.w3c.dom.Element> rootElements = DocumentImpl.getChildrenElements(element, "root");
 		if (rootElements.size() != 1) {
 			throw new IllegalArgumentException("There should be only one root XML element, found " + rootElements.size());
 		}
 		
-		List<ModelElement> result = new ArrayList<>();
+		List<org.w3c.dom.Element> elements = new ArrayList<>();
 		org.w3c.dom.Element rootElement = rootElements.get(0);
 		NodeList childNodes = rootElement.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); ++i) {
 			Node child = childNodes.item(i);
 			if (child instanceof org.w3c.dom.Element) {
 				org.w3c.dom.Element childElement = (org.w3c.dom.Element) child;
-				ModelElement modelElement = cache.get(childElement);
-				if (modelElement == null) {						
-					modelElement = create(childElement);
-					cache.put(childElement, modelElement);
-				}
-				if (predicate.test(modelElement)) {
-					result.add(modelElement);
+				if (predicate.test(childElement)) {
+					elements.add(childElement);
 				}
 			}
 		}
 		
-		return result;
-	}
-	
-	ModelElement find(Predicate<ModelElement> predicate) {
-		List<org.w3c.dom.Element> rootElements = DocumentImpl.getChildrenElements(element, "root");
-		if (rootElements.size() != 1) {
-			throw new IllegalArgumentException("There should be only one root XML element, found " + rootElements.size());
-		}
-		
-		org.w3c.dom.Element rootElement = rootElements.get(0);
-		NodeList childNodes = rootElement.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); ++i) {
-			Node child = childNodes.item(i);
-			if (child instanceof org.w3c.dom.Element) {
-				org.w3c.dom.Element childElement = (org.w3c.dom.Element) child;
-				ModelElement modelElement = cache.get(childElement);
-				if (modelElement == null) {						
-					modelElement = create(childElement);
-					cache.put(childElement, modelElement);
-				}
-				if (predicate.test(modelElement)) {
-					return modelElement;
-				}
-			}
-		}
-		
-		return null;
-	}
-	
+		return new AbstractList<ModelElement>() {
 
+			@Override
+			public ModelElement get(int index) {
+				return cache.computeIfAbsent(elements.get(index), ModelImpl.this::create);
+			}
+
+			@Override
+			public int size() {
+				return elements.size();
+			}
+			
+		};
+	}	
+	
 }
