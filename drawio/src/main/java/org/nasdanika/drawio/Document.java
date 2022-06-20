@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.xml.sax.SAXException;
@@ -23,6 +24,8 @@ public interface Document extends Element {
 	 * @return a list of pages which represent nested diagram elements
 	 */
 	List<Page> getPages();
+	
+	Page createPage();
 	
 	/**
 	 * Loads document from an XML string.
@@ -58,10 +61,11 @@ public interface Document extends Element {
 	
 	/**
 	 * @param compress If null keeps the original compression setting. If not null forces either compressed (TRUE) or uncompressed (FALSE).
-	 * This can be used to generate HTML tags with compressed document while keeping the source document uncompressed so it can be manually inspected, edited, diffed, and merged.  
+	 * This can be used to generate HTML tags with compressed document while keeping the source document uncompressed so it can be manually inspected, edited, diffed, and merged.
+	 * @param viewer URL of the viewer script. Default value is used if null.  
 	 * @return div tag with the embedded document which can be inserted into HTML pages.
 	 */
-	String toHtml(Boolean compress);
+	String toHtml(Boolean compress, String viewer) throws TransformerException, IOException;
 
 	/**
 	 * Saves the document to String.
@@ -69,6 +73,6 @@ public interface Document extends Element {
 	 * This can be used to generate HTML tags with compressed document while keeping the source document uncompressed so it can be manually inspected, edited, diffed, and merged.  
 	 * @return Document string.
 	 */
-	String save(Boolean compress);
+	String save(Boolean compress) throws TransformerException, IOException;
 
 }

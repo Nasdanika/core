@@ -120,6 +120,17 @@ class PageImpl extends ElementImpl implements Page {
 	@Override
 	public void setName(String name) {
 		element.setAttribute("name", name);
+	}
+
+	/**
+	 * Saves any modifications. Doesn't do anything of compress null and uncompressed documents.
+	 * For compressed documents replaces texts with compressed model string
+	 * If compress is not null and different from the current setting then there are different permutations. 
+	 * @param compress
+	 */
+	void save(Boolean compress) {
+		// TODO Auto-generated method stub
+		
 	}	
 
 }

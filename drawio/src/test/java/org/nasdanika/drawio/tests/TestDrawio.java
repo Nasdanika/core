@@ -2,6 +2,8 @@ package org.nasdanika.drawio.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -55,6 +57,9 @@ public class TestDrawio {
 				}
 			}
 		}
+		Files.writeString(new File("target/uncompressed.drawio").toPath(), document.save(null));
+				
+		Files.writeString(new File("target/uncompressed.html").toPath(), document.toHtml(null, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
 	}
 	
 	private void dump(ModelElement modelElement, String indent) {
@@ -66,7 +71,8 @@ public class TestDrawio {
 			if (!outboundConnections.isEmpty()) {
 				System.out.println(indent + "\tOutbound connections:");
 				for (Connection connection: outboundConnections) {
-					System.out.println(indent + "\t\t" + connection.getLabel() + " -> " + connection.getTarget().getLabel());
+					Node target = connection.getTarget();
+					System.out.println(indent + "\t\t" + connection.getLabel() + " -> " + target.getLabel());
 				}
 			}
 			List<Connection> inboundConnections = node.getInboundConnections();
@@ -88,7 +94,7 @@ public class TestDrawio {
 			System.out.println(indent + "\tSource: " + connection.getSource().getLabel());
 			System.out.println(indent + "\tTarget: " + connection.getTarget().getLabel());			
 		}
-				
+		modelElement.setLink("https://www.nasdanika.org");		
 	}
 
 }

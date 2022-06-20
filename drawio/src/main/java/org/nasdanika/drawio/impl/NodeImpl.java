@@ -40,4 +40,10 @@ class NodeImpl extends ModelElementImpl implements Node {
 		return (List<ModelElement>) super.getChildren();
 	}
 
+	@Override
+	public Node createChild() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,7 +15,16 @@ import java.util.function.BiFunction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.text.StringEscapeUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
 import org.w3c.dom.Element;
@@ -78,15 +88,40 @@ public class DocumentImpl extends ElementImpl implements Document {
 	}
 
 	@Override
-	public String toHtml(Boolean compress) {
-		// TODO Auto-generated method stub
-		return null;
+	public String toHtml(Boolean compress, String viewer) throws JSONException, TransformerException, IOException {
+		JSONObject data = new JSONObject();
+		data.put("highlight", "#0000ff");
+		data.put("nav", true);
+		data.put("resize",true);
+		data.put("toolbar", "zoom layers tags lightbox");
+		data.put("edit","_blank");
+		
+		data.put("xml", save(compress));
+		
+		String diagramDiv = "<div class=\"mxgraph\" style=\"max-width:100%;border:1px solid transparent;\" data-mxgraph=\"" + StringEscapeUtils.escapeHtml4(data.toString()) + "\"></div>";		
+		if (viewer == null) {
+			return diagramDiv;
+		}
+		String script = "<script type=\"text/javascript\" src=\"" + viewer + "\"></script>";
+		return diagramDiv + System.lineSeparator() + script;		
 	}
 
 	@Override
-	public String save(Boolean compress) {
-		// TODO Auto-generated method stub
-		return null;
+	public String save(Boolean compress) throws TransformerException, IOException {
+		for (Page page: getPages()) {
+			((PageImpl) page).save(compress);
+		}
+		
+		TransformerFactory tFactory = TransformerFactory.newInstance();
+	    Transformer transformer = tFactory.newTransformer();
+	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	    
+	    DOMSource source = new DOMSource(document);
+	    StringWriter out = new StringWriter();
+	    try (out) {
+	    	transformer.transform(source, new StreamResult(out));
+	    }
+		return out.toString();
 	}
 		
 	static List<org.w3c.dom.Element> getChildrenElements(org.w3c.dom.Element parent, String name) {
@@ -99,6 +134,11 @@ public class DocumentImpl extends ElementImpl implements Document {
 			}
 		}
 		return ret;
+	}
+	@Override
+	public Page createPage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

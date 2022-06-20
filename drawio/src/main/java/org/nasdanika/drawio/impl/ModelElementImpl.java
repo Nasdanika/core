@@ -70,6 +70,10 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 				element.setAttribute(ATTRIBUTE_LABEL, cellElement.getAttribute(ATTRIBUTE_VALUE));
 				cellElement.removeAttribute(ATTRIBUTE_VALUE);
 			}
+			if (cellElement.hasAttribute(ATTRIBUTE_ID)) {
+				element.setAttribute(ATTRIBUTE_ID, cellElement.getAttribute(ATTRIBUTE_ID));
+				cellElement.removeAttribute(ATTRIBUTE_ID);
+			}
 		}
 		return element;
 	}
