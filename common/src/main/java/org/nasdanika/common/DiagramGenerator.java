@@ -16,7 +16,7 @@ import org.nasdanika.common.resources.Container;
  * @author Pavel
  *
  */
-public interface DiagramGenerator {
+public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 	
 	/**
 	 * PlantUML diagram dialect
@@ -63,6 +63,12 @@ public interface DiagramGenerator {
 	}
 	
 	/**
+	 * @param dialect
+	 * @return true if given dialect is supported by this generator
+	 */
+	boolean isSupported(Dialect dialect);
+	
+	/**
 	 * Uses local PlantUML.
 	 */
 	DiagramGenerator INSTANCE = new DiagramGeneratorImpl();
@@ -103,6 +109,21 @@ public interface DiagramGenerator {
 				}
 				
 				throw new IOException("HTTP Call to "+dialectURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage());
+			}
+
+			@Override
+			public boolean isSupported(Dialect dialect) {
+				try {
+					URL dialectURL = new URL(service, dialect.name());
+					URLConnection connection = dialectURL.openConnection();
+					if (!(connection instanceof HttpURLConnection)) {
+						throw new IllegalArgumentException("Not an HTTP(s) url: "+dialectURL);
+					}				
+					HttpURLConnection httpConnection = (HttpURLConnection) connection;				
+					return httpConnection.getResponseCode() == 200; // GET OK indicates that dialect is supported. 
+				} catch (Exception e) {
+					throw new NasdanikaException(e);
+				}
 			}
 			
 		};
@@ -170,6 +191,28 @@ public interface DiagramGenerator {
 			@Override
 			public String toString() {
 				return super.toString() + " hits: " + hits + ", misses: " + misses;
+			}
+
+			@Override
+			public boolean isSupported(Dialect dialect) {
+				return DiagramGenerator.this.isSupported(dialect);
+			}
+			
+		};
+	}
+	
+	@Override
+	default DiagramGenerator compose(DiagramGenerator other) {
+		return new DiagramGenerator() {
+
+			@Override
+			public boolean isSupported(Dialect dialect) {
+				return DiagramGenerator.this.isSupported(dialect) || other.isSupported(dialect);
+			}
+
+			@Override
+			public String generateDiagram(String spec, Dialect dialect) throws Exception {
+				return (DiagramGenerator.this.isSupported(dialect) ? DiagramGenerator.this : other).generateDiagram(spec, dialect);
 			}
 			
 		};
