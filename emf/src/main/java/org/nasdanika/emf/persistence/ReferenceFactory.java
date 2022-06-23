@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -258,13 +259,23 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			include(baseDir, (file,path) -> true, collector);
 		} else {
 			for (String include: includes) {
-				include(baseDir, (file,path) -> matcher.isMatch(include, path), collector);
+				include(baseDir, (file,path) -> matcher.isMatch(peel(include), path), collector);
 			}
 		}
 		if (excludes != null) {
-			collector.keySet().removeIf(path -> excludes.stream().filter(exclude -> matcher.isMatch(exclude, path)).findAny().isPresent());
+			collector.keySet().removeIf(path -> excludes.stream().filter(exclude -> matcher.isMatch(peel(exclude), path)).findAny().isPresent());
 		}				
 		return collector.values();
+	}
+	
+	/**
+	 * Removes leading ./ if it is present
+	 * @param baseDir
+	 * @param pattern
+	 * @return
+	 */
+	private static String peel(String pattern) {
+		return pattern != null && pattern.startsWith("./") ? peel(pattern.substring(2)) : pattern;
 	}
 	
 	private static void include(File baseDir, BiPredicate<File,String> predicate, Map<String, File> collector) {

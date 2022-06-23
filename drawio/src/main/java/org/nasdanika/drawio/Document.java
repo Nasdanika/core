@@ -6,10 +6,10 @@ import java.io.Reader;
 import java.net.URL;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.nasdanika.drawio.impl.DocumentImpl;
 import org.xml.sax.SAXException;
 
 /**
@@ -41,6 +41,34 @@ public interface Document extends Element {
 	
 	static Document load(Reader reader) throws IOException, ParserConfigurationException, SAXException {
 		return new DocumentImpl(reader);
+	}
+	
+	static Document create(boolean compressed) {
+		return null; // TODO
+//		mxCodec codec = new mxCodec();
+//		DocumentBuilder documentBuilder = mxXmlUtils.getDocumentBuilder();
+//		Document xmlDocument = documentBuilder.newDocument();
+//		Element mxFileElement = xmlDocument.createElement("mxfile");
+//		mxFileElement.setAttribute("type", "device");
+//		mxFileElement.setAttribute("compressed", "false");
+//		xmlDocument.appendChild(mxFileElement);
+//		for (Diagram diagram: diagrams) {	
+//			Element diagramElement = xmlDocument.createElement("diagram");
+//	        mxFileElement.appendChild(diagramElement);
+//	        if (!Util.isBlank(diagram.getUuid())) {
+//	        	diagramElement.setAttribute("id", diagram.getUuid());
+//	        }
+//	        if (!Util.isBlank(diagram.getName())) {
+//	        	diagramElement.setAttribute("name", diagram.getName());
+//	        }
+//	    
+//	        // TODO - support of compression, copy from app util
+//			mxIGraphModel model = generateGraph(diagram).getModel();
+//			Node encodedNode = codec.encode(model);
+//	        diagramElement.appendChild(xmlDocument.importNode(encodedNode, true));
+//		}
+//		return mxXmlUtils.getXml(xmlDocument);
+		
 	}
 
 	/**

@@ -18,4 +18,10 @@ class RootImpl extends ModelElementImpl implements Root {
 		return (List<Layer>) getChildren();
 	}
 
+	@Override
+	public Layer createLayer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

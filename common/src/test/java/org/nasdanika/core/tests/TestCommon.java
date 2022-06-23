@@ -3,6 +3,7 @@ package org.nasdanika.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -29,6 +30,7 @@ import org.junit.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.JavaExpressionPropertyComputer;
 import org.nasdanika.common.ListCompoundSupplier;
@@ -414,5 +416,40 @@ public class TestCommon {
 //		URI pURI = deresolved.appendSegment("");
 //		System.out.println(pURI + " -"+pURI.lastSegment()+"-");
 //	}
+	
+	@Test
+	public void testDelimitedStringMap() {
+		String[] data = { "outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff;" };
+		
+		DelimitedStringMap map = new DelimitedStringMap(";", "=") {
+			
+			@Override
+			protected void setState(String state) {
+				data[0] = state;
+			}
+			
+			@Override
+			protected String getState() {
+				return data[0];
+			}
+		};
+		
+		assertEquals(17, map.size());
+		assertEquals("north", map.get("gradientDirection"));
+		assertEquals("#ffffff", map.get("labelBackgroundColor"));
+
+		assertEquals("#232F3E", map.put("fontColor", "#222222"));
+		assertEquals("outlineConnect=0;fontColor=#222222;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff", data[0]);
+
+		assertEquals("#945DF2", map.remove("gradientColor"));
+		assertEquals("outlineConnect=0;fontColor=#222222;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff", data[0]);
+		
+		assertNull(map.put("answer-to-everything", "42"));
+		assertEquals("outlineConnect=0;fontColor=#222222;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff;answer-to-everything=42", data[0]);
+		
+		map.clear();
+		assertEquals("", data[0]);
+		
+	}
 	
 }

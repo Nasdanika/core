@@ -20,8 +20,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.xml.parsers.DocumentBuilder;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -37,15 +35,17 @@ import org.nasdanika.diagram.Layer;
 import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
+import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Model;
+import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.Root;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.util.NcoreUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * Generates Drawio diagrams.
@@ -71,7 +71,7 @@ public class DrawioGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public String generateDiagram(Diagram diagram) throws Exception {
+	public Document generateDiagram(Diagram diagram) throws Exception {
 		return diagramGenerator.generateDrawioDiagram(generateModel(diagram));
 	}
 
@@ -80,62 +80,22 @@ public class DrawioGenerator {
 	 * @param diagram
 	 * @return
 	 */
-	public String generateModel(Diagram... diagrams) throws Exception {
-		mxCodec codec = new mxCodec();
-		DocumentBuilder documentBuilder = mxXmlUtils.getDocumentBuilder();
-		Document xmlDocument = documentBuilder.newDocument();
-		Element mxFileElement = xmlDocument.createElement("mxfile");
-		mxFileElement.setAttribute("type", "device");
-		mxFileElement.setAttribute("compressed", "false");
-		xmlDocument.appendChild(mxFileElement);
-		for (Diagram diagram: diagrams) {	
-			Element diagramElement = xmlDocument.createElement("diagram");
-	        mxFileElement.appendChild(diagramElement);
+	public Document generateModel(Diagram... diagrams) throws Exception {
+		Document ret = Document.create(false);
+		for (Diagram diagram: diagrams) {
+			Page page = ret.createPage();
 	        if (!Util.isBlank(diagram.getUuid())) {
-	        	diagramElement.setAttribute("id", diagram.getUuid());
+	        	page.getElement().setAttribute("id", diagram.getUuid());
 	        }
 	        if (!Util.isBlank(diagram.getName())) {
-	        	diagramElement.setAttribute("name", diagram.getName());
+	        	page.setName(diagram.getName());
 	        }
-	    
-	        // TODO - support of compression, copy from app util
-			mxIGraphModel model = generateGraph(diagram).getModel();
-			Node encodedNode = codec.encode(model);
-	        diagramElement.appendChild(xmlDocument.importNode(encodedNode, true));
+
+	        generatePage(diagram, page);
 		}
-		return mxXmlUtils.getXml(xmlDocument);
+		return ret;
 	}
 	
-//	/**
-//	 * Decodes compressed text content of the diagram element.
-//	 * @param diagramSource
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	protected String decodeDiagram(String diagramSource) throws Exception {
-//		Document xmlDocument = mxXmlUtils.parseXml(diagramSource);
-//        Node diagram = xmlDocument.getElementsByTagName("diagram").item(0);
-//        String textContent = diagram.getTextContent();
-//
-//        byte[] compressed = Base64.getDecoder().decode(textContent);
-//        byte[] decompressed = inflate(compressed);
-//        String decompressedStr = new String(decompressed, getCharset());
-//        return URLDecoder.decode(decompressedStr, getCharset().name());
-//	}
-//		
-//    private byte[] inflate(byte[] content) throws Exception {
-//    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//    	try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new InflaterOutputStream(baos, new Inflater(true))) {
-//            byte[] buf = new byte[8192];
-//            int length;
-//            while ((length = source.read(buf)) > 0) {
-//                target.write(buf, 0, length);
-//            }
-//    	}
-//    	
-//    	return baos.toByteArray();
-//    }
-    
     /**
      * {@link Charset} for encoding/decoding.
      * @return This implementation returns UTF-8.
@@ -144,24 +104,23 @@ public class DrawioGenerator {
     	return StandardCharsets.UTF_8;
     }
 
-	protected mxGraph generateGraph(Diagram diagram) throws Exception {
-		mxGraph graph = new mxGraph(/* graphModel */);
-		
-		mxIGraphModel graphModel = graph.getModel();
-		graphModel.beginUpdate();
-		Object parent = graph.getDefaultParent();	
+	protected void generatePage(Diagram diagram, Page page) throws Exception {
 		try	{
-			Document userObjectFactory = mxDomUtils.createDocument();
+			Root root = page.getModels().get(0).getRoot();
 			for (Note note: diagram.getNotes()) {
-				createNote(note, graph, parent, userObjectFactory);				
+				createNote(note, model);				
 			}
-			Map<DiagramElement,mxCell> elementsMap = new HashMap<>();
+			Map<DiagramElement,ModelElement> elementsMap = new HashMap<>();
 			Map<DiagramElement, Rectangle> geometry = new HashMap<>();
 			layout(diagram, geometry::put);
 						
-			Collection<Connection> connections = new ArrayList<>(); 
-			for (DiagramElement element: diagram.getElements()) {
-				createElement(element, graph, parent, userObjectFactory, geometry::get, elementsMap, connections, 0);
+			Collection<Connection> connections = new ArrayList<>();
+			EList<DiagramElement> diagramElements = diagram.getElements();
+			if (!diagramElements.isEmpty()) {
+				Layer backgroundLayer = root.. 
+				for (DiagramElement element: diagramElements) { // Background anonymous layer
+					createElement(element, graph, parent, userObjectFactory, geometry::get, elementsMap, connections, 0);
+				}
 			}
 			
 			for (Layer layer: diagram.getLayers()) {
