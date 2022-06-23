@@ -1,5 +1,7 @@
 package org.nasdanika.drawio;
 
+import java.util.Map;
+
 public interface ModelElement extends Element {
 	
 	ModelElement getParent();
@@ -15,5 +17,11 @@ public interface ModelElement extends Element {
 	String getTooltip();
 	
 	void setTooltip(String tooltip);
+	
+	Map<String,String> getStyle();
+	
+	String getProperty(String name);
+	
+	void setProperty(String name, String value);
 	
 }

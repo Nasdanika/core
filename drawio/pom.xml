@@ -38,20 +38,10 @@
 
 	<dependencies>		
 		<dependency>
-		  <groupId>commons-codec</groupId>
-		  <artifactId>commons-codec</artifactId>
-		  <version>1.15</version>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.json</groupId>
-		    <artifactId>json</artifactId>
-		    <version>20220320</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-text</artifactId>
-		    <version>1.9</version>
-		</dependency>		
 		
 		<dependency>
 			<groupId>junit</groupId>

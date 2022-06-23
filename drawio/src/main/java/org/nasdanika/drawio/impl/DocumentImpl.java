@@ -47,6 +47,16 @@ public class DocumentImpl extends ElementImpl implements Document {
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 	}
+	public DocumentImpl(boolean compressed) throws ParserConfigurationException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		org.w3c.dom.Document document = dBuilder.newDocument();		
+		org.w3c.dom.Element mxFileElement = document.createElement("mxfile");
+		mxFileElement.setAttribute("type", "device");
+		mxFileElement.setAttribute("compressed", String.valueOf(compressed));
+		document.appendChild(mxFileElement);
+	}
+	
 	public DocumentImpl(String docStr) throws ParserConfigurationException, SAXException, IOException {
 		this(new StringReader(docStr));
 	}

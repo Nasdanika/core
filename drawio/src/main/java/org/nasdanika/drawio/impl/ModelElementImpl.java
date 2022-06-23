@@ -2,7 +2,9 @@ package org.nasdanika.drawio.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.ModelElement;
 
@@ -16,6 +18,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	static final String ATTRIBUTE_TOOLTIP = "tooltip";
 	static final String ATTRIBUTE_TARGET = "target";
 	static final String ATTRIBUTE_SOURCE = "source";
+	static final String ATTRIBUTE_STYLE = "style";
 	
 	/**
 	 * For element resolution.
@@ -90,22 +93,49 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public String getLink() {
-		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(ATTRIBUTE_LINK);
+		return getProperty(ATTRIBUTE_LINK);
 	}
 
 	@Override
 	public void setLink(String link) {
-		asObjectElement().setAttribute(ATTRIBUTE_LINK, link);
+		setProperty(ATTRIBUTE_LINK, link);
 	}
 
 	@Override
 	public String getTooltip() {
-		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(ATTRIBUTE_TOOLTIP);
+		return getProperty(ATTRIBUTE_TOOLTIP);
 	}
 
 	@Override
 	public void setTooltip(String tooltip) {
-		asObjectElement().setAttribute(ATTRIBUTE_TOOLTIP, tooltip);
+		setProperty(ATTRIBUTE_TOOLTIP, tooltip);
+	}
+
+	@Override
+	public Map<String, String> getStyle() {
+		return new DelimitedStringMap(";", "=") {
+
+			@Override
+			protected String getState() {
+				return getCellElement().getAttribute(ATTRIBUTE_STYLE);
+			}
+
+			@Override
+			protected void setState(String state) {
+				getCellElement().setAttribute(ATTRIBUTE_STYLE, state);
+			}
+			
+		};
+	}
+
+	@Override
+	public String getProperty(String name) {
+		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(name);
+	}
+
+	@Override
+	public void setProperty(String name, String value) {
+		asObjectElement().setAttribute(ATTRIBUTE_LINK, value);
 	}
 
 }
