@@ -16,7 +16,7 @@ public abstract class DelimitedStringMap extends AbstractSplitJoinMap<String, St
 
 	@Override
 	protected List<String> split(String state) {
-		return state == null ? Collections.emptyList() : Arrays.asList(state.split(entryDelimiter));
+		return Util.isBlank(state) ? Collections.emptyList() : Arrays.asList(state.split(entryDelimiter));
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public abstract class DelimitedStringMap extends AbstractSplitJoinMap<String, St
 
 			@Override
 			public String getValue() {
-				return ea[1];
+				return ea.length > 1 ? ea[1] : null;
 			}
 
 			@Override
