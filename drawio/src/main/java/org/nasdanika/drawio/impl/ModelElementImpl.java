@@ -1,15 +1,21 @@
 package org.nasdanika.drawio.impl;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.ModelElement;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
+	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
 	static final String ATTRIBUTE_ID = "id";
 	static final String ATTRIBUTE_PARENT = "parent";
@@ -135,7 +141,54 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public void setProperty(String name, String value) {
-		asObjectElement().setAttribute(ATTRIBUTE_LINK, value);
+		if (Util.isBlank(value)) {
+			asObjectElement().removeAttribute(name);			
+		} else {
+			asObjectElement().setAttribute(name, value);
+		}
+	}
+
+	@Override
+	public Set<String> getTags() {
+		return new AbstractSplitJoinSet<String,String,String>() {
+
+			@Override
+			protected String getState() {
+				return getProperty(ATTRIBUTE_TAGS);
+			}
+
+			@Override
+			protected void setState(String state) {
+				setProperty(ATTRIBUTE_TAGS, state);
+			}
+
+			@Override
+			protected List<String> split(String state) {
+				if (Util.isBlank(state)) {
+					return Collections.emptyList();
+				}
+				return Arrays.asList(state.split(" "));
+			}
+
+			@Override			
+			protected String join(List<String> chunks) {
+				if (chunks == null || chunks.isEmpty()) {
+					return null;
+				}
+				return chunks.stream().filter(e -> !Util.isBlank(e)).collect(Collectors.joining(" "));
+			}
+
+			@Override
+			protected String load(String chunk) {
+				return chunk;
+			}
+
+			@Override
+			protected String store(String element) {
+				return element;
+			}
+			
+		};
 	}
 
 }

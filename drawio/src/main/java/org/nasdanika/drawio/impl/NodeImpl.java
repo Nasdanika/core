@@ -5,12 +5,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.Rectangle;
 import org.w3c.dom.Element;
 
-class NodeImpl extends ModelElementImpl implements Node {
-
+class NodeImpl extends LayerImpl implements Node {
+	
 	NodeImpl(Element element, ModelImpl model) {
 		super(element, model);
 	}
@@ -34,16 +34,28 @@ class NodeImpl extends ModelElementImpl implements Node {
 		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).collect(Collectors.toList());
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ModelElement> getChildren() {
-		return (List<ModelElement>) super.getChildren();
+	private Element getGeometryElement(boolean create) {
+		Element cellElement = getCellElement();
+		List<org.w3c.dom.Element> geometryElements = DocumentImpl.getChildrenElements(cellElement, "mxGeometry");
+		if (geometryElements.isEmpty()) {
+			if (create) {
+				Element ret = element.getOwnerDocument().createElement("mxGeometry");
+				ret.setAttribute("as", "geometry");
+				cellElement.appendChild(ret);
+				return ret;
+			}
+		} 
+		
+		if (geometryElements.size() == 1) {
+			return geometryElements.get(0);
+		} 
+		
+		throw new IllegalArgumentException("Expected one geometry element, got " + geometryElements.size());
 	}
 
 	@Override
-	public Node createChild() {
-		// TODO Auto-generated method stub
-		return null;
+	public Rectangle getGeometry() {
+		return new RectangleImpl(this::getGeometryElement);
 	}
 
 }

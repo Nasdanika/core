@@ -1,6 +1,7 @@
 package org.nasdanika.drawio;
 
 import java.util.Map;
+import java.util.Set;
 
 public interface ModelElement extends Element {
 	
@@ -23,5 +24,7 @@ public interface ModelElement extends Element {
 	String getProperty(String name);
 	
 	void setProperty(String name, String value);
+	
+	Set<String> getTags();
 	
 }

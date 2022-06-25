@@ -3,10 +3,14 @@ package org.nasdanika.drawio.tests;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiFunction;
+
+import javax.xml.transform.TransformerException;
 
 import org.junit.Test;
 import org.nasdanika.drawio.Connection;
@@ -17,6 +21,7 @@ import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 
 public class TestDrawio {
@@ -30,6 +35,27 @@ public class TestDrawio {
 		};
 		String result = document.accept(visitor);
 		System.out.println(result);
+		
+		for (Page page: document.getPages()) {
+			System.out.println("Page: " + page.getName());
+			Model model = page.getModel();
+			Root root = model.getRoot();
+			for (Layer layer: root.getLayers()) {
+				System.out.println("\tLayer: " + layer.getLabel());
+				for (ModelElement modelElement: layer.getElements()) {
+					modelElement.setTooltip("Karamba");
+					modelElement.setLink("https://nasdanika.org");
+				}
+				
+			}
+		}
+		
+		Files.writeString(new File("target/compressed.drawio").toPath(), document.save(null));
+		Files.writeString(new File("target/compressed.html").toPath(), document.toHtml(null, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
+
+		Files.writeString(new File("target/decompressed.drawio").toPath(), document.save(false));
+		Files.writeString(new File("target/decompressed.html").toPath(), document.toHtml(false, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
+		
 	}
 	
 	@Test
@@ -46,23 +72,72 @@ public class TestDrawio {
 		
 		for (Page page: document.getPages()) {
 			System.out.println("Page: " + page.getName());
-			for (Model model: page.getModels()) {
-				Root root = model.getRoot();
-				for (Layer layer: root.getLayers()) {
-					System.out.println("\tLayer: " + layer.getLabel());
-					for (ModelElement modelElement: layer.getElements()) {
-						dump(modelElement, "\t\t");
-					}
-					
+			Model model = page.getModel();
+			Root root = model.getRoot();
+			for (Layer layer: root.getLayers()) {
+				System.out.println("\tLayer: " + layer.getLabel());
+				for (ModelElement modelElement: layer.getElements()) {
+					dump(modelElement, "\t\t");
 				}
+				
 			}
 		}
 		Files.writeString(new File("target/uncompressed.drawio").toPath(), document.save(null));
-				
 		Files.writeString(new File("target/uncompressed.html").toPath(), document.toHtml(null, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
+		Files.writeString(new File("target/recompressed.drawio").toPath(), document.save(true));
+		Files.writeString(new File("target/recompressed.html").toPath(), document.toHtml(true, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
 	}
 	
-	private void dump(ModelElement modelElement, String indent) {
+	@Test
+	public void testNewUncompressed() throws Exception {
+		Document document = Document.create(false);
+		Page page = document.createPage();
+		page.setName("My first new page");
+		
+		Model model = page.getModel();
+		Root root = model.getRoot();
+		List<Layer> layers = root.getLayers();
+		assertThat(layers).singleElement();
+		
+		// Add layer
+		Layer newLayer = root.createLayer();
+		newLayer.setLabel("My new layer");
+				
+		// Add nodes
+		Node source = newLayer.createNode();
+		source.setLabel("My source node");
+		Rectangle sourceGeometry = source.getGeometry();
+		sourceGeometry.setX(200);
+		sourceGeometry.setX(100);
+		sourceGeometry.setWidth(70);
+		sourceGeometry.setHeight(30);
+		source.getTags().add("aws");
+		
+		
+		Node target = newLayer.createNode();
+		target.setLabel("My target node");
+		target.getGeometry().setBounds(300, 150, 100, 30);
+		Set<String> targetTags = target.getTags();
+		targetTags.add("aws");
+		targetTags.add("azure");
+		
+		// Add connection 
+		Connection connection = newLayer.createConnection(source, target);
+		connection.setLabel("My connection");
+		Map<String, String> connectionStyle = connection.getStyle();
+		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
+		connectionStyle.put("rounded", "1");
+		connectionStyle.put("orthogonalLoop", "1");
+		connectionStyle.put("jettySize", "auto");
+		connectionStyle.put("html", "1");
+		
+		Files.writeString(new File("target/new-uncompressed.drawio").toPath(), document.save(null));
+	}	
+	
+	private void dump(ModelElement modelElement, String indent) throws TransformerException, IOException {
+		modelElement.setTooltip("Kurumba");
+		modelElement.setLink("https://nasdanika.org");
+		
 		System.out.print(indent);
 		System.out.println(modelElement.getClass() + " " + modelElement.getLabel());
 		if (modelElement instanceof Node) {
@@ -82,7 +157,7 @@ public class TestDrawio {
 					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + connection.getSource().getLabel());
 				}
 			}
-			List<ModelElement> children = node.getChildren();
+			List<ModelElement> children = node.getElements();
 			if (!children.isEmpty()) {
 				System.out.println(indent + "\tChildren:");
 				for (ModelElement child: children) {
@@ -94,7 +169,20 @@ public class TestDrawio {
 			System.out.println(indent + "\tSource: " + connection.getSource().getLabel());
 			System.out.println(indent + "\tTarget: " + connection.getTarget().getLabel());			
 		}
-		modelElement.setLink("https://www.nasdanika.org");		
-	}
+		
+//	    TransformerFactory tFactory = TransformerFactory.newInstance();
+//	    Transformer transformer = tFactory.newTransformer();
+//	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+//		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+//		
+//	    DOMSource source = new DOMSource(modelElement.getElement());
+//	    StringWriter sw = new StringWriter();
+//	    try (sw) {
+//		    StreamResult out = new StreamResult(sw);
+//		    transformer.transform(source, out);
+//	    }
+//		System.out.println(sw);			    
+//		System.out.println(indent + modelElement.getElement().getOwnerDocument().hashCode());			    
+	}		
 
 }

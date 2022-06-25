@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiFunction;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -27,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -35,35 +35,36 @@ import org.xml.sax.SAXException;
 
 public class DocumentImpl extends ElementImpl implements Document {
 	
+	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
 
 	public DocumentImpl(InputStream in) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
+		element = document.getDocumentElement();
 	}
 	public DocumentImpl(Reader reader) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
+		element = document.getDocumentElement();
 	}
 	public DocumentImpl(boolean compressed) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		org.w3c.dom.Document document = dBuilder.newDocument();		
+		document = dBuilder.newDocument();		
 		org.w3c.dom.Element mxFileElement = document.createElement("mxfile");
 		mxFileElement.setAttribute("type", "device");
-		mxFileElement.setAttribute("compressed", String.valueOf(compressed));
+		if (!compressed) {
+			mxFileElement.setAttribute(ATTRIBUTE_COMPRESSED, String.valueOf(compressed));
+		}
 		document.appendChild(mxFileElement);
+		element = document.getDocumentElement();
 	}
 	
 	public DocumentImpl(String docStr) throws ParserConfigurationException, SAXException, IOException {
 		this(new StringReader(docStr));
-	}
-
-	@Override
-	public Element getElement() {
-		return document.getDocumentElement();
 	}
 
 	@Override
@@ -74,19 +75,23 @@ public class DocumentImpl extends ElementImpl implements Document {
 		}
 		return visitor.apply(this, pageResults);
 	}
+	
+	private Map<Integer, Page> pages = new LinkedHashMap<>();
 
 	@Override
-	public List<Page> getPages() {
+	public List<Page> getPages() {		
 		// List backed by the XML document. Currently unmodifiable
 		return new AbstractList<Page>() {
 
 			@Override
 			public Page get(int index) {
-				try {
-					return new PageImpl(getChildrenElements(getElement(), "diagram").get(index));
-				} catch (IOException | ParserConfigurationException | SAXException e) {
-					throw new IllegalArgumentException("Error loading compressed page", e);
-				}
+				return pages.computeIfAbsent(index, idx -> {
+					try {			
+						return new PageImpl(getChildrenElements(getElement(), "diagram").get(idx));
+					} catch (IOException | ParserConfigurationException | SAXException e) {
+						throw new IllegalArgumentException("Error loading compressed page", e);
+					}
+				});
 			}
 
 			@Override
@@ -118,13 +123,28 @@ public class DocumentImpl extends ElementImpl implements Document {
 
 	@Override
 	public String save(Boolean compress) throws TransformerException, IOException {
+		int pageCount = 0;
 		for (Page page: getPages()) {
 			((PageImpl) page).save(compress);
+			++pageCount;
+		}
+		
+		element.setAttribute("pages", String.valueOf(pageCount));
+		if (compress != null) {
+			if (compress) {
+				element.removeAttribute(ATTRIBUTE_COMPRESSED);
+			} else {
+				element.setAttribute(ATTRIBUTE_COMPRESSED, "false");
+			}
 		}
 		
 		TransformerFactory tFactory = TransformerFactory.newInstance();
 	    Transformer transformer = tFactory.newTransformer();
-	    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+	    if (compress == null ? element.hasAttribute(ATTRIBUTE_COMPRESSED) && element.getAttribute(ATTRIBUTE_COMPRESSED).equals("false")  : !compress) {
+	    	transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	    }
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	    
 	    DOMSource source = new DOMSource(document);
 	    StringWriter out = new StringWriter();
@@ -145,10 +165,41 @@ public class DocumentImpl extends ElementImpl implements Document {
 		}
 		return ret;
 	}
+
 	@Override
 	public Page createPage() {
-		// TODO Auto-generated method stub
-		return null;
+		org.w3c.dom.Element diagramElement = document.createElement("diagram");
+	    element.appendChild(diagramElement);
+    	diagramElement.setAttribute("id", UUID.randomUUID().toString());
+    	org.w3c.dom.Element modelElement = document.createElement("mxGraphModel");
+    	diagramElement.appendChild(modelElement);
+    	
+    	modelElement.setAttribute("page", "1");
+    	modelElement.setAttribute("grid", "1");
+    	modelElement.setAttribute("gridSize", "10");
+    	modelElement.setAttribute("guides", "1");
+    	modelElement.setAttribute("tooltips", "1");
+    	modelElement.setAttribute("connect", "1");
+    	modelElement.setAttribute("arrows", "1");
+    	modelElement.setAttribute("fold", "1");
+    	modelElement.setAttribute("pageScale", "1");
+    	modelElement.setAttribute("math", "0");
+    	modelElement.setAttribute("shadow", "0");
+    	
+    	org.w3c.dom.Element rootElement = document.createElement("root");
+    	modelElement.appendChild(rootElement);
+    	
+    	org.w3c.dom.Element modelRootElement = document.createElement("mxCell");
+    	modelRootElement.setAttribute("id", "0");
+    	rootElement.appendChild(modelRootElement);
+    	
+    	org.w3c.dom.Element backgroundElement = document.createElement("mxCell");
+    	backgroundElement.setAttribute("id", "1");
+    	backgroundElement.setAttribute("parent", "0");
+    	rootElement.appendChild(backgroundElement);
+    	
+    	List<Page> pageList = getPages();
+    	return pageList.get(pageList.size() - 1);
 	}
 
 }

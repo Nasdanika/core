@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
@@ -20,8 +21,12 @@ class RootImpl extends ModelElementImpl implements Root {
 
 	@Override
 	public Layer createLayer() {
-		// TODO Auto-generated method stub
-		return null;
+		Element layerElement = element.getOwnerDocument().createElement("mxCell");
+		layerElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
+		layerElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
+		element.getParentNode().appendChild(layerElement);
+		List<Layer> layers = getLayers();
+		return layers.get(layers.size() - 1);
 	}
 
 }

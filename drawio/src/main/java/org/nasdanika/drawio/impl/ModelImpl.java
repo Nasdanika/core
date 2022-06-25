@@ -1,5 +1,14 @@
 package org.nasdanika.drawio.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,22 +16,74 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.Inflater;
+import java.util.zip.InflaterOutputStream;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.apache.commons.codec.binary.Base64;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Root;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 class ModelImpl extends ElementImpl implements Model {
 	
-	private static final String ATTRIBUTE_VERTEX = "vertex";
-	private static final String ATTRIBUTE_EDGE = "edge";
-	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
+	static final String ATTRIBUTE_VERTEX = "vertex";
+	static final String ATTRIBUTE_EDGE = "edge";
+	
+	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();		
 	
 	ModelImpl(org.w3c.dom.Element element) {
 		this.element = element;		
+	}
+	
+	ModelImpl(String compressedStr) throws SAXException, IOException, ParserConfigurationException {
+		if (!Base64.isBase64(compressedStr)) {
+			throw new IllegalArgumentException("Compressed diagram is not Base64 encoded");
+		}
+	    byte[] compressed = Base64.decodeBase64(compressedStr);
+	    byte[] decompressed = inflate(compressed);
+	    String decompressedStr = new String(decompressed, StandardCharsets.UTF_8);
+	    String decodedStr = URLDecoder.decode(decompressedStr, StandardCharsets.UTF_8.name());
+	    
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		element = dBuilder.parse(new InputSource(new StringReader(decodedStr))).getDocumentElement();				
+	}
+	
+	/**
+	 * @return Compressed model string.
+	 */
+	String compress() throws TransformerException, IOException {
+	    TransformerFactory tFactory = TransformerFactory.newInstance();
+	    Transformer transformer = tFactory.newTransformer();
+	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		
+	    DOMSource source = new DOMSource(element);
+	    StringWriter sw = new StringWriter();
+	    try (sw) {
+		    StreamResult out = new StreamResult(sw);
+		    transformer.transform(source, out);
+	    }
+	    String urlEncodedStr = URLEncoder.encode(sw.toString(), StandardCharsets.UTF_8.name()).replace("+", "%20"); // Hackish replacement of + with %20 for drawio viewer to understand.
+	    byte[] reCompressed = deflate(urlEncodedStr.getBytes(StandardCharsets.UTF_8));
+	    return Base64.encodeBase64String(reCompressed);		
 	}
 	
 	@Override
@@ -109,5 +170,31 @@ class ModelImpl extends ElementImpl implements Model {
 			
 		};
 	}	
+	
+	private static  byte[] inflate(byte[] content) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new InflaterOutputStream(baos, new Inflater(true))) {
+	        byte[] buf = new byte[8192];
+	        int length;
+	        while ((length = source.read(buf)) > 0) {
+	            target.write(buf, 0, length);
+	        }
+		}
+		
+		return baos.toByteArray();
+	}
+	
+	private static  byte[] deflate(byte[] content) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (ByteArrayInputStream source = new ByteArrayInputStream(content); OutputStream target = new DeflaterOutputStream(baos, new Deflater(Deflater.DEFAULT_COMPRESSION, true))) {
+	        byte[] buf = new byte[8192];
+	        int length;
+	        while ((length = source.read(buf)) > 0) {
+	            target.write(buf, 0, length);
+	        }
+		}
+		
+		return baos.toByteArray();
+	}
 	
 }
