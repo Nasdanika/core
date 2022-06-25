@@ -3,7 +3,6 @@ package org.nasdanika.drawio;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.awt.Rectangle;
 
 /**
  * {@link Document} element, including the Document itself, backed by org.w3c.dom.Element.

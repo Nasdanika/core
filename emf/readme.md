@@ -253,6 +253,8 @@ It is possible to load zero or more objects into a reference using ``fileset:`` 
 
 The specification can be a string, a YAML array, or a YAML map. 
 
+In some cases if a patterns starts with ``*`` it is treated as a [YAML alias](https://yaml.org/spec/1.2.2/#alias-nodes) which would lead to a ScannerException being thrown. To solve it add ``./`` in front of ``*`` e.g. ``./*/engineering.yml``.
+
 ###### String
 
 If it is a string, then it is treated as an [Ant path pattern](https://github.com/azagniotov/ant-style-path-matcher).
@@ -263,7 +265,7 @@ Example: ``fileset:issues/*.yml``
 
 If it is an array, then elements are treated as Ant path patterns.
 
-Example: ``fileset:issues/*.yml``
+Example: ``fileset:[issues/*.yml]``
 
 ###### Map
 

@@ -1,7 +1,5 @@
 package org.nasdanika.diagram.gen;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -39,6 +37,7 @@ import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.IntegerProperty;
@@ -71,8 +70,9 @@ public class DrawioGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public Document generateDiagram(Diagram diagram) throws Exception {
-		return diagramGenerator.generateDrawioDiagram(generateModel(diagram));
+	public String generateDiagram(Diagram diagram) throws Exception {
+		Document document = generateModel(diagram);
+		return diagramGenerator.generateDrawioDiagram(document.save(true));
 	}
 
 	/**
@@ -105,39 +105,34 @@ public class DrawioGenerator {
     }
 
 	protected void generatePage(Diagram diagram, Page page) throws Exception {
-		try	{
-			Root root = page.getModels().get(0).getRoot();
-			for (Note note: diagram.getNotes()) {
-				createNote(note, model);				
-			}
-			Map<DiagramElement,ModelElement> elementsMap = new HashMap<>();
-			Map<DiagramElement, Rectangle> geometry = new HashMap<>();
-			layout(diagram, geometry::put);
-						
-			Collection<Connection> connections = new ArrayList<>();
-			EList<DiagramElement> diagramElements = diagram.getElements();
-			if (!diagramElements.isEmpty()) {
-				Layer backgroundLayer = root.. 
-				for (DiagramElement element: diagramElements) { // Background anonymous layer
-					createElement(element, graph, parent, userObjectFactory, geometry::get, elementsMap, connections, 0);
-				}
-			}
+		Root root = page.getModel().getRoot();
+		Map<DiagramElement,ModelElement> elementsMap = new HashMap<>();
+		Map<DiagramElement, Rectangle> geometry = new HashMap<>();
+		layout(diagram, geometry::put);
+					
+		Collection<Connection> connections = new ArrayList<>();
+		org.nasdanika.drawio.Layer backgroundLayer = root.getLayers().get(0);
+		for (Note note: diagram.getNotes()) {
+			createNote(note, backgroundLayer);				
+		}
+		for (DiagramElement element: diagram.getElements()) { // Background anonymous layer
+			createElement(element, backgroundLayer, geometry::get, elementsMap, connections, 0);
+		}
+		
+		for (Layer layer: diagram.getLayers()) {
+			org.nasdanika.drawio.Layer drawioLayer = root.createLayer();
+			drawioLayer.setLabel(layer.getName());
 			
-			for (Layer layer: diagram.getLayers()) {
-				createLayer(layer, graph, userObjectFactory, geometry::get, elementsMap, connections, 0);
-			}			
-			
-			for (Connection connection: connections) {
-				mxCell source = Objects.requireNonNull(elementsMap.get(connection.eContainer()), "Source cell not found");
-				mxCell target = Objects.requireNonNull(elementsMap.get(connection.getTarget()), "Target cell not found");
-				EObject commonAncestor = NcoreUtil.commonAncestor(connection.eContainer(), connection.getTarget());
-				mxCell commonParent = elementsMap.get(commonAncestor);
-				createConnection(connection, graph, commonParent == null ? parent : commonParent, source, target, userObjectFactory);
-			}
-		} finally {
-			graphModel.endUpdate();
-		}		
-		return graph;	
+			createLayer(layer, drawioLayer, geometry::get, elementsMap, connections, 0);
+		}			
+		
+		for (Connection connection: connections) {
+			ModelElement source = Objects.requireNonNull(elementsMap.get(connection.eContainer()), "Source cell not found");
+			ModelElement target = Objects.requireNonNull(elementsMap.get(connection.getTarget()), "Target cell not found");
+			EObject commonAncestor = NcoreUtil.commonAncestor(connection.eContainer(), connection.getTarget());
+			ModelElement commonParent = elementsMap.get(commonAncestor);
+			createConnection(connection, graph, commonParent == null ? parent : commonParent, source, target, userObjectFactory);
+		}
 	}
 
 	/**
