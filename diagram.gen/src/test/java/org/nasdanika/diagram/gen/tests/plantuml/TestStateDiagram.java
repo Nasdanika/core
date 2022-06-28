@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
@@ -18,6 +19,7 @@ import org.nasdanika.exec.content.Text;
 
 public class TestStateDiagram {
 	
+	@Ignore("No UML dialect support for now")
 	@Test
 	public void generateStateDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;

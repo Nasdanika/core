@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
@@ -19,6 +20,7 @@ import org.nasdanika.diagram.gen.PlantumlGenerator;
  */
 public class TestSequenceDiagram {
 	
+	@Ignore("No UML dialect support for now")
 	@Test
 	public void generateSequenceDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
