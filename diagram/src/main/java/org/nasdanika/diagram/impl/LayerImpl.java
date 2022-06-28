@@ -30,11 +30,22 @@ import org.nasdanika.ncore.impl.NamedElementImpl;
  * <ul>
  *   <li>{@link org.nasdanika.diagram.impl.LayerImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link org.nasdanika.diagram.impl.LayerImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link org.nasdanika.diagram.impl.LayerImpl#isVisible <em>Visible</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class LayerImpl extends NamedElementImpl implements Layer {
+	/**
+	 * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isVisible()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean VISIBLE_EDEFAULT = true;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -82,6 +93,26 @@ public class LayerImpl extends NamedElementImpl implements Layer {
 	 * @generated
 	 */
 	@Override
+	public boolean isVisible() {
+		return (Boolean)eDynamicGet(DiagramPackage.LAYER__VISIBLE, DiagramPackage.Literals.LAYER__VISIBLE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVisible(boolean newVisible) {
+		eDynamicSet(DiagramPackage.LAYER__VISIBLE, DiagramPackage.Literals.LAYER__VISIBLE, newVisible);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DiagramPackage.LAYER__ELEMENTS:
@@ -104,6 +135,8 @@ public class LayerImpl extends NamedElementImpl implements Layer {
 				return getElements();
 			case DiagramPackage.LAYER__NOTES:
 				return getNotes();
+			case DiagramPackage.LAYER__VISIBLE:
+				return isVisible();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -125,6 +158,9 @@ public class LayerImpl extends NamedElementImpl implements Layer {
 				getNotes().clear();
 				getNotes().addAll((Collection<? extends Note>)newValue);
 				return;
+			case DiagramPackage.LAYER__VISIBLE:
+				setVisible((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -143,6 +179,9 @@ public class LayerImpl extends NamedElementImpl implements Layer {
 			case DiagramPackage.LAYER__NOTES:
 				getNotes().clear();
 				return;
+			case DiagramPackage.LAYER__VISIBLE:
+				setVisible(VISIBLE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -159,6 +198,8 @@ public class LayerImpl extends NamedElementImpl implements Layer {
 				return !getElements().isEmpty();
 			case DiagramPackage.LAYER__NOTES:
 				return !getNotes().isEmpty();
+			case DiagramPackage.LAYER__VISIBLE:
+				return isVisible() != VISIBLE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

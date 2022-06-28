@@ -11,6 +11,7 @@ import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.DiagramGenerator.Dialect;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Diagram;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.ncore.Marker;
 
 /**
@@ -67,7 +68,8 @@ public class Generator {
 				} else {
 					File container = diagramFile.getParentFile();
 					if (container.isDirectory() || container.mkdirs()) {
-						Files.write(diagramFile.toPath(), DefaultConverter.INSTANCE.toByteArray(createDrawioGenerator().generateModel(diagram)));
+						Document document = createDrawioGenerator().generateModel(diagram);
+						Files.write(diagramFile.toPath(), DefaultConverter.INSTANCE.toByteArray(document.save(true)));
 					}
 				}
 			}						

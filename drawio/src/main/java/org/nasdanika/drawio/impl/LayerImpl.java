@@ -10,7 +10,7 @@ import org.nasdanika.drawio.Node;
 import org.w3c.dom.Element;
 
 class LayerImpl extends ModelElementImpl implements Layer {
-
+	
 	LayerImpl(Element element, ModelImpl model) {
 		super(element, model);
 	}

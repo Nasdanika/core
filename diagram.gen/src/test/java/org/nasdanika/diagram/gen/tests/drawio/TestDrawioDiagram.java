@@ -13,6 +13,7 @@ import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.diagram.DiagramFactory;
 import org.nasdanika.diagram.Layer;
 import org.nasdanika.diagram.gen.DrawioGenerator;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.NcoreFactory;
 
@@ -23,10 +24,10 @@ public class TestDrawioDiagram {
 		Diagram diagram = createAwsDiagram(null);
 	
 		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
-		String diagramModel = generator.generateModel(diagram);
+		Document diagramModel = generator.generateModel(diagram);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.write(new File(outputDir, "aws.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+		Files.write(new File(outputDir, "aws.drawio").toPath(), diagramModel.save(true).getBytes(StandardCharsets.UTF_8));		
 	}
 
 	protected Diagram createAwsDiagram(String pageUUID) {
@@ -76,10 +77,10 @@ public class TestDrawioDiagram {
 		Diagram diagram = createLayeredAwsDiagram();
 	
 		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
-		String diagramModel = generator.generateModel(diagram);
+		Document diagramDocument = generator.generateModel(diagram);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.write(new File(outputDir, "aws-layered.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+		Files.write(new File(outputDir, "aws-layered.drawio").toPath(), diagramDocument.save(false).getBytes(StandardCharsets.UTF_8));		
 	}
 
 	protected Diagram createLayeredAwsDiagram() {
@@ -134,10 +135,10 @@ public class TestDrawioDiagram {
 		Diagram awsDiagram = createAwsDiagram(awsLayeredDiagram.getUuid());
 	
 		DrawioGenerator generator = new DrawioGenerator(DiagramGenerator.INSTANCE);
-		String diagramModel = generator.generateModel(awsDiagram, awsLayeredDiagram);
+		Document diagramDocument = generator.generateModel(awsDiagram, awsLayeredDiagram);
 		File outputDir = new File("target/diagrams");
 		outputDir.mkdirs();
-		Files.write(new File(outputDir, "aws-multi-page.drawio").toPath(), diagramModel.getBytes(StandardCharsets.UTF_8));		
+		Files.write(new File(outputDir, "aws-multi-page.drawio").toPath(), diagramDocument.save(true).getBytes(StandardCharsets.UTF_8));		
 	}
 	
 

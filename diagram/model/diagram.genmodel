@@ -46,6 +46,7 @@
     <genClasses ecoreClass="diagram.ecore#//Layer">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Layer/elements"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference diagram.ecore#//Layer/notes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Layer/visible"/>
     </genClasses>
     <genClasses ecoreClass="diagram.ecore#//Diagram">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute diagram.ecore#//Diagram/vertical"/>

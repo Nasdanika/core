@@ -25,6 +25,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	static final String ATTRIBUTE_TARGET = "target";
 	static final String ATTRIBUTE_SOURCE = "source";
 	static final String ATTRIBUTE_STYLE = "style";
+	static final String ATTRIBUTE_VISIBLE = "visible";	
 	
 	/**
 	 * For element resolution.
@@ -189,6 +190,22 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 			
 		};
+	}
+
+	@Override
+	public boolean isVisible() {
+		org.w3c.dom.Element cellElement = getCellElement(getElement());
+		return !cellElement.hasAttribute(ATTRIBUTE_VISIBLE) || "1".equals(cellElement.getAttribute(ATTRIBUTE_VISIBLE));
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		org.w3c.dom.Element cellElement = getCellElement(getElement());
+		if (visible) {
+			cellElement.removeAttribute(ATTRIBUTE_VISIBLE);
+		} else {
+			cellElement.setAttribute(ATTRIBUTE_VISIBLE, "0");
+		}		
 	}
 
 }

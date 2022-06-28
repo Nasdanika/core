@@ -1,17 +1,17 @@
 package org.nasdanika.diagram.gen;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -34,10 +34,9 @@ import org.nasdanika.diagram.Link;
 import org.nasdanika.diagram.Note;
 import org.nasdanika.diagram.Start;
 import org.nasdanika.drawio.Document;
-import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.IntegerProperty;
@@ -112,6 +111,9 @@ public class DrawioGenerator {
 					
 		Collection<Connection> connections = new ArrayList<>();
 		org.nasdanika.drawio.Layer backgroundLayer = root.getLayers().get(0);
+		if (!diagram.isVisible()) {
+			backgroundLayer.setVisible(false);
+		}
 		for (Note note: diagram.getNotes()) {
 			createNote(note, backgroundLayer);				
 		}
@@ -122,16 +124,21 @@ public class DrawioGenerator {
 		for (Layer layer: diagram.getLayers()) {
 			org.nasdanika.drawio.Layer drawioLayer = root.createLayer();
 			drawioLayer.setLabel(layer.getName());
+			if (!layer.isVisible()) {
+				drawioLayer.setVisible(false);
+			}
 			
-			createLayer(layer, drawioLayer, geometry::get, elementsMap, connections, 0);
+			for (DiagramElement element: layer.getElements()) {
+				createElement(element, drawioLayer, geometry::get, elementsMap, connections, 0);
+			}
 		}			
 		
 		for (Connection connection: connections) {
 			ModelElement source = Objects.requireNonNull(elementsMap.get(connection.eContainer()), "Source cell not found");
 			ModelElement target = Objects.requireNonNull(elementsMap.get(connection.getTarget()), "Target cell not found");
 			EObject commonAncestor = NcoreUtil.commonAncestor(connection.eContainer(), connection.getTarget());
-			ModelElement commonParent = elementsMap.get(commonAncestor);
-			createConnection(connection, graph, commonParent == null ? parent : commonParent, source, target, userObjectFactory);
+			ModelElement commonParent = elementsMap.get(commonAncestor);		
+			(commonParent instanceof org.nasdanika.drawio.Layer ? (org.nasdanika.drawio.Layer) commonParent : backgroundLayer).createConnection((Node) source, (Node) target).getStyle().put("strokeColor", "#000000");
 		}
 	}
 
@@ -407,24 +414,6 @@ public class DrawioGenerator {
 		}
 		return 30;
 	}
-
-	protected void createConnection(
-			Connection connection,
-			mxGraph graph,
-			Object parent, 
-			mxCell source, 
-			mxCell target,
-			Document userObjectFactory) {
-		
-		Element userObject = userObjectFactory.createElement("UserObject");
-//		String dataLink = "data:action/json,{\"actions\":[{\"open\":\"javascript:alert(\\\"Hello World\\\")\"}]}";
-//		userObject.setAttribute("link", dataLink);
-//		userObject.setAttribute("linkTarget", "self");
-//		userObject.setAttribute("label", renderConconnection.get); TODO
-				
-		mxCell edge = (mxCell) graph.insertEdge(parent, null, userObject, source, target); // TODO - ID
-		edge.setStyle("strokeColor=#000000");
-	}	
 	
 	protected String generate(Connection connection) {
 		StringBuilder ret = new StringBuilder();
@@ -498,7 +487,7 @@ public class DrawioGenerator {
 		
 		return ret.toString();
 	}	
-	
+		
 	/**
 	 * Creates a cell for diagram element and puts element to cell entry to the elements map for creating connections.
 	 * @param element
@@ -507,88 +496,30 @@ public class DrawioGenerator {
 	 * @param userObjectFactory
 	 * @param elementsMap
 	 */
-	protected void createLayer(
-			Layer layer, 
-			mxGraph graph, 
-			Document userObjectFactory,
-			Function<DiagramElement, Rectangle> geometry,
-			Map<DiagramElement, mxCell> elementsMap,
-			Collection<Connection> connections,
-			int depth) {
-		
-		mxCell layerCell = (mxCell) graph.insertVertex(graph.getModel().getRoot(), UUID.randomUUID().toString(), layer.getName(), 0, 0, 0, 0);
-		layerCell.setVertex(false);
-		layerCell.setGeometry(null);
-		
-		for (DiagramElement element: layer.getElements()) {
-			createElement(element, graph, layerCell, userObjectFactory, geometry, elementsMap, connections, 0);
-		}
-	}
-	
-	
-	/**
-	 * Creates a cell for diagram element and puts element to cell entry to the elements map for creating connections.
-	 * @param element
-	 * @param graph
-	 * @param parent
-	 * @param userObjectFactory
-	 * @param elementsMap
-	 */
-	protected mxCell createElement(
+	protected Node createElement(
 			DiagramElement element, 
-			mxGraph graph, 
-			Object parent, 
-			Document userObjectFactory,
+			org.nasdanika.drawio.Layer layer, 
 			Function<DiagramElement, Rectangle> geometry,
-			Map<DiagramElement, mxCell> elementsMap,
+			Map<DiagramElement, ModelElement> elementsMap,
 			Collection<Connection> connections,
 			int depth) {
 		
-//		Element v1uo = doc.createElement("UserObject");
-//		v1uo.setAttribute("label", "Hren\nsobachya");
-//		v1uo.setAttribute("link", "https://nasdanika.org");
-//		v1uo.setAttribute("uri", "nasdanika://hmmm");
-//		mxCell v1 = (mxCell) graph.insertVertex(parent, null, v1uo, 40, 40, 160, 60);
-//		v1.setStyle("verticalAlign=top;fillColor=#fefece");
-//		Object v11 = graph.insertVertex(v1, null, "Purum", 20, 20, 80, 30);
-//		Object v2 = graph.insertVertex(parent, null, "World!", 280, 250, 160, 60);
-//		mxCell v21 = (mxCell) graph.insertVertex(parent, null, "Govno", 20, 20, 80, 30);
-//		v21.setStyle("fillColor=#fefece");
-//		graph.insertEdge(parent, null, "Edge", v1, v2);
-//		graph.insertEdge(parent, null, "Cross Edge", v11, v21);
+		Node elementNode = layer.createNode();
 		
-		
-//		if (diagramElement instanceof Start) {
-//			return "";
-//		}
-//		if (diagramElement instanceof End) {
-//			return "";
-//		}
-//		
-//		StringBuilder ret = new StringBuilder();
-//		
-//		for (int i = 0; i < depth; ++i) {
-//			ret.append("  ");
-//		}
-//		
-//		ret.append(diagramElement.getType()).append(" ");		
-//		
-		Element userObject = userObjectFactory.createElement("UserObject");
-				
 		String renderedName = renderName(element);
 		if (!Util.isBlank(renderedName)) {
-			userObject.setAttribute("label", renderedName);
+			elementNode.setLabel(renderedName);
 		}
 				
-		Map<String,String> style = new LinkedHashMap<>();
+		Map<String,String> style = elementNode.getStyle();
 
 		String location = element.getLocation();
 		if (!Util.isBlank(location)) {
-			userObject.setAttribute("link", location);
+			elementNode.setLink(location);
 		}
 		String tooltip = element.getTooltip();
 		if (!Util.isBlank(tooltip)) {
-			userObject.setAttribute("tooltip", tooltip);
+			elementNode.setTooltip(tooltip);
 		}
 
 		style.put("recursiveResize", "0");
@@ -666,7 +597,7 @@ public class DrawioGenerator {
 						}
 					} else if (!HEIGHT_PROPERTY.equals(drawioProperty.getName()) && !WIDTH_PROPERTY.equals(drawioProperty.getName())) {
 						if (drawioProperty instanceof StringProperty) {
-							userObject.setAttribute(drawioProperty.getName(), ((StringProperty) drawioProperty).getValue());
+							elementNode.setProperty(drawioProperty.getName(), ((StringProperty) drawioProperty).getValue());
 						}
 					}
 				}
@@ -681,35 +612,17 @@ public class DrawioGenerator {
 				styleBuilder.append(se.getKey()).append("=").append(se.getValue());
 			}
 		}		
-		Rectangle cellGeometry = Objects.requireNonNull(geometry.apply(element), "Element geometry not found");
-		mxCell cell = (mxCell) graph.insertVertex(
-				parent, 
-				element.getId(), 
-				userObject, 
-				cellGeometry.getX(), 
-				cellGeometry.getY(), 
-				cellGeometry.getWidth(), 
-				cellGeometry.getHeight(), 
-				styleBuilder.length() == 0 ? null : styleBuilder.toString());
-		
-		elementsMap.put(element, cell);
+		Rectangle elementGeometry = Objects.requireNonNull(geometry.apply(element), "Element geometry not found");
+		org.nasdanika.drawio.Rectangle nodeGeometry = elementNode.getGeometry();
+		nodeGeometry.setBounds((int) elementGeometry.getX(), (int) elementGeometry.getY(), (int) elementGeometry.getWidth(), (int) elementGeometry.getHeight()); 
+		elementsMap.put(element, elementNode);
 		
 		EList<DiagramElement> elements = element.getElements();		
-		if (elements.isEmpty()) {
-//			graph.updateCellSize(cell, true);
-		} else {
-			List<mxCell> childrenCells = new ArrayList<>();
+		if (!elements.isEmpty()) {
+			List<Node> childNodes = new ArrayList<>();
 			for (DiagramElement child: elements) {
-				childrenCells.add(createElement(child, graph, cell, userObjectFactory, geometry, elementsMap, connections, depth + 1));
+				childNodes.add(createElement(child, elementNode, geometry, elementsMap, connections, depth + 1));
 			}
-
-			mxGeometry geo = (mxGeometry) cell.getGeometry().clone();
-			for (mxCell childCell: childrenCells) {
-				mxGeometry childGeometry = childCell.getGeometry();
-				geo.setWidth(Math.max(geo.getWidth(), childGeometry.getX() + childGeometry.getWidth() + 10));
-				geo.setHeight(Math.max(geo.getHeight(), childGeometry.getY() + childGeometry.getHeight() + 10));
-			}
-			graph.resizeCell(cell, geo);
 		}
 		
 //		
@@ -728,7 +641,7 @@ public class DrawioGenerator {
 				
 		connections.addAll(element.getConnections());	
 		
-		return cell;
+		return elementNode;
 	}
 
 	private String renderName(DiagramElement element) {
@@ -768,7 +681,7 @@ public class DrawioGenerator {
 	 * @param userObjectFactory
 	 * @return Note cell
 	 */
-	protected mxCell createNote(Note note, mxGraph graph, Object parent, Document userObjectFactory) {
+	protected Node createNote(Note note, org.nasdanika.drawio.Layer layer) {
 		StringBuilder content = new StringBuilder();
 		String noteText = note.getText();
 		EList<EObject> noteContent = note.getContent();
@@ -781,11 +694,16 @@ public class DrawioGenerator {
 		content.append(render(noteContent));
 		content.append(System.lineSeparator());
 		
-		Element noteUserObject = userObjectFactory.createElement("UserObject");
-		noteUserObject.setAttribute("label", content.toString());
-		mxCell noteCell = (mxCell) graph.insertVertex(parent, null, noteUserObject, 40, 40, 160, 60); // TODO - compute position and size, relative?
-		noteCell.setStyle("shape=note;align=left;fillColor=#e3c800");		
-		return noteCell;
+		Node noteNode = layer.createNode();
+		noteNode.setLabel(content.toString());
+		noteNode.getGeometry().setBounds(0, 0, 160, 60);
+		Map<String, String> style = noteNode.getStyle();
+		style.put("shape", "note");
+		style.put("align", "left");
+		style.put("fillColor", "#e3c800");
+		style.put("whiteSpace", "wrap");
+		style.put("html", "1");
+		return noteNode;
 	}
 	
 	// TODO - merging of existing drawio model
@@ -841,24 +759,5 @@ public class DrawioGenerator {
 		ret.append(System.lineSeparator());
 		return ret.toString();
 	}
-	
-	public static void dump(mxICell cell, int indent) {
-		for (int i = 0; i < indent; ++i) {
-			System.out.print("  ");
-		}
-		Object cellValue = cell.getValue();
-		if (cellValue instanceof Element) {
-			String label = ((Element) cellValue).getAttribute("label");
-			if (!Util.isBlank(label)) {
-				System.out.print(label + " ");
-			}
-		}
-		System.out.print(cell);
-		System.out.println();
-		for (int i = 0; i < cell.getChildCount(); ++i) {
-        	mxICell child = cell.getChildAt(i);
-			dump(child, indent + 1);
-        }
-	}		
 
 }

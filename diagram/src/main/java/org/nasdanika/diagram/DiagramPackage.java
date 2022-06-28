@@ -542,13 +542,22 @@ public interface DiagramPackage extends EPackage {
 	int LAYER__NOTES = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER__VISIBLE = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Layer</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LAYER_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int LAYER_FEATURE_COUNT = NcorePackage.NAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Layer</em>' class.
@@ -640,6 +649,15 @@ public interface DiagramPackage extends EPackage {
 	 * @ordered
 	 */
 	int DIAGRAM__NOTES = LAYER__NOTES;
+
+	/**
+	 * The feature id for the '<em><b>Visible</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DIAGRAM__VISIBLE = LAYER__VISIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Vertical</b></em>' attribute.
@@ -1546,6 +1564,17 @@ public interface DiagramPackage extends EPackage {
 	EReference getLayer_Notes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.diagram.Layer#isVisible <em>Visible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Visible</em>'.
+	 * @see org.nasdanika.diagram.Layer#isVisible()
+	 * @see #getLayer()
+	 * @generated
+	 */
+	EAttribute getLayer_Visible();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.diagram.Diagram <em>Diagram</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1961,6 +1990,14 @@ public interface DiagramPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LAYER__NOTES = eINSTANCE.getLayer_Notes();
+
+		/**
+		 * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LAYER__VISIBLE = eINSTANCE.getLayer_Visible();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.diagram.impl.DiagramImpl <em>Diagram</em>}' class.

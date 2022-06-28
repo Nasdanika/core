@@ -27,4 +27,8 @@ public interface ModelElement extends Element {
 	
 	Set<String> getTags();
 	
+	boolean isVisible();
+	
+	void setVisible(boolean visible);
+	
 }
