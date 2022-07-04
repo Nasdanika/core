@@ -3,6 +3,7 @@ package org.nasdanika.drawio;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * {@link Document} element, including the Document itself, backed by org.w3c.dom.Element.
@@ -20,8 +21,8 @@ public interface Element {
 	 * Accepts the visitor in children first way.
 	 * @param visitor
 	 */
-	default void accept(Consumer<Element> visitor) {
-		accept((e, cr) -> { visitor.accept(e); return null; });
+	default void accept(Consumer<Element> visitor, ConnectionBase connectionBase) {
+		accept((e, cr) -> { visitor.accept(e); return null; }, connectionBase);
 	}
 	
 	/**
@@ -30,14 +31,13 @@ public interface Element {
 	 * @param visitor
 	 * @return result returned by the visitor.
 	 */
-	<T> T accept(BiFunction<Element, Map<Element, T>, T> visitor);
+	<T> T accept(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase);
 	
 	/**
-	 * @param step
-	 * @return A visitor which sizes and arranges nodes in such a way that they do not overlap.
+	 * @return Stream containing this element and its children.
 	 */
-	static BiFunction<Element, Map<Element, Rectangle>, Rectangle> createNonOverlappingLayoutVisitor(int step) {
-		throw new UnsupportedOperationException("TODO - move logic from diagram.gen");
-	}	
+	default Stream<Element> stream(ConnectionBase connectionBase) {
+		return accept((BiFunction<Element, Map<Element, Stream<Element>>, Stream<Element>>) (e, cm) -> cm.values().stream().reduce(Stream.of(e), (a,b) -> Stream.concat(a, b)), connectionBase);
+	}; 
 
 }

@@ -26,6 +26,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
 import org.w3c.dom.Node;
@@ -68,10 +69,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 	}
 
 	@Override
-	public <T> T accept(BiFunction<org.nasdanika.drawio.Element, Map<org.nasdanika.drawio.Element, T>, T> visitor) {
+	public <T> T accept(BiFunction<org.nasdanika.drawio.Element, Map<org.nasdanika.drawio.Element, T>, T> visitor, ConnectionBase connectionBase) {
 		Map<org.nasdanika.drawio.Element, T> pageResults = new LinkedHashMap<>();
 		for (Page page: getPages()) {
-			pageResults.put(page, page.accept(visitor));
+			pageResults.put(page, page.accept(visitor, connectionBase));
 		}
 		return visitor.apply(this, pageResults);
 	}

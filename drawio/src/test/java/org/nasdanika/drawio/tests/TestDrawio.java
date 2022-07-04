@@ -7,13 +7,18 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.xml.transform.TransformerException;
 
+import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Layer;
@@ -33,7 +38,7 @@ public class TestDrawio {
 		BiFunction<Element, Map<Element, String>, String> visitor = (element, childResults) -> {
 			return element.getElement().getTagName() + "[" + element.getElement().getAttribute("id") + "] " + childResults;
 		};
-		String result = document.accept(visitor);
+		String result = document.accept(visitor, null);
 		System.out.println(result);
 		
 		for (Page page: document.getPages()) {
@@ -67,7 +72,7 @@ public class TestDrawio {
 		BiFunction<Element, Map<Element, String>, String> visitor = (element, childResults) -> {
 			return element.getElement().getTagName() + "[" + element.getElement().getAttribute("id") + "] " + childResults;
 		};
-		String result = document.accept(visitor);
+		String result = document.accept(visitor, null);
 		System.out.println(result);
 		
 		for (Page page: document.getPages()) {
@@ -168,21 +173,43 @@ public class TestDrawio {
 			Connection connection = (Connection) modelElement;
 			System.out.println(indent + "\tSource: " + connection.getSource().getLabel());
 			System.out.println(indent + "\tTarget: " + connection.getTarget().getLabel());			
-		}
+		}		
+	}	
+	
+	@Test
+	public void testStream() throws Exception {
+		Document document = Document.load(getClass().getResource("uncompressed.drawio"));
+		long actors = document.stream(ConnectionBase.SOURCE).filter(ModelElement.class::isInstance).map(ModelElement.class::cast).filter(me -> "Actor".equals(me.getLabel())).count();
+		assertThat(actors).isEqualTo(1);
+	}
+	
+	@Test
+	public void testURI() throws Exception {
+		Document document = Document.load(getClass().getResource("uris.drawio"));
+		URI base = URI.createURI("nasdanika://drawio/tests/");
+		Function<ModelElement, URI> uriProvider = e -> {
+			String uriProperty = e.getProperty("uri");
+			if (Util.isBlank(uriProperty)) {
+				return null;
+			}
+			URI uri = URI.createURI(uriProperty);
+			return uri.appendSegment(""); // Adding a hanging / for "under the parent" resolution.
+		};
 		
-//	    TransformerFactory tFactory = TransformerFactory.newInstance();
-//	    Transformer transformer = tFactory.newTransformer();
-//	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-//		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-//		
-//	    DOMSource source = new DOMSource(modelElement.getElement());
-//	    StringWriter sw = new StringWriter();
-//	    try (sw) {
-//		    StreamResult out = new StreamResult(sw);
-//		    transformer.transform(source, out);
-//	    }
-//		System.out.println(sw);			    
-//		System.out.println(indent + modelElement.getElement().getOwnerDocument().hashCode());			    
-	}		
-
+		Optional<ModelElement> actorOptional = document.stream(null).filter(ModelElement.class::isInstance).map(ModelElement.class::cast).filter(me -> "Actor".equals(me.getLabel())).findFirst();
+		assertThat(actorOptional.isPresent()).isEqualTo(true);
+		URI actorURI = actorOptional.get().resolveURI(base, uriProvider, null);
+		assertThat(actorURI).isEqualTo(URI.createURI("nasdanika://drawio/tests/root/container/actor/"));
+		
+		Optional<ModelElement> simpleConnectionOptional = document.stream(ConnectionBase.SOURCE).filter(ModelElement.class::isInstance).map(ModelElement.class::cast).filter(me -> "Simple Connection".equals(me.getLabel())).findFirst();
+		assertThat(simpleConnectionOptional.isPresent()).isEqualTo(true);
+		URI simpleConnectionURI = simpleConnectionOptional.get().resolveURI(base, uriProvider, ConnectionBase.SOURCE);
+		assertThat(simpleConnectionURI).isEqualTo(URI.createURI("nasdanika://drawio/tests/root/simple-shape/simple-connection/"));
+		
+		Optional<ModelElement> toActorConnectionOptional = document.stream(ConnectionBase.SOURCE).filter(ModelElement.class::isInstance).map(ModelElement.class::cast).filter(me -> "To Actor".equals(me.getLabel())).findFirst();
+		assertThat(toActorConnectionOptional.isPresent()).isEqualTo(true);
+		URI toActorConnectionURI = toActorConnectionOptional.get().resolveURI(base, uriProvider, ConnectionBase.TARGET);
+		assertThat(toActorConnectionURI).isEqualTo(URI.createURI("nasdanika://drawio/tests/root/container/actor/to-actor/"));
+	}	
+	
 }

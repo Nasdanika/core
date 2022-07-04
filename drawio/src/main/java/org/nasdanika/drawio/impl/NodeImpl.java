@@ -1,10 +1,12 @@
 package org.nasdanika.drawio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.nasdanika.drawio.Connection;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
 import org.w3c.dom.Element;
@@ -56,6 +58,17 @@ class NodeImpl extends LayerImpl implements Node {
 	@Override
 	public Rectangle getGeometry() {
 		return new RectangleImpl(this::getGeometryElement);
+	}
+
+	@Override
+	protected List<? extends org.nasdanika.drawio.Element> getLogicalChildren(ConnectionBase connectionBase) {
+		List<org.nasdanika.drawio.Element> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
+		if (connectionBase == ConnectionBase.SOURCE) {
+			logicalChildren.addAll(getOutboundConnections());
+		} else {
+			logicalChildren.addAll(getInboundConnections());			
+		}
+		return logicalChildren;
 	}
 
 }

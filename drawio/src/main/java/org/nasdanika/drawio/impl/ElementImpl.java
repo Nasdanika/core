@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import org.nasdanika.drawio.Connection;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
 
 class ElementImpl implements Element {
@@ -26,14 +30,23 @@ class ElementImpl implements Element {
 	}
 
 	@Override
-	public <T> T accept(BiFunction<Element, Map<Element, T>, T> visitor) {
+	public <T> T accept(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase) {
 		Map<org.nasdanika.drawio.Element, T> childResults = new LinkedHashMap<>();
-		for (Element child: getChildren()) {
+		for (Element child: getLogicalChildren(connectionBase)) {
 			if (child != null) {
-				childResults.put(child, child.accept(visitor));
+				childResults.put(child, child.accept(visitor, connectionBase));
 			}
 		}
 		return visitor.apply(this, childResults);
+	}
+	
+	protected List<? extends Element> getLogicalChildren(ConnectionBase connectionBase) {
+		if (connectionBase == null || connectionBase == ConnectionBase.PARENT) {
+			return getChildren();
+		}
+		
+		Predicate<Element> isConnection = Connection.class::isInstance;
+		return getChildren().stream().filter(isConnection.negate()).collect(Collectors.toList());
 	}
 	
 	@Override

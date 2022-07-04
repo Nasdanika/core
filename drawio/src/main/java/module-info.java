@@ -2,9 +2,9 @@ module org.nasdanika.drawio {
 	
 	requires transitive java.xml;
 	requires org.apache.commons.codec;
-	requires org.json;
 	requires org.apache.commons.text;
-	requires org.nasdanika.common;
+	requires transitive org.nasdanika.common;
+	requires org.eclipse.emf.common;
 	
 	exports org.nasdanika.drawio;
 	

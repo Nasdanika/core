@@ -5,11 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.ModelElement;
 
@@ -207,5 +209,14 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			cellElement.setAttribute(ATTRIBUTE_VISIBLE, "0");
 		}		
 	}
-
+	
+	public <T> T resolve(T base, BiFunction<? super ModelElement,T,T> resolver, ConnectionBase connectionBase) {
+		ModelElement logicalParent = getLogicalParent(connectionBase);
+		return resolver.apply(this, logicalParent == null ? base : logicalParent.resolve(base, resolver, connectionBase)); 
+	}
+	
+	protected ModelElement getLogicalParent(ConnectionBase connectionBase) {
+		return getParent();
+	}
+	
 }
