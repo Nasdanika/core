@@ -342,7 +342,7 @@ public class PlantumlGenerator {
 	 * @return
 	 * @throws Exception 
 	 */
-	public String generateDiagram(Diagram diagram, DiagramGenerator.Dialect dialect) throws Exception {
+	public String generateDiagram(Diagram diagram, String dialect) throws Exception {
 		return diagramGenerator.generateDiagram(generateSpec(diagram), dialect);
 	}
 	

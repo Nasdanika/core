@@ -35,30 +35,25 @@ import org.nasdanika.common.Util;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
- * Generates PlantUML text from Ecore models.
- * 
- * This code is based on net.sourceforge.plantuml.text.AbstractDiagramTextProvider and 
- * net.sourceforge.plantuml.ecore.AbstractEcoreDiagramTextProvider from 
- * https://github.com/hallvard/plantuml
+ * Generates Mermaid.js class diagram (https://mermaid-js.github.io/mermaid/#/classDiagram) text from Ecore models.
  * 
  * @author Pavel Vlasov
  *
  */
-public class PlantUmlTextGenerator implements DiagramTextGenerator {
+public class MermaidTextGenerator implements DiagramTextGenerator {
 	
 	private static final String DIAGRAM_STYLE_KEY = "diagram-style";
 	private static final String RELATED_BACKGROUND = "#DDDDDD";
 	
 	// Default background: #FEFECE
 
-	
 	// TODO - support of packages and fully qualified names -> get rid of Logical name?
 	
 	private Appendable collector;
 	private Function<EClassifier, String> eClassifierLinkResolver;
 	private Function<EModelElement, String> eModelElementFirstDocSentenceProvider;
 
-	public PlantUmlTextGenerator(
+	public MermaidTextGenerator(
 			Appendable collector, 
 			Function<EClassifier, String> eClassifierLinkResolver, 
 			Function<EModelElement, String> eModelElementFirstDocSentenceProvider) {
@@ -679,14 +674,6 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			}
 		}
 		return getSimpleName(typeName);
-	}
-	
-	public void appendStartUml() throws IOException {
-		collector.append("@startuml").append(System.lineSeparator());
-	}
-	
-	public void appendEndUml() throws IOException {
-		collector.append("@enduml").append(System.lineSeparator());
 	}
 	
 }

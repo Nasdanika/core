@@ -8,8 +8,8 @@ import org.json.JSONObject;
 public class DiagramGeneratorImpl implements DiagramGenerator {
 	
 	@Override
-	public String generateDiagram(String spec, Dialect dialect) throws IOException {
-		if (dialect == Dialect.DRAWIO) {
+	public String generateDiagram(String spec, String dialect) throws IOException {
+		if (DRAWIO_DIALECT.equals(dialect)) {
 			JSONObject data = new JSONObject();
 			data.put("highlight", "#0000ff");
 			data.put("nav", true);
@@ -28,7 +28,7 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 			return diagramDiv + System.lineSeparator() + script;		
 		}
 		
-		if (dialect == Dialect.MERMAID) {
+		if (MERMAID_DIALECT.equals(dialect)) {
 			String mermaidDiv = "<div class=\"mermaid\">"  + System.lineSeparator() + spec + System.lineSeparator() + "</div>";
 			String mermaidInitialize = getMermaidInitialize();
 			if (Util.isBlank(mermaidInitialize)) {
@@ -55,7 +55,7 @@ public class DiagramGeneratorImpl implements DiagramGenerator {
 	}
 
 	@Override
-	public boolean isSupported(Dialect dialect) {
-		return dialect == Dialect.DRAWIO || dialect == Dialect.MERMAID;
+	public boolean isSupported(String dialect) {
+		return DRAWIO_DIALECT.equals(dialect) || MERMAID_DIALECT.equals(dialect);
 	}
 }

@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
-import org.nasdanika.common.DiagramGenerator.Dialect;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.drawio.Document;
@@ -32,7 +31,7 @@ public class Generator {
 			type = "plantuml:uml";
 		}
 		if (type.startsWith(PLANTUML_SCHEMA)) {
-			Dialect dialect = Dialect.valueOf(type.substring(PLANTUML_SCHEMA.length()).toUpperCase());
+			String dialect = type.substring(PLANTUML_SCHEMA.length()).toLowerCase();
 			return createPlantumlGenerator().generateDiagram(diagram, dialect);
 		}
 		

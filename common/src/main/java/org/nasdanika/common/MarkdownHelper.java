@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.jsoup.Jsoup;
-import org.nasdanika.common.DiagramGenerator.Dialect;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
@@ -119,23 +118,23 @@ public class MarkdownHelper {
 	 */
 	protected String preProcessMarkdown(String markdown, Map<String,String> replacements) {
 		if (isProcessFendedBlocks()) {
-			String ret = processFencedBlocks(markdown, DiagramGenerator.Dialect.UML, START_UML_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_PATTERN, replacements, false);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MERMAID, START_MERMAID_PATTERN, replacements, false);
+			String ret = processFencedBlocks(markdown, DiagramGenerator.UML_DIALECT, START_UML_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.SALT_DIALECT, START_WIREFRAME_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.GANTT_DIALECT, START_GANTT_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.MINDMAP_DIALECT, START_MINDMAP_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.WBS_DIALECT, START_WBS_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.DRAWIO_DIALECT, START_DRAWIO_PATTERN, replacements, false);
+			ret = processFencedBlocks(ret, DiagramGenerator.MERMAID_DIALECT, START_MERMAID_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, null, START_PNG_PATTERN, replacements, false);
 			ret = processFencedBlocks(ret, null, START_JPEG_PATTERN, replacements, false);
 					
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.UML, START_UML_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.SALT, START_WIREFRAME_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.GANTT, START_GANTT_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MINDMAP, START_MINDMAP_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.WBS, START_WBS_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.DRAWIO, START_DRAWIO_RESOURCE_PATTERN, replacements, true);
-			ret = processFencedBlocks(ret, DiagramGenerator.Dialect.MERMAID, START_MERMAID_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.UML_DIALECT, START_UML_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.SALT_DIALECT, START_WIREFRAME_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.GANTT_DIALECT, START_GANTT_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.MINDMAP_DIALECT, START_MINDMAP_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.WBS_DIALECT, START_WBS_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.DRAWIO_DIALECT, START_DRAWIO_RESOURCE_PATTERN, replacements, true);
+			ret = processFencedBlocks(ret, DiagramGenerator.MERMAID_DIALECT, START_MERMAID_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_PNG_RESOURCE_PATTERN, replacements, true);
 			ret = processFencedBlocks(ret, null, START_JPEG_RESOURCE_PATTERN, replacements, true);
 					
@@ -154,7 +153,7 @@ public class MarkdownHelper {
 	 * @param resource Indicates that spec is a URL of a resource resolved relative to the URL returned by getResourceBase(). The URL supports <code>classpath</code> schema for classloader resources.
 	 * @return
 	 */
-	private String processFencedBlocks(String input, DiagramGenerator.Dialect dialect, Pattern startPattern, Map<String,String> replacements, boolean resource) {
+	private String processFencedBlocks(String input, String dialect, Pattern startPattern, Map<String,String> replacements, boolean resource) {
 		StringBuilder output = new StringBuilder();
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
@@ -243,20 +242,20 @@ public class MarkdownHelper {
 	 * @param bareSpec
 	 * @return
 	 */
-	protected String processSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
+	protected String processSpec(String dialect, String bareSpec) {
 		return bareSpec;
 	}
 
-	protected String escapeDiagramSpec(DiagramGenerator.Dialect dialect, String bareSpec) {
+	protected String escapeDiagramSpec(String dialect, String bareSpec) {
 		if (dialect == null) {
 			return null; // For PNG and JPEG
 		}
-		if (dialect == Dialect.DRAWIO) {
+		if (DiagramGenerator.DRAWIO_DIALECT.equals(dialect)) {
 			// TODO - Extract text from XML, return null for now.
 			// Not needed with Nasdanika search - it extracts text from Drawio diagrams.
 			return null;
 		}
-		if (dialect == Dialect.MERMAID) {
+		if (DiagramGenerator.MERMAID_DIALECT.equals(dialect)) {
 			// No need - spec is available as plain text. 
 			return null;
 		}

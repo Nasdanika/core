@@ -18,55 +18,19 @@ import org.nasdanika.common.resources.Container;
  */
 public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 	
-	/**
-	 * PlantUML diagram dialect
-	 * @author Pavel
-	 *
-	 */
-	enum Dialect {
-
-		/**
-		 * For sequence, use case, class, activity, component, state, object, deployment, timing, and network diagrams.
-		 */
-		UML,
-		
-		/**
-		 * For wireframe diagrams - https://plantuml.com/salt
-		 */
-		SALT,
-		
-		/**
-		 * For Gantt charts - https://plantuml.com/gantt-diagram
-		 */
-		GANTT,
-		
-		/**
-		 * For mind maps - https://plantuml.com/mindmap-diagram
-		 */
-		MINDMAP,
-		
-		/**
-		 * For work breakdown structures - https://plantuml.com/wbs-diagram
-		 */
-		WBS,
-		
-		/**
-		 * For generating drawio (https://diagrams.net/) embedded diagram HTML from diagram file contents as a spec. 
-		 */
-		DRAWIO,
-		
-		/**
-		 * For generating Mermaid (https://mermaid-js.github.io/mermaid/#/) diagrams.
-		 */
-		MERMAID
-		
-	}
+	public static String UML_DIALECT = "uml";
+	public static String SALT_DIALECT = "salt";
+	public static String GANTT_DIALECT = "gantt";
+	public static String MINDMAP_DIALECT = "mindmap";
+	public static String WBS_DIALECT = "wbs";
+	public static String DRAWIO_DIALECT = "drawio";
+	public static String MERMAID_DIALECT = "mermaid";
 	
 	/**
 	 * @param dialect
 	 * @return true if given dialect is supported by this generator
 	 */
-	boolean isSupported(Dialect dialect);
+	boolean isSupported(String dialect);
 	
 	/**
 	 * Uses local PlantUML.
@@ -89,8 +53,8 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 		return new DiagramGenerator() {
 
 			@Override
-			public String generateDiagram(String spec, Dialect dialect) throws IOException {
-				URL dialectURL = new URL(service, dialect.name());
+			public String generateDiagram(String spec, String dialect) throws IOException {
+				URL dialectURL = new URL(service, dialect);
 				URLConnection connection = dialectURL.openConnection();
 				if (!(connection instanceof HttpURLConnection)) {
 					throw new IllegalArgumentException("Not an HTTP(s) url: "+dialectURL);
@@ -112,9 +76,9 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 			}
 
 			@Override
-			public boolean isSupported(Dialect dialect) {
+			public boolean isSupported(String dialect) {
 				try {
-					URL dialectURL = new URL(service, dialect.name());
+					URL dialectURL = new URL(service, dialect);
 					URLConnection connection = dialectURL.openConnection();
 					if (!(connection instanceof HttpURLConnection)) {
 						throw new IllegalArgumentException("Not an HTTP(s) url: "+dialectURL);
@@ -135,30 +99,34 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 	 * @return
 	 * @throws IOException 
 	 */
-	String generateDiagram(String spec, Dialect dialect) throws Exception;
+	String generateDiagram(String spec, String dialect) throws Exception;
 			
 	default String generateUmlDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.UML);
+		return generateDiagram(spec, UML_DIALECT);
 	}
 		
 	default String generateWireframeDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.SALT);
+		return generateDiagram(spec, SALT_DIALECT);
 	}
 	
 	default String generateGanttDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.GANTT);
+		return generateDiagram(spec, GANTT_DIALECT);
 	}
 	
 	default String generateMindmapDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.MINDMAP);
+		return generateDiagram(spec, MINDMAP_DIALECT);
 	}
 	
 	default String generateWbsDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.WBS);
+		return generateDiagram(spec, WBS_DIALECT);
 	}
 	
 	default String generateDrawioDiagram(String spec) throws Exception {
-		return generateDiagram(spec, Dialect.DRAWIO);
+		return generateDiagram(spec, DRAWIO_DIALECT);
+	}
+	
+	default String generateMermaidDiagram(String spec) throws Exception {
+		return generateDiagram(spec, MERMAID_DIALECT);
 	}
 	
 	/**
@@ -175,8 +143,8 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 			private int misses;
 
 			@Override
-			public String generateDiagram(String spec, Dialect dialect) throws Exception {
-				String cachePath = dialect.name() + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
+			public String generateDiagram(String spec, String dialect) throws Exception {
+				String cachePath = dialect + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
 				Object ret = container.find(cachePath, progressMonitor);
 				if (ret instanceof String) {
 					++hits;
@@ -194,7 +162,7 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 			}
 
 			@Override
-			public boolean isSupported(Dialect dialect) {
+			public boolean isSupported(String dialect) {
 				return DiagramGenerator.this.isSupported(dialect);
 			}
 			
@@ -206,12 +174,12 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 		return new DiagramGenerator() {
 
 			@Override
-			public boolean isSupported(Dialect dialect) {
+			public boolean isSupported(String dialect) {
 				return DiagramGenerator.this.isSupported(dialect) || other.isSupported(dialect);
 			}
 
 			@Override
-			public String generateDiagram(String spec, Dialect dialect) throws Exception {
+			public String generateDiagram(String spec, String dialect) throws Exception {
 				return (DiagramGenerator.this.isSupported(dialect) ? DiagramGenerator.this : other).generateDiagram(spec, dialect);
 			}
 			
