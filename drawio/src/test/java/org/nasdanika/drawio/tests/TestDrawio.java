@@ -1,16 +1,20 @@
 package org.nasdanika.drawio.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.xml.transform.TransformerException;
 
@@ -210,6 +214,38 @@ public class TestDrawio {
 		assertThat(toActorConnectionOptional.isPresent()).isEqualTo(true);
 		URI toActorConnectionURI = toActorConnectionOptional.get().resolveURI(base, uriProvider, ConnectionBase.TARGET);
 		assertThat(toActorConnectionURI).isEqualTo(URI.createURI("nasdanika://drawio/tests/root/container/actor/to-actor/"));
-	}	
+	}
+	
+	@Test 
+	public void testUpOffsetGenerator() {
+		Supplier<Point> upOffsetGenerator = org.nasdanika.drawio.Util.createOffsetGenerator(10, false);
+		int x = 0;
+		int y = 0;
+		Set<java.awt.Point> visited = new HashSet<>();
+		for (int i = 0; i < 10000; ++i) {
+			Point offset = upOffsetGenerator.get();
+			x += offset.getX();
+			y += offset.getY();
+			if (!visited.add(new java.awt.Point(x, y))) {
+				fail("Point already visited: "+ x + " " + y);
+			}
+		}
+	}
+	
+	@Test 
+	public void testDownOffsetGenerator() {
+		Supplier<Point> upOffsetGenerator = org.nasdanika.drawio.Util.createOffsetGenerator(10, true);
+		int x = 0;
+		int y = 0;
+		Set<java.awt.Point> visited = new HashSet<>();
+		for (int i = 0; i < 10000; ++i) {
+			Point offset = upOffsetGenerator.get();
+			x += offset.getX();
+			y += offset.getY();
+			if (!visited.add(new java.awt.Point(x, y))) {
+				fail("Point already visited: "+ x + " " + y);
+			}
+		}
+	}
 	
 }

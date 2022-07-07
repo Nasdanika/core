@@ -310,7 +310,7 @@ public class DrawioGenerator {
 		
 		rectangle.translate((int) (unionCenter - rectangleCenter), (int) (unionMiddle - rectangleMiddle));
 	
-		Supplier<Point> offsetGenerator = createOffsetGenerator(down);
+		Supplier<Point> offsetGenerator = org.nasdanika.drawio.Util.createOffsetGenerator(10, down);
 		Z: for (Point offset = offsetGenerator.get(); offset != null; offset = offsetGenerator.get()) {
 			rectangle.translate((int) offset.getX(), (int) offset.getY());
 			for (Rectangle offsetRectangle: offsetRectangles) {
@@ -320,49 +320,6 @@ public class DrawioGenerator {
 			}
 			break; // No intersection.
 		}
-	}
-	
-	/**
-	 * @return generator of a sequence of points which are offset from the initial point for positioning of a rectangle. 
-	 * This implementation returns a sequence of offsets which form concentric half-circles up or down.
-	 * The generator returns null after some large number of invocations to prevent infinite positioning.   
-	 */
-	protected Supplier<Point> createOffsetGenerator(boolean down) {
-		return new Supplier<Point>() {
-			
-			private int counter;
-			
-			private double lastX;
-			private double lastY;
-			
-			private int radiusIncrement = 10;
-			
-			private int angleSteps = 18;
-			
-			private double initialAngle = down ? Math.PI * 0.75 : Math.PI * 0.25;
-
-			@Override
-			public Point get() {
-				++counter;
-
-				int radius = radiusIncrement * (1 + counter / angleSteps);
-				double angle = initialAngle;
-				double angleDelta = Math.PI * (double) (counter / 2) / angleSteps; 
-				if (angleSteps % 2 == 0) {
-					angle += angleDelta;
-				} else {
-					angle -= angleDelta;
-				}
-				
-				double x = radius * Math.sin(angle);
-				double y = radius * Math.cos(angle);
-				Point point = new Point((int) (x - lastX), (int) (y - lastY));
-				lastX = x;
-				lastY = y;
-				return point; 
-			}
-			
-		};
 	}
 
 	/**

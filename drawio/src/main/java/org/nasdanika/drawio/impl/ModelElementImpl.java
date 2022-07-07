@@ -19,7 +19,6 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
-	static final String ATTRIBUTE_ID = "id";
 	static final String ATTRIBUTE_PARENT = "parent";
 	static final String ATTRIBUTE_LABEL = "label";
 	static final String ATTRIBUTE_LINK = "link";

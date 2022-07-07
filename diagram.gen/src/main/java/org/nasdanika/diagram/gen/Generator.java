@@ -24,16 +24,19 @@ public class Generator {
 
 	public static final String PLANTUML_SCHEMA = "plantuml:";
 	public static final String DRAWIO_SCHEMA = "drawio:";
+//	public static final String MERMAID_SCHEMA = "mermaid:";
 
 	public String generate(Diagram diagram) throws Exception {
 		String type = diagram.getType();
-		if (type == null) {
-			type = "plantuml:uml";
-		}
 		if (type.startsWith(PLANTUML_SCHEMA)) {
 			String dialect = type.substring(PLANTUML_SCHEMA.length()).toLowerCase();
 			return createPlantumlGenerator().generateDiagram(diagram, dialect);
 		}
+		
+//		if (type.startsWith(MERMAID_SCHEMA)) {
+//			String dialect = type.substring(MERMAID_SCHEMA.length()).toLowerCase();
+//			return createMermaidGenerator().generateDiagram(diagram, dialect);
+//		}
 		
 		if (type.startsWith(DRAWIO_SCHEMA)) {
 			String diagramURI = type.substring(DRAWIO_SCHEMA.length());

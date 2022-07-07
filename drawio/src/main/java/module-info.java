@@ -1,6 +1,7 @@
 module org.nasdanika.drawio {
 	
 	requires transitive java.xml;
+	requires transitive java.desktop;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.text;
 	requires transitive org.nasdanika.common;

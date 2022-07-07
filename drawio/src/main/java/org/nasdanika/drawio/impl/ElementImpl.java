@@ -15,6 +15,8 @@ import org.nasdanika.drawio.Element;
 
 class ElementImpl implements Element {
 	
+	static final String ATTRIBUTE_ID = "id";
+	
 	protected org.w3c.dom.Element element; 
 
 	@Override
@@ -51,11 +53,11 @@ class ElementImpl implements Element {
 	
 	@Override
 	public int hashCode() {
-		if (element == null || !element.hasAttribute("id")) {
+		if (element == null) {
 			return super.hashCode();
 		}
-		String id = element.getAttribute("id");
-		return id.hashCode() ^ getClass().hashCode();
+		int hc = element.hasAttribute(ATTRIBUTE_ID) ? element.getAttribute(ATTRIBUTE_ID).hashCode() : element.hashCode();  
+		return hc ^ getClass().hashCode();
 	}
 
 	@Override
@@ -68,11 +70,19 @@ class ElementImpl implements Element {
 			return false;
 		ElementImpl other = (ElementImpl) obj;
 		
+		if (element == other.element) {
+			return true;
+		}
+		
 		if (element == null || other.element == null) {
 			return super.equals(obj);
 		}
-		String id = element.getAttribute("id");		
-		return Objects.equals(id, other.element.getAttribute("id"));
+		
+		if (element.hasAttribute(ATTRIBUTE_ID) && other.element.hasAttribute(ATTRIBUTE_ID)) {
+			return Objects.equals(element.getAttribute(ATTRIBUTE_ID), other.element.getAttribute(ATTRIBUTE_ID));			
+		}
+
+		return false;
 	}
 
 }
