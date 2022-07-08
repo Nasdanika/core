@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -21,28 +20,15 @@ public final class Util {
 	
 	private Util() {}
 			
-//	/**
-//	 * 
-//	 * @param gap Gap between rectangles
-//	 * @param offsetSupplierProvider provider of offsets for positioning of rectangles. Boolean true indicates that positions shall be down, i.e. absolute y shall be positive. 
-//	 * @return
-//	 */
-//	public static BiFunction<Element, Map<Element, Rectangle>, Rectangle> createNonOverlappingLayout(int gap, Function<Boolean, Supplier<Point>> offsetSupplierProvider) {
-//		return null;
-//	}
-	
-//	/**
-//	 * Computes sizes and positions of diagram elements.
-//	 * @param diagram
-//	 * @return
-//	 */
-//	protected Map<DiagramElement, Rectangle> layout(Diagram diagram, BiConsumer<DiagramElement, Rectangle> geometryConsumer) {		
-//		List<DiagramElement> allElements = new ArrayList<>(diagram.getElements());
-//		for (Layer layer: diagram.getLayers()) {
-//			allElements.addAll(layer.getElements());
-//		}
-//		return layout(allElements, new Point(10,10), geometryConsumer);
-//	}
+	/**
+	 * Lays out the diagram so nodes do not overlap.
+	 * @param root
+	 * @param gridSize
+	 */
+	public static void layout(Root root, int gridSize) {
+		List<Node> topLevelNodes = root.getLayers().stream().flatMap(layer -> layer.getElements().stream()).filter(Node.class::isInstance).map(Node.class::cast).collect(Collectors.toList());
+		layout(topLevelNodes, new Point(gridSize, gridSize), down -> createOffsetGenerator(gridSize, down));
+	}		
 	
 	/**
 	 * Computes sizes and positions of a collection of elements so they don't overlap
@@ -52,12 +38,12 @@ public final class Util {
 	public static Map<Node, Rectangle> layout(
 			Collection<Node> nodes, 
 			Point offset,
-			Function<Boolean, Supplier<Point>> offsetGeneratorProvider,			
-			BiConsumer<Node, Rectangle> geometryConsumer) {
+			Function<Boolean, Supplier<Point>> offsetGeneratorProvider /*,			
+			BiConsumer<Node, Rectangle> geometryConsumer */) {
 		
 		Map<Node, Rectangle> ret = new HashMap<>();
 		for (Node node: nodes) {
-			ret.put(node, createElementRectangle(node, offset, offsetGeneratorProvider, geometryConsumer));
+			ret.put(node, createElementRectangle(node, offset, offsetGeneratorProvider /*, geometryConsumer */));
 		}
 		
 		// Sort
@@ -100,7 +86,12 @@ public final class Util {
 		
 		for (Rectangle rectangle: ret.values()) {
 			rectangle.translate((int) (-minX + offset.getX()), (int) (-minY + offset.getY()));
-		}		
+		}	
+		
+		for (Entry<Node, Rectangle> e: ret.entrySet()) {
+			Rectangle rectangle = e.getValue();
+			e.getKey().getGeometry().setBounds(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+		}	
 		
 		return ret;
 	}
@@ -276,22 +267,20 @@ public final class Util {
 	private static Rectangle createElementRectangle(
 			Node node, 
 			Point offset, 
-			Function<Boolean, Supplier<Point>> offsetGeneratorProvider,
-			BiConsumer<Node, Rectangle> geometryConsumer) {
+			Function<Boolean, Supplier<Point>> offsetGeneratorProvider) {
 		
 		org.nasdanika.drawio.Rectangle nodeGeometry = node.getGeometry();
 		Rectangle rectangle = new Rectangle(0, 0, nodeGeometry.getWidth(), nodeGeometry.getHeight());
 		List<Node> children = node.getElements().stream().filter(Node.class::isInstance).map(Node.class::cast).collect(Collectors.toList());
 		if (!children.isEmpty()) {
 			Point childOffset = new Point((int) offset.getX(), (int) offset.getY() + 30);
-			Map<Node, Rectangle> childGeometry = layout(children, childOffset, offsetGeneratorProvider, geometryConsumer);
+			Map<Node, Rectangle> childGeometry = layout(children, childOffset, offsetGeneratorProvider);
 			for (ModelElement child: children) {
 				Rectangle childRectangle = childGeometry.get(child);
 				rectangle.add(childRectangle);
 			}
 			rectangle.grow((int) offset.getX(), (int) offset.getY());
 		}
-		geometryConsumer.accept(node, rectangle);
 		return rectangle;
 	}
 

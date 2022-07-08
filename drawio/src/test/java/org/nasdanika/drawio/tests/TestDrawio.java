@@ -248,4 +248,64 @@ public class TestDrawio {
 		}
 	}
 	
+	@Test
+	public void testLayout() throws Exception {
+		Document document = Document.create(false);
+		Page page = document.createPage();
+		page.setName("My first new page");
+		
+		Model model = page.getModel();
+		Root root = model.getRoot();
+		List<Layer> layers = root.getLayers();
+		assertThat(layers).singleElement();
+		
+		// Add layer
+		Layer newLayer = root.createLayer();
+		newLayer.setLabel("My new layer");
+				
+		// Add nodes
+		Node source = newLayer.createNode();
+		source.setLabel("My source node");
+		Rectangle sourceGeometry = source.getGeometry();
+		sourceGeometry.setWidth(120);
+		sourceGeometry.setHeight(50);
+		source.getTags().add("aws");
+				
+		Node target = newLayer.createNode();
+		target.setLabel("My target node");
+		target.getGeometry().setBounds(0, 0, 100, 30);
+		Set<String> targetTags = target.getTags();
+		targetTags.add("aws");
+		targetTags.add("azure");
+		
+		// Add connection 
+		Connection connection = newLayer.createConnection(source, target);
+		connection.setLabel("My connection");
+		Map<String, String> connectionStyle = connection.getStyle();
+		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
+		connectionStyle.put("rounded", "1");
+		connectionStyle.put("orthogonalLoop", "1");
+		connectionStyle.put("jettySize", "auto");
+		connectionStyle.put("html", "1");
+		
+		Node target2 = newLayer.createNode();
+		target2.setLabel("My second target");
+		target2.getGeometry().setBounds(0, 0, 120, 20);
+		
+		// Add connection 
+		Connection connection2 = newLayer.createConnection(source, target2);
+		connection2.setLabel("Second connection");
+		connectionStyle = connection2.getStyle();
+		connectionStyle.put("edgeStyle", "orthogonalEdgeStyle");
+		connectionStyle.put("rounded", "1");
+		connectionStyle.put("orthogonalLoop", "1");
+		connectionStyle.put("jettySize", "auto");
+		connectionStyle.put("html", "1");		
+		
+		org.nasdanika.drawio.Util.layout(root, 20);
+		
+		Files.writeString(new File("target/layout.drawio").toPath(), document.save(null));
+	}	
+	
+	
 }
