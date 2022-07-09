@@ -9,5 +9,6 @@ module org.nasdanika.emf {
 	requires org.eclipse.emf.ecore.xmi;
 	requires org.eclipse.jgit;
 	requires ant.style.path.matcher;
+	requires transitive org.apache.poi.ooxml;
 	
 }

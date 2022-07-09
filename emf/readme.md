@@ -322,3 +322,12 @@ For example, [GitMarker](../ncore/GitMarker.html) can be created with ${javadoc/
 #### Examples
 
 For examples see [Exec tests](https://github.com/Nasdanika/core/tree/master/exec.gen/src/test).
+
+#### MS Excel resources
+
+Loading models from MS Excel resources can be done with ${javadoc/org.nasdanika.emf.persistence.ExcelResourceFactory} class.
+This class takes care of reading and updating the workbook on save. 
+Loading of model elements from sheets and rows shall be implemented by subclasses.
+
+  
+You can find an example/test case in [TestExcel](https://github.com/Nasdanika/core/blob/master/flow/src/test/java/org/nasdanika/flow/tests/TestExcel.java).
