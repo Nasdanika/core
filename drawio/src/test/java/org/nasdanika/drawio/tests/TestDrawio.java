@@ -305,7 +305,13 @@ public class TestDrawio {
 		org.nasdanika.drawio.Util.layout(root, 20);
 		
 		Files.writeString(new File("target/layout.drawio").toPath(), document.save(null));
-	}	
+	}
+	
+	@Test 
+	public void testLoadFromPngMetadata() throws Exception {
+		List<Document> documents = Document.loadFromPngMetadata(getClass().getResourceAsStream("illustration.png"));
+		assertThat(documents).singleElement();
+	}
 	
 	
 }
