@@ -36,7 +36,7 @@ import org.yaml.snakeyaml.error.MarkedYAMLException;
  * @author Pavel
  *
  */
-public class YamlResource extends ResourceImpl {
+class YamlResource extends ResourceImpl {
 	
 	private ObjectLoader loader;
 	private ProgressMonitor progressMonitor;

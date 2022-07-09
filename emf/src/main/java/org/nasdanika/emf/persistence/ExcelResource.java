@@ -9,12 +9,12 @@ import java.util.Map;
 
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.emf.EObjectAdaptable;
+import org.nasdanika.emf.persistence.ExcelResourceFactory.UpdateAdapter;
 
 /**
  * Loads EMF classes from MS Excel files/resources. 
@@ -23,17 +23,7 @@ import org.nasdanika.emf.EObjectAdaptable;
  * @author Pavel
  *
  */
-public abstract class ExcelResource extends ResourceImpl {
-	
-	public interface UpdateAdapter extends Adapter {
-		
-		/**
-		 * Updates the workbook.
-		 * @param workbook
-		 */
-		void update(XSSFWorkbook workbook);
-		
-	}
+abstract class ExcelResource extends ResourceImpl {
 	
 	/**
 	 * Last loaded/saved state.

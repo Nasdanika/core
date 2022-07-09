@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.junit.Test;
-import org.nasdanika.emf.persistence.ExcelResource;
 import org.nasdanika.emf.persistence.ExcelResourceFactory;
 import org.nasdanika.flow.FlowFactory;
 import org.nasdanika.flow.Participant;
@@ -27,7 +26,7 @@ public class TestExcelResource {
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xlsx", new ExcelResourceFactory() {
 			
 			@Override
-			protected void loadRow(ExcelResource resource, Row row, FormulaEvaluator formulaEvaluator) {
+			protected void loadRow(Resource resource, Row row, FormulaEvaluator formulaEvaluator) {
 				if ("Participants".equals(row.getSheet().getSheetName())) {
 					Participant participant = FlowFactory.eINSTANCE.createParticipant();
 					participant.setName(row.getCell(0).getStringCellValue());

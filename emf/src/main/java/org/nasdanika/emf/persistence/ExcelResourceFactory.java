@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
@@ -19,6 +20,16 @@ import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
  *
  */
 public class ExcelResourceFactory extends ResourceFactoryImpl {
+	
+	public interface UpdateAdapter extends Adapter {
+		
+		/**
+		 * Updates the workbook.
+		 * @param workbook
+		 */
+		void update(XSSFWorkbook workbook);
+		
+	}
 	
 	@Override
 	public Resource createResource(URI uri) {
@@ -32,21 +43,21 @@ public class ExcelResourceFactory extends ResourceFactoryImpl {
 		};
 	}
 	
-	protected void loadWorkbook(ExcelResource resource, XSSFWorkbook workbook, FormulaEvaluator formulaEvaluator) {
+	protected void loadWorkbook(Resource resource, XSSFWorkbook workbook, FormulaEvaluator formulaEvaluator) {
 		Iterator<Sheet> sheetIterator = workbook.sheetIterator();
 		while (sheetIterator.hasNext()) {
 			loadSheet(resource, sheetIterator.next(), formulaEvaluator);
 		}
 	};
 	
-	protected void loadSheet(ExcelResource resource, Sheet sheet, FormulaEvaluator formulaEvaluator) {
+	protected void loadSheet(Resource resource, Sheet sheet, FormulaEvaluator formulaEvaluator) {
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		while (rowIterator.hasNext()) {
 			loadRow(resource, rowIterator.next(), formulaEvaluator);
 		}
 	};
 	
-	protected void loadRow(ExcelResource resource, Row row, FormulaEvaluator formulaEvaluator) {
+	protected void loadRow(Resource resource, Row row, FormulaEvaluator formulaEvaluator) {
 		// NOP		
 	};
 	
