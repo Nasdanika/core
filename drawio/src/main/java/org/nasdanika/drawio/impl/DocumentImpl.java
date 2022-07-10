@@ -45,12 +45,14 @@ public class DocumentImpl extends ElementImpl implements Document {
 		document = dBuilder.parse(in);
 		element = document.getDocumentElement();
 	}
+	
 	public DocumentImpl(Reader reader) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 		element = document.getDocumentElement();
 	}
+	
 	public DocumentImpl(boolean compressed) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -81,7 +83,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 
 	@Override
 	public List<Page> getPages() {		
-		// List backed by the XML document. Currently unmodifiable
+		// List backed by the XML document.
 		return new AbstractList<Page>() {
 
 			@Override
@@ -99,7 +101,38 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public int size() {
 				return getChildrenElements(getElement(), "diagram").size();
 			}
+
+			/**
+			 * Imports page node 
+			 */
+			@Override
+			public void add(int index, Page page) {
+				if (index == size()) {
+					getElement().appendChild(cloneAndImportPageElement(page));
+				} else {
+					getElement().insertBefore(cloneAndImportPageElement(page), get(index).getElement());
+				}
+			}
+
+			private Node cloneAndImportPageElement(Page page) {
+				Node pageElementClone = page.getElement().cloneNode(true);
+				Node importedPageElementClone = document.importNode(pageElementClone, true);
+				return importedPageElementClone;
+			}
 			
+			@Override
+			public Page set(int index, Page page) {
+				Page oldPage = get(index);
+				getElement().replaceChild(cloneAndImportPageElement(page), oldPage.getElement());
+				return oldPage;
+			}
+			
+			@Override
+			public Page remove(int index) {
+				Page page = get(index);
+				getElement().removeChild(page.getElement());
+				return page;
+			}
 		};
 	}
 

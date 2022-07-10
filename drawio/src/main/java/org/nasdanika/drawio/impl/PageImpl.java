@@ -79,5 +79,10 @@ class PageImpl extends ElementImpl implements Page {
 		}
 		
 	}	
+	
+	@Override
+	public String getId() {
+		return element.hasAttribute(ATTRIBUTE_ID) ? element.getAttribute(ATTRIBUTE_ID) : null;
+	}
 
 }

@@ -62,6 +62,12 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return getCellElement(element);
 	}	
 	
+	@Override
+	public String getId() {
+		org.w3c.dom.Element cellElement = getCellElement();
+		return cellElement.hasAttribute(ATTRIBUTE_ID) ? cellElement.getAttribute(ATTRIBUTE_ID) : null;
+	}
+	
 	static org.w3c.dom.Element getCellElement(org.w3c.dom.Element element) {
 		return "mxCell".equals(element.getTagName()) ? element : DocumentImpl.getChildrenElements(element, "mxCell").get(0);
 	}

@@ -35,6 +35,8 @@ public interface ModelElement extends Element {
 	
 	void setVisible(boolean visible);
 	
+	String getId();
+	
 	/**
 	 * Resolves some value for the model element by traversing its logical containment hierarchy and resolving that value against logical parents.
 	 * For the containment root the value is resolved against base.

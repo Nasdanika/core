@@ -38,7 +38,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 	
 	private ConnectionBase connectionBase;
 
-	public DrawioResourceFactory(ConnectionBase connectionBase) {
+	protected DrawioResourceFactory(ConnectionBase connectionBase) {
 		this.connectionBase = connectionBase;
 	}
 	

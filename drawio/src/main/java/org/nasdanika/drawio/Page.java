@@ -7,5 +7,7 @@ public interface Page extends Element {
 	String getName();
 	
 	void setName(String name);
+	
+	String getId();	
 
 }
