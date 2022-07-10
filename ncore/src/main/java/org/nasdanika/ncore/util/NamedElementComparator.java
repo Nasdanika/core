@@ -47,5 +47,4 @@ public class NamedElementComparator implements Comparator<NamedElement> {
 		return a.getName().compareTo(b.getName());
 	}
 
-
 }
