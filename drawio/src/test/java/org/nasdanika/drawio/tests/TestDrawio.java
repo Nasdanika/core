@@ -99,7 +99,7 @@ public class TestDrawio {
 	
 	@Test
 	public void testNewUncompressed() throws Exception {
-		Document document = Document.create(false);
+		Document document = Document.create(false, null);
 		Page page = document.createPage();
 		page.setName("My first new page");
 		
@@ -250,7 +250,7 @@ public class TestDrawio {
 	
 	@Test
 	public void testLayout() throws Exception {
-		Document document = Document.create(false);
+		Document document = Document.create(false, null);
 		Page page = document.createPage();
 		page.setName("My first new page");
 		
@@ -309,9 +309,41 @@ public class TestDrawio {
 	
 	@Test 
 	public void testLoadFromPngMetadata() throws Exception {
-		List<Document> documents = Document.loadFromPngMetadata(getClass().getResourceAsStream("illustration.png"));
+		List<Document> documents = Document.loadFromPngMetadata(getClass().getResource("illustration.png"));
 		assertThat(documents).singleElement();
 	}
+		
+	@Test 
+	public void testInternalPageLink() throws Exception {
+		Document document = Document.load(getClass().getResource("links.drawio"));
+		Optional<Node> linkToPage2 = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to Page 2".equals(n.getLabel())).findFirst();
+		assertThat(linkToPage2.isPresent()).isEqualTo(true);		
+		Page linkedPage = linkToPage2.get().getLinkedPage();
+		assertThat(linkedPage).isNotNull();
+		assertThat(linkedPage.getName()).isEqualTo("Page 2");
+	}
 	
+	@Test 
+	public void testExternalPageLink() throws Exception {
+		Document document = Document.load(getClass().getResource("links.drawio"));
+		Optional<Node> linkToPage = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to compressed second page".equals(n.getLabel())).findFirst();
+		assertThat(linkToPage.isPresent()).isEqualTo(true);		
+		Page linkedPage = linkToPage.get().getLinkedPage();
+		assertThat(linkedPage).isNotNull();
+		assertThat(linkedPage.getName()).isEqualTo("Page 2");
+		URI linkedDocURI = linkedPage.getDocument().getURI();
+		assertThat(linkedDocURI.toString().endsWith("compressed.drawio#Page+2")).isEqualTo(true);
+	}
+	
+	@Test 
+	public void testDocumentFirstPageLink() throws Exception {
+		Document document = Document.load(getClass().getResource("links.drawio"));
+		Optional<Node> linkToPage = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to compressed first page".equals(n.getLabel())).findFirst();
+		assertThat(linkToPage.isPresent()).isEqualTo(true);		
+		Page linkedPage = linkToPage.get().getLinkedPage();
+		assertThat(linkedPage).isNotNull();
+		assertThat(linkedPage.getName()).isEqualTo("Page-1");
+		assertThat(linkedPage.getDocument().getURI().toString().endsWith("compressed.drawio")).isEqualTo(true);
+	}
 	
 }

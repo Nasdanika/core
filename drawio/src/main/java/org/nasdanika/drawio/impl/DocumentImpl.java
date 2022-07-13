@@ -24,6 +24,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.eclipse.emf.common.util.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.nasdanika.drawio.ConnectionBase;
@@ -38,22 +39,25 @@ public class DocumentImpl extends ElementImpl implements Document {
 	
 	private static final String ATTRIBUTE_COMPRESSED = "compressed";
 	private org.w3c.dom.Document document;
+	private URI uri;	
 
-	public DocumentImpl(InputStream in) throws ParserConfigurationException, SAXException, IOException {
+	public DocumentImpl(InputStream in, URI uri) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(in);
 		element = document.getDocumentElement();
+		this.uri = uri;
 	}
 	
-	public DocumentImpl(Reader reader) throws ParserConfigurationException, SAXException, IOException {
+	public DocumentImpl(Reader reader, URI uri) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.parse(new InputSource(reader));
 		element = document.getDocumentElement();
+		this.uri = uri;
 	}
 	
-	public DocumentImpl(boolean compressed) throws ParserConfigurationException {
+	public DocumentImpl(boolean compressed, URI uri) throws ParserConfigurationException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		document = dBuilder.newDocument();		
@@ -64,10 +68,11 @@ public class DocumentImpl extends ElementImpl implements Document {
 		}
 		document.appendChild(mxFileElement);
 		element = document.getDocumentElement();
+		this.uri = uri;
 	}
 	
-	public DocumentImpl(String docStr) throws ParserConfigurationException, SAXException, IOException {
-		this(new StringReader(docStr));
+	public DocumentImpl(String docStr, URI uri) throws ParserConfigurationException, SAXException, IOException {
+		this(new StringReader(docStr), uri);
 	}
 
 	@Override
@@ -90,7 +95,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page get(int index) {
 				return pages.computeIfAbsent(index, idx -> {
 					try {			
-						return new PageImpl(getChildrenElements(getElement(), "diagram").get(idx));
+						return new PageImpl(DocumentImpl.this, getChildrenElements(getElement(), "diagram").get(idx));
 					} catch (IOException | ParserConfigurationException | SAXException e) {
 						throw new IllegalArgumentException("Error loading compressed page", e);
 					}
@@ -234,6 +239,11 @@ public class DocumentImpl extends ElementImpl implements Document {
     	
     	List<Page> pageList = getPages();
     	return pageList.get(pageList.size() - 1);
+	}
+	
+	@Override
+	public URI getURI() {
+		return uri;
 	}
 
 }

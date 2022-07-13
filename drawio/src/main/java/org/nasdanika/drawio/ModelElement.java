@@ -9,6 +9,8 @@ import org.eclipse.emf.common.util.URI;
 
 public interface ModelElement extends Element {
 	
+	Model getModel();
+	
 	ModelElement getParent();
 	
 	String getLabel();
@@ -68,5 +70,7 @@ public interface ModelElement extends Element {
 			return uri.resolve(parentURI);			
 		}, connectionBase);
 	}
+	
+	Page getLinkedPage();
 	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.Page;
@@ -15,18 +16,26 @@ import org.xml.sax.SAXException;
 
 class PageImpl extends ElementImpl implements Page {
 	
+	static final String ATTRIBUTE_NAME = "name";
 	private ModelImpl model;
+	private Document document;
 	
-	PageImpl(org.w3c.dom.Element element) throws IOException, ParserConfigurationException, SAXException {
+	PageImpl(Document document, org.w3c.dom.Element element) throws IOException, ParserConfigurationException, SAXException {
+		this.document = document;
 		this.element = element;
 		List<org.w3c.dom.Element> modelElements = DocumentImpl.getChildrenElements(element, "mxGraphModel");
 		if (modelElements.isEmpty()) {
-			model = new ModelImpl(element.getTextContent());
+			model = new ModelImpl(this, element.getTextContent());
 		} else if (modelElements.size() == 1) {
-			model = new ModelImpl(modelElements.get(0));
+			model = new ModelImpl(this, modelElements.get(0));
 		} else {
 			throw new IllegalArgumentException("Expected one model element, got " + modelElements.size());
 		}
+	}
+	
+	@Override
+	public Document getDocument() {
+		return document;
 	}
 	
 	@Override
@@ -41,12 +50,12 @@ class PageImpl extends ElementImpl implements Page {
 
 	@Override
 	public String getName() {
-		return element.getAttribute("name");
+		return element.getAttribute(ATTRIBUTE_NAME);
 	}
 
 	@Override
 	public void setName(String name) {
-		element.setAttribute("name", name);
+		element.setAttribute(ATTRIBUTE_NAME, name);
 	}
 
 	/**
@@ -73,7 +82,7 @@ class PageImpl extends ElementImpl implements Page {
 				if (modelElement.getOwnerDocument() != element.getOwnerDocument()) {
 					modelElement = (org.w3c.dom.Element) element.getOwnerDocument().importNode(modelElement, true);
 					element.appendChild(modelElement);
-					model = new ModelImpl(modelElement);
+					model = new ModelImpl(this, modelElement);
 				}
 			}			
 		}

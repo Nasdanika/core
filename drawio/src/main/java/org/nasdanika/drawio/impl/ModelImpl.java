@@ -35,6 +35,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -46,13 +47,16 @@ class ModelImpl extends ElementImpl implements Model {
 	static final String ATTRIBUTE_VERTEX = "vertex";
 	static final String ATTRIBUTE_EDGE = "edge";
 	
-	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();		
+	private Map<org.w3c.dom.Element, ModelElement> cache = new IdentityHashMap<>();
+	private Page page;		
 	
-	ModelImpl(org.w3c.dom.Element element) {
+	ModelImpl(Page page, org.w3c.dom.Element element) {
+		this.page = page;
 		this.element = element;		
 	}
 	
-	ModelImpl(String compressedStr) throws SAXException, IOException, ParserConfigurationException {
+	ModelImpl(Page page, String compressedStr) throws SAXException, IOException, ParserConfigurationException {
+		this.page = page;
 		if (!Base64.isBase64(compressedStr)) {
 			throw new IllegalArgumentException("Compressed diagram is not Base64 encoded");
 		}
@@ -195,6 +199,11 @@ class ModelImpl extends ElementImpl implements Model {
 		}
 		
 		return baos.toByteArray();
+	}
+
+	@Override
+	public Page getPage() {
+		return page;
 	}
 	
 }

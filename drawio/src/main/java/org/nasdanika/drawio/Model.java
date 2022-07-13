@@ -22,5 +22,7 @@ public interface Model extends Element {
 	static BiFunction<Element, Map<Element, Rectangle>, Rectangle> createNonOverlappingLayoutVisitor(int step) {
 		throw new UnsupportedOperationException("TODO - move logic from diagram.gen");
 	}	
+	
+	Page getPage();
 
 }

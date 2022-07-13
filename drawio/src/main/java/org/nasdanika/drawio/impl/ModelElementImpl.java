@@ -1,5 +1,9 @@
 package org.nasdanika.drawio.impl;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,15 +12,26 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
+import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Page;
+import org.xml.sax.SAXException;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
+	private static final String ID_DATA_PAGE_PREFIX = "data:page/id,"; // Page identified by id - internal references
+	private static final String NAME_DATA_PAGE_PREFIX = "data:page/name,"; // Page identified by name - external references
+	private static final String FIRST_DATA_PAGE_PREFIX = "data:page,"; // First document page
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
 	static final String ATTRIBUTE_PARENT = "parent";
@@ -222,6 +237,71 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	protected ModelElement getLogicalParent(ConnectionBase connectionBase) {
 		return getParent();
+	}
+
+	@Override
+	public Model getModel() {
+		return model;
+	}
+
+	@Override
+	public Page getLinkedPage() {
+		String link = getLink();
+		if (Util.isBlank(link)) {
+			return null;
+		}
+		
+		Document document = getModel().getPage().getDocument();
+		if (link.startsWith(FIRST_DATA_PAGE_PREFIX)) {
+			URI targetURI = URI.createURI(link.substring(FIRST_DATA_PAGE_PREFIX.length()));
+			URI docURI = document.getURI();
+			if (targetURI.isRelative() && !docURI.isRelative()) {
+				targetURI = targetURI.resolve(docURI);
+			}
+			
+			try {
+				Document targetDocument = Document.load(new URL(targetURI.toString()));
+				for (Page page: targetDocument.getPages()) {
+					return page;
+				}
+			} catch (IOException | ParserConfigurationException | SAXException e) {
+				throw new NasdanikaException("Failed to load document from " + targetURI, e);
+			}
+			throw new IllegalArgumentException("No pages in " + targetURI);
+		}
+
+		if (link.startsWith(ID_DATA_PAGE_PREFIX)) {
+			String targetId = link.substring(ID_DATA_PAGE_PREFIX.length());
+			for (Page page: document.getPages()) {
+				if (targetId.equals(page.getId())) {
+					return page;
+				}
+			}
+			throw new IllegalArgumentException("Linked page not found: " + targetId);
+		}
+
+		if (link.startsWith(NAME_DATA_PAGE_PREFIX)) {
+			String targetUriStr = link.substring(NAME_DATA_PAGE_PREFIX.length());
+			URI targetURI = URI.createURI(targetUriStr);
+			URI docURI = document.getURI();
+			if (targetURI.isRelative() && !docURI.isRelative()) {
+				targetURI = targetURI.resolve(docURI);
+			}
+				
+			try {
+				Document targetDocument = Document.load(new URL(targetURI.toString()));
+				for (Page page: targetDocument.getPages()) {
+					if (Util.isBlank(targetURI.fragment()) || URLDecoder.decode(targetURI.fragment(), StandardCharsets.UTF_8).equals(page.getName())) {
+						return page;
+					}
+				}
+			} catch (IOException | ParserConfigurationException | SAXException e) {
+				throw new NasdanikaException("Failed to load document from " + targetURI, e);
+			}
+			throw new IllegalArgumentException("Linked page not found: " + targetURI);
+		}
+
+		return null;
 	}
 	
 }

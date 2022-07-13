@@ -9,5 +9,7 @@ public interface Page extends Element {
 	void setName(String name);
 	
 	String getId();	
+	
+	Document getDocument();
 
 }

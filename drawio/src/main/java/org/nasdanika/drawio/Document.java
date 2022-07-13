@@ -15,6 +15,7 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -38,38 +39,56 @@ public interface Document extends Element {
 	/**
 	 * Loads document from an XML string.
 	 * @param docStr
+	 * @param base
 	 * @return
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static Document load(String docStr) throws ParserConfigurationException, SAXException, IOException {
-		return new DocumentImpl(docStr);
+	static Document load(String docStr, URI uri) throws ParserConfigurationException, SAXException, IOException {
+		return new DocumentImpl(docStr, uri);
+	}
+
+	/**
+	 * 
+	 * @param reader
+	 * @param uri
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	static Document load(Reader reader, URI uri) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(reader, uri);
 	}
 	
-	static Document load(Reader reader) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(reader);
-	}
-	
-	static Document create(boolean compressed) throws ParserConfigurationException {
-		return new DocumentImpl(compressed);
+	/**
+	 * 
+	 * @param compressed
+	 * @param base
+	 * @return
+	 * @throws ParserConfigurationException
+	 */
+	static Document create(boolean compressed, URI uri) throws ParserConfigurationException {
+		return new DocumentImpl(compressed, uri);
 	}
 
 	/**
 	 * Loads document using UTF-8 encoding.
 	 * @param in
+	 * @param uri
 	 * @return
 	 * @throws IOException
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static Document load(InputStream in) throws IOException, ParserConfigurationException, SAXException {
-		return new DocumentImpl(in);
+	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
+		return new DocumentImpl(in, uri);
 	}
 	
 	static Document load(URL source) throws IOException, ParserConfigurationException, SAXException {
 		try (InputStream in = source.openStream()) {
-			return load(in);
+			return load(in, URI.createURI(source.toString()));
 		}
 	}
 	
@@ -81,7 +100,7 @@ public interface Document extends Element {
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
 	 */
-	static List<Document> loadFromPngMetadata(InputStream in) throws IOException, ParserConfigurationException, SAXException {
+	static List<Document> loadFromPngMetadata(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
 		ImageReader imageReader = ImageIO.getImageReadersByFormatName("png").next();
 		imageReader.setInput(ImageIO.createImageInputStream(in));
 		IIOMetadata metadata = imageReader.getImageMetadata(0);
@@ -103,7 +122,7 @@ public interface Document extends Element {
 										&& ((org.w3c.dom.Element) grandChild).hasAttribute("keyword")
 										&& "mxfile".equals(((org.w3c.dom.Element) grandChild).getAttribute("keyword"))) {
 									String value = ((org.w3c.dom.Element) grandChild).getAttribute("value");
-									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8))));									
+									ret.add(load((URLDecoder.decode(value, StandardCharsets.UTF_8)), uri));									
 								}
 							}
 						}
@@ -116,9 +135,11 @@ public interface Document extends Element {
 	
 	static List<Document> loadFromPngMetadata(URL source) throws IOException, ParserConfigurationException, SAXException {
 		try (InputStream in = source.openStream()) {
-			return loadFromPngMetadata(in);
+			return loadFromPngMetadata(in, URI.createURI(source.toString()));
 		}
 	}
+	
+	URI getURI();
 	
 	/**
 	 * @param compress If null keeps the original compression setting. If not null forces either compressed (TRUE) or uncompressed (FALSE).

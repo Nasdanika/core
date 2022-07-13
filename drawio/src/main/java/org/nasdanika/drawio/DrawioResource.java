@@ -44,7 +44,7 @@ abstract class DrawioResource<T> extends ResourceImpl {
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
-			document = Document.load(inputStream);
+			document = Document.load(inputStream, getURI());
 			ElementEntry<T> docEntry = document.accept(this::createEntry, connectionBase);
 			resolve(document, docEntry, e -> resolveSemanticElement(e, document, docEntry));			
 		} catch (ParserConfigurationException | SAXException e) {
@@ -96,7 +96,7 @@ abstract class DrawioResource<T> extends ResourceImpl {
 	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
 		if (document == null) {
 			try {
-				document = Document.create(false);
+				document = Document.create(false, getURI());
 			} catch (ParserConfigurationException e) {
 				throw new NasdanikaException(e);
 			}
