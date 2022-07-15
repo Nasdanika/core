@@ -1,5 +1,8 @@
 import org.nasdanika.drawio.ElementComparator;
+import org.nasdanika.drawio.impl.comparators.AngularModelElementComparatorFactory;
+import org.nasdanika.drawio.impl.comparators.CartesianModelElementComparatorFactory;
 import org.nasdanika.drawio.impl.comparators.LabelModelElementComparatorFactory;
+import org.nasdanika.drawio.impl.comparators.PropertyModelElementComparatorFactory;
 
 module org.nasdanika.drawio {
 	
@@ -13,7 +16,7 @@ module org.nasdanika.drawio {
 	
 	exports org.nasdanika.drawio;
 	
-	provides ElementComparator.Factory with LabelModelElementComparatorFactory;
+	provides ElementComparator.Factory with LabelModelElementComparatorFactory, PropertyModelElementComparatorFactory, CartesianModelElementComparatorFactory, AngularModelElementComparatorFactory;
 	
 	uses ElementComparator.Factory;
 	

@@ -143,9 +143,9 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			sort = sort.substring(0, colonIdx);
 		}
 		
-		for (ElementComparator.Factory comparatorFactoy: ServiceLoader.load(ElementComparator.Factory.class)) {
-			if (sort.equals(comparatorFactoy.getName())) {
-				return comparatorFactoy.create(parent, config);
+		for (ElementComparator.Factory comparatorFactory: ServiceLoader.load(ElementComparator.Factory.class)) {
+			if (comparatorFactory.isForType(sort)) {
+				return comparatorFactory.create(sort, config, parent);
 			}
 		}			
 		throw new IllegalArgumentException("Unsupported sort type: " + sort);

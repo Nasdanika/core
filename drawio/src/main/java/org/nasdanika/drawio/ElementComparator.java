@@ -6,9 +6,9 @@ public interface ElementComparator extends Comparator<Element> {
 	
 	interface Factory {
 		
-		String getName();
+		boolean isForType(String type);
 		
-		ElementComparator create(Element parent, String config);
+		ElementComparator create(String type, String config, Element parent);
 		
 	}
 

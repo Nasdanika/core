@@ -79,8 +79,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override
 	public String getId() {
-		org.w3c.dom.Element cellElement = getCellElement();
-		return cellElement.hasAttribute(ATTRIBUTE_ID) ? cellElement.getAttribute(ATTRIBUTE_ID) : null;
+		return getElement().hasAttribute(ATTRIBUTE_ID) ? getElement().getAttribute(ATTRIBUTE_ID) : null;
 	}
 	
 	static org.w3c.dom.Element getCellElement(org.w3c.dom.Element element) {
