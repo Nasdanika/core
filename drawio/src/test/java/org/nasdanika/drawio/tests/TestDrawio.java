@@ -340,7 +340,7 @@ public class TestDrawio {
 		Document document = Document.load(getClass().getResource("links.drawio"));
 		Optional<Node> linkToPage = document.stream(null).filter(Node.class::isInstance).map(Node.class::cast).filter(n -> "Link to compressed first page".equals(n.getLabel())).findFirst();
 		assertThat(linkToPage.isPresent()).isEqualTo(true);		
-		Page linkedPage = linkToPage.get().getLinkedPage();
+		Page linkedPage = ((Node) linkToPage.get()).getLinkedPage();
 		assertThat(linkedPage).isNotNull();
 		assertThat(linkedPage.getName()).isEqualTo("Page-1");
 		assertThat(linkedPage.getDocument().getURI().toString().endsWith("compressed.drawio")).isEqualTo(true);

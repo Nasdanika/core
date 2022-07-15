@@ -80,7 +80,7 @@ public class DrawioGenerator {
 	 * @return
 	 */
 	public Document generateModel(Diagram... diagrams) throws Exception {
-		Document ret = Document.create(false);
+		Document ret = Document.create(false, null);
 		for (Diagram diagram: diagrams) {
 			Page page = ret.createPage();
 	        if (!Util.isBlank(diagram.getUuid())) {

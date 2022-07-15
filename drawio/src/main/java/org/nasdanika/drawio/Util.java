@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class Util {
 	
@@ -282,6 +284,56 @@ public final class Util {
 			rectangle.grow((int) offset.getX(), (int) offset.getY());
 		}
 		return rectangle;
+	}
+	
+	// Mappers
+	
+	private static Collection<? extends Element> getChildren(Element element) {
+		if (element instanceof Document) {
+			return ((Document) element).getPages();
+		}
+		if (element instanceof Page) {
+			return Collections.singleton(((Page) element).getModel());
+		}
+		if (element instanceof Model) {
+			return Collections.singleton(((Model) element).getRoot());
+		}
+		if (element instanceof Root) {
+			return ((Root) element).getLayers();
+		}
+		if (element instanceof Layer) {
+			return ((Layer) element).getElements();
+		}
+		return Collections.emptySet();
+	}
+	
+	
+	public static Function<Element, Stream<? extends Element>> childrenMapper(Predicate<Element> predicate) {
+		return new Function<Element, Stream<? extends Element>>() {
+						
+			@Override
+			public Stream<? extends Element> apply(Element element) {
+				Stream<? extends Element> ret = getChildren(element).stream();
+				return predicate == null ? ret : ret.filter(predicate);
+			}
+			
+		};
+	}
+	
+	public static Function<Element, Stream<? extends Element>> childrenRecursiveMapper() {
+		return new Function<Element, Stream<? extends Element>>() {
+			
+			@Override
+			public Stream<? extends Element> apply(Element element) {
+				return getChildren(element).stream().flatMap(childrenRecursiveMapper());
+			}
+			
+		};
+		
+	}
+	
+	public static Stream<Element> childrenStream(Element element, Predicate<Element> predicate) {
+		return Stream.of(element).flatMap(childrenMapper(predicate));
 	}
 
 }
