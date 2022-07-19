@@ -41,7 +41,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		
 	}
 	
-	private ConnectionBase connectionBase;
+	protected ConnectionBase connectionBase;
 
 	protected DrawioResourceFactory(ConnectionBase connectionBase) {
 		this.connectionBase = connectionBase;
@@ -53,27 +53,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 
 			@Override
 			protected ElementEntry<T> createEntry(Element element, Map<Element, ElementEntry<T>> childMappings) {
-				if (childMappings != null) {
-					Comparator<Element> childComparator = getChildComparator(element);
-					if (childComparator != null) {
-						Map<Element, ElementEntry<T>> orderedChildMappings = new LinkedHashMap<>();
-						childMappings.entrySet().stream().sorted((a, b) -> childComparator.compare(a.getKey(), b.getKey())).forEachOrdered(e -> orderedChildMappings.put(e.getKey(), e.getValue()));
-						childMappings = orderedChildMappings;
-					}
-				}
-				Map<Element, ElementEntry<T>> theChildMappings = childMappings;
-				T semanticElement = DrawioResourceFactory.this.createSemanticElement(this, element, theChildMappings);
-				return new ElementEntry<T>() {
-					
-					public T getSemanticElement() {
-						return semanticElement;
-					}
-					
-					public Map<Element, ElementEntry<T>> getChildEntries() {
-						return theChildMappings;
-					}
-					
-				};
+				return DrawioResourceFactory.this.createEntry(this, element, childMappings);
 			}
 
 			@Override
@@ -87,6 +67,14 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			}			
 			
 		};
+	}		
+	
+	/**
+	 * @param modelElement
+	 * @return true if a linked page of this element shall be added to child mappings. 
+	 */
+	protected boolean isWithLinkedPage(ModelElement modelElement) {
+		return false;
 	}
 	
 	/**
@@ -202,6 +190,44 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		}
 
 		return new ElementAdapterImpl();
+	}
+
+	protected ElementEntry<T> createEntry(Resource resource, Element element, Map<Element, ElementEntry<T>> childMappings) {
+		if (childMappings != null) {
+			Comparator<Element> childComparator = getChildComparator(element);
+			if (childComparator != null) {
+				Map<Element, ElementEntry<T>> orderedChildMappings = new LinkedHashMap<>();
+				childMappings.entrySet().stream().sorted((a, b) -> childComparator.compare(a.getKey(), b.getKey())).forEachOrdered(e -> orderedChildMappings.put(e.getKey(), e.getValue()));
+				childMappings = orderedChildMappings;
+			}
+		}
+		
+		if (element instanceof ModelElement) {
+			Page linkedPage = ((ModelElement) element).getLinkedPage();
+			if (linkedPage != null && isWithLinkedPage(((ModelElement) element))) {
+				childMappings = childMappings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(childMappings);
+				@SuppressWarnings("unchecked")
+				DrawioResource<T> drawioResource = (DrawioResource<T>) resource;
+				ElementEntry<T> linkedPageMapping = linkedPage.accept(drawioResource::createEntry, connectionBase);
+				if (linkedPageMapping != null) {
+					childMappings.put(linkedPage, linkedPageMapping);
+				}
+			}
+		}
+
+		Map<Element, ElementEntry<T>> theChildMappings = childMappings;
+		T semanticElement = createSemanticElement(resource, element, theChildMappings);
+		return new ElementEntry<T>() {
+			
+			public T getSemanticElement() {
+				return semanticElement;
+			}
+			
+			public Map<Element, ElementEntry<T>> getChildEntries() {
+				return theChildMappings;
+			}
+			
+		};
 	}
 		
 }

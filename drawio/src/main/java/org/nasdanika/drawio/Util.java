@@ -8,10 +8,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -334,6 +337,60 @@ public final class Util {
 	
 	public static Stream<Element> childrenStream(Element element, Predicate<Element> predicate) {
 		return Stream.of(element).flatMap(childrenMapper(predicate));
+	}
+	
+	/**
+	 * @param <T>
+	 * @param visitor
+	 * @param connectionBase Connection base for visiting linked pages.
+	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
+	 */
+	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkedPages(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase) {
+		return new BiFunction<Element, Map<Element, T>, T>() {
+
+			@Override
+			public T apply(Element element, Map<Element, T> childResults) {				
+				if (element instanceof ModelElement) {
+					Page linkedPage = ((ModelElement) element).getLinkedPage();
+					if (linkedPage != null) {
+						Map<Element, T> cr = new LinkedHashMap<>();
+						if (childResults != null) {
+							cr.putAll(childResults);
+						}
+						T linkedPageResult = linkedPage.accept(this, connectionBase);
+						if (linkedPageResult != null) {
+							cr.put(linkedPage, linkedPageResult);
+						}
+						return visitor.apply(element, cr);
+					}
+				}
+				return visitor.apply(element, childResults);
+			}
+			
+		};
+	}
+	
+	/**
+	 * @param <T>
+	 * @param visitor
+	 * @param connectionBase Connection base for visiting linked pages.
+	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
+	 */
+	public static <T> Consumer<Element> withLinkedPages(Consumer<Element> visitor, ConnectionBase connectionBase) {
+		return new Consumer<Element>() {
+
+			@Override
+			public void accept(Element element) {				
+				if (element instanceof ModelElement) {
+					Page linkedPage = ((ModelElement) element).getLinkedPage();
+					if (linkedPage != null) {
+						linkedPage.accept(this, connectionBase);
+					}
+				}
+				visitor.accept(element);
+			}
+			
+		};
 	}
 
 }

@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -345,5 +346,23 @@ public class TestDrawio {
 		assertThat(linkedPage.getName()).isEqualTo("Page-1");
 		assertThat(linkedPage.getDocument().getURI().toString().endsWith("compressed.drawio")).isEqualTo(true);
 	}
+		
+	@Test 
+	public void testLinkedPagesTraversal() throws Exception {
+		Document document = Document.load(getClass().getResource("links.drawio"));
+		Consumer<Element> visitor = e -> {
+			if (e instanceof ModelElement) {
+//				System.out.println(((ModelElement) e).getLabel());
+			} else if (e instanceof Page) {
+				Page page = (Page) e;
+				System.out.println(page.getName() + " " + page.getId() + " " + page.getDocument().getURI());				
+			}
+		};
+		
+		document.accept(visitor, null);
+		System.out.println("===");
+		document.accept(org.nasdanika.drawio.Util.withLinkedPages(visitor, null), null);
+	}
+	
 	
 }
