@@ -140,7 +140,7 @@ public class TestDrawio {
 		connectionStyle.put("orthogonalLoop", "1");
 		connectionStyle.put("jettySize", "auto");
 		connectionStyle.put("html", "1");
-		
+				
 		Files.writeString(new File("target/new-uncompressed.drawio").toPath(), document.save(null));
 	}	
 	

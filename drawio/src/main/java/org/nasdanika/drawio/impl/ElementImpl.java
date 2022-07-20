@@ -13,7 +13,7 @@ import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
 
-class ElementImpl implements Element {
+abstract class ElementImpl implements Element {
 	
 	static final String ATTRIBUTE_ID = "id";
 	

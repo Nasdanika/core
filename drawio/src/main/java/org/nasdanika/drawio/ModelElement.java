@@ -73,4 +73,6 @@ public interface ModelElement extends Element {
 	
 	Page getLinkedPage();
 	
+	boolean isPageLink();
+	
 }

@@ -3,6 +3,7 @@ package org.nasdanika.drawio.impl;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,9 +30,10 @@ import org.xml.sax.SAXException;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
-	private static final String ID_DATA_PAGE_PREFIX = "data:page/id,"; // Page identified by id - internal references
-	private static final String NAME_DATA_PAGE_PREFIX = "data:page/name,"; // Page identified by name - external references
-	private static final String FIRST_DATA_PAGE_PREFIX = "data:page,"; // First document page
+	private static final String PAGE_LINK_PREFIX = "data:page";
+	private static final String ID_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/id,"; // Page identified by id - internal references
+	private static final String NAME_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/name,"; // Page identified by name - external references
+	private static final String FIRST_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + ","; // First document page
 	private static final String ATTRIBUTE_TAGS = "tags";
 	static final String ATTRIBUTE_VALUE = "value";
 	static final String ATTRIBUTE_PARENT = "parent";
@@ -242,6 +244,12 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	public Model getModel() {
 		return model;
 	}
+	
+	@Override
+	public boolean isPageLink() {
+		String link = getLink();
+		return !Util.isBlank(link) && link.startsWith(PAGE_LINK_PREFIX);
+	}
 
 	@Override
 	public Page getLinkedPage() {
@@ -301,6 +309,12 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		}
 
 		return null;
+	}
+
+	@Override
+	public URI getURI() {
+		URI parentURI = getParent().getURI();
+		return parentURI == null ? URI.createURI(URLEncoder.encode(getId(), StandardCharsets.UTF_8)) : parentURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
 	}
 	
 }

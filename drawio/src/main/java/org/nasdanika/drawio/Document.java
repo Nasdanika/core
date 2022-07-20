@@ -139,8 +139,6 @@ public interface Document extends Element {
 		}
 	}
 	
-	URI getURI();
-	
 	/**
 	 * @param compress If null keeps the original compression setting. If not null forces either compressed (TRUE) or uncompressed (FALSE).
 	 * This can be used to generate HTML tags with compressed document while keeping the source document uncompressed so it can be manually inspected, edited, diffed, and merged.

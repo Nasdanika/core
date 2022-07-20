@@ -5,6 +5,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.URI;
+
 /**
  * {@link Document} element, including the Document itself, backed by org.w3c.dom.Element.
  * @author Pavel
@@ -39,5 +41,7 @@ public interface Element {
 	default Stream<Element> stream(ConnectionBase connectionBase) {
 		return accept((BiFunction<Element, Map<Element, Stream<Element>>, Stream<Element>>) (e, cm) -> cm.values().stream().reduce(Stream.of(e), (a,b) -> Stream.concat(a, b)), connectionBase);
 	}; 
+		
+	URI getURI();	
 
 }

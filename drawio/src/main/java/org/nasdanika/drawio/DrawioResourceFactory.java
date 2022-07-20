@@ -1,5 +1,6 @@
 package org.nasdanika.drawio;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,13 +69,14 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			
 		};
 	}		
-	
+
 	/**
+	 * Override to add child mappings from a linked page (if any).
 	 * @param modelElement
-	 * @return true if a linked page of this element shall be added to child mappings. 
+	 * @return
 	 */
-	protected boolean isWithLinkedPage(ModelElement modelElement) {
-		return false;
+	protected Map<Element, ElementEntry<T>> getLinkedPageChildMappings(Resource resource, Page linkedPage, ElementEntry<T> linkedPageEntry) {
+		return Collections.emptyMap();
 	}
 	
 	/**
@@ -204,14 +206,15 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
-			if (linkedPage != null && isWithLinkedPage(((ModelElement) element))) {
-				childMappings = childMappings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(childMappings);
+			if (linkedPage != null) {
 				@SuppressWarnings("unchecked")
 				DrawioResource<T> drawioResource = (DrawioResource<T>) resource;
 				ElementEntry<T> linkedPageMapping = linkedPage.accept(drawioResource::createEntry, connectionBase);
-				if (linkedPageMapping != null) {
-					childMappings.put(linkedPage, linkedPageMapping);
-				}
+				Map<Element, ElementEntry<T>> linkedPageChildMappings = getLinkedPageChildMappings(resource, linkedPage, linkedPageMapping);
+				if (linkedPageChildMappings != null && !linkedPageChildMappings.isEmpty()) {
+					childMappings = childMappings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(childMappings);
+					childMappings.putAll(linkedPageChildMappings);
+				}				
 			}
 		}
 

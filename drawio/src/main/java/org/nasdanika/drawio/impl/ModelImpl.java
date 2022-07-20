@@ -32,6 +32,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
@@ -204,6 +205,12 @@ class ModelImpl extends ElementImpl implements Model {
 	@Override
 	public Page getPage() {
 		return page;
+	}
+
+	@Override
+	public URI getURI() {
+		URI pageURI = getPage().getURI();
+		return pageURI == null ? URI.createURI("model") : pageURI.appendSegment("model");
 	}
 	
 }

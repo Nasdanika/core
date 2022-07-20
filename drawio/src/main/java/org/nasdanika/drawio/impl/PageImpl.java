@@ -1,12 +1,15 @@
 package org.nasdanika.drawio.impl;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.eclipse.emf.common.util.URI;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
@@ -93,5 +96,12 @@ class PageImpl extends ElementImpl implements Page {
 	public String getId() {
 		return element.hasAttribute(ATTRIBUTE_ID) ? element.getAttribute(ATTRIBUTE_ID) : null;
 	}
+	
+	@Override
+	public URI getURI() {
+		URI documentURI = getDocument().getURI();
+		return documentURI == null ? URI.createURI(getId()) : documentURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
+	}
+	
 
 }
