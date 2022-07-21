@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -58,7 +59,7 @@ abstract class DrawioResource<T> extends ResourceImpl {
 	 * @param elementEntry
 	 * @return
 	 */
-	protected void resolve(Element element, ElementEntry<T> elementEntry, Function<Element,T> resolver) {
+	protected void resolve(Element element, ElementEntry<T> elementEntry, Function<Predicate<Element>,T> resolver) {
 		resolve(element, elementEntry.getSemanticElement(), elementEntry.getChildEntries(), resolver);		
 		for (Entry<Element, ElementEntry<T>> ee: elementEntry.getChildEntries().entrySet()) {
 			resolve(ee.getKey(), ee.getValue(), resolver);
@@ -69,7 +70,7 @@ abstract class DrawioResource<T> extends ResourceImpl {
 			Element element, 
 			T semanticElement, 
 			Map<Element,ElementEntry<T>> childEntries, 
-			Function<Element, T> resolver);
+			Function<Predicate<Element>, T> resolver);
 	
 	/**
 	 * Finds semantic element by recursively traversing entries.
@@ -77,12 +78,12 @@ abstract class DrawioResource<T> extends ResourceImpl {
 	 * @param elementEntry
 	 * @return
 	 */
-	protected T resolveSemanticElement(Element toResolve, Element element, ElementEntry<T> elementEntry) {
-		if (toResolve.equals(element)) {
+	protected T resolveSemanticElement(Predicate<Element> predicate, Element element, ElementEntry<T> elementEntry) {
+		if (predicate.test(element)) {
 			return elementEntry.getSemanticElement();
 		}
 		for (Entry<Element, ElementEntry<T>> ee: elementEntry.getChildEntries().entrySet()) {
-			T ret = resolveSemanticElement(toResolve, ee.getKey(), ee.getValue());
+			T ret = resolveSemanticElement(predicate, ee.getKey(), ee.getValue());
 			if (ret != null) {
 				return ret;
 			}

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -62,7 +63,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 					Element element, 
 					T semanticElement, 
 					Map<Element, ElementEntry<T>> childEntries,
-					Function<Element, T> resolver) {
+					Function<Predicate<Element>, T> resolver) {
 				
 				DrawioResourceFactory.this.resolve(this, element, semanticElement, childEntries, resolver);				
 			}			
@@ -169,7 +170,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			Element element, 
 			T semanticElement, 
 			Map<Element,ElementEntry<T>> childEntries, 
-			Function<Element, T> resolver);
+			Function<Predicate<Element>, T> resolver);
 	
 	/**
 	 * Creates an {@link ElementAdapter}.
