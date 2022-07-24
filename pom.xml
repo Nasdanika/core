@@ -142,6 +142,10 @@
 									<location>../../../cli/target/apidocs/</location>
 								</offlineLink>
 								<offlineLink>
+									<url>https://docs.nasdanika.org/modules/core/modules/drawio/apidocs/</url>
+									<location>../../../drawio/target/apidocs/</location>
+								</offlineLink>
+								<offlineLink>
 									<url>https://docs.nasdanika.org/modules/core/modules/emf/apidocs/</url>
 									<location>../../../emf/target/apidocs/</location>
 								</offlineLink>
