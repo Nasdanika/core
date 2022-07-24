@@ -16,6 +16,7 @@ engineering-product:
          modules:
            - diagram/engineering.yml
            - diagram.gen/engineering.yml
+     - drawio/engineering.yml
      - emf/engineering.yml
      - engineering-module:
          path: exec
