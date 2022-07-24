@@ -4,7 +4,6 @@ engineering-module:
   action-prototype: "../javadoc-action-prototype.xml#/"
   dependencies:
     - engineering://nasdanika/modules/core/modules/diagram/modules/model
-    - engineering://nasdanika/modules/core/modules/mxgraph
     - engineering://nasdanika/modules/core/modules/exec/modules/model
   documentation:
     content-markdown:

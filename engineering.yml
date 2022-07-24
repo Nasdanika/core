@@ -25,7 +25,6 @@ engineering-product:
            - exec/engineering.yml
            - exec.gen/engineering.yml
      - flow/engineering/engineering.yml
-     - mxgraph/engineering.yml
      - ncore/engineering.yml
   issues:
     merge-to-master:
