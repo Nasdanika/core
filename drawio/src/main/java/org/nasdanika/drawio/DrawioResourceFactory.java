@@ -2,10 +2,12 @@ package org.nasdanika.drawio;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -106,12 +108,42 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			
 		}
 		
-		if (parent instanceof Layer) {
-			return loadChildComparator((ModelElement) parent, "label");
+		String defaultSort = getDefaultSort();
+		if (parent instanceof ModelElement) {
+			return loadChildComparator((ModelElement) parent, defaultSort);
 		}
+		
+		for (ElementComparator.Factory comparatorFactory: ServiceLoader.load(ElementComparator.Factory.class)) {
+			if (comparatorFactory.isForType(defaultSort)) {
+				return comparatorFactory.create(defaultSort, null, parent);
+			}
+		}					
 		
 		return null;
 	}
+	
+	protected String getDefaultSort() {
+		return "label";
+	}
+		
+	/**
+	 * Semantic parent is used for resolution of documentation.
+	 * Element documentation URI is resolved relative to semantic ancestor documentation URI if it is set and relative to the
+	 * document otherwise.
+	 * @param element
+	 * @return
+	 */
+	protected ModelElement getSemanticParent(ModelElement element, Set<Connection> traversed) {
+		if (element instanceof Connection) {
+			if (connectionBase == ConnectionBase.SOURCE) {
+				return ((Connection) element).getSource();
+			}
+			if (connectionBase == ConnectionBase.TARGET) {
+				return ((Connection) element).getTarget();
+			}
+		} 
+		return element.getParent();
+	}	
 
 	protected Comparator<Element> loadChildComparator(ModelElement parent, String defaultSort) {
 		String sortProperty = getSortProperty(parent);
@@ -120,10 +152,14 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			sort = ((ModelElement) parent).getProperty(sortProperty);
 		}
 		if (org.nasdanika.common.Util.isBlank(sort)) {
+			ModelElement semanticParent = getSemanticParent(parent, new HashSet<>());
+			if (semanticParent != null) {
+				return loadChildComparator(semanticParent, defaultSort);
+			}
 			sort = defaultSort;
 		}
 		
-		if (org.nasdanika.common.Util.isBlank(sort)) {
+		if (org.nasdanika.common.Util.isBlank(sort) || "none".equals(sort)) {
 			return null;
 		}
 		
@@ -196,7 +232,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 	}
 
 	protected ElementEntry<T> createEntry(Resource resource, Element element, Map<Element, ElementEntry<T>> childMappings) {
-		if (childMappings != null) {
+		if (childMappings != null && !childMappings.isEmpty()) {
 			Comparator<Element> childComparator = getChildComparator(element);
 			if (childComparator != null) {
 				Map<Element, ElementEntry<T>> orderedChildMappings = new LinkedHashMap<>();
