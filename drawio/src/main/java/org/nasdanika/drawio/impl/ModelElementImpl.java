@@ -317,4 +317,9 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return parentURI == null ? URI.createURI(URLEncoder.encode(getId(), StandardCharsets.UTF_8)) : parentURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
 	}
 	
+	@Override
+	public String toString() {
+		return super.toString() + " " + getLabel();
+	}
+	
 }
