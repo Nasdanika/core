@@ -21,19 +21,19 @@ class PointImpl implements Point {
 	}
 
 	@Override
-	public int getX() {
+	public double getX() {
 		Element element = getElement();
-		return element != null && element.hasAttribute(ATTRIBUTE_X) ? Integer.parseInt(element.getAttribute(ATTRIBUTE_X)) : 0;
+		return element != null && element.hasAttribute(ATTRIBUTE_X) ? Double.parseDouble(element.getAttribute(ATTRIBUTE_X)) : 0;
 	}
 
 	@Override
-	public int getY() {
+	public double getY() {
 		Element element = getElement();
-		return element != null && element.hasAttribute(ATTRIBUTE_Y) ? Integer.parseInt(element.getAttribute(ATTRIBUTE_Y)) : 0;
+		return element != null && element.hasAttribute(ATTRIBUTE_Y) ? Double.parseDouble(element.getAttribute(ATTRIBUTE_Y)) : 0;
 	}
 
 	@Override
-	public void setX(int x) {
+	public void setX(double x) {
 		Element element = elementProvider.apply(true);
 		if (x == 0) {
 			element.removeAttribute(ATTRIBUTE_X);
@@ -46,7 +46,7 @@ class PointImpl implements Point {
 	}
 
 	@Override
-	public void setY(int y) {
+	public void setY(double y) {
 		Element element = elementProvider.apply(true);
 		if (y == 0) {
 			element.removeAttribute(ATTRIBUTE_Y);
@@ -64,7 +64,7 @@ class PointImpl implements Point {
 	}
 
 	@Override
-	public void setLocation(int x, int y) {
+	public void setLocation(double x, double y) {
 		Element element = elementProvider.apply(true);
 		if (x == 0) {
 			element.removeAttribute(ATTRIBUTE_X);
@@ -80,6 +80,11 @@ class PointImpl implements Point {
 		if (isEmpty(element)) {
 			element.getParentNode().removeChild(element);
 		}		
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + "[" + getX() + ", " + getY() + "]";
 	}
 
 }

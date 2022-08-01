@@ -20,19 +20,19 @@ public class RectangleImpl extends PointImpl implements Rectangle {
 	}
 			
 	@Override
-	public int getWidth() {
+	public double getWidth() {
 		Element element = getElement();
-		return element != null && element.hasAttribute(ATTRIBUTE_WIDTH) ? Integer.parseInt(element.getAttribute(ATTRIBUTE_WIDTH)) : 0;
+		return element != null && element.hasAttribute(ATTRIBUTE_WIDTH) ? Double.parseDouble(element.getAttribute(ATTRIBUTE_WIDTH)) : 0;
 	}
 
 	@Override
-	public int getHeight() {
+	public double getHeight() {
 		Element element = getElement();
-		return element != null && element.hasAttribute(ATTRIBUTE_HEIGHT) ? Integer.parseInt(element.getAttribute(ATTRIBUTE_HEIGHT)) : 0;
+		return element != null && element.hasAttribute(ATTRIBUTE_HEIGHT) ? Double.parseDouble(element.getAttribute(ATTRIBUTE_HEIGHT)) : 0;
 	}
 
 	@Override
-	public void setWidth(int width) {
+	public void setWidth(double width) {
 		Element element = elementProvider.apply(true);
 		if (width == 0) {
 			element.removeAttribute(ATTRIBUTE_WIDTH);
@@ -45,7 +45,7 @@ public class RectangleImpl extends PointImpl implements Rectangle {
 	}
 
 	@Override
-	public void setHeight(int height) {
+	public void setHeight(double height) {
 		Element element = elementProvider.apply(true);
 		if (height == 0) {
 			element.removeAttribute(ATTRIBUTE_HEIGHT);
@@ -58,7 +58,7 @@ public class RectangleImpl extends PointImpl implements Rectangle {
 	}
 
 	@Override
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds(double x, double y, double width, double height) {
 		Element element = elementProvider.apply(true);
 		if (x == 0) {
 			element.removeAttribute(ATTRIBUTE_X);
@@ -84,6 +84,11 @@ public class RectangleImpl extends PointImpl implements Rectangle {
 		if (isEmpty(element)) {
 			element.getParentNode().removeChild(element);
 		}		
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + "[" + getWidth() + ", " + getHeight() + "]";
 	}
 	
 }

@@ -4,14 +4,14 @@ public interface Point {
 	
 	org.w3c.dom.Element getElement();	
 	
-	int getX();
+	double getX();
 	
-	int getY();
+	double getY();
 	
-	void setX(int x);
+	void setX(double x);
 	
-	void setY(int y);
+	void setY(double y);
 	
-	void setLocation(int x, int y);
+	void setLocation(double x, double y);
 
 }

@@ -2,14 +2,14 @@ package org.nasdanika.drawio;
 
 public interface Rectangle extends Point {
 	
-	int getWidth();
+	double getWidth();
 	
-	int getHeight();
+	double getHeight();
 	
-	void setWidth(int width);
+	void setWidth(double width);
 	
-	void setHeight(int height);	
+	void setHeight(double height);	
 	
-	void setBounds(int x, int y, int width, int height);
+	void setBounds(double x, double y, double width, double height);
 
 }

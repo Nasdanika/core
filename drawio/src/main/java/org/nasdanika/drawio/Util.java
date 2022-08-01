@@ -275,7 +275,7 @@ public final class Util {
 			Function<Boolean, Supplier<Point>> offsetGeneratorProvider) {
 		
 		org.nasdanika.drawio.Rectangle nodeGeometry = node.getGeometry();
-		Rectangle rectangle = new Rectangle(0, 0, nodeGeometry.getWidth(), nodeGeometry.getHeight());
+		Rectangle rectangle = new Rectangle(0, 0, (int) nodeGeometry.getWidth(), (int) nodeGeometry.getHeight());
 		List<Node> children = node.getElements().stream().filter(Node.class::isInstance).map(Node.class::cast).collect(Collectors.toList());
 		if (!children.isEmpty()) {
 			Point childOffset = new Point((int) offset.getX(), (int) offset.getY() + 30);

@@ -16,6 +16,8 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.nasdanika.common.BiSupplier;
+import org.nasdanika.drawio.impl.comparators.AngularModelElementComparatorFactory;
 
 /**
  * Creates {@link DrawioResource}
@@ -143,9 +145,9 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			}
 		} 
 		return element.getParent();
-	}	
-
-	protected Comparator<Element> loadChildComparator(ModelElement parent, String defaultSort) {
+	}
+	
+	protected BiSupplier<String, String> getComparatorConfig(ModelElement parent, String defaultSort) {
 		String sortProperty = getSortProperty(parent);
 		String sort = null;
 		if (!org.nasdanika.common.Util.isBlank(sortProperty)) {
@@ -154,7 +156,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		if (org.nasdanika.common.Util.isBlank(sort)) {
 			ModelElement semanticParent = getSemanticParent(parent, new HashSet<>());
 			if (semanticParent != null) {
-				return loadChildComparator(semanticParent, defaultSort);
+				return getComparatorConfig(semanticParent, defaultSort);
 			}
 			sort = defaultSort;
 		}
@@ -170,14 +172,43 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			sort = sort.substring(0, colonIdx);
 		}
 		
-		for (ElementComparator.Factory comparatorFactory: ServiceLoader.load(ElementComparator.Factory.class)) {
-			if (comparatorFactory.isForType(sort)) {
-				return comparatorFactory.create(sort, config, parent);
-			}
-		}			
-		throw new IllegalArgumentException("Unsupported sort type: " + sort);
+		return BiSupplier.of(sort, config);
 	}
 	
+
+	protected Comparator<Element> loadChildComparator(ModelElement parent, String defaultSort) {
+		BiSupplier<String, String> config = getComparatorConfig(parent, defaultSort);
+		if (config == null) {
+			return null;
+		}
+		String sortConfig = config.getSecond();
+		if (sortConfig == null) {
+			sortConfig = getDefaultSortConfig(parent, config.getFirst());
+		}
+		
+		for (ElementComparator.Factory comparatorFactory: ServiceLoader.load(ElementComparator.Factory.class)) {
+			if (comparatorFactory.isForType(config.getFirst())) {
+				return comparatorFactory.create(config.getFirst(), sortConfig, parent);
+			}
+		}			
+		throw new IllegalArgumentException("Unsupported sort type: " + config.getFirst());
+	}
+	
+	/**
+	 * @param parent
+	 * @param sort
+	 * @return Default configuration for a sort type. For example, for a agle sort (clockwise/counterclockwise) the default configuration can the an angle from the semantic parent of this model element.  
+	 */
+	protected String getDefaultSortConfig(ModelElement modelElement, String sort) {
+		if (modelElement instanceof Node && (AngularModelElementComparatorFactory.CLOCKWISE.equals(sort) || AngularModelElementComparatorFactory.COUNTERCLOCKWISE.equals(sort))) {
+			ModelElement semanticParent = getSemanticParent(modelElement, new HashSet<>());
+			if (semanticParent instanceof Node) {
+				return String.valueOf(Math.toDegrees(AngularModelElementComparatorFactory.angle((Node) modelElement, (Node) semanticParent)));
+			}
+		}
+		return null;
+	}
+
 	protected String getSortProperty(Element parent) {
 		return "sort";
 	}
