@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.impl.comparators;
+package org.nasdanika.drawio.comparators;
 
 import java.util.Objects;
 

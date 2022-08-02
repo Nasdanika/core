@@ -18,7 +18,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.nasdanika.common.BiSupplier;
-import org.nasdanika.drawio.impl.comparators.AngularModelElementComparatorFactory;
+import org.nasdanika.drawio.comparators.AngularModelElementComparatorFactory;
+import org.nasdanika.drawio.comparators.LabelModelElementComparatorFactory;
+import org.nasdanika.drawio.comparators.PropertyModelElementComparatorFactory;
 
 /**
  * Base class for factories which load {@link EObject}'s from Drawio diagrams by performing semantic mapping from diagram elements to model elements. 
@@ -176,7 +178,6 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		return BiSupplier.of(sort, config);
 	}
 	
-
 	protected Comparator<Element> loadChildComparator(ModelElement parent, String defaultSort) {
 		BiSupplier<String, String> config = getComparatorConfig(parent, defaultSort);
 		if (config == null) {
@@ -187,12 +188,33 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			sortConfig = getDefaultSortConfig(parent, config.getFirst());
 		}
 		
+		return getChildComparator(parent, config.getFirst(), sortConfig);
+	}
+	
+	protected static final ElementComparator.Factory[] ELEMENT_COMPARATOR_FACTORIES = {
+		new AngularModelElementComparatorFactory(),
+		new LabelModelElementComparatorFactory(),
+		new PropertyModelElementComparatorFactory()
+	};
+
+	/**
+	 * @param parent Parent model element.
+	 * @param type Sort type.
+	 * @param config Sort configuration.
+	 * @return Child comparator for a given parent and type with a given configuration. This implementation loads comparators using {@link ServiceLoader} and then goes through factories shipped with this module - they should have been loaded by the service loader, but just in case it doesn't happen. 
+	 */
+	protected Comparator<Element> getChildComparator(ModelElement parent, String type, String config) {
 		for (ElementComparator.Factory comparatorFactory: ServiceLoader.load(ElementComparator.Factory.class)) {
-			if (comparatorFactory.isForType(config.getFirst())) {
-				return comparatorFactory.create(config.getFirst(), sortConfig, parent);
+			if (comparatorFactory.isForType(type)) {
+				return comparatorFactory.create(type, config, parent);
 			}
 		}			
-		throw new IllegalArgumentException("Unsupported sort type: " + config.getFirst());
+		for (ElementComparator.Factory comparatorFactory: ELEMENT_COMPARATOR_FACTORIES) {
+			if (comparatorFactory.isForType(type)) {
+				return comparatorFactory.create(type, config, parent);
+			}
+		}			
+		throw new IllegalArgumentException("Unsupported sort type: " + type);
 	}
 	
 	/**
