@@ -1,7 +1,7 @@
 package org.nasdanika.drawio;
 
 /**
- * Base (logical parent) for connections to use, for example, to resolve URI's and also during visiting.
+ * Base (logical/semantic parent) for connections to use, for example, to resolve URI's and also during visiting.
  * @author Pavel
  *
  */

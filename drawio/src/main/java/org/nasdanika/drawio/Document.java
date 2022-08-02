@@ -30,16 +30,19 @@ import org.xml.sax.SAXException;
 public interface Document extends Element {
 	
 	/**
-	 * @return a list of pages which represent nested diagram elements
+	 * @return a list of pages. This list supports add() method to insert pages from other documents. The add() method creates a clone of the page passed as a parameter. 
 	 */
 	List<Page> getPages();
 	
+	/**
+	 * @return Creates a new page and adds it to the list of pages.
+	 */
 	Page createPage();
 	
 	/**
 	 * Loads document from an XML string.
 	 * @param docStr
-	 * @param base
+	 * @param uri Optional document URI for resolution of relative URI's.
 	 * @return
 	 * @throws IOException 
 	 * @throws SAXException 
@@ -52,7 +55,7 @@ public interface Document extends Element {
 	/**
 	 * 
 	 * @param reader
-	 * @param uri
+	 * @param uri Optional document URI for resolution of relative URI's.
 	 * @return
 	 * @throws IOException
 	 * @throws ParserConfigurationException
@@ -65,7 +68,7 @@ public interface Document extends Element {
 	/**
 	 * 
 	 * @param compressed
-	 * @param base
+	 * @param uri Optional document URI for resolution of relative URI's.
 	 * @return
 	 * @throws ParserConfigurationException
 	 */
@@ -76,7 +79,7 @@ public interface Document extends Element {
 	/**
 	 * Loads document using UTF-8 encoding.
 	 * @param in
-	 * @param uri
+	 * @param uri Optional document URI for resolution of relative URI's.
 	 * @return
 	 * @throws IOException
 	 * @throws SAXException 
@@ -133,6 +136,14 @@ public interface Document extends Element {
 		return ret;
 	}
 	
+	/**
+	 * Loads documents stored in PNG metadata using UTF-8 encoding.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
 	static List<Document> loadFromPngMetadata(URL source) throws IOException, ParserConfigurationException, SAXException {
 		try (InputStream in = source.openStream()) {
 			return loadFromPngMetadata(in, URI.createURI(source.toString()));

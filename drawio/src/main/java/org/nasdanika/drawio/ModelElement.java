@@ -25,6 +25,9 @@ public interface ModelElement extends Element {
 	
 	void setTooltip(String tooltip);
 	
+	/**
+	 * @return style property represented as a map
+	 */
 	Map<String,String> getStyle();
 	
 	String getProperty(String name);
@@ -41,7 +44,7 @@ public interface ModelElement extends Element {
 	
 	/**
 	 * Resolves some value for the model element by traversing its logical containment hierarchy and resolving that value against logical parents.
-	 * For the containment root the value is resolved against base.
+	 * For the containment root the value is resolved against the base.
 	 * @param <T>
 	 * @param base Base value is used to resolve the parent value
 	 * @param resolver Resolver {@link BiFunction}
@@ -73,6 +76,9 @@ public interface ModelElement extends Element {
 	
 	Page getLinkedPage();
 	
+	/**
+	 * @return True if there is a link and it is in one of page link formats.
+	 */
 	boolean isPageLink();
 	
 }

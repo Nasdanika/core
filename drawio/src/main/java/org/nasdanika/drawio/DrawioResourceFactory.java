@@ -14,13 +14,14 @@ import java.util.function.Predicate;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.drawio.impl.comparators.AngularModelElementComparatorFactory;
 
 /**
- * Creates {@link DrawioResource}
+ * Base class for factories which load {@link EObject}'s from Drawio diagrams by performing semantic mapping from diagram elements to model elements. 
  * @author Pavel
  *
  */

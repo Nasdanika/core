@@ -4,6 +4,10 @@ import org.nasdanika.drawio.impl.comparators.CartesianModelElementComparatorFact
 import org.nasdanika.drawio.impl.comparators.LabelModelElementComparatorFactory;
 import org.nasdanika.drawio.impl.comparators.PropertyModelElementComparatorFactory;
 
+/**
+ * Java API for reading/creating, manipulating, and writing <a href="https://drawio.net">Drawio</a> documents.
+ * See <a href="https://docs.nasdanika.org/modules/core/modules/drawio/index.html">Online Documentation</a> for more details.
+ */
 module org.nasdanika.drawio {
 	
 	requires transitive java.xml;
