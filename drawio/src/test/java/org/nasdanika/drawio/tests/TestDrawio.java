@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -33,6 +34,9 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.processors.ElementProcessor;
+import org.nasdanika.drawio.processors.ExportNodeProcessor;
+import org.nasdanika.drawio.processors.NopEndpointProcessorFactory;
 
 public class TestDrawio {
 
@@ -364,5 +368,74 @@ public class TestDrawio {
 		document.accept(org.nasdanika.drawio.Util.withLinkedPages(visitor, null), null);
 	}
 	
+	@Test 
+	public void testProcessor() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		NopEndpointProcessorFactory<ElementProcessor<ElementProcessor<?>>, String, String> processorFactory = new NopEndpointProcessorFactory<>() {
+			
+			@Override
+			protected ElementProcessor<ElementProcessor<?>> createNodeProcessor(
+					Node node, 
+					Map<Element,ElementProcessor<ElementProcessor<?>>> childProcessors, 
+					Map<Connection,Function<String,String>> inboundEndpoints, 
+					Map<Connection,Consumer<Function<String,String>>> inboundHandlerConsumers, 
+					Map<Connection,Function<String,String>> outboundEndpoints, 
+					Map<Connection,Consumer<Function<String,String>>> outboundHandlerConsumers) {
+				
+				if ("Bob".equals(node.getLabel())) {
+					// Handling Bob here
+					assertThat(childProcessors == null || childProcessors.isEmpty()).isTrue();
+					assertThat(outboundEndpoints).isEmpty();
+					assertThat(outboundHandlerConsumers).isEmpty();
+					assertThat(inboundEndpoints.size()).isEqualTo(1);
+					assertThat(inboundHandlerConsumers.size()).isEqualTo(1);
+					
+					// Bob ask Alice and then replies to Alice
+					inboundHandlerConsumers.forEach((connection, handlerConsumer) -> {
+						handlerConsumer.accept(request -> {
+							StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
+							for (Entry<Connection, Function<String, String>> inboundEndpoint: inboundEndpoints.entrySet()) {
+								sb.append(inboundEndpoint.getValue().apply("[Bob] Hi, my name is Bob. What is your name?"));
+							}
+							
+							return sb.toString();
+						});
+					});
+					
+					return null;
+				}
+				
+				return super.createNodeProcessor(node, childProcessors, inboundEndpoints, inboundHandlerConsumers, outboundEndpoints, outboundHandlerConsumers);
+			}
+			
+		};
+		
+		document.accept(processorFactory::createProcessors, null);
+		
+		@SuppressWarnings("unchecked")
+		ExportNodeProcessor<?, String,String,String,String> alice = (ExportNodeProcessor<?, String, String, String, String>) processorFactory.select(e -> e instanceof Node && "Alice".equals(((Node) e).getLabel())).findAny().get();
+		
+		assertThat(alice.getChildProcessors() == null || alice.getChildProcessors().isEmpty()).isTrue();
+		assertThat(alice.getInboundEndpoints()).isEmpty();
+		assertThat(alice.getInboundHandlerConsumers()).isEmpty();
+		assertThat(alice.getOutboundEndpoints().size()).isEqualTo(1);
+		assertThat(alice.getOutboundHandlerConsumers().size()).isEqualTo(1);
+		
+		alice.getOutboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+			handlerConsumer.accept(request -> {
+				return request + System.lineSeparator() + "[Alice] My name is Alice.";
+			});
+		});
+
+		for (Entry<Connection, Function<String, String>> outboundEndpoint: alice.getOutboundEndpoints().entrySet()) {
+			String dialog = outboundEndpoint.getValue().apply("[Alice] Hello!");
+			System.out.println(dialog);
+		}
+		
+		
+//		assertThat(linkedPage).isNotNull();
+//		assertThat(linkedPage.getName()).isEqualTo("Page-1");
+//		assertThat(linkedPage.getDocument().getURI().toString().endsWith("compressed.drawio")).isEqualTo(true);
+	}	
 	
 }

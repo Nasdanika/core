@@ -65,7 +65,7 @@ class NodeImpl extends LayerImpl implements Node {
 		List<org.nasdanika.drawio.Element> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
 		if (connectionBase == ConnectionBase.SOURCE) {
 			logicalChildren.addAll(getOutboundConnections());
-		} else {
+		} else if (connectionBase == ConnectionBase.TARGET) {
 			logicalChildren.addAll(getInboundConnections());			
 		}
 		return logicalChildren;
