@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.processors;
+package org.nasdanika.drawio._processors;
 
 import java.util.HashMap;
 import java.util.Map;

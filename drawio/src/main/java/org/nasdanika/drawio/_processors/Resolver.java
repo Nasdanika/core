@@ -1,4 +1,4 @@
-package org.nasdanika.drawio.processors;
+package org.nasdanika.drawio._processors;
 
 import java.util.function.Predicate;
 import java.util.stream.Stream;

@@ -20,7 +20,7 @@ module org.nasdanika.drawio {
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;
-	exports org.nasdanika.drawio.processors;
+	exports org.nasdanika.drawio.processor;
 	
 	provides ElementComparator.Factory with LabelModelElementComparatorFactory, PropertyModelElementComparatorFactory, CartesianModelElementComparatorFactory, AngularModelElementComparatorFactory;
 	
