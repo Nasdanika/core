@@ -15,9 +15,17 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 	
 	private ProcessorFactory<P, T, R, U, S> factory;
 	private Map<Element, P> registry = new LinkedHashMap<>();
+	
+	// Handlers to call connection sources by outbound endpoints
 	private Map<Connection, Function<U,S>> sourceHandlers = new HashMap<>();
+	
+	// Handlers to call connection targets by inbound endpoints
 	private Map<Connection, Function<U,S>> targetHandlers = new HashMap<>();
+	
+	// Handlers to call nodes by target endpoints or by outbound endpoints for pass-through connections.
 	private Map<Node, Map<Connection, Function<U,S>>> inboundHandlers = new HashMap<>();
+	
+	// Handlers to call nodes by source endpoints or by inbound endpoints for pass-through connections.
 	private Map<Node, Map<Connection, Function<U,S>>> outboundHandlers = new HashMap<>();	
 
 	ProcessorFactoryVisitor(ProcessorFactory<P,T,R,U,S> factory) {
@@ -28,136 +36,102 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 		return registry;
 	}	
 
+
 	public Helper<P> createElementProcessor(Element element, Map<Element, Helper<P>> childProcessors) {
 		Reference<P> parentProcessorReference = new Reference<>();
 		ElementProcessorConfig<? extends Element, P> config;
 		if (element instanceof Node) {
+			Node node = (Node) element;
 			Map<Connection, Function<T, R>> inboundEndpoints = new HashMap<>();
 			Map<Connection, Consumer<Function<U, S>>> inboundHandlerConsumers = new HashMap<>();
-			Node node = (Node) element;
 			for (Connection inboundConnection: node.getInboundConnections()) {
-				if (factory.isPassThrough(inboundConnection)) {
-					Node inboundConnectionSource = inboundConnection.getSource();
-					if (inboundConnectionSource != null) {
-						Function<U, S> inboundHandler = new Function<U, S>() {
-	
-							@Override
-							public S apply(U t) {
-								Map<Connection, Function<U, S>> sourceOutboundHandlers = outboundHandlers.get(inboundConnectionSource);
-								if (sourceOutboundHandlers == null) {
-									throw new IllegalStateException("Outbound handlers not found for " + inboundConnectionSource);
-								}							
-								Function<U, S> оutboundHandler = sourceOutboundHandlers.get(inboundConnection);
-								if (оutboundHandler == null) {
-									throw new IllegalStateException("Outbound handler is not set for connection " + inboundConnection);
-								}
-								return оutboundHandler.apply(t);
-							}
-							
-						};
-						Function<T, R> inboundEndpoint = factory.createEndpoint(inboundConnection, inboundHandler, EndpointType.INBOUND);
-						inboundEndpoints.put(inboundConnection, inboundEndpoint);						
-					}
-					Consumer<Function<U, S>> inboundHandlerConsumer = new Consumer<Function<U,S>>() {
-						
-						@Override
-						public void accept(Function<U, S> handler) {
-							Map<Connection, Function<U, S>> nodeInboundHandlers = inboundHandlers.computeIfAbsent(node, n -> new HashMap<>());							
-							nodeInboundHandlers.put(inboundConnection, handler);						
-						}
-						
-					};
-					inboundHandlerConsumers.put(inboundConnection, inboundHandlerConsumer);					
-				} else {
-					Function<U, S> handler = new Function<U, S>() {
+				Function<U, S> inboundEndpointHandler = new Function<U, S>() {
 
-						@Override
-						public S apply(U t) {
-							Function<U, S> targetHandler = targetHandlers.get(inboundConnection);
-							if (targetHandler == null) {
-								throw new IllegalStateException("Target handler is not set for connection " + inboundConnection);
+					@Override
+					public S apply(U t) {
+						if (factory.isPassThrough(inboundConnection)) {
+							// Calling outbound handler directly as there is no target handler
+							Node inboundConnectionSource = inboundConnection.getSource();
+							if (inboundConnectionSource == null) {
+								throw new IllegalStateException("Inbound connection has no source node: " + inboundConnection);
 							}
-							return targetHandler.apply(t);
+							Map<Connection, Function<U, S>> sourceOutboundHandlers = outboundHandlers.get(inboundConnectionSource);
+							if (sourceOutboundHandlers == null) {
+								throw new IllegalStateException("Outbound handlers not found for " + inboundConnectionSource);
+							}
+							Function<U, S> sourceOutboundHandler = sourceOutboundHandlers.get(inboundConnection);
+							if (sourceOutboundHandler == null) {
+								throw new IllegalStateException("Source outbound hanlder not found for inbound connection " + inboundConnection);
+							}
+							return sourceOutboundHandler.apply(t);
 						}
 						
-					};
-					Function<T, R> inboundEndpoint = factory.createEndpoint(inboundConnection, handler, EndpointType.INBOUND);
-					inboundEndpoints.put(inboundConnection, inboundEndpoint);
+						Function<U, S> targetHandler = targetHandlers.get(inboundConnection);
+						if (targetHandler == null) {
+							throw new IllegalStateException("Target handler is not set for connection " + inboundConnection);
+						}
+						return targetHandler.apply(t);
+					}
 					
-					Consumer<Function<U, S>> inboundHandlerConsumer = new Consumer<Function<U,S>>() {
-						
-						@Override
-						public void accept(Function<U, S> handler) {
-							targetHandlers.put(inboundConnection, handler);
-						}
-						
-					};
-					inboundHandlerConsumers.put(inboundConnection, inboundHandlerConsumer);										
-				}
+				};
+				Function<T, R> inboundEndpoint = factory.createEndpoint(inboundConnection, inboundEndpointHandler, EndpointType.INBOUND);
+				inboundEndpoints.put(inboundConnection, inboundEndpoint);
+				
+				Consumer<Function<U, S>> inboundHandlerConsumer = new Consumer<Function<U,S>>() {
+					
+					@Override
+					public void accept(Function<U, S> inboundHandler) {
+						inboundHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(inboundConnection, inboundHandler);
+					}
+					
+				};
+				inboundHandlerConsumers.put(inboundConnection, inboundHandlerConsumer);										
 			}
 			
 			Map<Connection, Function<T, R>> outboundEndpoints = new HashMap<>();
 			Map<Connection, Consumer<Function<U, S>>> outboundHandlerConsumers = new HashMap<>();
 			for (Connection outboundConnection: node.getOutboundConnections()) {
-				if (factory.isPassThrough(outboundConnection)) {
-					Node outboundConnectionTarget = outboundConnection.getTarget();
-					if (outboundConnectionTarget != null) {
-						Function<U, S> handler = new Function<U, S>() {
-	
-							@Override
-							public S apply(U t) {
-								Map<Connection, Function<U, S>> targetInboundHandlers = inboundHandlers.get(outboundConnectionTarget);
-								if (targetInboundHandlers == null) {
-									throw new IllegalStateException("Inbound handlers not found for " + outboundConnectionTarget);
-								}							
-								Function<U, S> inboundHandler = targetInboundHandlers.get(outboundConnection);
-								if (inboundHandler == null) {
-									throw new IllegalStateException("Inbound handler is not set for connection " + outboundConnection);
-								}
-								return inboundHandler.apply(t);
+				Function<U, S> outboundEndpointHandler = new Function<U, S>() {
+
+					@Override
+					public S apply(U t) {
+						if (factory.isPassThrough(outboundConnection)) {
+							// Calling inbound handler directly as there is no source handler
+							Node outboundConnectionTarget = outboundConnection.getTarget();
+							if (outboundConnectionTarget == null) {
+								throw new IllegalStateException("Outbound connection has no target node: " + outboundConnection);
 							}
-							
-						};
-						Function<T, R> outboundEndpoint = factory.createEndpoint(outboundConnection, handler, EndpointType.OUTBOUND);
-						outboundEndpoints.put(outboundConnection, outboundEndpoint);
+							Map<Connection, Function<U, S>> targetInboundHandlers = inboundHandlers.get(outboundConnectionTarget);
+							if (targetInboundHandlers == null) {
+								throw new IllegalStateException("Inbound handlers not found for " + outboundConnectionTarget);
+							}
+							Function<U, S> targetInboundHandler = targetInboundHandlers.get(outboundConnection);
+							if (targetInboundHandler == null) {
+								throw new IllegalStateException("Target inbound hanlder not found for outbound connection " + outboundConnection);
+							}
+							return targetInboundHandler.apply(t);
+						}
+						
+						Function<U, S> sourceHandler = sourceHandlers.get(outboundConnection);
+						if (sourceHandler == null) {
+							throw new IllegalStateException("Source handler is not set for connection " + outboundConnection);
+						}
+						return sourceHandler.apply(t);
 					}
 					
-					Consumer<Function<U, S>> outboundHandlerConsumer = new Consumer<Function<U,S>>() {
-
-						@Override
-						public void accept(Function<U, S> handler) {
-							Map<Connection, Function<U, S>> nodeOutboundHandlers = outboundHandlers.computeIfAbsent(node, n -> new HashMap<>());							
-							nodeOutboundHandlers.put(outboundConnection, handler);						
-						}
-						
-					};
-					outboundHandlerConsumers.put(outboundConnection, outboundHandlerConsumer);
-				} else {
-					Function<U, S> handler = new Function<U, S>() {
-
-						@Override
-						public S apply(U t) {
-							Function<U, S> sourceHandler = sourceHandlers.get(outboundConnection);
-							if (sourceHandler == null) {
-								throw new IllegalStateException("Source handler is not set for connection " + outboundConnection);
-							}
-							return sourceHandler.apply(t);
-						}
-						
-					};
-					Function<T, R> outboundEndpoint = factory.createEndpoint(outboundConnection, handler, EndpointType.OUTBOUND);
-					inboundEndpoints.put(outboundConnection, outboundEndpoint);
+				};
+				Function<T, R> outboundEndpoint = factory.createEndpoint(outboundConnection, outboundEndpointHandler, EndpointType.OUTBOUND);
+				outboundEndpoints.put(outboundConnection, outboundEndpoint);
+				
+				Consumer<Function<U, S>> outboundHandlerConsumer = new Consumer<Function<U,S>>() {
 					
-					Consumer<Function<U, S>> outboundHandlerConsumer = new Consumer<Function<U,S>>() {
-						
-						@Override
-						public void accept(Function<U, S> handler) {
-							sourceHandlers.put(outboundConnection, handler);
-						}
-						
-					};
-					outboundHandlerConsumers.put(outboundConnection, outboundHandlerConsumer);															
-				}
+					@Override
+					public void accept(Function<U, S> inboundHandler) {
+						outboundHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(outboundConnection, inboundHandler);
+					}
+					
+				};
+				outboundHandlerConsumers.put(outboundConnection, outboundHandlerConsumer);										
 			}
 			
 			config = new NodeProcessorConfig<P, T, R, U, S>() {
