@@ -7,7 +7,10 @@ import java.util.function.Function;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
 
-public interface NodeProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<Node, P> {
+public interface NodeProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<P> {
+	
+	@Override
+	Node getElement();
 
 	Map<Connection, Function<T,R>> getInboundEndpoints();
 	

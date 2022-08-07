@@ -36,6 +36,7 @@ import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.drawio.processor.ConnectionProcessorConfig;
 import org.nasdanika.drawio.processor.ElementProcessorConfig;
+import org.nasdanika.drawio.processor.ElementProcessorInfo;
 import org.nasdanika.drawio.processor.NodeProcessorConfig;
 
 public class TestDrawio {
@@ -374,13 +375,12 @@ public class TestDrawio {
 		org.nasdanika.drawio.processor.NopEndpointProcessorFactory<Object, String, String> processorFactory = new org.nasdanika.drawio.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public Object createProcessor(ElementProcessorConfig<? extends Element, Object> config) {
+			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config) {
 				if (config instanceof NodeProcessorConfig) {
-					@SuppressWarnings("unchecked")
 					NodeProcessorConfig<Object, String, String, String, String> nodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) config;
 					if ("Bob".equals(nodeProcessorConfig.getElement().getLabel())) {
 						// Wiring
-						assertThat(nodeProcessorConfig.getChildProcessors() == null || nodeProcessorConfig.getChildProcessors().isEmpty()).isTrue();
+						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 						assertThat(nodeProcessorConfig.getOutboundEndpoints()).isEmpty();
 						assertThat(nodeProcessorConfig.getOutboundHandlerConsumers()).isEmpty();
 						assertThat(nodeProcessorConfig.getInboundEndpoints().size()).isEqualTo(1);
@@ -402,20 +402,17 @@ public class TestDrawio {
 					}
 				}
 				
-				return config;
+				return org.nasdanika.drawio.processor.NopEndpointProcessorFactory.super.createProcessor(config);
 			}
 			
 		};
 		
-		Map<Element, Object> registry = processorFactory.createProcessors(document, null);
-
-		Optional<Object> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
+		Map<Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document, null);
+		Optional<ElementProcessorInfo<Object>> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorOptional.isPresent()).isTrue();
-		Object aliceProcessor = aliceProcessorOptional.get();
-		assertThat(aliceProcessor).isInstanceOf(NodeProcessorConfig.class);
-		@SuppressWarnings("unchecked")
-		NodeProcessorConfig<Object, String, String, String, String> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) aliceProcessor;
-		assertThat(aliceNodeProcessorConfig.getChildProcessors() == null || aliceNodeProcessorConfig.getChildProcessors().isEmpty()).isTrue();
+		ElementProcessorInfo<Object> aliceProcessor = aliceProcessorOptional.get();
+		NodeProcessorConfig<Object, String, String, String, String> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) aliceProcessor.getConfig();
+		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 		assertThat(aliceNodeProcessorConfig.getInboundEndpoints()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getInboundHandlerConsumers()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getOutboundEndpoints().size()).isEqualTo(1);
@@ -440,13 +437,12 @@ public class TestDrawio {
 		org.nasdanika.drawio.processor.NopEndpointProcessorFactory<Object, String, String> processorFactory = new org.nasdanika.drawio.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public Object createProcessor(ElementProcessorConfig<? extends Element, Object> config) {
+			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config) {
 				if (config instanceof NodeProcessorConfig) {
-					@SuppressWarnings("unchecked")
 					NodeProcessorConfig<Object, String, String, String, String> nodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) config;
 					if ("Bob".equals(nodeProcessorConfig.getElement().getLabel())) {
 						// Wiring
-						assertThat(nodeProcessorConfig.getChildProcessors() == null || nodeProcessorConfig.getChildProcessors().isEmpty()).isTrue();
+						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 						assertThat(nodeProcessorConfig.getOutboundEndpoints()).isEmpty();
 						assertThat(nodeProcessorConfig.getOutboundHandlerConsumers()).isEmpty();
 						assertThat(nodeProcessorConfig.getInboundEndpoints().size()).isEqualTo(1);
@@ -486,7 +482,7 @@ public class TestDrawio {
 					
 				}
 				
-				return config;
+				return org.nasdanika.drawio.processor.NopEndpointProcessorFactory.super.createProcessor(config);
 			}
 			
 			@Override
@@ -496,15 +492,13 @@ public class TestDrawio {
 			
 		};
 		
-		Map<Element, Object> registry = processorFactory.createProcessors(document, null);
+		Map<Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document, null);
 
-		Optional<Object> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
-		assertThat(aliceProcessorOptional.isPresent()).isTrue();
-		Object aliceProcessor = aliceProcessorOptional.get();
-		assertThat(aliceProcessor).isInstanceOf(NodeProcessorConfig.class);
-		@SuppressWarnings("unchecked")
-		NodeProcessorConfig<Object, String, String, String, String> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) aliceProcessor;
-		assertThat(aliceNodeProcessorConfig.getChildProcessors() == null || aliceNodeProcessorConfig.getChildProcessors().isEmpty()).isTrue();
+		Optional<ElementProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
+		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
+		ElementProcessorInfo<Object> aliceProcessorInfo = aliceProcessorInfoOptional.get();
+		NodeProcessorConfig<Object, String, String, String, String> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, String, String, String, String>) aliceProcessorInfo.getConfig();
+		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 		assertThat(aliceNodeProcessorConfig.getInboundEndpoints()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getInboundHandlerConsumers()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getOutboundEndpoints().size()).isEqualTo(1);

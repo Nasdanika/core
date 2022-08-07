@@ -4,7 +4,10 @@ import java.util.function.Function;
 
 import org.nasdanika.drawio.Connection;
 
-public interface ConnectionProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<Connection, P> {
+public interface ConnectionProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<P> {
+	
+	@Override
+	Connection getElement();
 
 	Function<T,R> getSourceEndpoint();
 	

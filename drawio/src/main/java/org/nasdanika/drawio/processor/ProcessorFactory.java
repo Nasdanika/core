@@ -16,9 +16,22 @@ public interface ProcessorFactory<P,T,R,U,S> {
 	
 	Function<T,R> createEndpoint(Connection connection, Function<U,S> handler, EndpointType type);
 	
-	P createProcessor(ElementProcessorConfig<? extends Element, P> config);
+	default ElementProcessorInfo<P> createProcessor(ElementProcessorConfig<P> config) {
+		return new ElementProcessorInfo<P>() {
+
+			@Override
+			public ElementProcessorConfig<P> getConfig() {
+				return config;
+			}
+
+			@Override
+			public P getProcessor() {
+				return null;
+			}
+		};
+	}
 	
-	default Map<Element,P> createProcessors(Element element, ConnectionBase connectionBase) {
+	default Map<Element,ElementProcessorInfo<P>> createProcessors(Element element, ConnectionBase connectionBase) {
 		ProcessorFactoryVisitor<P, T, R, U, S> visitor = new ProcessorFactoryVisitor<>(this);				
 		element.accept(visitor::createElementProcessor, connectionBase);				
 		return Collections.unmodifiableMap(visitor.getRegistry());		

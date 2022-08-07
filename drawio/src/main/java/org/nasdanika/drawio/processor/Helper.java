@@ -4,20 +4,20 @@ import org.nasdanika.common.Reference;
 
 class Helper<P> {
 	
-	private P processor;
-	private Reference<P> parentProcessorReference;
+	private ElementProcessorInfo<P> processorInfo;
+	private Reference<ElementProcessorInfo<P>> parentProcessorInfoReference;
 
-	Helper(P processor, Reference<P> parentProcessorReference) {
-		this.processor = processor;
-		this.parentProcessorReference = parentProcessorReference;
+	Helper(ElementProcessorInfo<P> processorInfo, Reference<ElementProcessorInfo<P>> parentProcessorInfoReference) {
+		this.processorInfo = processorInfo;
+		this.parentProcessorInfoReference = parentProcessorInfoReference;
 	}
 	
-	void setParentProcessor(P parentProcessor) {
-		parentProcessorReference.set(parentProcessor);
+	void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo) {
+		parentProcessorInfoReference.set(parentProcessorInfo);
 	}
 
-	P getProcessor() {
-		return processor;
+	ElementProcessorInfo<P> getProcessorInfo() {
+		return processorInfo;
 	}
 	
 }

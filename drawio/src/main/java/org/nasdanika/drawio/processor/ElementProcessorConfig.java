@@ -4,14 +4,14 @@ import java.util.Map;
 
 import org.nasdanika.drawio.Element;
 
-public interface ElementProcessorConfig<E extends Element,P> {
+public interface ElementProcessorConfig<P> {
 	
-	E getElement();
+	Element getElement();
 	
-	Map<Element, P> getChildProcessors();
+	Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo();
 	
-	P getParentProcessor();
+	ElementProcessorInfo<P> getParentProcessorInfo();
 	
-	Map<Element, P> getRegistry();
+	Map<Element, ElementProcessorInfo<P>> getRegistry();
 	
 }
