@@ -1,20 +1,14 @@
 package org.nasdanika.drawio.processor;
 
-import org.nasdanika.common.Reference;
-
-class Helper<P> {
+abstract class Helper<P> {
 	
 	private ElementProcessorInfo<P> processorInfo;
-	private Reference<ElementProcessorInfo<P>> parentProcessorInfoReference;
 
-	Helper(ElementProcessorInfo<P> processorInfo, Reference<ElementProcessorInfo<P>> parentProcessorInfoReference) {
+	Helper(ElementProcessorInfo<P> processorInfo) {
 		this.processorInfo = processorInfo;
-		this.parentProcessorInfoReference = parentProcessorInfoReference;
 	}
 	
-	void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo) {
-		parentProcessorInfoReference.set(parentProcessorInfo);
-	}
+	abstract void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo);
 
 	ElementProcessorInfo<P> getProcessorInfo() {
 		return processorInfo;

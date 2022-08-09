@@ -2,6 +2,7 @@ package org.nasdanika.drawio.processor;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.nasdanika.drawio.Connection;
@@ -16,7 +17,7 @@ public interface ProcessorFactory<P,T,R,U,S> {
 	
 	Function<T,R> createEndpoint(Connection connection, Function<U,S> handler, EndpointType type);
 	
-	default ElementProcessorInfo<P> createProcessor(ElementProcessorConfig<P> config) {
+	default ElementProcessorInfo<P> createProcessor(ElementProcessorConfig<P> config, Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback) {
 		return new ElementProcessorInfo<P>() {
 
 			@Override

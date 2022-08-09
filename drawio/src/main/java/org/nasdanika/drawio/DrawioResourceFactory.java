@@ -2,12 +2,10 @@ package org.nasdanika.drawio;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -138,7 +136,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 	 * @param element
 	 * @return
 	 */
-	protected ModelElement getSemanticParent(ModelElement element, Set<Connection> traversed) {
+	protected ModelElement getSemanticParent(ModelElement element) {
 		if (element instanceof Connection) {
 			if (connectionBase == ConnectionBase.SOURCE) {
 				return ((Connection) element).getSource();
@@ -157,7 +155,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 			sort = ((ModelElement) parent).getProperty(sortProperty);
 		}
 		if (org.nasdanika.common.Util.isBlank(sort)) {
-			ModelElement semanticParent = getSemanticParent(parent, new HashSet<>());
+			ModelElement semanticParent = getSemanticParent(parent);
 			if (semanticParent != null) {
 				return getComparatorConfig(semanticParent, defaultSort);
 			}
@@ -224,7 +222,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 	 */
 	protected String getDefaultSortConfig(ModelElement modelElement, String sort) {
 		if (modelElement instanceof Node && (AngularModelElementComparatorFactory.CLOCKWISE.equals(sort) || AngularModelElementComparatorFactory.COUNTERCLOCKWISE.equals(sort))) {
-			ModelElement semanticParent = getSemanticParent(modelElement, new HashSet<>());
+			ModelElement semanticParent = getSemanticParent(modelElement);
 			if (semanticParent instanceof Node) {
 				return String.valueOf(Math.toDegrees(AngularModelElementComparatorFactory.angle((Node) modelElement, (Node) semanticParent)));
 			}

@@ -1,5 +1,7 @@
 package org.nasdanika.drawio.processor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -7,7 +9,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.nasdanika.common.Reference;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Node;
@@ -39,7 +40,7 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 
 
 	public Helper<P> createElementProcessor(Element element, Map<Element, Helper<P>> childProcessors) {
-		Reference<ElementProcessorInfo<P>> parentProcessorInfoReference = new Reference<>();
+		Collection<Consumer<ElementProcessorInfo<P>>> parentProcessorInfoConsumers = new ArrayList<>();
 		ElementProcessorConfig<P> config;
 		if (element instanceof Node) {
 			Node node = (Node) element;
@@ -136,6 +137,12 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 			}
 			
 			config = new NodeProcessorConfig<P, T, R, U, S>() {
+				
+				private ElementProcessorInfo<P> parentProcessorInfo;
+				
+				{
+					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
+				}
 
 				@Override
 				public Node getElement() {
@@ -151,7 +158,7 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 
 				@Override
 				public ElementProcessorInfo<P> getParentProcessorInfo() {
-					return parentProcessorInfoReference.get();
+					return parentProcessorInfo;
 				}
 
 				@Override
@@ -250,6 +257,12 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 				};
 				
 				config = new ConnectionProcessorConfig<P, T, R, U, S>() {
+					
+					private ElementProcessorInfo<P> parentProcessorInfo;
+					
+					{
+						parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
+					}
 
 					@Override
 					public Connection getElement() {
@@ -265,7 +278,7 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 
 					@Override
 					public ElementProcessorInfo<P> getParentProcessorInfo() {
-						return parentProcessorInfoReference.get();
+						return parentProcessorInfo;
 					}
 
 					@Override
@@ -296,6 +309,12 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 			}
 		} else {
 			config = new ElementProcessorConfig<P>() {
+				
+				private ElementProcessorInfo<P> parentProcessorInfo;
+				
+				{
+					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
+				}
 
 				@Override
 				public Element getElement() {
@@ -311,7 +330,7 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 
 				@Override
 				public ElementProcessorInfo<P> getParentProcessorInfo() {
-					return parentProcessorInfoReference.get();
+					return parentProcessorInfo;
 				}
 
 				@Override
@@ -322,7 +341,7 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 			};
 		}
 		
-		ElementProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config);
+		ElementProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add);
 		
 		if (childProcessors != null) {
 			for (Helper<P> childHelper: childProcessors.values()) {
@@ -332,7 +351,14 @@ class ProcessorFactoryVisitor<P,T,R,U,S> {
 		if (processorInfo != null) {
 			registry.put(element, processorInfo);
 		}
-		return new Helper<>(processorInfo, parentProcessorInfoReference);
+		return new Helper<>(processorInfo) {
+
+			@Override
+			void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo) {
+				parentProcessorInfoConsumers.forEach(ppic -> ppic.accept(parentProcessorInfo));				
+			}
+			
+		};
 	}
 
 }

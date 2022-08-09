@@ -38,5 +38,10 @@ class ConnectionImpl extends ModelElementImpl implements Connection {
 			throw new UnsupportedOperationException("Unsupported connection base: " + connectionBase);		
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + getSource() + " -> " + getTarget();
+	}
 
 }
