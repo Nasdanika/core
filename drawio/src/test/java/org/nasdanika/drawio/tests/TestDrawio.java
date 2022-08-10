@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.AlreadyConnectedException;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
@@ -545,6 +546,14 @@ public class TestDrawio {
 			String dialog = outboundEndpoint.getValue().apply("[" + outboundEndpoint.getKey().getSource().getLabel() + "] Hello!");
 			System.out.println(dialog);
 		}
+	}	
+	
+	@Test 
+	public void testReflectiveVisitor() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		
+		AliceBobHandlers aliceBobHandlers = new AliceBobHandlers();		
+		Object result = document.accept(org.nasdanika.drawio.Util.reflectiveVisitor(aliceBobHandlers), null);
 	}	
 	
 }

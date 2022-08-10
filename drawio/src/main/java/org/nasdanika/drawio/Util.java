@@ -2,7 +2,11 @@ package org.nasdanika.drawio;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,14 +16,21 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.apache.commons.text.WordUtils;
+import org.jsoup.Jsoup;
+import org.nasdanika.common.NasdanikaException;
 
 public final class Util {
 	
@@ -391,6 +402,158 @@ public final class Util {
 			}
 			
 		};
+	}
+	
+	/***
+	 * Matched annotation
+	 * @param method
+	 * @param element
+	 * @param childMappings
+	 * @return
+	 */
+	private static <T> boolean matchElementHandlerAnnotation(Method method, Element element, Map<Element, T> childMappings) {	
+		ElementHandler elementHandlerAnnotation = method.getAnnotation(ElementHandler.class);
+		if (elementHandlerAnnotation == null) {
+			return false;
+		}
+				
+		String value = elementHandlerAnnotation.value();		
+		String[] selector = elementHandlerAnnotation.selector();
+		
+		String elementLabel = null;		
+		if (element instanceof ModelElement) {
+			elementLabel = ((ModelElement) element).getLabel(); 
+		} else if (element instanceof Page) {
+			elementLabel = ((Page) element).getName();
+		}
+		
+		if (!org.nasdanika.common.Util.isBlank(elementLabel)) {
+			elementLabel = Jsoup.parse(elementLabel).text();
+			
+			// Matching value
+			if (org.nasdanika.common.Util.isBlank(value)) {
+				if (selector.length == 0) {
+					String[] la = elementLabel.split("\\s+");
+					for (int i = 0; i < la.length; ++i) {
+						la[i] = i== 0 ? WordUtils.uncapitalize(la[i]) : WordUtils.capitalize(la[i]);
+					}
+
+					String methodName = String.join("", la);
+					if (!method.getName().equals(methodName)) {
+						return false;
+					}
+				}
+			} else if (!value.equals(elementLabel)) {
+				return false;
+			}
+		}		
+		
+		// Matching selector
+		for (String selectorElement: selector) {
+			int equalsIdx = selectorElement.indexOf("=");
+			if (equalsIdx == -1) {
+				throw new IllegalArgumentException("Selector shall be in the form of <property>=<value pattern>. Method: " + method);				
+			}
+			if (element instanceof ModelElement) {
+				ModelElement modelElement = (ModelElement) element;
+				String property = selectorElement.substring(0, equalsIdx);
+				String propertyValue = modelElement.getProperty(property);
+				String pattern = selectorElement.substring(equalsIdx + 1);
+				if (org.nasdanika.common.Util.isBlank(pattern)) {
+					if (!org.nasdanika.common.Util.isBlank(propertyValue)) {
+						return false;
+					}
+				}
+				if (org.nasdanika.common.Util.isBlank(propertyValue)) {
+					return false;
+				}
+				
+				if (!Pattern.matches(pattern, propertyValue)) {
+					return false;
+				}
+				
+			} else {
+				return false;  
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	private static int compareHandlerMethods(Method a, Method b) {
+		if (Objects.equals(a, b)) {
+			return 0;
+		}
+		if (a == null) {
+			return 1;
+		}
+		if (b == null) {
+			return -1;
+		}
+		
+		ElementHandler eha = a.getAnnotation(ElementHandler.class);
+		ElementHandler ehb = a.getAnnotation(ElementHandler.class);
+		if (eha.priority() != ehb.priority()) {
+			return ehb.priority() - eha.priority();
+		}
+		
+		Class<?> typeA = a.getParameters()[0].getType();
+		Class<?> typeB = a.getParameters()[0].getType();
+		if (!typeA.equals(typeB)) {
+			if (typeA.isAssignableFrom(typeB)) {
+				return 1;
+			}
+			if (typeB.isAssignableFrom(typeA)) {
+				return -1;
+			}
+		}
+		
+		if (a.getParameterCount() != b.getParameterCount()) {
+			return b.getParameterCount() - a.getParameterCount();
+		}
+		
+		return a.getName().compareTo(b.getName());		
+	}
+	
+	/**
+	 * Creates a visitor which dispatches invocations to the target methods annotated with {@link ElementHandler}.
+	 * @param <T>
+	 * @param target
+	 * @return
+	 */
+	public static <T> BiFunction<Element, Map<Element, T>, T> reflectiveVisitor(Object target) {
+		Objects.requireNonNull(target);
+		Method[] methods = target.getClass().getMethods();
+		return new BiFunction<Element, Map<Element,T>, T>() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public T apply(Element element, Map<Element, T> childMappings) {				
+				Optional<Method> handlerOptional = Arrays.stream(methods)
+					.filter(m -> !Modifier.isAbstract(m.getModifiers()))	
+					.filter(m -> m.getParameterCount() == 1 || m.getParameterCount() == 2)
+					.filter(m -> m.getParameters()[0].getType().isInstance(element))
+					.filter(m -> m.getParameterCount() == 1 ? true : m.getParameters()[1].getType().isInstance(childMappings))
+					.filter(m -> matchElementHandlerAnnotation(m, element, childMappings))
+					.sorted(Util::compareHandlerMethods)
+					.findFirst();
+				
+				if (handlerOptional.isEmpty()) {
+					return null;
+				}
+				
+				Method handler = handlerOptional.get();
+				try {
+					if (handler.getParameterCount() == 1) {
+						return (T) handler.invoke(target, element);
+					}
+					return (T) handler.invoke(target, element, childMappings);					
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					throw new NasdanikaException("Error invoking element handler: " + e, e);
+				}
+			}			
+		};				
 	}
 
 }
