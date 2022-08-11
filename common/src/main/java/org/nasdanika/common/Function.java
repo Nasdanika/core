@@ -12,15 +12,15 @@ import java.util.function.BiFunction;
  */
 public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipantInfo, BiFunction<T,ProgressMonitor,R> {
 	
-	R execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
+	R execute(T arg, ProgressMonitor progressMonitor);	
 	
-	default R splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
+	default R splitAndExecute(T arg, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			return execute(arg, subMonitor);
 		}
 	}
 	
-	default R splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
+	default R splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			return execute(arg, subMonitor);
 		}
@@ -39,7 +39,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		}
 
 		@Override
-		public Object execute(Object arg, ProgressMonitor monitor) throws Exception {
+		public Object execute(Object arg, ProgressMonitor monitor) {
 			return arg;
 		}
 		
@@ -54,7 +54,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		return new Function<V,R>() {
 			
 			@Override
-			public R execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+			public R execute(V arg, ProgressMonitor progressMonitor) {
 				return Function.this.execute(before.apply(arg), progressMonitor);
 			}
 			
@@ -69,12 +69,12 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Function.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Function.this.rollback(progressMonitor);
 			}
 			
@@ -95,7 +95,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 		return new Function<T,V>() {
 			
 			@Override
-			public V execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public V execute(T arg, ProgressMonitor progressMonitor) {
 				return then.apply(Function.this.execute(arg, progressMonitor));
 			}
 			
@@ -110,12 +110,12 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Function.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Function.this.rollback(progressMonitor);
 			}
 			
@@ -143,7 +143,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public V execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public V execute(T arg, ProgressMonitor progressMonitor) {
 				return then.splitAndExecute(Function.this.splitAndExecute(arg, progressMonitor), progressMonitor);
 			}
 
@@ -169,7 +169,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public void execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(T arg, ProgressMonitor progressMonitor) {
 				then.splitAndExecute(Function.this.splitAndExecute(arg, progressMonitor), progressMonitor);
 			}
 
@@ -198,7 +198,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 
 			@Override
-			public R execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public R execute(T arg, ProgressMonitor progressMonitor) {
 				return biFunction.apply(arg, progressMonitor);
 			}
 			
@@ -242,8 +242,8 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 	 * Calls asBiFunction() with a {@link NullProgressMonitor}.
 	 * @return
 	 */
-	default java.util.function.Function<T,R> asFunction() {
-		return arg -> apply(arg, new NullProgressMonitor());
+	default java.util.function.Function<T,R> toFunction(ProgressMonitor progressMonitor) {
+		return arg -> apply(arg, progressMonitor);
 	}
 		
 }

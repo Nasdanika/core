@@ -87,7 +87,7 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	}
 	
 	@Override
-	public Supplier<T> create(Context context) throws Exception {
+	public Supplier<T> create(Context context) {
 		return EObjectAdaptable.adaptToSupplierFactoryNonNull(root, getSupplierResultType()).create(context);
 	}
 	

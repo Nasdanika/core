@@ -21,7 +21,7 @@ public class FailCommandFactoryAdapter extends AdapterImpl implements CommandFac
 	}
 
 	@Override
-	public Command create(Context context) throws Exception {
+	public Command create(Context context) {
 		String message = context.interpolateToString(((Fail) getTarget()).getMessage());
 		
 		return new Command() {
@@ -37,7 +37,7 @@ public class FailCommandFactoryAdapter extends AdapterImpl implements CommandFac
 			}
 
 			@Override
-			public void execute(ProgressMonitor progressMonitor) throws Exception {
+			public void execute(ProgressMonitor progressMonitor) {
 				throw new NasdanikaException(message);
 			}
 		};

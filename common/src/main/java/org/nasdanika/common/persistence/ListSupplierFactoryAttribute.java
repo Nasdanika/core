@@ -33,7 +33,7 @@ public class ListSupplierFactoryAttribute<T,E> extends AbstractFeatureDelegate<F
 					ret.add(new SupplierFactory<T>() {
 
 						@Override
-						public Supplier<T> create(Context context) throws Exception {
+						public Supplier<T> create(Context context) {
 							Object ie = context.interpolate((String) e);
 							return SupplierFactory.<T>adapt(ie, "Interpolated feature " + getKey() + "[" + e + "]").create(context);							
 						}

@@ -22,7 +22,7 @@ public interface Feature<T> extends Marked {
 	 */
 	boolean isDefault();
 
-	void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;
+	void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);
 	
 	/**
 	 * @return Feature description in Markdown.

@@ -12,6 +12,6 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public interface Merger {
 	
-	InputStream merge(Context context, BinaryEntity entity, InputStream oldContent, InputStream newContent, ProgressMonitor progressMonitor) throws Exception;
+	InputStream merge(Context context, BinaryEntity entity, InputStream oldContent, InputStream newContent, ProgressMonitor progressMonitor);
 	
 }

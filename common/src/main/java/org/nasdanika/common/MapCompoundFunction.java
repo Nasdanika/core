@@ -18,7 +18,7 @@ public class MapCompoundFunction<K,T,R>
 	}
 
 	@Override
-	public Map<K,R> execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+	public Map<K,R> execute(T arg, ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		Map<K,R> result = new LinkedHashMap<>();
 		for (Entry<K, Function<? super T, ? extends R>> e: elements.entrySet()) {

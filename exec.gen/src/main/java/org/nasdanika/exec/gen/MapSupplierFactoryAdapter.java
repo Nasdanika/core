@@ -23,7 +23,7 @@ public class MapSupplierFactoryAdapter extends AdapterImpl implements SupplierFa
 	}
 		
 	@Override
-	public Supplier<java.util.Map<String,Object>> create(Context context) throws Exception {
+	public Supplier<java.util.Map<String,Object>> create(Context context) {
 		MapCompoundSupplierFactory<String,Object> entriesFactory = new MapCompoundSupplierFactory<>("Map");
 		for (Entry<String, EObject> e: ((org.nasdanika.exec.Map) getTarget()).getEntries()) {
 			EObject value = e.getValue();

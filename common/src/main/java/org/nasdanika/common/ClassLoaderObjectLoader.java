@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		String fqn = resolver == null ? type : resolver.apply(type);
 		if (fqn == null) {
 			if (resolver == null) {
@@ -46,9 +47,13 @@ public class ClassLoaderObjectLoader implements ObjectLoader {
 			return chain.create(loader, type, config, base, progressMonitor, markers);
 		}
 		
-		Class<?> clazz = classLoader.loadClass(fqn);		
-		Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class, Marker.class); 		
-		return constructor.newInstance(loader, config, base, progressMonitor, markers);
+		try {
+			Class<?> clazz = classLoader.loadClass(fqn);		
+			Constructor<?> constructor = clazz.getConstructor(ObjectLoader.class, Object.class, URL.class, ProgressMonitor.class, Marker.class); 		
+			return constructor.newInstance(loader, config, base, progressMonitor, markers);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			throw new ExecutionException(e);
+		}
 	}
 
 }

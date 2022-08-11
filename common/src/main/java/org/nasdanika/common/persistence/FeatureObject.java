@@ -55,7 +55,7 @@ public class FeatureObject implements Marked, Loadable {
 	 * @throws Exception
 	 */
 	@Override
-	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		this.markers = markers;			
 		if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;

@@ -26,7 +26,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new SupplierFactory<V>() {
 			
 			@Override
-			public Supplier<V> create(Context context) throws Exception {
+			public Supplier<V> create(Context context) {
 				return SupplierFactory.this.create(context).then(then.create(context));
 			}
 			
@@ -37,7 +37,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new CommandFactory() {
 			
 			@Override
-			public Command create(Context context) throws Exception {
+			public Command create(Context context) {
 				return SupplierFactory.this.create(context).then(then.create(context));
 			}
 			
@@ -59,7 +59,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new FunctionFactory<V, BiSupplier<V,T>>() {
 
 			@Override
-			public Function<V, BiSupplier<V, T>> create(Context context) throws Exception {				
+			public Function<V, BiSupplier<V, T>> create(Context context) {				
 				return SupplierFactory.this.create(context).asFunction();
 			}
 		};
@@ -69,7 +69,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new SupplierFactory<T>() {
 
 			@Override
-			public Supplier<T> create(Context context) throws Exception {
+			public Supplier<T> create(Context context) {
 				return Supplier.fromFunction(pm -> biFunction.apply(context, pm), name, size);
 			}
 			
@@ -104,7 +104,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return new SupplierFactory<T>() {
 
 			@Override
-			public Supplier<T> create(Context context) throws Exception {
+			public Supplier<T> create(Context context) {
 				return new ContextifiedExecutionParticipant.ContextifiedSupplier<T>(contextSupplierFactory.create(context), SupplierFactory.this);
 			}
 			

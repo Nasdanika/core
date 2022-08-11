@@ -16,7 +16,7 @@ public class MapCompoundSupplier<K,T> extends MapCompoundExecutionParticipant<K,
 	}
 
 	@Override
-	public Map<K,T> execute(ProgressMonitor progressMonitor) throws Exception {
+	public Map<K,T> execute(ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		Map<K,T> result = new LinkedHashMap<>();
 		for (Entry<K, Supplier<? extends T>> e: elements.entrySet()) {

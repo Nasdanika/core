@@ -40,7 +40,7 @@ public class BlockConsumerFactoryAdapter extends BlockExecutionParticipantAdapte
 		}
 
 		@Override
-		public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+		public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) {
 			try {
 				tryParticipant.splitAndExecute(container, progressMonitor);
 			} catch (Exception e) {
@@ -60,7 +60,7 @@ public class BlockConsumerFactoryAdapter extends BlockExecutionParticipantAdapte
 	}	
 	
 	@Override
-	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
+	public Consumer<BinaryEntityContainer> create(Context context) {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Block target = (Block) getTarget();
 		

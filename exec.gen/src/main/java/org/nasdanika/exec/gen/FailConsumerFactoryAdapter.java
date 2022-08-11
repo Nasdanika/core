@@ -22,7 +22,7 @@ public class FailConsumerFactoryAdapter extends AdapterImpl implements ConsumerF
 	}
 
 	@Override
-	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
+	public Consumer<BinaryEntityContainer> create(Context context) {
 		String message = context.interpolateToString(((Fail) getTarget()).getMessage());
 		
 		return new Consumer<BinaryEntityContainer>() {
@@ -38,7 +38,7 @@ public class FailConsumerFactoryAdapter extends AdapterImpl implements ConsumerF
 			}
 
 			@Override
-			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) {
 				throw new NasdanikaException(message);
 			}
 		};

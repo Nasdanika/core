@@ -35,7 +35,7 @@ public class EnumSupplierFactoryAttribute<T extends Enum<T>> extends AbstractFea
 			}
 
 			@Override
-			public T execute(String name, ProgressMonitor progressMonitor) throws Exception {
+			public T execute(String name, ProgressMonitor progressMonitor) {
 				if (isLoaded()) {
 					try {
 						return Enum.valueOf(type, name);

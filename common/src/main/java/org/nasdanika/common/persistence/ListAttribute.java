@@ -27,7 +27,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		if (config instanceof Collection) {
 			List<T> ret = new ArrayList<>();
 			int idx = 0;
@@ -51,7 +51,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @return
 	 * @throws Exception
 	 */
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception { 
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		return Collections.singletonList(createElement(loader, element, base, progressMonitor, markers)); 
 	}
 	
@@ -67,7 +67,7 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception { 
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		return (T) element; 
 	}
 	

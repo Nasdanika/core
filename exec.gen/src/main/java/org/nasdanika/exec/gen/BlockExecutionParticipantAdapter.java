@@ -82,7 +82,7 @@ public class BlockExecutionParticipantAdapter extends AdapterImpl {
 		}
 		
 		@Override
-		public void commit(ProgressMonitor progressMonitor) throws Exception {
+		public void commit(ProgressMonitor progressMonitor) {
 			if (progressMonitor.isCancelled()) {
 				progressMonitor.worked(1, "Cancelled");
 				throw new CancellationException();
@@ -98,7 +98,7 @@ public class BlockExecutionParticipantAdapter extends AdapterImpl {
 		}
 		
 		@Override
-		public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+		public boolean rollback(ProgressMonitor progressMonitor) {
 			if (progressMonitor.isCancelled()) {
 				progressMonitor.worked(1, "Cancelled");
 				throw new CancellationException();
@@ -153,7 +153,7 @@ public class BlockExecutionParticipantAdapter extends AdapterImpl {
 			}
 	
 			@Override
-			public Context execute(ProgressMonitor progressMonitor) throws Exception {
+			public Context execute(ProgressMonitor progressMonitor) {
 				return new Context() {
 	
 					@Override

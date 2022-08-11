@@ -27,7 +27,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected synchronized T getTarget(ProgressMonitor progressMonitor) throws Exception {
+	protected synchronized T getTarget(ProgressMonitor progressMonitor) {
 		if (target == null) {
 			target = targetFactory.create(contextSupplier.splitAndExecute(progressMonitor));
 		} else {
@@ -51,13 +51,13 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 	}
 	
 	@Override
-	public void commit(ProgressMonitor progressMonitor) throws Exception {
+	public void commit(ProgressMonitor progressMonitor) {
 		getTarget(progressMonitor).splitAndCommit(1, progressMonitor);
 		contextSupplier.splitAndCommit(progressMonitor);
 	}
 	
 	@Override
-	public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+	public boolean rollback(ProgressMonitor progressMonitor) {
 		boolean result = getTarget(progressMonitor).splitAndRollback(1, progressMonitor);
 		return contextSupplier.splitAndRollback(progressMonitor) && result;
 	}
@@ -80,7 +80,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 		}
 
 		@Override
-		public T execute(ProgressMonitor progressMonitor) throws Exception {
+		public T execute(ProgressMonitor progressMonitor) {
 			return getTarget(progressMonitor).execute(progressMonitor.scale(contextSupplier.size() + 1));
 		}
 		
@@ -93,7 +93,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 		}
 		
 		@Override
-		public R execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+		public R execute(T arg, ProgressMonitor progressMonitor) {
 			return getTarget(progressMonitor).execute(arg, progressMonitor.scale(contextSupplier.size() + 1));
 		}
 		
@@ -106,7 +106,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 		}
 
 		@Override
-		public void execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+		public void execute(T arg, ProgressMonitor progressMonitor) {
 			getTarget(progressMonitor).execute(arg, progressMonitor.scale(contextSupplier.size() + 1));
 		}
 		
@@ -119,7 +119,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 		}
 
 		@Override
-		public void execute(ProgressMonitor progressMonitor) throws Exception {
+		public void execute(ProgressMonitor progressMonitor) {
 			getTarget(progressMonitor).execute(progressMonitor.scale(contextSupplier.size() + 1));
 		}
 		

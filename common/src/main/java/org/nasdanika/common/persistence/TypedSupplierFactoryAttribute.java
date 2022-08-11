@@ -48,7 +48,7 @@ public class TypedSupplierFactoryAttribute<T> extends AbstractFeatureDelegate<Su
 				}
 
 				@Override
-				public T execute(Object obj, ProgressMonitor progressMonitor) throws Exception {					
+				public T execute(Object obj, ProgressMonitor progressMonitor) {					
 					if (TypedSupplierFactoryAttribute.this.converter != null) {
 						return TypedSupplierFactoryAttribute.this.converter.apply(obj, progressMonitor);
 					}

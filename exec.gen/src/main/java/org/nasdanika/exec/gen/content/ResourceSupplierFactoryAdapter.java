@@ -1,5 +1,6 @@
 package org.nasdanika.exec.gen.content;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.BasicDiagnostic;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Diagnostic;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
@@ -38,7 +40,7 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 	}
 
 	@Override
-	public Supplier<InputStream> create(Context context) throws Exception {
+	public Supplier<InputStream> create(Context context) {
 		return new Supplier<InputStream>() {
 			
 			private URL theURL;
@@ -79,8 +81,12 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 			}
 
 			@Override
-			public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
-				return theURL.openStream();
+			public InputStream execute(ProgressMonitor progressMonitor) {
+				try {
+					return theURL.openStream();
+				} catch (IOException e) {
+					throw new ExecutionException(e, this);
+				}
 			}
 			
 		};

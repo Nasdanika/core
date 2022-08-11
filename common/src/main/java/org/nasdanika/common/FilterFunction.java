@@ -7,7 +7,7 @@ public class FilterFunction<T,R> extends FilterExecutionParticipant<Function<T,R
 	}
 
 	@Override
-	public R execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+	public R execute(T arg, ProgressMonitor progressMonitor) {
 		return target.execute(arg, progressMonitor);
 	}
 

@@ -39,7 +39,7 @@ public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAtt
 	 * @throws Exception
 	 */
 	@Override
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception { 
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		T ret = elementFactory.get();
 		ret.load(loader, element, base, progressMonitor, markers);
 		return ret;

@@ -171,8 +171,12 @@ public class Util {
 		}
 		
 		@Override
-		public InputStream execute(String text, ProgressMonitor progressMonitor) throws Exception {
-			return toStream(context, text);
+		public InputStream execute(String text, ProgressMonitor progressMonitor) {
+			try {
+				return toStream(context, text);
+			} catch (IOException e) {
+				throw new ExecutionException(e, this);
+			}
 		}
 		
 	};
@@ -190,7 +194,7 @@ public class Util {
 		}
 		
 		@Override
-		public InputStream execute(Object object, ProgressMonitor progressMonitor) throws Exception {
+		public InputStream execute(Object object, ProgressMonitor progressMonitor) {
 			if (object == null) {
 				return null;
 			}
@@ -233,8 +237,12 @@ public class Util {
 		}
 		
 		@Override
-		public String execute(InputStream stream, ProgressMonitor progressMonitor) throws Exception {
-			return Util.toString(context, stream);
+		public String execute(InputStream stream, ProgressMonitor progressMonitor) {
+			try {
+				return Util.toString(context, stream);
+			} catch (IOException e) {
+				throw new ExecutionException(e, this);
+			}
 		}
 		
 	};
@@ -252,7 +260,7 @@ public class Util {
 		}
 		
 		@Override
-		public String execute(String str, ProgressMonitor progressMonitor) throws Exception {
+		public String execute(String str, ProgressMonitor progressMonitor) {
 			return str == null ? "" : str.trim();
 		}
 		
@@ -271,7 +279,7 @@ public class Util {
 		}
 		
 		@Override
-		public String execute(String input, ProgressMonitor progressMonitor) throws Exception {
+		public String execute(String input, ProgressMonitor progressMonitor) {
 			return context.interpolateToString(input);
 		}
 		
@@ -290,7 +298,7 @@ public class Util {
 		}
 		
 		@Override
-		public Object execute(Object input, ProgressMonitor progressMonitor) throws Exception {
+		public Object execute(Object input, ProgressMonitor progressMonitor) {
 			if (input instanceof String) {
 				return context.interpolate((String) input);
 			}
@@ -319,7 +327,7 @@ public class Util {
 		}
 		
 		@Override
-		public Object execute(String input, ProgressMonitor progressMonitor) throws Exception {
+		public Object execute(String input, ProgressMonitor progressMonitor) {
 			return context.interpolate(input);
 		}
 		
@@ -338,7 +346,7 @@ public class Util {
 		}
 		
 		@Override
-		public Map<?,?> execute(Map<?,?> input, ProgressMonitor progressMonitor) throws Exception {
+		public Map<?,?> execute(Map<?,?> input, ProgressMonitor progressMonitor) {
 			return context.interpolate(input);
 		}
 		
@@ -357,7 +365,7 @@ public class Util {
 		}
 		
 		@Override
-		public List<?> execute(Collection<?> input, ProgressMonitor progressMonitor) throws Exception {
+		public List<?> execute(Collection<?> input, ProgressMonitor progressMonitor) {
 			return context.interpolate(input);
 		}
 		
@@ -380,8 +388,12 @@ public class Util {
 		}
 
 		@Override
-		public InputStream execute(List<InputStream> content, ProgressMonitor progressMonitor) throws Exception {
-			return join(content.toArray(new InputStream[content.size()]));
+		public InputStream execute(List<InputStream> content, ProgressMonitor progressMonitor) {
+			try {
+				return join(content.toArray(new InputStream[content.size()]));
+			} catch (IOException e) {
+				throw new ExecutionException(e, this);
+			}
 		}
 		
 	};
@@ -389,7 +401,7 @@ public class Util {
 	public static FunctionFactory<List<InputStream>, InputStream> JOIN_STREAMS_FACTORY = new FunctionFactory<List<InputStream>, InputStream>() {
 
 		@Override
-		public Function<List<InputStream>, InputStream> create(Context context) throws Exception {
+		public Function<List<InputStream>, InputStream> create(Context context) {
 			return JOIN_STREAMS;
 		}
 		
@@ -411,12 +423,16 @@ public class Util {
 		}
 
 		@Override
-		public String execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+		public String execute(Object obj, ProgressMonitor progressMonitor) {
 			if (obj == null) {
 				return null;
 			}
 			if (obj instanceof InputStream) {
-				return Util.toString(context, (InputStream) obj);
+				try {
+					return Util.toString(context, (InputStream) obj);
+				} catch (IOException e) {
+					throw new ExecutionException(e, this);
+				}
 			}
 	    	Converter converter = context.get(Converter.class);
 	    	if (converter != null) {
@@ -572,7 +588,7 @@ public class Util {
 	 * @return Evaluation result
 	 * @throws ScriptException 
 	 */
-	public static Object eval(String script, Map<String,Object> bindings) throws Exception {
+	public static Object eval(String script, Map<String,Object> bindings) {
 		org.mozilla.javascript.Context scriptContext = org.mozilla.javascript.Context.enter();
 		try {
 			Scriptable scope = scriptContext.initStandardObjects();
@@ -591,9 +607,10 @@ public class Util {
 	 * @param script Script
 	 * @param bindings Optional script bindings
 	 * @return Evaluation result
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	public static Object eval(InputStream script, Map<String,Object> bindings) throws Exception {
+	public static Object eval(InputStream script, Map<String,Object> bindings) throws IOException {
 		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
 	}
 	
@@ -604,7 +621,7 @@ public class Util {
 	 * @return Evaluation result
 	 * @throws Exception 
 	 */
-	public static Object eval(URL script, Map<String,Object> bindings) throws Exception {
+	public static Object eval(URL script, Map<String,Object> bindings) {
 		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
 	}
 		
@@ -986,7 +1003,7 @@ public class Util {
 			}
 	
 			@Override
-			public String execute(ProgressMonitor progressMonitor) throws Exception {
+			public String execute(ProgressMonitor progressMonitor) {
 				return context.interpolateToString(String.valueOf(obj));
 			}
 		

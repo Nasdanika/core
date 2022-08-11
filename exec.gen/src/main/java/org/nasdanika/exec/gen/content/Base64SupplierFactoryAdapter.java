@@ -1,6 +1,7 @@
 package org.nasdanika.exec.gen.content;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -8,6 +9,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -26,7 +28,7 @@ public class Base64SupplierFactoryAdapter extends AdapterImpl implements Supplie
 	}
 	
 	@Override
-	public Supplier<InputStream> create(Context context) throws Exception {
+	public Supplier<InputStream> create(Context context) {
 		EObject source = getTarget().getSource();
 		SupplierFactory<InputStream> ssf = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(source, InputStream.class), "Cannot adapt to SupplierFactory: " + source);
 		Function<InputStream, InputStream> encoder = new Function<InputStream, InputStream>() {
@@ -42,13 +44,17 @@ public class Base64SupplierFactoryAdapter extends AdapterImpl implements Supplie
 			}
 
 			@Override
-			public InputStream execute(InputStream input, ProgressMonitor progressMonitor) throws Exception {
+			public InputStream execute(InputStream input, ProgressMonitor progressMonitor) {
 				if (input == null) {
 					return null;
 				}
-				byte[] data = DefaultConverter.INSTANCE.toByteArray(input);
-				byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(data);
-				return new ByteArrayInputStream(encoded);
+				try {
+					byte[] data = DefaultConverter.INSTANCE.toByteArray(input);
+					byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(data);
+					return new ByteArrayInputStream(encoded);
+				} catch (IOException e) {
+					throw new ExecutionException(e, this);
+				}
 			}
 			
 		};

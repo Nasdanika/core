@@ -24,12 +24,12 @@ public class FilterExecutionParticipant<T extends ExecutionParticipant> implemen
 	}
 	
 	@Override
-	public void commit(ProgressMonitor progressMonitor) throws Exception {
+	public void commit(ProgressMonitor progressMonitor) {
 		target.commit(progressMonitor);
 	}
 	
 	@Override
-	public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+	public boolean rollback(ProgressMonitor progressMonitor) {
 		return target.rollback(progressMonitor);
 	}
 	

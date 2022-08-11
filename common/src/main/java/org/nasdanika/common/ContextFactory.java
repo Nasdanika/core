@@ -14,6 +14,6 @@ public interface ContextFactory<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	Context createContext(T input) throws Exception;
+	Context createContext(T input);
 	
 }

@@ -1,5 +1,6 @@
 package org.nasdanika.exec.gen;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reference;
 import org.nasdanika.common.Supplier;
@@ -41,7 +43,7 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 			this.eRef = eRef;
 		}
 	
-		private InputStream executeTryCatch(ProgressMonitor progressMonitor) throws Exception {
+		private InputStream executeTryCatch(ProgressMonitor progressMonitor) {
 			try {
 				return tryParticipant.splitAndExecute(progressMonitor);
 			} catch (Exception e) {
@@ -55,7 +57,7 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 		}
 	
 		@Override
-		public InputStream execute(ProgressMonitor progressMonitor) throws Exception {
+		public InputStream execute(ProgressMonitor progressMonitor) {
 			if (finallyParticipant == null) {
 				return executeTryCatch(progressMonitor);
 			} 
@@ -71,15 +73,19 @@ public class BlockSupplierFactoryAdapter extends BlockExecutionParticipantAdapte
 				finallyResult = finallyParticipant.splitAndExecute(progressMonitor);
 			}
 			if (ex == null) {
-				return Util.join(tcResult, finallyResult);
+				try {
+					return Util.join(tcResult, finallyResult);
+				} catch (IOException e) {
+					throw new ExecutionException(e, this);
+				}
 			}
-			throw ex;			
+			throw new ExecutionException(ex, this);			
 		}
 		
 	}	
 	
 	@Override
-	public Supplier<InputStream> create(Context context) throws Exception {
+	public Supplier<InputStream> create(Context context) {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Block target = (Block) getTarget();
 		

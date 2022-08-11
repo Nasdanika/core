@@ -28,7 +28,7 @@ public class ContainerConsumerFactoryAdapter extends ResourceConsumerFactoryAdap
 	}	
 
 	@Override
-	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
+	public Consumer<BinaryEntityContainer> create(Context context) {
 		return createContainerFactory().then(createContentsFactory()).create(context);
 	}
 
@@ -50,7 +50,7 @@ public class ContainerConsumerFactoryAdapter extends ResourceConsumerFactoryAdap
 			}
 
 			@Override
-			public BinaryEntityContainer execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+			public BinaryEntityContainer execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) {
 				if (progressMonitor.isCancelled()) {
 					return null;
 				}
@@ -92,13 +92,13 @@ public class ContainerConsumerFactoryAdapter extends ResourceConsumerFactoryAdap
 		return new ConsumerFactory<BinaryEntityContainer>() {		
 		
 			@Override
-			public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
+			public Consumer<BinaryEntityContainer> create(Context context) {
 				Consumer<BinaryEntityContainer> contentsConsumer = contentsFactory.create(context);
 				
 				return new FilterConsumer<BinaryEntityContainer>(contentsConsumer) {
 					
 					@Override
-					public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) throws Exception {
+					public void execute(BinaryEntityContainer container, ProgressMonitor progressMonitor) {
 						if (container != null) {
 							contentsConsumer.execute(container, progressMonitor);
 						}						

@@ -15,7 +15,7 @@ public interface CommandFactory extends ExecutionParticipantFactory<Command> {
 		return new CommandFactory() {
 
 			@Override
-			public Command create(Context context) throws Exception {
+			public Command create(Context context) {
 				return new ContextifiedExecutionParticipant.ContextifiedCommand(contextSupplierFactory.create(context), CommandFactory.this);
 			}
 			

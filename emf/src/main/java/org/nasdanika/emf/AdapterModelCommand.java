@@ -30,7 +30,7 @@ public abstract class AdapterModelCommand<T extends EObject, A> extends ModelCom
 		return new ConsumerFactory<T>() {
 
 			@Override
-			public Consumer<T> create(Context context) throws Exception {
+			public Consumer<T> create(Context context) {
 				return new Consumer<T>() {
 
 					@Override
@@ -44,7 +44,7 @@ public abstract class AdapterModelCommand<T extends EObject, A> extends ModelCom
 					}
 
 					@Override
-					public void execute(T element, ProgressMonitor progressMonitor) throws Exception {
+					public void execute(T element, ProgressMonitor progressMonitor) {
 						A adapter = EObjectAdaptable.adaptTo(element, getAdapterType());
 						if (adapter == null) {
 							throw new NasdanikaException("Cannot adapt " + element + " to " + getAdapterType());

@@ -21,21 +21,21 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 		}
 
 		@Override
-		public void execute(ProgressMonitor monitor) throws Exception {
+		public void execute(ProgressMonitor monitor) {
 			
 		}
 		
 	};
 			
-	void execute(ProgressMonitor progressMonitor) throws Exception;	
+	void execute(ProgressMonitor progressMonitor);	
 	
-	default void splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndExecute(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			execute(subMonitor);
 		}
 	}	
 	
-	default void splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndExecute(double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			execute(subMonitor);
 		}
@@ -55,10 +55,14 @@ public interface Command extends ExecutionParticipant, ExecutionParticipantInfo 
 			}
 			
 			@Override
-			public void execute(ProgressMonitor progressMonitor) throws Exception {
+			public void execute(ProgressMonitor progressMonitor) {
 				runnable.run();
 			}
 		};
+	}
+	
+	default Runnable toRunnable(ProgressMonitor progressMonitor) {
+		return () -> execute(progressMonitor);
 	}
 	
 	

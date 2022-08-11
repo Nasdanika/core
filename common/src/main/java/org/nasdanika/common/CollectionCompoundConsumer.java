@@ -24,7 +24,7 @@ public class CollectionCompoundConsumer<E> extends ListCompoundExecutionParticip
 	}
 
 	@Override
-	public void execute(E arg, ProgressMonitor progressMonitor) throws Exception {
+	public void execute(E arg, ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		for (Consumer<? super E> e: getElements()) {
 			if (e != null) {

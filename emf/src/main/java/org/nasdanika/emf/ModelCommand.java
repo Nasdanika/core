@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 
@@ -55,7 +56,7 @@ public abstract class ModelCommand<T extends EObject> extends ResourceSetCommand
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public T execute(ProgressMonitor progressMonitor) throws Exception {
+			public T execute(ProgressMonitor progressMonitor) {
 				
 				// Creating a resource set
 				ResourceSet resourceSet = createResourceSet();
@@ -75,7 +76,7 @@ public abstract class ModelCommand<T extends EObject> extends ResourceSetCommand
 				};				
 				Diagnostic validationResult = diagnostician.validate(target);
 				if (validationResult.getSeverity() == Diagnostic.ERROR) {
-					throw new DiagnosticException(validationResult);
+					throw new ExecutionException(new DiagnosticException(validationResult), this);
 				}
 				return (T) target;
 			}
@@ -90,7 +91,7 @@ public abstract class ModelCommand<T extends EObject> extends ResourceSetCommand
 		return new CommandFactory() {
 			
 			@Override
-			public org.nasdanika.common.Command create(Context context) throws Exception {
+			public org.nasdanika.common.Command create(Context context) {
 				return createSupplier(context).then(getConsumerFactory().create(context));
 			}
 		};

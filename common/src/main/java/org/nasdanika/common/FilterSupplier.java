@@ -7,7 +7,7 @@ public class FilterSupplier<T> extends FilterExecutionParticipant<Supplier<T>> i
 	}
 
 	@Override
-	public T execute(ProgressMonitor progressMonitor) throws Exception {
+	public T execute(ProgressMonitor progressMonitor) {
 		return target.execute(progressMonitor);
 	}
 

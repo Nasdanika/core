@@ -21,7 +21,7 @@ public class ConfiguratorCommandFactoryAdapter extends ConfiguratorExecutionPart
 	}
 	
 	@Override
-	public Command create(Context context) throws Exception {
+	public Command create(Context context) {
 		SupplierFactory<Context> contextSupplierFactory = createContextSupplierFactory();
 		Configurator configurator = (Configurator) getTarget();
 		CommandFactory commandFactory = Objects.requireNonNull(EObjectAdaptable.adaptTo(configurator.getTarget(), CommandFactory.class), "Cannot adapt " + configurator.getTarget() + " to CommandFactory");		

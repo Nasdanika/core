@@ -64,7 +64,7 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 	}
 	
 	@Override
-	public void commit(ProgressMonitor progressMonitor) throws Exception {
+	public void commit(ProgressMonitor progressMonitor) {
 		if (progressMonitor.isCancelled()) {
 			progressMonitor.worked(1, "Cancelled");
 			throw new CancellationException();
@@ -80,7 +80,7 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 	}
 	
 	@Override
-	public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+	public boolean rollback(ProgressMonitor progressMonitor) {
 		if (progressMonitor.isCancelled()) {
 			progressMonitor.worked(1, "Cancelled");
 			throw new CancellationException();

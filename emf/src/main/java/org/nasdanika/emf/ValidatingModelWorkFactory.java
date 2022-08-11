@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Supplier;
 
 /**
@@ -35,7 +36,7 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 	}
 	
 	@Override
-	public Supplier<T> create(Context context) throws Exception {
+	public Supplier<T> create(Context context) {
 		Diagnostician diagnostician = new Diagnostician() {
 			
 			public Map<Object,Object> createDefaultContext() {
@@ -47,40 +48,9 @@ public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 		};				
 		Diagnostic validationResult = diagnostician.validate(root);
 		if (validationResult.getSeverity() == Diagnostic.ERROR) {
-			throw new DiagnosticException(validationResult);
+			throw new ExecutionException(new DiagnosticException(validationResult));
 		}
 		return super.create(context);
 	}
-	
-//	static void diagnosticToProgress(ProgressMonitor progressMonitor, long worked, Diagnostic diagnostic) {
-//		Status status;
-//		switch (diagnostic.getSeverity()) {
-//		case Diagnostic.CANCEL:
-//			status = Status.CANCEL;
-//			break;
-//		case Diagnostic.ERROR:
-//			status = Status.ERROR;
-//			break;
-//		case Diagnostic.WARNING:
-//			status = Status.WARNING;
-//			break;
-//		case Diagnostic.INFO:
-//			status = Status.INFO;
-//			break;
-//		case Diagnostic.OK:
-//		default:
-//			status = Status.SUCCESS;
-//			break;
-//		}
-//		progressMonitor.worked(status, worked, diagnostic.getMessage());
-//		List<Diagnostic> children = diagnostic.getChildren();
-//		if (children != null) {
-//			for (Diagnostic child: children) {
-//				try (ProgressMonitor childMonitor = progressMonitor.split(child.getSource(), 0, child.getData(), child.getException())) {
-//					diagnosticToProgress(childMonitor, worked, child);
-//				}
-//			}
-//		}
-//	}	
 
 }

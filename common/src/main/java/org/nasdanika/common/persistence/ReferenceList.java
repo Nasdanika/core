@@ -23,7 +23,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		return (T) loader.load(element, base, progressMonitor);
 	}
 

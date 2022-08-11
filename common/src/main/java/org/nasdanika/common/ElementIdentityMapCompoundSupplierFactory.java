@@ -22,7 +22,7 @@ public class ElementIdentityMapCompoundSupplierFactory<T> implements SupplierFac
 	}
 
 	@Override
-	public Supplier<java.util.function.Function<SupplierFactory<T>,T>> create(Context context) throws Exception {
+	public Supplier<java.util.function.Function<SupplierFactory<T>,T>> create(Context context) {
 		Map<SupplierFactory<T>, Supplier<T>> supplierMap = new IdentityHashMap<>();
 		ElementIdentityMapCompoundSupplier<T> compoundSupplier = new ElementIdentityMapCompoundSupplier<>(name);		
 		
@@ -41,7 +41,7 @@ public class ElementIdentityMapCompoundSupplierFactory<T> implements SupplierFac
 			}
 
 			@Override
-			public Function<SupplierFactory<T>, T> execute(ProgressMonitor progressMonitor) throws Exception {
+			public Function<SupplierFactory<T>, T> execute(ProgressMonitor progressMonitor) {
 				return ((Function<SupplierFactory<T>, Supplier<T>>) supplierMap::get).andThen(target.execute(progressMonitor));
 			}
 			

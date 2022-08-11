@@ -19,7 +19,7 @@ public class MapCompoundFunctionFactory<K,T,R> implements FunctionFactory<T,Map<
 	}
 
 	@Override
-	public Function<T,Map<K,R>> create(Context context) throws Exception {
+	public Function<T,Map<K,R>> create(Context context) {
 		MapCompoundFunction<K, T, R> ret = new MapCompoundFunction<K,T,R>(name);
 		for (Entry<K, FunctionFactory<? super T, ? extends R>> e: elements.entrySet()) {
 			FunctionFactory<? super T, ? extends R> value = e.getValue();

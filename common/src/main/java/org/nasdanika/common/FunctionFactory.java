@@ -20,7 +20,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		return new FunctionFactory<T, V>() {
 			
 			@Override
-			public Function<T, V> create(Context context) throws Exception {
+			public Function<T, V> create(Context context) {
 				return FunctionFactory.this.create(context).then(then.create(context));
 			}
 			
@@ -31,7 +31,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		return new ConsumerFactory<T>() {
 			
 			@Override
-			public Consumer<T> create(Context context) throws Exception {
+			public Consumer<T> create(Context context) {
 				return FunctionFactory.this.create(context).then(then.create(context));
 			}
 			
@@ -46,7 +46,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		return new FunctionFactory<T,R>() {
 
 			@Override
-			public Function<T,R> create(Context context) throws Exception {
+			public Function<T,R> create(Context context) {
 				return new ContextifiedExecutionParticipant.ContextifiedFunction<T,R>(contextSupplierFactory.create(context), FunctionFactory.this);
 			}
 			
@@ -64,7 +64,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 		return new FunctionFactory<S,T>() {
 
 			@Override
-			public Function<S,T> create(Context context) throws Exception {
+			public Function<S,T> create(Context context) {
 				return new Function<S,T>() {
 
 					@Override
@@ -78,7 +78,7 @@ public interface FunctionFactory<T,R> extends ExecutionParticipantFactory<Functi
 					}
 
 					@Override
-					public T execute(S source, ProgressMonitor progressMonitor) throws Exception {
+					public T execute(S source, ProgressMonitor progressMonitor) {
 						return Adaptable.adaptTo(source, type);
 					}
 					

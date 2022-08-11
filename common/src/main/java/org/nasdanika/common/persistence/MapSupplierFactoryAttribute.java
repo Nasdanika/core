@@ -26,7 +26,7 @@ public class MapSupplierFactoryAttribute<K,V,U> extends AbstractFeatureDelegate<
 					ret.put(e.getKey(), new SupplierFactory<V>() {
 
 						@Override
-						public Supplier<V> create(Context context) throws Exception {
+						public Supplier<V> create(Context context) {
 							Object ie = context.interpolate((String) e.getValue());
 							return SupplierFactory.<V>adapt(ie, "Interpolated feature " + getKey() + "[" + e.getKey() + "]").create(context);							
 						}

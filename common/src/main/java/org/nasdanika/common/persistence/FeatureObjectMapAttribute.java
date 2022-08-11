@@ -51,7 +51,7 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 	 * @throws Exception
 	 */
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception { 
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		V ret = valueFactory.apply(key);
 		ret.load(loader, value, base, progressMonitor, markers);
 		return ret;

@@ -11,17 +11,16 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 	 * Executes Consumer.
 	 * @param monitor Monitor to use.
 	 * @return
-	 * @throws Exception
 	 */
-	void execute(T arg, ProgressMonitor progressMonitor) throws Exception;	
+	void execute(T arg, ProgressMonitor progressMonitor);	
 	
-	default void splitAndExecute(T arg, ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndExecute(T arg, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing "+name())) {
 			execute(arg, subMonitor);
 		}
 	}	
 	
-	default void splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndExecute(T arg, double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing "+name())) {
 			execute(arg, subMonitor);
 		}
@@ -40,7 +39,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 
 		@Override
-		public void execute(Object arg, ProgressMonitor monitor) throws Exception {
+		public void execute(Object arg, ProgressMonitor monitor) {
 			// NOP
 		}
 		
@@ -84,7 +83,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Consumer<V>() {
 			
 			@Override
-			public void execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(V arg, ProgressMonitor progressMonitor) {
 				Consumer.this.execute(before.apply(arg), progressMonitor);
 			}
 			
@@ -99,12 +98,12 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Consumer.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Consumer.this.rollback(progressMonitor);
 			}
 			
@@ -129,7 +128,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Function<T,T>() {
 			
 			@Override
-			public T execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public T execute(T arg, ProgressMonitor progressMonitor) {
 				Consumer.this.execute(arg, progressMonitor);
 				return arg;
 			}
@@ -145,12 +144,12 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Consumer.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Consumer.this.rollback(progressMonitor);
 			}
 			
@@ -175,7 +174,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Function<BiSupplier<T,R>,R>() {
 			
 			@Override
-			public R execute(BiSupplier<T,R> input, ProgressMonitor progressMonitor) throws Exception {
+			public R execute(BiSupplier<T,R> input, ProgressMonitor progressMonitor) {
 				Consumer.this.execute(input.getFirst(), progressMonitor);
 				return input.getSecond();
 			}
@@ -191,12 +190,12 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Consumer.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Consumer.this.rollback(progressMonitor);
 			}
 			
@@ -227,7 +226,7 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 
 			@Override
-			public void execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(T arg, ProgressMonitor progressMonitor) {
 				biConsumer.accept(arg, progressMonitor);				
 			}
 		};
@@ -242,6 +241,10 @@ public interface Consumer<T> extends ExecutionParticipant, ExecutionParticipantI
 	 */
 	static <T> Consumer<T> fromConsumer(java.util.function.Consumer<T> consumer, String name, double size) {
 		return fromBiConsumer((arg,progressMonitor) -> consumer.accept(arg), name, size);		
+	}
+	
+	default java.util.function.Consumer<T> toConsumer(ProgressMonitor progressMonitor) {
+		return arg -> execute(arg, progressMonitor);
 	}
 	
 }

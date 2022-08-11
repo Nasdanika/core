@@ -24,7 +24,7 @@ public class ExecYamlSupplier extends ExecYamlLoadingExecutionParticipant implem
 	}
 
 	@Override
-	public EObject execute(ProgressMonitor progressMonitor) throws Exception {
+	public EObject execute(ProgressMonitor progressMonitor) {
 		return resourceSet.getResource(uri, false).getContents().get(0);
 	}
 

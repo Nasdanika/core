@@ -15,6 +15,6 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public interface ContextLoadable {
 	
-	void load(Context context, ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;	
+	void load(Context context, ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);	
 
 }

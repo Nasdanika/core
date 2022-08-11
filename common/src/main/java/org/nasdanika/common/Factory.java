@@ -13,6 +13,6 @@ public interface Factory<T,R> {
 	 * @return
 	 * @throws Exception
 	 */
-	R create(T arg) throws Exception;
+	R create(T arg);
 	
 }

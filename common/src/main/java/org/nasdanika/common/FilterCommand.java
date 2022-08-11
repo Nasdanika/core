@@ -7,7 +7,7 @@ public class FilterCommand extends FilterExecutionParticipant<Command> implement
 	}
 
 	@Override
-	public void execute(ProgressMonitor progressMonitor) throws Exception {
+	public void execute(ProgressMonitor progressMonitor) {
 		target.execute(progressMonitor);
 	}
 

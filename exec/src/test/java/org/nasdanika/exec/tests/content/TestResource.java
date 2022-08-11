@@ -46,7 +46,7 @@ public class TestResource extends TestBase {
 			}
 
 			@Override
-			public void execute(EObject obj, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(EObject obj, ProgressMonitor progressMonitor) {
 				Resource resource = (Resource) obj;
 				assertThat(resource.getDescription()).isEqualTo("Full resource definition");
 				assertThat(resource.getLocation()).isEqualTo(getClass().getResource("resource/hello.txt").toString());
@@ -91,7 +91,7 @@ public class TestResource extends TestBase {
 			}
 
 			@Override
-			public void execute(EObject obj, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(EObject obj, ProgressMonitor progressMonitor) {
 				Resource resource = (Resource) obj;
 				assertThat(resource.getDescription()).isNull();
 				assertThat(resource.getLocation()).isEqualTo(getClass().getResource("resource/hello.txt").toString());

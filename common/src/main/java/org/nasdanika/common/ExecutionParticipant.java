@@ -18,17 +18,17 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	 * @param progressMonitor
 	 * @throws Exception
 	 */
-	default void commit(ProgressMonitor progressMonitor) throws Exception {
+	default void commit(ProgressMonitor progressMonitor) {
 		// NOP
 	}
 		
-	default void splitAndCommit(ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndCommit(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Commiting "+name())) {
 			commit(subMonitor);
 		}
 	}	
 			
-	default void splitAndCommit(double size, ProgressMonitor progressMonitor) throws Exception {
+	default void splitAndCommit(double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Commiting "+name())) {
 			commit(subMonitor);
 		}
@@ -42,17 +42,17 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	 * @return ``true`` if the work was successfully rolled back or there was no work to roll back, ``false`` otherwise. 
 	 * @throws Exception
 	 */
-	default boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+	default boolean rollback(ProgressMonitor progressMonitor) {
 		return true;
 	};
 	
-	default boolean splitAndRollback(ProgressMonitor progressMonitor) throws Exception {
+	default boolean splitAndRollback(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Rolling back "+name())) {
 			return rollback(subMonitor);
 		}
 	}	
 	
-	default boolean splitAndRollback(double size, ProgressMonitor progressMonitor) throws Exception {
+	default boolean splitAndRollback(double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Rolling back "+name())) {
 			return rollback(subMonitor);
 		}

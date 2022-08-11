@@ -1,5 +1,6 @@
 package org.nasdanika.exec.gen.resources;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.concurrent.CancellationException;
@@ -9,6 +10,7 @@ import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ProgressMonitor;
@@ -59,7 +61,7 @@ public class FileConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<F
 			}
 	
 			@Override
-			public void execute(BiSupplier<BinaryEntityContainer, InputStream> input, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(BiSupplier<BinaryEntityContainer, InputStream> input, ProgressMonitor progressMonitor) {
 				if (!progressMonitor.isCancelled()) {
 					switch (semanticElement.getReconcileAction()) {
 					case CANCEL:
@@ -85,7 +87,11 @@ public class FileConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<F
 					case APPEND: {
 						BinaryEntity file = Objects.requireNonNull(input.getFirst().get(finalName, progressMonitor), "Cannot create file " + finalName + " in " + input.getFirst());
 						if (input.getSecond() != null) {
-							file.setState(file.exists(progressMonitor) ? Util.join(file.getState(progressMonitor), input.getSecond()) : input.getSecond(), progressMonitor);
+							try {
+								file.setState(file.exists(progressMonitor) ? Util.join(file.getState(progressMonitor), input.getSecond()) : input.getSecond(), progressMonitor);
+							} catch (IOException e) {
+								throw new ExecutionException(e, this);
+							}
 						}
 						break;
 					}							
@@ -108,12 +114,12 @@ public class FileConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<F
 	}
 
 	@Override
-	public Consumer<BinaryEntityContainer> create(Context iContext) throws Exception {
+	public Consumer<BinaryEntityContainer> create(Context iContext) {
 		FunctionFactory<BinaryEntityContainer, BiSupplier<BinaryEntityContainer, InputStream>> contentFunctionFactory = getContentsFactory().asFunctionFactory();
 		return contentFunctionFactory.then(createFileFactory()).create(iContext);
 	}
 	
-	protected InputStream merge(Context context, BinaryEntity entity, InputStream oldContent, InputStream newContent, ProgressMonitor progressMonitor) throws Exception {
+	protected InputStream merge(Context context, BinaryEntity entity, InputStream oldContent, InputStream newContent, ProgressMonitor progressMonitor) {
 		File semanticElement = (File) getTarget();
 		EObject semanticMerger = semanticElement.getMerger();
 		Merger merger = semanticMerger == null ? getNativeMerger(context) : Objects.requireNonNull(EObjectAdaptable.adaptTo(semanticMerger, Merger.class));

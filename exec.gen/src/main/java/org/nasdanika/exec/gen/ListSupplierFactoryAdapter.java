@@ -23,7 +23,7 @@ public class ListSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 	}
 		
 	@Override
-	public Supplier<List<Object>> create(Context context) throws Exception {
+	public Supplier<List<Object>> create(Context context) {
 		ListCompoundSupplierFactory<Object> elementsFactory = new ListCompoundSupplierFactory<>("List");
 		for (EObject e: ((org.nasdanika.exec.List) getTarget()).getElements()) {
 			elementsFactory.add(Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(e, Object.class), "Cannot adapt to SupplierFactory"));

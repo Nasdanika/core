@@ -51,7 +51,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	}
 
 	@Override
-	public void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		if (source.containsKey(getKey())) {
 			for (Object ek: exclusiveWith) {
 				if (source.containsKey(ek)) {
@@ -78,7 +78,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		return (T) config;
 	}
 

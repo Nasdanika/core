@@ -104,7 +104,7 @@ public class TestBase {
 			}
 
 			@Override
-			public EObject execute(ProgressMonitor progressMonitor) throws Exception {
+			public EObject execute(ProgressMonitor progressMonitor) {
 				assertEquals(1, roots.size());
 				return roots.iterator().next();
 			}

@@ -20,7 +20,7 @@ public class ListCompoundFunction<T,R> extends ListCompoundExecutionParticipant<
 	}	
 
 	@Override
-	public List<R> execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+	public List<R> execute(T arg, ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		List<R> result = new ArrayList<>();
 		for (Function<? super T, ? extends R> e: getElements()) {

@@ -22,7 +22,7 @@ public class CompoundCommandFactory implements CommandFactory {
 	}
 
 	@Override
-	public Command create(Context context) throws Exception {
+	public Command create(Context context) {
 		CompoundCommand ret = createCompoundCommand(context);
 		for (CommandFactory e: elements) {
 			ret.add(e.create(context));

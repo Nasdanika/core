@@ -35,7 +35,7 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		for (Entry<String, ObjectLoader> re: registry.entrySet()) {
 			if (type.startsWith(re.getKey())) {
 				return re.getValue().create(loader, type.substring(re.getKey().length()), config, base, progressMonitor, markers);

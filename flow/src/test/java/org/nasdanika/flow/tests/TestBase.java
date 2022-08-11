@@ -137,7 +137,7 @@ public class TestBase {
 			}
 
 			@Override
-			public void execute(ProgressMonitor progressMonitor) throws Exception {
+			public void execute(ProgressMonitor progressMonitor) {
 				if (consumer != null) {
 					consumer.accept(resourceSet.getResource(resourceURI, false).getContents().get(0));
 				}

@@ -22,7 +22,7 @@ public class ConfiguratorConsumerFactoryAdapter extends ConfiguratorExecutionPar
 	}
 	
 	@Override
-	public Consumer<BinaryEntityContainer> create(Context context) throws Exception {
+	public Consumer<BinaryEntityContainer> create(Context context) {
 		SupplierFactory<Context> contextSupplierFactory = createContextSupplierFactory();
 		Configurator configurator = (Configurator) getTarget();
 		ConsumerFactory<BinaryEntityContainer> consumerFactory = Objects.requireNonNull(EObjectAdaptable.adaptToConsumerFactory(configurator.getTarget(), BinaryEntityContainer.class), "Cannot adapt " + configurator.getTarget() + " to ConsumerFactory");		

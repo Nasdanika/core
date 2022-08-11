@@ -137,7 +137,7 @@ public class TestBase {
 			}
 
 			@Override
-			public void execute(ProgressMonitor progressMonitor) throws Exception {
+			public void execute(ProgressMonitor progressMonitor) {
 				assertEquals(1, roots.size());
 				if (consumer != null) {
 					consumer.accept(roots.iterator().next());

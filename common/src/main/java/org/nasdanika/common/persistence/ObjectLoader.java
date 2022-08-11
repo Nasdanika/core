@@ -1,9 +1,11 @@
 package org.nasdanika.common.persistence;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -51,10 +53,10 @@ public interface ObjectLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;
+	Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);
 	
 	@SuppressWarnings("unchecked")
-	default Object load(Object spec, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object load(Object spec, URI base, ProgressMonitor progressMonitor) {
 		// map
 		if (spec instanceof Map) {
 			Map<String,Object> map = (Map<String,Object>) spec;
@@ -85,18 +87,18 @@ public interface ObjectLoader {
 		return spec;
 	}
 	
-	default Object loadYaml(String yamlString, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(String yamlString, URI base, ProgressMonitor progressMonitor) {
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(yamlString), base, progressMonitor);
 	}
 	
-	default Object loadYaml(InputStream in, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(InputStream in, URI base, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(in, getCharset())) {
 			return loadYaml(reader, base, progressMonitor);
 		}
 	}
 	
-	default Object loadYaml(Reader reader, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(Reader reader, URI base, ProgressMonitor progressMonitor) {
 		Yaml yaml = MarkingYamlConstructor.createMarkingYaml(base == null ? null : base.toString());
 		return load(yaml.load(reader), base, progressMonitor);
 	}
@@ -111,43 +113,43 @@ public interface ObjectLoader {
 		}
 	}
 	
-	default Object loadYaml(File file, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadYaml(File file, ProgressMonitor progressMonitor) throws MalformedURLException, Exception {
 		return loadYaml(file.toURI().toURL(), progressMonitor);
 	}
 		
-	default Object loadJsonObject(String str, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(String str, URI base, ProgressMonitor progressMonitor) {
 		JSONObject jsonObject = new JSONObject(new JSONTokener(str));
 		return load(jsonObject.toMap(), base, progressMonitor);
 	}
 	
-	default Object loadJsonObject(InputStream in, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(InputStream in, URI base, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(in, getCharset())) {	
 			return loadJsonObject(reader, base, progressMonitor);
 		}
 	}
 	
-	default Object loadJsonObject(Reader reader, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(Reader reader, URI base, ProgressMonitor progressMonitor) {
 		JSONObject jsonObject = new JSONObject(new JSONTokener(reader));
 		return load(jsonObject.toMap(), base, progressMonitor);
 	}
 	
-	default Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonObject(URL url, ProgressMonitor progressMonitor) throws IOException {
 		progressMonitor.worked(1, "Loading JSON object from " + url);
 		return loadJsonObject(url.openStream(), URI.createURI(url.toString()), progressMonitor);
 	}
 		
-	default Object loadJsonArray(String str, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(String str, URI base, ProgressMonitor progressMonitor) {
 		JSONArray jsonArray = new JSONArray(new JSONTokener(str));
 		return load(jsonArray.toList(), base, progressMonitor);
 	}
 	
-	default Object loadJsonArray(InputStream in, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(InputStream in, URI base, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(in, getCharset())) {
 			return loadJsonArray(reader,  base, progressMonitor);
 		}
 	}
 	
-	default Object loadJsonArray(Reader reader, URI base, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(Reader reader, URI base, ProgressMonitor progressMonitor) {
 		JSONArray jsonArray = new JSONArray(new JSONTokener(reader));
 		return load(jsonArray.toList(), base, progressMonitor);
 	}

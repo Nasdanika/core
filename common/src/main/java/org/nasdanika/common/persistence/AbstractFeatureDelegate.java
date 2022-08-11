@@ -36,7 +36,7 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		return delegate.isLoaded();
 	}
 
-	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		delegate.load(loader, source, base, progressMonitor, markers);		
 	}
 	

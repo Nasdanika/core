@@ -21,7 +21,7 @@ public class ListCompoundFunctionFactory<T,R> implements FunctionFactory<T,List<
 	}
 
 	@Override
-	public Function<T,List<R>> create(Context context) throws Exception {
+	public Function<T,List<R>> create(Context context) {
 		ListCompoundFunction<T, R> ret = new ListCompoundFunction<T,R>(name);
 		for (FunctionFactory<? super T, ? extends R> e: elements) {
 			ret.add(e == null ? null : e.create(context));

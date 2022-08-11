@@ -18,7 +18,7 @@ import org.nasdanika.common.SupplierFactory;
 public abstract class SupplierFactoryFeatureObject<T> extends FeatureObject implements SupplierFactory<T> {
 
 	@Override
-	public Supplier<T> create(Context context) throws Exception {
+	public Supplier<T> create(Context context) {
 		// TODO - handling of prototype here - prototype supplier factory, bi-supplier
 		MapCompoundSupplierFactory<Object, Object> featureMapFactory = new MapCompoundSupplierFactory<>("Feature map factory");
 		for (Feature<?> feature: features) {			

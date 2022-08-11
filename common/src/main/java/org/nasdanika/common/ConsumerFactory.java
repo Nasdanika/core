@@ -20,7 +20,7 @@ public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer
 		return new FunctionFactory<T, T>() {
 
 			@Override
-			public Function<T, T> create(Context context) throws Exception {
+			public Function<T, T> create(Context context) {
 				return ConsumerFactory.this.create(context).asFunction();
 			}
 			
@@ -31,7 +31,7 @@ public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer
 		return new FunctionFactory<BiSupplier<T,R>, R>() {
 
 			@Override
-			public Function<BiSupplier<T,R>, R> create(Context context) throws Exception {
+			public Function<BiSupplier<T,R>, R> create(Context context) {
 				return ConsumerFactory.this.create(context).asBiSupplierFunction();
 			}
 			
@@ -46,7 +46,7 @@ public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer
 		return new ConsumerFactory<T>() {
 
 			@Override
-			public Consumer<T> create(Context context) throws Exception {
+			public Consumer<T> create(Context context) {
 				return new ContextifiedExecutionParticipant.ContextifiedConsumer<T>(contextSupplierFactory.create(context), ConsumerFactory.this);
 			}
 			

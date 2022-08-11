@@ -32,17 +32,16 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 	 * Executes the Supplier.
 	 * @param monitor Monitor to use.
 	 * @return
-	 * @throws Exception
 	 */
-	T execute(ProgressMonitor progressMonitor) throws Exception;	
+	T execute(ProgressMonitor progressMonitor);	
 	
-	default T splitAndExecute(ProgressMonitor progressMonitor) throws Exception {
+	default T splitAndExecute(ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(progressMonitor, "Executing " + name())) {
 			return execute(subMonitor);
 		}
 	}
 	
-	default T splitAndExecute(double size, ProgressMonitor progressMonitor) throws Exception {
+	default T splitAndExecute(double size, ProgressMonitor progressMonitor) {
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Executing " + name())) {
 			return execute(subMonitor);
 		}
@@ -61,7 +60,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		}
 
 		@Override
-		public Object execute(ProgressMonitor monitor) throws Exception {
+		public Object execute(ProgressMonitor monitor) {
 			return null;
 		}
 		
@@ -76,7 +75,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Supplier<R>() {
 			
 			@Override
-			public R execute(ProgressMonitor progressMonitor) throws Exception {
+			public R execute(ProgressMonitor progressMonitor) {
 				return then.apply(Supplier.this.execute(progressMonitor));
 			}
 			
@@ -91,12 +90,12 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Supplier.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Supplier.this.rollback(progressMonitor);
 			}
 			
@@ -124,7 +123,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public V execute(ProgressMonitor progressMonitor) throws Exception {
+			public V execute(ProgressMonitor progressMonitor) {
 				return then.splitAndExecute(Supplier.this.splitAndExecute(progressMonitor), progressMonitor);
 			}
 
@@ -150,7 +149,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void execute(ProgressMonitor progressMonitor) throws Exception {
+			public void execute(ProgressMonitor progressMonitor) {
 				then.splitAndExecute(Supplier.this.splitAndExecute(progressMonitor), progressMonitor);
 			}
 
@@ -179,7 +178,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public T execute(ProgressMonitor progressMonitor) throws Exception {
+			public T execute(ProgressMonitor progressMonitor) {
 				return function.apply(progressMonitor);
 			}
 		};
@@ -207,8 +206,12 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public T execute(ProgressMonitor progressMonitor) throws Exception {
-				return callable.call();
+			public T execute(ProgressMonitor progressMonitor) {
+				try {
+					return callable.call();
+				} catch (Exception e) {
+					throw new ExecutionException(e, this);
+				}
 			}
 		};
 	}
@@ -304,7 +307,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		return new Function<V,BiSupplier<V,T>>() {
 			
 			@Override
-			public BiSupplier<V,T> execute(V arg, ProgressMonitor progressMonitor) throws Exception {
+			public BiSupplier<V,T> execute(V arg, ProgressMonitor progressMonitor) {
 				T result = Supplier.this.execute(progressMonitor);
 				return new BiSupplier<V, T>() {
 
@@ -331,12 +334,12 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void commit(ProgressMonitor progressMonitor) throws Exception {
+			public void commit(ProgressMonitor progressMonitor) {
 				Supplier.this.commit(progressMonitor);
 			}
 			
 			@Override
-			public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+			public boolean rollback(ProgressMonitor progressMonitor) {
 				return Supplier.this.rollback(progressMonitor);
 			}
 			
@@ -352,8 +355,5 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			
 		};
 	}
-		
-	
-	
 	
 }

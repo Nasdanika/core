@@ -21,7 +21,7 @@ public class ElementIdentityMapCompoundFunctionFactory<T,R> implements FunctionF
 	}
 
 	@Override
-	public Function<T, java.util.function.Function<FunctionFactory<T, R>, R>> create(Context context) throws Exception {
+	public Function<T, java.util.function.Function<FunctionFactory<T, R>, R>> create(Context context) {
 		Map<FunctionFactory<T,R>, Function<T,R>> functionMap = new IdentityHashMap<>();
 		ElementIdentityMapCompoundFunction<T,R> compoundFunction = new ElementIdentityMapCompoundFunction<>(name);		
 		
@@ -40,7 +40,7 @@ public class ElementIdentityMapCompoundFunctionFactory<T,R> implements FunctionF
 			}
 
 			@Override
-			public java.util.function.Function<FunctionFactory<T, R>, R> execute(T arg, ProgressMonitor progressMonitor) throws Exception {
+			public java.util.function.Function<FunctionFactory<T, R>, R> execute(T arg, ProgressMonitor progressMonitor) {
 				return ((java.util.function.Function<FunctionFactory<T, R>, Function<T, R>>) functionMap::get).andThen(target.execute(arg, progressMonitor));
 			}
 			

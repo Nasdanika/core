@@ -27,7 +27,7 @@ public class CollectionCompoundConsumerFactory<T> implements ConsumerFactory<T> 
 	}
 
 	@Override
-	public Consumer<T> create(Context context) throws Exception {
+	public Consumer<T> create(Context context) {
 		CollectionCompoundConsumer<T> ret = new CollectionCompoundConsumer<>(name);
 		for (ConsumerFactory<? super T> e: elements) {
 			ret.add(e == null ? null : e.create(context));

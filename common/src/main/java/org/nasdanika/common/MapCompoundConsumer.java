@@ -22,7 +22,7 @@ public class MapCompoundConsumer<K,T> extends MapCompoundExecutionParticipant<K,
 	}
 
 	@Override
-	public void execute(Map<K,T> input, ProgressMonitor progressMonitor) throws Exception {
+	public void execute(Map<K,T> input, ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		for (Entry<K, Consumer<? super T>> e: elements.entrySet()) {
 			Consumer<? super T> value = e.getValue();

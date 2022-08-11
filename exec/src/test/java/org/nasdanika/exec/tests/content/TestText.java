@@ -46,7 +46,7 @@ public class TestText {
 			}
 
 			@Override
-			public void execute(EObject obj, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(EObject obj, ProgressMonitor progressMonitor) {
 				Text text = (Text) obj;
 				assertThat(text.getDescription()).isEqualTo("Full text definition");
 				assertThat(text.getContent()).isEqualTo("Hello World.");
@@ -94,7 +94,7 @@ public class TestText {
 			}
 
 			@Override
-			public void execute(EObject obj, ProgressMonitor progressMonitor) throws Exception {
+			public void execute(EObject obj, ProgressMonitor progressMonitor) {
 				Text text = (Text) obj;
 				assertThat(text.getDescription()).isNull();
 				assertThat(text.getContent()).isEqualTo("Hello World.");

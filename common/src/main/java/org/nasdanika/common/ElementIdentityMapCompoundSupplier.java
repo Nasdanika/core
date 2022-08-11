@@ -16,7 +16,7 @@ public class ElementIdentityMapCompoundSupplier<T> extends ElementIdentityMapCom
 	}
 
 	@Override
-	public java.util.function.Function<Supplier<T>,T> execute(ProgressMonitor progressMonitor) throws Exception {
+	public java.util.function.Function<Supplier<T>,T> execute(ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		Map<Supplier<T>,T> result = new IdentityHashMap<>();
 		for (Supplier<T> e: elements) {

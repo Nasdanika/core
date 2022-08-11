@@ -23,7 +23,7 @@ public class FeatureObjectAttribute<T extends FeatureObject> extends Attribute<T
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		T ret = factory.get();
 		ret.load(loader, config, base, progressMonitor, markers);
 		return ret;

@@ -1,5 +1,6 @@
 package org.nasdanika.exec.gen;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.DefaultConverter;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
@@ -79,11 +81,15 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 				}
 
 				@Override
-				public Object execute(BiSupplier<InputStream, Map<String,Object>> input, ProgressMonitor progressMonitor) throws Exception {
+				public Object execute(BiSupplier<InputStream, Map<String,Object>> input, ProgressMonitor progressMonitor) {
 					Map<String,Object> bindings = new HashMap<>(input.getSecond());
 					bindings.put(CONTEXT_BINDING, context);
 					bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);					
-					return Util.eval(input.getFirst(), bindings);
+					try {
+						return Util.eval(input.getFirst(), bindings);
+					} catch (IOException e) {
+						throw new ExecutionException(e, this);
+					}
 				}
 			};
 			
@@ -104,7 +110,7 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 				}
 
 				@Override
-				public Boolean execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+				public Boolean execute(Object obj, ProgressMonitor progressMonitor) {
 					return Boolean.TRUE.equals(obj);
 				}
 			};
@@ -126,10 +132,14 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 				}
 
 				@Override
-				public InputStream execute(Object obj, ProgressMonitor progressMonitor) throws Exception {
+				public InputStream execute(Object obj, ProgressMonitor progressMonitor) {
 					InputStream ret = DefaultConverter.INSTANCE.convert(obj, InputStream.class);
 					if (obj != null && ret == null) {
-						ret = Util.toStream(context, obj.toString());
+						try {
+							ret = Util.toStream(context, obj.toString());
+						} catch (IOException e) {
+							throw new ExecutionException(e, this);
+						}
 					}
 					return ret;
 				}

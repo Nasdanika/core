@@ -24,7 +24,7 @@ public class ListCompoundConsumer<E> extends ListCompoundExecutionParticipant<Co
 	}
 
 	@Override
-	public void execute(List<E> args, ProgressMonitor progressMonitor) throws Exception {
+	public void execute(List<E> args, ProgressMonitor progressMonitor) {
 		if (args != null) {
 			progressMonitor.setWorkRemaining(size());
 			int idx = 0;

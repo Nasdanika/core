@@ -12,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -21,7 +20,6 @@ import java.util.function.Function;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -157,13 +155,13 @@ public class TestCommon {
 							}
 			
 							@Override
-							public String execute(ProgressMonitor progressMonitor) throws Exception {
+							public String execute(ProgressMonitor progressMonitor) {
 								progressMonitor.worked(1, "Produced W1 result");
 								return "W1-result";
 							}
 			
 							@Override
-							public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+							public boolean rollback(ProgressMonitor progressMonitor) {
 								// TODO Auto-generated method stub
 								return true;
 							}
@@ -183,13 +181,13 @@ public class TestCommon {
 							}
 			
 							@Override
-							public String execute(ProgressMonitor progressMonitor) throws Exception {
+							public String execute(ProgressMonitor progressMonitor) {
 								progressMonitor.worked(1, "Produced W2 result");
 								return "W2-result";
 							}
 			
 							@Override
-							public boolean rollback(ProgressMonitor progressMonitor) throws Exception {
+							public boolean rollback(ProgressMonitor progressMonitor) {
 								// TODO Auto-generated method stub
 								return true;
 							}

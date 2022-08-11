@@ -25,7 +25,7 @@ public class MapCompoundConsumerFactory<K,T> implements ConsumerFactory<Map<K,T>
 	}
 
 	@Override
-	public Consumer<Map<K,T>> create(Context context) throws Exception {
+	public Consumer<Map<K,T>> create(Context context) {
 		MapCompoundConsumer<K,T> ret = new MapCompoundConsumer<K,T>(name);
 		for (Entry<K, ConsumerFactory<? super T>> e: elements.entrySet()) {
 			ConsumerFactory<? super T> value = e.getValue();

@@ -99,7 +99,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 	}
 	
 	@Override
-	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
@@ -107,7 +107,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 					return Collections.singletonList(new SupplierFactory<List<EObject>>() {  
 	
 						@Override
-						public Supplier<List<EObject>> create(Context context) throws Exception {
+						public Supplier<List<EObject>> create(Context context) {
 							String ref = context.interpolateToString((String) element);
 							return new Supplier<List<EObject>>() {
 	
@@ -122,7 +122,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 								}
 	
 								@Override
-								public List<EObject> execute(ProgressMonitor progressMonitor) throws Exception {
+								public List<EObject> execute(ProgressMonitor progressMonitor) {
 									return loadReference(ref, base, markers, progressMonitor);
 								}
 								

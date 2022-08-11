@@ -63,7 +63,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers)	throws Exception {
+	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		if (config instanceof Map) {
 			if (!keys.isEmpty()) {
 				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getEReference());
@@ -142,7 +142,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		return (List<T>) referenceFactory.create(loader, element, base, progressMonitor, markers);
 	}
 

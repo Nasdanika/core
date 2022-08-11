@@ -23,6 +23,6 @@ public interface ObjectFactory<T> {
 	 * @return Created object
 	 * @throws Exception
 	 */
-	T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception;	
+	T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);	
 
 }

@@ -110,7 +110,7 @@ public class TestBlock extends TestBase {
 		BinaryEntity file = myContainer.get("my-file.txt", progressMonitor);
 		assertThat(file).isNotNull();
 		assertThat(file.exists(progressMonitor)).isTrue();
-		assertThat(DefaultConverter.INSTANCE.toString(file.getState(progressMonitor))).startsWith("Good bye, World! Error: java.io.FileNotFoundException: ");
+		assertThat(DefaultConverter.INSTANCE.toString(file.getState(progressMonitor))).startsWith("Good bye, World! Error: org.nasdanika.common.ExecutionException: java.io.FileNotFoundException: ");
 		
 		BinaryEntity log = container.get("log.txt", progressMonitor);
 		assertThat(log).isNotNull();

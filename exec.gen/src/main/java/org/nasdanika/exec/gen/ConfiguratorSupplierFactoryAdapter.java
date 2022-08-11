@@ -21,7 +21,7 @@ public class ConfiguratorSupplierFactoryAdapter extends ConfiguratorExecutionPar
 	}
 	
 	@Override
-	public Supplier<InputStream> create(Context context) throws Exception {
+	public Supplier<InputStream> create(Context context) {
 		SupplierFactory<Context> contextSupplierFactory = createContextSupplierFactory();
 		Configurator configurator = (Configurator) getTarget();
 		SupplierFactory<InputStream> supplierFactory = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(configurator.getTarget(), InputStream.class), "Cannot adapt " + configurator.getTarget() + " to SupplierFactory");		

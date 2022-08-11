@@ -39,7 +39,7 @@ public class BlockCommandFactoryAdapter extends BlockExecutionParticipantAdapter
 		}
 
 		@Override
-		public void execute(ProgressMonitor progressMonitor) throws Exception {
+		public void execute(ProgressMonitor progressMonitor) {
 			try {
 				tryParticipant.splitAndExecute(progressMonitor);
 			} catch (Exception e) {
@@ -59,7 +59,7 @@ public class BlockCommandFactoryAdapter extends BlockExecutionParticipantAdapter
 	}	
 	
 	@Override
-	public Command create(Context context) throws Exception {
+	public Command create(Context context) {
 		Reference<Exception> eRef = new Reference<Exception>();
 		Block target = (Block) getTarget();
 		

@@ -67,7 +67,7 @@ public class TestCall extends TestBase {
 		}
 
 		@Override
-		public String execute(ProgressMonitor progressMonitor) throws Exception {
+		public String execute(ProgressMonitor progressMonitor) {
 			return "Hello, " + name + "!";
 		}
 				
@@ -76,7 +76,7 @@ public class TestCall extends TestBase {
 	public static class CallSupplierFactory implements SupplierFactory<String> {
 
 		@Override
-		public Supplier<String> create(Context context) throws Exception {
+		public Supplier<String> create(Context context) {
 			return new CallSupplier(context.getString("name"));
 		}
 		

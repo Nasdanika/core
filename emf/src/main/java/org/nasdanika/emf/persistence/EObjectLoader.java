@@ -291,7 +291,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
 		if (result != null) {
 			return create(loader, result.getFirst(), config, base, progressMonitor, markers, result.getSecond(), constructor);
@@ -304,7 +304,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * Creates an object by calling create() which takes constructor and passing thread constructor to it.
 	 */
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		return create(loader, type, config, threadConstructor.get(), base, progressMonitor, markers);
 	}	
 	
@@ -362,7 +362,7 @@ public class EObjectLoader extends DispatchingLoader {
 			ProgressMonitor progressMonitor, 
 			List<? extends Marker> markers, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
-			java.util.function.Function<EClass, EObject> constructor) throws Exception {
+			java.util.function.Function<EClass, EObject> constructor) {
 		
 		// Nulls are nulls
 		if (config == null) {
@@ -387,7 +387,7 @@ public class EObjectLoader extends DispatchingLoader {
 			return new SupplierFactory<EObject>() {
 
 				@Override
-				public Supplier<EObject> create(Context context) throws Exception {
+				public Supplier<EObject> create(Context context) {
 					return new Supplier<EObject>() {
 
 						@Override
@@ -401,7 +401,7 @@ public class EObjectLoader extends DispatchingLoader {
 						}
 
 						@Override
-						public EObject execute(ProgressMonitor pm) throws Exception {
+						public EObject execute(ProgressMonitor pm) {
 							EObject eObject = factory.create(eClass);
 							((ContextLoadable) eObject).load(context, loader, config, base, pm, markers);
 							return eObject;

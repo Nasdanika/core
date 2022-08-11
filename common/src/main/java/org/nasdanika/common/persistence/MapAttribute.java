@@ -28,7 +28,7 @@ public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 	}
 	
 	@Override
-	public Map<K,V> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public Map<K,V> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		if (config instanceof Map) {
 			Map<K,V> ret = new LinkedHashMap<>();
 			for (Entry<?, ?> e: ((Map<?,?>) config).entrySet()) {
@@ -57,7 +57,7 @@ public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception { 
+	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		return (V) value; 
 	}
 	

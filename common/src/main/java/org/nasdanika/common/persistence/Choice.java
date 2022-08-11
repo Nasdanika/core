@@ -39,7 +39,7 @@ public class Choice<T> extends Attribute<T> {
 	 * @throws Exception
 	 */
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) throws Exception {
+	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		return selector.apply(config).create(loader, config, base, progressMonitor, markers);
 	}
 	

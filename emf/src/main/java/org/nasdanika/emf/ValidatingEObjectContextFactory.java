@@ -6,6 +6,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ContextFactory;
+import org.nasdanika.common.ExecutionException;
 
 /**
  * Validates {@link EObject} and then creates a context from it. Throws a {@link DiagnosticException} if validation level is error.
@@ -15,11 +16,11 @@ import org.nasdanika.common.ContextFactory;
 public class ValidatingEObjectContextFactory implements ContextFactory<EObject> {
 
 	@Override
-	public Context createContext(EObject input) throws Exception {
+	public Context createContext(EObject input) {
 		Diagnostician diagnostician = new Diagnostician();
 		Diagnostic inputDiagnostic = diagnostician.validate(input);
 		if (inputDiagnostic.getSeverity() == Diagnostic.ERROR) {
-			throw new DiagnosticException(inputDiagnostic);
+			throw new ExecutionException(new DiagnosticException(inputDiagnostic));
 		}		
 		return new EObjectContext(input);
 	}

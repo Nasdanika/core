@@ -397,7 +397,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 		return factory.then(new FunctionFactory<Object,T>() {
 
 			@Override
-			public Function<Object, T> create(Context context) throws Exception {				
+			public Function<Object, T> create(Context context) {				
 				return new Function<Object, T>() {
 
 					@Override
@@ -411,7 +411,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 					}
 
 					@Override
-					public T execute(Object result, ProgressMonitor progressMonitor) throws Exception {
+					public T execute(Object result, ProgressMonitor progressMonitor) {
 						if (result == null || type.isInstance(result)) {
 							return (T) result;
 						}
@@ -498,7 +498,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 		return (FunctionFactory<T,R>) factory.then(new FunctionFactory<Object,R>() {
 
 			@Override
-			public Function<Object,R> create(Context context) throws Exception {				
+			public Function<Object,R> create(Context context) {				
 				return new Function<Object,R>() {
 
 					@Override
@@ -512,7 +512,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 					}
 
 					@Override
-					public R execute(Object result, ProgressMonitor progressMonitor) throws Exception {
+					public R execute(Object result, ProgressMonitor progressMonitor) {
 						if (result == null || resultType.isInstance(result)) {
 							return (R) result;
 						}

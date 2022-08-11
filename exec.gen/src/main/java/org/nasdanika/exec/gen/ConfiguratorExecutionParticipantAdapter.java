@@ -44,7 +44,7 @@ public abstract class ConfiguratorExecutionParticipantAdapter extends AdapterImp
 		FunctionFactory<Map<String, Object>, org.nasdanika.common.Context> contextFactory = new FunctionFactory<Map<String, Object>, org.nasdanika.common.Context>() {
 			
 			@Override
-			public Function<Map<String, java.lang.Object>, org.nasdanika.common.Context> create(org.nasdanika.common.Context context) throws Exception {
+			public Function<Map<String, java.lang.Object>, org.nasdanika.common.Context> create(org.nasdanika.common.Context context) {
 				return Function.fromBiFunction((map, progressMonitor) -> {
 					return org.nasdanika.common.Context.wrap(map::get).compose(context);
 				}, "Contextifier", 1);

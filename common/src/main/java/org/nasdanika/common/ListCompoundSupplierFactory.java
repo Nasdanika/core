@@ -21,7 +21,7 @@ public class ListCompoundSupplierFactory<T> implements SupplierFactory<List<T>> 
 	}
 
 	@Override
-	public Supplier<List<T>> create(Context context) throws Exception {
+	public Supplier<List<T>> create(Context context) {
 		ListCompoundSupplier<T> ret = new ListCompoundSupplier<>(name);
 		for (SupplierFactory<? extends T> e: elements) {
 			ret.add(e == null ? null : e.create(context));

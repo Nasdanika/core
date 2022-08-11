@@ -20,7 +20,7 @@ public class ListCompoundSupplier<E> extends ListCompoundExecutionParticipant<Su
 	}
 
 	@Override
-	public List<E> execute(ProgressMonitor progressMonitor) throws Exception {
+	public List<E> execute(ProgressMonitor progressMonitor) {
 		progressMonitor.setWorkRemaining(size());
 		List<E> result = new ArrayList<>();
 		for (Supplier<? extends E> e: getElements()) {

@@ -1,11 +1,13 @@
 package org.nasdanika.exec.gen.content;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
@@ -40,14 +42,18 @@ public abstract class FilterSupplierFactoryAdapter<T extends Filter> extends Ada
 		}
 
 		@Override
-		public InputStream execute(InputStream input, ProgressMonitor progressMonitor) throws Exception {
-			return Util.filter(ctx, input, str -> FilterSupplierFactoryAdapter.this.filter(ctx, str));
+		public InputStream execute(InputStream input, ProgressMonitor progressMonitor) {
+			try {
+				return Util.filter(ctx, input, str -> FilterSupplierFactoryAdapter.this.filter(ctx, str));
+			} catch (IOException e) {
+				throw new ExecutionException(e, this);
+			}
 		}
 		
 	};
 		
 	@Override
-	public Supplier<InputStream> create(Context context) throws Exception {
+	public Supplier<InputStream> create(Context context) {
 		EObject source = ((Filter) getTarget()).getSource();
 		SupplierFactory<InputStream> ssf = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(source, InputStream.class), "Cannot adapt to SupplierFactory: " + source);
 		return ssf.then(filterFactory).create(context);

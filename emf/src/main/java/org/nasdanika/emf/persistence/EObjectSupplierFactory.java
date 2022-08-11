@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
@@ -131,7 +132,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				org.nasdanika.common.persistence.Reference delegate = new org.nasdanika.common.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.getDocumentation(), exclusiveWith) {
 					
 					@Override
-					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) throws Exception {
+					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) {
 						Object ret = super.create(loader, config, base, progressMonitor, markers);
 						if (base != null && base.hasAbsolutePath() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
 							return URI.createURI((String) ret).resolve(base).toString();
@@ -153,7 +154,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				FunctionFactory<String,EClass> functionFactory = new FunctionFactory<String, EClass>() {
 
 					@Override
-					public Function<String, EClass> create(Context ctx) throws Exception {
+					public Function<String, EClass> create(Context ctx) {
 						return new Function<String, EClass>() {
 
 							@Override
@@ -167,7 +168,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							}
 
 							@Override
-							public EClass execute(String type, ProgressMonitor progressMonitor) throws Exception {
+							public EClass execute(String type, ProgressMonitor progressMonitor) {
 								BiSupplier<EClass, BiFunction<EClass,ENamedElement, String>> result = loader.resolveEClass(type);
 								if (result == null) {
 									throw new ConfigurationException("Cannot resolve " + type+ " to EClass", EObjectSupplierFactory.this.getMarkers());
@@ -252,7 +253,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) throws Exception {
+			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) {
 				EObject ret = constructor.apply(eClass);
 				if (ret == null) {
 					ret = instantiate(eClass);
@@ -352,7 +353,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						} catch (ConfigurationException e) {
 							throw e;
 						} catch (Exception e) {
-							throw markers == null || markers.isEmpty() ? e : new ConfigurationException("Error setting feature " + feature.getKey() + " in " + ret + ": " + e, e, markers);
+							throw markers == null || markers.isEmpty() ? new ExecutionException(e) : new ConfigurationException("Error setting feature " + feature.getKey() + " in " + ret + ": " + e, e, markers);
 						} finally {
 							loadingFeature[0] = null;
 						}

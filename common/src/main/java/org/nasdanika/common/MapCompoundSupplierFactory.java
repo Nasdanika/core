@@ -19,7 +19,7 @@ public class MapCompoundSupplierFactory<K,T> implements SupplierFactory<Map<K,T>
 	}
 
 	@Override
-	public Supplier<Map<K,T>> create(Context context) throws Exception {
+	public Supplier<Map<K,T>> create(Context context) {
 		MapCompoundSupplier<K,T> ret = new MapCompoundSupplier<K,T>(name);
 		for (Entry<K, SupplierFactory<? extends T>> e: elements.entrySet()) {
 			SupplierFactory<? extends T> value = e.getValue();
