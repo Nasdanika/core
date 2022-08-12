@@ -16,7 +16,6 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	/**
 	 * Commits work results. The default implementation does nothing.
 	 * @param progressMonitor
-	 * @throws Exception
 	 */
 	default void commit(ProgressMonitor progressMonitor) {
 		// NOP
@@ -40,7 +39,6 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	 *  
 	 * @param progressMonitor Progress monitor to report the undo progress and possibly cancel the undo operation. 
 	 * @return ``true`` if the work was successfully rolled back or there was no work to roll back, ``false`` otherwise. 
-	 * @throws Exception
 	 */
 	default boolean rollback(ProgressMonitor progressMonitor) {
 		return true;

@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class DiagramGeneratorImpl implements DiagramGenerator {
 	
 	@Override
-	public String generateDiagram(String spec, String dialect) throws IOException {
+	public String generateDiagram(String spec, String dialect) {
 		if (DRAWIO_DIALECT.equals(dialect)) {
 			JSONObject data = new JSONObject();
 			data.put("highlight", "#0000ff");

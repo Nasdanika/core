@@ -608,7 +608,6 @@ public class Util {
 	 * @param bindings Optional script bindings
 	 * @return Evaluation result
 	 * @throws IOException 
-	 * @throws Exception 
 	 */
 	public static Object eval(InputStream script, Map<String,Object> bindings) throws IOException {
 		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
@@ -619,7 +618,6 @@ public class Util {
 	 * @param script Script
 	 * @param bindings Optional script bindings
 	 * @return Evaluation result
-	 * @throws Exception 
 	 */
 	public static Object eval(URL script, Map<String,Object> bindings) {
 		return eval(DefaultConverter.INSTANCE.toString(script), bindings);
@@ -709,7 +707,6 @@ public class Util {
 	 * @param context
 	 * @param text
 	 * @return
-	 * @throws Exception
 	 */
 	public static String firstSentence(String text, int minSentenceLength, int maxSentenceLength, String... abbreviations) {
 		if (text == null || text.length() < minSentenceLength) {
@@ -736,7 +733,6 @@ public class Util {
 	 * @param context
 	 * @param text
 	 * @return
-	 * @throws Exception
 	 */
 	public static String firstPlainTextSentence(String html, int minSentenceLength, int maxSentenceLength, String... abbreviations) {
 		if (html == null || html.length() < minSentenceLength) {
@@ -920,7 +916,6 @@ public class Util {
 	 * Calls asSupplierFactory(obj, null, null)
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	public static <T> SupplierFactory<T> asSupplierFactory(Object obj) {
 		return asSupplierFactory(obj, null, null);
@@ -930,7 +925,6 @@ public class Util {
 	 * Wraps object into a supplier factory. Handles adapters, and collections.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> SupplierFactory<T> asSupplierFactory(Object obj, Class<T> type, FunctionFactory<List<T>, T> joinFactory) {
@@ -981,7 +975,6 @@ public class Util {
 	 * Wraps object into an {@link InputStream} supplier factory. Handles adapters, and collection and scalar cases.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	public static SupplierFactory<InputStream> asInputStreamSupplierFactory(Object obj) {
 		SupplierFactory<InputStream> ret = asSupplierFactory(obj, InputStream.class, JOIN_STREAMS_FACTORY);
@@ -1016,7 +1009,6 @@ public class Util {
 	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	public static ConsumerFactory<BinaryEntityContainer> asConsumerFactory(Object obj)  {
 		return asConsumerFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarkers() : null);
@@ -1026,7 +1018,6 @@ public class Util {
 	 * Wraps object into an {@link BinaryEntityContainer} consumer factory. Handles adapters and collections.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, List<? extends Marker> markers) {
@@ -1057,7 +1048,6 @@ public class Util {
 	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	public static CommandFactory asCommandFactory(Object obj) {
 		return asCommandFactory(obj, obj instanceof Marked ? ((Marked) obj).getMarkers() : null);
@@ -1067,7 +1057,6 @@ public class Util {
 	 * Wraps object into a {@link CommandFactory}. Handles adapters and collections.
 	 * @param obj
 	 * @return
-	 * @throws Exception
 	 */
 	public static CommandFactory asCommandFactory(Object obj, List<? extends Marker> markers) {
 		if (obj instanceof Collection) {

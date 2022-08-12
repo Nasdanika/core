@@ -271,7 +271,6 @@ public class MarkdownHelper {
 	 * @param resource
 	 * @param encode
 	 * @return
-	 * @throws Exception
 	 */
 	protected String loadResource(URI resource, boolean encode) throws Exception {
 		if (encode) {

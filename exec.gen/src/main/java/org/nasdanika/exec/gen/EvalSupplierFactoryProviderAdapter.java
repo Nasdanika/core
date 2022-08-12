@@ -36,20 +36,6 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 		return type == SupplierFactory.class;
 	}
 	
-	
-//	protected Object eval(String script, Map<String, Object> b, Context context, ProgressMonitor progressMonitor) throws Exception {
-//		Map<String,Object> bindings = new HashMap<>();
-//		bindings.put(CONTEXT_BINDING, context);
-//		bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);
-//		
-//		if (this.bindings != null) {
-//			for (Entry<String, Object> e: context.interpolate(this.bindings).entrySet()) {
-//				bindings.put(e.getKey(), e.getValue());
-//			}
-//		}
-//		return Util.eval(interpolateScript ? context.interpolateToString(script) : script, bindings);
-//	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> SupplierFactory<T> getFactory(Class<T> type) {

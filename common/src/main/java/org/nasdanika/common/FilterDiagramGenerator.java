@@ -14,7 +14,7 @@ public class FilterDiagramGenerator implements DiagramGenerator {
 	}
 
 	@Override
-	public String generateDiagram(String spec, String dialect) throws Exception {
+	public String generateDiagram(String spec, String dialect) {
 		return chain.generateDiagram(spec, dialect);
 	}
 

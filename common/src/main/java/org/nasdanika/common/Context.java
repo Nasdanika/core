@@ -1,6 +1,7 @@
 package org.nasdanika.common;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Array;
@@ -828,7 +829,7 @@ public interface Context extends Composeable<Context> {
 	 * @return Evaluation result
 	 * @throws ScriptException 
 	 */
-	default Object eval(String script) throws Exception {
+	default Object eval(String script) {
 		return Util.eval(script, Collections.singletonMap("context", this));
 	}
 	
@@ -836,9 +837,10 @@ public interface Context extends Composeable<Context> {
 	 * Evaluates Javascript with this context as <code>context</code> binding.
 	 * @param script Script
 	 * @return Evaluation result
+	 * @throws IOException 
 	 * @throws Exception 
 	 */
-	default Object eval(InputStream script) throws Exception {
+	default Object eval(InputStream script) throws IOException {
 		return eval(DefaultConverter.INSTANCE.toString(script));
 	}
 	
@@ -848,7 +850,7 @@ public interface Context extends Composeable<Context> {
 	 * @return Evaluation result
 	 * @throws ScriptException 
 	 */
-	default Object eval(URL script) throws Exception {
+	default Object eval(URL script) {
 		return eval(DefaultConverter.INSTANCE.toString(script));
 	}
 	

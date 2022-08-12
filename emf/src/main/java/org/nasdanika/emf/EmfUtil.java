@@ -140,9 +140,8 @@ public class EmfUtil {
 	 * @param resource Used to resolve relative references if not null.
 	 * @param reference Reference.
 	 * @return
-	 * @throws Exception
 	 */
-	public static URI resolveReference(Resource resource, String reference) throws Exception {		
+	public static URI resolveReference(Resource resource, String reference) {		
 		URI refUri = Util.isBlank(reference) ? null : URI.createURI(reference);
 		if (resource != null) {
 			URI resUri = resource.getURI();

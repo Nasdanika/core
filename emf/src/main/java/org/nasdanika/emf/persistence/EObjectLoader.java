@@ -289,7 +289,6 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
@@ -352,7 +351,6 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param ePackageEntry
 	 * @param eClassifier
 	 * @return
-	 * @throws Exception
 	 */
 	public Object create(
 			ObjectLoader loader, 

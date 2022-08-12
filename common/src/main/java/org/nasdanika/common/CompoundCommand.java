@@ -52,7 +52,7 @@ public class CompoundCommand extends ListCompoundExecutionParticipant<Command> i
 			ret.add(new Callable<Void>() {
 
 				@Override
-				public Void call() throws Exception {
+				public Void call() {
 					e.splitAndExecute(progressMonitor);
 					return null;
 				}

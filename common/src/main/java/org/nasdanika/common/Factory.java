@@ -11,7 +11,6 @@ public interface Factory<T,R> {
 	/**
 	 * @param context
 	 * @return
-	 * @throws Exception
 	 */
 	R create(T arg);
 	

@@ -293,7 +293,6 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 	 * @param arguments
 	 * @param parameterTypes
 	 * @return
-	 * @throws Exception
 	 */
 	private Object[] coerce(Context context, List<Object> arguments, Class<?>[] parameterTypes, ProgressMonitor progressMonitor) {
 		if (arguments == null) {
@@ -311,7 +310,6 @@ public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierF
 	 * @param argument
 	 * @param parameterType
 	 * @return
-	 * @throws Exception
 	 */
 	private Object coerce(Context context, Object argument, Class<?> parameterType, ProgressMonitor progressMonitor) {
 		if (argument == null || parameterType.isInstance(argument)) {

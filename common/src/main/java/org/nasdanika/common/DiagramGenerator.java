@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Hex;
 import org.nasdanika.common.resources.Container;
@@ -53,26 +54,30 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 		return new DiagramGenerator() {
 
 			@Override
-			public String generateDiagram(String spec, String dialect) throws IOException {
-				URL dialectURL = new URL(service, dialect);
-				URLConnection connection = dialectURL.openConnection();
-				if (!(connection instanceof HttpURLConnection)) {
-					throw new IllegalArgumentException("Not an HTTP(s) url: "+dialectURL);
+			public String generateDiagram(String spec, String dialect) {
+				try {
+					URL dialectURL = new URL(service, dialect);
+					URLConnection connection = dialectURL.openConnection();
+					if (!(connection instanceof HttpURLConnection)) {
+						throw new IllegalArgumentException("Not an HTTP(s) url: "+dialectURL);
+					}
+					
+					HttpURLConnection httpConnection = (HttpURLConnection) connection;
+					httpConnection.setRequestMethod("POST");
+					httpConnection.setDoOutput(true);
+					try (OutputStream out = connection.getOutputStream()) {
+						out.write(spec.getBytes(StandardCharsets.UTF_8));
+					}
+					
+					int responseCode = httpConnection.getResponseCode();
+					if (responseCode == 200) {
+						return DefaultConverter.INSTANCE.toString(httpConnection.getInputStream());
+					}
+					
+					throw new IOException("HTTP Call to "+dialectURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage());
+				} catch (IOException e) {
+					throw new NasdanikaException(e);
 				}
-				
-				HttpURLConnection httpConnection = (HttpURLConnection) connection;
-				httpConnection.setRequestMethod("POST");
-				httpConnection.setDoOutput(true);
-				try (OutputStream out = connection.getOutputStream()) {
-					out.write(spec.getBytes(StandardCharsets.UTF_8));
-				}
-				
-				int responseCode = httpConnection.getResponseCode();
-				if (responseCode == 200) {
-					return DefaultConverter.INSTANCE.toString(httpConnection.getInputStream());
-				}
-				
-				throw new IOException("HTTP Call to "+dialectURL+" has failed with response: "+responseCode+" "+httpConnection.getResponseMessage());
 			}
 
 			@Override
@@ -99,33 +104,33 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 	 * @return
 	 * @throws IOException 
 	 */
-	String generateDiagram(String spec, String dialect) throws Exception;
+	String generateDiagram(String spec, String dialect);
 			
-	default String generateUmlDiagram(String spec) throws Exception {
+	default String generateUmlDiagram(String spec) {
 		return generateDiagram(spec, UML_DIALECT);
 	}
 		
-	default String generateWireframeDiagram(String spec) throws Exception {
+	default String generateWireframeDiagram(String spec) {
 		return generateDiagram(spec, SALT_DIALECT);
 	}
 	
-	default String generateGanttDiagram(String spec) throws Exception {
+	default String generateGanttDiagram(String spec) {
 		return generateDiagram(spec, GANTT_DIALECT);
 	}
 	
-	default String generateMindmapDiagram(String spec) throws Exception {
+	default String generateMindmapDiagram(String spec) {
 		return generateDiagram(spec, MINDMAP_DIALECT);
 	}
 	
-	default String generateWbsDiagram(String spec) throws Exception {
+	default String generateWbsDiagram(String spec) {
 		return generateDiagram(spec, WBS_DIALECT);
 	}
 	
-	default String generateDrawioDiagram(String spec) throws Exception {
+	default String generateDrawioDiagram(String spec) {
 		return generateDiagram(spec, DRAWIO_DIALECT);
 	}
 	
-	default String generateMermaidDiagram(String spec) throws Exception {
+	default String generateMermaidDiagram(String spec) {
 		return generateDiagram(spec, MERMAID_DIALECT);
 	}
 	
@@ -143,17 +148,21 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 			private int misses;
 
 			@Override
-			public String generateDiagram(String spec, String dialect) throws Exception {
-				String cachePath = dialect + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
-				Object ret = container.find(cachePath, progressMonitor);
-				if (ret instanceof String) {
-					++hits;
-					return (String) ret;
+			public String generateDiagram(String spec, String dialect) {
+				try {
+					String cachePath = dialect + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
+					Object ret = container.find(cachePath, progressMonitor);
+					if (ret instanceof String) {
+						++hits;
+						return (String) ret;
+					}
+					String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
+					container.put(cachePath, diagram, progressMonitor);
+					++misses;
+					return diagram;
+				} catch (NoSuchAlgorithmException e) {
+					throw new NasdanikaException(e);
 				}
-				String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
-				container.put(cachePath, diagram, progressMonitor);
-				++misses;
-				return diagram;
 			}
 			
 			@Override
@@ -179,7 +188,7 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 			}
 
 			@Override
-			public String generateDiagram(String spec, String dialect) throws Exception {
+			public String generateDiagram(String spec, String dialect) {
 				return (DiagramGenerator.this.isSupported(dialect) ? DiagramGenerator.this : other).generateDiagram(spec, dialect);
 			}
 			

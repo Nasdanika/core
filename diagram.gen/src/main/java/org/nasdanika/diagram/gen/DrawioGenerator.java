@@ -2,6 +2,7 @@ package org.nasdanika.diagram.gen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -67,9 +71,11 @@ public class DrawioGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
+	 * @throws IOException 
+	 * @throws TransformerException 
+	 * @throws ParserConfigurationException 
 	 */
-	public String generateDiagram(Diagram diagram) throws Exception {
+	public String generateDiagram(Diagram diagram) throws TransformerException, IOException, ParserConfigurationException {
 		Document document = generateModel(diagram);
 		return diagramGenerator.generateDrawioDiagram(document.save(true));
 	}
@@ -78,8 +84,9 @@ public class DrawioGenerator {
 	 * Generates diagram model in .drawio format which can be further converted to HTML or stored to a file for manual editing.
 	 * @param diagram
 	 * @return
+	 * @throws ParserConfigurationException 
 	 */
-	public Document generateModel(Diagram... diagrams) throws Exception {
+	public Document generateModel(Diagram... diagrams) throws ParserConfigurationException {
 		Document ret = Document.create(false, null);
 		for (Diagram diagram: diagrams) {
 			Page page = ret.createPage();
@@ -103,7 +110,7 @@ public class DrawioGenerator {
     	return StandardCharsets.UTF_8;
     }
 
-	protected void generatePage(Diagram diagram, Page page) throws Exception {
+	protected void generatePage(Diagram diagram, Page page) {
 		Root root = page.getModel().getRoot();
 		Map<DiagramElement,ModelElement> elementsMap = new HashMap<>();
 		Map<DiagramElement, Rectangle> geometry = new HashMap<>();

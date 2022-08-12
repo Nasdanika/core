@@ -340,9 +340,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateDiagram(Diagram diagram, String dialect) throws Exception {
+	public String generateDiagram(Diagram diagram, String dialect) {
 		return diagramGenerator.generateDiagram(generateSpec(diagram), dialect);
 	}
 	
@@ -351,9 +350,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateUmlDiagram(Diagram diagram) throws Exception {
+	public String generateUmlDiagram(Diagram diagram) {
 		return diagramGenerator.generateUmlDiagram(generateSpec(diagram));
 	}
 	
@@ -362,9 +360,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateWireframeDiagram(Diagram diagram) throws Exception {
+	public String generateWireframeDiagram(Diagram diagram) {
 		return diagramGenerator.generateWireframeDiagram(generateSpec(diagram));
 	}
 	
@@ -373,9 +370,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateGanttDiagram(Diagram diagram) throws Exception {
+	public String generateGanttDiagram(Diagram diagram) {
 		return diagramGenerator.generateGanttDiagram(generateSpec(diagram));
 	}
 	
@@ -384,9 +380,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateMindmapDiagram(Diagram diagram) throws Exception {
+	public String generateMindmapDiagram(Diagram diagram) {
 		return diagramGenerator.generateMindmapDiagram(generateSpec(diagram));
 	}
 	
@@ -395,9 +390,8 @@ public class PlantumlGenerator {
 	 * @param diagram
 	 * @param diagramGenerator
 	 * @return
-	 * @throws Exception 
 	 */
-	public String generateWbsDiagram(Diagram diagram) throws Exception {
+	public String generateWbsDiagram(Diagram diagram) {
 		return diagramGenerator.generateWbsDiagram(generateSpec(diagram));
 	}
 

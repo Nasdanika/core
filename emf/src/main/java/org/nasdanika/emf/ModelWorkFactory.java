@@ -27,16 +27,15 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	 * @param platformPluginUri
 	 * @throws Exception 
 	 */
-	public ModelWorkFactory(String platformPluginUri, EPackage... ePackages) throws Exception {
+	public ModelWorkFactory(String platformPluginUri, EPackage... ePackages) {
 		this(URI.createPlatformPluginURI(platformPluginUri, false), ePackages);
 	}
 	
 	/**
 	 * Creates a generator by loading a generator model from the specified URI into a new {@link ResourceSet}. 
 	 * @param modelUri
-	 * @throws Exception 
 	 */
-	public ModelWorkFactory(URI modelUri, EPackage... ePackages) throws Exception {
+	public ModelWorkFactory(URI modelUri, EPackage... ePackages) {
 		this(createResourceSet(ePackages), modelUri);
 	}	
 	
@@ -45,9 +44,8 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	 * the specified {@link ResourceSet}.
 	 * @param resourceSet Resource set to load the model to, see ``ModelGenerator(ResourceSet resourceSet, URI modelUri)`` for details. 
 	 * @param platformPluginUri
-	 * @throws Exception 
 	 */
-	public ModelWorkFactory(ResourceSet resourceSet, String platformPluginUri) throws Exception {
+	public ModelWorkFactory(ResourceSet resourceSet, String platformPluginUri) {
 		this(resourceSet, URI.createPlatformPluginURI(platformPluginUri, false));
 	}
 	
@@ -79,9 +77,8 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	/**
 	 * Creates a generator by loading a generator model from the specified URI into the specified {@link ResourceSet}.
 	 * @param resourceSet Resource set to load the model to. 
-	 * @throws Exception 
 	 */
-	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
+	public ModelWorkFactory(ResourceSet resourceSet, URI modelUri) {
 		modelResource = resourceSet.getResource(modelUri, true);
 		root = modelResource.getContents().iterator().next();
 	}
