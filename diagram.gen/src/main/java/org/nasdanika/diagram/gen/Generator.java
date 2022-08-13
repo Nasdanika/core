@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.DiagramGenerator;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.drawio.Document;
@@ -26,61 +27,67 @@ public class Generator {
 	public static final String DRAWIO_SCHEMA = "drawio:";
 //	public static final String MERMAID_SCHEMA = "mermaid:";
 
-	public String generate(Diagram diagram) throws Exception {
+	public String generate(Diagram diagram) {
 		String type = diagram.getType();
-		if (type.startsWith(PLANTUML_SCHEMA)) {
-			String dialect = type.substring(PLANTUML_SCHEMA.length()).toLowerCase();
-			return createPlantumlGenerator().generateDiagram(diagram, dialect);
-		}
-		
-//		if (type.startsWith(MERMAID_SCHEMA)) {
-//			String dialect = type.substring(MERMAID_SCHEMA.length()).toLowerCase();
-//			return createMermaidGenerator().generateDiagram(diagram, dialect);
-//		}
-		
-		if (type.startsWith(DRAWIO_SCHEMA)) {
-			String diagramURI = type.substring(DRAWIO_SCHEMA.length());
-			URI uri = URI.createURI(diagramURI);
-			
-			URI markerBase = null;
-			for (Marker marker: diagram.getMarkers()) { 
-				if (marker != null && !Util.isBlank(marker.getLocation())) { // Finds a first marker with location
-					markerBase = URI.createURI(marker.getLocation());
-					break;
-				}				
-			}
-
-			URI resourceBase = null;
-			Resource resource = diagram.eResource();
-			if (resource != null) {
-				resourceBase = resource.getURI();
+		try {
+			if (type.startsWith(PLANTUML_SCHEMA)) {
+				String dialect = type.substring(PLANTUML_SCHEMA.length()).toLowerCase();
+				return createPlantumlGenerator().generateDiagram(diagram, dialect);
 			}
 			
-			if (markerBase != null && markerBase.hasAbsolutePath() && diagramURI.startsWith("./")) {
-				uri = uri.resolve(markerBase);
-			} else if (resourceBase != null) {
-				uri = uri.resolve(resourceBase);
-			}
+	//		if (type.startsWith(MERMAID_SCHEMA)) {
+	//			String dialect = type.substring(MERMAID_SCHEMA.length()).toLowerCase();
+	//			return createMermaidGenerator().generateDiagram(diagram, dialect);
+	//		}
 			
-			if (uri.isFile()) {
-				String fileStr = uri.toFileString();
-				File diagramFile = new File(fileStr);
-				if (diagramFile.exists()) {
-					// TODO - merging - read, merge models, write if result is not null.
-				} else {
-					File container = diagramFile.getParentFile();
-					if (container.isDirectory() || container.mkdirs()) {
-						Document document = createDrawioGenerator().generateModel(diagram);
-						Files.write(diagramFile.toPath(), DefaultConverter.INSTANCE.toByteArray(document.save(true)));
-					}
+			if (type.startsWith(DRAWIO_SCHEMA)) {
+				String diagramURI = type.substring(DRAWIO_SCHEMA.length());
+				URI uri = URI.createURI(diagramURI);
+				
+				URI markerBase = null;
+				for (Marker marker: diagram.getMarkers()) { 
+					if (marker != null && !Util.isBlank(marker.getLocation())) { // Finds a first marker with location
+						markerBase = URI.createURI(marker.getLocation());
+						break;
+					}				
 				}
-			}						
+	
+				URI resourceBase = null;
+				Resource resource = diagram.eResource();
+				if (resource != null) {
+					resourceBase = resource.getURI();
+				}
+				
+				if (markerBase != null && markerBase.hasAbsolutePath() && diagramURI.startsWith("./")) {
+					uri = uri.resolve(markerBase);
+				} else if (resourceBase != null) {
+					uri = uri.resolve(resourceBase);
+				}
+				
+				if (uri.isFile()) {
+					String fileStr = uri.toFileString();
+					File diagramFile = new File(fileStr);
+					if (diagramFile.exists()) {
+						// TODO - merging - read, merge models, write if result is not null.
+					} else {
+						File container = diagramFile.getParentFile();
+						if (container.isDirectory() || container.mkdirs()) {
+							Document document = createDrawioGenerator().generateModel(diagram);
+							Files.write(diagramFile.toPath(), DefaultConverter.INSTANCE.toByteArray(document.save(true)));
+						}
+					}
+				}						
+				
+				return generateDrawioHtml(uri);
+			}
 			
-			return generateDrawioHtml(uri);
-		}
-		
-		if (type.equals("drawio")) {
-			return createDrawioGenerator().generateDiagram(diagram);
+			if (type.equals("drawio")) {
+				return createDrawioGenerator().generateDiagram(diagram);
+			}
+		} catch (NasdanikaException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new NasdanikaException(e);
 		}
 		
 		throw new IllegalArgumentException("Unsupported diagram type: " + type);
@@ -92,8 +99,12 @@ public class Generator {
 	 * @return
 	 * @throws IOException
 	 */
-	public String generateDrawioHtml(URI diagram) throws Exception {
-		return getDiagramGenerator().generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
+	public String generateDrawioHtml(URI diagram) {
+		try {
+			return getDiagramGenerator().generateDrawioDiagram(DefaultConverter.INSTANCE.stringContent(diagram));
+		} catch (IOException e) {
+			throw new NasdanikaException(e);
+		}
 	}
 	
 	protected DiagramGenerator getDiagramGenerator() {

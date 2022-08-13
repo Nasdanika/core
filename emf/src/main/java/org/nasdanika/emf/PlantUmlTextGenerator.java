@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DependencyTracer;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.util.NcoreUtil;
 
@@ -235,82 +236,87 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	public void appendWithRelationships(
 			Collection<? extends EClassifier> coreClassifiers,
 			RelationshipDirection direction,
-			int depth) throws IOException {
-		Set<EClassifier> coreSet = new HashSet<>(coreClassifiers);				
-		Set<EClassifier> relatedSet = new HashSet<>();
+			int depth) {
 		
-		switch (direction) {
-		case both:
-			relatedSet = bothDependencyTracer.trace(coreSet, depth);
-			break;
-		case in:
-			relatedSet = inDependencyTracer.trace(coreSet, depth);
-			break;
-		case out:
-			relatedSet = OUT_DEPENDENCY_TRACER.trace(coreSet, depth);
-			break;
-		default:
-			break;		
-		}
-		
-		Set<EClassifier> allClassifiers = new HashSet<>(coreSet);
-		
-		for (EClassifier rc: relatedSet) {
-			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
-				allClassifiers.add(rc);				
+		try {
+			Set<EClassifier> coreSet = new HashSet<>(coreClassifiers);				
+			Set<EClassifier> relatedSet = new HashSet<>();
+			
+			switch (direction) {
+			case both:
+				relatedSet = bothDependencyTracer.trace(coreSet, depth);
+				break;
+			case in:
+				relatedSet = inDependencyTracer.trace(coreSet, depth);
+				break;
+			case out:
+				relatedSet = OUT_DEPENDENCY_TRACER.trace(coreSet, depth);
+				break;
+			default:
+				break;		
 			}
-		}
-		
-		for (EClassifier cc: coreSet) {
-			appendEClassifier(cc, allClassifiers);
-		}
-		
-		for (EClassifier rc: relatedSet) {
-			if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
-				String style = NcoreUtil.getNasdanikaAnnotationDetail(rc, DIAGRAM_STYLE_KEY);
-				if (style == null) {
-					style = RELATED_BACKGROUND;
-				} else {
-					style = Context.singleton("background", RELATED_BACKGROUND).interpolateToString(style);
+			
+			Set<EClassifier> allClassifiers = new HashSet<>(coreSet);
+			
+			for (EClassifier rc: relatedSet) {
+				if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
+					allClassifiers.add(rc);				
 				}
-				
-				appendEClassifier(rc, style, allClassifiers);
 			}
-		}		
-		
-		for (EClassifier c: allClassifiers) {
-			if (c instanceof EClass) {
-				for (EGenericType gsc: ((EClass) c).getEGenericSuperTypes()) {
-					if (allClassifiers.contains(gsc.getEClassifier())) {
-						appendGeneralization((EClass) c, gsc);
+			
+			for (EClassifier cc: coreSet) {
+				appendEClassifier(cc, allClassifiers);
+			}
+			
+			for (EClassifier rc: relatedSet) {
+				if (!coreSet.contains(rc) && getEClassifierLink(rc) != null) {
+					String style = NcoreUtil.getNasdanikaAnnotationDetail(rc, DIAGRAM_STYLE_KEY);
+					if (style == null) {
+						style = RELATED_BACKGROUND;
+					} else {
+						style = Context.singleton("background", RELATED_BACKGROUND).interpolateToString(style);
+					}
+					
+					appendEClassifier(rc, style, allClassifiers);
+				}
+			}		
+			
+			for (EClassifier c: allClassifiers) {
+				if (c instanceof EClass) {
+					for (EGenericType gsc: ((EClass) c).getEGenericSuperTypes()) {
+						if (allClassifiers.contains(gsc.getEClassifier())) {
+							appendGeneralization((EClass) c, gsc);
+						}
 					}
 				}
 			}
-		}
-		
-		Set<EReference> processedOpposites = new HashSet<>();
-		for (EClassifier c: allClassifiers) {
-			if (c instanceof EClass) {
-				for (EReference ref: ((EClass) c).getEReferences()) {
-					if (!processedOpposites.contains(ref) && allClassifiers.contains(ref.getEReferenceType())) {
-						appendEReference(ref);
-						EReference opposite = NcoreUtil.getOpposite(ref);
-						if (opposite!=null) {
-							processedOpposites.add(opposite);
-						}
-					} 
+			
+			Set<EReference> processedOpposites = new HashSet<>();
+			for (EClassifier c: allClassifiers) {
+				if (c instanceof EClass) {
+					for (EReference ref: ((EClass) c).getEReferences()) {
+						if (!processedOpposites.contains(ref) && allClassifiers.contains(ref.getEReferenceType())) {
+							appendEReference(ref);
+							EReference opposite = NcoreUtil.getOpposite(ref);
+							if (opposite!=null) {
+								processedOpposites.add(opposite);
+							}
+						} 
+					}
+				}
+			}	
+			
+			// Type dependencies
+			for (EClassifier c: allClassifiers) {
+				for (EClass src: getUses(c)) {
+					if (allClassifiers.contains(src)) {
+						appendTypeDependency(src, c);
+					}				
 				}
 			}
-		}	
-		
-		// Type dependencies
-		for (EClassifier c: allClassifiers) {
-			for (EClass src: getUses(c)) {
-				if (allClassifiers.contains(src)) {
-					appendTypeDependency(src, c);
-				}				
-			}
-		}			
+		} catch (IOException e) {
+			throw new NasdanikaException(e);
+		}
 	}
 	
 	protected static String getMultiplicity(EStructuralFeature feature) {

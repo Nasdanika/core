@@ -1,6 +1,5 @@
 package org.nasdanika.emf;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EClassifier;
@@ -14,5 +13,5 @@ public interface DiagramTextGenerator {
 	
 	enum RelationshipDirection { in, out, both } 
 	
-	void appendWithRelationships(Collection<? extends EClassifier> coreClassifiers,	RelationshipDirection direction, int depth) throws IOException;
+	void appendWithRelationships(Collection<? extends EClassifier> coreClassifiers,	RelationshipDirection direction, int depth);
 }
