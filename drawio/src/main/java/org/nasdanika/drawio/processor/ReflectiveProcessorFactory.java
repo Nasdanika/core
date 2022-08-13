@@ -1,5 +1,7 @@
 package org.nasdanika.drawio.processor;
 
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -301,6 +303,61 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return childProcessorsInfo;
 	}	
 	
+	/**
+	 * Matches processor field or method and inbound connection.
+	 * @return
+	 */
+	protected boolean matchInboundHandler(AnnotatedElement handlerMember, Connection inboundConnection) {
+		InboundHandler inboundHanlderAnnotation = handlerMember.getAnnotation(InboundHandler.class);
+		if (inboundHanlderAnnotation == null) {
+			return false;
+		}
+		
+		if (handlerMember instanceof Method) {
+			Method handlerMethod = (Method) handlerMember;
+			int pc = handlerMethod.getParameterCount();
+			if (pc > 1) {
+				throw new NasdanikaException("A method annotated with InboundHandler shall have zero or one parameter: " + handlerMethod);
+			}
+			if (pc == 1 && !handlerMethod.getParameters()[0].getType().isInstance(inboundConnection)) {
+				throw new NasdanikaException("A single parameter type of a method annotated with InboundHandler shall be assignable from Connection: " + handlerMethod);				
+			}
+		}
+		
+//		/**
+//		 * If not blank value is used to match the inbound {@link Connection} label.
+//		 * If blank and selector is not provided, then connection label is converted to camel case by 
+//		 * lower casing the first word, upper casing the rest and concatenating them. E.g. "Hello world" would become "helloWorld".
+//		 * The resulting string is used to match the annotated field. 
+//		 * For methods all words are upper cased, concatenated and prefixed with get. E.g. "Hello world" would become "getHelloWorld".
+//		 * If selector is set and value is blank then value is not used for matching.
+//		 * @return
+//		 */
+//		String value() default "";
+//			
+//		/**
+//		 * Inbound {@link Connection} selector in the form of <code>property=value pattern</code>.
+//		 * Elements are concatenated with and. 
+//		 * @return
+//		 */
+//		String[] selector() default {};
+//		
+//		/**
+//		 * If not blank value is used to match the inbound {@link Connection}'s source {@link Node} label.
+//		 * @return
+//		 */
+//		String source() default "";
+//			
+//		/**
+//		 * Inbound {@link Connection}'s source {@link Node} selector in the form of <code>property=value pattern</code>.
+//		 * Elements are concatenated with and. 
+//		 * @return
+//		 */
+//		String[] sourceSelector() default {};
+		
+		return true;
+	}
+	
 	// Node wiring
 	@SuppressWarnings("unchecked")
 	protected Map<Connection, Consumer<H>> wireInboundHandler(
@@ -308,31 +365,40 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Map<Connection, Consumer<H>> inboundHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
-		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(inboundHandlerConsumers);		
-		getFields(processor.getClass(), processorIntrospectionLevel).forEach(handlerField -> {
-			InboundHandler inboundHanlderAnnotation = handlerField.getAnnotation(InboundHandler.class);
-			if (inboundHanlderAnnotation != null) {
-				for (Entry<Connection, Consumer<H>> inboundHandlerConsumerEntry: inboundHandlerConsumers.entrySet()) {										
-					// TODO - match here - connection (value, selector), source (source, sourceSelector). Extract selector matching to a method. continue if not a match 
-					
-					boolean isAccessible = introspectionLevel == IntrospectionLevel.DECLARED ? handlerField.canAccess(processor) : true;
-					try {
-						if (!isAccessible) {
-							handlerField.setAccessible(true);
-						}
-						inboundHandlerConsumerEntry.getValue().accept((H) handlerField.get(processor));
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						throw new NasdanikaException("Error otaining handler field value: " + e, e);
-					} finally {
-						if (!isAccessible) {
-							handlerField.setAccessible(false);
-						}
+		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(inboundHandlerConsumers);
+
+		// Streaming fields and methods and then flat mapping them to all permutations with inbound handler consumers.
+		// then filtering using matchInboundHandler, sorting by priority, finding first, wiring it and removing from ret.
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.flatMap(ae -> inboundHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
+			.filter(e -> matchInboundHandler(e.getKey(), e.getValue().getKey()))
+			.sorted((a, b) -> b.getKey().getAnnotation(InboundHandler.class).priority() - a.getKey().getAnnotation(InboundHandler.class).priority())
+			.findFirst().ifPresent(e -> {
+				AccessibleObject handlerMember = e.getKey();
+				Entry<Connection, Consumer<H>> inboundHandlerConsumerEntry = e.getValue();
+				boolean isAccessible = introspectionLevel == IntrospectionLevel.DECLARED ? handlerMember.canAccess(processor) : true;
+				try {
+					if (!isAccessible) {
+						handlerMember.setAccessible(true);
 					}
-					ret.remove(inboundHandlerConsumerEntry.getKey());
-				}										
-			}
-		});
-		
+					if (handlerMember instanceof Field) {
+						inboundHandlerConsumerEntry.getValue().accept((H) ((Field) handlerMember).get(processor));
+					} else {
+						Method handlerSupplierMethod = (Method) handlerMember;
+						Object inboundHandler = handlerSupplierMethod.getParameterCount() == 0 ? handlerSupplierMethod.invoke(processor) : handlerSupplierMethod.invoke(processor, inboundHandlerConsumerEntry.getKey());
+						inboundHandlerConsumerEntry.getValue().accept((H) inboundHandler);
+					}
+				} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException ex) {
+					throw new NasdanikaException("Error obtaining handler value: " + ex, ex);
+				} finally {
+					if (!isAccessible) {
+						handlerMember.setAccessible(false);
+					}
+				}
+				ret.remove(inboundHandlerConsumerEntry.getKey());
+				
+			});
+				
 		return ret;
 	}	
 	
@@ -559,6 +625,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			
 		}
 		return declared;
+	}
+	
+	protected static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz, IntrospectionLevel introspectionLevel) {
+		return Stream.concat(getMethods(clazz, introspectionLevel), getFields(clazz, introspectionLevel));
 	}
 	
 }
