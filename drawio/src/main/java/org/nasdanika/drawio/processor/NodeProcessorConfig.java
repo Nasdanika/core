@@ -2,22 +2,21 @@ package org.nasdanika.drawio.processor;
 
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Node;
 
-public interface NodeProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<P> {
+public interface NodeProcessorConfig<P,H,E> extends ElementProcessorConfig<P> {
 	
 	@Override
 	Node getElement();
 
-	Map<Connection, Function<T,R>> getInboundEndpoints();
+	Map<Connection, E> getInboundEndpoints();
 	
-	Map<Connection, Consumer<Function<U,S>>> getInboundHandlerConsumers();
+	Map<Connection, Consumer<H>> getInboundHandlerConsumers();
 	
-	Map<Connection, Function<T,R>> getOutboundEndpoints();
+	Map<Connection, E> getOutboundEndpoints();
 	
-	Map<Connection, Consumer<Function<U,S>>> getOutboundHandlerConsumers();
+	Map<Connection, Consumer<H>> getOutboundHandlerConsumers();
 	
 }

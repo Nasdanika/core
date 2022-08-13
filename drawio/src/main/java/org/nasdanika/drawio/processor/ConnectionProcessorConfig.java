@@ -1,20 +1,18 @@
 package org.nasdanika.drawio.processor;
 
-import java.util.function.Function;
-
 import org.nasdanika.drawio.Connection;
 
-public interface ConnectionProcessorConfig<P,T,R,U,S> extends ElementProcessorConfig<P> {
+public interface ConnectionProcessorConfig<P,H,E> extends ElementProcessorConfig<P> {
 	
 	@Override
 	Connection getElement();
 
-	Function<T,R> getSourceEndpoint();
+	E getSourceEndpoint();
 	
-	void setSourceHandler(Function<U,S> sourceHandler);
+	void setSourceHandler(H sourceHandler);
 	
-	Function<T,R> getTargetEndpoint();
+	E getTargetEndpoint();
 	
-	void setTargetHandler(Function<U,S> targetHandler);
+	void setTargetHandler(H targetHandler);
 	
 }

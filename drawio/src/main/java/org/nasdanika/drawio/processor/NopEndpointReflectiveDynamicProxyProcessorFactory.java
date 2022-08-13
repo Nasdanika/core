@@ -1,8 +1,8 @@
 package org.nasdanika.drawio.processor;
 
-public class NopEndpointReflectiveProcessorFactory<P, T, R> extends ReflectiveProcessorFactory<P, T, R, T, R> implements NopEndpointProcessorFactory<P, T, R> {
+public abstract class NopEndpointReflectiveDynamicProxyProcessorFactory<P, H> extends ReflectiveProcessorFactory<P, H, H> implements NopEndpointProcessorFactory<P, H>, DynamicProxyProcessorFactory<P, H, H> {
 
-	public NopEndpointReflectiveProcessorFactory(Object target, IntrospectionLevel introspectionLevel) {
+	public NopEndpointReflectiveDynamicProxyProcessorFactory(Object target, IntrospectionLevel introspectionLevel) {
 		super(target, introspectionLevel);
 	}
 

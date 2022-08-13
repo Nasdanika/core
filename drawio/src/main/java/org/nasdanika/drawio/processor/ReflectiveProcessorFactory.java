@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -35,7 +34,7 @@ import org.nasdanika.drawio.Page;
  * @param <U>
  * @param <S>
  */
-public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements ProcessorFactory<P, T, R, U, S> {
+public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFactory<P, H, E> {
 	
 	private Object target;
 	private IntrospectionLevel introspectionLevel;
@@ -89,20 +88,20 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 					
 					if (config instanceof NodeProcessorConfig) {
 						@SuppressWarnings("unchecked")
-						NodeProcessorConfig<P, T, R, U, S> nodeProcessorConfig = (NodeProcessorConfig<P, T, R, U, S>) config;
-						Map<Connection, Function<T, R>> unwiredInboundEndpoints = wireInboundEndpoint(processor, nodeProcessorConfig.getInboundEndpoints(), processorIntrospectionLevel);
+						NodeProcessorConfig<P, H, E> nodeProcessorConfig = (NodeProcessorConfig<P, H, E>) config;
+						Map<Connection, E> unwiredInboundEndpoints = wireInboundEndpoint(processor, nodeProcessorConfig.getInboundEndpoints(), processorIntrospectionLevel);
 						wireInboundEndpoints(processor, hideWired ? unwiredInboundEndpoints : nodeProcessorConfig.getInboundEndpoints(), processorIntrospectionLevel);
 						
-						Map<Connection, Consumer<Function<U, S>>> unwiredInboundHandlerConsumers = wireInboundHandler(processor, nodeProcessorConfig.getInboundHandlerConsumers(), processorIntrospectionLevel);
+						Map<Connection, Consumer<H>> unwiredInboundHandlerConsumers = wireInboundHandler(processor, nodeProcessorConfig.getInboundHandlerConsumers(), processorIntrospectionLevel);
 						wireInboundHandlers(processor, hideWired ? unwiredInboundHandlerConsumers : nodeProcessorConfig.getInboundHandlerConsumers(), processorIntrospectionLevel);
 						
-						Map<Connection, Function<T, R>> unwiredOutboundEndpoints = wireOutboundEndpoint(processor, nodeProcessorConfig.getOutboundEndpoints(), processorIntrospectionLevel);
+						Map<Connection, E> unwiredOutboundEndpoints = wireOutboundEndpoint(processor, nodeProcessorConfig.getOutboundEndpoints(), processorIntrospectionLevel);
 						wireOutboundEndpoints(processor, hideWired ? unwiredOutboundEndpoints : nodeProcessorConfig.getOutboundEndpoints(), processorIntrospectionLevel);
 						
-						Map<Connection, Consumer<Function<U, S>>> unwiredOutboundHandlerConsumers = wireOutboundHandler(processor, nodeProcessorConfig.getOutboundHandlerConsumers(), processorIntrospectionLevel);
+						Map<Connection, Consumer<H>> unwiredOutboundHandlerConsumers = wireOutboundHandler(processor, nodeProcessorConfig.getOutboundHandlerConsumers(), processorIntrospectionLevel);
 						wireOutboundHandlers(processor, hideWired ? unwiredOutboundHandlerConsumers : nodeProcessorConfig.getOutboundHandlerConsumers(), processorIntrospectionLevel);
 						
-						unwiredConfig = new NodeProcessorConfig<P, T, R, U, S>() {
+						unwiredConfig = new NodeProcessorConfig<P, H, E>() {
 
 							@Override
 							public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
@@ -125,34 +124,34 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 							}
 
 							@Override
-							public Map<Connection, Function<T, R>> getInboundEndpoints() {
+							public Map<Connection, E> getInboundEndpoints() {
 								return unwiredInboundEndpoints;
 							}
 
 							@Override
-							public Map<Connection, Consumer<Function<U, S>>> getInboundHandlerConsumers() {
+							public Map<Connection, Consumer<H>> getInboundHandlerConsumers() {
 								return unwiredInboundHandlerConsumers;
 							}
 
 							@Override
-							public Map<Connection, Function<T, R>> getOutboundEndpoints() {
+							public Map<Connection, E> getOutboundEndpoints() {
 								return unwiredOutboundEndpoints;
 							}
 
 							@Override
-							public Map<Connection, Consumer<Function<U, S>>> getOutboundHandlerConsumers() {
+							public Map<Connection, Consumer<H>> getOutboundHandlerConsumers() {
 								return unwiredOutboundHandlerConsumers;
 							}
 						};
 					} else if (config instanceof ConnectionProcessorConfig) {
 						@SuppressWarnings("unchecked")
-						ConnectionProcessorConfig<P, T, R, U, S> connectionProcessorConfig = (ConnectionProcessorConfig<P, T, R, U, S>) config;
+						ConnectionProcessorConfig<P, H, E> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E>) config;
 						boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), processorIntrospectionLevel);
 						boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
 						boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), processorIntrospectionLevel);
 						boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
 						
-						unwiredConfig = new ConnectionProcessorConfig<P, T, R, U, S>() {
+						unwiredConfig = new ConnectionProcessorConfig<P, H, E>() {
 
 							@Override
 							public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
@@ -175,12 +174,12 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 							}
 
 							@Override
-							public Function<T, R> getSourceEndpoint() {
+							public E getSourceEndpoint() {
 								return wiredSourceEndpoint ? null : connectionProcessorConfig.getSourceEndpoint();
 							}
 
 							@Override
-							public void setSourceHandler(Function<U, S> sourceHandler) {
+							public void setSourceHandler(H sourceHandler) {
 								if (wiredSourceHandler) {
 									throw new IllegalStateException("Source handler is already wired for " + getElement());
 								}
@@ -188,12 +187,12 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 							}
 
 							@Override
-							public Function<T, R> getTargetEndpoint() {
+							public E getTargetEndpoint() {
 								return wiredTargetEndpoint ? null : connectionProcessorConfig.getTargetEndpoint();
 							}
 
 							@Override
-							public void setTargetHandler(Function<U, S> targetHandler) {
+							public void setTargetHandler(H targetHandler) {
 								if (wiredTargetHandler) {
 									throw new IllegalStateException("Target handler is already wired for " + getElement());
 								}
@@ -304,25 +303,31 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 	
 	// Node wiring
 	@SuppressWarnings("unchecked")
-	protected Map<Connection, Consumer<Function<U, S>>> wireInboundHandler(
+	protected Map<Connection, Consumer<H>> wireInboundHandler(
 			Object processor, 
-			Map<Connection, Consumer<Function<U, S>>> inboundHandlerConsumers,
+			Map<Connection, Consumer<H>> inboundHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
-		Map<Connection, Consumer<Function<U, S>>> ret = new LinkedHashMap<>(inboundHandlerConsumers);		
-		getMethods(processor.getClass(), processorIntrospectionLevel).forEach(method -> {
-			InboundHandler inboundHanlderAnnotation = method.getAnnotation(InboundHandler.class);
-			if (inboundHanlderAnnotation != null && method.getParameterCount() == 1) {
-				for (Entry<Connection, Consumer<Function<U, S>>> inboundHandlerConsumerEntry: inboundHandlerConsumers.entrySet()) {										
+		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(inboundHandlerConsumers);		
+		getFields(processor.getClass(), processorIntrospectionLevel).forEach(handlerField -> {
+			InboundHandler inboundHanlderAnnotation = handlerField.getAnnotation(InboundHandler.class);
+			if (inboundHanlderAnnotation != null) {
+				for (Entry<Connection, Consumer<H>> inboundHandlerConsumerEntry: inboundHandlerConsumers.entrySet()) {										
 					// TODO - match here - connection (value, selector), source (source, sourceSelector). Extract selector matching to a method. continue if not a match 
 					
-					inboundHandlerConsumerEntry.getValue().accept(arg -> {
-						try {
-							return (S) method.invoke(processor, arg);
-						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-							throw new NasdanikaException("Error invoking handler method for inbound connection " + inboundHandlerConsumerEntry.getKey() + ": " + e, e);
+					boolean isAccessible = introspectionLevel == IntrospectionLevel.DECLARED ? handlerField.canAccess(processor) : true;
+					try {
+						if (!isAccessible) {
+							handlerField.setAccessible(true);
 						}
-					});
+						inboundHandlerConsumerEntry.getValue().accept((H) handlerField.get(processor));
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						throw new NasdanikaException("Error otaining handler field value: " + e, e);
+					} finally {
+						if (!isAccessible) {
+							handlerField.setAccessible(false);
+						}
+					}
 					ret.remove(inboundHandlerConsumerEntry.getKey());
 				}										
 			}
@@ -333,16 +338,16 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 	
 	protected void wireInboundHandlers(
 			Object processor, 
-			Map<Connection, Consumer<Function<U, S>>> inboundHandlerConsumers,
+			Map<Connection, Consumer<H>> inboundHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		// TODO Auto-generated method stub
 
 	}
 
-	protected Map<Connection, Function<T, R>> wireInboundEndpoint(
+	protected Map<Connection, E> wireInboundEndpoint(
 			Object processor, 
-			Map<Connection, Function<T, R>> inboundEndpoints,
+			Map<Connection, E> inboundEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return inboundEndpoints;
@@ -350,16 +355,16 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 
 	protected void wireInboundEndpoints(
 			Object processor, 
-			Map<Connection, Function<T, R>> inboundEndpoints,
+			Map<Connection, E> inboundEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 
 	}
 	
-	protected Map<Connection, Consumer<Function<U, S>>> wireOutboundHandler(
+	protected Map<Connection, Consumer<H>> wireOutboundHandler(
 			Object processor, 
 			Map<Connection,
-			Consumer<Function<U, S>>> outboundHandlerConsumers,
+			Consumer<H>> outboundHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return outboundHandlerConsumers;
@@ -367,15 +372,15 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 	
 	protected void wireOutboundHandlers(
 			Object processor,
-			Map<Connection, Consumer<Function<U, S>>> outboundHandlerConsumers,
+			Map<Connection, Consumer<H>> outboundHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 
 	}
 
-	protected Map<Connection, Function<T, R>> wireOutboundEndpoint(
+	protected Map<Connection, E> wireOutboundEndpoint(
 			Object processor, 
-			Map<Connection, Function<T, R>> outboundEndpoints,
+			Map<Connection, E> outboundEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return outboundEndpoints;
@@ -383,7 +388,7 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 
 	protected void wireOutboundEndpoints(
 			Object processor, 
-			Map<Connection, Function<T, R>> outboundEndpoints,
+			Map<Connection, E> outboundEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 
@@ -392,7 +397,7 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 	// Connection wiring
 	protected boolean wireTargetHandler(
 			Object processor, 
-			ConnectionProcessorConfig<P, T, R, U, S> connectionProcessorConfig, 
+			ConnectionProcessorConfig<P, H, E> connectionProcessorConfig, 
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return false;
@@ -400,7 +405,7 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 
 	protected boolean wireTargetEndpoint(
 			Object processor, 
-			Function<T, R> targetEndpoint, 
+			E targetEndpoint, 
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return false;
@@ -408,7 +413,7 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 
 	protected boolean wireSourceHandler(
 			Object processor, 
-			ConnectionProcessorConfig<P, T, R, U, S> connectionProcessorConfig,
+			ConnectionProcessorConfig<P, H, E> connectionProcessorConfig,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return false;
@@ -416,7 +421,7 @@ public abstract class ReflectiveProcessorFactory<P, T, R, U, S> implements Proce
 
 	protected boolean wireSourceEndpoint(
 			Object processor, 
-			Function<T, R> sourceEndpoint,
+			E sourceEndpoint,
 			IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
 		return false;

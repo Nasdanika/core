@@ -1,13 +1,21 @@
 package org.nasdanika.drawio.processor;
 
-import java.util.function.Function;
-
 import org.nasdanika.drawio.Connection;
 
-public interface NopEndpointProcessorFactory<P,T,R> extends ProcessorFactory<P,T,R,T,R> {
+/**
+ * Mix-in interface for processor factories with no-operation endpoints.
+ * @author Pavel
+ *
+ * @param <P> Processor type.
+ * @param <H> Handler type.
+ */
+public interface NopEndpointProcessorFactory<P,H> extends ProcessorFactory<P,H,H> {
 
+	/**
+	 * Returns argument handler.
+	 */
 	@Override
-	default Function<T, R> createEndpoint(Connection connection, Function<T, R> handler, EndpointType type) {
+	default H createEndpoint(Connection connection, H handler, HandlerType type) {
 		return handler;
 	}
 	
