@@ -1,0 +1,5 @@
+engineering-product:
+  name: Persistence
+  path: persistence
+  action-prototype: "../../javadoc-action-prototype.xml#/"
+      
