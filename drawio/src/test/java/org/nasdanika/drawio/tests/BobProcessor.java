@@ -3,18 +3,18 @@ package org.nasdanika.drawio.tests;
 import java.util.function.Function;
 
 import org.nasdanika.drawio.Connection;
-import org.nasdanika.drawio.processor.InboundHandler;
+import org.nasdanika.graph.processor.IncomingHandler;
 
 public class BobProcessor {
 	
-	@InboundHandler
+	@IncomingHandler
 	public Function<String,String> aliceInboundHandler(Connection connection) { 
 		return request -> {
 			return request + System.lineSeparator() + " [Bob] Hello, my name is Bob! What is yours?";
 		};
 	} 
 	
-//	@InboundHandler
+//	@IncomingHandler
 //	private Function<String,String> aliceInboundHandler = request -> {
 //		System.out.println("Request: " + request);
 //		return request + System.lineSeparator() + "[Bob] Hello, my name is Bob! What is yours?";

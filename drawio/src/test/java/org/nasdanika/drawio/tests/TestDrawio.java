@@ -34,12 +34,13 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
-import org.nasdanika.drawio.processor.ConnectionProcessorConfig;
-import org.nasdanika.drawio.processor.ElementProcessorConfig;
-import org.nasdanika.drawio.processor.ElementProcessorInfo;
-import org.nasdanika.drawio.processor.HandlerType;
-import org.nasdanika.drawio.processor.IntrospectionLevel;
-import org.nasdanika.drawio.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.ElementProcessorConfig;
+import org.nasdanika.graph.processor.ElementProcessorInfo;
+import org.nasdanika.graph.processor.HandlerType;
+import org.nasdanika.graph.processor.IntrospectionLevel;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.NopEndpointProcessorFactory;
 
 public class TestDrawio {
 
@@ -159,17 +160,17 @@ public class TestDrawio {
 		System.out.println(modelElement.getClass() + " " + modelElement.getLabel());
 		if (modelElement instanceof Node) {
 			Node node = (Node) modelElement;
-			List<Connection> outboundConnections = node.getOutgoingConnections();
-			if (!outboundConnections.isEmpty()) {
-				System.out.println(indent + "\tOutbound connections:");
-				for (Connection connection: outboundConnections) {
+			List<Connection> outcomingConnections = node.getOutgoingConnections();
+			if (!outcomingConnections.isEmpty()) {
+				System.out.println(indent + "\tOutgoing connections:");
+				for (Connection connection: outcomingConnections) {
 					Node target = connection.getTarget();
 					System.out.println(indent + "\t\t" + connection.getLabel() + " -> " + target.getLabel());
 				}
 			}
 			List<Connection> inboundConnections = node.getIncomingConnections();
 			if (!inboundConnections.isEmpty()) {
-				System.out.println(indent + "\tInbound connections:");
+				System.out.println(indent + "\tIncoming connections:");
 				for (Connection connection: inboundConnections) {
 					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + connection.getSource().getLabel());
 				}
@@ -374,26 +375,31 @@ public class TestDrawio {
 	@Test 
 	public void testProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.drawio.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.drawio.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
+			@Override
+			public Function<String, String> createHandlerProxy(org.nasdanika.graph.Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
+				return arg -> handlerSupplier.get().apply(arg);
+			}
+			
 			@Override
 			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config, Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
-					if ("Bob".equals(nodeProcessorConfig.getElement().getLabel())) {
+					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-						assertThat(nodeProcessorConfig.getOutboundEndpoints()).isEmpty();
-						assertThat(nodeProcessorConfig.getOutboundHandlerConsumers()).isEmpty();
-						assertThat(nodeProcessorConfig.getInboundEndpoints().size()).isEqualTo(1);
-						assertThat(nodeProcessorConfig.getInboundHandlerConsumers().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getOutgoingEndpoints()).isEmpty();
+						assertThat(nodeProcessorConfig.getOutgoingHandlerConsumers()).isEmpty();
+						assertThat(nodeProcessorConfig.getIncomingEndpoints().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getIncomingHandlerConsumers().size()).isEqualTo(1);
 						
 						// Bob ask Alice and then replies to Alice
-						nodeProcessorConfig.getInboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 							handlerConsumer.accept(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getInboundEndpoints().entrySet()) {
-									String myName = connection.getTarget().getLabel();
+								for (Entry<org.nasdanika.graph.Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
+									String myName = ((Node) connection.getTarget()).getLabel();
 									sb.append(inboundEndpoint.getValue().apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));
 								}
 								
@@ -404,36 +410,32 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.drawio.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
 			}
 
-			@Override
-			public Function<String, String> createHandlerProxy(Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
-				return arg -> handlerSupplier.get().apply(arg);
-			}
 			
 		};
 		
-		Map<Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document, null);
+		Map<org.nasdanika.graph.Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document);
 		Optional<ElementProcessorInfo<Object>> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorOptional.isPresent()).isTrue();
 		ElementProcessorInfo<Object> aliceProcessor = aliceProcessorOptional.get();
 		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) aliceProcessor.getConfig();
 		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-		assertThat(aliceNodeProcessorConfig.getInboundEndpoints()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getInboundHandlerConsumers()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getOutboundEndpoints().size()).isEqualTo(1);
-		assertThat(aliceNodeProcessorConfig.getOutboundHandlerConsumers().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
 		
-		aliceNodeProcessorConfig.getOutboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+		aliceNodeProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 			handlerConsumer.accept(request -> {
-				String myName = connection.getSource().getLabel();
+				String myName = ((Node) connection.getSource()).getLabel();
 				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
 			});
 		});
 
-		for (Entry<Connection, Function<String, String>> outboundEndpoint: aliceNodeProcessorConfig.getOutboundEndpoints().entrySet()) {
-			String dialog = outboundEndpoint.getValue().apply("[" + outboundEndpoint.getKey().getSource().getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Function<String, String>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			String dialog = outcomingEndpoint.getValue().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
 			System.out.println(dialog);
 		}
 	}
@@ -441,26 +443,26 @@ public class TestDrawio {
 	@Test 
 	public void testConnectionProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.drawio.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.drawio.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
 			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config, Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
-					if ("Bob".equals(nodeProcessorConfig.getElement().getLabel())) {
+					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-						assertThat(nodeProcessorConfig.getOutboundEndpoints()).isEmpty();
-						assertThat(nodeProcessorConfig.getOutboundHandlerConsumers()).isEmpty();
-						assertThat(nodeProcessorConfig.getInboundEndpoints().size()).isEqualTo(1);
-						assertThat(nodeProcessorConfig.getInboundHandlerConsumers().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getOutgoingEndpoints()).isEmpty();
+						assertThat(nodeProcessorConfig.getOutgoingHandlerConsumers()).isEmpty();
+						assertThat(nodeProcessorConfig.getIncomingEndpoints().size()).isEqualTo(1);
+						assertThat(nodeProcessorConfig.getIncomingHandlerConsumers().size()).isEqualTo(1);
 						
 						// Bob ask Alice and then replies to Alice
-						nodeProcessorConfig.getInboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 							handlerConsumer.accept(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getInboundEndpoints().entrySet()) {
-									String myName = connection.getTarget().getLabel();
+								for (Entry<org.nasdanika.graph.Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
+									String myName = ((Node) connection.getTarget()).getLabel();
 									sb.append(inboundEndpoint.getValue().apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));
 								}
 								
@@ -488,42 +490,42 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.drawio.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
 			}
 			
 			@Override
-			public boolean isPassThrough(Connection connection) {
+			public boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
 			}
-
+			
 			@Override
-			public Function<String, String> createHandlerProxy(Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
+			public Function<String, String> createHandlerProxy(org.nasdanika.graph.Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
 				return arg -> handlerSupplier.get().apply(arg);
 			}
 			
 		};
 		
-		Map<Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document, null);
+		Map<org.nasdanika.graph.Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document);
 
 		Optional<ElementProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
 		ElementProcessorInfo<Object> aliceProcessorInfo = aliceProcessorInfoOptional.get();
 		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) aliceProcessorInfo.getConfig();
 		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-		assertThat(aliceNodeProcessorConfig.getInboundEndpoints()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getInboundHandlerConsumers()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getOutboundEndpoints().size()).isEqualTo(1);
-		assertThat(aliceNodeProcessorConfig.getOutboundHandlerConsumers().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
 		
-		aliceNodeProcessorConfig.getOutboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+		aliceNodeProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 			handlerConsumer.accept(request -> {
-				String myName = connection.getSource().getLabel();
+				String myName = ((Node) connection.getSource()).getLabel();
 				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
 			});
 		});
 
-		for (Entry<Connection, Function<String, String>> outboundEndpoint: aliceNodeProcessorConfig.getOutboundEndpoints().entrySet()) {
-			String dialog = outboundEndpoint.getValue().apply("[" + outboundEndpoint.getKey().getSource().getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Function<String, String>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			String dialog = outcomingEndpoint.getValue().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
 			System.out.println(dialog);
 		}
 	}		
@@ -532,35 +534,35 @@ public class TestDrawio {
 	public void testReflectiveProcessorFactory() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 				
-		org.nasdanika.drawio.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.drawio.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<>(new AliceBobProcessorFactory(), IntrospectionLevel.DECLARED) {
+		org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<>(new AliceBobProcessorFactory(), IntrospectionLevel.DECLARED) {
 
 			@Override
-			public Class<?> getHandlerInterface(Connection connection, HandlerType type) {
+			public Class<?> getHandlerInterface(org.nasdanika.graph.Connection connection, HandlerType type) {
 				return Function.class;
 			}
 			
 		};	
-		Map<Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document, null);
+		Map<org.nasdanika.graph.Element, ElementProcessorInfo<Object>> registry = processorFactory.createProcessors(document);
 	
 		Optional<ElementProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
 		ElementProcessorInfo<Object> aliceProcessorInfo = aliceProcessorInfoOptional.get();
 		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) aliceProcessorInfo.getConfig();
 		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-		assertThat(aliceNodeProcessorConfig.getInboundEndpoints()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getInboundHandlerConsumers()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getOutboundEndpoints().size()).isEqualTo(1);
-		assertThat(aliceNodeProcessorConfig.getOutboundHandlerConsumers().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
+		assertThat(aliceNodeProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
+		assertThat(aliceNodeProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
 		
-		aliceNodeProcessorConfig.getOutboundHandlerConsumers().forEach((connection, handlerConsumer) -> {
+		aliceNodeProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 			handlerConsumer.accept(request -> {
-				String myName = connection.getSource().getLabel();
+				String myName = ((Node) connection.getSource()).getLabel();
 				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
 			});
 		});
 	
-		for (Entry<Connection, Function<String, String>> outboundEndpoint: aliceNodeProcessorConfig.getOutboundEndpoints().entrySet()) {
-			String dialog = outboundEndpoint.getValue().apply("[" + outboundEndpoint.getKey().getSource().getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, Function<String, String>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			String dialog = outcomingEndpoint.getValue().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
 			System.out.println(dialog);
 		}
 	}	

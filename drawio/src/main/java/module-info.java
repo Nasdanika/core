@@ -12,6 +12,7 @@ module org.nasdanika.drawio {
 	
 	requires transitive java.xml;
 	requires transitive java.desktop;
+	requires transitive org.nasdanika.graph;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.text;
 	requires org.apache.commons.lang3;
@@ -21,7 +22,6 @@ module org.nasdanika.drawio {
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;
-	exports org.nasdanika.drawio.processor;
 	
 	provides ElementComparator.Factory with LabelModelElementComparatorFactory, PropertyModelElementComparatorFactory, CartesianModelElementComparatorFactory, AngularModelElementComparatorFactory;
 	

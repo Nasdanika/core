@@ -17,7 +17,6 @@ module org.nasdanika.common {
 	requires org.jsoup;
 	requires commons.compiler;
 	requires org.apache.commons.lang3;
-	requires spring.expression;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;

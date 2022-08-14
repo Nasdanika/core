@@ -12,7 +12,7 @@ import org.eclipse.emf.common.util.URI;
  * @author Pavel
  *
  */
-public interface Element {
+public interface Element extends org.nasdanika.graph.Element {
 	
 	/**
 	 * @return The underlying XML element.
@@ -23,7 +23,7 @@ public interface Element {
 	 * Accepts the visitor in children first way.
 	 * @param visitor
 	 */
-	default void accept(Consumer<Element> visitor, ConnectionBase connectionBase) {
+	default void accept(Consumer<? super Element> visitor, ConnectionBase connectionBase) {
 		accept((e, cr) -> { visitor.accept(e); return null; }, connectionBase);
 	}
 	
@@ -34,12 +34,23 @@ public interface Element {
 	 * @return result returned by the visitor.
 	 */
 	<T> T accept(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase);
+		
+	@Override
+	default <T> T accept(BiFunction<? super org.nasdanika.graph.Element, Map<? extends org.nasdanika.graph.Element, T>, T> visitor) {
+		BiFunction<Element, Map<Element, T>, T> visitorAdapter = (element, childMappings) -> {
+			return visitor.apply(element, childMappings);
+		};
+		return accept(visitorAdapter, ConnectionBase.PARENT);
+	}
 	
 	/**
 	 * @return Stream containing this element and its children.
 	 */
 	default Stream<Element> stream(ConnectionBase connectionBase) {
-		return accept((BiFunction<Element, Map<Element, Stream<Element>>, Stream<Element>>) (e, cm) -> cm.values().stream().reduce(Stream.of(e), (a,b) -> Stream.concat(a, b)), connectionBase);
+		BiFunction<Element, Map<Element, Stream<Element>>, Stream<Element>> visitor = (element, childMappings) -> {
+			return childMappings.values().stream().reduce(Stream.of(element), (a,b) -> Stream.concat(a, b));
+		};
+		return accept(visitor, connectionBase);
 	}; 
 		
 	URI getURI();	

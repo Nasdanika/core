@@ -16,7 +16,7 @@ public interface Element {
 	 * Accepts the visitor in children first way.
 	 * @param visitor
 	 */
-	default void accept(Consumer<Element> visitor) {
+	default void accept(Consumer<? super Element> visitor) {
 		accept((e, cr) -> { visitor.accept(e); return null; });
 	}
 	
@@ -26,13 +26,16 @@ public interface Element {
 	 * @param visitor
 	 * @return result returned by the visitor.
 	 */
-	<T> T accept(BiFunction<Element, Map<Element, T>, T> visitor);
+	<T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor);
 	
 	/**
 	 * @return Stream containing this element and its children.
 	 */
 	default Stream<Element> stream() {
-		return accept((BiFunction<Element, Map<Element, Stream<Element>>, Stream<Element>>) (e, cm) -> cm.values().stream().reduce(Stream.of(e), (a,b) -> Stream.concat(a, b)));
+		BiFunction<Element, Map<? extends Element, Stream<Element>>, Stream<Element>> visitor = (element, childMappings) -> {
+			return childMappings.values().stream().reduce(Stream.of(element), (a,b) -> Stream.concat(a, b));
+		};
+		return accept(visitor);
 	}; 
 
 }

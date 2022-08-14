@@ -133,13 +133,13 @@ public final class Util {
 	 * @return
 	 */
 	private static int[] affinity(ModelElement element, Collection<ModelElement> elements) {
-		int[] outbound = { 0 };
+		int[] outgoing = { 0 };
 		element.accept(e -> {
 			if (e instanceof Connection) {
 				Node target = ((Connection) e).getTarget();
 				for (ModelElement oe: elements) {
 					if (isSameOrAncestor(target, oe)) {
-						++outbound[0];
+						++outgoing[0];
 					}
 				}
 			}
@@ -157,7 +157,7 @@ public final class Util {
 			}
 		}, ConnectionBase.TARGET);
 		
-		return new int[] { outbound[0], inbound[0] };
+		return new int[] { outgoing[0], inbound[0] };
 	}
 	
 	/**
@@ -356,7 +356,7 @@ public final class Util {
 	 * @param connectionBase Connection base for visiting linked pages.
 	 * @return Visitor which passes itself to linked pages and adds linked pages' result to child results.
 	 */
-	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkedPages(BiFunction<Element, Map<Element, T>, T> visitor, ConnectionBase connectionBase) {
+	public static <T> BiFunction<Element, Map<Element, T>, T> withLinkedPages(BiFunction<? super Element, Map<? extends Element, T>, T> visitor, ConnectionBase connectionBase) {
 		return new BiFunction<Element, Map<Element, T>, T>() {
 
 			@Override

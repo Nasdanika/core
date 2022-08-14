@@ -242,7 +242,7 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 	 * @param element
 	 * @param childEntries
 	 */
-	protected abstract T createSemanticElement(Resource resource, Element element, Map<Element, ElementEntry<T>> childEntries);
+	protected abstract T createSemanticElement(Resource resource, Element element, Map<? extends Element, ElementEntry<T>> childEntries);
 	
 	/**
 	 * Resolve references after all elements have been created.
@@ -283,13 +283,13 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 		return new ElementAdapterImpl();
 	}
 
-	protected ElementEntry<T> createEntry(Resource resource, Element element, Map<Element, ElementEntry<T>> childMappings) {
-		if (childMappings != null && !childMappings.isEmpty()) {
+	protected ElementEntry<T> createEntry(Resource resource, Element element, Map<Element, ElementEntry<T>> childResults) {
+		if (childResults != null && !childResults.isEmpty()) {
 			Comparator<Element> childComparator = getChildComparator(element);
 			if (childComparator != null) {
 				Map<Element, ElementEntry<T>> orderedChildMappings = new LinkedHashMap<>();
-				childMappings.entrySet().stream().sorted((a, b) -> childComparator.compare(a.getKey(), b.getKey())).forEachOrdered(e -> orderedChildMappings.put(e.getKey(), e.getValue()));
-				childMappings = orderedChildMappings;
+				childResults.entrySet().stream().sorted((a, b) -> childComparator.compare(a.getKey(), b.getKey())).forEachOrdered(e -> orderedChildMappings.put(e.getKey(), e.getValue()));
+				childResults = orderedChildMappings;
 			}
 		}
 		
@@ -301,13 +301,13 @@ public abstract class DrawioResourceFactory<T> extends ResourceFactoryImpl {
 				ElementEntry<T> linkedPageMapping = linkedPage.accept(drawioResource::createEntry, connectionBase);
 				Map<Element, ElementEntry<T>> linkedPageChildMappings = getLinkedPageChildMappings(resource, linkedPage, linkedPageMapping);
 				if (linkedPageChildMappings != null && !linkedPageChildMappings.isEmpty()) {
-					childMappings = childMappings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(childMappings);
-					childMappings.putAll(linkedPageChildMappings);
+					childResults = childResults == null ? new LinkedHashMap<>() : new LinkedHashMap<>(childResults);
+					childResults.putAll(linkedPageChildMappings);
 				}				
 			}
 		}
 
-		Map<Element, ElementEntry<T>> theChildMappings = childMappings;
+		Map<Element, ElementEntry<T>> theChildMappings = childResults;
 		T semanticElement = createSemanticElement(resource, element, theChildMappings);
 		return new ElementEntry<T>() {
 			
