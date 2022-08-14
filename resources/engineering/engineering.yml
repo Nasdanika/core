@@ -1,0 +1,5 @@
+engineering-product:
+  name: Resources
+  path: resources
+  action-prototype: "../../javadoc-action-prototype.xml#/"
+      
