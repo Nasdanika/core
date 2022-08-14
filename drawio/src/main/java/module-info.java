@@ -14,6 +14,7 @@ module org.nasdanika.drawio {
 	requires transitive java.desktop;
 	requires org.apache.commons.codec;
 	requires org.apache.commons.text;
+	requires org.apache.commons.lang3;
 	requires transitive org.nasdanika.common;
 	requires org.eclipse.emf.common;
 	requires org.jsoup;

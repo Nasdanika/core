@@ -18,7 +18,7 @@ class NodeImpl extends LayerImpl implements Node {
 	}
 
 	@Override
-	public List<Connection> getInboundConnections() {
+	public List<Connection> getIncomingConnections() {
 		Predicate<org.w3c.dom.Element> predicate = me -> element.hasAttribute(ATTRIBUTE_ID) 
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_TARGET) 
 				&& getCellElement(me).getAttribute(ATTRIBUTE_TARGET).equals(element.getAttribute(ATTRIBUTE_ID));
@@ -27,7 +27,7 @@ class NodeImpl extends LayerImpl implements Node {
 	}
 
 	@Override
-	public List<Connection> getOutboundConnections() {
+	public List<Connection> getOutgoingConnections() {
 		Predicate<org.w3c.dom.Element> predicate = 
 				me -> element.hasAttribute(ATTRIBUTE_ID) 
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_SOURCE) 
@@ -64,9 +64,9 @@ class NodeImpl extends LayerImpl implements Node {
 	protected List<? extends org.nasdanika.drawio.Element> getLogicalChildren(ConnectionBase connectionBase) {
 		List<org.nasdanika.drawio.Element> logicalChildren = new ArrayList<>(super.getLogicalChildren(connectionBase));
 		if (connectionBase == ConnectionBase.SOURCE) {
-			logicalChildren.addAll(getOutboundConnections());
+			logicalChildren.addAll(getOutgoingConnections());
 		} else if (connectionBase == ConnectionBase.TARGET) {
-			logicalChildren.addAll(getInboundConnections());			
+			logicalChildren.addAll(getIncomingConnections());			
 		}
 		return logicalChildren;
 	}

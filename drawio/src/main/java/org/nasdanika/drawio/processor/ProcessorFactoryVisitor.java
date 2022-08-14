@@ -54,7 +54,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 			Node node = (Node) element;
 			Map<Connection, E> inboundEndpoints = new HashMap<>();
 			Map<Connection, Consumer<H>> inboundHandlerConsumers = new HashMap<>();
-			for (Connection inboundConnection: node.getInboundConnections()) {
+			for (Connection inboundConnection: node.getIncomingConnections()) {
 				Supplier<H> inboundHandlerSupplier = () -> {
 					if (factory.isPassThrough(inboundConnection)) {
 						// Returning outbound handler directly as there is no target handler
@@ -90,7 +90,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 			
 			Map<Connection, E> outboundEndpoints = new HashMap<>();
 			Map<Connection, Consumer<H>> outboundHandlerConsumers = new HashMap<>();
-			for (Connection outboundConnection: node.getOutboundConnections()) {
+			for (Connection outboundConnection: node.getOutgoingConnections()) {
 				Supplier<H> outboundHandlerSupplier = () -> {
 					if (factory.isPassThrough(outboundConnection)) {
 						// Calling inbound handler directly as there is no source handler

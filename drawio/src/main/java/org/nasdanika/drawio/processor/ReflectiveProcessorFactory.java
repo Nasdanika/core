@@ -4,6 +4,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import org.apache.commons.text.WordUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
@@ -308,8 +309,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	 * @return
 	 */
 	protected boolean matchInboundHandler(AnnotatedElement handlerMember, Connection inboundConnection) {
-		InboundHandler inboundHanlderAnnotation = handlerMember.getAnnotation(InboundHandler.class);
-		if (inboundHanlderAnnotation == null) {
+		InboundHandler inboundHandlerAnnotation = handlerMember.getAnnotation(InboundHandler.class);
+		if (inboundHandlerAnnotation == null) {
 			return false;
 		}
 		
@@ -355,6 +356,38 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 //		 */
 //		String[] sourceSelector() default {};
 		
+		String value = inboundHandlerAnnotation.value();		
+		String[] selector = inboundHandlerAnnotation.selector();
+		
+		String sourceValue = inboundHandlerAnnotation.source();
+		String[] sourceSelector = inboundHandlerAnnotation.sourceSelector();
+		
+		String elementValue = getElementValue(inboundConnection);		
+		if (!Util.isBlank(elementValue)) {
+			// Matching value
+			if (Util.isBlank(value)) {
+				if (selector.length == 0 && sourceSelector.length == 0) {
+					// Using method name value
+					String methodName = method.getName();
+					if (!methodName.startsWith("create")) {
+						return false;
+					}
+					if (!methodName.endsWith("Processor")) {
+						return false;
+					}
+					String methodNameValue = memberNameToValue(methodName.substring("create".length(), methodName.length() - "Processor".length()));
+					if (!elementValue.endsWith(methodNameValue)) {
+						return false;
+					}
+				}
+			} else if (!value.equals(elementValue)) {
+				return false;
+			}
+		}		
+		
+		return matchSelector(inboundConnection, method, elementProcessorAnnotation.selector());
+		
+		
 		return true;
 	}
 	
@@ -370,6 +403,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		// Streaming fields and methods and then flat mapping them to all permutations with inbound handler consumers.
 		// then filtering using matchInboundHandler, sorting by priority, finding first, wiring it and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> inboundHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
 			.filter(e -> matchInboundHandler(e.getKey(), e.getValue().getKey()))
 			.sorted((a, b) -> b.getKey().getAnnotation(InboundHandler.class).priority() - a.getKey().getAnnotation(InboundHandler.class).priority())
@@ -519,34 +553,43 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		String value = elementProcessorAnnotation.value();		
 		String[] selector = elementProcessorAnnotation.selector();
 		
-		String elementLabel = null;		
-		if (element instanceof ModelElement) {
-			elementLabel = ((ModelElement) element).getLabel(); 
-		} else if (element instanceof Page) {
-			elementLabel = ((Page) element).getName();
-		}
-		
-		if (!Util.isBlank(elementLabel)) {
-			elementLabel = Jsoup.parse(elementLabel).text();
-			
+		String elementValue = getElementValue(element);		
+		if (!Util.isBlank(elementValue)) {
 			// Matching value
 			if (Util.isBlank(value)) {
 				if (selector.length == 0) {
-					String methodName = labelToMethodName(elementLabel);
-					if (!method.getName().equals(methodName)) {
+					// Using method name value
+					String methodName = method.getName();
+					if (!methodName.startsWith("create")) {
+						return false;
+					}
+					if (!methodName.endsWith("Processor")) {
+						return false;
+					}
+					String methodNameValue = memberNameToValue(methodName.substring("create".length(), methodName.length() - "Processor".length()));
+					if (!elementValue.endsWith(methodNameValue)) {
 						return false;
 					}
 				}
-			} else if (!value.equals(elementLabel)) {
+			} else if (!value.equals(elementValue)) {
 				return false;
 			}
 		}		
 		
-		// Matching selector
+		return matchSelector(elementProcessorConfig.getElement(), method, elementProcessorAnnotation.selector());
+	}
+	
+	/**
+	 * Matches selector against element properties
+	 * @param element
+	 * @param selector
+	 * @return
+	 */
+	protected boolean matchSelector(Element element, Member member, String[] selector) {
 		for (String selectorElement: selector) {
 			int equalsIdx = selectorElement.indexOf("=");
 			if (equalsIdx == -1) {
-				throw new IllegalArgumentException("Selector shall be in the form of <property>=<value pattern>. Method: " + method);				
+				throw new IllegalArgumentException("Selector shall be in the form of <property>=<value pattern>: " + member);				
 			}
 			if (element instanceof ModelElement) {
 				ModelElement modelElement = (ModelElement) element;
@@ -570,14 +613,45 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		
 		return true;
 	}
-	
-	protected String labelToMethodName(String label) {
-		String[] la = label.split("\\s+");
-		for (int i = 0; i < la.length; ++i) {
-			la[i] = i== 0 ? WordUtils.uncapitalize(la[i]) : WordUtils.capitalize(la[i]);
+
+	/**
+	 * @param element
+	 * @return Some element information to match with value, target or source in wiring annotations. This implementation returns label text stripped of HTML markup for model elements and name for pages.
+	 * Override to return something else. For example, a value of <code>implementation</code> property. This would allow to have a "library" of implementations and map diagram elements to implementations. 
+	 */
+	protected String getElementValue(Element element) {
+		if (element instanceof Page) {
+			return ((Page) element).getName();
 		}
-		return String.join("", la);
+		if (element instanceof ModelElement) {
+			String label = ((ModelElement) element).getLabel();
+			return Util.isBlank(label) ? null : Jsoup.parse(label).text();
+		}
+		return null;
 	}
+	
+	/**
+	 * Converts member name to value to match by splitting by camel case, lower casing 2+ words and joining with space.
+	 * For example, <code>helloWorld</code> would become <code>Hello world</code>. 
+	 * Say, remove <code>get</code> prefix from getter methods.  
+	 * @param member
+	 * @return
+	 */
+	protected String memberNameToValue(String memberName) {
+		String[] words = StringUtils.splitByCharacterTypeCamelCase(memberName);
+		for (int i = 1; i < words.length; ++i) {
+			words[i] = words[i].toLowerCase();
+		}
+		return String.join(" ", words);
+	}
+	
+//	protected String labelToMethodName(String label) {
+//		String[] la = label.split("\\s+");
+//		for (int i = 0; i < la.length; ++i) {
+//			la[i] = i== 0 ? WordUtils.uncapitalize(la[i]) : WordUtils.capitalize(la[i]);
+//		}
+//		return String.join("", la);
+//	}
 	
 	/**
 	 * @return A stream of methods. Accessible methods for the introspection level ACCESSIBLE and declared methods from the class and all super classes and implemented interfaces for the introspection level DECLARED.

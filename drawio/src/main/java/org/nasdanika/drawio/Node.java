@@ -2,11 +2,11 @@ package org.nasdanika.drawio;
 
 import java.util.List;
 
-public interface Node extends Layer {
+public interface Node extends Layer, org.nasdanika.graph.Node {
 	
-	List<Connection> getInboundConnections();
+	List<Connection> getIncomingConnections();
 	
-	List<Connection> getOutboundConnections();	
+	List<Connection> getOutgoingConnections();	
 		
 	Rectangle getGeometry();
 

@@ -1,7 +1,6 @@
 package org.nasdanika.common;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Array;
@@ -10,7 +9,6 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,8 +19,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.script.ScriptException;
 
 /**
  * A generic source of contextual information keyed by a {@link String} - property, or a {@link Class} (type) - service. 
@@ -821,38 +817,6 @@ public interface Context extends Composeable<Context> {
 			}
 			
 		};
-	}
-		
-	/**
-	 * Evaluates Javascript with this context as <code>context</code> binding.
-	 * @param script Script
-	 * @return Evaluation result
-	 * @throws ScriptException 
-	 */
-	default Object eval(String script) {
-		return Util.eval(script, Collections.singletonMap("context", this));
-	}
-	
-	/**
-	 * Evaluates Javascript with this context as <code>context</code> binding.
-	 * @param script Script
-	 * @return Evaluation result
-	 * @throws IOException 
-	 * @throws Exception 
-	 */
-	default Object eval(InputStream script) throws IOException {
-		return eval(DefaultConverter.INSTANCE.toString(script));
-	}
-	
-	/**
-	 * Evaluates Javascript with this context as <code>context</code> binding.
-	 * @param script Script
-	 * @return Evaluation result
-	 * @throws ScriptException 
-	 */
-	default Object eval(URL script) {
-		return eval(DefaultConverter.INSTANCE.toString(script));
-	}
-	
+	}	
 	
 }

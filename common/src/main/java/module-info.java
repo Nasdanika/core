@@ -7,7 +7,6 @@ module org.nasdanika.common {
 	requires transitive org.eclipse.emf.ecore;
 	requires transitive org.yaml.snakeyaml;
 	requires java.scripting;
-	requires janino;
 	requires flexmark;
 	requires flexmark.profile.pegdown;
 	requires flexmark.util.ast;
@@ -18,11 +17,9 @@ module org.nasdanika.common {
 	requires org.jsoup;
 	requires commons.compiler;
 	requires org.apache.commons.lang3;
-	requires org.mozilla.rhino;
+	requires spring.expression;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;
-	exports org.nasdanika.common.persistence;
-	exports org.nasdanika.common.resources;
 	
 }

@@ -24,10 +24,9 @@ import org.nasdanika.drawio.Page;
 public @interface ElementProcessor {
 	
 	/**
-	 * If not blank value is used to match {@link ModelElement} label or {@link Page} name.
-	 * If blank and selector is not provided, then model element label is converted to camel case by 
-	 * lower casing the first word, upper casing the rest and concatenating them. E.g. "Hello world" would become "helloWorld".
-	 * The resulting string is used to match method name. If selector is set and value is blank then value is not used.
+	 * If not blank value is used to match value returned by getElementValue() method of {@ReflectiveProcessorFactory}, which is with default implementation is {@link ModelElement} label or {@link Page} name.
+	 * If this value is blank and selector is not provided, then default value is provided from the annotated method using memberNameToValue() method of ReflectiveProcessorFactory with preprocessor removing "create" prefix and "Processor" suffix.
+	 * E.g. <code>createHelloWorldProcessor</code> will be converted to <code>Hello world</code> 
 	 * @return
 	 */
 	String value() default "";

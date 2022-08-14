@@ -159,7 +159,7 @@ public class TestDrawio {
 		System.out.println(modelElement.getClass() + " " + modelElement.getLabel());
 		if (modelElement instanceof Node) {
 			Node node = (Node) modelElement;
-			List<Connection> outboundConnections = node.getOutboundConnections();
+			List<Connection> outboundConnections = node.getOutgoingConnections();
 			if (!outboundConnections.isEmpty()) {
 				System.out.println(indent + "\tOutbound connections:");
 				for (Connection connection: outboundConnections) {
@@ -167,7 +167,7 @@ public class TestDrawio {
 					System.out.println(indent + "\t\t" + connection.getLabel() + " -> " + target.getLabel());
 				}
 			}
-			List<Connection> inboundConnections = node.getInboundConnections();
+			List<Connection> inboundConnections = node.getIncomingConnections();
 			if (!inboundConnections.isEmpty()) {
 				System.out.println(indent + "\tInbound connections:");
 				for (Connection connection: inboundConnections) {

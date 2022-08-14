@@ -10,8 +10,7 @@ public class BobProcessor {
 	@InboundHandler
 	public Function<String,String> aliceInboundHandler(Connection connection) { 
 		return request -> {
-			System.out.println("Request: " + request);
-			return request + System.lineSeparator() + connection + " [Bob] Hello, my name is Bob! What is yours?";
+			return request + System.lineSeparator() + " [Bob] Hello, my name is Bob! What is yours?";
 		};
 	} 
 	

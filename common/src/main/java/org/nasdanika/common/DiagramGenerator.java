@@ -6,11 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.apache.commons.codec.binary.Hex;
-import org.nasdanika.common.resources.Container;
 
 /**
  * Generates PlantUML diagrams.
@@ -134,49 +129,49 @@ public interface DiagramGenerator extends Composeable<DiagramGenerator> {
 		return generateDiagram(spec, MERMAID_DIALECT);
 	}
 	
-	/**
-	 * Creates a diagram generator facading this one and cacheing generated diagrams by dialect and diagram text SHA-256 digest.
-	 * @param container
-	 * @param progressMonitor
-	 * @return
-	 */
-	default DiagramGenerator cachingDiagramGenerator(Container<String> container, ProgressMonitor progressMonitor) {
-		
-		return new DiagramGenerator() {
-			
-			private int hits;
-			private int misses;
-
-			@Override
-			public String generateDiagram(String spec, String dialect) {
-				try {
-					String cachePath = dialect + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
-					Object ret = container.find(cachePath, progressMonitor);
-					if (ret instanceof String) {
-						++hits;
-						return (String) ret;
-					}
-					String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
-					container.put(cachePath, diagram, progressMonitor);
-					++misses;
-					return diagram;
-				} catch (NoSuchAlgorithmException e) {
-					throw new NasdanikaException(e);
-				}
-			}
-			
-			@Override
-			public String toString() {
-				return super.toString() + " hits: " + hits + ", misses: " + misses;
-			}
-
-			@Override
-			public boolean isSupported(String dialect) {
-				return DiagramGenerator.this.isSupported(dialect);
-			}
-			
-		};
-	}
+//	/**
+//	 * Creates a diagram generator facading this one and cacheing generated diagrams by dialect and diagram text SHA-256 digest.
+//	 * @param container
+//	 * @param progressMonitor
+//	 * @return
+//	 */
+//	default DiagramGenerator cachingDiagramGenerator(Container<String> container, ProgressMonitor progressMonitor) {
+//		
+//		return new DiagramGenerator() {
+//			
+//			private int hits;
+//			private int misses;
+//
+//			@Override
+//			public String generateDiagram(String spec, String dialect) {
+//				try {
+//					String cachePath = dialect + "/" + Hex.encodeHexString(MessageDigest.getInstance("SHA-256").digest(spec.getBytes(StandardCharsets.UTF_8))) + ".html";
+//					Object ret = container.find(cachePath, progressMonitor);
+//					if (ret instanceof String) {
+//						++hits;
+//						return (String) ret;
+//					}
+//					String diagram = DiagramGenerator.this.generateDiagram(spec, dialect);
+//					container.put(cachePath, diagram, progressMonitor);
+//					++misses;
+//					return diagram;
+//				} catch (NoSuchAlgorithmException e) {
+//					throw new NasdanikaException(e);
+//				}
+//			}
+//			
+//			@Override
+//			public String toString() {
+//				return super.toString() + " hits: " + hits + ", misses: " + misses;
+//			}
+//
+//			@Override
+//			public boolean isSupported(String dialect) {
+//				return DiagramGenerator.this.isSupported(dialect);
+//			}
+//			
+//		};
+//	}
 	
 	@Override
 	default DiagramGenerator compose(DiagramGenerator other) {
