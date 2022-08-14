@@ -15,8 +15,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -108,11 +106,11 @@ public class NcoreValidator extends EObjectValidator {
 			case NcorePackage.ADAPTABLE:
 				return validateAdaptable((Adaptable)value, diagnostics, context);
 			case NcorePackage.IMARKED:
-				return validateIMarked((Marked)value, diagnostics, context);
+				return validateIMarked((org.nasdanika.persistence.Marked)value, diagnostics, context);
 			case NcorePackage.MARKED:
 				return validateMarked((org.nasdanika.ncore.Marked)value, diagnostics, context);
 			case NcorePackage.IMARKER:
-				return validateIMarker((Marker)value, diagnostics, context);
+				return validateIMarker((org.nasdanika.persistence.Marker)value, diagnostics, context);
 			case NcorePackage.MARKER:
 				return validateMarker((org.nasdanika.ncore.Marker)value, diagnostics, context);
 			case NcorePackage.TEMPORAL:
@@ -180,7 +178,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIMarked(Marked iMarked, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarked(org.nasdanika.persistence.Marked iMarked, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)iMarked, diagnostics, context);
 	}
 
@@ -198,7 +196,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIMarker(Marker iMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarker(org.nasdanika.persistence.Marker iMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)iMarker, diagnostics, context);
 	}
 

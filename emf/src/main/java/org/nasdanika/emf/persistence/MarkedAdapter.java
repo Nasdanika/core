@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 
 public class MarkedAdapter extends AdapterImpl implements Marked {
 	

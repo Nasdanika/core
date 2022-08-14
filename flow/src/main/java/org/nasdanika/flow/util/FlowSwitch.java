@@ -1099,7 +1099,7 @@ public class FlowSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseIMarked(org.nasdanika.common.persistence.Marked object) {
+	public T1 caseIMarked(org.nasdanika.persistence.Marked object) {
 		return null;
 	}
 

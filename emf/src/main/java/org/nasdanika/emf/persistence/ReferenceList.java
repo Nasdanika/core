@@ -13,12 +13,12 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.ListAttribute;
-import org.nasdanika.common.persistence.MarkedArrayList;
-import org.nasdanika.common.persistence.MarkedLinkedHashMap;
-import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.ListAttribute;
+import org.nasdanika.persistence.MarkedArrayList;
+import org.nasdanika.persistence.MarkedLinkedHashMap;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Loads a list of references using loader.

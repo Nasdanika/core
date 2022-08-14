@@ -71,11 +71,12 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 					Map<String,Object> bindings = new HashMap<>(input.getSecond());
 					bindings.put(CONTEXT_BINDING, context);
 					bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);					
-					try {
-						return Util.eval(input.getFirst(), bindings);
-					} catch (IOException e) {
-						throw new ExecutionException(e, this);
-					}
+					throw new UnsupportedOperationException("TODO - implement with Spring Expression language or drop eval");
+//					try {
+//						return Util.eval(input.getFirst(), bindings);
+//					} catch (IOException e) {
+//						throw new ExecutionException(e, this);
+//					}
 				}
 			};
 			

@@ -9,8 +9,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -89,7 +87,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createAdaptableAdapter();
 			}
 			@Override
-			public Adapter caseIMarked(Marked object) {
+			public Adapter caseIMarked(org.nasdanika.persistence.Marked object) {
 				return createIMarkedAdapter();
 			}
 			@Override
@@ -97,7 +95,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createMarkedAdapter();
 			}
 			@Override
-			public Adapter caseIMarker(Marker object) {
+			public Adapter caseIMarker(org.nasdanika.persistence.Marker object) {
 				return createIMarkerAdapter();
 			}
 			@Override
@@ -223,13 +221,13 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.persistence.Marked <em>IMarked</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.persistence.Marked <em>IMarked</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.persistence.Marked
+	 * @see org.nasdanika.persistence.Marked
 	 * @generated
 	 */
 	public Adapter createIMarkedAdapter() {
@@ -251,13 +249,13 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.persistence.Marker <em>IMarker</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.nasdanika.common.persistence.Marker
+	 * @see org.nasdanika.persistence.Marker
 	 * @generated
 	 */
 	public Adapter createIMarkerAdapter() {

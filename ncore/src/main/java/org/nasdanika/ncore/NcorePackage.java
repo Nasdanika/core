@@ -89,10 +89,10 @@ public interface NcorePackage extends EPackage {
 	int ADAPTABLE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.common.persistence.Marked <em>IMarked</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.persistence.Marked <em>IMarked</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.common.persistence.Marked
+	 * @see org.nasdanika.persistence.Marked
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIMarked()
 	 * @generated
 	 */
@@ -154,10 +154,10 @@ public interface NcorePackage extends EPackage {
 	int MARKED_OPERATION_COUNT = IMARKED_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.persistence.Marker <em>IMarker</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.common.persistence.Marker
+	 * @see org.nasdanika.persistence.Marker
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIMarker()
 	 * @generated
 	 */
@@ -1514,12 +1514,12 @@ public interface NcorePackage extends EPackage {
 	EClass getAdaptable();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.common.persistence.Marked <em>IMarked</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.persistence.Marked <em>IMarked</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>IMarked</em>'.
-	 * @see org.nasdanika.common.persistence.Marked
-	 * @model instanceClass="org.nasdanika.common.persistence.Marked"
+	 * @see org.nasdanika.persistence.Marked
+	 * @model instanceClass="org.nasdanika.persistence.Marked"
 	 * @generated
 	 */
 	EClass getIMarked();
@@ -1546,12 +1546,12 @@ public interface NcorePackage extends EPackage {
 	EReference getMarked_Markers();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.persistence.Marker <em>IMarker</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>IMarker</em>'.
-	 * @see org.nasdanika.common.persistence.Marker
-	 * @model instanceClass="org.nasdanika.common.persistence.Marker"
+	 * @see org.nasdanika.persistence.Marker
+	 * @model instanceClass="org.nasdanika.persistence.Marker"
 	 * @generated
 	 */
 	EClass getIMarker();
@@ -2340,10 +2340,10 @@ public interface NcorePackage extends EPackage {
 		EClass ADAPTABLE = eINSTANCE.getAdaptable();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.common.persistence.Marked <em>IMarked</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.persistence.Marked <em>IMarked</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.common.persistence.Marked
+		 * @see org.nasdanika.persistence.Marked
 		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIMarked()
 		 * @generated
 		 */
@@ -2368,10 +2368,10 @@ public interface NcorePackage extends EPackage {
 		EReference MARKED__MARKERS = eINSTANCE.getMarked_Markers();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.common.persistence.Marker <em>IMarker</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.persistence.Marker <em>IMarker</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.common.persistence.Marker
+		 * @see org.nasdanika.persistence.Marker
 		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIMarker()
 		 * @generated
 		 */

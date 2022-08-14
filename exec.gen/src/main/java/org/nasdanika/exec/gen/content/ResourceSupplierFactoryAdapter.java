@@ -19,8 +19,8 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.common.persistence.Marker;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.content.Resource;
 

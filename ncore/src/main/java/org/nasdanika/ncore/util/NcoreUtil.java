@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.LoadTracker;
+import org.nasdanika.persistence.LoadTracker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;

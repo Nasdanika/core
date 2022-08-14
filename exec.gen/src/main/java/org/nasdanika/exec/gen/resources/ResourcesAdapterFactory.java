@@ -1,7 +1,7 @@
 package org.nasdanika.exec.gen.resources;
 
 import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.resources.Container;

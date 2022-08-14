@@ -19,8 +19,8 @@ import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ObjectLoader;
-import org.nasdanika.common.persistence.Storable;
+import org.nasdanika.persistence.ObjectLoader;
+import org.nasdanika.persistence.Storable;
 import org.nasdanika.emf.EObjectAdaptable;
 
 /**

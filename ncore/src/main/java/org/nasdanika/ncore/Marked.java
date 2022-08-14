@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *        annotation="urn:org.nasdanika documentation-reference='doc/marked.md'"
  * @generated
  */
-public interface Marked extends EObject, org.nasdanika.common.persistence.Marked {
+public interface Marked extends EObject, org.nasdanika.persistence.Marked {
 	/**
 	 * Returns the value of the '<em><b>Markers</b></em>' containment reference list.
 	 * The list contents are of type {@link org.nasdanika.ncore.Marker}.

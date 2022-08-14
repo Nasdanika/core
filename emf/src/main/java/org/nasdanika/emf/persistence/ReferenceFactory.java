@@ -27,10 +27,10 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ConfigurationException;
-import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.persistence.ObjectFactory;
-import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.ObjectFactory;
+import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.yaml.snakeyaml.Yaml;
 
@@ -177,7 +177,7 @@ public class ReferenceFactory implements ObjectFactory<List<?>> {
 			
 			if (filesetSpec instanceof Map) {
 				Map<String,Object> specMap = (Map<String,Object>) filesetSpec;
-				org.nasdanika.common.Util.checkUnsupportedKeys(specMap, FILESET_BASE_KEY, FILESET_INCLUDE_KEY, FILESET_EXCLUDE_KEY);
+				org.nasdanika.persistence.Util.checkUnsupportedKeys(specMap, FILESET_BASE_KEY, FILESET_INCLUDE_KEY, FILESET_EXCLUDE_KEY);
 				Object fsBase = specMap.get(FILESET_BASE_KEY);
 				if (fsBase == null || fsBase instanceof String) {
 					URI fsBaseURI = fsBase == null ? base : URI.createFileURI((String) fsBase).resolve(base);

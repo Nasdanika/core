@@ -60,7 +60,7 @@
 	<dependencies>	
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

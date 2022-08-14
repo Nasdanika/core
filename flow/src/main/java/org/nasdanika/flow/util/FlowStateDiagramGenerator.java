@@ -16,7 +16,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.diagram.Connection;
 import org.nasdanika.diagram.Diagram;
 import org.nasdanika.diagram.DiagramElement;

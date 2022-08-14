@@ -8,9 +8,9 @@ import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
-import org.nasdanika.common.resources.BinaryEntity;
-import org.nasdanika.common.resources.BinaryEntityContainer;
-import org.nasdanika.common.resources.EphemeralBinaryEntityContainer;
+import org.nasdanika.resources.BinaryEntity;
+import org.nasdanika.resources.BinaryEntityContainer;
+import org.nasdanika.resources.EphemeralBinaryEntityContainer;
 import org.nasdanika.exec.gen.tests.TestBase;
 
 /**

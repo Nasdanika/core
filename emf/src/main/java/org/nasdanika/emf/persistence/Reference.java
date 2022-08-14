@@ -9,9 +9,9 @@ import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.persistence.Attribute;
-import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.persistence.Attribute;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Single value reference.

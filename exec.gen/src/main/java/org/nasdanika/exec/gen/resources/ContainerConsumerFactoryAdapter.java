@@ -12,7 +12,7 @@ import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.CollectionCompoundConsumerFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.resources.Container;
 

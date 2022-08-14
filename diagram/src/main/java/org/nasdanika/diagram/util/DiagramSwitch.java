@@ -8,7 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.persistence.Marked;
+import org.nasdanika.persistence.Marked;
 import org.nasdanika.diagram.*;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;

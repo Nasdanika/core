@@ -12,7 +12,7 @@ import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Creates {@link YamlResource}

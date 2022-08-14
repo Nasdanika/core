@@ -7,8 +7,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.common.persistence.Marked;
-import org.nasdanika.common.persistence.Marker;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -90,7 +88,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				return result;
 			}
 			case NcorePackage.IMARKED: {
-				Marked iMarked = (Marked)theEObject;
+				org.nasdanika.persistence.Marked iMarked = (org.nasdanika.persistence.Marked)theEObject;
 				T1 result = caseIMarked(iMarked);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -103,7 +101,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				return result;
 			}
 			case NcorePackage.IMARKER: {
-				Marker iMarker = (Marker)theEObject;
+				org.nasdanika.persistence.Marker iMarker = (org.nasdanika.persistence.Marker)theEObject;
 				T1 result = caseIMarker(iMarker);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -299,7 +297,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseIMarked(Marked object) {
+	public T1 caseIMarked(org.nasdanika.persistence.Marked object) {
 		return null;
 	}
 
@@ -329,7 +327,7 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseIMarker(Marker object) {
+	public T1 caseIMarker(org.nasdanika.persistence.Marker object) {
 		return null;
 	}
 

@@ -12,9 +12,9 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.persistence.MapAttribute;
-import org.nasdanika.common.persistence.Marker;
-import org.nasdanika.common.persistence.ObjectLoader;
+import org.nasdanika.persistence.MapAttribute;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Loads {@link EMap} of references using loader.

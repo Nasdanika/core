@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NcorePackage;
@@ -346,15 +346,15 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				}
 			}
 		}		
-		List<? extends org.nasdanika.common.persistence.Marker> pMarkers = new ArrayList<>();
+		List<? extends org.nasdanika.persistence.Marker> pMarkers = new ArrayList<>();
 		List<? extends Marker> mMarkers = getMarkers();
 		if (mMarkers == null || mMarkers.isEmpty()) {
-			org.nasdanika.common.persistence.Marked pMarked = (org.nasdanika.common.persistence.Marked) EcoreUtil.getRegisteredAdapter(this, type);
+			org.nasdanika.persistence.Marked pMarked = (org.nasdanika.persistence.Marked) EcoreUtil.getRegisteredAdapter(this, type);
 			if (pMarked != null) {
 				pMarkers = pMarked.getMarkers();
 			}
 		} else {
-			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.common.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getLine(), mMarker.getColumn())).collect(Collectors.toList());
+			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getLine(), mMarker.getColumn())).collect(Collectors.toList());
 		}		
 		throw new ConfigurationException("Could not find " + type.getName() + " with uri " + uri, pMarkers);
 	}
@@ -436,9 +436,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		if (eObject.eIsProxy()) {
 			eObject = (E) EcoreUtil.resolve(eObject, this);
 			if (eObject.eIsProxy()) { // Not resolved.
-				List<? extends org.nasdanika.common.persistence.Marker> markers = null;
-				if (eObject instanceof org.nasdanika.common.persistence.Marked) {
-					markers = ((org.nasdanika.common.persistence.Marked) eObject).getMarkers();
+				List<? extends org.nasdanika.persistence.Marker> markers = null;
+				if (eObject instanceof org.nasdanika.persistence.Marked) {
+					markers = ((org.nasdanika.persistence.Marked) eObject).getMarkers();
 				}
 				throw new ConfigurationException("Unresolved proxy: " + eObject, markers == null || markers.isEmpty() ? getMarkers() : markers);
 			}

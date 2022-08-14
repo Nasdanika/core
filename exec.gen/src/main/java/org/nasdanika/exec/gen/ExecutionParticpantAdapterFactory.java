@@ -7,7 +7,7 @@ import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.resources.BinaryEntityContainer;
+import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.Block;

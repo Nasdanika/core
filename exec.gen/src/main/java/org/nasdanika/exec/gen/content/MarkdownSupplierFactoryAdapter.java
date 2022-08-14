@@ -8,7 +8,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.Util;
-import org.nasdanika.common.persistence.ConfigurationException;
+import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.ncore.Marker;
 
