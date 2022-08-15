@@ -248,42 +248,14 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback); 
 	}
 	
-	/**
-	 * Matches processor field to a registry entry.
-	 * @return
-	 */
-	protected boolean matchRegistryEntry(AnnotatedElement registryEntryReceiver) {
-		RegistryEntry registryEntryAnnotation = registryEntryReceiver.getAnnotation(RegistryEntry.class);
-		if (registryEntryAnnotation == null) {
-			return false;
-		}
-		
-		if (registryEntryReceiver instanceof Method) {
-			Method registryEntrySetterMethod = (Method) registryEntryReceiver;
-			int pc = registryEntrySetterMethod.getParameterCount();
-			if (pc == 1) {
-				Class<?> parameterType = registryEntrySetterMethod.getParameterTypes()[0];
-				if (!parameterType.isAssignableFrom(Supplier.class)) {
-					throw new NasdanikaException("A method annotated with RegistryEntry shall have one parameter assignable from Supplier: " + registryEntrySetterMethod);
-				}
-			}
-		} else {
-			Class<?> fieldType = ((Field) registryEntryReceiver).getType();
-			if (!fieldType.isAssignableFrom(Supplier.class)) {
-				throw new NasdanikaException("A field annotated with RegistryEntry shall have type assignable from Supplier: " + registryEntryReceiver);
-			}
-		}
-
-		return true;
-	}
-	
 	// Registry wiring
 	protected void wireRegistryEntrySupplier(
 			Object processor, 
 			Map<Element, ElementProcessorInfo<P>> registry,
 			IntrospectionLevel processorIntrospectionLevel) {
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
-			.filter(this::matchRegistryEntry)
+			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
+			.filter(ae -> mustInject(ae, Supplier.class, "Fields/methods annotated with RegistyEntry must have (parameter) type assignable from Supplier"))
 			.forEach(ae -> {
 				Supplier<Object> supplier = () -> {
 					for (Entry<Element, ElementProcessorInfo<P>> re: registry.entrySet()) {
@@ -295,12 +267,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					
 					return null;
 				};
-		
-				if (ae instanceof Field) {
-					setFieldValue(processor, (Field) ae, supplier);
-				} else {
-					invokeMethod(processor, (Method) ae, supplier);
-				}
+				
+				inject(processor, ae, supplier);
 			});
 	}
 
@@ -655,6 +623,34 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 				method.setAccessible(false);
 			}
 		}		
+	}
+	
+	protected boolean canInject(AnnotatedElement element, Class<?> type) {
+		if (element instanceof Field) {
+			return ((Field) element).getType().isAssignableFrom(type);
+		}
+		if (element instanceof Method) {
+			Method method = (Method) element;
+			return method.getParameterCount() == 1 && method.getParameterTypes()[0].isAssignableFrom(type);
+		}
+		return false;
+	}
+	
+	protected boolean mustInject(AnnotatedElement element, Class<?> type, String message) {
+		if (canInject(element, type)) {
+			return true;
+		}
+		throw new NasdanikaException(message);
+	}
+	
+	protected void inject(Object target, AnnotatedElement element, Object value) {
+		if (element instanceof Field) {
+			setFieldValue(target, (Field) element, value);
+		} else if (element instanceof Method) {
+			invokeMethod(target, (Method) element, value);
+		} else {
+			throw new IllegalArgumentException("Cannot inject value into " + element);
+		}
 	}
 	
 }
