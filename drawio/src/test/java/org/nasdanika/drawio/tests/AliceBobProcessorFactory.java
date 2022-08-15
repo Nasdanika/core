@@ -11,5 +11,10 @@ public class AliceBobProcessorFactory {
 	public BobProcessor createBobProcessor(NodeProcessorConfig<Object, Function<String,String>, Function<String,String>> config) {
 		return new BobProcessor();
 	}
+	
+	@ElementProcessor("label == 'Library'")
+	public Function<String,String> createLibraryProcessor(NodeProcessorConfig<Object, Function<String,String>, Function<String,String>> config) {
+		return question -> "Answer to " + question;
+	}	
 
 }

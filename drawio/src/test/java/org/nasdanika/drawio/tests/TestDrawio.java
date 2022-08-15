@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +25,7 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.junit.Test;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
@@ -40,7 +44,6 @@ import org.nasdanika.graph.processor.ElementProcessorInfo;
 import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.IntrospectionLevel;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
-import org.nasdanika.graph.processor.NopEndpointProcessorFactory;
 
 public class TestDrawio {
 
@@ -539,6 +542,68 @@ public class TestDrawio {
 			@Override
 			public Class<?> getHandlerInterface(org.nasdanika.graph.Connection connection, HandlerType type) {
 				return Function.class;
+			}
+			
+			/**
+			 * A trick around module things - test classes are not exported.
+			 * @param target
+			 * @param method
+			 * @param args
+			 * @return
+			 */
+			@Override
+			protected Object invokeMethod(Object target, Method method, Object... args) {
+				try {
+					return method.invoke(target, args);
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					throw new NasdanikaException("Error invoking " + method + " of " + target + ": " + e, e);
+				}		
+			}
+			
+			/**
+			 * A trick around module things - test classes are not exported.
+			 * @param target
+			 * @param field
+			 * @return
+			 */
+			@Override
+			protected Object getFieldValue(Object target, Field field) {
+				boolean canAccess = field.canAccess(target);
+				try {
+					if (!canAccess) {
+						field.setAccessible(true);
+					}
+					return  field.get(target);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
+				} finally {
+					if (!canAccess) {
+						field.setAccessible(false);
+					}
+				}	
+			}
+
+			/**
+			 * A trick around module things - test classes are not exported.
+			 * @param target
+			 * @param field
+			 * @param value
+			 */
+			@Override
+			protected void setFieldValue(Object target, Field field, Object value) {
+				boolean canAccess = field.canAccess(target);
+				try {
+					if (!canAccess) {
+						field.setAccessible(true);
+					}
+					field.set(target, value);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
+				} finally {
+					if (!canAccess) {
+						field.setAccessible(false);
+					}
+				}	
 			}
 			
 		};	
