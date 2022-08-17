@@ -386,7 +386,9 @@ public class TestDrawio {
 			}
 			
 			@Override
-			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config, Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback) {
+			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config,
+					Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback,
+					Consumer<Consumer<Map<org.nasdanika.graph.Element, ElementProcessorInfo<Object>>>> setRegistryCallback) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
@@ -413,7 +415,7 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
 			}
 
 			
@@ -449,7 +451,10 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config, Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback) {
+			public ElementProcessorInfo<Object> createProcessor(ElementProcessorConfig<Object> config,
+					Consumer<Consumer<ElementProcessorInfo<Object>>> setParentProcessorInfoCallback,
+					Consumer<Consumer<Map<org.nasdanika.graph.Element, ElementProcessorInfo<Object>>>> setRegistryCallback) {
+				
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
@@ -493,7 +498,7 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
 			}
 			
 			@Override

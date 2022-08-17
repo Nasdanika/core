@@ -36,7 +36,10 @@ public interface ProcessorFactory<P,H,E> {
 	 */
 	E createEndpoint(Connection connection, H handler, HandlerType type);
 	
-	default ElementProcessorInfo<P> createProcessor(ElementProcessorConfig<P> config, Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback) {
+	default ElementProcessorInfo<P> createProcessor(
+			ElementProcessorConfig<P> config, 
+			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
+			Consumer<Consumer<Map<Element, ElementProcessorInfo<P>>>> setRegistryCallback) {
 		return new ElementProcessorInfo<P>() {
 
 			@Override
@@ -53,7 +56,8 @@ public interface ProcessorFactory<P,H,E> {
 	
 	default Map<Element,ElementProcessorInfo<P>> createProcessors(Element element) {
 		ProcessorFactoryVisitor<P, H, E> visitor = new ProcessorFactoryVisitor<>(this);				
-		element.accept(visitor::createElementProcessor);				
+		Helper<P> helper = element.accept(visitor::createElementProcessor);
+		helper.setRegistry(visitor.getRegistry());
 		return Collections.unmodifiableMap(visitor.getRegistry());		
 	}
 	

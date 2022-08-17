@@ -7,14 +7,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
@@ -53,10 +56,16 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}
 	
 	@Override
-	public ElementProcessorInfo<P> createProcessor(ElementProcessorConfig<P> config, Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback) {
+	public ElementProcessorInfo<P> createProcessor(
+			ElementProcessorConfig<P> config, 
+			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
+			Consumer<Consumer<Map<Element, ElementProcessorInfo<P>>>> setRegistryCallback) {
 		if (target == null || introspectionLevel == IntrospectionLevel.NONE) {
-			return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+			return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
 		}
+		Collection<Consumer<Map<Element, ElementProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
+		setRegistryCallback.accept(registry -> registryConsumers.forEach(rc -> rc.accept(registry)));
+		
 		Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
 			.filter(m -> matchFactoryMethod(config, m))
 			.sorted((a, b) -> b.getAnnotation(ElementProcessor.class).priority() - a.getAnnotation(ElementProcessor.class).priority())
@@ -74,7 +83,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 				ElementProcessor elementProcessorAnnotation = method.getAnnotation(ElementProcessor.class);
 				IntrospectionLevel processorIntrospectionLevel = elementProcessorAnnotation.introspect();
 				if (processorIntrospectionLevel == IntrospectionLevel.NONE) {
-					return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback);
+					return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
 				}
 				
 				boolean hideWired = elementProcessorAnnotation.hideWired();
@@ -84,8 +93,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 				wireParentProcessor(processor, setParentProcessorInfoCallback, processorIntrospectionLevel);
 				wireProcessorElement(processor, config.getElement(), processorIntrospectionLevel);
 				
-				wireRegistryEntrySupplier(processor, config.getRegistry(), processorIntrospectionLevel);
-				wireRegistry(processor, config.getRegistry(), processorIntrospectionLevel);
+				registryConsumers.add(wireRegistryEntry(processor, processorIntrospectionLevel));
+				
+				Consumer<Map<Element, ElementProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
+				if (rc != null) {
+					registryConsumers.add(rc);
+				}
 				
 				ElementProcessorConfig<P> unwiredConfig;
 				
@@ -245,39 +258,31 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 				};										
 			}
 		}
-		return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback); 
+		return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback); 
 	}
-	
+		
 	// Registry wiring
-	protected void wireRegistryEntrySupplier(
-			Object processor, 
-			Map<Element, ElementProcessorInfo<P>> registry,
-			IntrospectionLevel processorIntrospectionLevel) {
-		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+	protected Consumer<Map<Element, ElementProcessorInfo<P>>> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
+		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
-			.filter(ae -> mustInject(ae, Supplier.class, "Fields/methods annotated with RegistyEntry must have (parameter) type assignable from Supplier"))
-			.forEach(ae -> {
-				Supplier<Object> supplier = () -> {
-					for (Entry<Element, ElementProcessorInfo<P>> re: registry.entrySet()) {
-						RegistryEntry registryEntryAnnotation = ae.getAnnotation(RegistryEntry.class);
-						if (matchPredicate(re.getKey(), registryEntryAnnotation.value())) {
-							return registryEntryAnnotation.info() ? re.getValue() : re.getValue().getProcessor();
-						};						
-					}
-					
-					return null;
-				};
-				
-				inject(processor, ae, supplier);
-			});
+			.filter(ae -> mustSet(ae, ae.getAnnotation(RegistryEntry.class).info() ? ElementProcessorInfo.class : null, "Fields/methods annotated with RegistyEntry must have (parameter) type assignable from the processor type or ElementProcessorInfo if info is set to true "))
+			.collect(Collectors.toList());
+		
+		return registry -> {
+			registryEntrySetters.forEach(setter -> {
+				for (Entry<Element, ElementProcessorInfo<P>> re: registry.entrySet()) {
+					RegistryEntry registryEntryAnnotation = setter.getAnnotation(RegistryEntry.class);
+					if (matchPredicate(re.getKey(), registryEntryAnnotation.value())) {
+						set(processor, setter, registryEntryAnnotation.info() ? re.getValue() : re.getValue().getProcessor());
+					};						
+				}				
+			});						
+		};
 	}
 
-	protected void wireRegistry(
-			Object processor, 
-			Map<Element, ElementProcessorInfo<P>> registry,
-			IntrospectionLevel processorIntrospectionLevel) {
+	protected Consumer<Map<Element, ElementProcessorInfo<P>>> wireRegistry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	protected void wireProcessorElement(
@@ -625,32 +630,65 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		}		
 	}
 	
-	protected boolean canInject(AnnotatedElement element, Class<?> type) {
+	protected boolean canSet(AnnotatedElement element, Class<?> type) {
 		if (element instanceof Field) {
-			return ((Field) element).getType().isAssignableFrom(type);
+			return type == null || ((Field) element).getType().isAssignableFrom(type);
 		}
 		if (element instanceof Method) {
 			Method method = (Method) element;
-			return method.getParameterCount() == 1 && method.getParameterTypes()[0].isAssignableFrom(type);
+			return type == null || method.getParameterCount() == 1 && method.getParameterTypes()[0].isAssignableFrom(type);
 		}
 		return false;
 	}
 	
-	protected boolean mustInject(AnnotatedElement element, Class<?> type, String message) {
-		if (canInject(element, type)) {
+	protected boolean mustSet(AnnotatedElement element, Class<?> type, String message) {
+		if (canSet(element, type)) {
 			return true;
 		}
 		throw new NasdanikaException(message);
 	}
 	
-	protected void inject(Object target, AnnotatedElement element, Object value) {
+	protected void set(Object target, AnnotatedElement element, Object value) {
 		if (element instanceof Field) {
 			setFieldValue(target, (Field) element, value);
 		} else if (element instanceof Method) {
 			invokeMethod(target, (Method) element, value);
 		} else {
-			throw new IllegalArgumentException("Cannot inject value into " + element);
+			throw new IllegalArgumentException("Cannot set value into " + element);
 		}
+	}
+	
+	protected Object get(Object target, AnnotatedElement element) {
+		if (element instanceof Field) {
+			return getFieldValue(target, (Field) element);
+		} 
+		if (element instanceof Method) {
+			return invokeMethod(target, (Method) element);
+		}
+		
+		throw new IllegalArgumentException("Cannot get value from " + element);
+	}
+	
+	protected boolean canGet(AnnotatedElement element, Class<?> type) {
+		if (element instanceof Field) {
+			return type.isAssignableFrom(((Field) element).getType());
+		}
+		if (element instanceof Method) {
+			Method method = (Method) element;
+			return method.getParameterCount() == 0 && type.isAssignableFrom(method.getReturnType());
+		}
+		return false;
+	}
+	
+	protected boolean mustGet(AnnotatedElement element, Class<?> type, String message) {
+		if (canGet(element, type)) {
+			return true;
+		}
+		throw new NasdanikaException(message);
+	}
+
+	protected boolean isValueSupplier(AnnotatedElement element) {
+		return element instanceof Field || (element instanceof Method && ((Method) element).getParameterCount() == 0);
 	}
 	
 }

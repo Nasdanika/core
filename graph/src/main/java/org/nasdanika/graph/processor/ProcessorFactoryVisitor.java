@@ -46,9 +46,9 @@ class ProcessorFactoryVisitor<P,H,E> {
 		return registry;
 	}	
 
-
 	public Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors) {
 		Collection<Consumer<ElementProcessorInfo<P>>> parentProcessorInfoConsumers = new ArrayList<>();
+		Collection<Consumer<Map<Element, ElementProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
 		ElementProcessorConfig<P> config;
 		if (element instanceof Node) {
 			Node node = (Node) element;
@@ -309,12 +309,10 @@ class ProcessorFactoryVisitor<P,H,E> {
 			};
 		}
 		
-		ElementProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add);
+		ElementProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add, registryConsumers::add);
 		
 		if (childProcessors != null) {
-			for (Helper<P> childHelper: childProcessors.values()) {
-				childHelper.setParentProcessorInfo(processorInfo);
-			}
+			childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
 		}
 		if (processorInfo != null) {
 			registry.put(element, processorInfo);
@@ -324,6 +322,12 @@ class ProcessorFactoryVisitor<P,H,E> {
 			@Override
 			void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo) {
 				parentProcessorInfoConsumers.forEach(ppic -> ppic.accept(parentProcessorInfo));				
+			}
+
+			@Override
+			void setRegistry(Map<Element, ElementProcessorInfo<P>> registry) {
+				childProcessors.values().forEach(ch -> ch.setRegistry(registry));
+				registryConsumers.forEach(rc -> rc.accept(registry));
 			}
 			
 		};
