@@ -542,7 +542,7 @@ public class TestDrawio {
 	public void testReflectiveProcessorFactory() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 				
-		org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<>(new AliceBobProcessorFactory(), IntrospectionLevel.DECLARED) {
+		org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
 
 			@Override
 			public Class<?> getHandlerInterface(org.nasdanika.graph.Connection connection, HandlerType type) {
