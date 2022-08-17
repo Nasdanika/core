@@ -2,7 +2,7 @@ package org.nasdanika.drawio;
 
 import java.util.List;
 
-public interface Node extends Layer, org.nasdanika.graph.Node {
+public interface Node extends Layer, LayerElement, org.nasdanika.graph.Node {
 	
 	@Override
 	List<Connection> getIncomingConnections();

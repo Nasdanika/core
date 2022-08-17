@@ -1,6 +1,6 @@
 package org.nasdanika.drawio;
 
-public interface Connection extends ModelElement, org.nasdanika.graph.Connection {
+public interface Connection extends LayerElement, org.nasdanika.graph.Connection {
 	
 	@Override
 	Node getSource();
