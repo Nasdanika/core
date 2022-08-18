@@ -25,10 +25,9 @@ public @interface RegistryEntry {
 	String value() default "";
 	
 	/**
-	 * If true supplier will supply {@link ElementProcessorInfo} for the registry entry. It will supply the processor otherwise.
+	 * If true supplier will supply {@link ProcessorConfig} for the registry entry. It will supply the processor otherwise.
 	 * @return   
 	 */
-	boolean info() default false;
-	
-		
+	boolean config() default false;
+			
 }

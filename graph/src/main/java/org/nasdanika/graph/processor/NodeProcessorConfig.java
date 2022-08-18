@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
-public interface NodeProcessorConfig<P,H,E> extends ElementProcessorConfig<P> {
+public interface NodeProcessorConfig<P,H,E> extends ProcessorConfig<P> {
 	
 	@Override
 	Node getElement();

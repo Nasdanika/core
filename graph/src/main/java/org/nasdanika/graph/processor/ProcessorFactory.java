@@ -1,9 +1,14 @@
 package org.nasdanika.graph.processor;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -36,14 +41,14 @@ public interface ProcessorFactory<P,H,E> {
 	 */
 	E createEndpoint(Connection connection, H handler, HandlerType type);
 	
-	default ElementProcessorInfo<P> createProcessor(
-			ElementProcessorConfig<P> config, 
-			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
-			Consumer<Consumer<Map<Element, ElementProcessorInfo<P>>>> setRegistryCallback) {
-		return new ElementProcessorInfo<P>() {
+	default ProcessorInfo<P> createProcessor(
+			ProcessorConfig<P> config, 
+			Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
+			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
+		return new ProcessorInfo<P>() {
 
 			@Override
-			public ElementProcessorConfig<P> getConfig() {
+			public ProcessorConfig<P> getConfig() {
 				return config;
 			}
 
@@ -54,11 +59,20 @@ public interface ProcessorFactory<P,H,E> {
 		};
 	}
 	
-	default Map<Element,ElementProcessorInfo<P>> createProcessors(Element element) {
+	default Map<Element,ProcessorInfo<P>> createProcessors(Element... elements) {
+		return createProcessors(Arrays.stream(elements));
+	}
+	
+	default Map<Element,ProcessorInfo<P>> createProcessors(Collection<Element> elements) {
+		return createProcessors(elements.stream());
+	}
+	
+	default Map<Element,ProcessorInfo<P>> createProcessors(Stream<Element> elements) {
 		ProcessorFactoryVisitor<P, H, E> visitor = new ProcessorFactoryVisitor<>(this);				
-		Helper<P> helper = element.accept(visitor::createElementProcessor);
-		helper.setRegistry(visitor.getRegistry());
-		return Collections.unmodifiableMap(visitor.getRegistry());		
+		List<Helper<P>> helpers = elements.map(element -> element.accept(visitor::createElementProcessor)).collect(Collectors.toList());
+		Map<Element, ProcessorInfo<P>> registry = visitor.getRegistry();
+		helpers.forEach(helper -> helper.setRegistry(registry));
+		return Collections.unmodifiableMap(registry);		
 	}
 	
 	/**

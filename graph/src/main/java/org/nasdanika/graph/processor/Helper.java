@@ -6,18 +6,18 @@ import org.nasdanika.graph.Element;
 
 abstract class Helper<P> {
 	
-	private ElementProcessorInfo<P> processorInfo;
+	private ProcessorInfo<P> processorInfo;
 
-	Helper(ElementProcessorInfo<P> processorInfo) {
+	Helper(ProcessorInfo<P> processorInfo) {
 		this.processorInfo = processorInfo;
 	}
 	
-	abstract void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo);
+	abstract void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo);
 
-	ElementProcessorInfo<P> getProcessorInfo() {
+	ProcessorInfo<P> getProcessorInfo() {
 		return processorInfo;
 	}
 	
-	abstract void setRegistry(Map<Element, ElementProcessorInfo<P>> registry);	
+	abstract void setRegistry(Map<Element, ProcessorInfo<P>> registry);	
 	
 }

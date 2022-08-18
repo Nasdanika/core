@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -49,19 +48,23 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		this.targets = targets;
 	}
 	
-	public Map<Element, ElementProcessorInfo<P>> createProcessors(Element element, Object... registryTargets) {
-		// TODO wire registry target if not null
-		return ProcessorFactory.super.createProcessors(element);
+	public Map<Element, ProcessorInfo<P>> createProcessors(Element element, IntrospectionLevel introspectionLevel, Object... registryTargets) {
+		Map<Element, ProcessorInfo<P>> registry = ProcessorFactory.super.createProcessors(element);
+		for (Object registryTarget: registryTargets) {
+			wireRegistryEntry(registryTarget, introspectionLevel).accept(registry);
+			wireRegistry(registryTarget, introspectionLevel).accept(registry);
+		}
+		return registry;
 	}
 	
 	@Override
-	public ElementProcessorInfo<P> createProcessor(
-			ElementProcessorConfig<P> config, 
-			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
-			Consumer<Consumer<Map<Element, ElementProcessorInfo<P>>>> setRegistryCallback) {
+	public ProcessorInfo<P> createProcessor(
+			ProcessorConfig<P> config, 
+			Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
+			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
 		if (introspectionLevel != IntrospectionLevel.NONE) {
 			for (Object target: targets) {
-				ElementProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel, setParentProcessorInfoCallback, setRegistryCallback);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel, setParentProcessorInfoCallback, setRegistryCallback);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -71,20 +74,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}		
 	
 	@SuppressWarnings("unchecked")
-	protected ElementProcessorInfo<P> createProcessor(
+	protected ProcessorInfo<P> createProcessor(
 			Object target,
-			ElementProcessorConfig<P> config, 
+			ProcessorConfig<P> config, 
 			IntrospectionLevel introspectionLevel,
-			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
-			Consumer<Consumer<Map<Element, ElementProcessorInfo<P>>>> setRegistryCallback) {
+			Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
+			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
 	
 		if (target != null && (target.getClass().getAnnotation(Factory.class) == null || matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value()))) {
-			Collection<Consumer<Map<Element, ElementProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
-			setRegistryCallback.accept(registry -> registryConsumers.forEach(rc -> rc.accept(registry)));
 			
 			Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
 				.filter(m -> matchFactoryMethod(config, m))
-				.sorted((a, b) -> b.getAnnotation(ElementProcessor.class).priority() - a.getAnnotation(ElementProcessor.class).priority())
+				.sorted((a, b) -> b.getAnnotation(Processor.class).priority() - a.getAnnotation(Processor.class).priority())
 				.findFirst();
 			
 			if (match.isPresent()) {
@@ -96,27 +97,30 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					processor = invokeMethod(target, method, config);
 				}
 				if (processor != null) {
-					ElementProcessor elementProcessorAnnotation = method.getAnnotation(ElementProcessor.class);
+					Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 					IntrospectionLevel processorIntrospectionLevel = elementProcessorAnnotation.introspect();
 					if (processorIntrospectionLevel == IntrospectionLevel.NONE) {
 						return ProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
 					}
 					
 					boolean hideWired = elementProcessorAnnotation.hideWired();
-					Map<Element, ElementProcessorInfo<P>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), processorIntrospectionLevel);
+					Map<Element, ProcessorInfo<P>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), processorIntrospectionLevel);
 					wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo(), processorIntrospectionLevel);
 					
-					wireParentProcessor(processor, setParentProcessorInfoCallback, processorIntrospectionLevel);
+					Consumer<ProcessorInfo<P>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
+					if (pc != null) {
+						setParentProcessorInfoCallback.accept(pc);
+					}
 					wireProcessorElement(processor, config.getElement(), processorIntrospectionLevel);
 					
-					registryConsumers.add(wireRegistryEntry(processor, processorIntrospectionLevel));
+					setRegistryCallback.accept(wireRegistryEntry(processor, processorIntrospectionLevel));
 					
-					Consumer<Map<Element, ElementProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
+					Consumer<Map<Element, ProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
 					if (rc != null) {
-						registryConsumers.add(rc);
+						setRegistryCallback.accept(rc);
 					}
 					
-					ElementProcessorConfig<P> unwiredConfig;
+					ProcessorConfig<P> unwiredConfig;
 					
 					if (config instanceof NodeProcessorConfig) {
 						NodeProcessorConfig<P, H, E> nodeProcessorConfig = (NodeProcessorConfig<P, H, E>) config;
@@ -124,28 +128,28 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 						wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
-						wireIncomingHandlers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
+						wireIncomingHandlersConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
 						
 						Map<Connection, E> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
 						wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
-						wireOutgoingHandlers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
+						wireOutgoingHandlersConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
 						
 						unwiredConfig = new NodeProcessorConfig<P, H, E>() {
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 	
 							@Override
-							public ElementProcessorInfo<P> getParentProcessorInfo() {
+							public ProcessorInfo<P> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+							public Map<Element, ProcessorInfo<P>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -184,17 +188,17 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 						unwiredConfig = new ConnectionProcessorConfig<P, H, E>() {
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 	
 							@Override
-							public ElementProcessorInfo<P> getParentProcessorInfo() {
+							public ProcessorInfo<P> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+							public Map<Element, ProcessorInfo<P>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -230,20 +234,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 						};
 					} else {
-						unwiredConfig = new ElementProcessorConfig<P>() {
+						unwiredConfig = new ProcessorConfig<P>() {
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 	
 							@Override
-							public ElementProcessorInfo<P> getParentProcessorInfo() {
+							public ProcessorInfo<P> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+							public Map<Element, ProcessorInfo<P>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -256,10 +260,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					}
 					
 					Object theProcessor = processor;
-					return new ElementProcessorInfo<P>() {
+					return new ProcessorInfo<P>() {
 	
 						@Override
-						public ElementProcessorConfig<P> getConfig() {
+						public ProcessorConfig<P> getConfig() {
 							return hideWired ? unwiredConfig : config;
 						}
 	
@@ -282,7 +286,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ElementProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), setParentProcessorInfoCallback, setRegistryCallback);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), setParentProcessorInfoCallback, setRegistryCallback);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -297,7 +301,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ElementProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), setParentProcessorInfoCallback, setRegistryCallback);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), setParentProcessorInfoCallback, setRegistryCallback);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -307,61 +311,93 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return null;
 	}
 		
-	// Registry wiring
-	protected Consumer<Map<Element, ElementProcessorInfo<P>>> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
+	protected Consumer<Map<Element, ProcessorInfo<P>>> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
 		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
-			.filter(ae -> mustSet(ae, ae.getAnnotation(RegistryEntry.class).info() ? ElementProcessorInfo.class : null, "Fields/methods annotated with RegistyEntry must have (parameter) type assignable from the processor type or ElementProcessorInfo if info is set to true "))
+			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.collect(Collectors.toList());
 		
 		return registry -> {
 			registryEntrySetters.forEach(setter -> {
-				for (Entry<Element, ElementProcessorInfo<P>> re: registry.entrySet()) {
+				for (Entry<Element, ProcessorInfo<P>> re: registry.entrySet()) {
 					RegistryEntry registryEntryAnnotation = setter.getAnnotation(RegistryEntry.class);
 					if (matchPredicate(re.getKey(), registryEntryAnnotation.value())) {
-						set(processor, setter, registryEntryAnnotation.info() ? re.getValue() : re.getValue().getProcessor());
+						set(processor, setter, registryEntryAnnotation.config() ? re.getValue().getConfig() : re.getValue().getProcessor());
 					};						
 				}				
 			});						
 		};
 	}
 
-	protected Consumer<Map<Element, ElementProcessorInfo<P>>> wireRegistry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		return null;
+	protected Consumer<Map<Element, ProcessorInfo<P>>> wireRegistry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
+		List<AccessibleObject> registrySetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(Registry.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + ae))
+				.collect(Collectors.toList());
+			
+		return registry -> registrySetters.forEach(setter -> set(processor, setter, registry));
 	}
 
 	protected void wireProcessorElement(
 			Object processor, 
 			Element element,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(ProcessorElement.class) != null)
+				.filter(ae -> mustSet(ae, element.getClass(), "Methods annotated with ProcessorElement must have one parameter compatible with the processor element type (" + element.getClass() + "): " + ae))
+				.forEach(setter -> {
+					set(processor, setter, element);
+				});						
 	}
 
-	protected void wireParentProcessor(
+	protected Consumer<ProcessorInfo<P>> wireParentProcessor(
 			Object processor, 
-			Consumer<Consumer<ElementProcessorInfo<P>>> setParentProcessorInfoCallback,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		
+		List<AccessibleObject> parentProcessorSetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(ParentProcessor.class) != null)
+				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if value is set to true: " + ae))
+				.collect(Collectors.toList());
+			
+			return parentProcessorInfo -> {
+				parentProcessorSetters.forEach(setter -> {
+					ParentProcessor parentProcessorAnnotation = setter.getAnnotation(ParentProcessor.class);
+					set(processor, setter, parentProcessorAnnotation.value() ? parentProcessorInfo.getConfig() : parentProcessorInfo.getProcessor());
+				});						
+			};
 	}
+	
+	private Map<Element, ProcessorInfo<P>> wireChildProcessor(
+			Object processor, 
+			Map<Element, ProcessorInfo<P>> childProcessorsInfo,
+			IntrospectionLevel processorIntrospectionLevel) {
+		
+		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>(childProcessorsInfo); 
+		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.filter(ae -> ae.getAnnotation(ChildProcessor.class) != null)
+			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
+			.forEach(setter -> {
+				for (Entry<Element, ProcessorInfo<P>> ce: childProcessorsInfo.entrySet()) {
+					ChildProcessor childProcessorAnnotation = setter.getAnnotation(ChildProcessor.class);
+					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
+						set(processor, setter, childProcessorAnnotation.config() ? ce.getValue().getConfig() : ce.getValue().getProcessor());
+					};						
+				}				
+				
+			});
+		return ret;
+	}	
 
 	protected void wireChildProcessors(
 			Object processor, 
-			Map<Element, ElementProcessorInfo<P>> childProcessorsInfo,
+			Map<Element, ProcessorInfo<P>> childProcessorsInfo,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
 		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(ChildProcessors.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + ae))
+				.forEach(setter -> set(processor, setter, childProcessorsInfo));
 	}
-
-	private Map<Element, ElementProcessorInfo<P>> wireChildProcessor(
-			Object processor, 
-			Map<Element, ElementProcessorInfo<P>> childProcessorsInfo,
-			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		return childProcessorsInfo;
-	}	
 	
 	/**
 	 * Matches processor field or method and incoming connection.
@@ -419,46 +455,147 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return ret;
 	}	
 	
-	protected void wireIncomingHandlers(
+	protected void wireIncomingHandlersConsumers(
 			Object processor, 
 			Map<Connection, Consumer<H>> incomingHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
-		
-		// TODO Auto-generated method stub
-
+				
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(IncomingHandlerConsumers.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
+				.forEach(setter -> set(processor, setter, incomingHandlerConsumers));
 	}
+		
+	/**
+	 * Matches processor field or method and incoming connection.
+	 * @return
+	 */
+	protected boolean matchIncomingEndpoint(AnnotatedElement endpointMember, Connection incomingConnection) {
+		IncomingHandler incomingHandlerAnnotation = endpointMember.getAnnotation(IncomingHandler.class);
+		if (incomingHandlerAnnotation == null) {
+			return false;
+		}
+		
+		if (handlerMember instanceof Method) {
+			Method handlerMethod = (Method) handlerMember;
+			int pc = handlerMethod.getParameterCount();
+			if (pc > 1) {
+				throw new NasdanikaException("A method annotated with IncomingHandler shall have zero or one parameter: " + handlerMethod);
+			}
+			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
+				throw new NasdanikaException("A single parameter type of a method annotated with IncomingHandler shall be assignable from Connection: " + handlerMethod);				
+			}
+		}
+				
+		return matchPredicate(incomingConnection, incomingHandlerAnnotation.value());
+	}	
 
 	protected Map<Connection, E> wireIncomingEndpoint(
 			Object processor, 
 			Map<Connection, E> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		return incomingEndpoints;
+		
+		Map<Connection, E> ret = new LinkedHashMap<>(incomingEndpoints);
+
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
+		// then filtering using matchIncomingHandler, sorting by priority, finding first, wiring it and removing from ret.
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
+			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
+			.filter(e -> matchIncomingHandler(e.getKey(), e.getValue().getKey()))
+			.sorted((a, b) -> b.getKey().getAnnotation(IncomingHandler.class).priority() - a.getKey().getAnnotation(IncomingHandler.class).priority())
+			.findFirst().ifPresent(e -> {
+				AccessibleObject handlerMember = e.getKey();
+				Entry<Connection, Consumer<H>> incomingHandlerConsumerEntry = e.getValue();
+				if (handlerMember instanceof Field) {					
+					incomingHandlerConsumerEntry.getValue().accept((H) getFieldValue(processor, (Field) handlerMember));
+				} else {
+					Method handlerSupplierMethod = (Method) handlerMember;
+					Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, incomingHandlerConsumerEntry.getKey());
+					incomingHandlerConsumerEntry.getValue().accept((H) incomingHandler);
+				}
+				ret.remove(incomingHandlerConsumerEntry.getKey());
+			});
+				
+		return ret;
 	}
 
 	protected void wireIncomingEndpoints(
 			Object processor, 
 			Map<Connection, E> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-
+		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(IncomingEndpoints.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingEndpoints must have (parameter) type assignable from Map: " + ae))
+				.forEach(setter -> set(processor, setter, incomingEndpoints));
 	}
 	
+	/**
+	 * Matches processor field or method and outgoing connection.
+	 * @return
+	 */
+	protected boolean matchOutgoingHandler(AnnotatedElement handlerMember, Connection outgoingConnection) {
+		OutgoingHandler outgoingHandlerAnnotation = handlerMember.getAnnotation(OutgoingHandler.class);
+		if (outgoingHandlerAnnotation == null) {
+			return false;
+		}
+		
+		if (handlerMember instanceof Method) {
+			Method handlerMethod = (Method) handlerMember;
+			int pc = handlerMethod.getParameterCount();
+			if (pc > 1) {
+				throw new NasdanikaException("A method annotated with OutgoingHandler shall have zero or one parameter: " + handlerMethod);
+			}
+			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
+				throw new NasdanikaException("A single parameter type of a method annotated with OutgoingHandler shall be assignable from Connection: " + handlerMethod);				
+			}
+		}
+				
+		return matchPredicate(outgoingConnection, outgoingHandlerAnnotation.value());
+	}
+	
+	@SuppressWarnings("unchecked")
 	protected Map<Connection, Consumer<H>> wireOutgoingHandler(
 			Object processor, 
 			Map<Connection,
 			Consumer<H>> outgoingHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-		return outgoingHandlerConsumers;
+
+		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(outgoingHandlerConsumers);
+
+		// Streaming fields and methods and then flat mapping them to all permutations with outgoing handler consumers.
+		// then filtering using matchOutgoingHandler, sorting by priority, finding first, wiring it and removing from ret.
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
+			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
+			.filter(e -> matchOutgoingHandler(e.getKey(), e.getValue().getKey()))
+			.sorted((a, b) -> b.getKey().getAnnotation(OutgoingHandler.class).priority() - a.getKey().getAnnotation(OutgoingHandler.class).priority())
+			.findFirst().ifPresent(e -> {
+				AccessibleObject handlerMember = e.getKey();
+				Entry<Connection, Consumer<H>> outgoingHandlerConsumerEntry = e.getValue();
+				if (handlerMember instanceof Field) {					
+					outgoingHandlerConsumerEntry.getValue().accept((H) getFieldValue(processor, (Field) handlerMember));
+				} else {
+					Method handlerSupplierMethod = (Method) handlerMember;
+					Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, outgoingHandlerConsumerEntry.getKey());
+					outgoingHandlerConsumerEntry.getValue().accept((H) incomingHandler);
+				}
+				ret.remove(outgoingHandlerConsumerEntry.getKey());
+			});
+				
+		return ret;
 	}
 	
-	protected void wireOutgoingHandlers(
+	protected void wireOutgoingHandlersConsumers(
 			Object processor,
 			Map<Connection, Consumer<H>> outgoingHandlerConsumers,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-
+		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(OutgoingHandlerConsumers.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
+				.forEach(setter -> set(processor, setter, outgoingHandlerConsumers));
 	}
 
 	protected Map<Connection, E> wireOutgoingEndpoint(
@@ -473,8 +610,11 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Object processor, 
 			Map<Connection, E> outgoingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
-		// TODO Auto-generated method stub
-
+		
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+				.filter(ae -> ae.getAnnotation(OutgoingEndpoints.class) != null)
+				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingEndpoints must have (parameter) type assignable from Map: " + ae))
+				.forEach(setter -> set(processor, setter, outgoingEndpoints));
 	}
 
 	// Connection wiring
@@ -510,12 +650,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return false;
 	}
 	
-	protected boolean matchFactoryMethod(ElementProcessorConfig<P> elementProcessorConfig, Method method) {
+	protected boolean matchFactoryMethod(ProcessorConfig<P> elementProcessorConfig, Method method) {
 		if (Modifier.isAbstract(method.getModifiers())) {
 			return false;
 		}
 		
-		ElementProcessor elementProcessorAnnotation = method.getAnnotation(ElementProcessor.class);
+		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 		if (elementProcessorAnnotation == null) {
 			return false;
 		}

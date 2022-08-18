@@ -24,7 +24,7 @@ import org.nasdanika.graph.Node;
 class ProcessorFactoryVisitor<P,H,E> {
 	
 	private ProcessorFactory<P,H,E> factory;
-	private Map<Element, ElementProcessorInfo<P>> registry = new LinkedHashMap<>();
+	private Map<Element, ProcessorInfo<P>> registry = new LinkedHashMap<>();
 	
 	// Handlers to call connection sources by outgoing endpoints
 	private Map<Connection,H> sourceHandlers = new HashMap<>();
@@ -42,14 +42,14 @@ class ProcessorFactoryVisitor<P,H,E> {
 		this.factory = factory;
 	}
 		
-	Map<Element, ElementProcessorInfo<P>> getRegistry() {
+	Map<Element, ProcessorInfo<P>> getRegistry() {
 		return registry;
 	}	
 
 	public Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors) {
-		Collection<Consumer<ElementProcessorInfo<P>>> parentProcessorInfoConsumers = new ArrayList<>();
-		Collection<Consumer<Map<Element, ElementProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
-		ElementProcessorConfig<P> config;
+		Collection<Consumer<ProcessorInfo<P>>> parentProcessorInfoConsumers = new ArrayList<>();
+		Collection<Consumer<Map<Element, ProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
+		ProcessorConfig<P> config;
 		if (element instanceof Node) {
 			Node node = (Node) element;
 			Map<Connection, E> incomingEndpoints = new HashMap<>();
@@ -126,7 +126,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 			
 			config = new NodeProcessorConfig<P, H, E>() {
 				
-				private ElementProcessorInfo<P> parentProcessorInfo;
+				private ProcessorInfo<P> parentProcessorInfo;
 				
 				{
 					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
@@ -138,19 +138,19 @@ class ProcessorFactoryVisitor<P,H,E> {
 				}
 
 				@Override
-				public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
-					Map<Element,ElementProcessorInfo<P>> ret = new LinkedHashMap<>();
+				public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+					Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
 					childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
 					return ret;
 				}
 
 				@Override
-				public ElementProcessorInfo<P> getParentProcessorInfo() {
+				public ProcessorInfo<P> getParentProcessorInfo() {
 					return parentProcessorInfo;
 				}
 
 				@Override
-				public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+				public Map<Element, ProcessorInfo<P>> getRegistry() {
 					return Collections.unmodifiableMap(registry);
 				}
 
@@ -226,7 +226,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 				
 				config = new ConnectionProcessorConfig<P, H, E>() {
 					
-					private ElementProcessorInfo<P> parentProcessorInfo;
+					private ProcessorInfo<P> parentProcessorInfo;
 					
 					{
 						parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
@@ -238,19 +238,19 @@ class ProcessorFactoryVisitor<P,H,E> {
 					}
 
 					@Override
-					public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
-						Map<Element,ElementProcessorInfo<P>> ret = new LinkedHashMap<>();
+					public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+						Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
 						childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
 						return ret;
 					}
 
 					@Override
-					public ElementProcessorInfo<P> getParentProcessorInfo() {
+					public ProcessorInfo<P> getParentProcessorInfo() {
 						return parentProcessorInfo;
 					}
 
 					@Override
-					public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+					public Map<Element, ProcessorInfo<P>> getRegistry() {
 						return Collections.unmodifiableMap(registry);
 					}
 
@@ -276,9 +276,9 @@ class ProcessorFactoryVisitor<P,H,E> {
 				};
 			}
 		} else {
-			config = new ElementProcessorConfig<P>() {
+			config = new ProcessorConfig<P>() {
 				
-				private ElementProcessorInfo<P> parentProcessorInfo;
+				private ProcessorInfo<P> parentProcessorInfo;
 				
 				{
 					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
@@ -290,26 +290,26 @@ class ProcessorFactoryVisitor<P,H,E> {
 				}
 
 				@Override
-				public Map<Element, ElementProcessorInfo<P>> getChildProcessorsInfo() {
-					Map<Element,ElementProcessorInfo<P>> ret = new LinkedHashMap<>();
+				public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+					Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
 					childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
 					return ret;
 				}
 
 				@Override
-				public ElementProcessorInfo<P> getParentProcessorInfo() {
+				public ProcessorInfo<P> getParentProcessorInfo() {
 					return parentProcessorInfo;
 				}
 
 				@Override
-				public Map<Element, ElementProcessorInfo<P>> getRegistry() {
+				public Map<Element, ProcessorInfo<P>> getRegistry() {
 					return Collections.unmodifiableMap(registry);
 				}
 				
 			};
 		}
 		
-		ElementProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add, registryConsumers::add);
+		ProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add, registryConsumers::add);
 		
 		if (childProcessors != null) {
 			childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
@@ -320,12 +320,12 @@ class ProcessorFactoryVisitor<P,H,E> {
 		return new Helper<>(processorInfo) {
 
 			@Override
-			void setParentProcessorInfo(ElementProcessorInfo<P> parentProcessorInfo) {
+			void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo) {
 				parentProcessorInfoConsumers.forEach(ppic -> ppic.accept(parentProcessorInfo));				
 			}
 
 			@Override
-			void setRegistry(Map<Element, ElementProcessorInfo<P>> registry) {
+			void setRegistry(Map<Element, ProcessorInfo<P>> registry) {
 				childProcessors.values().forEach(ch -> ch.setRegistry(registry));
 				registryConsumers.forEach(rc -> rc.accept(registry));
 			}
