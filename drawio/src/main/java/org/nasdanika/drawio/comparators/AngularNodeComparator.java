@@ -1,20 +1,14 @@
 package org.nasdanika.drawio.comparators;
 
+import java.util.Comparator;
 import java.util.Objects;
 
-import org.nasdanika.common.Util;
-import org.nasdanika.drawio.Element;
-import org.nasdanika.drawio.ElementComparator;
-import org.nasdanika.drawio.ElementComparator.Factory;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Point;
 import org.nasdanika.drawio.Rectangle;
 
-public class AngularModelElementComparatorFactory implements Factory {
-	
-	public static final String COUNTERCLOCKWISE = "counterclockwise";
-	public static final String CLOCKWISE = "clockwise";
+public class AngularNodeComparator implements Comparator<Node> {
 
 	public static Rectangle getAbsoluteGeometry(Node node) {
 		ModelElement parent = node.getParent();
@@ -170,47 +164,43 @@ public class AngularModelElementComparatorFactory implements Factory {
 		return ret;
 	}
 
-	@Override
-	public ElementComparator create(String type, String config, Element parent) {
-		if (parent instanceof Node) {
-			return new ElementComparator() {
-				
-				@Override
-				public int compare(Element o1, Element o2) {				
-					if (Objects.equals(o1, o2)) {
-						return 0;
-					}
-					
-					if (o1 instanceof Node && o2 instanceof Node) {
-						double angle1 = angle((Node) parent, (Node) o1);
-						double angle2 = angle((Node) parent, (Node) o2);
-						if (angle1 == angle2) {
-							return 0;
-						}
-						double baseAngle = Util.isBlank(config) ? Math.PI / 2.0 : Math.toRadians(Double.parseDouble(config));
-						double delta1 = angle1 - baseAngle;
-						if (delta1 < 0) {
-							delta1 += 2.0 * Math.PI;
-						}
-						double delta2 = angle2 - baseAngle;
-						if (delta2 < 0) {
-							delta2 += 2.0 * Math.PI;
-						}
-						int cmp = delta1 < delta2 ? -1 : 1;
-						return CLOCKWISE.equals(type) ? -cmp : cmp;
-					}
-					
-					return o1.hashCode() - o2.hashCode();
-				}
-				
-			};
-		} 
-		return null;
+	private Node parent;
+	private boolean clockwise;
+	private Double baseAngle;
+	
+	/**
+	 * 
+	 * @param parent
+	 * @param clockwise
+	 * @param baseAngle Base angle in degrees, defaults to 90 if null.
+	 */
+	public AngularNodeComparator(Node parent, boolean clockwise, Double baseAngle) {
+		this.parent = parent;
+		this.clockwise = clockwise;
+		this.baseAngle = baseAngle == null ? Math.PI / 2.0 : baseAngle;
 	}
 
 	@Override
-	public boolean isForType(String type) {
-		return CLOCKWISE.equals(type) || COUNTERCLOCKWISE.equals(type);
+	public int compare(Node o1, Node o2) {
+		if (Objects.equals(o1, o2)) {
+			return 0;
+		}
+		
+		double angle1 = angle(parent, o1);
+		double angle2 = angle(parent, o2);
+		if (angle1 == angle2) {
+			return 0;
+		}
+		double delta1 = angle1 - baseAngle;
+		if (delta1 < 0) {
+			delta1 += 2.0 * Math.PI;
+		}
+		double delta2 = angle2 - baseAngle;
+		if (delta2 < 0) {
+			delta2 += 2.0 * Math.PI;
+		}
+		int cmp = delta1 < delta2 ? -1 : 1;
+		return clockwise ? -cmp : cmp;
 	}
 
 }
