@@ -120,7 +120,7 @@ public class SimpleMutableContext implements MutableContext {
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(null, Composeable.<T>composer());
+			return svcs.stream().reduce(Composeable::composer).orElse(null);
 		}
 		
 		List<T> svcs = getServices(type);
@@ -157,7 +157,7 @@ public class SimpleMutableContext implements MutableContext {
 			if (chained!=null) {
 				svcs.add(chained);
 			}
-			return svcs.stream().reduce(null, Composeable.<T>composer());
+			return svcs.stream().reduce(Composeable::composer).orElse(null);
 		}
 		
 		return getServices(type).stream().filter(predicate).findFirst().orElse(chain.get(type, predicate));

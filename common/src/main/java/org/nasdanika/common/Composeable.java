@@ -1,7 +1,5 @@
 package org.nasdanika.common;
 
-import java.util.function.BinaryOperator;
-
 /**
  * Something that can be composed to create an aggregate. E.g. {@link AccessController}s can be composed with AND operation,
  * {@link Context}s can be composed by chaining.
@@ -16,8 +14,14 @@ public interface Composeable<T> {
 	 * @return Composing operator which can be use in reducing streams of {@link Composeable}s to a single composeable.
 	 */
 	@SuppressWarnings("unchecked")
-	static <T> BinaryOperator<T> composer() {
-		return (a,b) -> a == null ? b : ((Composeable<T>) a).compose(b);
+	static <T> T composer(T a, T b) {	
+		if (a == null) {
+			return b;
+		}
+		if (b == null) {
+			return a;
+		}
+		return ((Composeable<T>) a).compose(b);
 	}
 
 	/**

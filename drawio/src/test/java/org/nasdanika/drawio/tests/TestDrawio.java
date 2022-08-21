@@ -24,6 +24,7 @@ import java.util.function.Supplier;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
@@ -39,11 +40,11 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.IntrospectionLevel;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 
 public class TestDrawio {
 
@@ -513,7 +514,7 @@ public class TestDrawio {
 			
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.createProcessors(document);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.compose(processorFactory).createProcessors(document);
 
 		Optional<ProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
@@ -611,20 +612,27 @@ public class TestDrawio {
 				}	
 			}
 			
+			@Override
+			public boolean isPassThrough(org.nasdanika.graph.Connection connection) {
+				return false;
+			}
+			
 		};	
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
 		processorFactory.createProcessors(document, IntrospectionLevel.DECLARED, registry);
 		
-		registry.aliceProcessor.talkToBob("Hi!");
+		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	
 	
+	@Ignore("Does not work because AlibBobHandlers is not exported and reflective method invocation fails")
 	@Test 
 	public void testReflectiveVisitor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		
 		AliceBobHandlers aliceBobHandlers = new AliceBobHandlers();		
-		Object result = document.accept(org.nasdanika.drawio.Util.reflectiveVisitor(aliceBobHandlers), null);
+		Object result = document.dispatch(aliceBobHandlers);
+		System.out.println(result);
 	}	
 	
 }

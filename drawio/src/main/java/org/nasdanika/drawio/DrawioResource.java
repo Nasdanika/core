@@ -7,22 +7,17 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.drawio.DrawioResourceFactory.ElementEntry;
-import org.nasdanika.drawio.DrawioResourceFactory.UpdateAdapter;
+import org.nasdanika.graph.processor.GraphProcessorResource;
+import org.nasdanika.graph.processor.ProcessorFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -32,66 +27,27 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-abstract class DrawioResource<T> extends ResourceImpl {
+public abstract class DrawioResource<T> extends GraphProcessorResource {
 	
 	protected Document document;
-	private ConnectionBase connectionBase;
 	
-	public DrawioResource(URI uri, ConnectionBase connectionBase) {
-		super(uri);
-		this.connectionBase = connectionBase;
+	public DrawioResource(URI uri, ProcessorFactory<Supplier<EObject>, ?, ?> processorFactory) {
+		super(uri, processorFactory);
 	}
-
+	
 	@Override
-	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
+	protected Stream<org.nasdanika.graph.Element> loadElements(InputStream inputStream, Map<?, ?> options)	throws IOException {
 		try {
-			document = Document.load(inputStream, getURI());
-			ElementEntry<T> docEntry = document.accept(this::createEntry, connectionBase);
-			resolve(document, docEntry, e -> resolveSemanticElement(e, document, docEntry));			
+			document = loadDocument(inputStream);
+			return Stream.of(document);
 		} catch (ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException(e);
 		}
 	}
-	
-	/**
-	 * Finds semantic element by recursively traversing entries.
-	 * @param element
-	 * @param elementEntry
-	 * @return
-	 */
-	protected void resolve(Element element, ElementEntry<T> elementEntry, Function<Predicate<Element>,T> resolver) {
-		resolve(element, elementEntry.getSemanticElement(), elementEntry.getChildEntries(), resolver);		
-		for (Entry<Element, ElementEntry<T>> ee: elementEntry.getChildEntries().entrySet()) {
-			resolve(ee.getKey(), ee.getValue(), resolver);
-		}
+
+	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
+		return Document.load(inputStream, getURI());
 	}
-	
-	protected abstract void resolve(
-			Element element, 
-			T semanticElement, 
-			Map<Element,ElementEntry<T>> childEntries, 
-			Function<Predicate<Element>, T> resolver);
-	
-	/**
-	 * Finds semantic element by recursively traversing entries.
-	 * @param element
-	 * @param elementEntry
-	 * @return
-	 */
-	protected T resolveSemanticElement(Predicate<Element> predicate, Element element, ElementEntry<T> elementEntry) {
-		if (predicate.test(element)) {
-			return elementEntry.getSemanticElement();
-		}
-		for (Entry<Element, ElementEntry<T>> ee: elementEntry.getChildEntries().entrySet()) {
-			T ret = resolveSemanticElement(predicate, ee.getKey(), ee.getValue());
-			if (ret != null) {
-				return ret;
-			}
-		}
-		return null;
-	}
-	
-	protected abstract ElementEntry<T> createEntry(Element element, Map<Element, ElementEntry<T>> childMappings);
 
 	@Override
 	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
@@ -112,14 +68,10 @@ abstract class DrawioResource<T> extends ResourceImpl {
 		}
 	}
 
-	protected void update(Document document) {
-		TreeIterator<EObject> cit = getAllContents();
-		while (cit.hasNext()) {
-			Adapter adapter = EcoreUtil.getRegisteredAdapter(cit.next(), UpdateAdapter.class);
-			if (adapter instanceof UpdateAdapter) {
-				((UpdateAdapter) adapter).update(document);
-			}
-		}
-	};
+	/**
+	 * Override to update document with model data.
+	 * @param document Document to update. It may be a previously loaded document or a new empty document for new resources.
+	 */
+	protected void update(Document document) {}
 	
 }

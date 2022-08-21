@@ -6,24 +6,26 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.nasdanika.drawio.Node;
+import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorInfo;
+import org.nasdanika.graph.processor.IncomingEndpoint;
 import org.nasdanika.graph.processor.IncomingHandler;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ParentProcessor;
+import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorElement;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.Registry;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public class BobProcessor implements Runnable {
 	
-//	@IncomingHandler("source.label == 'Alice'")
-//	public Function<String,String> aliceInboundHandler(Connection connection) { 
-//		return request -> {
-//			return request + System.lineSeparator() + " [Bob] Hello, my name is Bob! What is yours?";
-//		};
-//	} 
+	private Function<String, String> aliceEndpoint;
+
+	@IncomingEndpoint("source.label == 'Alice'")
+	public void setAliceInboundEndpoint(Connection connection, Function<String,String> aliceEndpoint) {
+		this.aliceEndpoint = aliceEndpoint;
+	} 
 	
 	@ProcessorElement
 	private Node bobNode;
@@ -53,7 +55,7 @@ public class BobProcessor implements Runnable {
 		System.out.println(registry.size());		
 		System.out.println(parentConfig.getElement());		
 		System.out.println(bobNode);		
-		return request + System.lineSeparator() + "[Bob] Hello, my name is Bob! What is yours?";
+		return request + System.lineSeparator() + aliceEndpoint.apply("[" + bobNode.getLabel() + "] Hello, my name is Bob! What is yours?");
 	};
 
 	@Override

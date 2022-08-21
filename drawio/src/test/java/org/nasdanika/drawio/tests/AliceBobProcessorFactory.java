@@ -36,6 +36,11 @@ public class AliceBobProcessorFactory {
 		
 	};
 	
+	@Processor("source.label == 'Alice' && target.label == 'Bob'")
+	public AliceBobConnectionProcessor createAliceBobConnectionProcessor() {
+		return new AliceBobConnectionProcessor();
+	}
+	
 	@Factories
 	public List<Object> getLibraryProcessor() {
 		return Collections.singletonList(libraryProcessor);

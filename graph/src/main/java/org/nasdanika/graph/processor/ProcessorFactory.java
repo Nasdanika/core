@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.nasdanika.common.Composeable;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
@@ -21,7 +23,7 @@ import org.nasdanika.graph.Element;
  * @param <H> Handler type. Handlers are invoked by endpoints. 
  * @param <E> Endpoint type. Endpoints pass invocations to handlers.
  */
-public interface ProcessorFactory<P,H,E> {
+public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,H,E>> {
 	
 	/**
 	 * If a connection is pass-through its source endpoint is connected directly to the target node handler and vice versa.
@@ -84,5 +86,48 @@ public interface ProcessorFactory<P,H,E> {
 	 * @return
 	 */
 	H createHandlerProxy(Connection connection, Supplier<H> handlerSupplier, HandlerType type);
+	
+	@Override
+	default ProcessorFactory<P, H, E> compose(ProcessorFactory<P, H, E> other) {
+		if (other == null) {
+			return this;
+		}
+		
+		return new ProcessorFactory<P, H, E>() {
+
+			@Override
+			public E createEndpoint(Connection connection, H handler, HandlerType type) {
+				E endpoint = ProcessorFactory.this.createEndpoint(connection, handler, type);
+				if (endpoint != null) {
+					return endpoint;
+				}
+				return other.createEndpoint(connection, handler, type);
+			}
+
+			@Override
+			public H createHandlerProxy(Connection connection, Supplier<H> handlerSupplier, HandlerType type) {
+				H handler = ProcessorFactory.this.createHandlerProxy(connection, handlerSupplier, type);
+				if (handler != null) {
+					return handler;
+				}
+				return other.createHandlerProxy(connection, handlerSupplier, type);
+			}
+			
+			@Override
+			public ProcessorInfo<P> createProcessor(
+					ProcessorConfig<P> config,
+					Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
+					Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
+				
+				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
+				return info.getProcessor() == null ? other.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback) : info;
+			}
+		};
+		
+	}
+	
+	static <P, H, E> Optional<ProcessorFactory<P, H, E>> compose(Stream<ProcessorFactory<P, H, E>> factories) {
+		return factories.reduce(Composeable::composer);
+	}
 
 }
