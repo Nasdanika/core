@@ -7,14 +7,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.processor.GraphProcessorResource;
 import org.nasdanika.graph.processor.ProcessorFactory;
@@ -27,11 +25,11 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource<T> extends GraphProcessorResource {
+public abstract class DrawioResource<P> extends GraphProcessorResource<P> {
 	
 	protected Document document;
 	
-	public DrawioResource(URI uri, ProcessorFactory<Supplier<EObject>, ?, ?> processorFactory) {
+	public DrawioResource(URI uri, ProcessorFactory<P, ?, ?> processorFactory) {
 		super(uri, processorFactory);
 	}
 	

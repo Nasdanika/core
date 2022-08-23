@@ -81,8 +81,10 @@ class ProcessorFactoryVisitor<P,H,E> {
 					
 				};
 				H incomingEndpointHandlerProxy = factory.createHandlerProxy(incomingConnection, incomingHandlerSupplier, HandlerType.INBOUND); 
-				E incomingEndpoint = factory.createEndpoint(incomingConnection, incomingEndpointHandlerProxy, HandlerType.INBOUND);
-				incomingEndpoints.put(incomingConnection, incomingEndpoint);
+				E incomingEndpoint = incomingEndpointHandlerProxy == null ? null : factory.createEndpoint(incomingConnection, incomingEndpointHandlerProxy, HandlerType.INBOUND);
+				if (incomingEndpoint != null) {
+					incomingEndpoints.put(incomingConnection, incomingEndpoint);
+				}
 				
 				Consumer<H> incomingHandlerConsumer = incomingHandler -> incomingHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(incomingConnection, incomingHandler);
 				incomingHandlerConsumers.put(incomingConnection, incomingHandlerConsumer);										
@@ -117,8 +119,10 @@ class ProcessorFactoryVisitor<P,H,E> {
 					
 				};
 				H outgoingEndpointHandlerProxy = factory.createHandlerProxy(outgoingConnection, outgoingHandlerSupplier, HandlerType.OUTBOUND);
-				E outgoingEndpoint = factory.createEndpoint(outgoingConnection, outgoingEndpointHandlerProxy, HandlerType.OUTBOUND);
-				outgoingEndpoints.put(outgoingConnection, outgoingEndpoint);
+				E outgoingEndpoint = outgoingEndpointHandlerProxy == null ? null : factory.createEndpoint(outgoingConnection, outgoingEndpointHandlerProxy, HandlerType.OUTBOUND);
+				if (outgoingEndpoint != null) {
+					outgoingEndpoints.put(outgoingConnection, outgoingEndpoint);
+				}
 				
 				Consumer<H> outgoingHandlerConsumer = outgoingHandler -> outgoingHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(outgoingConnection, outgoingHandler);
 				outgoingHandlerConsumers.put(outgoingConnection, outgoingHandlerConsumer);										
@@ -198,7 +202,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 						
 					};
 					H sourceHandlerProxy = factory.createHandlerProxy(connection, sourceHandlerSupplier, HandlerType.SOURCE);
-					sourceEndpoint = factory.createEndpoint(connection, sourceHandlerProxy, HandlerType.SOURCE);
+					sourceEndpoint = sourceHandlerProxy == null ? null : factory.createEndpoint(connection, sourceHandlerProxy, HandlerType.SOURCE);
 				}
 				
 				Consumer<H> sourceHandlerConsumer = sourceHandler -> sourceHandlers.put((Connection) element, sourceHandler);						
@@ -220,7 +224,7 @@ class ProcessorFactoryVisitor<P,H,E> {
 						return targetHandler;						
 					};
 					H targetHandlerProxy = factory.createHandlerProxy(connection, targetHandlerSupplier, HandlerType.TARGET);
-					targetEndpoint = factory.createEndpoint(connection, targetHandlerProxy, HandlerType.TARGET);
+					targetEndpoint = targetHandlerProxy == null ? null : factory.createEndpoint(connection, targetHandlerProxy, HandlerType.TARGET);
 				}
 				Consumer<H> targetHandlerConsumer = targetHandler -> targetHandlers.put((Connection) element, targetHandler);						
 				

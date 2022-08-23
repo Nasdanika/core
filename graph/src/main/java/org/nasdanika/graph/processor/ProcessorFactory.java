@@ -45,20 +45,9 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	
 	default ProcessorInfo<P> createProcessor(
 			ProcessorConfig<P> config, 
-			Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
-			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
-		return new ProcessorInfo<P>() {
-
-			@Override
-			public ProcessorConfig<P> getConfig() {
-				return config;
-			}
-
-			@Override
-			public P getProcessor() {
-				return null;
-			}
-		};
+			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
+			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConsumer) {
+		return ProcessorInfo.of(config, null);
 	}
 	
 	default Map<Element,ProcessorInfo<P>> createProcessors(Element... elements) {
@@ -116,11 +105,11 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 			@Override
 			public ProcessorInfo<P> createProcessor(
 					ProcessorConfig<P> config,
-					Consumer<Consumer<ProcessorInfo<P>>> setParentProcessorInfoCallback,
-					Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> setRegistryCallback) {
+					Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
+					Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConsumer) {
 				
-				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
-				return info.getProcessor() == null ? other.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback) : info;
+				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConsumer);
+				return info.getProcessor() == null ? other.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConsumer) : info;
 			}
 		};
 		

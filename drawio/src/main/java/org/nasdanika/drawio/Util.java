@@ -2,7 +2,6 @@ package org.nasdanika.drawio;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,12 +18,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.apache.commons.text.WordUtils;
-import org.jsoup.Jsoup;
 
 public final class Util {
 	

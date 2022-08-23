@@ -18,11 +18,11 @@ import org.nasdanika.graph.Element;
  * @author Pavel
  *
  */
-public abstract class GraphProcessorResource extends ResourceImpl {
+public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	
-	private ProcessorFactory<Supplier<EObject>, ?, ?> processorFactory;
+	private ProcessorFactory<P, ?, ?> processorFactory;
 	
-	protected GraphProcessorResource(URI uri, ProcessorFactory<Supplier<EObject>, ?, ?> processorFactory) {
+	protected GraphProcessorResource(URI uri, ProcessorFactory<P, ?, ?> processorFactory) {
 		super(uri);
 		this.processorFactory = processorFactory;
 	}
@@ -38,24 +38,24 @@ public abstract class GraphProcessorResource extends ResourceImpl {
 	
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
-		Map<Element, ProcessorInfo<Supplier<EObject>>> registry = processorFactory.createProcessors(loadElements(inputStream, options));
-		getRoots(registry).forEach(getContents()::add);
+		Map<Element, ProcessorInfo<P>> registry = processorFactory.createProcessors(loadElements(inputStream, options));
+		getRoots(getSemanticElements(registry)).forEach(getContents()::add);
 	}
 
 	/**
-	 * Loads root objects from the registry. This implementation loads objects not contained in other objects. 
+	 * Retrieves semantic elements {@link EObject}s from the registry.
 	 * @param registry
 	 * @return
 	 */
-	protected Stream<EObject> getRoots(Map<Element, ProcessorInfo<Supplier<EObject>>> registry) {
-		return registry
-				.values()
-				.stream()
-				.map(ProcessorInfo::getProcessor)
-				.filter(Objects::nonNull)
-				.map(Supplier::get)
-				.filter(Objects::nonNull)
-				.filter(eObj -> eObj.eContainer() == null);
+	protected abstract Stream<EObject> getSemanticElements(Map<Element, ProcessorInfo<P>> registry);
+
+	/**
+	 * Loads root objects from a stream of semantic elements. This implementation loads objects not contained in other objects. 
+	 * @param registry
+	 * @return
+	 */
+	protected Stream<? extends EObject> getRoots(Stream<EObject> semanticElements) {
+		return semanticElements.filter(Objects::nonNull).filter(eObj -> eObj.eContainer() == null);
 	}
 	
 }
