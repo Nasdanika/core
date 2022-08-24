@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -85,7 +87,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			
 			Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
 				.filter(m -> matchFactoryMethod(config, m))
-				.sorted((a, b) -> b.getAnnotation(Processor.class).priority() - a.getAnnotation(Processor.class).priority())
+				.sorted(this::compareProcessorMethods)
 				.findFirst();
 			
 			if (match.isPresent()) {
@@ -296,6 +298,34 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			
 		}
 		return null;
+	}
+
+	protected int compareProcessorMethods(Method a, Method b) {
+		int priorityCmp = b.getAnnotation(Processor.class).priority() - a.getAnnotation(Processor.class).priority();
+		if (priorityCmp != 0) {
+			return priorityCmp;
+		}
+		
+		Class<Element> aType = a.getAnnotation(Processor.class).type();
+		Class<Element> bType = b.getAnnotation(Processor.class).type();
+		if (!Objects.equals(aType, bType)) {
+			if (aType.isAssignableFrom(bType)) {
+				// b is more specific
+				return 1;
+			}
+			if (bType.isAssignableFrom(aType)) {
+				// a is more specific
+				return -1;
+			}
+		}
+		
+		// Taking config is more specific 
+		int paramCountCmp = b.getParameterCount() - a.getParameterCount();
+		if (paramCountCmp != 0) {
+			return paramCountCmp;
+		}
+		
+		return a.getName().compareTo(b.getName());
 	}
 		
 	protected Consumer<Map<Element, ProcessorInfo<P>>> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
@@ -768,9 +798,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		}
 		
 		ExpressionParser parser = new SpelExpressionParser();
-		Expression exp = parser.parseExpression(expr);			
-		try {
-			return exp.getValue(obj, Boolean.class);
+		Expression exp = parser.parseExpression(expr);
+		EvaluationContext evaluationContext = getEvaluationContext();
+		try {			
+			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
 		} catch (EvaluationException e) {
 			return false;
 		}
@@ -955,6 +986,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected boolean isValueSupplier(AnnotatedElement element) {
 		return element instanceof Field || (element instanceof Method && ((Method) element).getParameterCount() == 0);
+	}
+	
+	protected EvaluationContext getEvaluationContext() {
+		return null;
 	}
 	
 }
