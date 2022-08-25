@@ -322,4 +322,9 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return super.toString() + " " + getLabel();
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && obj instanceof ModelElement && getModel().equals(((ModelElement) obj).getModel());
+	}
+	
 }

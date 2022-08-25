@@ -212,5 +212,15 @@ class ModelImpl extends ElementImpl implements Model {
 		URI pageURI = getPage().getURI();
 		return pageURI == null ? URI.createURI("model") : pageURI.appendSegment("model");
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj) && getPage().equals(((Model) obj).getPage());
+	}
+	
+	@Override
+	public int hashCode() {
+		return getPage().hashCode() ^ getClass().hashCode();
+	}
 	
 }
