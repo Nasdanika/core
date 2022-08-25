@@ -122,6 +122,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			private Node cloneAndImportPageElement(Page page) {
 				Node pageElementClone = page.getElement().cloneNode(true);
 				Node importedPageElementClone = document.importNode(pageElementClone, true);
+				((org.w3c.dom.Element) importedPageElementClone).setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString()); // New ID.
 				return importedPageElementClone;
 			}
 			
