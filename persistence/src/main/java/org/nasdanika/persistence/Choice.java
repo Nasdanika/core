@@ -36,7 +36,6 @@ public class Choice<T> extends Attribute<T> {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@Override
 	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {

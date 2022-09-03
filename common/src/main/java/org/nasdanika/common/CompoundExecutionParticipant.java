@@ -96,7 +96,7 @@ public abstract class CompoundExecutionParticipant<E extends ExecutionParticipan
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		List<E> elements = new ArrayList<E>(getElements());
 		if (reverseCommitClose) {
 			Collections.reverse(elements);

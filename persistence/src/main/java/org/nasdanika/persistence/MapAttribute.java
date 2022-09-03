@@ -53,7 +53,6 @@ public class MapAttribute<K, V> extends Attribute<Map<K, V>> {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 

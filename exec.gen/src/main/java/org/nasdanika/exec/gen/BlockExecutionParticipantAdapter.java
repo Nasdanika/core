@@ -116,7 +116,7 @@ public class BlockExecutionParticipantAdapter extends AdapterImpl {
 		}
 		
 		@Override
-		public void close() throws Exception {
+		public void close() {
 			tryParticipant.close();
 			if (catchParticipant != null) {
 				catchParticipant.close();

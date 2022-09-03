@@ -48,7 +48,6 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
 		return Collections.singletonList(createElement(loader, element, base, progressMonitor, markers)); 
@@ -63,7 +62,6 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 

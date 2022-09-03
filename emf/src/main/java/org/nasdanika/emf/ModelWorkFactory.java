@@ -25,7 +25,6 @@ public class ModelWorkFactory<T> implements SupplierFactory<T> {
 	/**
 	 * Creates a generator by loading a generator model specified by the platform URI, e.g. ``org.nasdanika.codegen.tests.models/models/static-text/basic.codegen``, into a new {@link ResourceSet}. 
 	 * @param platformPluginUri
-	 * @throws Exception 
 	 */
 	public ModelWorkFactory(String platformPluginUri, EPackage... ePackages) {
 		this(URI.createPlatformPluginURI(platformPluginUri, false), ePackages);

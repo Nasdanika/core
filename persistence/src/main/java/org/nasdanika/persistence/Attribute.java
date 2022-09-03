@@ -73,7 +73,6 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

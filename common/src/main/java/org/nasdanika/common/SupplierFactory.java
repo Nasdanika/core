@@ -46,13 +46,7 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		
 	@Override
 	default T apply(Context context, ProgressMonitor progressMonitor) {
-		try {
-			return create(context).apply(progressMonitor);
-		} catch (DiagnosticException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new NasdanikaException(e);
-		}
+		return create(context).apply(progressMonitor);
 	}
 	
 	default <V> FunctionFactory<V,BiSupplier<V,T>> asFunctionFactory() { 

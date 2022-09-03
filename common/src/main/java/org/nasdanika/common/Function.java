@@ -64,7 +64,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public void close() throws Exception {
+			public void close() {
 				Function.this.close();
 			}
 			
@@ -105,7 +105,7 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 			}
 			
 			@Override
-			public void close() throws Exception {
+			public void close() {
 				Function.this.close();
 			}
 			
@@ -225,16 +225,8 @@ public interface Function<T,R> extends ExecutionParticipant, ExecutionParticipan
 				}
 				throw e;
 			}
-		} catch (DiagnosticException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new NasdanikaException(e);
 		} finally {
-			try {
-				close();
-			} catch (Exception e) {
-				throw new NasdanikaException(e);
-			}
+			close();
 		}		
 	}
 	

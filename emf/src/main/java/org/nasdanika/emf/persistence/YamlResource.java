@@ -83,13 +83,7 @@ class YamlResource extends ResourceImpl {
 			if (storable == null) {
 				throw new IOException("Cannot adapt " + e + " to " + Storable.class.getName());
 			}
-			try {
-				data.add(storable.store(new URL(getURI().toString()), progressMonitor));
-			} catch (RuntimeException | IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new NasdanikaException(ex);
-			}
+			data.add(storable.store(new URL(getURI().toString()), progressMonitor));
 		}
 		
 		DumperOptions dumperOptions = new DumperOptions();

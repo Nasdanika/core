@@ -47,24 +47,18 @@ public class JsonResource extends ResourceImpl {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
-		try {
-			Object data = loader.loadJsonArray(inputStream, getURI(), progressMonitor);
-			if (data instanceof Collection) {
-				getContents().addAll((Collection<EObject>) data);
+		Object data = loader.loadJsonArray(inputStream, getURI(), progressMonitor);
+		if (data instanceof Collection) {
+			getContents().addAll((Collection<EObject>) data);
+		} else {
+			if (data instanceof SupplierFactory) {
+				EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(context), progressMonitor, null);
+				getContents().add(eObject);
+			} else if (data instanceof EObject) {
+				getContents().add((EObject) data);
 			} else {
-				if (data instanceof SupplierFactory) {
-					EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(context), progressMonitor, null);
-					getContents().add(eObject);
-				} else if (data instanceof EObject) {
-					getContents().add((EObject) data);
-				} else {
-					throw new IOException("Not an instance of EObject: " + data);
-				}
+				throw new IOException("Not an instance of EObject: " + data);
 			}
-		} catch (RuntimeException | IOException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new NasdanikaException(e);
 		}
 	}
 	
@@ -76,13 +70,7 @@ public class JsonResource extends ResourceImpl {
 			if (storable == null) {
 				throw new IOException("Cannot adapt " + e + " to " + Storable.class.getName());
 			}
-			try {
-				data.put(storable.store(new URL(getURI().toString()), progressMonitor));
-			} catch (RuntimeException | IOException ex) {
-				throw ex;
-			} catch (Exception ex) {
-				throw new NasdanikaException(ex);
-			}
+			data.put(storable.store(new URL(getURI().toString()), progressMonitor));
 		}
 		
 		try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {

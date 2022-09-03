@@ -21,7 +21,6 @@ public interface ObjectFactory<T> {
 	 * @param progressMonitor 
 	 * @param marker Optional source marker for troubleshooting.  
 	 * @return Created object
-	 * @throws Exception
 	 */
 	T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);	
 

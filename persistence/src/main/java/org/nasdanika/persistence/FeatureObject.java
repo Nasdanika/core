@@ -51,7 +51,6 @@ public class FeatureObject implements Marked, Loadable {
 	 * @param progressMonitor
 	 * @param marker
 	 * @return this object.
-	 * @throws Exception
 	 */
 	@Override
 	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {

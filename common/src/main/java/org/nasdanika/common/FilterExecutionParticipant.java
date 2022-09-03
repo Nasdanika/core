@@ -34,7 +34,7 @@ public class FilterExecutionParticipant<T extends ExecutionParticipant> implemen
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		target.close();
 	}
 

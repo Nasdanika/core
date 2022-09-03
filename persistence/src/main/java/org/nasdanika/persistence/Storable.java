@@ -15,6 +15,6 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public interface Storable {
 	
-	Object store(URL base, ProgressMonitor progressMonitor) throws Exception;	
+	Object store(URL base, ProgressMonitor progressMonitor);	
 
 }

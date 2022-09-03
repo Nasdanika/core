@@ -19,19 +19,19 @@ import org.nasdanika.common.Supplier;
  */
 public class ValidatingModelWorkFactory<T> extends ModelWorkFactory<T> {
 
-	public ValidatingModelWorkFactory(ResourceSet resourceSet, URI modelUri) throws Exception {
+	public ValidatingModelWorkFactory(ResourceSet resourceSet, URI modelUri) {
 		super(resourceSet, modelUri);
 	}
 
-	public ValidatingModelWorkFactory(String platformPluginUri, EPackage... ePackages) throws Exception {
+	public ValidatingModelWorkFactory(String platformPluginUri, EPackage... ePackages) {
 		super(platformPluginUri, ePackages);
 	}
 
-	public ValidatingModelWorkFactory(URI modelUri, EPackage... ePackages) throws Exception {
+	public ValidatingModelWorkFactory(URI modelUri, EPackage... ePackages) {
 		super(modelUri, ePackages);
 	}
 	
-	public ValidatingModelWorkFactory(ResourceSet resourceSet, String platformPluginUri) throws Exception {
+	public ValidatingModelWorkFactory(ResourceSet resourceSet, String platformPluginUri) {
 		super(resourceSet, platformPluginUri);
 	}
 	

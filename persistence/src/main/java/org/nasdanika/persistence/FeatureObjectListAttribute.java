@@ -36,7 +36,6 @@ public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAtt
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@Override
 	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 

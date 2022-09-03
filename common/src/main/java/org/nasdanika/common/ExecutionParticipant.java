@@ -9,7 +9,7 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 	
 	
 	@Override
-	default void close() throws Exception {
+	default void close() {
 		
 	}
 
@@ -86,6 +86,7 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 		try (ProgressMonitor subMonitor = split(size, progressMonitor, "Diagnosing "+name())) {
 			return diagnose(subMonitor);
 		}
-	}	
+	}
+	
 	
 }

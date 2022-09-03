@@ -85,7 +85,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void close() throws Exception {
+			public void close() {
 				Supplier.this.close();
 			}
 			
@@ -238,16 +238,8 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 				}
 				throw e;
 			}
-		} catch (DiagnosticException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new NasdanikaException(e);
 		} finally {
-			try {
-				close();
-			} catch (Exception e) {
-				throw new NasdanikaException(e);
-			}
+			close();
 		}
 	}
 	
@@ -284,16 +276,8 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 						}
 						throw e;
 					}
-				} catch (DiagnosticException e) {
-					throw e;
-				} catch (Exception e) {
-					throw new NasdanikaException(e);
 				} finally {
-					try {
-						close();
-					} catch (Exception e) {
-						throw new NasdanikaException(e);
-					}
+					close();
 				}
 			}
 		};
@@ -329,7 +313,7 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			}
 			
 			@Override
-			public void close() throws Exception {
+			public void close() {
 				Supplier.this.close();
 			}
 			

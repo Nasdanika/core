@@ -479,9 +479,8 @@ public class Util {
 	 * @param context
 	 * @param component
 	 * @return
-	 * @throws Exception
 	 */
-	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor, Consumer<Diagnostic> diagnosticConsumer, Status... failOnStatuses) throws Exception {
+	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor, Consumer<Diagnostic> diagnosticConsumer, Status... failOnStatuses) {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
 			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
 			if (diagnosticConsumer != null) {
@@ -520,9 +519,8 @@ public class Util {
 	 * @param component
 	 * @param failOnStatuses Status on which to throw {@link DiagnosticException}. Defaults to FAIL.
 	 * @return
-	 * @throws Exception
 	 */
-	public static Diagnostic call(Command command, ProgressMonitor monitor, Status... failOnStatuses) throws Exception {
+	public static Diagnostic call(Command command, ProgressMonitor monitor, Status... failOnStatuses) {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling command", 3)) {
 			Diagnostic diagnostic = command.splitAndDiagnose(progressMonitor);			
 			Status status = diagnostic.getStatus();
@@ -558,9 +556,8 @@ public class Util {
 	 * @param component
 	 * @param failOnStatuses Status on which to throw {@link DiagnosticException}. Defaults to FAIL.
 	 * @return
-	 * @throws Exception
 	 */
-	public static <T> Diagnostic call(org.nasdanika.common.Consumer<T> consumer, T arg,  ProgressMonitor monitor, Status... failOnStatuses) throws Exception {
+	public static <T> Diagnostic call(org.nasdanika.common.Consumer<T> consumer, T arg,  ProgressMonitor monitor, Status... failOnStatuses) {
 		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling consumer", 3)) {
 			Diagnostic diagnostic = consumer.splitAndDiagnose(progressMonitor);			
 			Status status = diagnostic.getStatus();

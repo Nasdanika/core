@@ -63,7 +63,7 @@ public class ContextifiedExecutionParticipant<T extends ExecutionParticipant>  i
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		if (target != null) {
 			target.close();
 		}

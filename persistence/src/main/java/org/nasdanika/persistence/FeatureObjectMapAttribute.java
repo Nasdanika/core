@@ -48,7 +48,6 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 	 * @param progressMonitor
 	 * @param marker
 	 * @return
-	 * @throws Exception
 	 */
 	@Override
 	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 

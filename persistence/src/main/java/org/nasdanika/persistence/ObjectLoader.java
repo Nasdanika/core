@@ -50,7 +50,6 @@ public interface ObjectLoader {
 	 * @param progressMonitor 
 	 * @param marker Optional source marker for troubleshooting.  
 	 * @return
-	 * @throws Exception
 	 */
 	Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);
 	
