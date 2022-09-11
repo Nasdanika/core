@@ -1,20 +1,5 @@
 engineering-module:
   name: Generation Adapters
   path: gen
-  action-prototype: "../javadoc-action-prototype.xml#/"
-  dependencies:
-    - engineering://nasdanika/modules/core/modules/exec
-  issues:
-    embedded-image-data:
-      name: Embedded image data
-      description: Add embedded image data interpolation for markdown.      
-    include-base:
-      name: Include base
-      description: Base shall be resolved relative to the target resource or marker. Use marker first.
-    maven-classloader:
-      name: Maven classloader
-      description: For the call. Might be heavy, but powerful, it is not that much about the speed but about the result. https://stackoverflow.com/questions/35598239/load-maven-artifact-via-classloader.   
-    link-validator:
-      name: Link Validator
-      description: Validation of links. Should work on a file system and on a resource model. Base (target) URI for link resolution and a predicate for URL's to validate, e.g. all URL's under a particular URL (internal links). Use Jsoup.   
+  action-prototype: "javadoc-action-prototype.xml#/"
    

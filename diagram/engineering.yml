@@ -2,6 +2,4 @@ engineering-module:
   name: Model
   path: model
   action-prototype: "../../nasdanika.github.io/target/model-doc/actions/diagram.genmodel.xml#/"    
-  dependencies:
-    - engineering://nasdanika/modules/core/modules/ncore
     

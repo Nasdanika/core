@@ -1,7 +1,7 @@
 engineering-module:
   name: EMF
   path: emf
-  action-prototype: "../javadoc-action-prototype.xml#/"
+  action-prototype: "javadoc-action-prototype.xml#/"
   documentation:
     content-interpolator:
       source:
@@ -9,34 +9,4 @@ engineering-module:
           style: true
           source:
             content-resource: readme.md
-  dependencies:
-    - engineering://nasdanika/modules/core/modules/cli
-    - engineering://nasdanika/modules/core/modules/ncore
-  issues:
-    - path: map-markers
-      name: Carry-over markers from Map entries to List elements
-      description: ReferenceList - 81, 93.      
-    - path: multiple-e-keys
-      name: Add support of multiple e-keys
-      description: ReferenceList - 98. Nested maps.      
-    - path: default-features-with-e-keys
-      name: Add support of default features with e-keys
-      description: ReferenceList. Implemented for homogenous - needs to be tested, implement for heterogenous.      
-    - path: type-selectors
-      name: Type selectors
-      description: |+2
-        Currently homogenous reference type can be selected based on configuration type - map, list, ...
-        Extend this capability to allow to introspect config and select element type based on config content, not just type.
-        For example, if issue config map has github-issue key then instead of Issue an instance of GitHubIssue shall be created.
-        One way is to keep the existing functionality for type mapping and add selector type key with value of a list for a single entry map.
-        List elements would be maps with config-type (map, ...), element-type (EClass - string or map with EPackage and Eclass names), and 
-        selector or different selectors which can be jxpath (https://commons.apache.org/proper/commons-jxpath/), JavaScript, etc.
-        For GitHubIssue it would be something like { config-type: map; element-type: GitHubIssue; path: <jxpath checking for presence of github-issue key> }         
-    - path: homogenous-to-typed
-      name: Homogenous to typed
-      description: |+2
-        With introduction of type maps and type selectors homogenous became a misnomer. Drop "homogenous" in favor of "typed" with default value true and 
-        change homogenous=true to typed=false annotation. Typed would mean that the type shall be explicitly provided by elements and false would mean that
-        it will be computed from reference type and type map/selector annotations. Or use reference-type annotation with string value "reference" indicating
-        that type shall be taking from EReference - the same as homogenous. Replace isHomogenous with isTyped (with negation).
      

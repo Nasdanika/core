@@ -1,5 +1,6 @@
 engineering-module:
-  name: CLI
-  path: cli
+  name: Graph
+  path: graph
   action-prototype: "javadoc-action-prototype.xml#/"
-    
+
+     

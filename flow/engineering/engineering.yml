@@ -2,10 +2,6 @@ engineering-product:
   name: Flow
   path: flow
   action-prototype: "../../../nasdanika.github.io/target/model-doc/actions/flow.genmodel.xml#/"    
-  dependencies:
-    - engineering://nasdanika/modules/core/modules/exec/modules/gen
-    - engineering://nasdanika/modules/core/modules/diagram/modules/model
-    - engineering://nasdanika/modules/core/modules/diagram/modules/gen
   documentation:
     content-markdown:
       style: true
@@ -47,77 +43,4 @@ engineering-product:
           style: true
           source:
             content-resource: features/validation.md      
-            
-  issues:
-    style-inheritance-from-templates:
-      name: Artifact inheritance of representation properties from templates
-      description: |+2
-        Cascading inheritance, merging of properties. Would allow to define a library of artifact templates (building blocks) and assemble composite artifacts from them. 
-        E.g. cloud components - storage, compute, cache, networking. Generated diagrams would have styles like images readily available. 
-    model-documentation:
-      name: Fully document the model
-      description: Link to this file - template-action. 
-      increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
-    children-only-representation:
-      name: Children only representation
-      description: A flag to diagram or a property to indicate that the element itself shall not appear on the diagram, only children. May use something like context = -1.
-    drawio-styling:
-      name: Drawio styling for pseudo-states
-      description: Choice, join, ... PlantUML layout shall take care of port positioning.
-    document-features:
-      name: Document features
-    git-provenance:
-      name: Git provenance
-      description: |+2
-        Conversion of file URI's in markers to Git upstream URI's using jGit and then to URL's of, say, GitHub.
-        Generic marker processing approach and then Git implementation with GitHub implementation as an extension.
-        Would allow to navigate to the source location of model elements. Shall be very useful in the case of 
-        flow inheritance where elements may reside in multiple source repositories. 
-    pseudo-state-links:
-      name: Pseudo-state links
-      description: Add links to pseudo-states - supported by Drawio. If linked then shall have an action - need a flag to indicate that it is a real state. Maybe a way to have real states rendered as pseudo-states. 
-    change-comment:
-      name: Change comment
-      description: Add support for providing a reason for adding/suppressing/overriding package elements. Generate a changelog. 
-    inputs-outputs-validation:
-      name: Inputs/Outputs validation
-      description: |+2
-        If both element and transitions/calls specify artifacts - input, output, payload, response - then validate consistency, e.g. that transition payload is in the list of activity output artifacts.
-        Take resources into account which serve as artifact repositories. The goal is to catch situations when input artifacts appear from nowhere - don't come through inputs or call responses and 
-        cannot be retrieved from repository resorces. For output artifacts - make sure that an artifact does not disappear - it shall either be listed as a payload of a call or transition, or stored into a repository resource.    
-    builders:
-      name: Builders
-      description: |+2
-        A list of EObjects adapted to Consumer and invoked in apply(). Context and progress monitor, apply and createInstance either throws Exception or wraps it maybe in ConfigurationException and injects builder's marker.
-        InterpolatingBuilder - interpolates tokens in features. Own properties, flag to chain with context and path. Features to interpolate - all String features by default. 
-        CallBuilder - similar to Call in Exec, possibly extract common functionality to Ncore or use Call as-is - shall be adaptable to consumer then.     
-    durations:
-      name: Durations
-      description: |+2
-        Activity and transition durations. Create DurationProbability class extending Duration in Flow, or just Duration with weight. Weight default value is 1.
-        For flows without explicitly provided durations compute durations from elements. For a low number of permutations use all permutations, for a high use something like
-        Monte Carlo method. In both cases computed results can be grouped into "slices" with different weights. Number of computed durations is an attribute with default value, say 10 or 20.
-        Slicing may use the same weight for slices with a large number of samples and make the number of samples equal in each slice. For the tails of distribution and outliers it would use lower weights.
-        The number of simulations to run shall be configurable via flow attribute(s). Options - total number, absolute, relative number - computed from the number of elements, time bound - no more than, say, 10 seconds,
-        combination of thereof, e.g. no more than 10 seconds, but at least 1000 iterations even if it takes more than 10 seconds.
-        Create a feature explaining how it works and how to use it.
-        getDuration(double) method returning duration for a number between 0 and 1 - sum all weights, find an entry which the argument "falls in" and return it - running weight (sum) previous is lower, next is higher or there is no next (1).
-        For a single element simply return its duration.
-        Transition type - end-to-start (default), the other 3. Not applicable to calls - may have a diagnostic or throw an error if used on calls.
-        Consider adding support of Duration Observation - value, when, maybe description. Derive distribution from observations if no durations were specified. Consider using some weight scale based on how far in the past, i.e. recent observations
-        have more weight. Maybe a generic observation in Flow or Ncore model which may have individual named metrics - duration, sentiment (rating). Metrics may have individual comments. Observations may be captured in some 
-        system using, say, URI as a correlation id, and then be "injected" into the model during load. Then clear feature cache. Clear it on any mutation or have some dependency thing to know which mutations clear which cached feature - annotation, say "depends"?       
-    in-browser-editing:
-      name: In-browsing editing feature
-      description: Collaboration, inner source. Create pull request. Related to Data Provenance.
-    critical-path:
-      name: Critical path
-      description: Computation. Probability/frequency/distribution. Visualization - arrow width, thick border.
-    group-by:
-      name: Group-by
-      description: Support of grouping by not only participants, but, say, responsible.
-    categories:
-      name: Categories
-      description: Grouping mechanism, maybe have it in Ncore. A category is a named element with id (use uuid?). Elements have a list of categories. If it is not empty, elements may be grouped into categories with categories list being a (tree) path. Can be used to group service activities into "domains". Categorization does not affect URI's.
-       
     

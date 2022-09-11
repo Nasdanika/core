@@ -1,5 +1,6 @@
 engineering-module:
-  name: CLI
-  path: cli
+  name: Resources
+  path: resources
   action-prototype: "javadoc-action-prototype.xml#/"
-    
+
+     

@@ -1,7 +1,7 @@
 engineering-module:
   name: Drawio
   path: drawio
-  action-prototype: "../javadoc-action-prototype.xml#/"
+  action-prototype: "javadoc-action-prototype.xml#/"
   documentation:
     content-interpolator:
       source:

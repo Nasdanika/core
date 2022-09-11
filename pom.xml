@@ -106,48 +106,6 @@
 								<link>https://download.eclipse.org/modeling/emf/emf/javadoc/2.11/</link>
 								<link>https://picocli.info/apidocs/</link>
 							</links>
-							<offlineLinks>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/common/apidocs/</url>
-									<location>../../../common/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/ncore/apidocs/</url>
-									<location>../../../ncore/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/flow/apidocs/</url>
-									<location>../../../flow/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/apidocs/</url>
-									<location>../../../diagram/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/gen/apidocs/</url>
-									<location>../../../diagram.gen/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/model/apidocs/</url>
-									<location>../../../exec/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/gen/apidocs/</url>
-									<location>../../../exec.gen/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/cli/apidocs/</url>
-									<location>../../../cli/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/drawio/apidocs/</url>
-									<location>../../../drawio/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/emf/apidocs/</url>
-									<location>../../../emf/target/apidocs/</location>
-								</offlineLink>
-							</offlineLinks>
 							<header>
 								<![CDATA[
 								      <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BRJVLK8CC"></script>
@@ -177,48 +135,6 @@
 								<link>https://download.eclipse.org/modeling/emf/emf/javadoc/2.11/</link>
 								<link>https://picocli.info/apidocs/</link>
 							</links>
-							<offlineLinks>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/common/apidocs/</url>
-									<location>../../../common/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/ncore/apidocs/</url>
-									<location>../../../ncore/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/flow/apidocs/</url>
-									<location>../../../flow/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/apidocs/</url>
-									<location>../../../diagram/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/gen/apidocs/</url>
-									<location>../../../diagram.gen/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/model/apidocs/</url>
-									<location>../../../exec/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/gen/apidocs/</url>
-									<location>../../../exec.gen/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/cli/apidocs/</url>
-									<location>../../../cli/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/drawio/apidocs/</url>
-									<location>../../../drawio/target/apidocs/</location>
-								</offlineLink>
-								<offlineLink>
-									<url>https://docs.nasdanika.org/modules/core/modules/emf/apidocs/</url>
-									<location>../../../emf/target/apidocs/</location>
-								</offlineLink>
-							</offlineLinks>
 							<header>
 								<![CDATA[
 								      <script async src="https://www.googletagmanager.com/gtag/js?id=G-9BRJVLK8CC"></script>

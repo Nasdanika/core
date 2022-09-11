@@ -287,7 +287,6 @@ public class TestCommon {
 	}
 	
 	@Test
-	@Ignore("Need to modify to Java 11")
 	public void testJavadocResolver() throws Exception {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 
@@ -301,18 +300,17 @@ public class TestCommon {
 		
 		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		String contextLink = nasdanikaResolver.apply("org.nasdanika.common.Context");
-		assertEquals("<a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
+		assertEquals("<a href='https://docs.nasdanika.org/modules/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
 	}
 	
 	@Test
-	@Ignore("Need to modify to Java 11")
 	public void testJavadocPropertyComputer() throws Exception {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
 		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		
 		MutableContext context = Context.EMPTY_CONTEXT.fork();
 		context.put("javadoc", Util.createJavadocPropertyComputer(nasdanikaResolver));
-		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/modules/common/apidocs/index.html?org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
+		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
 		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));
 		
 //		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));

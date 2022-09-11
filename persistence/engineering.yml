@@ -1,5 +1,6 @@
 engineering-module:
-  name: CLI
-  path: cli
+  name: Persistence
+  path: persistence
   action-prototype: "javadoc-action-prototype.xml#/"
-    
+
+     

@@ -227,7 +227,7 @@ public class MarkdownHelper {
 							.append(System.lineSeparator())
 							.append(System.lineSeparator());
 					} catch (Exception e) {
-						output.append("Error during diagram rendering: " + e);
+						output.append("<div class=\"nsd-error\">Error during diagram rendering: " + e + "</div>");
 					}
 				}				
 			}

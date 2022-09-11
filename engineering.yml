@@ -1,12 +1,7 @@
 engineering-product:
   name: Core
   path: core
-  releases:
-    "2021-12-2":
-      name: "2021.12.2"
-      start: 2021/12/06
-      end: 2021/12/13
-      increment: engineering://nasdanika/increments/2021/children/Q4/children/dec
+  action-prototype: "javadoc-action-prototype.xml#/"
   modules:
      - cli/engineering.yml
      - common/engineering/engineering.yml
@@ -18,6 +13,7 @@ engineering-product:
            - diagram.gen/engineering.yml
      - drawio/engineering.yml
      - emf/engineering.yml
+     - graph/engineering.yml
      - engineering-module:
          path: exec
          name: Exec
@@ -26,17 +22,5 @@ engineering-product:
            - exec.gen/engineering.yml
      - flow/engineering/engineering.yml
      - ncore/engineering.yml
-  issues:
-    merge-to-master:
-      name: Merge to master 
-    update-dependencies:
-      name: Update dependencies - end of 2021
-    persistence-service:
-      name: Persistence Service
-      description: |+2
-        A service for storing state by single-page applications generated from YAML models
-        Likely a template/framework. Space (origin), reference/environment (branch, tag), containment path.
-        REST API, backed by container. Container is configurable - file system, NO-SQL, Git, relational, ...
-        MongoDB - JSON/Map entity container? Rating, analytics (page visits). SpringBoot, Waffle for windows authentication
-        For file/git containers extension means file, e.g. something.yml. Ability to CRUD on internal pieces, e.g. something.json/mything
-        Some kind of application-level auth - what an application can do, specified at generation time - JWT?
+     - persistence/engineering.yml
+     - resources/engineering.yml
