@@ -10,7 +10,7 @@
 	<artifactId>persistence</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Persistence</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/persistence/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>

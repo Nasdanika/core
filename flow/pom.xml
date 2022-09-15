@@ -11,7 +11,7 @@
 	<artifactId>flow</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Flow Model</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/flow/index.html</url>
 	<build>
 		<plugins>
 			<plugin>

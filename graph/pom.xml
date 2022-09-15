@@ -10,7 +10,7 @@
 	<artifactId>graph</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Graph</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/graph/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>

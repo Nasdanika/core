@@ -10,7 +10,7 @@
 	<artifactId>drawio</artifactId>
 	<packaging>jar</packaging>
 	<name>Java API for working with Drawio diagrams</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/drawio/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>

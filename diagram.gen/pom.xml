@@ -10,7 +10,7 @@
 	<artifactId>diagram-gen</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Diagram Generation Adapters</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/gen/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>

@@ -9,7 +9,7 @@
 	<artifactId>emf</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika EMF</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/emf/index.html</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

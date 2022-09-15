@@ -10,6 +10,7 @@
 	<artifactId>common</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Common</name>
+	<url>https://docs.nasdanika.org/modules/core/modules/common/index.html</url>
 
 	<build>
 	    <plugins>

@@ -11,7 +11,7 @@
 	<artifactId>exec</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Execution Model</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/model/index.html</url>
 	<build>
 		<plugins>
 			<plugin>

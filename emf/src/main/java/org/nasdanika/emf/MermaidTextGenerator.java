@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
@@ -53,12 +54,15 @@ public class MermaidTextGenerator implements DiagramTextGenerator {
 	private Appendable collector;
 	private Function<EClassifier, String> eClassifierLinkResolver;
 	private Function<EModelElement, String> eModelElementFirstDocSentenceProvider;
+	private Predicate<EModelElement> elementPredicate;
 
 	public MermaidTextGenerator(
 			Appendable collector, 
+			Predicate<EModelElement> elementPredicate,			
 			Function<EClassifier, String> eClassifierLinkResolver, 
 			Function<EModelElement, String> eModelElementFirstDocSentenceProvider) {
 		this.collector = collector;
+		this.elementPredicate = elementPredicate;
 		this.eClassifierLinkResolver = eClassifierLinkResolver;
 		this.eModelElementFirstDocSentenceProvider = eModelElementFirstDocSentenceProvider;
 	}

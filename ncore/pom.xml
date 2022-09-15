@@ -11,7 +11,7 @@
 	<artifactId>ncore</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Core Model</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/ncore/index.html</url>
 	<build>
 		<plugins>
 			<plugin>

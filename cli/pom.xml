@@ -10,7 +10,7 @@
 	<artifactId>cli</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Command Line</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/cli/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>

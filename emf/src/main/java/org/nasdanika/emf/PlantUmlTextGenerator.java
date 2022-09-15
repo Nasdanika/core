@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
@@ -52,21 +54,31 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	
 	// Default background: #FEFECE
 
-	
-	// TODO - support of packages and fully qualified names -> get rid of Logical name?
-	
 	private Appendable collector;
 	private Function<EClassifier, String> eClassifierLinkResolver;
 	private Function<EModelElement, String> eModelElementFirstDocSentenceProvider;
+	private Predicate<EModelElement> elementPredicate;
 
 	public PlantUmlTextGenerator(
 			Appendable collector, 
+			Predicate<EModelElement> elementPredicate,			
 			Function<EClassifier, String> eClassifierLinkResolver, 
 			Function<EModelElement, String> eModelElementFirstDocSentenceProvider) {
 		this.collector = collector;
+		this.elementPredicate = elementPredicate;
 		this.eClassifierLinkResolver = eClassifierLinkResolver;
 		this.eModelElementFirstDocSentenceProvider = eModelElementFirstDocSentenceProvider;
 	}
+	
+	/**
+	 * Filters the collection retaining only model elements which shall be documented.
+	 * @param <T>
+	 * @param elements
+	 * @return
+	 */
+	protected <T extends EModelElement> List<T> retainDocumentable(Collection<T> elements) {
+		return elements.stream().filter(elementPredicate).collect(Collectors.toList());
+	}	
 	
 	private static final String EXTENDS_RELATION = "<|--"; 
 	private static final String IMPLEMENTS_RELATION = "<|..";
@@ -139,27 +151,29 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	}
 		
 	public void appendGeneralization(EClass subClass, EGenericType superType) throws IOException {
-		EClass superClass = (EClass) superType.getEClassifier();
-		collector
-			.append(qualifiedName(superClass))
-			.append(" ")
-			.append(superClass.isInterface() && !subClass.isInterface() ? IMPLEMENTS_RELATION : EXTENDS_RELATION)
-			.append(" ")
-			.append(qualifiedName(subClass));
-		
-		if (!superType.getETypeArguments().isEmpty()) {
-			collector.append(" : <");
-			Iterator<EGenericType> it = superType.getETypeArguments().iterator();
-			while (it.hasNext()) {
-				collector.append(genericName(it.next()));
-				if (it.hasNext()) {
-					collector.append(",");
+		if (elementPredicate.test(superType.getEClassifier())) {
+			EClass superClass = (EClass) superType.getEClassifier();
+			collector
+				.append(qualifiedName(superClass))
+				.append(" ")
+				.append(superClass.isInterface() && !subClass.isInterface() ? IMPLEMENTS_RELATION : EXTENDS_RELATION)
+				.append(" ")
+				.append(qualifiedName(subClass));
+			
+			if (!superType.getETypeArguments().isEmpty()) {
+				collector.append(" : <");
+				Iterator<EGenericType> it = superType.getETypeArguments().iterator();
+				while (it.hasNext()) {
+					collector.append(genericName(it.next()));
+					if (it.hasNext()) {
+						collector.append(",");
+					}
 				}
-			}
-			collector.append(">");
-		}		
-		
-		collector.append("\n");
+				collector.append(">");
+			}		
+			
+			collector.append("\n");
+		}
 	}
 		
 	// --- ECore ---
@@ -172,13 +186,13 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			if (obj instanceof EClass) {
 				EClass eClass = (EClass) obj;
 				ret.addAll(eClass.getESuperTypes());
-				for (EReference ref: eClass.getEReferences()) {
+				for (EReference ref: retainDocumentable(eClass.getEReferences())) {
 					ret.add(ref.getEReferenceType());
 				}
 				
 				ret.addAll(EmfUtil.collectTypeDependencies(eClass));				
 			}
-			return ret;
+			return retainDocumentable(ret);
 		}
 		
 	};
@@ -193,7 +207,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 				ret.addAll(getReferrers((EClass) obj));
 			}
 			ret.addAll(getUses(obj));
-			return ret;
+			return retainDocumentable(ret);
 		}
 		
 	};
@@ -211,7 +225,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 				
 				// Out
 				ret.addAll(eClass.getESuperTypes());
-				for (EReference ref: eClass.getEReferences()) {
+				for (EReference ref: retainDocumentable(eClass.getEReferences())) {
 					ret.add(ref.getEReferenceType());
 				}
 				
@@ -221,12 +235,11 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			// In
 			ret.addAll(getUses(obj));
 			
-			return ret;
+			return retainDocumentable(ret);
 		}
 		
 	};
-	
-	
+		
 	/**
 	 * Appends core classifiers, their related classifiers, and relationships
 	 * @param coreClassifiers
@@ -239,7 +252,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			int depth) {
 		
 		try {
-			Set<EClassifier> coreSet = new HashSet<>(coreClassifiers);				
+			Set<EClassifier> coreSet = new HashSet<>(retainDocumentable(coreClassifiers));				
 			Set<EClassifier> relatedSet = new HashSet<>();
 			
 			switch (direction) {
@@ -352,75 +365,79 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	}
 	
 	protected void appendEReference(EReference ref) throws IOException {
-		collector.append(qualifiedName(ref.getEContainingClass()));
-		collector.append(" ");
-		EReference opposite = NcoreUtil.getOpposite(ref);
-		if (ref.isContainment()) {
-			collector.append("*");
-		} else if (opposite!=null) {
-			collector.append("\"");
-			collector.append(getLocalizedName(opposite));
-			collector.append(eKeys(opposite));
-			String multiplicity = getMultiplicity(opposite);
-			if (!multiplicity.isEmpty()) {
-				collector.append("["+multiplicity+"]");
-			}
-			collector.append("\" ");
-		}
-		
-		String diagramStyle = NcoreUtil.getNasdanikaAnnotationDetail(ref, DIAGRAM_STYLE_KEY);
-		String relationLine = Util.isBlank(diagramStyle) ? "--" : "-[" + diagramStyle + "]-";
-		String associationRelation = relationLine + ">";
-		
-		if (opposite == null) {
-			collector.append(associationRelation);
-		} else {
-			collector.append(relationLine);
-			if (opposite.isContainment()) {
+		if (elementPredicate.test(ref)) {
+			collector.append(qualifiedName(ref.getEContainingClass()));
+			collector.append(" ");
+			EReference opposite = NcoreUtil.getOpposite(ref);
+			if (ref.isContainment()) {
 				collector.append("*");
+			} else if (opposite!=null) {
+				collector.append("\"");
+				collector.append(getLocalizedName(opposite));
+				collector.append(eKeys(opposite));
+				String multiplicity = getMultiplicity(opposite);
+				if (!multiplicity.isEmpty()) {
+					collector.append("["+multiplicity+"]");
+				}
+				collector.append("\" ");
 			}
-		}		
-		collector.append(" ");
-		
-		String multiplicity = getMultiplicity(ref);
-		if (opposite == null) {
-			if (!multiplicity.isEmpty()) {
+			
+			String diagramStyle = NcoreUtil.getNasdanikaAnnotationDetail(ref, DIAGRAM_STYLE_KEY);
+			String relationLine = Util.isBlank(diagramStyle) ? "--" : "-[" + diagramStyle + "]-";
+			String associationRelation = relationLine + ">";
+			
+			if (opposite == null) {
+				collector.append(associationRelation);
+			} else {
+				collector.append(relationLine);
+				if (opposite.isContainment()) {
+					collector.append("*");
+				}
+			}		
+			collector.append(" ");
+			
+			String multiplicity = getMultiplicity(ref);
+			if (opposite == null) {
+				if (!multiplicity.isEmpty()) {
+					collector
+						.append("\"")
+						.append(multiplicity)
+						.append("\" ");						
+				}
+			} else {
+				collector.append("\"");
+				collector.append(getLocalizedName(ref));			
+				collector.append(eKeys(ref));
+				if (!multiplicity.isEmpty()) {
+					collector.append("["+multiplicity+"]");
+				}
+				collector.append("\" ");			
+			}		
+			
+			collector.append(qualifiedName(ref.getEReferenceType()));		
+			
+			if (opposite == null) {
 				collector
-					.append("\"")
-					.append(multiplicity)
-					.append("\" ");						
+					.append(" : ")
+					.append(getLocalizedName(ref));
+	
+				collector.append(eKeys(ref));			
+				collector.append(genericTypeArguments(ref.getEGenericType()));
 			}
-		} else {
-			collector.append("\"");
-			collector.append(getLocalizedName(ref));			
-			collector.append(eKeys(ref));
-			if (!multiplicity.isEmpty()) {
-				collector.append("["+multiplicity+"]");
-			}
-			collector.append("\" ");			
-		}		
-		
-		collector.append(qualifiedName(ref.getEReferenceType()));		
-		
-		if (opposite == null) {
-			collector
-				.append(" : ")
-				.append(getLocalizedName(ref));
-
-			collector.append(eKeys(ref));			
-			collector.append(genericTypeArguments(ref.getEGenericType()));
+			
+			collector.append(System.lineSeparator());
 		}
-		
-		collector.append(System.lineSeparator());
 	}
 	
 	protected void appendTypeDependency(EClass source, EClassifier target) throws IOException {
-		collector.append(qualifiedName(source));
-		collector.append(" ");
-		collector.append(DEPENDENCY_RELATION);
-		collector.append(" ");
-		collector.append(qualifiedName(target));		
-		collector.append(System.lineSeparator());
+		if (elementPredicate.test(source) && elementPredicate.test(target)) {
+			collector.append(qualifiedName(source));
+			collector.append(" ");
+			collector.append(DEPENDENCY_RELATION);
+			collector.append(" ");
+			collector.append(qualifiedName(target));		
+			collector.append(System.lineSeparator());
+		}
 	}
 	
 	/**
@@ -446,7 +463,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 				ret.add((EClass) obj);
 			}
 		});
-		return ret;
+		return retainDocumentable(ret);
 	}
 	
 	/**
@@ -472,7 +489,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 				ret.add(((EReference) obj).getEContainingClass());
 			}
 		});
-		return ret;
+		return retainDocumentable(ret);
 	}
 	
 	/**
@@ -498,7 +515,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 				ret.add((EClass) obj);
 			}
 		});
-		return ret;
+		return retainDocumentable(ret);
 	}
 		
 	public void appendEClassifier(EClassifier eClassifier, Set<EClassifier> allClassifiers) throws IOException {
@@ -507,12 +524,14 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	}
 	
 	public void appendEClassifier(EClassifier eClassifier, String style, Set<EClassifier> allClassifiers) throws IOException {
-		if (eClassifier instanceof EClass) {
-			appendEClass((EClass) eClassifier, style, allClassifiers);
-		} else if (eClassifier instanceof EEnum) {
-			appendEEnum((EEnum) eClassifier, style, allClassifiers);			
-		} else if (eClassifier instanceof EDataType) {
-			appendEDataType((EDataType) eClassifier, style, allClassifiers);
+		if (elementPredicate.test(eClassifier)) {
+			if (eClassifier instanceof EClass) {
+				appendEClass((EClass) eClassifier, style, allClassifiers);
+			} else if (eClassifier instanceof EEnum) {
+				appendEEnum((EEnum) eClassifier, style, allClassifiers);			
+			} else if (eClassifier instanceof EDataType) {
+				appendEDataType((EDataType) eClassifier, style, allClassifiers);
+			}
 		}
 	}
 	
@@ -591,7 +610,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
 		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), style);
 		if (isAppendAttributes(eClass)) {
-			for (EAttribute attribute: eClass.getEAttributes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {			
+			for (EAttribute attribute: eClass.getEAttributes().stream().filter(elementPredicate).sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {			
 				EGenericType eGenericType = attribute.getEGenericType();
 				if (eGenericType != null) {
 					appendAttribute(null, null, genericName(eGenericType) + (attribute.isMany() ? "[]" : ""), getLocalizedName(attribute));
@@ -599,7 +618,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			}
 		}
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
-		for (EReference reference: eClass.getEReferences().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
+		for (EReference reference: eClass.getEReferences().stream().filter(elementPredicate).sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
 			EGenericType eGenericType = reference.getEGenericType();			
 			if (eGenericType == null || !allClassifiers.contains(reference.getEReferenceType())) {
 				appendAttribute(null, null, genericName(eGenericType) + (reference.isMany() ? "[]" : ""), getLocalizedName(reference));
@@ -608,7 +627,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 		
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
 		if (isAppendOperations(eClass)) {
-			for (EOperation op : eClass.getEOperations().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
+			for (EOperation op : eClass.getEOperations().stream().filter(elementPredicate).sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
 				Collection<String> parameters = new ArrayList<String>();
 				for (EParameter parameter : op.getEParameters()) {
 					String paramString = getLocalizedName(parameter);

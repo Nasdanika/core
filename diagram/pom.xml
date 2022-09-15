@@ -11,7 +11,7 @@
 	<artifactId>diagram</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Diagram Model</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/index.html</url>
 	<build>
 		<plugins>
 			<plugin>

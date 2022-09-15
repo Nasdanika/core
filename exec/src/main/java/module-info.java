@@ -1,4 +1,4 @@
-module org.nasdanika.exec{
+module org.nasdanika.exec {
 	exports org.nasdanika.exec;
 	exports org.nasdanika.exec.content;
 	exports org.nasdanika.exec.content.impl;

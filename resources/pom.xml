@@ -10,7 +10,7 @@
 	<artifactId>resources</artifactId>
 	<packaging>jar</packaging>
 	<name>Nasdanika Resources</name>
-
+	<url>https://docs.nasdanika.org/modules/core/modules/resources/index.html</url>
 	<build>
 	    <plugins>
 			<plugin>
