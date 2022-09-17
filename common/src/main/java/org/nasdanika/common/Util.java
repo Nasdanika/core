@@ -30,6 +30,7 @@ import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
@@ -112,6 +113,24 @@ public class Util {
 			collector.forEach(sb::append);
 			return sb.toString();			
 		};
+	}
+	
+	public static InputStream join(Stream<InputStream> streams) throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		streams.forEach(in -> {
+			if (in != null) {				
+				try (BufferedInputStream bin = new BufferedInputStream(in)) {
+					int b;
+					while ((b = bin.read()) != -1) {
+						baos.write(b);
+					}						
+				} catch (IOException e) {
+					throw new NasdanikaException("Error joining streams: " + e, e);
+				}
+			}
+		});
+		baos.close();
+		return new ByteArrayInputStream(baos.toByteArray());
 	}
 	
 	public static InputStream join(InputStream... streams) throws IOException {
