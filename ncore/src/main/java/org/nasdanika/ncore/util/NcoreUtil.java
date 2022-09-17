@@ -465,4 +465,21 @@ public final class NcoreUtil {
 		}
 	}
 	
+	/**
+	 * @param eReference
+	 * @return Target EClass of association class reference.
+	 */
+	public static EClass getAssociationTarget(EReference eReference) {
+		String association = NcoreUtil.getNasdanikaAnnotationDetail(eReference, "association");
+		if (Util.isBlank(association)) {
+			return null;
+		}
+		EClass refType = eReference.getEReferenceType();
+		EStructuralFeature associationFeature = refType.getEStructuralFeature(association);
+		if (associationFeature instanceof EReference) {
+			return ((EReference) associationFeature).getEReferenceType();
+		}
+		return null;		
+	}	
+	
 }
