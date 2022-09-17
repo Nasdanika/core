@@ -1,1 +1,1 @@
-mvn clean source:test-jar deploy javadoc:aggregate
+mvn clean source:test-jar javadoc:aggregate deploy
