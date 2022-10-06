@@ -1,5 +1,0 @@
-engineering-product:
-  name: Graph
-  path: graph
-  action-prototype: "../../javadoc-action-prototype.xml#/"
-      
