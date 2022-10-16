@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -431,6 +432,18 @@ public class EmfUtil {
 	 */
 	public static URI resolve(URI uri, URI base) {
 		return base == null ? uri : uri.resolve(base);
+	}
+	
+	public static Stream<EObject> ancestors(EObject eObj) {
+		if (eObj == null) {
+			return Stream.empty();
+		}
+		
+		EObject ec = eObj.eContainer(); 
+		if (ec == null) {
+			return Stream.empty();
+		}
+		return Stream.concat(Stream.of(ec), ancestors(ec));
 	}
 
 }
