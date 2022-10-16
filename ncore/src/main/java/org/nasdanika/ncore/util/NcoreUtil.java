@@ -211,13 +211,14 @@ public final class NcoreUtil {
 			}
 			StringBuilder pathBuilder = new StringBuilder();
 			for (EAttribute eKey: eKeys) {
-				if (!eObj.eIsSet(eKey)) {
-					return position;
+				Object value = eObj.eGet(eKey);
+				if (value == null || (value instanceof String && Util.isBlank((String) value))) {
+					return pathBuilder.length() == 0 ? position : pathBuilder.toString();
 				}
 				if (pathBuilder.length() > 0) {
 					pathBuilder.append("/");
 				}
-				pathBuilder.append(eObj.eGet(eKey));
+				pathBuilder.append(value);
 			}
 			return pathBuilder.toString();
 		}
