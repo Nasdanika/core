@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Status;
@@ -44,5 +44,20 @@ public class TestMarkdown extends TestBase {
 		assertThat(in).isNotNull();
 		assertThat(DefaultConverter.INSTANCE.toString(in).trim()).isEqualTo("<div class=\"markdown-body\"><p>Hello, <code>World</code>!</p>\n</div>");
 	}
+
+	@Test
+	public void testMarkdownResource() throws Exception {	
+		InputStream in = loadInputStream(
+				"markdown/resource.yml",
+				diagnostic -> {
+					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
+				},
+				Context.EMPTY_CONTEXT,
+				Context.EMPTY_CONTEXT);
 		
+		assertThat(in).isNotNull();
+		String result = DefaultConverter.INSTANCE.toString(in).trim();
+		System.out.println(result);
+	}
+	
 }

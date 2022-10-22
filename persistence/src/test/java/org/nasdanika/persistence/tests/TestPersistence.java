@@ -1,6 +1,6 @@
 package org.nasdanika.persistence.tests;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestPersistence {
 

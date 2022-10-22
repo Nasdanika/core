@@ -5,7 +5,7 @@ import java.io.File;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TestJGit {
 

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Status;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;

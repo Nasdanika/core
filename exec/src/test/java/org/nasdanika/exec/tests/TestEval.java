@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Status;
 import org.nasdanika.exec.Eval;
 import org.nasdanika.exec.content.Text;

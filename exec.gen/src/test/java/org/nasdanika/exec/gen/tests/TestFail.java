@@ -1,8 +1,10 @@
 package org.nasdanika.exec.gen.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Status;
 
@@ -13,13 +15,16 @@ import org.nasdanika.common.Status;
  */
 public class TestFail extends TestBase {
 	
-	@Test(expected = NasdanikaException.class)
+	@Test
 	public void testFail() throws Exception {	
-		loadInputStream(
-				"fail/fail.yml",
-				diagnostic -> {
-					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
-				});
+		NasdanikaException thrown = assertThrows(NasdanikaException.class, () -> 
+			loadInputStream(
+					"fail/fail.yml",
+					diagnostic -> {
+						assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
+					}));
+		
+		assertTrue(thrown != null);
 	}
 		
 }

@@ -1,0 +1,4 @@
+content-markdown: 
+  style: true
+  source:
+    content-resource: test.md

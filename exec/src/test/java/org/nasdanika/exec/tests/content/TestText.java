@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagnosticException;

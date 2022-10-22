@@ -1,7 +1,7 @@
 package org.nasdanika.drawio.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.Point;
 import java.io.File;
@@ -24,8 +24,8 @@ import java.util.function.Supplier;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;

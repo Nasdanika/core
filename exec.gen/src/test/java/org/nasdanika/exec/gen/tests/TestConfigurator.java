@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Diagnostic;
@@ -68,7 +68,7 @@ public class TestConfigurator extends TestBase {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void testCommand() throws Exception {
 		// TODO
 	}

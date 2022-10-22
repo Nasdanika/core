@@ -2,7 +2,7 @@ package org.nasdanika.exec.tests.resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Status;
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.resources.Container;

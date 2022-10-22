@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.Status;
 
@@ -16,7 +16,7 @@ import org.nasdanika.common.Status;
  */
 public class TestEval extends TestBase {
 	
-	@Ignore
+	@Disabled
 	@Test
 	public void testBindings() throws Exception {	
 		InputStream in = loadInputStream(

@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.Connection;

@@ -1,6 +1,6 @@
 package org.nasdanika.drawio.tests;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Map;
 import java.util.function.Function;
