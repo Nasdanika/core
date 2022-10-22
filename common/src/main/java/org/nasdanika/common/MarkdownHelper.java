@@ -158,79 +158,82 @@ public class MarkdownHelper {
 		Matcher startMatcher = startPattern.matcher(input);
 		int i = 0;
 		while (startMatcher.find()) {
-			int startMatcherEnd = startMatcher.end();
-			String endMatcherContent = input.substring(startMatcherEnd);
-			Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);			
-			if (endMatcher.find()) {
-			    output.append(input.substring(i, startMatcher.start()));
-				String bareSpec = processSpec(dialect, endMatcherContent.substring(0, endMatcher.start())) ;
-				String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
-			    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
-				
-				if (resource) {					
-					try {		
-						URI resourceURI = URI.createURI(bareSpec);
-						URI resourceBase = getResourceBase();
-						if (resourceBase != null && resourceBase.hasAbsolutePath()) {
-							resourceURI = resourceURI.resolve(resourceBase);
-						}
-						bareSpec = loadResource(resourceURI, dialect == null);
-					} catch (Exception e) {					
-						output
-							.append(System.lineSeparator())
-							.append("<div class=\"nsd-error\">").append(System.lineSeparator())
-							.append("Error loading resource " + bareSpec + ": " + e) 
-							.append(System.lineSeparator()).append("</div>")
-							.append(System.lineSeparator());
-						bareSpec = null;
-					}
-				}
-				
-				if (bareSpec != null) {
-					String escapedBareSpec = escapeDiagramSpec(dialect, bareSpec);
+		    int startMatcherStart = startMatcher.start();
+		    if (startMatcherStart > i) { // Need to reproduce a situation when i is greater than startMatcherStart
+				int startMatcherEnd = startMatcher.end();
+				String endMatcherContent = input.substring(startMatcherEnd);
+				Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);			
+				if (endMatcher.find()) {
+					output.append(input.substring(i, startMatcherStart));
+					String bareSpec = processSpec(dialect, endMatcherContent.substring(0, endMatcher.start())) ;
+					String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
+				    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.
 					
-					StringBuilder replacementBuilder = new StringBuilder();
-					if (!Util.isBlank(escapedBareSpec)) {
-						replacementBuilder
-							.append(System.lineSeparator())
-							.append("<div style='display:none;white-space:pre-wrap' title='Diagram escaped spec for search'>").append(System.lineSeparator())
-							.append(escapedBareSpec).append(System.lineSeparator()) 
-							.append("</div> ").append(System.lineSeparator());
-					}
-					
-					try {
-						String token = nextToken();
-						
-						if (dialect == null) {
-							replacementBuilder.append("<img src=\"data:image/");
-							if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
-								replacementBuilder.append("png");
-							} else if (startPattern == START_JPEG_PATTERN || startPattern == START_JPEG_RESOURCE_PATTERN) {
-								replacementBuilder.append("jpeg");
+					if (resource) {					
+						try {		
+							URI resourceURI = URI.createURI(bareSpec);
+							URI resourceBase = getResourceBase();
+							if (resourceBase != null && resourceBase.hasAbsolutePath()) {
+								resourceURI = resourceURI.resolve(resourceBase);
 							}
-							replacementBuilder
-								.append(";base64, ")
-								.append(bareSpec)
-								.append("\"/>")
+							bareSpec = loadResource(resourceURI, dialect == null);
+						} catch (Exception e) {					
+							output
+								.append(System.lineSeparator())
+								.append("<div class=\"nsd-error\">").append(System.lineSeparator())
+								.append("Error loading resource " + bareSpec + ": " + e) 
+								.append(System.lineSeparator()).append("</div>")
 								.append(System.lineSeparator());
-						} else {
+							bareSpec = null;
+						}
+					}
+					
+					if (bareSpec != null) {
+						String escapedBareSpec = escapeDiagramSpec(dialect, bareSpec);
+						
+						StringBuilder replacementBuilder = new StringBuilder();
+						if (!Util.isBlank(escapedBareSpec)) {
 							replacementBuilder
-								.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
-								.append(System.lineSeparator());
+								.append(System.lineSeparator())
+								.append("<div style='display:none;white-space:pre-wrap' title='Diagram escaped spec for search'>").append(System.lineSeparator())
+								.append(escapedBareSpec).append(System.lineSeparator()) 
+								.append("</div> ").append(System.lineSeparator());
 						}
 						
-						replacements.put(token, replacementBuilder.toString());
-						output
-							.append(System.lineSeparator())
-							.append(System.lineSeparator())
-							.append(token)
-							.append(System.lineSeparator())
-							.append(System.lineSeparator());
-					} catch (Exception e) {
-						output.append("<div class=\"nsd-error\">Error during diagram rendering: " + e + "</div>");
-					}
-				}				
-			}
+						try {
+							String token = nextToken();
+							
+							if (dialect == null) {
+								replacementBuilder.append("<img src=\"data:image/");
+								if (startPattern == START_PNG_PATTERN || startPattern == START_PNG_RESOURCE_PATTERN) {
+									replacementBuilder.append("png");
+								} else if (startPattern == START_JPEG_PATTERN || startPattern == START_JPEG_RESOURCE_PATTERN) {
+									replacementBuilder.append("jpeg");
+								}
+								replacementBuilder
+									.append(";base64, ")
+									.append(bareSpec)
+									.append("\"/>")
+									.append(System.lineSeparator());
+							} else {
+								replacementBuilder
+									.append(getDiagramGenerator().generateDiagram(bareSpec, dialect))
+									.append(System.lineSeparator());
+							}
+							
+							replacements.put(token, replacementBuilder.toString());
+							output
+								.append(System.lineSeparator())
+								.append(System.lineSeparator())
+								.append(token)
+								.append(System.lineSeparator())
+								.append(System.lineSeparator());
+						} catch (Exception e) {
+							output.append("<div class=\"nsd-error\">Error during diagram rendering: " + e + "</div>");
+						}
+					}				
+				}
+		    }
 		}
 		output.append(input.substring(i, input.length()));
 		return output.toString();

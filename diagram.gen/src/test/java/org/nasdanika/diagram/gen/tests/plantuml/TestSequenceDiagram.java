@@ -20,7 +20,7 @@ import org.nasdanika.diagram.gen.PlantumlGenerator;
  */
 public class TestSequenceDiagram {
 	
-	@Ignore("No UML dialect support for now")
+	@Disabled("No UML dialect support for now")
 	@Test
 	public void generateSequenceDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;

@@ -1,6 +1,8 @@
 package org.nasdanika.exec.tests.content;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.eclipse.emf.common.util.URI;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagnosticException;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
@@ -116,16 +119,19 @@ public class TestResource extends TestBase {
 		}				
 	}
 	
-	@Test(expected = ConfigurationException.class)	
+	@Test	
 	public void testMissingLocation() throws Exception {	
-		load(
-				"resource/resource-no-location.yml", 
-				obj -> {
-					fail("Should not be called");
-				},
-				diagnostic -> {
-					fail("Should not be called");
-				});		
+		NasdanikaException thrown = assertThrows(NasdanikaException.class, () -> 
+			load(
+					"resource/resource-no-location.yml", 
+					obj -> {
+						fail("Should not be called");
+					},
+					diagnostic -> {
+						fail("Should not be called");
+					}));
+	
+		assertTrue(thrown != null);		
 	}
 	
 	

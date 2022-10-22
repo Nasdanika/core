@@ -19,7 +19,7 @@ import org.nasdanika.exec.content.Text;
 
 public class TestStateDiagram {
 	
-	@Ignore("No UML dialect support for now")
+	@Disabled("No UML dialect support for now")
 	@Test
 	public void generateStateDiagram() throws Exception {
 		DiagramFactory diagramFactory = DiagramFactory.eINSTANCE;
