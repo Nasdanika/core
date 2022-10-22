@@ -1,9 +1,9 @@
 package org.nasdanika.common.tests;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.URL;
@@ -14,9 +14,8 @@ import java.util.function.Function;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.Converter;
 import org.nasdanika.common.DefaultConverter;
@@ -42,22 +41,22 @@ public class TestCommon {
 		Function<String, Object> f = key -> "** " + key;		
 		Map<String, Object> m = Collections.singletonMap("f", f);
 		Context c = Context.wrap(m::get);
-		Assert.assertEquals("** mom", c.get("f/mom"));
+		assertEquals("** mom", c.get("f/mom"));
 	}
 	
 	@Test
 	public void testServiceInstance() throws Exception {
-		Assert.assertEquals(DefaultConverter.INSTANCE, Context.EMPTY_CONTEXT.get(DefaultConverter.class));
+		assertEquals(DefaultConverter.INSTANCE, Context.EMPTY_CONTEXT.get(DefaultConverter.class));
 	}		
 	
 	@Test
 	public void testSingleTokenInterpolation() throws Exception {
 		Context ctx = Context.singleton("key", 33);
-		Assert.assertEquals(33, ctx.interpolate("${key}"));
+		assertEquals(33, ctx.interpolate("${key}"));
 		
 		Map<String,Object> map = new Yaml().load("k: ${key}");
 		Map<String, Object> iMap = ctx.interpolate(map);
-		Assert.assertEquals(33, iMap.get("k"));		
+		assertEquals(33, iMap.get("k"));		
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -84,24 +83,24 @@ public class TestCommon {
 	@Test
 	public void testDefaultConverter() throws Exception {
 		Converter converter = DefaultConverter.INSTANCE;
-		Assert.assertEquals("33", converter.convert(33, String.class));
-		Assert.assertEquals(Integer.valueOf(33), converter.convert("33", Integer.class));
-		Assert.assertEquals("Hello", converter.convert("{ \"value\": \"Hello\" }", JSONObject.class).getString("value"));
+		assertEquals("33", converter.convert(33, String.class));
+		assertEquals(Integer.valueOf(33), converter.convert("33", Integer.class));
+		assertEquals("Hello", converter.convert("{ \"value\": \"Hello\" }", JSONObject.class).getString("value"));
 	}
 	
 	@Test 
 	public void testInterpolation() {
 		MutableContext ctx = new SimpleMutableContext();
 		ctx.put("name", "World");
-		Assert.assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${name}!"));		
+		assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${name}!"));		
 		
 		ctx.put("nameResource", getClass().getResource("name.txt"));
 		ctx.register(Converter.class, DefaultConverter.INSTANCE);
-		Assert.assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${nameResource}!"));	
+		assertEquals("Hello, World!", ctx.interpolate("${greeting|Hello}, ${nameResource}!"));	
 		
 		// Escaping, peeling
-		Assert.assertEquals("${name}", ctx.interpolate("${{name}}"));						
-		Assert.assertEquals("Hello, World - ${name}!", ctx.interpolate("${greeting|Hello}, ${name} - ${{name}}!"));						
+		assertEquals("${name}", ctx.interpolate("${{name}}"));						
+		assertEquals("Hello, World - ${name}!", ctx.interpolate("${greeting|Hello}, ${name} - ${{name}}!"));						
 	}
 	
 	@Test 
@@ -109,7 +108,7 @@ public class TestCommon {
 		Map<String, Object> yaml = new Yaml().load(TestCommon.class.getResourceAsStream("test-map-interpolation.yml"));
 		Map<String, Object> interpolated = Context.singleton("name", "World").interpolate(yaml);	
 		Context mapContext = Context.wrap(interpolated::get);
-		Assert.assertEquals("World", mapContext.get("map/a"));
+		assertEquals("World", mapContext.get("map/a"));
 	}
 	
 	@Test 
@@ -280,7 +279,7 @@ public class TestCommon {
 	}
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void testRemoteDiagramming() throws Exception {
 		DiagramGenerator generator = DiagramGenerator.createClient(new URL("http://localhost:8090/spring-exec/api/v1/exec/diagram/"));
 		System.out.println(generator.generateUmlDiagram("Alice -> Bob"));
