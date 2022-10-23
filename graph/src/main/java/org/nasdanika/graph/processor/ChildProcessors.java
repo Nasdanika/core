@@ -7,6 +7,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Field or method to inject a map of children elements to their {@link ProcessorInfo}
+ * @author Pavel
+ */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface ChildProcessors {

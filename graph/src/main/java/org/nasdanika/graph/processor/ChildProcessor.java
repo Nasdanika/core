@@ -7,6 +7,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Field or method to inject 
+ * @author Pavel
+ *
+ */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface ChildProcessor {
@@ -19,7 +24,7 @@ public @interface ChildProcessor {
 	String value() default "";
 	
 	/**
-	 * If true supplier will supply {@link ProcessorConfig} for the registry entry. It will supply the processor otherwise.
+	 * If <code>true</code>, {@link ProcessorConfig} for the matching child will be injected. The child processor will be injected otherwise.
 	 * @return   
 	 */
 	boolean config() default false;

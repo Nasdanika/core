@@ -7,6 +7,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Field or method from which the connection source handler is obtained.
+ * @author Pavel
+ *
+ */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface SourceHandler {

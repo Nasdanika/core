@@ -6,10 +6,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.function.Supplier;
 
 /**
- * Annotation for a field of type {@link Supplier} or a method with a single parameter of supplier which should be wired to a supplier of registry entry - processor or info. 
+ * A field or method to inject processor of config of matching registry entry 
  * @author Pavel
  *
  */
@@ -25,7 +24,7 @@ public @interface RegistryEntry {
 	String value() default "";
 	
 	/**
-	 * If true supplier will supply {@link ProcessorConfig} for the registry entry. It will supply the processor otherwise.
+	 * If <code>true</code> config is injected, processor otherwise.
 	 * @return   
 	 */
 	boolean config() default false;

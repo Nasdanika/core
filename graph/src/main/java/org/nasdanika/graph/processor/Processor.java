@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import org.nasdanika.graph.Element;
 
 /**
- * Annotation for method creating an {@link Element} processor.
+ * Annotation for a method creating an {@link Element} processor.
  * The method shall have zero or one parameter. In the second case the parameter type shall be assignable from 
  * {@link ProcessorConfig} or its subclasses - {@link NodeProcessorConfig} or {@link ConnectionProcessorConfig}.
  * An annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 

@@ -627,7 +627,7 @@ public class TestDrawio {
 	
 	@Disabled("Does not work because AlibBobHandlers is not exported and reflective method invocation fails")
 	@Test 
-	public void testReflectiveVisitor() throws Exception {
+	public void testDispatch() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		
 		AliceBobHandlers aliceBobHandlers = new AliceBobHandlers();		

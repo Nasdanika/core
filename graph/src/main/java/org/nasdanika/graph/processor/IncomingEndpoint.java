@@ -7,6 +7,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Field or method to inject a matching incoming endpoint. A method shall have one or two parameters. 
+ * If a single parameter than the endpoint is passed to the method. If two parameters then the connection and endpoint are passed - it allows to use one method for more than one connection/endpoint.   
+ * @author Pavel
+ *
+ */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface IncomingEndpoint {

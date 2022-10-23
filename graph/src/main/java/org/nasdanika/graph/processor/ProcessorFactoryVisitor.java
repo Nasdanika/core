@@ -80,8 +80,8 @@ class ProcessorFactoryVisitor<P,H,E> {
 					return targetHandler;
 					
 				};
-				H incomingEndpointHandlerProxy = factory.createHandlerProxy(incomingConnection, incomingHandlerSupplier, HandlerType.INBOUND); 
-				E incomingEndpoint = incomingEndpointHandlerProxy == null ? null : factory.createEndpoint(incomingConnection, incomingEndpointHandlerProxy, HandlerType.INBOUND);
+				H incomingEndpointHandlerProxy = factory.createHandlerProxy(incomingConnection, incomingHandlerSupplier, HandlerType.INCOMING); 
+				E incomingEndpoint = incomingEndpointHandlerProxy == null ? null : factory.createEndpoint(incomingConnection, incomingEndpointHandlerProxy, HandlerType.INCOMING);
 				if (incomingEndpoint != null) {
 					incomingEndpoints.put(incomingConnection, incomingEndpoint);
 				}
@@ -118,8 +118,8 @@ class ProcessorFactoryVisitor<P,H,E> {
 					return sourceHandler;
 					
 				};
-				H outgoingEndpointHandlerProxy = factory.createHandlerProxy(outgoingConnection, outgoingHandlerSupplier, HandlerType.OUTBOUND);
-				E outgoingEndpoint = outgoingEndpointHandlerProxy == null ? null : factory.createEndpoint(outgoingConnection, outgoingEndpointHandlerProxy, HandlerType.OUTBOUND);
+				H outgoingEndpointHandlerProxy = factory.createHandlerProxy(outgoingConnection, outgoingHandlerSupplier, HandlerType.OUTGOING);
+				E outgoingEndpoint = outgoingEndpointHandlerProxy == null ? null : factory.createEndpoint(outgoingConnection, outgoingEndpointHandlerProxy, HandlerType.OUTGOING);
 				if (outgoingEndpoint != null) {
 					outgoingEndpoints.put(outgoingConnection, outgoingEndpoint);
 				}

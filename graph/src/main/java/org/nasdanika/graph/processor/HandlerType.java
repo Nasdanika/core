@@ -20,11 +20,11 @@ public enum HandlerType {
 	/**
 	 * Handler to invoke a node via an outgoing connection .
 	 */
-	OUTBOUND,
+	OUTGOING,
 	
 	/**
 	 * Handler to invoke a node via an incoming connection.
 	 */
-	INBOUND	
+	INCOMING	
 
 }

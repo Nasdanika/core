@@ -7,6 +7,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Field or method to inject a map of incoming connections to their endpoints.
+ * @author Pavel
+ *
+ */
 @Retention(RUNTIME)
 @Target({FIELD, METHOD})
 public @interface IncomingEndpoints {

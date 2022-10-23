@@ -10,7 +10,7 @@ import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 
 /**
- * Annotation for methods returning an incoming handler for {@link Node} processors or incoming handler fields.
+ * Annotation for fields and methods returning an incoming handler for {@link Node} processors or incoming handler fields.
  * Methods may be with zero parameters or with one parameter compatible with {@link Connection}. 
  * @author Pavel
  *

@@ -43,6 +43,13 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	 */
 	E createEndpoint(Connection connection, H handler, HandlerType type);
 	
+	/**
+	 * Creates a processor and returns processor info. This implementation returns info with <code>null</code> processor.
+	 * @param config
+	 * @param parentProcessorInfoCallbackConsumer
+	 * @param registryCallbackConsumer
+	 * @return
+	 */
 	default ProcessorInfo<P> createProcessor(
 			ProcessorConfig<P> config, 
 			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
@@ -76,6 +83,9 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	 */
 	H createHandlerProxy(Connection connection, Supplier<H> handlerSupplier, HandlerType type);
 	
+	/**
+	 * Composes this and the other factory
+	 */
 	@Override
 	default ProcessorFactory<P, H, E> compose(ProcessorFactory<P, H, E> other) {
 		if (other == null) {
@@ -115,6 +125,14 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 		
 	}
 	
+	/**
+	 * Composes a stream of factories into a single factory.
+	 * @param <P>
+	 * @param <H>
+	 * @param <E>
+	 * @param factories
+	 * @return
+	 */
 	static <P, H, E> Optional<ProcessorFactory<P, H, E>> compose(Stream<ProcessorFactory<P, H, E>> factories) {
 		return factories.reduce(Composeable::composer);
 	}

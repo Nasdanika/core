@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 import java.util.Collection;
 
 /**
- * For methods and fields this annotation indicates that the method return value or field value shall be a {@link Collection} whose elements are used as introspection targets to create element processors.
+ * For methods and fields this annotation indicates that the method return value or field value shall be a {@link Collection} 
+ * whose elements are used as introspection targets to create element processors.
  * @author Pavel
  *
  */

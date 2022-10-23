@@ -16,13 +16,9 @@ public class AliceBobConnectionProcessor {
 	Function<String,String> targetEndpoint;
 	
 	@SourceHandler
-	Function<String,String> sourceHandler = request -> {
-		return ">> " + targetEndpoint.apply(request);
-	};
+	Function<String,String> sourceHandler = request -> ">> " + targetEndpoint.apply(request);
 	
 	@TargetHandler
-	Function<String,String> targetHandler = response -> {
-		return "<< " + sourceEndpoint.apply(response);	
-	};
+	Function<String,String> targetHandler = response -> "<< " + sourceEndpoint.apply(response);	
 	
 }
