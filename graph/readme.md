@@ -244,3 +244,8 @@ Another example is a diagram of a software system where diagram elements can be 
 * Diagram elements can be mapped to code generators so parts of the system can be generated. This can be used in software product lines where multiple similar solutions are created following the same pattern. The pattern can be captured and documented using diagrams.
 * Once the system is build diagram elements can be mapped to build/deployment processes - execution of the diagram would result in deploying a solution. The diagram may be updated with deployment details, e.g. [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)'s for [AWS](https://aws.amazon.com/) solutions.
 * Once the system is built diagram elements can be mapped to monitoring models to show how the system operates. At this step deployment details injected into the diagram can be used to pull runtime information.
+
+With semantic mapping the diagram does not have to comply to a specific notation as it is the case with UML or Sirius diagrams. 
+Meaning is assigned to diagram elements by semantic mapping, i.e. the notation may be created after the diagram.
+It can be beneficial when there is no notation for the problem domain at hand, it is too complex or people authoring diagrams are not familiar with the notation, but they know how to express what they know or need as a diagram.
+ 
