@@ -245,7 +245,18 @@ Another example is a diagram of a software system where diagram elements can be 
 * Once the system is build diagram elements can be mapped to build/deployment processes - execution of the diagram would result in deploying a solution. The diagram may be updated with deployment details, e.g. [ARN](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)'s for [AWS](https://aws.amazon.com/) solutions.
 * Once the system is built diagram elements can be mapped to monitoring models to show how the system operates. At this step deployment details injected into the diagram can be used to pull runtime information.
 
-With semantic mapping the diagram does not have to comply to a specific notation as it is the case with UML or Sirius diagrams. 
+With semantic mapping a diagram does not have to comply to a specific notation as it is the case with UML or Sirius diagrams. 
 Meaning is assigned to diagram elements by semantic mapping, i.e. the notation may be created after the diagram.
-It can be beneficial when there is no notation for the problem domain at hand, it is too complex or people authoring diagrams are not familiar with the notation, but they know how to express what they know or need as a diagram.
- 
+It can be beneficial when there is no notation for the problem domain at hand, the notation is too complex or people authoring diagrams are not familiar with the notation, but they know how to express what they know or need as a diagram.
+
+Semantic mapping approach can be used to elicit and codify organizational tribal knowledge - the "secret sauce" of an organization.
+An organization may start with pre-existing diagrams and map them actions to generate documentation sites.
+Diagrams similar to [this one](https://docs.nasdanika.org/demo-drawio-actions/) can be used to document software systems.
+[Flow diagrams](https://docs.nasdanika.org/demo-drawio-flow-actions/) can be used to document processes. 
+The diagrams can be interrelated. For example, documentation of some software component may contain flow diagrams instructing how to perform operations on the component, e.g. deployment.   
+
+The organization may also map diagrams to different models. E.g. to the [Nasdanika Flow](../flow/index.html) model for processes. 
+Or the organization may create an Ecore model of the organization and map diagrams and other data sources to the model.
+Such a model can be documented using [Nasdanika HTML Ecore](../../../html/modules/ecore/index.html).
+The documentation may include instructions how to map diagram elements to model elements.
+
