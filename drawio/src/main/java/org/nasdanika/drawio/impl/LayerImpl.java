@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
+import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.w3c.dom.Element;
@@ -17,8 +18,8 @@ class LayerImpl extends ModelElementImpl implements Layer {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ModelElement> getElements() {
-		return (List<ModelElement>) getChildren();
+	public List<LayerElement> getElements() {
+		return (List<LayerElement>) getChildren();
 	}
 
 	@Override
@@ -28,7 +29,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		nodeElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		nodeElement.setAttribute(ModelImpl.ATTRIBUTE_VERTEX, "1");
 		element.getParentNode().appendChild(nodeElement);
-		List<ModelElement> elements = getElements();
+		List<LayerElement> elements = getElements();
 		return (Node) elements.get(elements.size() - 1);
 	}
 
@@ -47,7 +48,7 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		geometryElement.setAttribute("as", "geometry");
 		
 		element.getParentNode().appendChild(connectionElement);
-		List<ModelElement> elements = getElements();
+		List<LayerElement> elements = getElements();
 		return (Connection) elements.get(elements.size() - 1);
 	}
 

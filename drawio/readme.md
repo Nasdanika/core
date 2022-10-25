@@ -1,4 +1,5 @@
 Nasdanika Drawio module provides [Java API](https://docs.nasdanika.org/modules/core/modules/drawio/apidocs/org.nasdanika.drawio/module-summary.html) for reading and manipulating [Drawio](https://www.diagrams.net/) diagrams.
+It is built on top of [Graph](../graph/index.html).
 
 To use the module add the below dependency to your ``pom.xml``:
 
@@ -6,7 +7,7 @@ To use the module add the below dependency to your ``pom.xml``:
 <dependency>
 	<groupId>org.nasdanika.core</groupId>
 	<artifactId>drawio</artifactId>
-	<version>2022.8.0</version>
+	<version>...</version>
 </dependency>
 ```
 
@@ -22,23 +23,25 @@ The module provides the following interfaces representing elements of a diagram 
 
 * ${javadoc/org.nasdanika.drawio.Document} - the root object of the API representing a file which contains one or more pages.
 * ${javadoc/org.nasdanika.drawio.Page} - a page containing a diagram (Model).
-* ${javadoc/org.nasdanika.drawio.Model} - diagram model containing diagram root.
+* ${javadoc/org.nasdanika.drawio.Model} - a diagram model containing diagram root.
 * ${javadoc/org.nasdanika.drawio.Root} - the root of the model containing layers.
 * ${javadoc/org.nasdanika.drawio.Layer} - a diagram may have one or more layers. Layers contain Nodes and Connections.
 * ${javadoc/org.nasdanika.drawio.Node} - a node can be connected to other nodes with connections. A node may contain other nodes and connections.
 * ${javadoc/org.nasdanika.drawio.Connection} - connection between two nodes. 
 
+The below diagram shows relationships between the above interfaces including their super-interfaces:
+
+```drawio-resource
+./classes.drawio
+```
+
 ${javadoc/org.nasdanika.drawio.Util} provides utility methods such as ``layout()`` and methods to navigate and query documents and their elements.
 
 ## Examples
 
-* Tests
-    * [Drawio API](https://github.com/Nasdanika/core/tree/master/drawio/src/test) - tests of the Drawio module.
-    * [Application Generation Tests](https://github.com/Nasdanika/html/tree/master/model/app.gen/src/test) - tests of generating HTML sites from action models, including loading of action models from Drawio files.
-* Demos
-    * [Actions](https://github.com/Nasdanika/demo-drawio-actions) - Demo of generation of a web site from a drawio diagram
-    * [Flow](https://github.com/Nasdanika/demo-drawio-flow-actions) - Demo of generation of a web site from a flow drawio diagram
-    * [Mind map](https://github.com/Nasdanika/demo-drawio-map) - Demo of generation of a web site from a (mind) map drawio diagram
+* [Actions](https://github.com/Nasdanika/demo-drawio-actions) - Demo of generation of a web site from a drawio diagram
+* [Flow](https://github.com/Nasdanika/demo-drawio-flow-actions) - Demo of generation of a web site from a flow drawio diagram
+* [Mind map](https://github.com/Nasdanika/demo-drawio-map) - Demo of generation of a web site from a (mind) map drawio diagram
 
 ## Creating a new document
 
@@ -117,7 +120,7 @@ Files.writeString(new File("compressed.html").toPath(), document.toHtml(null, "h
 
 ## Layout
 
-The API provide a simple layout algorithm which arranges node so that they don't overlap. 
+The API provide a simple layout algorithm which arranges nodes so that they don't overlap. 
 It can be used with generated diagrams to make them easier to layout manually after generation.
 
 ```java
@@ -141,28 +144,17 @@ To traverse document elements you can use either ``accept(<visitor>)`` methods o
 
 ## Semantic mapping
 
-${javadoc/org.nasdanika.drawio.DrawioResourceFactory} is a base class for mapping of diagram elements to [EMF](https://www.eclipse.org/modeling/emf/) model elements. 
-With DrawioResourceFactory drawio files are treated as model resources with can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
-${javadoc/org.nasdanika.html.model.app.util.AppDrawioResourceFactory} is a concrete subclass of DrawioResourceFactory mapping diagram elements to  [application model](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/index.html) [actions](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html).
+${javadoc/org.nasdanika.drawio.DrawioResource} is a base class for mapping of diagram elements to [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
+With DrawioResource drawio files are treated as model resources which can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
+${javadoc/org.nasdanika.html.model.app.drawio.ResourceFactory} is a concrete implementation for mapping diagram elements to  [application model](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/index.html) [actions](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html).
 
-### Sorting
+## Sorting
 
-DrawioResourceFactory supports sorting of child elements with ``sort`` property which should have a value in form of ``type[:config]``:
-
-* ``type`` - sort type
-* ``config`` - optional configuration
-
-Sorting is done by implementations of ${javadoc/org.nasdanika.drawio.ElementComparator$Factory} service.
-
-This module provide service implementations which support the following types:
-
-* ``label`` - default sort type. Sorts elements using labels. Optional configuration ``descending`` to sort in reverse alphabetical order.
-* ``clockwise``, ``counterclockwise`` - sorts elements by their angle relative to the semantic parent node clockwise and counterclockwise respectively. Useful for mind maps, org charts and work breakdown structures. Optional configuration is a base angle in degrees. If not provided then the angle from the parent's semantic parent is used as the base angle. If there is no semantic grandparent then the default value is 90 degrees.
-* ``property`` - sorts elements by property value, which is a required configuration. Property values are compared as strings.
+${javadoc/org.nasdanika.drawio.comparators} package contains comparators for sorting diagram elements based on their label, properties, and geometry.
 
 ## Executable diagrams
 
-Coming soon - mapping nodes and connections to executable implementations.
+[Graph](../graph/index.html) documentation explains how to implement graph processors which can be used to make diagrams executable.
 
 ## Applications
 

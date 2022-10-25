@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Layer extends ModelElement {
 
-	List<ModelElement> getElements();
+	List<LayerElement> getElements();
 	
 	Node createNode();
 	

@@ -33,6 +33,7 @@ import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Layer;
+import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
@@ -179,7 +180,7 @@ public class TestDrawio {
 					System.out.println(indent + "\t\t" + connection.getLabel() + " <- " + connection.getSource().getLabel());
 				}
 			}
-			List<ModelElement> children = node.getElements();
+			List<LayerElement> children = node.getElements();
 			if (!children.isEmpty()) {
 				System.out.println(indent + "\tChildren:");
 				for (ModelElement child: children) {
