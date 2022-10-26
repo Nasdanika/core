@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 
 /**
- * {@link Document} element, including the Document itself, backed by org.w3c.dom.Element.
+ * {@link Document} element, including the Document itself, backed by {@link org.w3c.dom.Element}.
  * @author Pavel
  *
  */
@@ -20,7 +20,7 @@ public interface Element extends org.nasdanika.graph.Element {
 	org.w3c.dom.Element getElement();
 	
 	/**
-	 * Accepts the visitor in children first way.
+	 * Accepts the visitor in children first (bottom-up) way.
 	 * @param visitor
 	 */
 	default void accept(Consumer<? super Element> visitor, ConnectionBase connectionBase) {
@@ -52,7 +52,11 @@ public interface Element extends org.nasdanika.graph.Element {
 		};
 		return accept(visitor, connectionBase);
 	}; 
-		
+	
+	/**
+	 * 
+	 * @return Element URI for resolving relative references, e.g. links to documentation. 
+	 */
 	URI getURI();	
 
 }

@@ -8,6 +8,11 @@ import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Point;
 import org.nasdanika.drawio.Rectangle;
 
+/**
+ * Sorts {@link Node}s by the angle of a line between the node center and node's logical parent center.  
+ * @author Pavel
+ *
+ */
 public class AngularNodeComparator implements Comparator<Node> {
 
 	public static Rectangle getAbsoluteGeometry(Node node) {
@@ -170,8 +175,8 @@ public class AngularNodeComparator implements Comparator<Node> {
 	
 	/**
 	 * 
-	 * @param parent
-	 * @param clockwise
+	 * @param parent Parent node
+	 * @param clockwise If true, the comparison is clockwise. I.e. if the base angle is 12 o'clock then a node at 2 o'clock would be greater than a node at 1 o'clock.
 	 * @param baseAngle Base angle in degrees, defaults to 90 if null.
 	 */
 	public AngularNodeComparator(Node parent, boolean clockwise, Double baseAngle) {

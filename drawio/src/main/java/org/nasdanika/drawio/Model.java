@@ -23,6 +23,10 @@ public interface Model extends Element {
 		throw new UnsupportedOperationException("TODO - move logic from diagram.gen");
 	}	
 	
+	/**
+	 * Containing page
+	 * @return
+	 */
 	Page getPage();
 
 }

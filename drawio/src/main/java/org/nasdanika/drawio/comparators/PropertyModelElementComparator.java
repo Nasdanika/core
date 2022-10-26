@@ -5,6 +5,11 @@ import java.util.Objects;
 
 import org.nasdanika.drawio.ModelElement;
 
+/**
+ * Compares {@link ModelElement}s by property value.
+ * @author Pavel
+ *
+ */
 public class PropertyModelElementComparator implements Comparator<ModelElement> {
 	
 	private String property;

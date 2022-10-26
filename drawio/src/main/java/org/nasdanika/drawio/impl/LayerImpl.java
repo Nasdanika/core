@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
-import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Node;
 import org.w3c.dom.Element;
 
@@ -39,8 +38,12 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		connectionElement.setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString());
 		connectionElement.setAttribute(ATTRIBUTE_PARENT, element.getAttribute(ATTRIBUTE_ID));
 		connectionElement.setAttribute(ModelImpl.ATTRIBUTE_EDGE, "1");
-		connectionElement.setAttribute(ATTRIBUTE_SOURCE, source.getElement().getAttribute(ATTRIBUTE_ID));
-		connectionElement.setAttribute(ATTRIBUTE_TARGET, target.getElement().getAttribute(ATTRIBUTE_ID));
+		if (source != null) {
+			connectionElement.setAttribute(ATTRIBUTE_SOURCE, source.getElement().getAttribute(ATTRIBUTE_ID));
+		}
+		if (target != null) {
+			connectionElement.setAttribute(ATTRIBUTE_TARGET, target.getElement().getAttribute(ATTRIBUTE_ID));
+		}
 		
 		Element geometryElement = element.getOwnerDocument().createElement("mxGeometry");
 		connectionElement.appendChild(geometryElement);

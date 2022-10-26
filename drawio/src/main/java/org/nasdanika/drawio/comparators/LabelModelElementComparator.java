@@ -6,6 +6,11 @@ import java.util.Objects;
 import org.jsoup.Jsoup;
 import org.nasdanika.drawio.ModelElement;
 
+/**
+ * Compares {@link ModelElement}s by label.
+ * @author Pavel
+ *
+ */
 public class LabelModelElementComparator implements Comparator<ModelElement> {
 	
 	private boolean descending;

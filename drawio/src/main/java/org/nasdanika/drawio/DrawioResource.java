@@ -43,6 +43,15 @@ public abstract class DrawioResource<P> extends GraphProcessorResource<P> {
 		}
 	}
 
+	/**
+	 * Loads document from an {@link InputStream}. This implementation calls Document.load().
+	 * Override to implement document pre-processing, e.g. token replacement.
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
 	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
 		return Document.load(inputStream, getURI());
 	}

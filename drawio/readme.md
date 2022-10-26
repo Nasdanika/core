@@ -21,13 +21,13 @@ The module requires Java 11 or above.
 
 The module provides the following interfaces representing elements of a diagram file:
 
-* ${javadoc/org.nasdanika.drawio.Document} - the root object of the API representing a file which contains one or more pages.
+* ${javadoc/org.nasdanika.drawio.Document} - the root object of the API representing a file/resource which contains one or more pages.
 * ${javadoc/org.nasdanika.drawio.Page} - a page containing a diagram (Model).
 * ${javadoc/org.nasdanika.drawio.Model} - a diagram model containing diagram root.
 * ${javadoc/org.nasdanika.drawio.Root} - the root of the model containing layers.
 * ${javadoc/org.nasdanika.drawio.Layer} - a diagram may have one or more layers. Layers contain Nodes and Connections.
 * ${javadoc/org.nasdanika.drawio.Node} - a node can be connected to other nodes with connections. A node may contain other nodes and connections.
-* ${javadoc/org.nasdanika.drawio.Connection} - connection between two nodes. 
+* ${javadoc/org.nasdanika.drawio.Connection} - a connection between two nodes. 
 
 The below diagram shows relationships between the above interfaces including their super-interfaces:
 
@@ -39,9 +39,9 @@ ${javadoc/org.nasdanika.drawio.Util} provides utility methods such as ``layout()
 
 ## Examples
 
-* [Actions](https://github.com/Nasdanika/demo-drawio-actions) - Demo of generation of a web site from a drawio diagram
-* [Flow](https://github.com/Nasdanika/demo-drawio-flow-actions) - Demo of generation of a web site from a flow drawio diagram
-* [Mind map](https://github.com/Nasdanika/demo-drawio-map) - Demo of generation of a web site from a (mind) map drawio diagram
+* [Actions](https://docs.nasdanika.org/demo-drawio-actions/) - Demo of generation of a web site from a drawio diagram
+* [Flow](https://docs.nasdanika.org/demo-drawio-flow-actions) - Demo of generation of a web site from a flow drawio diagram
+* [Mind map](https://docs.nasdanika.org/demo-drawio-map) - Demo of generation of a web site from a (mind) map drawio diagram
 
 ## Creating a new document
 

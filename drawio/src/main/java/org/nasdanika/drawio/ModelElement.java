@@ -7,10 +7,23 @@ import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 
+/**
+ * Base interface for {@link Model} elements
+ * @author Pavel
+ *
+ */
 public interface ModelElement extends Element {
 	
+	/**
+	 * Containing model
+	 * @return
+	 */
 	Model getModel();
 	
+	/**
+	 * Containing model element
+	 * @return
+	 */
 	ModelElement getParent();
 	
 	String getLabel();
