@@ -21,6 +21,10 @@ Examples of such graphs:
 * In Java a jar contains packages containing sub-packages and classes. Classes contain fields and methods. Fields reference their types, methods call methods of other classes, ...
 * [EMF Ecore](https://www.eclipse.org/modeling/emf/) models contain packages. Packages contain sub-packages and classifiers including classes. Classes contain references to other classes. References may be configured as containment (composition) or non-containment.
 
+---
+
+[TOC levels=6]
+
 ## Graph API
 
 The graph API has 3 interfaces:

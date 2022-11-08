@@ -1,4 +1,4 @@
-Nasdanika Drawio module provides [Java API](https://docs.nasdanika.org/modules/core/modules/drawio/apidocs/org.nasdanika.drawio/module-summary.html) for reading and manipulating [Drawio](https://www.diagrams.net/) diagrams.
+Nasdanika Drawio module provides [Java API](https://docs.nasdanika.org/modules/core/apidocs/org.nasdanika.drawio/module-summary.html) for reading and manipulating [Drawio](https://www.diagrams.net/) diagrams.
 It is built on top of [Graph](../graph/index.html).
 
 To use the module add the below dependency to your ``pom.xml``:
