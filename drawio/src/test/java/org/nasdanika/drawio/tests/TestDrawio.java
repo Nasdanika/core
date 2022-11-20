@@ -388,9 +388,7 @@ public class TestDrawio {
 			}
 			
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config,
-					Consumer<Consumer<ProcessorInfo<Object>>> setParentProcessorInfoCallback,
-					Consumer<Consumer<Map<org.nasdanika.graph.Element, ProcessorInfo<Object>>>> setRegistryCallback) {
+			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
@@ -417,7 +415,7 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config);
 			}
 
 			
@@ -453,9 +451,7 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config,
-					Consumer<Consumer<ProcessorInfo<Object>>> setParentProcessorInfoCallback,
-					Consumer<Consumer<Map<org.nasdanika.graph.Element, ProcessorInfo<Object>>>> setRegistryCallback) {
+			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config) {
 				
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
@@ -500,7 +496,7 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, setParentProcessorInfoCallback, setRegistryCallback);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config);
 			}
 			
 			@Override

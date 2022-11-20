@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,10 +49,7 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	 * @param registryCallbackConsumer
 	 * @return
 	 */
-	default ProcessorInfo<P> createProcessor(
-			ProcessorConfig<P> config, 
-			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
-			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConsumer) {
+	default ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {
 		return ProcessorInfo.of(config, null);
 	}
 	
@@ -69,8 +65,9 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 		ProcessorFactoryVisitor<P, H, E> visitor = new ProcessorFactoryVisitor<>(this);				
 		List<Helper<P>> helpers = elements.map(element -> element.accept(visitor::createElementProcessor)).collect(Collectors.toList());
 		Map<Element, ProcessorInfo<P>> registry = visitor.getRegistry();
-		helpers.forEach(helper -> helper.setRegistry(registry));
-		return Collections.unmodifiableMap(registry);		
+		Map<Element, ProcessorInfo<P>> unmodifiableRegistry = Collections.unmodifiableMap(registry);
+		helpers.forEach(helper -> helper.setRegistry(unmodifiableRegistry));
+		return unmodifiableRegistry;		
 	}
 	
 	/**
@@ -113,13 +110,9 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 			}
 			
 			@Override
-			public ProcessorInfo<P> createProcessor(
-					ProcessorConfig<P> config,
-					Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
-					Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConsumer) {
-				
-				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConsumer);
-				return info.getProcessor() == null ? other.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConsumer) : info;
+			public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {				
+				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config);
+				return info.getProcessor() == null ? other.createProcessor(config) : info;
 			}
 		};
 		

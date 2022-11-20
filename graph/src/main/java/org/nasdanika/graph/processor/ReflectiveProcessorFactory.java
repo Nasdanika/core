@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,28 +61,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}
 	
 	@Override
-	public ProcessorInfo<P> createProcessor(
-			ProcessorConfig<P> config, 
-			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
-			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConumer) {
+	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {
 		if (introspectionLevel != IntrospectionLevel.NONE) {
 			for (Object target: targets) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel, parentProcessorInfoCallbackConsumer, registryCallbackConumer);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
 			}
 		}
-		return ProcessorFactory.super.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConumer); 		
+		return ProcessorFactory.super.createProcessor(config); 		
 	}		
 	
 	@SuppressWarnings("unchecked")
-	protected ProcessorInfo<P> createProcessor(
-			Object target,
-			ProcessorConfig<P> config, 
-			IntrospectionLevel introspectionLevel,
-			Consumer<Consumer<ProcessorInfo<P>>> parentProcessorInfoCallbackConsumer,
-			Consumer<Consumer<Map<Element, ProcessorInfo<P>>>> registryCallbackConsumer) {
+	protected ProcessorInfo<P> createProcessor(Object target, ProcessorConfig<P> config, IntrospectionLevel introspectionLevel) {
 	
 		if (target != null && (target.getClass().getAnnotation(Factory.class) == null || matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value()))) {
 			
@@ -102,7 +95,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 					IntrospectionLevel processorIntrospectionLevel = elementProcessorAnnotation.introspect();
 					if (processorIntrospectionLevel == IntrospectionLevel.NONE) {
-						return ProcessorFactory.super.createProcessor(config, parentProcessorInfoCallbackConsumer, registryCallbackConsumer);
+						return ProcessorFactory.super.createProcessor(config);
 					}
 					
 					boolean hideWired = elementProcessorAnnotation.hideWired();
@@ -111,15 +104,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					
 					Consumer<ProcessorInfo<P>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
 					if (pc != null) {
-						parentProcessorInfoCallbackConsumer.accept(pc);
+						config.getParentProcessorInfo().thenAccept(pc);
 					}
 					wireProcessorElement(processor, config.getElement(), processorIntrospectionLevel);
 					
-					registryCallbackConsumer.accept(wireRegistryEntry(processor, processorIntrospectionLevel));
+					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel));
 					
 					Consumer<Map<Element, ProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
 					if (rc != null) {
-						registryCallbackConsumer.accept(rc);
+						config.getRegistry().thenAccept(rc);
 					}
 					
 					ProcessorConfig<P> unwiredConfig;
@@ -146,12 +139,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 	
 							@Override
-							public ProcessorInfo<P> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getRegistry() {
+							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -193,14 +186,14 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
-	
+							
 							@Override
-							public ProcessorInfo<P> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getRegistry() {
+							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -242,14 +235,14 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
-	
+							
 							@Override
-							public ProcessorInfo<P> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getRegistry() {
+							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -275,7 +268,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), parentProcessorInfoCallbackConsumer, registryCallbackConsumer);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue());
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -290,7 +283,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), parentProcessorInfoCallbackConsumer, registryCallbackConsumer);
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue());
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}

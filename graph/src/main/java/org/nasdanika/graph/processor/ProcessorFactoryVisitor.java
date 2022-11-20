@@ -1,11 +1,10 @@
 package org.nasdanika.graph.processor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -46,9 +45,9 @@ class ProcessorFactoryVisitor<P,H,E> {
 		return registry;
 	}	
 
-	public Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors) {
-		Collection<Consumer<ProcessorInfo<P>>> parentProcessorInfoConsumers = new ArrayList<>();
-		Collection<Consumer<Map<Element, ProcessorInfo<P>>>> registryConsumers = new ArrayList<>();
+	Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors) {
+		CompletableFuture<ProcessorInfo<P>> parentProcessorInfoCompletableFuture = new CompletableFuture<>();
+		CompletableFuture<Map<Element, ProcessorInfo<P>>> registryCompletableFuture = new CompletableFuture<>();
 		ProcessorConfig<P> config;
 		if (element instanceof Node) {
 			Node node = (Node) element;
@@ -130,12 +129,6 @@ class ProcessorFactoryVisitor<P,H,E> {
 			
 			config = new NodeProcessorConfig<P, H, E>() {
 				
-				private ProcessorInfo<P> parentProcessorInfo;
-				
-				{
-					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
-				}
-
 				@Override
 				public Node getElement() {
 					return node;
@@ -147,15 +140,15 @@ class ProcessorFactoryVisitor<P,H,E> {
 					childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
 					return ret;
 				}
-
+				
 				@Override
-				public ProcessorInfo<P> getParentProcessorInfo() {
-					return parentProcessorInfo;
+				public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
+					return parentProcessorInfoCompletableFuture;
 				}
 
 				@Override
-				public Map<Element, ProcessorInfo<P>> getRegistry() {
-					return Collections.unmodifiableMap(registry);
+				public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
+					return registryCompletableFuture;
 				}
 
 				@Override
@@ -230,12 +223,6 @@ class ProcessorFactoryVisitor<P,H,E> {
 				
 				config = new ConnectionProcessorConfig<P, H, E>() {
 					
-					private ProcessorInfo<P> parentProcessorInfo;
-					
-					{
-						parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
-					}
-
 					@Override
 					public Connection getElement() {
 						return connection;
@@ -249,13 +236,13 @@ class ProcessorFactoryVisitor<P,H,E> {
 					}
 
 					@Override
-					public ProcessorInfo<P> getParentProcessorInfo() {
-						return parentProcessorInfo;
+					public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
+						return parentProcessorInfoCompletableFuture;
 					}
 
 					@Override
-					public Map<Element, ProcessorInfo<P>> getRegistry() {
-						return Collections.unmodifiableMap(registry);
+					public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
+						return registryCompletableFuture;
 					}
 
 					@Override
@@ -282,12 +269,6 @@ class ProcessorFactoryVisitor<P,H,E> {
 		} else {
 			config = new ProcessorConfig<P>() {
 				
-				private ProcessorInfo<P> parentProcessorInfo;
-				
-				{
-					parentProcessorInfoConsumers.add(ppi -> this.parentProcessorInfo = ppi);
-				}
-
 				@Override
 				public Element getElement() {
 					return element;
@@ -301,19 +282,19 @@ class ProcessorFactoryVisitor<P,H,E> {
 				}
 
 				@Override
-				public ProcessorInfo<P> getParentProcessorInfo() {
-					return parentProcessorInfo;
+				public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
+					return parentProcessorInfoCompletableFuture;
 				}
 
 				@Override
-				public Map<Element, ProcessorInfo<P>> getRegistry() {
-					return Collections.unmodifiableMap(registry);
+				public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
+					return registryCompletableFuture;
 				}
 				
 			};
 		}
 		
-		ProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, parentProcessorInfoConsumers::add, registryConsumers::add);
+		ProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config);
 		
 		if (childProcessors != null) {
 			childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
@@ -325,13 +306,13 @@ class ProcessorFactoryVisitor<P,H,E> {
 
 			@Override
 			void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo) {
-				parentProcessorInfoConsumers.forEach(ppic -> ppic.accept(parentProcessorInfo));				
+				parentProcessorInfoCompletableFuture.complete(parentProcessorInfo);
 			}
 
 			@Override
 			void setRegistry(Map<Element, ProcessorInfo<P>> registry) {
 				childProcessors.values().forEach(ch -> ch.setRegistry(registry));
-				registryConsumers.forEach(rc -> rc.accept(registry));
+				registryCompletableFuture.complete(registry);
 			}
 			
 		};
