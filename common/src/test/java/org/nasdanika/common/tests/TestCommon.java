@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import org.json.JSONArray;
@@ -365,6 +366,15 @@ public class TestCommon {
 		
 		map.clear();
 		assertEquals("", data[0]);		
+	}
+	
+	@Test 
+	public void testCompletableFuture() {
+		CompletableFuture<String> cf = new CompletableFuture<String>();
+		
+		cf.thenAccept(v -> System.out.println("Before completion handler: " + v));		
+		cf.complete("World");
+		cf.thenAccept(v -> System.out.println("After completion handler: " + v));		
 	}
 	
 }
