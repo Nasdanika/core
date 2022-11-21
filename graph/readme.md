@@ -116,7 +116,7 @@ This might be the case if processing is performed sequentially in a single JVM.
 Alternatively, an endpoint may be of different type than the handler it passes invocations to. 
 For example:
 
-* Endpoint methods may return ${javadoc/java.util.concurrent.Future Futures} ${javadoc/java.util.concurrent.CompletableFuture Completable Futures} of counterpart handler methods - when an endpoint method is invoked it would invoke handler's method asynchronously. 
+* Endpoint methods may return ${javadoc/java.util.concurrent.Future Futures} or ${javadoc/java.util.concurrent.CompletableFuture Completable Futures} of counterpart handler methods - when an endpoint method is invoked it would invoke handler's method asynchronously. 
 * Endpoint methods may take different parameters. E.g. an endpoint method can take ${javadoc/java.io.InputStream InputStream}, save it to some storage and pass a URL to the handler method.
 
 Processors can also interact by looking up other processors in the processor registry as explained below.
@@ -124,7 +124,6 @@ Processors can also interact by looking up other processors in the processor reg
 Processors, handlers, and endpoints are created and wired by implementations of ${javadoc/org.nasdanika.graph.processor.ProcessorFactory ProcessorFactory} which should implement the following methods:
 
 * ``createEndpoint()`` - creates an endpoint for a given connection, handler and handler type. ${javadoc/org.nasdanika.graph.processor.NopEndpointProcessorFactory NopEndpointProcessorFactory} provides a default implementation of this method which simply returns the handler.
-* ``createHandlerProxy()`` - creates a proxy for a handler which may not yet exist. The actual handler would be provided once all handlers are created via a handler supplier passed to the method. ${javadoc/org.nasdanika.graph.processor.DynamicProxyProcessorFactory DynamicProxyProcessorFactory} provides a default implementation of this method which creates [dynamic proxies](https://docs.oracle.com/javase/8/docs/technotes/guides/reflection/proxy.html). In this case the handler type shall be an interface. 
 * ``createProcessor()`` method. This method has a default implementation which does nothing - it simply returns ${javadoc/org.nasdanika.graph.processor.ProcessorInfo ProcessorInfo} with ``null`` processor. The purpose of this default implementation is to provide access to graph element's ${javadoc/org.nasdanika.graph.processor.ProcessorConfig ProcessorConfig} (or its subtypes ${javadoc/org.nasdanika.graph.processor.ConnectionProcessorConfig ConnectionProcessorConfig} or ${javadoc/org.nasdanika.graph.processor.NodeProcessorConfig NodeProcessorConfig} depending on the element type) to the client code. The client code can use the config to wire handlers and to call endpoints. It is similar to a [printed circuit board](https://en.wikipedia.org/wiki/Printed_circuit_board) with a [CPU socket](https://en.wikipedia.org/wiki/CPU_socket) - the board provides wiring and the user inserts a CPU into the socket. ``parentProcessorInfoCallbackConsumer`` parameters provides a mechanism to get notified when element's parent processor is created. Processors are created bottom-up and child processors are created before parent processors. ``registryCallbackConsumer`` provides a mechanism to get notified when all processors have been created.
 * ``isPassThrough()`` returns ``true`` by default meaning that connections do not perform any processing - they just connect nodes. 
 
@@ -137,12 +136,12 @@ The registry allows the client code to interact with the handler/endpoint/proces
 
 #### Reflective 
 
-A good deal of graph processing is matching a graph element to code to be invoked for processing of that elements. 
+A good deal of graph processing is matching graph elements to code to be invoked for processing of that elements. 
 It may be quite tedious for large graphs.
 
 ${javadoc/org.nasdanika.graph.processor.ReflectiveProcessorFactory ReflectiveProcessorFactory} uses annotations with [Spring expressions](https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions) to create processors and handlers and inject endpoints as explained below.
 
-${javadoc/org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory NopEndpointReflectiveDynamicProxyProcessorFactory} extends  ``ReflectiveProcessorFactory`` and implements ``NopEndpointProcessorFactory`` and ``DynamicProxyProcessorFactory`` providing default implementations for ``createEndpoint()`` and ``createHandlerProxy()`` methods.
+${javadoc/org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory NopEndpointReflectiveProcessorFactory} extends  ``ReflectiveProcessorFactory`` and implements ``NopEndpointProcessorFactory`` providing default implementations for ``createEndpoint()`` method.
 
 ``ReflectiveProcessorFactory`` constructor takes an vararg array of targets - objects with methods and fields annotated with:
 
@@ -170,11 +169,11 @@ Objects returned from methods annotated with ``Processor`` are introspected for 
     * ${javadoc/org.nasdanika.graph.processor.RegistryEntry RegistryEntry} - field or method to inject a matching registry entry.
 * Node processors:
     * ${javadoc/org.nasdanika.graph.processor.IncomingEndpoint IncomingEndpoint} - field or method to inject a matching incoming endpoint.
-    * ${javadoc/org.nasdanika.graph.processor.IncomingEndpoints IncomingEndpoints} - field or method to inject a map of incoming connections to their endpoints.
+    * ${javadoc/org.nasdanika.graph.processor.IncomingEndpoints IncomingEndpoints} - field or method to inject a map of incoming connections to their endpoints completion stages.
     * ${javadoc/org.nasdanika.graph.processor.IncomingHandler IncomingHandler} - field or method to obtain a handler for an incoming connection.
     * ${javadoc/org.nasdanika.graph.processor.IncomingHandlerConsumers IncomingHandlerConsumers} - field or method to inject a map of incoming connections to ${javadoc/java.util.function.Consumer consumers} of handlers. 
     * ${javadoc/org.nasdanika.graph.processor.OutgoingEndpoint OutgoingEndpoint} - field or method to inject a matching outgoing endpoint.
-    * ${javadoc/org.nasdanika.graph.processor.OutgoingEndpoints OutgoingEndpoints} - field or method to inject a map of outgoing connections to their endpoints.
+    * ${javadoc/org.nasdanika.graph.processor.OutgoingEndpoints OutgoingEndpoints} - field or method to inject a map of outgoing connections to their endpoints completion stages.
     * ${javadoc/org.nasdanika.graph.processor.OutgoingHandler OutgoingHandler} - field or method to obtain a handler for an outgoing connection.
     * ${javadoc/org.nasdanika.graph.processor.OutgoingHandlerConsumers OutgoingHandlerConsumers} - field or method to inject a map of outgoing connections to consumers of handlers.     
 * Connection processors:
@@ -228,6 +227,8 @@ public class AliceBobConnectionProcessor {
 
 ## Semantic mapping
 
+### GraphProcessorResource
+
 ${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorResource} is a base class for mapping graph elements to 
 [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
@@ -264,3 +265,6 @@ Or the organization may create an Ecore model of the organization and map diagra
 Such a model can be documented using [Nasdanika HTML Ecore](../../../html/modules/ecore/index.html).
 The documentation may include instructions how to map diagram elements to model elements.
 
+### EObjectFactory
+
+TODO.
