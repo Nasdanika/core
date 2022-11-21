@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +43,6 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.IntrospectionLevel;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
@@ -381,11 +382,6 @@ public class TestDrawio {
 	public void testProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
-
-			@Override
-			public Function<String, String> createHandlerProxy(org.nasdanika.graph.Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
-				return arg -> handlerSupplier.get().apply(arg);
-			}
 			
 			@Override
 			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config) {
@@ -403,9 +399,11 @@ public class TestDrawio {
 						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 							handlerConsumer.accept(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<org.nasdanika.graph.Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-									String myName = ((Node) connection.getTarget()).getLabel();
-									sb.append(inboundEndpoint.getValue().apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));
+								for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> incomingEndpointCompletionStageEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
+									incomingEndpointCompletionStageEntry.getValue().thenAccept(incomingEndpoint -> {
+										String myName = ((Node) connection.getTarget()).getLabel();
+										sb.append(incomingEndpoint.apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));										
+									});
 								}
 								
 								return sb.toString();
@@ -439,9 +437,11 @@ public class TestDrawio {
 			});
 		});
 
-		for (Entry<org.nasdanika.graph.Connection, Function<String, String>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			String dialog = outcomingEndpoint.getValue().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
-			System.out.println(dialog);
+		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
+				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
+				System.out.println(dialog);				
+			});
 		}
 	}
 		
@@ -467,9 +467,11 @@ public class TestDrawio {
 						nodeProcessorConfig.getIncomingHandlerConsumers().forEach((connection, handlerConsumer) -> {
 							handlerConsumer.accept(request -> {
 								StringBuilder sb = new StringBuilder(request).append(System.lineSeparator());
-								for (Entry<org.nasdanika.graph.Connection, Function<String, String>> inboundEndpoint: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-									String myName = ((Node) connection.getTarget()).getLabel();
-									sb.append(inboundEndpoint.getValue().apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));
+								for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> incomingEndpointCompletionStageEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
+									incomingEndpointCompletionStageEntry.getValue().thenAccept(incomingEndpoint -> {
+										String myName = ((Node) connection.getTarget()).getLabel();
+										sb.append(incomingEndpoint.apply("[" + myName + "] Hi, my name is " + myName + ". What is your name?"));
+									});
 								}
 								
 								return sb.toString();
@@ -479,18 +481,28 @@ public class TestDrawio {
 					}
 				} else if (config instanceof ConnectionProcessorConfig) {
 					ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>> connectionProcessorConfig = (ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
+					
 					connectionProcessorConfig.setSourceHandler(new Function<String, String>() {
 						
 						@Override
 						public String apply(String str) {
-							return ">> " + connectionProcessorConfig.getTargetEndpoint().apply(str);
+							try {
+								return ">> " + connectionProcessorConfig.getTargetEndpoint().toCompletableFuture().get().apply(str);
+							} catch (InterruptedException | ExecutionException e) {
+								throw new NasdanikaException(e);
+							}
 						}
+						
 					});
 					connectionProcessorConfig.setTargetHandler(new Function<String, String>() {
 						
 						@Override
 						public String apply(String str) {
-							return "<< " + connectionProcessorConfig.getSourceEndpoint().apply(str);
+							try {
+								return "<< " + connectionProcessorConfig.getSourceEndpoint().toCompletableFuture().get().apply(str);
+							} catch (InterruptedException | ExecutionException e) {
+								throw new NasdanikaException(e);
+							}
 						}
 					});					
 					
@@ -502,11 +514,6 @@ public class TestDrawio {
 			@Override
 			public boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
-			}
-			
-			@Override
-			public Function<String, String> createHandlerProxy(org.nasdanika.graph.Connection connection, Supplier<Function<String, String>> handlerSupplier, HandlerType type) {
-				return arg -> handlerSupplier.get().apply(arg);
 			}
 			
 		};
@@ -530,8 +537,8 @@ public class TestDrawio {
 			});
 		});
 
-		for (Entry<org.nasdanika.graph.Connection, Function<String, String>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			String dialog = outcomingEndpoint.getValue().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
+		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outcomingEndpoint: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			String dialog = outcomingEndpoint.getValue().toCompletableFuture().get().apply("[" + ((Node) outcomingEndpoint.getKey().getSource()).getLabel() + "] Hello!");
 			System.out.println(dialog);
 		}
 	}		
@@ -540,12 +547,7 @@ public class TestDrawio {
 	public void testReflectiveProcessorFactory() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 				
-		org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveDynamicProxyProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
-
-			@Override
-			public Class<?> getHandlerInterface(org.nasdanika.graph.Connection connection, HandlerType type) {
-				return Function.class;
-			}
+		org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
 			
 			/**
 			 * A trick around module things - test classes are not exported.

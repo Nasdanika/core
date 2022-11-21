@@ -119,13 +119,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					
 					if (config instanceof NodeProcessorConfig) {
 						NodeProcessorConfig<P, H, E> nodeProcessorConfig = (NodeProcessorConfig<P, H, E>) config;
-						Map<Connection, E> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
+						Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
 						wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
 						wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
 						
-						Map<Connection, E> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
+						Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
 						wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
@@ -154,7 +154,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 	
 							@Override
-							public Map<Connection, E> getIncomingEndpoints() {
+							public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
 								return unwiredIncomingEndpoints;
 							}
 	
@@ -164,7 +164,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 	
 							@Override
-							public Map<Connection, E> getOutgoingEndpoints() {
+							public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
 								return unwiredOutgoingEndpoints;
 							}
 	
@@ -203,7 +203,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 	
 							@Override
-							public E getSourceEndpoint() {
+							public CompletionStage<E> getSourceEndpoint() {
 								return wiredSourceEndpoint ? null : connectionProcessorConfig.getSourceEndpoint();
 							}
 	
@@ -216,7 +216,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 	
 							@Override
-							public E getTargetEndpoint() {
+							public CompletionStage<E> getTargetEndpoint() {
 								return wiredTargetEndpoint ? null : connectionProcessorConfig.getTargetEndpoint();
 							}
 	
@@ -500,12 +500,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return matchPredicate(incomingConnection, incomingEndpointAnnotation.value());
 	}	
 
-	protected Map<Connection, E> wireIncomingEndpoint(
+	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
 			Object processor, 
-			Map<Connection, E> incomingEndpoints,
+			Map<Connection, CompletionStage<E>> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 						
-		Map<Connection, E> ret = new LinkedHashMap<>(incomingEndpoints);
+		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
 		// then filtering using matchIncomingEndpoint, sorting by priority, finding first, wiring it and removing from ret.
@@ -516,17 +516,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			.sorted((a, b) -> b.getKey().getAnnotation(IncomingEndpoint.class).priority() - a.getKey().getAnnotation(IncomingEndpoint.class).priority())
 			.findFirst().ifPresent(e -> {
 				AccessibleObject endpointMember = e.getKey();
-				Entry<Connection, E> incomingEndpointEntry = e.getValue();
-				if (endpointMember instanceof Field) {
-					setFieldValue(processor, (Field) endpointMember, incomingEndpointEntry.getValue());
-				} else {
-					Method endpointMethod = (Method) endpointMember;
-					if (endpointMethod.getParameterCount() == 1) {
-						invokeMethod(processor, endpointMethod, incomingEndpointEntry.getValue());
+				Entry<Connection, CompletionStage<E>> incomingEndpointEntry = e.getValue();
+				incomingEndpointEntry.getValue().thenAccept(incomingEndpoint -> {
+					if (endpointMember instanceof Field) {
+						setFieldValue(processor, (Field) endpointMember, incomingEndpoint);
 					} else {
-						invokeMethod(processor, endpointMethod, incomingEndpointEntry.getKey(), incomingEndpointEntry.getValue());						
-					}
-				}
+						Method endpointMethod = (Method) endpointMember;
+						if (endpointMethod.getParameterCount() == 1) {
+							invokeMethod(processor, endpointMethod, incomingEndpoint);
+						} else {
+							invokeMethod(processor, endpointMethod, incomingEndpointEntry.getKey(), incomingEndpoint);						
+						}
+					}					
+				});
 				ret.remove(incomingEndpointEntry.getKey());
 			});
 				
@@ -535,7 +537,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected void wireIncomingEndpoints(
 			Object processor, 
-			Map<Connection, E> incomingEndpoints,
+			Map<Connection, CompletionStage<E>> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -634,12 +636,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return matchPredicate(outgoingConnection, outgoingEndpointAnnotation.value());
 	}	
 
-	protected Map<Connection, E> wireOutgoingEndpoint(
+	protected Map<Connection, CompletionStage<E>> wireOutgoingEndpoint(
 			Object processor, 
-			Map<Connection, E> outgoingEndpoints,
+			Map<Connection, CompletionStage<E>> outgoingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 						
-		Map<Connection, E> ret = new LinkedHashMap<>(outgoingEndpoints);
+		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
 		// then filtering using matchOutgoingEndpoint, sorting by priority, finding first, wiring it and removing from ret.
@@ -650,17 +652,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			.sorted((a, b) -> b.getKey().getAnnotation(OutgoingEndpoint.class).priority() - a.getKey().getAnnotation(OutgoingEndpoint.class).priority())
 			.findFirst().ifPresent(e -> {
 				AccessibleObject endpointMember = e.getKey();
-				Entry<Connection, E> outgoingEndpointEntry = e.getValue();
-				if (endpointMember instanceof Field) {
-					setFieldValue(processor, (Field) endpointMember, outgoingEndpointEntry.getValue());
-				} else {
-					Method endpointMethod = (Method) endpointMember;
-					if (endpointMethod.getParameterCount() == 1) {
-						invokeMethod(processor, endpointMethod, outgoingEndpointEntry.getValue());
+				Entry<Connection, CompletionStage<E>> outgoingEndpointEntry = e.getValue();
+				outgoingEndpointEntry.getValue().thenAccept(outgoingEndpoint -> {
+					if (endpointMember instanceof Field) {
+						setFieldValue(processor, (Field) endpointMember, outgoingEndpoint);
 					} else {
-						invokeMethod(processor, endpointMethod, outgoingEndpointEntry.getKey(), outgoingEndpointEntry.getValue());						
-					}
-				}
+						Method endpointMethod = (Method) endpointMember;
+						if (endpointMethod.getParameterCount() == 1) {
+							invokeMethod(processor, endpointMethod, outgoingEndpoint);
+						} else {
+							invokeMethod(processor, endpointMethod, outgoingEndpointEntry.getKey(), outgoingEndpoint);						
+						}
+					}					
+				});
 				ret.remove(outgoingEndpointEntry.getKey());
 			});
 				
@@ -669,7 +673,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected void wireOutgoingEndpoints(
 			Object processor, 
-			Map<Connection, E> outgoingEndpoints,
+			Map<Connection, CompletionStage<E>> outgoingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -700,18 +704,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected boolean wireTargetEndpoint(
 			Object processor, 
-			E targetEndpoint, 
+			CompletionStage<E> targetEndpointCompletionStage, 
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
-			.filter(ae -> mustSet(ae, targetEndpoint.getClass(), "Cannot use " + ae + " to set target connection endpoint"))
+			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set target connection endpoint"))
 			.findFirst();
 		
 		
 		if (setter.isPresent()) {
-			 set(processor, setter.get(), targetEndpoint);
-			 return true;
+			targetEndpointCompletionStage.thenAccept(targetEndpoint -> {
+				set(processor, setter.get(), targetEndpoint);	
+			});
+			return true;
 		}
 		return false;
 	}
@@ -737,18 +743,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected boolean wireSourceEndpoint(
 			Object processor, 
-			E sourceEndpoint,
+			CompletionStage<E> sourceEndpointCompletionStage,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
-			.filter(ae -> mustSet(ae, sourceEndpoint.getClass(), "Cannot use " + ae + " to set source connection endpoint"))
+			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set source connection endpoint"))
 			.findFirst();
 		
 		
 		if (setter.isPresent()) {
-			 set(processor, setter.get(), sourceEndpoint);
-			 return true;
+			sourceEndpointCompletionStage.thenAccept(sourceEndpoint -> {
+				set(processor, setter.get(), sourceEndpoint);	
+			});				
+			return true;
 		}
 		return false;
 	}

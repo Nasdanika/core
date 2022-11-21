@@ -1,12 +1,11 @@
 package org.nasdanika.graph.processor;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -25,17 +24,17 @@ class ProcessorFactoryVisitor<P,H,E> {
 	private ProcessorFactory<P,H,E> factory;
 	private Map<Element, ProcessorInfo<P>> registry = new LinkedHashMap<>();
 	
-	// Handlers to call connection sources by outgoing endpoints
-	private Map<Connection,H> sourceHandlers = new HashMap<>();
+	// Endpoints for connection source to call the connection
+	private Map<Connection,CompletableFuture<E>> sourceEndpoints = new LinkedHashMap<>();
 	
-	// Handlers to call connection targets by incoming endpoints
-	private Map<Connection,H> targetHandlers = new HashMap<>();
+	// Endpoints for connection target to call the connection
+	private Map<Connection, CompletableFuture<E>> targetEndpoints = new LinkedHashMap<>();
 	
-	// Handlers to call nodes by target endpoints or by outgoing endpoints for pass-through connections.
-	private Map<Node, Map<Connection,H>> incomingHandlers = new HashMap<>();
+	// Endpoints for incoming connections to call the target node
+	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = new LinkedHashMap<>();
 	
-	// Handlers to call nodes by source endpoints or by incoming endpoints for pass-through connections.
-	private Map<Node, Map<Connection,H>> outgoingHandlers = new HashMap<>();	
+	// Endpoints for outgoing connections to call the source node
+	private Map<Node, Map<Connection, CompletableFuture<E>>> outgoingEndpoints = new LinkedHashMap<>();	
 
 	ProcessorFactoryVisitor(ProcessorFactory<P,H,E> factory) {
 		this.factory = factory;
@@ -51,80 +50,55 @@ class ProcessorFactoryVisitor<P,H,E> {
 		ProcessorConfig<P> config;
 		if (element instanceof Node) {
 			Node node = (Node) element;
-			Map<Connection, E> incomingEndpoints = new HashMap<>();
-			Map<Connection, Consumer<H>> incomingHandlerConsumers = new HashMap<>();
+			Map<Connection, Consumer<H>> incomingHandlerConsumers = new LinkedHashMap<>();
 			for (Connection incomingConnection: node.getIncomingConnections()) {
-				Supplier<H> incomingHandlerSupplier = () -> {
-					if (factory.isPassThrough(incomingConnection)) {
-						// Returning outgoing handler directly as there is no target handler
-						Node incomingConnectionSource = incomingConnection.getSource();
-						if (incomingConnectionSource == null) {
-							throw new IllegalStateException("Incoming connection has no source node: " + incomingConnection);
-						}
-						Map<Connection,H> sourceOutgoingHandlers = outgoingHandlers.get(incomingConnectionSource);
-						if (sourceOutgoingHandlers == null) {
-							throw new IllegalStateException("Outgoing handlers not found for " + incomingConnectionSource);
-						}
-						H sourceOutgoingHandler = sourceOutgoingHandlers.get(incomingConnection);
-						if (sourceOutgoingHandler == null) {
-							throw new IllegalStateException("Source outgoing hanlder not found for incoming connection " + incomingConnection);
-						}
-						return sourceOutgoingHandler;
-					}
-					
-					H targetHandler = targetHandlers.get(incomingConnection);
-					if (targetHandler == null) {
-						throw new IllegalStateException("Target handler is not set for connection " + incomingConnection);
-					}
-					return targetHandler;
-					
-				};
-				H incomingEndpointHandlerProxy = factory.createHandlerProxy(incomingConnection, incomingHandlerSupplier, HandlerType.INCOMING); 
-				E incomingEndpoint = incomingEndpointHandlerProxy == null ? null : factory.createEndpoint(incomingConnection, incomingEndpointHandlerProxy, HandlerType.INCOMING);
-				if (incomingEndpoint != null) {
-					incomingEndpoints.put(incomingConnection, incomingEndpoint);
+				// Incoming endpoint - creating if not there
+				incomingEndpoints
+					.computeIfAbsent(node, n -> new LinkedHashMap<>())
+					.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+				
+				// Incoming handler consumer - wiring to the connection target endpoint or to the node outgoing endpoint
+				CompletableFuture<E> endpoint;
+				if (factory.isPassThrough(incomingConnection)) {
+					// Wiring to the source node outgoing endpoint
+					endpoint = outgoingEndpoints
+							.computeIfAbsent(node, n -> new LinkedHashMap<>())
+							.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+				} else {
+					// Wiring to the connection target endpoint
+					endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>()); 
 				}
 				
-				Consumer<H> incomingHandlerConsumer = incomingHandler -> incomingHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(incomingConnection, incomingHandler);
-				incomingHandlerConsumers.put(incomingConnection, incomingHandlerConsumer);										
+//				endpoint.thenAccept(v -> {
+//					System.out.println(v);
+//				});
+				
+				incomingHandlerConsumers.put(incomingConnection, handler -> {
+					endpoint.complete(factory.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
+				});
 			}
 			
-			Map<Connection, E> outgoingEndpoints = new HashMap<>();
-			Map<Connection, Consumer<H>> outgoingHandlerConsumers = new HashMap<>();
+			Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
 			for (Connection outgoingConnection: node.getOutgoingConnections()) {
-				Supplier<H> outgoingHandlerSupplier = () -> {
-					if (factory.isPassThrough(outgoingConnection)) {
-						// Calling incoming handler directly as there is no source handler
-						Node outgoingConnectionTarget = outgoingConnection.getTarget();
-						if (outgoingConnectionTarget == null) {
-							throw new IllegalStateException("Outgoing connection has no target node: " + outgoingConnection);
-						}
-						Map<Connection, H> targetIncomingHandlers = incomingHandlers.get(outgoingConnectionTarget);
-						if (targetIncomingHandlers == null) {
-							throw new IllegalStateException("Incoming handlers not found for " + outgoingConnectionTarget);
-						}
-						H targetIncomingHandler = targetIncomingHandlers.get(outgoingConnection);
-						if (targetIncomingHandler == null) {
-							throw new IllegalStateException("Target incoming hanlder not found for outgoing connection " + outgoingConnection);
-						}
-						return targetIncomingHandler;
-					}
-					
-					H sourceHandler = sourceHandlers.get(outgoingConnection);
-					if (sourceHandler == null) {
-						throw new IllegalStateException("Source handler is not set for connection " + outgoingConnection);
-					}
-					return sourceHandler;
-					
-				};
-				H outgoingEndpointHandlerProxy = factory.createHandlerProxy(outgoingConnection, outgoingHandlerSupplier, HandlerType.OUTGOING);
-				E outgoingEndpoint = outgoingEndpointHandlerProxy == null ? null : factory.createEndpoint(outgoingConnection, outgoingEndpointHandlerProxy, HandlerType.OUTGOING);
-				if (outgoingEndpoint != null) {
-					outgoingEndpoints.put(outgoingConnection, outgoingEndpoint);
+				outgoingEndpoints
+					.computeIfAbsent(node, n -> new LinkedHashMap<>())
+					.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+				
+				// Outgoing handler consumer - wiring to the connection source endpoint or to the node incoming endpoint
+				CompletableFuture<E> endpoint;
+				if (factory.isPassThrough(outgoingConnection)) {
+					// Wiring to the source node outgoing endpoint
+					endpoint = incomingEndpoints
+							.computeIfAbsent(node, n -> new LinkedHashMap<>())
+							.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+				} else {
+					// Wiring to the connection target endpoint
+					endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>()); 
 				}
 				
-				Consumer<H> outgoingHandlerConsumer = outgoingHandler -> outgoingHandlers.computeIfAbsent(node, n -> new HashMap<>()).put(outgoingConnection, outgoingHandler);
-				outgoingHandlerConsumers.put(outgoingConnection, outgoingHandlerConsumer);										
+				outgoingHandlerConsumers.put(outgoingConnection, handler -> {
+					endpoint.complete(factory.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
+				});
 			}
 			
 			config = new NodeProcessorConfig<P, H, E>() {
@@ -152,8 +126,8 @@ class ProcessorFactoryVisitor<P,H,E> {
 				}
 
 				@Override
-				public Map<Connection, E> getIncomingEndpoints() {
-					return Collections.unmodifiableMap(incomingEndpoints);
+				public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
+					return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
 				}
 
 				@Override
@@ -162,8 +136,8 @@ class ProcessorFactoryVisitor<P,H,E> {
 				}
 
 				@Override
-				public Map<Connection, E> getOutgoingEndpoints() {
-					return Collections.unmodifiableMap(outgoingEndpoints);
+				public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
+					return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
 				}
 
 				@Override
@@ -178,48 +152,13 @@ class ProcessorFactoryVisitor<P,H,E> {
 			} else {
 				Connection connection = (Connection) element;
 				Node source = connection.getSource();
-				E sourceEndpoint;
-				if (source == null) {
-					sourceEndpoint = null;
-				} else {
-					Supplier<H> sourceHandlerSupplier = () -> {
-						Map<Connection, H> sourceOutgoingHandlers = outgoingHandlers.get(source);
-						if (sourceOutgoingHandlers == null) {
-							throw new IllegalStateException("Outgoing handlers not found for " + source);
-						}																					
-						H sourceHandler = sourceOutgoingHandlers.get(connection);
-						if (sourceHandler == null) {
-							throw new IllegalStateException("Source handler is not set for connection " + connection);
-						}
-						return sourceHandler;
-						
-					};
-					H sourceHandlerProxy = factory.createHandlerProxy(connection, sourceHandlerSupplier, HandlerType.SOURCE);
-					sourceEndpoint = sourceHandlerProxy == null ? null : factory.createEndpoint(connection, sourceHandlerProxy, HandlerType.SOURCE);
-				}
-				
-				Consumer<H> sourceHandlerConsumer = sourceHandler -> sourceHandlers.put((Connection) element, sourceHandler);						
-				
 				Node target = connection.getTarget();
-				E targetEndpoint;
-				if (target == null) {
-					targetEndpoint = null;
-				} else {
-					Supplier<H> targetHandlerSupplier = () -> {
-						Map<Connection, H> targetIncomingHandlers = incomingHandlers.get(target);
-						if (targetIncomingHandlers == null) {
-							throw new IllegalStateException("Incoming handlers not found for " + target);
-						}																					
-						H targetHandler = targetIncomingHandlers.get(connection);
-						if (targetHandler == null) {
-							throw new IllegalStateException("Target handler is not set for connection " + connection);
-						}
-						return targetHandler;						
-					};
-					H targetHandlerProxy = factory.createHandlerProxy(connection, targetHandlerSupplier, HandlerType.TARGET);
-					targetEndpoint = targetHandlerProxy == null ? null : factory.createEndpoint(connection, targetHandlerProxy, HandlerType.TARGET);
-				}
-				Consumer<H> targetHandlerConsumer = targetHandler -> targetHandlers.put((Connection) element, targetHandler);						
+				
+				CompletableFuture<E> sourceEndpoint = source == null ? null : sourceEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+				CompletableFuture<E> targetEndpoint = target == null ? null : targetEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+											
+				CompletableFuture<E> outgoingEndpoint = source == null ? null : outgoingEndpoints.computeIfAbsent(source, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+				CompletableFuture<E> incomingEndpoint = target == null ? null : incomingEndpoints.computeIfAbsent(target, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
 				
 				config = new ConnectionProcessorConfig<P, H, E>() {
 					
@@ -246,23 +185,27 @@ class ProcessorFactoryVisitor<P,H,E> {
 					}
 
 					@Override
-					public E getSourceEndpoint() {
+					public CompletionStage<E> getSourceEndpoint() {
 						return sourceEndpoint;
 					}
 
 					@Override
 					public void setSourceHandler(H sourceHandler) {
-						sourceHandlerConsumer.accept(sourceHandler);						
+						if (outgoingEndpoint != null) {
+							outgoingEndpoint.complete(factory.createEndpoint(connection, sourceHandler, HandlerType.SOURCE));
+						}
 					}
 
 					@Override
-					public E getTargetEndpoint() {
+					public CompletionStage<E> getTargetEndpoint() {
 						return targetEndpoint;
 					}
 
 					@Override
 					public void setTargetHandler(H targetHandler) {
-						targetHandlerConsumer.accept(targetHandler);						
+						if (incomingEndpoint != null) {
+							incomingEndpoint.complete(factory.createEndpoint(connection, targetHandler, HandlerType.TARGET));
+						}
 					}
 				};
 			}

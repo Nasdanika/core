@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,16 +70,6 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	}
 	
 	/**
-	 * Handler proxy passes invocations to the handler returned by the supplier. 
-	 * This method is used to create endpoints before actual handlers are provided by processors.
-	 * @param connection
-	 * @param handlerSupplier
-	 * @param type
-	 * @return
-	 */
-	H createHandlerProxy(Connection connection, Supplier<H> handlerSupplier, HandlerType type);
-	
-	/**
 	 * Composes this and the other factory
 	 */
 	@Override
@@ -98,15 +87,6 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 					return endpoint;
 				}
 				return other.createEndpoint(connection, handler, type);
-			}
-
-			@Override
-			public H createHandlerProxy(Connection connection, Supplier<H> handlerSupplier, HandlerType type) {
-				H handler = ProcessorFactory.this.createHandlerProxy(connection, handlerSupplier, type);
-				if (handler != null) {
-					return handler;
-				}
-				return other.createHandlerProxy(connection, handlerSupplier, type);
 			}
 			
 			@Override

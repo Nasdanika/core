@@ -8,22 +8,22 @@ package org.nasdanika.graph.processor;
 public enum HandlerType {
 	
 	/**
-	 * Handler to invoke connection source.
+	 * Connection's target handler to invoke source node outgoing endpoint for this connection.
 	 */
 	SOURCE,
 
 	/**
-	 * Handler to invoke connection target.
+	 * Connection's source handler to invoke target node incoming endpoint for this connection.
 	 */
 	TARGET,
 	
 	/**
-	 * Handler to invoke a node via an outgoing connection .
+	 * Node's outgoing handler to invoke outgoing connection's source endpoint or, if the connection is passthrough, target node's incoming endpoint.
 	 */
 	OUTGOING,
 	
 	/**
-	 * Handler to invoke a node via an incoming connection.
+	 * Node's incoming handler to invoke incoming connection's target endpoint or, if the connection is passthrough, source node's outgoing endpoint.
 	 */
 	INCOMING	
 

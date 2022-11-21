@@ -374,7 +374,9 @@ public class TestCommon {
 		
 		cf.thenAccept(v -> System.out.println("Before completion handler: " + v));		
 		cf.complete("World");
-		cf.thenAccept(v -> System.out.println("After completion handler: " + v));		
+		cf.thenAccept(v -> System.out.println("After completion handler: " + v));
+		
+		cf.complete("Universe");
 	}
 	
 }

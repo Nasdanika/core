@@ -6,9 +6,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.concurrent.CompletionStage;
 
 /**
- * Field or method to inject a map of outgoing connections to their endpoints.
+ * Field or method to inject a map of outgoing connections to {@link CompletionStage}s of their endpoints.
  * @author Pavel
  *
  */

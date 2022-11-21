@@ -12,7 +12,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 public class AliceBobProcessorFactory {
 
 	@Processor("label == 'Alice'")
-	public BobHouseProcessor createAliceProcessor(NodeProcessorConfig<Object, Function<String,String>, Function<String,String>> config) {
+	public AliceProcessor createAliceProcessor(NodeProcessorConfig<Object, Function<String,String>, Function<String,String>> config) {
 		return new AliceProcessor();
 	}	
 	

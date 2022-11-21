@@ -1,5 +1,7 @@
 package org.nasdanika.graph.processor;
 
+import java.util.concurrent.CompletionStage;
+
 import org.nasdanika.graph.Connection;
 
 public interface ConnectionProcessorConfig<P,H,E> extends ProcessorConfig<P> {
@@ -7,11 +9,11 @@ public interface ConnectionProcessorConfig<P,H,E> extends ProcessorConfig<P> {
 	@Override
 	Connection getElement();
 
-	E getSourceEndpoint();
+	CompletionStage<E> getSourceEndpoint();
 	
 	void setSourceHandler(H sourceHandler);
 	
-	E getTargetEndpoint();
+	CompletionStage<E> getTargetEndpoint();
 	
 	void setTargetHandler(H targetHandler);
 	

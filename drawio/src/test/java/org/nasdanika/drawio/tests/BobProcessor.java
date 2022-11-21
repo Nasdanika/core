@@ -23,7 +23,7 @@ public class BobProcessor implements Runnable {
 	private Function<String, String> aliceEndpoint;
 
 	@IncomingEndpoint("source.label == 'Alice'")
-	public void setAliceInboundEndpoint(Connection connection, Function<String,String> aliceEndpoint) {
+	public void setAliceIncomingEndpoint(Connection connection, Function<String,String> aliceEndpoint) {
 		this.aliceEndpoint = aliceEndpoint;
 	} 
 	
@@ -47,7 +47,7 @@ public class BobProcessor implements Runnable {
 	private Map<Element, ProcessorInfo<Object>> registry;
 	
 	@IncomingHandler("source.label == 'Alice'")
-	private Function<String,String> aliceInboundHandler = request -> {
+	private Function<String,String> aliceIncomingHandler = request -> {
 		System.out.println("Request: " + request);
 		System.out.println("Request: " + library.apply(request));
 		System.out.println(library.apply("Hello!"));		
