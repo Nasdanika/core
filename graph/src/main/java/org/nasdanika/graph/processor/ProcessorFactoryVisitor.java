@@ -61,20 +61,23 @@ class ProcessorFactoryVisitor<P,H,E> {
 				CompletableFuture<E> endpoint;
 				if (factory.isPassThrough(incomingConnection)) {
 					// Wiring to the source node outgoing endpoint
-					endpoint = outgoingEndpoints
-							.computeIfAbsent(node, n -> new LinkedHashMap<>())
-							.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+					Node source = incomingConnection.getSource();
+					if (source == null) {
+						endpoint = null;
+					} else {
+						endpoint = outgoingEndpoints
+								.computeIfAbsent(source, n -> new LinkedHashMap<>())
+								.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+					}
 				} else {
 					// Wiring to the connection target endpoint
 					endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>()); 
 				}
 				
-//				endpoint.thenAccept(v -> {
-//					System.out.println(v);
-//				});
-				
 				incomingHandlerConsumers.put(incomingConnection, handler -> {
-					endpoint.complete(factory.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
+					if (endpoint != null) {
+						endpoint.complete(factory.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
+					}
 				});
 			}
 			
@@ -88,16 +91,23 @@ class ProcessorFactoryVisitor<P,H,E> {
 				CompletableFuture<E> endpoint;
 				if (factory.isPassThrough(outgoingConnection)) {
 					// Wiring to the source node outgoing endpoint
-					endpoint = incomingEndpoints
-							.computeIfAbsent(node, n -> new LinkedHashMap<>())
-							.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+					Node target = outgoingConnection.getTarget();
+					if (target == null) {
+						endpoint = null;
+					} else {
+						endpoint = incomingEndpoints
+								.computeIfAbsent(target, n -> new LinkedHashMap<>())
+								.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+					}
 				} else {
 					// Wiring to the connection target endpoint
 					endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>()); 
 				}
 				
 				outgoingHandlerConsumers.put(outgoingConnection, handler -> {
-					endpoint.complete(factory.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
+					if (endpoint != null) {
+						endpoint.complete(factory.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
+					}
 				});
 			}
 			
