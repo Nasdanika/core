@@ -227,8 +227,6 @@ public class AliceBobConnectionProcessor {
 
 ## Semantic mapping
 
-### GraphProcessorResource
-
 ${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorResource} is a base class for mapping graph elements to 
 [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
@@ -264,7 +262,3 @@ The organization may also map diagrams to different models. E.g. to the [Nasdani
 Or the organization may create an Ecore model of the organization and map diagrams and other data sources to the model.
 Such a model can be documented using [Nasdanika HTML Ecore](../../../html/modules/ecore/index.html).
 The documentation may include instructions how to map diagram elements to model elements.
-
-### EObjectFactory
-
-TODO.
