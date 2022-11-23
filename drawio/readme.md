@@ -144,9 +144,15 @@ To traverse document elements you can use either ``accept(<visitor>)`` methods o
 
 ## Semantic mapping
 
+### DrawioResource
+
 ${javadoc/org.nasdanika.drawio.DrawioResource} is a base class for mapping of diagram elements to [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 With DrawioResource drawio files are treated as model resources which can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
 ${javadoc/org.nasdanika.html.model.app.drawio.ResourceFactory} is a concrete implementation for mapping diagram elements to  [application model](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/index.html) [actions](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html).
+
+### AbstractEObjectFactory
+
+Parent ``child-reference``, ``parent-reference``.
 
 ## Sorting
 
