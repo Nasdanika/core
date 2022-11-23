@@ -231,6 +231,9 @@ ${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorRes
 [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
 
+${javadoc/org.nasdanika.graph.processor.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
+Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``.
+
 There might be multiple processors and semantic models for the same graph, e.g. a diagram. 
 It can be thought of as "semantic inversion" - in [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) and tools like [Sirius](https://www.eclipse.org/sirius/) there is a model and multiple representations/views of the model. 
 Visual (view) elements are mapped to model elements. 
@@ -262,3 +265,5 @@ The organization may also map diagrams to different models. E.g. to the [Nasdani
 Or the organization may create an Ecore model of the organization and map diagrams and other data sources to the model.
 Such a model can be documented using [Nasdanika HTML Ecore](../../../html/modules/ecore/index.html).
 The documentation may include instructions how to map diagram elements to model elements.
+
+

@@ -15,7 +15,6 @@ import javax.xml.transform.TransformerException;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.processor.GraphProcessorResource;
-import org.nasdanika.graph.processor.ProcessorFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -29,8 +28,8 @@ public abstract class DrawioResource<P> extends GraphProcessorResource<P> {
 	
 	protected Document document;
 	
-	public DrawioResource(URI uri, ProcessorFactory<P, ?, ?> processorFactory) {
-		super(uri, processorFactory);
+	public DrawioResource(URI uri) {
+		super(uri);
 	}
 	
 	@Override

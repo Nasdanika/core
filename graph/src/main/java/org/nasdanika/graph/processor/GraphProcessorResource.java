@@ -20,11 +20,10 @@ import org.nasdanika.graph.Element;
  */
 public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	
-	private ProcessorFactory<P, ?, ?> processorFactory;
+	protected abstract ProcessorFactory<P, ?, ?> getProcessorFactory();
 	
-	protected GraphProcessorResource(URI uri, ProcessorFactory<P, ?, ?> processorFactory) {
+	protected GraphProcessorResource(URI uri) {
 		super(uri);
-		this.processorFactory = processorFactory;
 	}
 
 	/**
@@ -38,7 +37,7 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
-		Map<Element, ProcessorInfo<P>> registry = processorFactory.createProcessors(loadElements(inputStream, options));
+		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(loadElements(inputStream, options));
 		getRoots(getSemanticElements(registry)).forEach(getContents()::add);
 	}
 
@@ -57,5 +56,5 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	protected Stream<? extends EObject> getRoots(Stream<EObject> semanticElements) {
 		return semanticElements.filter(Objects::nonNull).filter(eObj -> eObj.eContainer() == null);
 	}
-	
+			
 }
