@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.nasdanika.common.NullProgressMonitor;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
 
@@ -37,8 +39,12 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
-		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(loadElements(inputStream, options));
+		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(loadElements(inputStream, options), getProgressMonitor());
 		getRoots(getSemanticElements(registry)).forEach(getContents()::add);
+	}
+
+	protected ProgressMonitor getProgressMonitor() {
+		return new NullProgressMonitor();
 	}
 
 	/**

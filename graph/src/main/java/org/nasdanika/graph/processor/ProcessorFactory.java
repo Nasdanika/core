@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.nasdanika.common.Composeable;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
@@ -48,21 +50,22 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	 * @param registryCallbackConsumer
 	 * @return
 	 */
-	default ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {
+	default ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
 		return ProcessorInfo.of(config, null);
 	}
 	
-	default Map<Element,ProcessorInfo<P>> createProcessors(Element... elements) {
-		return createProcessors(Arrays.stream(elements));
+	default Map<Element,ProcessorInfo<P>> createProcessors(ProgressMonitor progressMonitor, Element... elements) {
+		return createProcessors(Arrays.stream(elements), progressMonitor);
 	}
 	
-	default Map<Element,ProcessorInfo<P>> createProcessors(Collection<Element> elements) {
-		return createProcessors(elements.stream());
+	default Map<Element,ProcessorInfo<P>> createProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {
+		return createProcessors(elements.stream(), progressMonitor);
 	}
 	
-	default Map<Element,ProcessorInfo<P>> createProcessors(Stream<Element> elements) {
+	default Map<Element,ProcessorInfo<P>> createProcessors(Stream<Element> elements, ProgressMonitor progressMonitor) {
 		ProcessorFactoryVisitor<P, H, E> visitor = new ProcessorFactoryVisitor<>(this);				
-		List<Helper<P>> helpers = elements.map(element -> element.accept(visitor::createElementProcessor)).collect(Collectors.toList());
+		BiFunction<Element, Map<? extends Element, Helper<P>>, Helper<P>> createElementProcessor = (element, childProcessors) -> visitor.createElementProcessor(element, childProcessors, progressMonitor);
+		List<Helper<P>> helpers = elements.map(element -> element.accept(createElementProcessor)).collect(Collectors.toList());
 		Map<Element, ProcessorInfo<P>> registry = visitor.getRegistry();
 		Map<Element, ProcessorInfo<P>> unmodifiableRegistry = Collections.unmodifiableMap(registry);
 		helpers.forEach(helper -> helper.setRegistry(unmodifiableRegistry));
@@ -90,9 +93,10 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 			}
 			
 			@Override
-			public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {				
-				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config);
-				return info.getProcessor() == null ? other.createProcessor(config) : info;
+			public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {				
+				// TODO - split monitor?
+				ProcessorInfo<P> info = ProcessorFactory.this.createProcessor(config, progressMonitor);
+				return info.getProcessor() == null ? other.createProcessor(config, progressMonitor) : info;
 			}
 		};
 		

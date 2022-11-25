@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -51,9 +52,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		this.targets = targets;
 	}
 	
-	public Map<Element, ProcessorInfo<P>> createProcessors(Element element, IntrospectionLevel introspectionLevel, Object... registryTargets) {
-		Map<Element, ProcessorInfo<P>> registry = ProcessorFactory.super.createProcessors(element);
+	public Map<Element, ProcessorInfo<P>> createProcessors(Element element, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor, Object... registryTargets) {
+		Map<Element, ProcessorInfo<P>> registry = ProcessorFactory.super.createProcessors(progressMonitor, element);
 		for (Object registryTarget: registryTargets) {
+			// TODO  - progress moinitor			
 			wireRegistryEntry(registryTarget, introspectionLevel).accept(registry);
 			wireRegistry(registryTarget, introspectionLevel).accept(registry);
 		}
@@ -61,23 +63,23 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}
 	
 	@Override
-	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config) {
+	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
 		if (introspectionLevel != IntrospectionLevel.NONE) {
 			for (Object target: targets) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel);
+				// TODO - split
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel, progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
 			}
 		}
-		return ProcessorFactory.super.createProcessor(config); 		
+		return ProcessorFactory.super.createProcessor(config, progressMonitor); 		
 	}		
 	
 	@SuppressWarnings("unchecked")
-	protected ProcessorInfo<P> createProcessor(Object target, ProcessorConfig<P> config, IntrospectionLevel introspectionLevel) {
-	
+	protected ProcessorInfo<P> createProcessor(Object target, ProcessorConfig<P> config, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor) {	
 		if (target != null && (target.getClass().getAnnotation(Factory.class) == null || matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value()))) {
-			
+			// TODO - progress steps.
 			Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
 				.filter(m -> matchFactoryMethod(config, m))
 				.sorted(this::compareProcessorMethods)
@@ -95,7 +97,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 					IntrospectionLevel processorIntrospectionLevel = elementProcessorAnnotation.introspect();
 					if (processorIntrospectionLevel == IntrospectionLevel.NONE) {
-						return ProcessorFactory.super.createProcessor(config);
+						return ProcessorFactory.super.createProcessor(config, progressMonitor);
 					}
 					
 					boolean hideWired = elementProcessorAnnotation.hideWired();
@@ -268,7 +270,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue());
+				// TODO - sub-monitors
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -283,7 +286,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					.collect(Collectors.toList());
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue());
+				// TODO - sub-monitors
+				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}

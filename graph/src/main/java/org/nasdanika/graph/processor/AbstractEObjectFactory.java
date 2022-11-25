@@ -7,6 +7,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
@@ -20,8 +21,8 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ProcessorInfo<T> createProcessor(ProcessorConfig<T> config) {
-		T semanticElement = createSemanticElement(config);
+	public ProcessorInfo<T> createProcessor(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+		T semanticElement = createSemanticElement(config, progressMonitor);
 		ProcessorInfo<T> processorInfo = ProcessorInfo.of(config, semanticElement);
 		if (semanticElement == null) {
 			if (config instanceof ConnectionProcessorConfig) {
@@ -129,7 +130,7 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 	 * @param config
 	 * @return
 	 */	
-	protected abstract T createSemanticElement(ProcessorConfig<T> config);
+	protected abstract T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor);
 	
 	/**
 	 * Sets parent. If parent is null this method sets itself to be called for the grand parent etc. 

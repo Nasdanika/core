@@ -3,10 +3,12 @@ package org.nasdanika.graph.processor;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
@@ -44,231 +46,239 @@ class ProcessorFactoryVisitor<P,H,E> {
 		return registry;
 	}	
 
-	Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors) {
-		CompletableFuture<ProcessorInfo<P>> parentProcessorInfoCompletableFuture = new CompletableFuture<>();
-		CompletableFuture<Map<Element, ProcessorInfo<P>>> registryCompletableFuture = new CompletableFuture<>();
-		ProcessorConfig<P> config;
-		if (element instanceof Node) {
-			Node node = (Node) element;
-			Map<Connection, Consumer<H>> incomingHandlerConsumers = new LinkedHashMap<>();
-			for (Connection incomingConnection: node.getIncomingConnections()) {
-				// Incoming endpoint - creating if not there
-				incomingEndpoints
-					.computeIfAbsent(node, n -> new LinkedHashMap<>())
-					.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
-				
-				// Incoming handler consumer - wiring to the connection target endpoint or to the node outgoing endpoint
-				CompletableFuture<E> endpoint;
-				if (factory.isPassThrough(incomingConnection)) {
-					// Wiring to the source node outgoing endpoint
-					Node source = incomingConnection.getSource();
-					if (source == null) {
-						endpoint = null;
+	Helper<P> createElementProcessor(Element element, Map<? extends Element, Helper<P>> childProcessors, ProgressMonitor progressMonitor) {
+		if (progressMonitor.isCancelled()) {
+			throw new CancellationException();
+		}		
+		try (ProgressMonitor subMonitor =  progressMonitor.split("Creating element processor", 1, element)) {
+			CompletableFuture<ProcessorInfo<P>> parentProcessorInfoCompletableFuture = new CompletableFuture<>();
+			CompletableFuture<Map<Element, ProcessorInfo<P>>> registryCompletableFuture = new CompletableFuture<>();
+			ProcessorConfig<P> config;
+			if (element instanceof Node) {
+				Node node = (Node) element;
+				Map<Connection, Consumer<H>> incomingHandlerConsumers = new LinkedHashMap<>();
+				for (Connection incomingConnection: node.getIncomingConnections()) {
+					// Incoming endpoint - creating if not there
+					incomingEndpoints
+						.computeIfAbsent(node, n -> new LinkedHashMap<>())
+						.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+					
+					// Incoming handler consumer - wiring to the connection target endpoint or to the node outgoing endpoint
+					CompletableFuture<E> endpoint;
+					if (factory.isPassThrough(incomingConnection)) {
+						// Wiring to the source node outgoing endpoint
+						Node source = incomingConnection.getSource();
+						if (source == null) {
+							endpoint = null;
+						} else {
+							endpoint = outgoingEndpoints
+									.computeIfAbsent(source, n -> new LinkedHashMap<>())
+									.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+						}
 					} else {
-						endpoint = outgoingEndpoints
-								.computeIfAbsent(source, n -> new LinkedHashMap<>())
-								.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+						// Wiring to the connection target endpoint
+						endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>()); 
 					}
-				} else {
-					// Wiring to the connection target endpoint
-					endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>()); 
+					
+					incomingHandlerConsumers.put(incomingConnection, handler -> {
+						if (endpoint != null) {
+							endpoint.complete(factory.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
+						}
+					});
 				}
 				
-				incomingHandlerConsumers.put(incomingConnection, handler -> {
-					if (endpoint != null) {
-						endpoint.complete(factory.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
-					}
-				});
-			}
-			
-			Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
-			for (Connection outgoingConnection: node.getOutgoingConnections()) {
-				outgoingEndpoints
-					.computeIfAbsent(node, n -> new LinkedHashMap<>())
-					.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
-				
-				// Outgoing handler consumer - wiring to the connection source endpoint or to the node incoming endpoint
-				CompletableFuture<E> endpoint;
-				if (factory.isPassThrough(outgoingConnection)) {
-					// Wiring to the source node outgoing endpoint
-					Node target = outgoingConnection.getTarget();
-					if (target == null) {
-						endpoint = null;
+				Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
+				for (Connection outgoingConnection: node.getOutgoingConnections()) {
+					outgoingEndpoints
+						.computeIfAbsent(node, n -> new LinkedHashMap<>())
+						.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+					
+					// Outgoing handler consumer - wiring to the connection source endpoint or to the node incoming endpoint
+					CompletableFuture<E> endpoint;
+					if (factory.isPassThrough(outgoingConnection)) {
+						// Wiring to the source node outgoing endpoint
+						Node target = outgoingConnection.getTarget();
+						if (target == null) {
+							endpoint = null;
+						} else {
+							endpoint = incomingEndpoints
+									.computeIfAbsent(target, n -> new LinkedHashMap<>())
+									.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+						}
 					} else {
-						endpoint = incomingEndpoints
-								.computeIfAbsent(target, n -> new LinkedHashMap<>())
-								.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+						// Wiring to the connection target endpoint
+						endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>()); 
 					}
-				} else {
-					// Wiring to the connection target endpoint
-					endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>()); 
+					
+					outgoingHandlerConsumers.put(outgoingConnection, handler -> {
+						if (endpoint != null) {
+							endpoint.complete(factory.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
+						}
+					});
 				}
 				
-				outgoingHandlerConsumers.put(outgoingConnection, handler -> {
-					if (endpoint != null) {
-						endpoint.complete(factory.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
-					}
-				});
-			}
-			
-			config = new NodeProcessorConfig<P, H, E>() {
-				
-				@Override
-				public Node getElement() {
-					return node;
-				}
-
-				@Override
-				public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
-					Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
-					childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
-					return ret;
-				}
-				
-				@Override
-				public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
-					return parentProcessorInfoCompletableFuture;
-				}
-
-				@Override
-				public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
-					return registryCompletableFuture;
-				}
-
-				@Override
-				public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-					return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
-				}
-
-				@Override
-				public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
-					return Collections.unmodifiableMap(incomingHandlerConsumers);
-				}
-
-				@Override
-				public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-					return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
-				}
-
-				@Override
-				public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
-					return Collections.unmodifiableMap(outgoingHandlerConsumers);
-				}
-			};
-
-		} else if (element instanceof Connection) {
-			if (factory.isPassThrough((Connection) element)) {
-				config = null;
-			} else {
-				Connection connection = (Connection) element;
-				Node source = connection.getSource();
-				Node target = connection.getTarget();
-				
-				CompletableFuture<E> sourceEndpoint = source == null ? null : sourceEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-				CompletableFuture<E> targetEndpoint = target == null ? null : targetEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-											
-				CompletableFuture<E> outgoingEndpoint = source == null ? null : outgoingEndpoints.computeIfAbsent(source, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-				CompletableFuture<E> incomingEndpoint = target == null ? null : incomingEndpoints.computeIfAbsent(target, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-				
-				config = new ConnectionProcessorConfig<P, H, E>() {
+				config = new NodeProcessorConfig<P, H, E>() {
 					
 					@Override
-					public Connection getElement() {
-						return connection;
+					public Node getElement() {
+						return node;
 					}
-
+	
 					@Override
 					public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
 						Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
 						childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
 						return ret;
 					}
-
+					
 					@Override
 					public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
 						return parentProcessorInfoCompletableFuture;
 					}
-
+	
 					@Override
 					public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
 						return registryCompletableFuture;
 					}
-
+	
 					@Override
-					public CompletionStage<E> getSourceEndpoint() {
-						return sourceEndpoint;
+					public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
+						return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
 					}
-
+	
 					@Override
-					public void setSourceHandler(H sourceHandler) {
-						if (outgoingEndpoint != null) {
-							outgoingEndpoint.complete(factory.createEndpoint(connection, sourceHandler, HandlerType.SOURCE));
-						}
+					public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
+						return Collections.unmodifiableMap(incomingHandlerConsumers);
 					}
-
+	
 					@Override
-					public CompletionStage<E> getTargetEndpoint() {
-						return targetEndpoint;
+					public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
+						return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
 					}
-
+	
 					@Override
-					public void setTargetHandler(H targetHandler) {
-						if (incomingEndpoint != null) {
-							incomingEndpoint.complete(factory.createEndpoint(connection, targetHandler, HandlerType.TARGET));
-						}
+					public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
+						return Collections.unmodifiableMap(outgoingHandlerConsumers);
 					}
 				};
+	
+			} else if (element instanceof Connection) {
+				if (factory.isPassThrough((Connection) element)) {
+					config = null;
+				} else {
+					Connection connection = (Connection) element;
+					Node source = connection.getSource();
+					Node target = connection.getTarget();
+					
+					CompletableFuture<E> sourceEndpoint = source == null ? null : sourceEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+					CompletableFuture<E> targetEndpoint = target == null ? null : targetEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+												
+					CompletableFuture<E> outgoingEndpoint = source == null ? null : outgoingEndpoints.computeIfAbsent(source, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+					CompletableFuture<E> incomingEndpoint = target == null ? null : incomingEndpoints.computeIfAbsent(target, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+					
+					config = new ConnectionProcessorConfig<P, H, E>() {
+						
+						@Override
+						public Connection getElement() {
+							return connection;
+						}
+	
+						@Override
+						public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+							Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
+							childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
+							return ret;
+						}
+	
+						@Override
+						public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
+							return parentProcessorInfoCompletableFuture;
+						}
+	
+						@Override
+						public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
+							return registryCompletableFuture;
+						}
+	
+						@Override
+						public CompletionStage<E> getSourceEndpoint() {
+							return sourceEndpoint;
+						}
+	
+						@Override
+						public void setSourceHandler(H sourceHandler) {
+							if (outgoingEndpoint != null) {
+								outgoingEndpoint.complete(factory.createEndpoint(connection, sourceHandler, HandlerType.SOURCE));
+							}
+						}
+	
+						@Override
+						public CompletionStage<E> getTargetEndpoint() {
+							return targetEndpoint;
+						}
+	
+						@Override
+						public void setTargetHandler(H targetHandler) {
+							if (incomingEndpoint != null) {
+								incomingEndpoint.complete(factory.createEndpoint(connection, targetHandler, HandlerType.TARGET));
+							}
+						}
+					};
+				}
+			} else {
+				config = new ProcessorConfig<P>() {
+					
+					@Override
+					public Element getElement() {
+						return element;
+					}
+	
+					@Override
+					public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+						Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
+						childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
+						return ret;
+					}
+	
+					@Override
+					public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
+						return parentProcessorInfoCompletableFuture;
+					}
+	
+					@Override
+					public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
+						return registryCompletableFuture;
+					}
+					
+				};
 			}
-		} else {
-			config = new ProcessorConfig<P>() {
-				
+			
+			ProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config, subMonitor);
+			
+			if (childProcessors != null) {
+				childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
+			}
+			if (processorInfo != null) {
+				registry.put(element, processorInfo);
+			}
+			
+			subMonitor.worked(0, "Created a processor", element, processorInfo);
+			
+			return new Helper<>(processorInfo) {
+	
 				@Override
-				public Element getElement() {
-					return element;
+				void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo) {
+					parentProcessorInfoCompletableFuture.complete(parentProcessorInfo);
 				}
-
+	
 				@Override
-				public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
-					Map<Element,ProcessorInfo<P>> ret = new LinkedHashMap<>();
-					childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
-					return ret;
-				}
-
-				@Override
-				public CompletableFuture<ProcessorInfo<P>> getParentProcessorInfo() {
-					return parentProcessorInfoCompletableFuture;
-				}
-
-				@Override
-				public CompletableFuture<Map<Element, ProcessorInfo<P>>> getRegistry() {
-					return registryCompletableFuture;
+				void setRegistry(Map<Element, ProcessorInfo<P>> registry) {
+					childProcessors.values().forEach(ch -> ch.setRegistry(registry));
+					registryCompletableFuture.complete(registry);
 				}
 				
 			};
-		}
-		
-		ProcessorInfo<P> processorInfo = config == null ? null : factory.createProcessor(config);
-		
-		if (childProcessors != null) {
-			childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
-		}
-		if (processorInfo != null) {
-			registry.put(element, processorInfo);
-		}
-		return new Helper<>(processorInfo) {
-
-			@Override
-			void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo) {
-				parentProcessorInfoCompletableFuture.complete(parentProcessorInfo);
-			}
-
-			@Override
-			void setRegistry(Map<Element, ProcessorInfo<P>> registry) {
-				childProcessors.values().forEach(ch -> ch.setRegistry(registry));
-				registryCompletableFuture.complete(registry);
-			}
-			
-		};
+		} 
 	}
 
 }

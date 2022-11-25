@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -162,7 +163,7 @@ public interface ObjectLoader {
 	 * @return
 	 */
 	default Charset getCharset() {
-		return Charset.defaultCharset();
+		return StandardCharsets.UTF_8;
 	}
 	
 	/*

@@ -29,6 +29,8 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.PrintStreamProgressMonitor;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
@@ -79,7 +81,6 @@ public class TestDrawio {
 
 		Files.writeString(new File("target/decompressed.drawio").toPath(), document.save(false));
 		Files.writeString(new File("target/decompressed.html").toPath(), document.toHtml(false, "https://cdn.jsdelivr.net/gh/Nasdanika/drawio@dev/src/main/webapp/js/viewer-static.min.js"));
-		
 	}
 	
 	@Test
@@ -384,7 +385,7 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 			
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config) {
+			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config, ProgressMonitor progressMonitor) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
@@ -413,13 +414,14 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
 			}
 
 			
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.createProcessors(document);
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.createProcessors(progressMonitor, document);
 		Optional<ProcessorInfo<Object>> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorOptional.isPresent()).isTrue();
 		ProcessorInfo<Object> aliceProcessor = aliceProcessorOptional.get();
@@ -451,7 +453,7 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config) {
+			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config, ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
@@ -508,7 +510,7 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
 			}
 			
 			@Override
@@ -518,7 +520,8 @@ public class TestDrawio {
 			
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.compose(processorFactory).createProcessors(document);
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.compose(processorFactory).createProcessors(progressMonitor, document);
 
 		Optional<ProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
@@ -619,7 +622,8 @@ public class TestDrawio {
 		};	
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
-		processorFactory.createProcessors(document, IntrospectionLevel.DECLARED, registry);
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
+		processorFactory.createProcessors(document, IntrospectionLevel.DECLARED, progressMonitor, registry);
 		
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	
