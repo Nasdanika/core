@@ -21,6 +21,11 @@ import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * Creates {@link EObject}s from graph elements and wires them together using diagram element properties.
@@ -160,15 +165,11 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 		if (parentSemanticElement == null) {
 			return null;
 		}
-		String value = getPropertyValue(config.getElement(), getChildInjectorPropertyName());
+		String value = getPropertyValue(config.getElement(), getChildReferencePropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
 		return (EReference) parentSemanticElement.eClass().getEStructuralFeature(value);
-	}
-		
-	protected String getChildInjectorPropertyName() {
-		return "child-injector";
 	}
 	
 	// Parent
@@ -178,13 +179,37 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getParentReference(ProcessorConfig<T> config, T semanticElement, ProcessorInfo<T> parentProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(config.getElement(), getParentReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
 	}	
 	
 	protected String getParentInjectorPropertyName() {
 		return "parent-injector";
 	}
+	
+	@Override
+	protected void setParent(ProcessorConfig<T> config, T semanticElement, ProcessorInfo<T> parentProcessorInfo) {
+		super.setParent(config, semanticElement, parentProcessorInfo);
+		String expr = getPropertyValue(config.getElement(), getParentInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("parent", parentProcessorInfo.getProcessor());
+			evaluationContext.setVariable("parentConfig", parentProcessorInfo.getConfig());			
+			exp.getValue(evaluationContext, semanticElement);
+		}		
+	}
+	
+	protected EvaluationContext createEvaluationContext() {
+		return new StandardEvaluationContext();
+	}
+	
 		
 	// Source
 	protected String getSourceReferencePropertyName() {
@@ -243,7 +268,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	}
 	
 	protected String getOutgoingInjectorPropertyName() {
-		return "outgoint-injector";
+		return "outgoing-injector";
 	}
 		
 	// Children

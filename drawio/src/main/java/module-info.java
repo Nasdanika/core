@@ -13,6 +13,7 @@ module org.nasdanika.drawio {
 	requires transitive org.nasdanika.common;
 	requires org.eclipse.emf.common;
 	requires org.jsoup;
+	requires spring.expression;
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;
