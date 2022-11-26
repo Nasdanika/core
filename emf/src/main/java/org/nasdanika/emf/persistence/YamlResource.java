@@ -14,22 +14,24 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Status;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.MarkerImpl;
 import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.Storable;
-import org.nasdanika.emf.EObjectAdaptable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
 
 /**
- * Loads EMF classes from YAML using {@link ObjectLoader}s. 
+ * Loads {@link EObject}'s from YAML using {@link ObjectLoader}s. 
  * Saving is supported if the resource content implements or is adaptable to {@link Storable}. 
  * The idea of this resource is to load models from manually created YAML files or YAML files generated 
  * by some other means. 
@@ -58,7 +60,7 @@ class YamlResource extends ResourceImpl {
 				getContents().addAll((Collection<EObject>) data);
 			} else {
 				if (data instanceof SupplierFactory) {
-					EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(context), progressMonitor, null);
+					EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(context), progressMonitor, this::onDiagnostic);
 					getContents().add(eObject);
 				} else if (data instanceof EObject) {
 					getContents().add((EObject) data);
@@ -73,6 +75,22 @@ class YamlResource extends ResourceImpl {
 		} catch (Exception e) {
 			throw new NasdanikaException(e);
 		}
+	}
+	
+	/**
+	 * Called by the supplier factory.
+	 * @param diagnostic
+	 */
+	protected void onDiagnostic(org.nasdanika.common.Diagnostic diagnostic) {
+		if (diagnostic.getStatus() == Status.FAIL || diagnostic.getStatus() == Status.ERROR) {
+			System.err.println("***********************");
+			System.err.println("*      Diagnostic     *");
+			System.err.println("***********************");
+			diagnostic.dump(System.err, 4, Status.FAIL, Status.ERROR);
+		}
+		if (diagnostic.getStatus() != Status.SUCCESS) {
+			throw new DiagnosticException(diagnostic);
+		};
 	}
 	
 	@Override

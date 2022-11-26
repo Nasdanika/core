@@ -3,7 +3,6 @@ package org.nasdanika.graph.processor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -40,7 +39,7 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(loadElements(inputStream, options), getProgressMonitor());
-		getRoots(getSemanticElements(registry)).forEach(getContents()::add);
+		getSemanticElements(registry).filter(this::isRoot).forEach(getContents()::add);
 	}
 
 	protected ProgressMonitor getProgressMonitor() {
@@ -53,14 +52,14 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	 * @return
 	 */
 	protected abstract Stream<EObject> getSemanticElements(Map<Element, ProcessorInfo<P>> registry);
-
+	
 	/**
-	 * Loads root objects from a stream of semantic elements. This implementation loads objects not contained in other objects. 
-	 * @param registry
-	 * @return
+	 * @param semanticElement 
+	 * @return true if the argument semantic element shall be added to the resource contents.
+	 * This implementation returns true if the semantic element is not null and is not contained by another semantic element, i.e. its eContainer() returns null.
 	 */
-	protected Stream<? extends EObject> getRoots(Stream<EObject> semanticElements) {
-		return semanticElements.filter(Objects::nonNull).filter(eObj -> eObj.eContainer() == null);
+	protected boolean isRoot(EObject semanticElement) {
+		return semanticElement != null && semanticElement.eContainer() == null;
 	}
 			
 }

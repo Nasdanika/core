@@ -13,14 +13,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.processor.GraphProcessorResource;
 import org.xml.sax.SAXException;
 
 /**
- * Loads EMF classes from Drawio documents. 
- * Saving is supported via {@link UpdateAdapter}. All contents is iterated and for each element with UpdateAdapter the adapter's update method is invoked.
- * The load logic is responsible for attaching adapters to model elements. 
+ * Loads {@link EObject}s from Drawio {@link Document}s. 
  * @author Pavel
  *
  */

@@ -38,7 +38,7 @@ import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 
 /**
- * {@link ExecutionParticipant} which loads resources using {@link EObjectLoader}, diagnoses them
+ * {@link ExecutionParticipant} which loads resources, diagnoses them
  * and stores in a {@link ResourceSet} for use in execute() methods of subclasses.
  * 
  * @author Pavel
@@ -50,7 +50,6 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	protected List<EObject> roots;
 	protected ResourceSet resourceSet;
 	protected Map<EObject, org.eclipse.emf.common.util.Diagnostic> diagnosticMap = new LinkedHashMap<>();
-//	protected ClassLoader classLoader;
 	
 	public LoadingExecutionParticipant(Context context) {
 		this.context = context;

@@ -66,7 +66,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
 			return load(spec, getBaseURI(), progressMonitor);
 		}
-		String specRef = getPropertyValue(config.getElement(), getSpecPropertyName());
+		String specRef = getPropertyValue(config.getElement(), getSpecRefPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(specRef)) {
 			URI specURI = URI.createURI(specRef);
 			if (specURI.isRelative()) {

@@ -15,7 +15,6 @@ module org.nasdanika.common {
 	requires flexmark.util.sequence;
 	requires flexmark.util.builder;
 	requires org.jsoup;
-	requires commons.compiler;
 	requires org.apache.commons.lang3;
 	
 	exports org.nasdanika.common;
