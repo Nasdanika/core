@@ -51,7 +51,7 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	 * @param registry
 	 * @return
 	 */
-	protected abstract Stream<EObject> getSemanticElements(Map<Element, ProcessorInfo<P>> registry);
+	protected abstract Stream<? extends EObject> getSemanticElements(Map<Element, ProcessorInfo<P>> registry);
 	
 	/**
 	 * @param semanticElement 

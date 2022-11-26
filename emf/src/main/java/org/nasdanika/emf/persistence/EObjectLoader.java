@@ -1,12 +1,15 @@
 package org.nasdanika.emf.persistence;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -28,15 +31,15 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.NcoreFactory;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ContextLoadable;
 import org.nasdanika.persistence.DispatchingLoader;
 import org.nasdanika.persistence.LoadTracker;
 import org.nasdanika.persistence.Loadable;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectLoader;
-import org.nasdanika.ncore.Marked;
-import org.nasdanika.ncore.NcoreFactory;
-import org.nasdanika.ncore.util.NcoreUtil;
 import org.yaml.snakeyaml.Yaml;
 
 public class EObjectLoader extends DispatchingLoader {
@@ -226,15 +229,26 @@ public class EObjectLoader extends DispatchingLoader {
 		
 	}
 	
-	private Map<String,EPackageEntry> registry = new HashMap<>();
+	private java.util.function.Supplier<Collection<Map.Entry<String,EPackageEntry>>> registrySupplier = () -> Collections.emptySet();
+	
+	private Collection<Map.Entry<String,EPackageEntry>> getRegistry() {
+		return registrySupplier.get();
+	}
 
 	private ResourceSet resourceSet;
 
 	public EObjectLoader(ObjectLoader chain, BiFunction<EClass,ENamedElement,String> keyProvider, EPackage... ePackages) {
 		super(chain);
 		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
-		for (EPackage ePackage: ePackages) {
-			register(ePackage);
+		if (ePackages.length > 0) {
+			Map<String,EPackageEntry> registry = new LinkedHashMap<>();
+			for (EPackage ePackage: ePackages) {
+				Entry<String, EPackageEntry> re = createRegistryEntry(ePackage);
+				if (re != null) {
+					registry.put(re.getKey(), re.getValue());
+				}
+			}
+			registrySupplier = registry::entrySet;
 		}
 	}
 	
@@ -257,26 +271,31 @@ public class EObjectLoader extends DispatchingLoader {
 	}
 
 	public EObjectLoader(ObjectLoader chain, BiFunction<EClass,ENamedElement,String> keyProvider, ResourceSet resourceSet) {
-		this(chain, keyProvider, resourceSet.getPackageRegistry().values().toArray(new EPackage[0]));
+		this(chain, keyProvider);
 		this.resourceSet = resourceSet;
+		
+		if (resourceSet != null) {
+			registrySupplier = () -> resourceSet.getPackageRegistry().values().stream().map(EPackage.class::cast).map(this::createRegistryEntry).collect(Collectors.toList());
+		}		
 	}
 	
 	public EObjectLoader(ResourceSet resourceSet) {
 		this(null, null, resourceSet);
 	}
 	
-	public void register(EPackage ePackage, BiFunction<EClass,ENamedElement,String> keyProvider) {
+	private Map.Entry<String, EPackageEntry> createRegistryEntry(EPackage ePackage, BiFunction<EClass,ENamedElement,String> keyProvider) {
 		if (keyProvider == null) {
 			keyProvider = this.keyProvider;
 		}
 		String packageKey = keyProvider.apply(null, ePackage);
-		if (packageKey != null) {
-			registry.put(packageKey + "-", new EPackageEntry(ePackage, keyProvider == null ? this.keyProvider : keyProvider));
+		if (Util.isBlank(packageKey)) {
+			return null;
 		}
+		return Map.entry(packageKey + "-", new EPackageEntry(ePackage, keyProvider == null ? this.keyProvider : keyProvider));
 	}
 	
-	public void register(EPackage ePackage) {
-		register(ePackage, null);
+	private Map.Entry<String, EPackageEntry> createRegistryEntry(EPackage ePackage) {
+		return createRegistryEntry(ePackage, null);
 	}
 
 	/**
@@ -313,7 +332,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @return
 	 */
 	public BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> resolveEClass(String type) {		
-		for (Entry<String, EPackageEntry> re: registry.entrySet()) {
+		for (Entry<String, EPackageEntry> re: getRegistry()) {
 			if (type.startsWith(re.getKey())) {
 				EPackageEntry ePackageEntry = re.getValue();
 				for (EClassifier eClassifier: ePackageEntry.ePackage.getEClassifiers()) {

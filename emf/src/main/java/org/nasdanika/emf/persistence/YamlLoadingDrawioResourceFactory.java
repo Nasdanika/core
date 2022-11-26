@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.nasdanika.common.Context;
@@ -12,6 +13,7 @@ import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.persistence.ObjectLoader;
 
 /**
@@ -19,7 +21,7 @@ import org.nasdanika.persistence.ObjectLoader;
  * @author Pavel
  *
  */
-public class YamlLoadingDrawioResourceFactory extends ResourceFactoryImpl {
+public class YamlLoadingDrawioResourceFactory<T extends EObject> extends ResourceFactoryImpl {
 	
 	private ProgressMonitor progressMonitor;
 	private ObjectLoader loader;
@@ -33,7 +35,7 @@ public class YamlLoadingDrawioResourceFactory extends ResourceFactoryImpl {
 
 	@Override
 	public Resource createResource(URI uri) {
-		return new YamlLoadingDrawioResource(uri) {
+		return new YamlLoadingDrawioResource<T>(uri) {
 			
 			@Override
 			protected ObjectLoader getLoader() {
@@ -48,6 +50,15 @@ public class YamlLoadingDrawioResourceFactory extends ResourceFactoryImpl {
 			@Override
 			protected ProgressMonitor getProgressMonitor() {
 				return progressMonitor;
+			}
+
+			@Override
+			protected void configureSemanticElement(
+					ProcessorConfig<T> config, 
+					T semanticElement,
+					ProgressMonitor progressMonitor) {
+				
+				YamlLoadingDrawioResourceFactory.this.configureSemanticElement(config, semanticElement, this, progressMonitor);
 			}
 			
 		};
@@ -77,5 +88,14 @@ public class YamlLoadingDrawioResourceFactory extends ResourceFactoryImpl {
 		
 		return ret;
 	}
+	
+	/**
+	 * Override to customize semantic elements. For example, set semantic element name from a diagram element label.
+	 * @param config
+	 * @param semanticElement
+	 * @param resource
+	 * @param progressMonitor
+	 */
+	protected void configureSemanticElement(ProcessorConfig<T> config, T semanticElement, Resource resource, ProgressMonitor progressMonitor) {	}		
 	
 }

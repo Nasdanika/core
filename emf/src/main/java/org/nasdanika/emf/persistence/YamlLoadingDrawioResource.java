@@ -7,8 +7,10 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.DrawioResource;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.persistence.ObjectLoader;
@@ -18,15 +20,15 @@ import org.nasdanika.persistence.ObjectLoader;
  * @author Pavel
  *
  */
-abstract class YamlLoadingDrawioResource extends DrawioResource<EObject> {
+abstract class YamlLoadingDrawioResource<T extends EObject> extends DrawioResource<T> {
 
 	public YamlLoadingDrawioResource(URI uri) {
 		super(uri);
 	}
 
 	@Override
-	protected ProcessorFactory<EObject, ?, ?> getProcessorFactory() {
-		return new YamlLoadingDrawioEObjectFactory<EObject>() {
+	protected ProcessorFactory<T, ?, ?> getProcessorFactory() {
+		return new YamlLoadingDrawioEObjectFactory<T>() {
 
 			@Override
 			protected ObjectLoader getLoader() {
@@ -38,15 +40,31 @@ abstract class YamlLoadingDrawioResource extends DrawioResource<EObject> {
 				return YamlLoadingDrawioResource.this.getContext();
 			}
 			
+			@Override
+			protected URI getBaseURI() {
+				return YamlLoadingDrawioResource.this.getURI();
+			}
+			
+			@Override
+			protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+				T semanticElement = super.createSemanticElement(config, progressMonitor);
+				if (semanticElement != null) {
+					configureSemanticElement(config, semanticElement, progressMonitor);
+				}
+				return semanticElement;
+			}
+			
 		};
 	}
 	
 	protected abstract ObjectLoader getLoader();	
 
-	protected abstract Context getContext();	
-
+	protected abstract Context getContext();
+	
+	protected abstract void configureSemanticElement(ProcessorConfig<T> config, T semanticElement, ProgressMonitor progressMonitor);	
+	
 	@Override
-	protected Stream<EObject> getSemanticElements(Map<Element, ProcessorInfo<EObject>> registry) {
+	protected Stream<? extends EObject> getSemanticElements(Map<Element, ProcessorInfo<T>> registry) {
 		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull);
 	}
 
