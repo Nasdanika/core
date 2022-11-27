@@ -8,6 +8,7 @@ module org.nasdanika.emf {
 	requires transitive org.nasdanika.cli;
 	requires transitive info.picocli;	
 	requires org.eclipse.emf.ecore.xmi;
+	requires spring.expression;	
 	requires org.eclipse.jgit;
 	requires ant.style.path.matcher;
 	requires transitive org.apache.poi.ooxml;

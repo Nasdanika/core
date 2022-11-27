@@ -69,18 +69,18 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
 		String spec = getPropertyValue(config.getElement(), getSpecPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
-			return load(spec, getBaseURI(), progressMonitor);
+			return load(spec, getBaseURI(), config, progressMonitor);
 		}
-		String specRef = getPropertyValue(config.getElement(), getSpecRefPropertyName());
-		if (!org.nasdanika.common.Util.isBlank(specRef)) {
-			URI specURI = URI.createURI(specRef);
+		String specUriStr = getPropertyValue(config.getElement(), getSpecUriPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(specUriStr)) {
+			URI specURI = URI.createURI(specUriStr);
 			if (specURI.isRelative()) {
 				URI baseURI = getBaseURI();
 				if (baseURI != null && !baseURI.isRelative()) {
 					specURI = specURI.resolve(baseURI);
 				}
 			}
-			return load(specURI, progressMonitor);
+			return load(specURI, config, progressMonitor);
 		}
 		return null;
 	}
@@ -89,10 +89,10 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * Loads semantic element from a URI
 	 * @return
 	 */
-	protected T load(URI specURI, ProgressMonitor progressMonitor) {
+	protected T load(URI specURI, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
 		try {
 			URL specUrl = new URL(specURI.toString());
-			return load(specUrl, progressMonitor);				
+			return load(specUrl, config, progressMonitor);				
 		} catch (IOException e) {
 			throw new NasdanikaException("Error loading specification from specification URI " + specURI, e);
 		}			
@@ -102,17 +102,17 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * Loads semantic element from a URL
 	 * @return
 	 */
-	protected T load(URL url, ProgressMonitor progressMonitor) throws IOException {
-		return load(url.openStream(), URI.createURI(url.toString()), progressMonitor);
+	protected T load(URL url, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
+		return load(url.openStream(), URI.createURI(url.toString()), config, progressMonitor);
 	}
 	
 	/**
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected T load(InputStream inputStream, URI base, ProgressMonitor progressMonitor) throws IOException {
+	protected T load(InputStream inputStream, URI base, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(inputStream, getCharset())) {
-			return load(DefaultConverter.INSTANCE.toString(reader), base, progressMonitor);
+			return load(DefaultConverter.INSTANCE.toString(reader), base, config, progressMonitor);
 		}		
 	}
 	
@@ -120,8 +120,8 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected T load(Reader reader, URI base, ProgressMonitor progressMonitor) throws IOException {
-		return load(DefaultConverter.INSTANCE.toString(reader), base, progressMonitor);
+	protected T load(Reader reader, URI base, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
+		return load(DefaultConverter.INSTANCE.toString(reader), base, config, progressMonitor);
 	}	
 	
 	/**
@@ -138,7 +138,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * @param specBase Base URI for resolving relative URI's.
 	 * @return
 	 */
-	protected T load(String spec, URI specBase, ProgressMonitor progressMonitor) {
+	protected T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
 		throw new UnsupportedOperationException();
 	}
 		
@@ -146,8 +146,8 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 		return "spec";
 	}
 	
-	protected String getSpecRefPropertyName() {
-		return "spec-ref";
+	protected String getSpecUriPropertyName() {
+		return "spec-uri";
 	}		
 
 	// Child
