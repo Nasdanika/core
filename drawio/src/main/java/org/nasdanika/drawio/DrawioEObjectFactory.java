@@ -7,6 +7,8 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -22,10 +24,12 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Creates {@link EObject}s from graph elements and wires them together using diagram element properties.
@@ -139,7 +143,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * @return
 	 */
 	protected T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-		throw new UnsupportedOperationException();
+		throw new UnsupportedOperationException("Override this or other load() methods in subclasses");
 	}
 		
 	protected String getSpecPropertyName() {
@@ -208,8 +212,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	
 	protected EvaluationContext createEvaluationContext() {
 		return new StandardEvaluationContext();
-	}
-	
+	}	
 		
 	// Source
 	protected String getSourceReferencePropertyName() {
@@ -218,12 +221,31 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getSourceReference(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> sourceProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(config.getElement(), getSourceReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
 	}
 	
 	protected String getSourceInjectorPropertyName() {
 		return "source-injector";
+	}
+	
+	@Override
+	protected void setSource(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> sourceProcessorInfo) {
+		super.setSource(config, semanticElement, sourceProcessorInfo);
+		String expr = getPropertyValue(config.getElement(), getSourceInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("source", sourceProcessorInfo.getProcessor());
+			evaluationContext.setVariable("sourceConfig", sourceProcessorInfo.getConfig());			
+			exp.getValue(evaluationContext, semanticElement);
+		}				
 	}
 	
 	// Target
@@ -233,27 +255,66 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getTargetReference(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> targetProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(config.getElement(), getTargetReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
 	}
 	
 	protected String getTargetInjectorPropertyName() {
 		return "target-injector";
 	}
 	
+	@Override
+	protected void setTarget(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> targetProcessorInfo) {
+		super.setTarget(config, semanticElement, targetProcessorInfo);
+		String expr = getPropertyValue(config.getElement(), getTargetInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("target", targetProcessorInfo.getProcessor());
+			evaluationContext.setVariable("targetConfig", targetProcessorInfo.getConfig());			
+			exp.getValue(evaluationContext, semanticElement);
+		}						
+	}
+	
 	// Incoming
 	protected String getIncomingReferencePropertyName() {
 		return "incoming-reference";
+	}
+
+	@Override
+	protected EReference getIncomingReference(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo) {
+		String value = getPropertyValue(connection, getIncomingReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
 	}
 	
 	protected String getIncomingInjectorPropertyName() {
 		return "incoming-injector";
 	}
-
+	
 	@Override
-	protected EReference getIncomingReference(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+	protected void setIncoming(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo) {
+		super.setIncoming(config, semanticElement, connection, incomingProcessorInfo);
+		String expr = getPropertyValue(config.getElement(), getIncomingInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("connection", connection);
+			evaluationContext.setVariable("incoming", incomingProcessorInfo.getProcessor());
+			evaluationContext.setVariable("incoingConfig", incomingProcessorInfo.getConfig());			
+			exp.getValue(evaluationContext, semanticElement);
+		}								
 	}
 	
 	// Outgoing
@@ -263,27 +324,102 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getOutgoingReference(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> outgoingProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(connection, getOutgoingReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
 	}
 	
 	protected String getOutgoingInjectorPropertyName() {
 		return "outgoing-injector";
 	}
+	
+	@Override
+	protected void setOutgoing(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> outgoingProcessorInfo) {
+		super.setOutgoing(config, semanticElement, connection, outgoingProcessorInfo);
+		String expr = getPropertyValue(config.getElement(), getOutgoingInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("connection", connection);
+			evaluationContext.setVariable("outgoing", outgoingProcessorInfo.getProcessor());
+			evaluationContext.setVariable("outgoingConfig", outgoingProcessorInfo.getConfig());			
+			exp.getValue(evaluationContext, semanticElement);
+		}								
+	}
 		
 	// Children
+	
+	/**
+	 * Value of child references property shall be a YAML map with reference names as keys and boolean Spel expressions as values. 
+	 * @return
+	 */
 	protected String getChildReferencesPropertyName() {
 		return "child-references";
 	}
 
 	@Override
 	protected EReference getChildReference(ProcessorConfig<T> config, T semanticElement, Element child,	ProcessorInfo<T> childProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(config.getElement(), getChildReferencesPropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		Yaml yaml = new Yaml();
+		Object yamlValue = yaml.load(value);
+		if (yamlValue instanceof Map) {
+			Map<?, ?> yamlMap = (Map<?,?>) yamlValue;
+			for (Entry<?, ?> me: yamlMap.entrySet()) {
+				Object key = me.getKey();
+				if (key instanceof String) {
+					Object eValue = me.getValue();
+					if (eValue instanceof String) {
+						ExpressionParser parser = new SpelExpressionParser();
+						Expression exp = parser.parseExpression((String) eValue);
+						EvaluationContext evaluationContext = createEvaluationContext();
+						evaluationContext.setVariable("config", config);
+						evaluationContext.setVariable("element", config.getElement());
+						evaluationContext.setVariable("childElement", child);
+						evaluationContext.setVariable("child", childProcessorInfo.getProcessor());
+						evaluationContext.setVariable("childConfig", childProcessorInfo.getConfig());
+						try {
+							if (exp.getValue(evaluationContext, semanticElement, Boolean.class)) {
+								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
+							}
+						} catch (EvaluationException e) {
+							// NOP - continue
+						}
+					} else {
+						throw new IllegalArgumentException(getChildReferencesPropertyName() + " map values shall be strings, got " + eValue);						
+					}
+				} else {
+					throw new IllegalArgumentException(getChildReferencesPropertyName() + " map keys shall be strings, got " + key);
+				}
+			}						
+		}
+		throw new IllegalArgumentException(getChildReferencesPropertyName() + " value shall be a YAML map, got " + yamlValue);
 	}
 	
 	protected String getChildInjectorsPropertyName() {
 		return "child-injectors";
+	}
+	
+	@Override
+	protected void setChildren(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> children) {
+		super.setChildren(config, semanticElement, children);
+		String expr = getPropertyValue(config.getElement(), getChildInjectorsPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("children", children);
+			exp.getValue(evaluationContext, semanticElement);
+		}								
 	}
 	
 	// Registry
@@ -293,12 +429,62 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getRegistryReference(ProcessorConfig<T> config, T semanticElement, Element registryElement, ProcessorInfo<T> registryElementProcessorInfo) {
-		// TODO Auto-generated method stub
-		return null;
+		String value = getPropertyValue(config.getElement(), getRegistryReferencesPropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		Yaml yaml = new Yaml();
+		Object yamlValue = yaml.load(value);
+		if (yamlValue instanceof Map) {
+			Map<?, ?> yamlMap = (Map<?,?>) yamlValue;
+			for (Entry<?, ?> me: yamlMap.entrySet()) {
+				Object key = me.getKey();
+				if (key instanceof String) {
+					Object eValue = me.getValue();
+					if (eValue instanceof String) {
+						ExpressionParser parser = new SpelExpressionParser();
+						Expression exp = parser.parseExpression((String) eValue);
+						EvaluationContext evaluationContext = createEvaluationContext();
+						evaluationContext.setVariable("config", config);
+						evaluationContext.setVariable("element", config.getElement());
+						evaluationContext.setVariable("registryElement", registryElement);
+						evaluationContext.setVariable("registrySemanticElement", registryElementProcessorInfo.getProcessor());
+						evaluationContext.setVariable("registrySemanticElementConfig", registryElementProcessorInfo.getConfig());
+						try {
+							if (exp.getValue(evaluationContext, semanticElement, Boolean.class)) {
+								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
+							}
+						} catch (EvaluationException e) {
+							// NOP - continue
+						}
+					} else {
+						throw new IllegalArgumentException(getRegistryReferencesPropertyName() + " map values shall be strings, got " + eValue);						
+					}
+				} else {
+					throw new IllegalArgumentException(getRegistryReferencesPropertyName() + " map keys shall be strings, got " + key);
+				}
+			}						
+		}
+		throw new IllegalArgumentException(getRegistryReferencesPropertyName() + " value shall be a YAML map, got " + yamlValue);
 	}
 
 	protected String getRegistryInjectorsPropertyName() {
 		return "registry-injectors";
+	}
+	
+	@Override
+	protected void setRegistry(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry) {
+		super.setRegistry(config, semanticElement, registry);
+		String expr = getPropertyValue(config.getElement(), getRegistryInjectorsPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr)) {
+			ExpressionParser parser = new SpelExpressionParser();
+			Expression exp = parser.parseExpression(expr);
+			EvaluationContext evaluationContext = createEvaluationContext();
+			evaluationContext.setVariable("config", config);
+			evaluationContext.setVariable("element", config.getElement());
+			evaluationContext.setVariable("registry", registry);
+			exp.getValue(evaluationContext, semanticElement);
+		}								
 	}
 	
 }
