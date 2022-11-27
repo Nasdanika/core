@@ -31,15 +31,18 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 		this.description = description;
 		this.exclusiveWith = exclusiveWith;		
 	}
-			
+		
+	@Override
 	public Object getKey() {
 		return key;
 	}
 	
+	@Override
 	public T getValue() {
 		return value; 
 	}
 	
+	@Override
 	public boolean isLoaded() {
 		return loaded;
 	}
@@ -84,6 +87,7 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 		return exclusiveWith;
 	}
 	
+	@Override
 	public boolean isRequired() {
 		return required;
 	}
