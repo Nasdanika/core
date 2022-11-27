@@ -392,5 +392,14 @@ public final class Util {
 			
 		};
 	}
+	
+//	/**
+//	 * Creates an element wrapper which substitutes accept()'s visitor with a visitor which also traverses linked pages.
+//	 * @param element
+//	 * @return
+//	 */
+//	public static org.nasdanika.graph.Element withLinkedPages(org.nasdanika.graph.Element element) {
+//		
+//	}
 
 }

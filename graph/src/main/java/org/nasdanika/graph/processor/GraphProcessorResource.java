@@ -34,7 +34,7 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	 * @return
 	 * @throws IOException
 	 */
-	protected abstract Stream<Element> loadElements(InputStream inputStream, Map<?, ?> options) throws IOException;
+	protected abstract Stream<? extends Element> loadElements(InputStream inputStream, Map<?, ?> options) throws IOException;
 	
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {

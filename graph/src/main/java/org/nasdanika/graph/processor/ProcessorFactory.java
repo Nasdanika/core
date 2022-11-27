@@ -62,7 +62,7 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 		return createProcessors(elements.stream(), progressMonitor);
 	}
 	
-	default Map<Element,ProcessorInfo<P>> createProcessors(Stream<Element> elements, ProgressMonitor progressMonitor) {
+	default Map<Element,ProcessorInfo<P>> createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
 		ProcessorFactoryVisitor<P, H, E> visitor = new ProcessorFactoryVisitor<>(this);				
 		BiFunction<Element, Map<? extends Element, Helper<P>>, Helper<P>> createElementProcessor = (element, childProcessors) -> visitor.createElementProcessor(element, childProcessors, progressMonitor);
 		List<Helper<P>> helpers = elements.map(element -> element.accept(createElementProcessor)).collect(Collectors.toList());

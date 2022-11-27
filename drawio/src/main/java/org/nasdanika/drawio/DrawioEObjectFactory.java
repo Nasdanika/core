@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -475,6 +476,14 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	@Override
 	protected void setRegistry(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry) {
 		super.setRegistry(config, semanticElement, registry);
+		Element element = config.getElement();
+		if (element instanceof ModelElement) {
+			Page linkedPage = ((ModelElement) element).getLinkedPage();
+			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
+				linkPage(config, semanticElement, registry, registry.get(linkedPage));
+			}
+		}				
+		
 		String expr = getPropertyValue(config.getElement(), getRegistryInjectorsPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(expr)) {
 			ExpressionParser parser = new SpelExpressionParser();
@@ -485,6 +494,28 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 			evaluationContext.setVariable("registry", registry);
 			exp.getValue(evaluationContext, semanticElement);
 		}								
+	}
+	
+
+	protected String getLinkPagePropertyName() {
+		return "link-page";
+	}	
+	
+	/**
+	 * Processes elements from the linked page. This implementation collects all page semantic elements without container and processes then as children of this element.
+	 * @param config
+	 * @param semanticElement
+	 * @param registry
+	 * @param likedPageInfo
+	 */
+	protected void linkPage(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry, ProcessorInfo<T> linkedPageInfo) {
+		ProcessorInfo<T> thisInfo = ProcessorInfo.of(config, semanticElement);
+		linkedPageInfo.getConfig().getElement().accept(pe -> {
+			ProcessorInfo<T> re = registry.get(pe);
+			if (re.getProcessor() != null && re.getProcessor().eContainer() == null) {
+				setParent(re.getConfig(), re.getProcessor(), thisInfo);
+			}
+		});		
 	}
 	
 }

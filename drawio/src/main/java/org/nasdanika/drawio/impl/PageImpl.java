@@ -100,7 +100,7 @@ class PageImpl extends ElementImpl implements Page {
 	@Override
 	public URI getURI() {
 		URI documentURI = getDocument().getURI();
-		return documentURI == null ? URI.createURI(getId()) : documentURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
+		return documentURI == null ? URI.createURI(getId()) : documentURI.appendFragment(URLEncoder.encode(getName(), StandardCharsets.UTF_8));
 	}
 		
 	@Override
