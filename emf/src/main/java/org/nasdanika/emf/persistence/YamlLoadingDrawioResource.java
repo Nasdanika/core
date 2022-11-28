@@ -25,38 +25,42 @@ abstract class YamlLoadingDrawioResource<T extends EObject> extends DrawioResour
 	public YamlLoadingDrawioResource(URI uri) {
 		super(uri);
 	}
+	
+	private YamlLoadingDrawioEObjectFactory<T> processorFactory = new YamlLoadingDrawioEObjectFactory<T>() {
+
+		@Override
+		protected ObjectLoader getLoader() {
+			return YamlLoadingDrawioResource.this.getLoader();
+		}
+		
+		@Override
+		protected Context getContext() {
+			return YamlLoadingDrawioResource.this.getContext();
+		}
+		
+		@Override
+		protected URI getBaseURI() {
+			return YamlLoadingDrawioResource.this.getURI();
+		}
+		
+		@Override
+		protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+			T semanticElement = super.createSemanticElement(config, progressMonitor);
+			if (semanticElement != null) {
+				configureSemanticElement(config, semanticElement, progressMonitor);
+			}
+			return semanticElement;
+		}
+		
+	};	
 
 	@Override
 	protected ProcessorFactory<T, ?, ?> getProcessorFactory() {
-		return new YamlLoadingDrawioEObjectFactory<T>() {
-
-			@Override
-			protected ObjectLoader getLoader() {
-				return YamlLoadingDrawioResource.this.getLoader();
-			}
-			
-			@Override
-			protected Context getContext() {
-				return YamlLoadingDrawioResource.this.getContext();
-			}
-			
-			@Override
-			protected URI getBaseURI() {
-				return YamlLoadingDrawioResource.this.getURI();
-			}
-			
-			@Override
-			protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-				T semanticElement = super.createSemanticElement(config, progressMonitor);
-				if (semanticElement != null) {
-					configureSemanticElement(config, semanticElement, progressMonitor);
-				}
-				return semanticElement;
-			}
-			
-		};
+		return processorFactory;
 	}
 	
+	// TODO - expose setParent() from the processor factory. pass the parent, go over the roots, use graph adapters for linking
+		
 	protected abstract ObjectLoader getLoader();	
 
 	protected abstract Context getContext();

@@ -45,6 +45,8 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 			
 			if (config instanceof NodeProcessorConfig) {
 				NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> nodeConfig = (NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
+				semanticElement.eAdapters().add(new NodeProcessorConfigAdapter<>(nodeConfig));
+				
 				// Incoming 
 				for (Entry<Connection, CompletionStage<ProcessorInfo<T>>> ie: nodeConfig.getIncomingEndpoints().entrySet()) {
 					ie.getValue().thenAccept(incomingInfo -> setIncoming(nodeConfig, semanticElement, ie.getKey(), incomingInfo));
@@ -59,6 +61,7 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 				nodeConfig.getOutgoingHandlerConsumers().forEach((k,v) -> v.accept(processorInfo));				
 			} else if (config instanceof ConnectionProcessorConfig) {
 				ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> connectionConfig = (ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
+				semanticElement.eAdapters().add(new ConnectionProcessorConfigAdapter<>(connectionConfig));
 				
 				// Source
 				connectionConfig.getSourceEndpoint().thenAccept(sourceInfo -> setTarget(connectionConfig, semanticElement, sourceInfo));
@@ -68,7 +71,9 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 
 				connectionConfig.setSourceHandler(processorInfo);
 				connectionConfig.setTargetHandler(processorInfo);				
-			}			
+			} else {
+				semanticElement.eAdapters().add(new ProcessorConfigAdapter<T, ProcessorConfig<T>>(config));
+			}
 		}		
 		
 		return processorInfo;

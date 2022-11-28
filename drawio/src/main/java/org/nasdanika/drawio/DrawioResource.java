@@ -32,13 +32,10 @@ public abstract class DrawioResource<P> extends GraphProcessorResource<P> {
 	}
 	
 	@Override
-	protected Stream<? extends org.nasdanika.graph.Element> loadElements(InputStream inputStream, Map<?, ?> options)	throws IOException {
+	protected Stream<? extends org.nasdanika.graph.Element> loadElements(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
 			document = loadDocument(inputStream);
 			URI resourceURI = getURI();
-			if (!resourceURI.hasFragment()) {
-				return Stream.of(document);
-			}
 			return document.stream()
 				.filter(org.nasdanika.drawio.Element.class::isInstance)
 				.map(org.nasdanika.drawio.Element.class::cast)
