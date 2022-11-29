@@ -20,7 +20,7 @@ import org.nasdanika.persistence.ObjectLoader;
  * @author Pavel
  *
  */
-abstract class YamlLoadingDrawioResource<T extends EObject> extends DrawioResource<T> {
+public abstract class YamlLoadingDrawioResource<T extends EObject> extends DrawioResource<T> {
 
 	public YamlLoadingDrawioResource(URI uri) {
 		super(uri);
@@ -53,14 +53,25 @@ abstract class YamlLoadingDrawioResource<T extends EObject> extends DrawioResour
 		}
 		
 	};	
+	
+	/**
+	 * Sets a parent for the resource roots. Delegates to the processor factory to use graph data (diagram element properties) to establish parent/child relationships.
+	 * This method is used when a parent object has an attribute containing diagram URI. In this case a diagram is loaded and then this method is called to 
+	 * link diagram's root semantic objects to the parent object. 
+	 * @param parent
+	 */
+	@SuppressWarnings("unchecked")
+	public void setParent(T parent) {
+		for (EObject root: getContents()) {
+			processorFactory.setParent((T) root, parent);
+		}
+	}
 
 	@Override
 	protected ProcessorFactory<T, ?, ?> getProcessorFactory() {
 		return processorFactory;
 	}
 	
-	// TODO - expose setParent() from the processor factory. pass the parent, go over the roots, use graph adapters for linking
-		
 	protected abstract ObjectLoader getLoader();	
 
 	protected abstract Context getContext();

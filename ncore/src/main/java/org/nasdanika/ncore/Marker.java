@@ -19,8 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.Marker#getLocation <em>Location</em>}</li>
- *   <li>{@link org.nasdanika.ncore.Marker#getLine <em>Line</em>}</li>
- *   <li>{@link org.nasdanika.ncore.Marker#getColumn <em>Column</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Marker#getPosition <em>Position</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}</li>
  * </ul>
  *
@@ -55,54 +54,29 @@ public interface Marker extends EObject, org.nasdanika.persistence.Marker {
 	void setLocation(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Line</b></em>' attribute.
+	 * Returns the value of the '<em><b>Position</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * Line number.
+	 * Marker position withing the resource identified by location - line and column in text documents, sheet and range in Excel, ...
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Line</em>' attribute.
-	 * @see #setLine(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Line()
+	 * @return the value of the '<em>Position</em>' attribute.
+	 * @see #setPosition(String)
+	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Position()
 	 * @model
 	 * @generated
 	 */
-	int getLine();
+	String getPosition();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getLine <em>Line</em>}' attribute.
+	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getPosition <em>Position</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Line</em>' attribute.
-	 * @see #getLine()
+	 * @param value the new value of the '<em>Position</em>' attribute.
+	 * @see #getPosition()
 	 * @generated
 	 */
-	void setLine(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Column</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Column number.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Column</em>' attribute.
-	 * @see #setColumn(int)
-	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Column()
-	 * @model
-	 * @generated
-	 */
-	int getColumn();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getColumn <em>Column</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Column</em>' attribute.
-	 * @see #getColumn()
-	 * @generated
-	 */
-	void setColumn(int value);
+	void setPosition(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Comment</b></em>' attribute.

@@ -64,7 +64,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	protected URI getBaseURI() {
 		return null;
 	}
-	
+			
 	/**
 	 * Loads specification from a spec property or URI specified in spec-ref property. 
 	 * The URI is resolved relative to the base URI if it is not null and absolute.
@@ -75,6 +75,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
 			return load(spec, getBaseURI(), config, progressMonitor);
 		}
+		
 		String specUriStr = getPropertyValue(config.getElement(), getSpecUriPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(specUriStr)) {
 			URI specURI = URI.createURI(specUriStr);
@@ -364,6 +365,9 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 
 	@Override
 	protected EReference getChildReference(ProcessorConfig<T> config, T semanticElement, Element child,	ProcessorInfo<T> childProcessorInfo) {
+		if (config == null) {
+			return null;
+		}
 		String value = getPropertyValue(config.getElement(), getChildReferencesPropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
@@ -410,16 +414,18 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	@Override
 	protected void setChildren(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> children) {
 		super.setChildren(config, semanticElement, children);
-		String expr = getPropertyValue(config.getElement(), getChildInjectorsPropertyName());
-		if (!org.nasdanika.common.Util.isBlank(expr)) {
-			ExpressionParser parser = new SpelExpressionParser();
-			Expression exp = parser.parseExpression(expr);
-			EvaluationContext evaluationContext = createEvaluationContext();
-			evaluationContext.setVariable("config", config);
-			evaluationContext.setVariable("element", config.getElement());
-			evaluationContext.setVariable("children", children);
-			exp.getValue(evaluationContext, semanticElement);
-		}								
+		if (config != null) {
+			String expr = getPropertyValue(config.getElement(), getChildInjectorsPropertyName());
+			if (!org.nasdanika.common.Util.isBlank(expr)) {
+				ExpressionParser parser = new SpelExpressionParser();
+				Expression exp = parser.parseExpression(expr);
+				EvaluationContext evaluationContext = createEvaluationContext();
+				evaluationContext.setVariable("config", config);
+				evaluationContext.setVariable("element", config.getElement());
+				evaluationContext.setVariable("children", children);
+				exp.getValue(evaluationContext, semanticElement);
+			}
+		}
 	}
 	
 	// Registry

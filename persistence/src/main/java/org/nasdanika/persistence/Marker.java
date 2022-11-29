@@ -9,17 +9,23 @@ import org.nasdanika.common.Util;
  */
 public interface Marker {
 	
-	int getLine();
+	/**
+	 * Position within resource, e.g line number, line and column number, URI fragment, some kind of path, character/byte offset, sheet row and column in Excel documents, ....
+	 * @return
+	 */
+	String getPosition();
 	
-	int getColumn();
-	
+	/**
+	 * Location of resource. E.g. file path or URL.
+	 * @return
+	 */
 	String getLocation();
 	
 	static String toString(Marker marker) {
 		if (marker == null) {
 			return "";
 		}
-		return (Util.isBlank(marker.getLocation()) ? "" : marker.getLocation()) + " " + marker.getLine() + ":" + marker.getColumn();
+		return (Util.isBlank(marker.getLocation()) ? "" : marker.getLocation()) + " " + (Util.isBlank(marker.getPosition()) ? "" : marker.getPosition());
 	}	
 
 }

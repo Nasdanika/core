@@ -387,7 +387,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMarker_Line() {
+	public EAttribute getMarker_Position() {
 		return (EAttribute)markerEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -397,18 +397,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getMarker_Column() {
-		return (EAttribute)markerEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getMarker_Comment() {
-		return (EAttribute)markerEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)markerEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1091,8 +1081,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		markerEClass = createEClass(MARKER);
 		createEAttribute(markerEClass, MARKER__LOCATION);
-		createEAttribute(markerEClass, MARKER__LINE);
-		createEAttribute(markerEClass, MARKER__COLUMN);
+		createEAttribute(markerEClass, MARKER__POSITION);
 		createEAttribute(markerEClass, MARKER__COMMENT);
 
 		temporalEClass = createEClass(TEMPORAL);
@@ -1244,8 +1233,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(markerEClass, Marker.class, "Marker", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMarker_Location(), ecorePackage.getEString(), "location", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarker_Line(), ecorePackage.getEInt(), "line", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMarker_Column(), ecorePackage.getEInt(), "column", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarker_Position(), ecorePackage.getEString(), "position", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(temporalEClass, Temporal.class, "Temporal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1514,16 +1502,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "URI of a resource."
 		   });
 		addAnnotation
-		  (getMarker_Line(),
+		  (getMarker_Position(),
 		   source,
 		   new String[] {
-			   "documentation", "Line number."
-		   });
-		addAnnotation
-		  (getMarker_Column(),
-		   source,
-		   new String[] {
-			   "documentation", "Column number."
+			   "documentation", "Marker position withing the resource identified by location - line and column in text documents, sheet and range in Excel, ..."
 		   });
 		addAnnotation
 		  (getMarker_Comment(),

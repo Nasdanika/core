@@ -201,22 +201,13 @@ public interface NcorePackage extends EPackage {
 	int MARKER__LOCATION = IMARKER_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Line</b></em>' attribute.
+	 * The feature id for the '<em><b>Position</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKER__LINE = IMARKER_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Column</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKER__COLUMN = IMARKER_FEATURE_COUNT + 2;
+	int MARKER__POSITION = IMARKER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -225,7 +216,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKER__COMMENT = IMARKER_FEATURE_COUNT + 3;
+	int MARKER__COMMENT = IMARKER_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Marker</em>' class.
@@ -234,7 +225,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 4;
+	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Marker</em>' class.
@@ -1393,22 +1384,13 @@ public interface NcorePackage extends EPackage {
 	int GIT_MARKER__LOCATION = MARKER__LOCATION;
 
 	/**
-	 * The feature id for the '<em><b>Line</b></em>' attribute.
+	 * The feature id for the '<em><b>Position</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GIT_MARKER__LINE = MARKER__LINE;
-
-	/**
-	 * The feature id for the '<em><b>Column</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GIT_MARKER__COLUMN = MARKER__COLUMN;
+	int GIT_MARKER__POSITION = MARKER__POSITION;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -1578,26 +1560,15 @@ public interface NcorePackage extends EPackage {
 	EAttribute getMarker_Location();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getLine <em>Line</em>}'.
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getPosition <em>Position</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Line</em>'.
-	 * @see org.nasdanika.ncore.Marker#getLine()
+	 * @return the meta object for the attribute '<em>Position</em>'.
+	 * @see org.nasdanika.ncore.Marker#getPosition()
 	 * @see #getMarker()
 	 * @generated
 	 */
-	EAttribute getMarker_Line();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getColumn <em>Column</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Column</em>'.
-	 * @see org.nasdanika.ncore.Marker#getColumn()
-	 * @see #getMarker()
-	 * @generated
-	 */
-	EAttribute getMarker_Column();
+	EAttribute getMarker_Position();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}'.
@@ -2396,20 +2367,12 @@ public interface NcorePackage extends EPackage {
 		EAttribute MARKER__LOCATION = eINSTANCE.getMarker_Location();
 
 		/**
-		 * The meta object literal for the '<em><b>Line</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Position</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MARKER__LINE = eINSTANCE.getMarker_Line();
-
-		/**
-		 * The meta object literal for the '<em><b>Column</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MARKER__COLUMN = eINSTANCE.getMarker_Column();
+		EAttribute MARKER__POSITION = eINSTANCE.getMarker_Position();
 
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.

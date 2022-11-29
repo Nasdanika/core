@@ -354,7 +354,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				pMarkers = pMarked.getMarkers();
 			}
 		} else {
-			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getLine(), mMarker.getColumn())).collect(Collectors.toList());
+			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getPosition())).collect(Collectors.toList());
 		}		
 		throw new ConfigurationException("Could not find " + type.getName() + " with uri " + uri, pMarkers);
 	}

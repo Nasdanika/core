@@ -1,12 +1,14 @@
 package org.nasdanika.graph.processor;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -150,7 +152,10 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 		T parent = parentProcessorInfo.getProcessor();
 		if (parent == null) {
 			// No processor, need to go up to the parent.
-			parentProcessorInfo.getConfig().getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, semanticElement, grandParentProcessorInfo));
+			ProcessorConfig<T> parentConfig = parentProcessorInfo.getConfig();
+			if (parentConfig != null) {
+				parentConfig.getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, semanticElement, grandParentProcessorInfo));
+			}
 		} else {
 			EReference childReference = getChildReference(config, semanticElement, parentProcessorInfo);
 			if (childReference == null) {
@@ -170,6 +175,23 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 				}
 			}
 		}												
+	}
+	
+	/**
+	 * This method calls protected setParent() and setChildren() methods to establish parent/child relationships between semantic elements
+	 * using data from the graph elements from which these semantic elements were created.
+	 * This method uses {@link ProcessorConfigAdapter}s to retrieve graph configs to pass to setParent() and setChildren()  
+	 * @param child
+	 * @param parent
+	 */
+	@SuppressWarnings("unchecked")
+	public void setParent(T child, T parent) {
+		if (child != null && parent != null) {
+			ProcessorConfig<T> childConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(child, ProcessorConfig.class);
+			ProcessorConfig<T> parentConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(parent, ProcessorConfig.class);
+			setParent(childConfig, child, ProcessorInfo.of(parentConfig, parent));
+			setChildren(parentConfig, parent, Collections.singletonMap(childConfig == null ? null : childConfig.getElement(), ProcessorInfo.of(childConfig, child)));
+		}
 	}
 	
 	/**

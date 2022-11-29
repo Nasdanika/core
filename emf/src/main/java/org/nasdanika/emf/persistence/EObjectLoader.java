@@ -32,7 +32,6 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.Marked;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ContextLoadable;
 import org.nasdanika.persistence.DispatchingLoader;
@@ -260,11 +259,7 @@ public class EObjectLoader extends DispatchingLoader {
 		this.markerFactory = markerFactory;
 	}
 	
-	private MarkerFactory markerFactory = (location, progressMonitor) -> {
-		org.nasdanika.ncore.Marker marker = NcoreFactory.eINSTANCE.createMarker();
-		marker.setLocation(location);
-		return marker;
-	};
+	private MarkerFactory markerFactory = MarkerFactory.INSTANCE;
 	
 	public EObjectLoader(EPackage... ePackages) {
 		this(null, null, ePackages);
@@ -498,8 +493,7 @@ public class EObjectLoader extends DispatchingLoader {
 			if (eObject instanceof Marked) {		
 				for (Marker marker: markers) {
 					org.nasdanika.ncore.Marker mMarker = markerFactory.createMarker(marker.getLocation(), progressMonitor);
-					mMarker.setLine(marker.getLine());
-					mMarker.setColumn(marker.getColumn());
+					mMarker.setPosition(marker.getPosition());
 					((Marked) eObject).getMarkers().add(0, mMarker);
 				}
 			}

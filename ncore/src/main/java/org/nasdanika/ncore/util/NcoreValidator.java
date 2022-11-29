@@ -30,6 +30,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 
 /**
  * <!-- begin-user-doc -->
@@ -106,11 +108,11 @@ public class NcoreValidator extends EObjectValidator {
 			case NcorePackage.ADAPTABLE:
 				return validateAdaptable((Adaptable)value, diagnostics, context);
 			case NcorePackage.IMARKED:
-				return validateIMarked((org.nasdanika.persistence.Marked)value, diagnostics, context);
+				return validateIMarked((Marked)value, diagnostics, context);
 			case NcorePackage.MARKED:
 				return validateMarked((org.nasdanika.ncore.Marked)value, diagnostics, context);
 			case NcorePackage.IMARKER:
-				return validateIMarker((org.nasdanika.persistence.Marker)value, diagnostics, context);
+				return validateIMarker((Marker)value, diagnostics, context);
 			case NcorePackage.MARKER:
 				return validateMarker((org.nasdanika.ncore.Marker)value, diagnostics, context);
 			case NcorePackage.TEMPORAL:
@@ -178,7 +180,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIMarked(org.nasdanika.persistence.Marked iMarked, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarked(Marked iMarked, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)iMarked, diagnostics, context);
 	}
 
@@ -196,7 +198,7 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateIMarker(org.nasdanika.persistence.Marker iMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
+	public boolean validateIMarker(Marker iMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)iMarker, diagnostics, context);
 	}
 

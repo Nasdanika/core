@@ -2,8 +2,10 @@ package org.nasdanika.graph.processor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
@@ -38,8 +40,20 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
-		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(loadElements(inputStream, options), getProgressMonitor());
+		List<? extends Element> elements = loadElements(inputStream, options).collect(Collectors.toList());
+		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(elements.stream(), getProgressMonitor());
 		getSemanticElements(registry).filter(this::isRoot).forEach(getContents()::add);
+		for (Element element: elements) {
+			ProcessorInfo<P> info = registry.get(element);
+			ProcessorConfig<P> config = info.getConfig();
+			if (config instanceof NodeProcessorConfig) {
+				eAdapters().add(new NodeProcessorConfigAdapter<>((NodeProcessorConfig<P, ?, ?>) config));
+			} else if (config instanceof ConnectionProcessorConfig) {
+				eAdapters().add(new ConnectionProcessorConfigAdapter<>((ConnectionProcessorConfig<P, ?, ?>) config));				
+			} else {
+				eAdapters().add(new ProcessorConfigAdapter<>(config));				
+			}
+		}
 	}
 
 	protected ProgressMonitor getProgressMonitor() {

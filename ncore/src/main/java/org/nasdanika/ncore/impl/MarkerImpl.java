@@ -2,7 +2,6 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Integer;
 import java.lang.String;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
@@ -18,8 +17,7 @@ import org.nasdanika.ncore.NcorePackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getLocation <em>Location</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getLine <em>Line</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getColumn <em>Column</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getComment <em>Comment</em>}</li>
  * </ul>
  *
@@ -37,24 +35,14 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	protected static final String LOCATION_EDEFAULT = null;
 
 	/**
-	 * The default value of the '{@link #getLine() <em>Line</em>}' attribute.
+	 * The default value of the '{@link #getPosition() <em>Position</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getLine()
+	 * @see #getPosition()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int LINE_EDEFAULT = 0;
-
-	/**
-	 * The default value of the '{@link #getColumn() <em>Column</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getColumn()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int COLUMN_EDEFAULT = 0;
+	protected static final String POSITION_EDEFAULT = null;
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
@@ -121,8 +109,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	 * @generated
 	 */
 	@Override
-	public int getLine() {
-		return (Integer)eDynamicGet(NcorePackage.MARKER__LINE, NcorePackage.Literals.MARKER__LINE, true, true);
+	public String getPosition() {
+		return (String)eDynamicGet(NcorePackage.MARKER__POSITION, NcorePackage.Literals.MARKER__POSITION, true, true);
 	}
 
 	/**
@@ -131,28 +119,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	 * @generated
 	 */
 	@Override
-	public void setLine(int newLine) {
-		eDynamicSet(NcorePackage.MARKER__LINE, NcorePackage.Literals.MARKER__LINE, newLine);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getColumn() {
-		return (Integer)eDynamicGet(NcorePackage.MARKER__COLUMN, NcorePackage.Literals.MARKER__COLUMN, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setColumn(int newColumn) {
-		eDynamicSet(NcorePackage.MARKER__COLUMN, NcorePackage.Literals.MARKER__COLUMN, newColumn);
+	public void setPosition(String newPosition) {
+		eDynamicSet(NcorePackage.MARKER__POSITION, NcorePackage.Literals.MARKER__POSITION, newPosition);
 	}
 
 	/**
@@ -185,10 +153,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 		switch (featureID) {
 			case NcorePackage.MARKER__LOCATION:
 				return getLocation();
-			case NcorePackage.MARKER__LINE:
-				return getLine();
-			case NcorePackage.MARKER__COLUMN:
-				return getColumn();
+			case NcorePackage.MARKER__POSITION:
+				return getPosition();
 			case NcorePackage.MARKER__COMMENT:
 				return getComment();
 		}
@@ -206,11 +172,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 			case NcorePackage.MARKER__LOCATION:
 				setLocation((String)newValue);
 				return;
-			case NcorePackage.MARKER__LINE:
-				setLine((Integer)newValue);
-				return;
-			case NcorePackage.MARKER__COLUMN:
-				setColumn((Integer)newValue);
+			case NcorePackage.MARKER__POSITION:
+				setPosition((String)newValue);
 				return;
 			case NcorePackage.MARKER__COMMENT:
 				setComment((String)newValue);
@@ -230,11 +193,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 			case NcorePackage.MARKER__LOCATION:
 				setLocation(LOCATION_EDEFAULT);
 				return;
-			case NcorePackage.MARKER__LINE:
-				setLine(LINE_EDEFAULT);
-				return;
-			case NcorePackage.MARKER__COLUMN:
-				setColumn(COLUMN_EDEFAULT);
+			case NcorePackage.MARKER__POSITION:
+				setPosition(POSITION_EDEFAULT);
 				return;
 			case NcorePackage.MARKER__COMMENT:
 				setComment(COMMENT_EDEFAULT);
@@ -253,10 +213,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 		switch (featureID) {
 			case NcorePackage.MARKER__LOCATION:
 				return LOCATION_EDEFAULT == null ? getLocation() != null : !LOCATION_EDEFAULT.equals(getLocation());
-			case NcorePackage.MARKER__LINE:
-				return getLine() != LINE_EDEFAULT;
-			case NcorePackage.MARKER__COLUMN:
-				return getColumn() != COLUMN_EDEFAULT;
+			case NcorePackage.MARKER__POSITION:
+				return POSITION_EDEFAULT == null ? getPosition() != null : !POSITION_EDEFAULT.equals(getPosition());
 			case NcorePackage.MARKER__COMMENT:
 				return COMMENT_EDEFAULT == null ? getComment() != null : !COMMENT_EDEFAULT.equals(getComment());
 		}

@@ -2,6 +2,7 @@ package org.nasdanika.emf.persistence;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DiagnosticException;
 import org.nasdanika.common.MutableContext;
@@ -14,7 +15,11 @@ import org.nasdanika.common.Util;
 import org.nasdanika.drawio.DrawioEObjectFactory;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.MarkerImpl;
 import org.nasdanika.persistence.ObjectLoader;
@@ -35,13 +40,73 @@ public abstract class YamlLoadingDrawioEObjectFactory<T extends EObject> extends
 		return Context.EMPTY_CONTEXT;
 	}
 	
+	protected MarkerFactory getMarkerFactory() {
+		return MarkerFactory.INSTANCE;
+	}
+	
+	@Override
+	protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+		T semanticElement = super.createSemanticElement(config, progressMonitor);
+		Element element = config.getElement();
+		URI baseURI = getBaseURI();
+		if (baseURI != null && semanticElement instanceof Marked) {
+			org.nasdanika.ncore.Marker marker = getMarkerFactory().createMarker(EXPR_PREFIX, progressMonitor);
+			marker.setLocation(baseURI.toString());
+			marker.setPosition(getMarkerPosition(element));
+			((Marked) semanticElement).getMarkers().add(marker);
+		}
+		
+		if (element instanceof ModelElement) {
+			ModelElement modelElement = (ModelElement) element;
+			String tooltip = modelElement.getTooltip();
+			if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement && !semanticElement.eIsSet(NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION)) {
+				((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);				
+			}
+			
+			String label = modelElement.getLabel();
+			if (!Util.isBlank(label) && semanticElement instanceof NamedElement && !semanticElement.eIsSet(NcorePackage.Literals.NAMED_ELEMENT__NAME)) {
+				((NamedElement) semanticElement).setName(label);				
+			}	
+			
+			if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
+				String semanticUuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
+				if (!Util.isBlank(semanticUuid)) {
+					modelElement.setProperty("semantic-uuid", semanticUuid);
+				}
+			}
+		}
+		
+		return semanticElement;
+	}
+	
+	protected String getMarkerPosition(Element element) {
+		if (element instanceof Page) {
+			return "name: " + ((Page) element).getName() + ", id: " + ((Page) element).getId();
+		} else if (element instanceof ModelElement) {
+			StringBuilder positionBuilder = new StringBuilder();
+			ModelElement modelElement = (ModelElement) element;
+			Page page = modelElement.getModel().getPage();
+			positionBuilder.append("page-name: " + page.getName() + ", page-id: " + page.getId());
+			String label = modelElement.getLabel();
+			if (!Util.isBlank(label)) {
+				positionBuilder.append(", label: "+ label);
+			}
+			String id = modelElement.getId();
+			if (!Util.isBlank(id)) {
+				positionBuilder.append(", id:" + id);
+			}
+			return positionBuilder.toString();
+		}		
+		return null;
+	}
+	
 	protected Context createDiagramElementContext(ProcessorConfig<T> config) {
 		MutableContext elementContext = getContext().fork();
 		PropertyComputer propertyComputer = new PropertyComputer() {
 			
 			@SuppressWarnings("unchecked")
 			@Override
-			public <T> T compute(Context context, String key, String path, Class<T> type) {
+			public <PT> PT compute(Context context, String key, String path, Class<PT> type) {
 				if (type == null || type.isAssignableFrom(String.class)) {
 					if (Util.isBlank(path)) {
 						return null;
@@ -51,32 +116,37 @@ public abstract class YamlLoadingDrawioEObjectFactory<T extends EObject> extends
 					if (config.getElement() instanceof Page) {
 						Page page = (Page) config.getElement();
 						if ("name".equals(path)) {
-							return (T) page.getName();
+							return (PT) page.getName();
 						}
 						if ("id".equals(path)) {
-							return (T) page.getId();
+							return (PT) page.getId();
 						}
 					} else if (config.getElement() instanceof ModelElement) {
 						ModelElement modelElement = (ModelElement) config.getElement();
 
 						if ("id".equals(path)) {
-							return (T) modelElement.getId();
+							return (PT) modelElement.getId();
 						}
 
+						String label = modelElement.getLabel();
 						if ("label".equals(path)) {
-							return (T) modelElement.getLabel();
+							return (PT) label;
+						}
+
+						if ("label-text".equals(path)) { // Plain text label							
+							return (PT) (Util.isBlank(label) ? label : Jsoup.parse(label).text());
 						}
 
 						if ("link".equals(path)) {
-							return (T) modelElement.getLink();
+							return (PT) modelElement.getLink();
 						}
 
 						if ("tooltip".equals(path)) {
-							return (T) modelElement.getTooltip();
+							return (PT) modelElement.getTooltip();
 						}
 
 						if (path.startsWith(PROPERTIES_PREFIX)) {							
-							return (T) modelElement.getProperty(path.substring(PROPERTIES_PREFIX.length()));
+							return (PT) modelElement.getProperty(path.substring(PROPERTIES_PREFIX.length()));
 						}
 
 					}
@@ -87,8 +157,9 @@ public abstract class YamlLoadingDrawioEObjectFactory<T extends EObject> extends
 							ExpressionParser parser = new SpelExpressionParser();
 							Expression exp = parser.parseExpression(expr);
 							EvaluationContext evaluationContext = createEvaluationContext();
+							evaluationContext.setVariable("context", context);
 							Object result = exp.getValue(evaluationContext, config.getElement());
-							return result == null ? null : (T) String.valueOf(result);
+							return result == null ? null : (PT) String.valueOf(result);
 						}								
 					}
 				}

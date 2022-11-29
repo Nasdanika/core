@@ -25,6 +25,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 
 /**
  * <!-- begin-user-doc -->
@@ -87,7 +89,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createAdaptableAdapter();
 			}
 			@Override
-			public Adapter caseIMarked(org.nasdanika.persistence.Marked object) {
+			public Adapter caseIMarked(Marked object) {
 				return createIMarkedAdapter();
 			}
 			@Override
@@ -95,7 +97,7 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createMarkedAdapter();
 			}
 			@Override
-			public Adapter caseIMarker(org.nasdanika.persistence.Marker object) {
+			public Adapter caseIMarker(Marker object) {
 				return createIMarkerAdapter();
 			}
 			@Override

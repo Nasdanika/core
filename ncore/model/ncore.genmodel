@@ -18,8 +18,7 @@
     <genClasses ecoreClass="ncore.ecore#//IMarker"/>
     <genClasses ecoreClass="ncore.ecore#//Marker">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/location"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/line"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/column"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/position"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Marker/comment"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Temporal">
