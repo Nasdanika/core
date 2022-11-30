@@ -89,7 +89,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Loads semantic element from a URI
 	 * @return

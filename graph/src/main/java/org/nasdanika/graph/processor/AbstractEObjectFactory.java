@@ -1,13 +1,16 @@
 package org.nasdanika.graph.processor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
@@ -24,7 +27,7 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 	@SuppressWarnings("unchecked")
 	@Override
 	public ProcessorInfo<T> createProcessor(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-		T semanticElement = createSemanticElement(config, progressMonitor);
+		T semanticElement = createSemanticElement(config, progressMonitor);		
 		ProcessorInfo<T> processorInfo = ProcessorInfo.of(config, semanticElement);
 		if (semanticElement == null) {
 			if (config instanceof ConnectionProcessorConfig) {
@@ -76,9 +79,31 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 			} else {
 				semanticElement.eAdapters().add(new ProcessorConfigAdapter<T, ProcessorConfig<T>>(config));
 			}
+			
+			LinkedResourcesAdapter linkedResourcesAdapter = (LinkedResourcesAdapter) EcoreUtil.getRegisteredAdapter(semanticElement, LinkedResourcesAdapter.class);
+			if (linkedResourcesAdapter != null) {
+				for (Resource linkedResource: linkedResourcesAdapter.getLinkedResources()) {
+					linkResource(config, semanticElement, linkedResource, progressMonitor);
+				}
+			}
 		}		
 		
 		return processorInfo;
+	}
+	
+	/**
+	 * Links resource. This implementation calls setChildren() for resource roots.
+	 * @param config
+	 * @param semanticElement
+	 * @param linkedResource
+	 * @param progressMonitor
+	 */
+	@SuppressWarnings("unchecked")
+	protected void linkResource(ProcessorConfig<T> config, T semanticElement, Resource linkedResource, ProgressMonitor progressMonitor) {
+		for (EObject linkedRoot: new ArrayList<>(linkedResource.getContents())) {
+			ProcessorConfig<T> linkedRootConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(linkedRoot, ProcessorConfig.class);
+			setChildren(config, semanticElement, Collections.singletonMap(linkedRootConfig == null ? null : linkedRootConfig.getElement(), ProcessorInfo.of(linkedRootConfig, (T) linkedRoot)));
+		}
 	}
 	
 	/**
@@ -178,9 +203,9 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 	}
 	
 	/**
-	 * This method calls protected setParent() and setChildren() methods to establish parent/child relationships between semantic elements
+	 * This method calls protected setParent() method to establish parent/child relationships between semantic elements
 	 * using data from the graph elements from which these semantic elements were created.
-	 * This method uses {@link ProcessorConfigAdapter}s to retrieve graph configs to pass to setParent() and setChildren()  
+	 * This method uses {@link ProcessorConfigAdapter}s to retrieve graph configs to pass to setParent()  
 	 * @param child
 	 * @param parent
 	 */
@@ -190,9 +215,8 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 			ProcessorConfig<T> childConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(child, ProcessorConfig.class);
 			ProcessorConfig<T> parentConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(parent, ProcessorConfig.class);
 			setParent(childConfig, child, ProcessorInfo.of(parentConfig, parent));
-			setChildren(parentConfig, parent, Collections.singletonMap(childConfig == null ? null : childConfig.getElement(), ProcessorInfo.of(childConfig, child)));
 		}
-	}
+	}	
 	
 	/**
 	 * Returns parent's {@link EReference} to add the semantic element to.

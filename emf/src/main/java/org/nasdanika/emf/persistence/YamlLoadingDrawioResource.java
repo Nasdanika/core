@@ -1,5 +1,6 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -62,7 +63,7 @@ public abstract class YamlLoadingDrawioResource<T extends EObject> extends Drawi
 	 */
 	@SuppressWarnings("unchecked")
 	public void setParent(T parent) {
-		for (EObject root: getContents()) {
+		for (EObject root: new ArrayList<>(getContents())) {
 			processorFactory.setParent((T) root, parent);
 		}
 	}
