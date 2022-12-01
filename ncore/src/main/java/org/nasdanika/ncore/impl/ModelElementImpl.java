@@ -13,11 +13,13 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -44,6 +46,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getActionPrototype <em>Action Prototype</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getRepresentations <em>Representations</em>}</li>
  * </ul>
  *
  * @generated
@@ -214,11 +217,24 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EMap<String, String> getRepresentations() {
+		return (EMap<String, String>)eDynamicGet(NcorePackage.MODEL_ELEMENT__REPRESENTATIONS, NcorePackage.Literals.MODEL_ELEMENT__REPRESENTATIONS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
+			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
+				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -242,6 +258,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
 				if (resolve) return getActionPrototype();
 				return basicGetActionPrototype();
+			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
+				if (coreType) return getRepresentations();
+				else return getRepresentations().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -271,6 +290,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
 				setActionPrototype((EObject)newValue);
 				return;
+			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
+				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -298,6 +320,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
 				setActionPrototype((EObject)null);
 				return;
+			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
+				getRepresentations().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -320,6 +345,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return UUID_EDEFAULT == null ? getUuid() != null : !UUID_EDEFAULT.equals(getUuid());
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
 				return basicGetActionPrototype() != null;
+			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
+				return !getRepresentations().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

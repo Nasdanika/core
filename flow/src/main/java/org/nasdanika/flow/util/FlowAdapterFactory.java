@@ -9,7 +9,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.diagram.Diagram;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.ArtifactParticipantResponsibility;
@@ -100,10 +99,6 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public <T extends PackageElement<T>> Adapter casePackageElement(PackageElement<T> object) {
 				return createPackageElementAdapter();
-			}
-			@Override
-			public Adapter caseRepresentationEntry(Map.Entry<String, Diagram> object) {
-				return createRepresentationEntryAdapter();
 			}
 			@Override
 			public Adapter casePackage(org.nasdanika.flow.Package object) {
@@ -296,20 +291,6 @@ public class FlowAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPackageElementAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Representation Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createRepresentationEntryAdapter() {
 		return null;
 	}
 

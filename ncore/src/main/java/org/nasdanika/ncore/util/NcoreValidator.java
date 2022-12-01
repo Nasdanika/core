@@ -121,6 +121,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validatePeriod((Period)value, diagnostics, context);
 			case NcorePackage.MODEL_ELEMENT:
 				return validateModelElement((ModelElement)value, diagnostics, context);
+			case NcorePackage.REPRESENTATION_ENTRY:
+				return validateRepresentationEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case NcorePackage.NAMED_ELEMENT:
 				return validateNamedElement((NamedElement)value, diagnostics, context);
 			case NcorePackage.REFERENCE:
@@ -341,6 +343,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateModelElement(ModelElement modelElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(modelElement, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateRepresentationEntry(Map.Entry<?, ?> representationEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint((EObject)representationEntry, diagnostics, context);
 	}
 
 	/**

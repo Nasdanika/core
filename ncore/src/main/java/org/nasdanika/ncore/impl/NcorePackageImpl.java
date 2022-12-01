@@ -105,6 +105,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass representationEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass namedElementEClass = null;
 
 	/**
@@ -647,6 +654,46 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getModelElement_Representations() {
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getRepresentationEntry() {
+		return representationEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRepresentationEntry_Key() {
+		return (EAttribute)representationEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getRepresentationEntry_Value() {
+		return (EAttribute)representationEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getNamedElement() {
 		return namedElementEClass;
 	}
@@ -1110,6 +1157,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__UUID);
 		createEReference(modelElementEClass, MODEL_ELEMENT__ACTION_PROTOTYPE);
+		createEReference(modelElementEClass, MODEL_ELEMENT__REPRESENTATIONS);
+
+		representationEntryEClass = createEClass(REPRESENTATION_ENTRY);
+		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__KEY);
+		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__VALUE);
 
 		namedElementEClass = createEClass(NAMED_ELEMENT);
 		createEAttribute(namedElementEClass, NAMED_ELEMENT__NAME);
@@ -1276,6 +1328,11 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Uuid(), ecorePackage.getEString(), "uuid", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_ActionPrototype(), ecorePackage.getEObject(), null, "actionPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(representationEntryEClass, java.util.Map.Entry.class, "RepresentationEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getRepresentationEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRepresentationEntry_Value(), ecorePackage.getEString(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(namedElementEClass, NamedElement.class, "NamedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1429,6 +1486,19 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "homogenous", "true",
 			   "strict-containment", "true"
+		   });
+		addAnnotation
+		  (getModelElement_Representations(),
+		   source,
+		   new String[] {
+			   "homogenous", "true",
+			   "load-doc-reference", "doc/model-element--representations.md"
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Value(),
+		   source,
+		   new String[] {
+			   "content-type", "resource-uri"
 		   });
 		addAnnotation
 		  (getReference_Target(),
@@ -1656,6 +1726,30 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. \nIf this reference is set and is Action then a copy of the action is created and returned.\nOtherwise the reference value it is adapted to ActionProvider which is used to create an action. \nThis allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."
+		   });
+		addAnnotation
+		  (getModelElement_Representations(),
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of representation keys to URI\'s of representation resources. URI\'s are resolved relative to the model element resource URI.\nDuring object loading resources are loaded and linked to the object. Additional processing depends on the resource type.\nIn case of Drawio diagrams, diagram elements are semantically mapped to model elements and representation resource root elements are added as children to the object.\nSee [Nasdanika Core Drawio](../drawio/index.html) and [Nasdanika Core EMF](../emf/index.html) documentation for more information.\n\n"
+		   });
+		addAnnotation
+		  (representationEntryEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mapping of representation key to a representation resource uri. Null values are supported to suppress inherited entries."
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Key(),
+		   source,
+		   new String[] {
+			   "documentation", "Representation key."
+		   });
+		addAnnotation
+		  (getRepresentationEntry_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "Representation resource URI. E.g. and URI of a Drawio diagram. "
 		   });
 		addAnnotation
 		  (namedElementEClass,

@@ -144,6 +144,12 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.REPRESENTATION_ENTRY: {
+				@SuppressWarnings("unchecked") java.util.Map.Entry<String, String> representationEntry = (java.util.Map.Entry<String, String>)theEObject;
+				T1 result = caseRepresentationEntry(representationEntry);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.NAMED_ELEMENT: {
 				NamedElement namedElement = (NamedElement)theEObject;
 				T1 result = caseNamedElement(namedElement);
@@ -390,6 +396,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseModelElement(ModelElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Representation Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Representation Entry</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseRepresentationEntry(java.util.Map.Entry<String, String> object) {
 		return null;
 	}
 

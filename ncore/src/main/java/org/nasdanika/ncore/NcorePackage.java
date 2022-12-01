@@ -303,13 +303,22 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__ACTION_PROTOTYPE = MARKED_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__REPRESENTATIONS = MARKED_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 4;
+	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -364,6 +373,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int TEMPORAL__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEMPORAL__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Instant</b></em>' attribute.
@@ -565,6 +583,15 @@ public interface NcorePackage extends EPackage {
 	int PERIOD__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Start</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -610,6 +637,52 @@ public interface NcorePackage extends EPackage {
 	int PERIOD_OPERATION_COUNT = MODEL_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.RepresentationEntryImpl <em>Representation Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.RepresentationEntryImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRepresentationEntry()
+	 * @generated
+	 */
+	int REPRESENTATION_ENTRY = 8;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Representation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Representation Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REPRESENTATION_ENTRY_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.NamedElementImpl <em>Named Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -617,7 +690,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getNamedElement()
 	 * @generated
 	 */
-	int NAMED_ELEMENT = 8;
+	int NAMED_ELEMENT = 9;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -665,6 +738,15 @@ public interface NcorePackage extends EPackage {
 	int NAMED_ELEMENT__ACTION_PROTOTYPE = MODEL_ELEMENT__ACTION_PROTOTYPE;
 
 	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -699,7 +781,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getReference()
 	 * @generated
 	 */
-	int REFERENCE = 9;
+	int REFERENCE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' reference.
@@ -736,7 +818,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getString()
 	 * @generated
 	 */
-	int STRING = 10;
+	int STRING = 11;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -773,7 +855,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 11;
+	int LIST = 12;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
@@ -810,7 +892,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
 	 */
-	int MAP = 12;
+	int MAP = 13;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
@@ -847,7 +929,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInteger()
 	 * @generated
 	 */
-	int INTEGER = 13;
+	int INTEGER = 14;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -884,7 +966,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBoolean()
 	 * @generated
 	 */
-	int BOOLEAN = 14;
+	int BOOLEAN = 15;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -921,7 +1003,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 15;
+	int PROPERTY = 16;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -958,7 +1040,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
 	 * @generated
 	 */
-	int STRING_PROPERTY = 16;
+	int STRING_PROPERTY = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1004,7 +1086,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerProperty()
 	 * @generated
 	 */
-	int INTEGER_PROPERTY = 17;
+	int INTEGER_PROPERTY = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1050,7 +1132,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMapProperty()
 	 * @generated
 	 */
-	int MAP_PROPERTY = 18;
+	int MAP_PROPERTY = 19;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1096,7 +1178,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getListProperty()
 	 * @generated
 	 */
-	int LIST_PROPERTY = 19;
+	int LIST_PROPERTY = 20;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1142,7 +1224,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanProperty()
 	 * @generated
 	 */
-	int BOOLEAN_PROPERTY = 20;
+	int BOOLEAN_PROPERTY = 21;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1188,7 +1270,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEObjectProperty()
 	 * @generated
 	 */
-	int EOBJECT_PROPERTY = 21;
+	int EOBJECT_PROPERTY = 22;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1234,7 +1316,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringEntry()
 	 * @generated
 	 */
-	int STRING_ENTRY = 22;
+	int STRING_ENTRY = 23;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1280,7 +1362,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerEntry()
 	 * @generated
 	 */
-	int INTEGER_ENTRY = 23;
+	int INTEGER_ENTRY = 24;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1326,7 +1408,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanEntry()
 	 * @generated
 	 */
-	int BOOLEAN_ENTRY = 24;
+	int BOOLEAN_ENTRY = 25;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1372,7 +1454,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getGitMarker()
 	 * @generated
 	 */
-	int GIT_MARKER = 25;
+	int GIT_MARKER = 26;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -1472,7 +1554,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 26;
+	int INSTANT = 27;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -1482,7 +1564,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 27;
+	int DURATION = 28;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -1833,6 +1915,52 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getModelElement_ActionPrototype();
+
+	/**
+	 * Returns the meta object for the map '{@link org.nasdanika.ncore.ModelElement#getRepresentations <em>Representations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the map '<em>Representations</em>'.
+	 * @see org.nasdanika.ncore.ModelElement#getRepresentations()
+	 * @see #getModelElement()
+	 * @generated
+	 */
+	EReference getModelElement_Representations();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Representation Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Representation Entry</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
+	 *        valueDataType="org.eclipse.emf.ecore.EString"
+	 *        valueAnnotation="urn:org.nasdanika content-type='resource-uri'"
+	 * @generated
+	 */
+	EClass getRepresentationEntry();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRepresentationEntry()
+	 * @generated
+	 */
+	EAttribute getRepresentationEntry_Key();
+
+	/**
+	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRepresentationEntry()
+	 * @generated
+	 */
+	EAttribute getRepresentationEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.NamedElement <em>Named Element</em>}'.
@@ -2579,6 +2707,40 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference MODEL_ELEMENT__ACTION_PROTOTYPE = eINSTANCE.getModelElement_ActionPrototype();
+
+		/**
+		 * The meta object literal for the '<em><b>Representations</b></em>' map feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MODEL_ELEMENT__REPRESENTATIONS = eINSTANCE.getModelElement_Representations();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.RepresentationEntryImpl <em>Representation Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.RepresentationEntryImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getRepresentationEntry()
+		 * @generated
+		 */
+		EClass REPRESENTATION_ENTRY = eINSTANCE.getRepresentationEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPRESENTATION_ENTRY__KEY = eINSTANCE.getRepresentationEntry_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REPRESENTATION_ENTRY__VALUE = eINSTANCE.getRepresentationEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.NamedElementImpl <em>Named Element</em>}' class.

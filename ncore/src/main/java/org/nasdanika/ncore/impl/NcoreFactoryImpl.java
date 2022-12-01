@@ -77,6 +77,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.MARKER: return createMarker();
 			case NcorePackage.TEMPORAL: return createTemporal();
 			case NcorePackage.PERIOD: return createPeriod();
+			case NcorePackage.REPRESENTATION_ENTRY: return (EObject)createRepresentationEntry();
 			case NcorePackage.NAMED_ELEMENT: return createNamedElement();
 			case NcorePackage.REFERENCE: return createReference();
 			case NcorePackage.STRING: return createString();
@@ -164,6 +165,16 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Period createPeriod() {
 		PeriodImpl period = new PeriodImpl();
 		return period;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public java.util.Map.Entry<String, String> createRepresentationEntry() {
+		RepresentationEntryImpl representationEntry = new RepresentationEntryImpl();
+		return representationEntry;
 	}
 
 	/**

@@ -66,13 +66,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass representationEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass packageEClass = null;
 
 	/**
@@ -454,18 +447,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getPackageElement_Representations() {
-		return (EReference)packageElementEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPackageElement_Properties() {
-		return (EReference)packageElementEClass.getEStructuralFeatures().get(6);
+		return (EReference)packageElementEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -496,36 +479,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EOperation getPackageElement__Resolve__PackageElement() {
 		return packageElementEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getRepresentationEntry() {
-		return representationEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getRepresentationEntry_Key() {
-		return (EAttribute)representationEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getRepresentationEntry_Value() {
-		return (EReference)representationEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1873,15 +1826,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__EXTENDS);
 		createEAttribute(packageElementEClass, PACKAGE_ELEMENT__MODIFIERS);
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__DOCUMENTATION);
-		createEReference(packageElementEClass, PACKAGE_ELEMENT__REPRESENTATIONS);
 		createEReference(packageElementEClass, PACKAGE_ELEMENT__PROPERTIES);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___CREATE);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___APPLY__PACKAGEELEMENT);
 		createEOperation(packageElementEClass, PACKAGE_ELEMENT___RESOLVE__PACKAGEELEMENT);
-
-		representationEntryEClass = createEClass(REPRESENTATION_ENTRY);
-		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__KEY);
-		createEReference(representationEntryEClass, REPRESENTATION_ENTRY__VALUE);
 
 		packageEClass = createEClass(PACKAGE);
 		createEReference(packageEClass, PACKAGE__SUPER_PACKAGES);
@@ -2191,7 +2139,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getPackageElement_Extends(), g1, this.getPackageElement_Extensions(), "extends", null, 0, -1, PackageElement.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPackageElement_Modifiers(), ecorePackage.getEString(), "modifiers", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPackageElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPackageElement_Properties(), theNcorePackage.getProperty(), null, "properties", null, 0, -1, PackageElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getPackageElement_Properties().getEKeys().add(theNcorePackage.getProperty_Name());
 
@@ -2206,10 +2153,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		op = initEOperation(getPackageElement__Resolve__PackageElement(), null, "resolve", 0, 1, IS_UNIQUE, IS_ORDERED);
 		g1 = createEGenericType(packageElementEClass_T);
 		addEParameter(op, g1, "instance", 0, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(representationEntryEClass, Map.Entry.class, "RepresentationEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRepresentationEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getRepresentationEntry_Value(), theDiagramPackage.getDiagram(), null, "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(packageEClass, org.nasdanika.flow.Package.class, "Package", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPackage_SuperPackages(), this.getPackage(), null, "superPackages", null, 0, -1, org.nasdanika.flow.Package.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2453,25 +2396,12 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "load-doc-reference", "doc/package-element--documentation.md"
 		   });
 		addAnnotation
-		  (getPackageElement_Representations(),
-		   source,
-		   new String[] {
-			   "homogenous", "true",
-			   "load-doc-reference", "doc/package-element--representations.md"
-		   });
-		addAnnotation
 		  (getPackageElement_Properties(),
 		   source,
 		   new String[] {
 			   "reference-type", "map: \n  ns-uri: urn:org.nasdanika.ncore\n  name: MapProperty\nlist:\n  ns-uri: urn:org.nasdanika.ncore\n  name: ListProperty\nstring:\n  ns-uri: urn:org.nasdanika.ncore\n  name: StringProperty\n",
 			   "value-feature", "value",
 			   "load-doc-reference", "doc/package-element--properties.md"
-		   });
-		addAnnotation
-		  (getRepresentationEntry_Value(),
-		   source,
-		   new String[] {
-			   "homogenous", "true"
 		   });
 		addAnnotation
 		  (packageEClass,
@@ -2920,34 +2850,10 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "Element documentation. Documentation elements are adapted to ``SupplierFactory<InputStream>`` during generation. \n[Exec content](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/package-summary.html) classes such as [Markdown](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Markdown.html) and [Interpolator](https://docs.nasdanika.org/modules/core/modules/exec/modules/model/content/Interpolator.html) can be used as documentation elements. \n"
 		   });
 		addAnnotation
-		  (getPackageElement_Representations(),
-		   source,
-		   new String[] {
-			   "documentation", "Mapping of representation names to values - [Diagrams](https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/Diagram.html) which serve as templates for generating diagram content from the package element."
-		   });
-		addAnnotation
 		  (getPackageElement_Properties(),
 		   source,
 		   new String[] {
 			   "documentation", "Properties can be used to customize the documentation generation process, e.g. provide configuration for generation of representation diagram elements."
-		   });
-		addAnnotation
-		  (representationEntryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Mapping of representation key to a representation (diagram). Null value suppresses inherited entry."
-		   });
-		addAnnotation
-		  (getRepresentationEntry_Key(),
-		   source,
-		   new String[] {
-			   "documentation", "Representation key."
-		   });
-		addAnnotation
-		  (getRepresentationEntry_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Representation (diagram)."
 		   });
 		addAnnotation
 		  (getPackage_SuperPackages(),

@@ -3,9 +3,7 @@
 package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.diagram.Diagram;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.Property;
 
@@ -27,7 +25,6 @@ import org.nasdanika.ncore.Property;
  *   <li>{@link org.nasdanika.flow.PackageElement#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getDocumentation <em>Documentation</em>}</li>
- *   <li>{@link org.nasdanika.flow.PackageElement#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.flow.PackageElement#getProperties <em>Properties</em>}</li>
  * </ul>
  *
@@ -142,23 +139,6 @@ public interface PackageElement<T extends PackageElement<T>> extends NamedElemen
 	 * @generated
 	 */
 	EList<EObject> getDocumentation();
-
-	/**
-	 * Returns the value of the '<em><b>Representations</b></em>' map.
-	 * The key is of type {@link java.lang.String},
-	 * and the value is of type {@link org.nasdanika.diagram.Diagram},
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Mapping of representation names to values - [Diagrams](https://docs.nasdanika.org/modules/core/modules/diagram/modules/model/Diagram.html) which serve as templates for generating diagram content from the package element.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Representations</em>' map.
-	 * @see org.nasdanika.flow.FlowPackage#getPackageElement_Representations()
-	 * @model mapType="org.nasdanika.flow.RepresentationEntry&lt;org.eclipse.emf.ecore.EString, org.nasdanika.diagram.Diagram&gt;"
-	 *        annotation="urn:org.nasdanika homogenous='true' load-doc-reference='doc/package-element--representations.md'"
-	 * @generated
-	 */
-	EMap<String, Diagram> getRepresentations();
 
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.

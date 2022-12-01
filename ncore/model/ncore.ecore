@@ -215,6 +215,34 @@
         <details key="documentation" value="If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. &#xA;If this reference is set and is Action then a copy of the action is created and returned.&#xA;Otherwise the reference value it is adapted to ActionProvider which is used to create an action. &#xA;This allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="representations" upperBound="-1"
+        eType="#//RepresentationEntry" containment="true">
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="homogenous" value="true"/>
+        <details key="load-doc-reference" value="doc/model-element--representations.md"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Mapping of representation keys to URI's of representation resources. URI's are resolved relative to the model element resource URI.&#xA;During object loading resources are loaded and linked to the object. Additional processing depends on the resource type.&#xA;In case of Drawio diagrams, diagram elements are semantically mapped to model elements and representation resource root elements are added as children to the object.&#xA;See [Nasdanika Core Drawio](../drawio/index.html) and [Nasdanika Core EMF](../emf/index.html) documentation for more information.&#xA;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepresentationEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Mapping of representation key to a representation resource uri. Null values are supported to suppress inherited entries."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Representation key."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Representation resource URI. E.g. and URI of a Drawio diagram. "/>
+      </eAnnotations>
+      <eAnnotations source="urn:org.nasdanika">
+        <details key="content-type" value="resource-uri"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//ModelElement">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

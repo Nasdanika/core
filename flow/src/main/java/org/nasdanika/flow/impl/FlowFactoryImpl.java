@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.nasdanika.diagram.Diagram;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.ArtifactParticipantResponsibility;
@@ -83,7 +82,6 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case FlowPackage.REPRESENTATION_ENTRY: return (EObject)createRepresentationEntry();
 			case FlowPackage.PACKAGE: return createPackage();
 			case FlowPackage.PACKAGE_ENTRY: return (EObject)createPackageEntry();
 			case FlowPackage.SERVICE_PROVIDER: return createServiceProvider();
@@ -122,16 +120,6 @@ public class FlowFactoryImpl extends EFactoryImpl implements FlowFactory {
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, Diagram> createRepresentationEntry() {
-		RepresentationEntryImpl representationEntry = new RepresentationEntryImpl();
-		return representationEntry;
 	}
 
 	/**

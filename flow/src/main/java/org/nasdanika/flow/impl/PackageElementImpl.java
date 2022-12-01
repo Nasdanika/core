@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.common.Util;
-import org.nasdanika.diagram.Diagram;
 import org.nasdanika.emf.persistence.FeatureCache;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowElement;
@@ -50,7 +49,6 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getExtends <em>Extends</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getModifiers <em>Modifiers</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getDocumentation <em>Documentation</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.PackageElementImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
@@ -155,17 +153,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public EMap<String, Diagram> getRepresentations() {
-		return (EMap<String, Diagram>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS, FlowPackage.Literals.PACKAGE_ELEMENT__REPRESENTATIONS, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
 	public EList<Property> getProperties() {
 		return (EList<Property>)eDynamicGet(FlowPackage.PACKAGE_ELEMENT__PROPERTIES, FlowPackage.Literals.PACKAGE_ELEMENT__PROPERTIES, true, true);
 	}
@@ -220,14 +207,14 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 		}
 		
 		// Representations
-		for (Entry<String, Diagram> re: getRepresentations().entrySet()) {
-			Diagram representation = re.getValue();
-			EMap<String, Diagram> instanceRepresentations = instance.getRepresentations();
+		for (Entry<String, String> re: getRepresentations().entrySet()) {
+			String representation = re.getValue();
+			EMap<String, String> instanceRepresentations = instance.getRepresentations();
 			String representationKey = re.getKey();
 			if (representation == null) {
 				instanceRepresentations.removeKey(representationKey);
 			} else {
-				instanceRepresentations.put(representationKey, EcoreUtil.copy(representation));
+				instanceRepresentations.put(representationKey, representation);
 			}
 		}
 		
@@ -281,8 +268,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return ((InternalEList<?>)getExtends()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
 				return ((InternalEList<?>)getDocumentation()).basicRemove(otherEnd, msgs);
-			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
 			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
@@ -308,9 +293,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return getModifiers();
 			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
 				return getDocumentation();
-			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				if (coreType) return getRepresentations();
-				else return getRepresentations().map();
 			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
 				return getProperties();
 		}
@@ -337,9 +319,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				getDocumentation().clear();
 				getDocumentation().addAll((Collection<? extends EObject>)newValue);
 				return;
-			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
-				return;
 			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
 				getProperties().clear();
 				getProperties().addAll((Collection<? extends Property>)newValue);
@@ -364,9 +343,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return;
 			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
 				getDocumentation().clear();
-				return;
-			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				getRepresentations().clear();
 				return;
 			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
 				getProperties().clear();
@@ -393,8 +369,6 @@ public abstract class PackageElementImpl<T extends PackageElement<T>> extends Na
 				return !getModifiers().isEmpty();
 			case FlowPackage.PACKAGE_ELEMENT__DOCUMENTATION:
 				return !getDocumentation().isEmpty();
-			case FlowPackage.PACKAGE_ELEMENT__REPRESENTATIONS:
-				return !getRepresentations().isEmpty();
 			case FlowPackage.PACKAGE_ELEMENT__PROPERTIES:
 				return !getProperties().isEmpty();
 		}
