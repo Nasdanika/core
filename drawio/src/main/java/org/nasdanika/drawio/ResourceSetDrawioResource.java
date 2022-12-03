@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
@@ -55,10 +56,21 @@ public abstract class ResourceSetDrawioResource<T extends EObject> extends Drawi
 			}
 			return semanticElement;
 		}		
+		
+		@Override
+		protected Context getContext() {
+			return ResourceSetDrawioResource.this.getContext();
+		}
 				
 	};
 	
 	protected abstract java.util.List<String> getPropertyPrefixes();
+	
+	/**
+	 * Context for spec interpolation.
+	 * @return
+	 */
+	protected abstract Context getContext();	
 	
 	/**
 	 * Sets a parent for the resource roots. Delegates to the processor factory to use graph data (diagram element properties) to establish parent/child relationships.

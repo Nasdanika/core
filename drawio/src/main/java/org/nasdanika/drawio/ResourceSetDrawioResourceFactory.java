@@ -1,14 +1,21 @@
 package org.nasdanika.drawio;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.nasdanika.common.Context;
+import org.nasdanika.common.MutableContext;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.processor.ProcessorConfig;
 
 /**
@@ -53,8 +60,37 @@ public abstract class ResourceSetDrawioResourceFactory<T extends EObject> extend
 				
 				ResourceSetDrawioResourceFactory.this.configureSemanticElement(config, semanticElement, this, progressMonitor);
 			}
+
+			@Override
+			protected Context getContext() {
+				return ResourceSetDrawioResourceFactory.this.getContext(getURI());
+			}
 			
 		};
+	}
+	
+	/**
+	 * Context for spec interpolation.
+	 * @param uri
+	 * @return
+	 */
+	protected Context getContext(URI uri) {
+		MutableContext ret = Context.EMPTY_CONTEXT.fork();
+
+		Function<String, URL> resolver = path -> {
+			try {
+				return new URL(new URL(uri.toString()), path);
+			} catch (MalformedURLException e) {
+				throw new NasdanikaException("Cannot resolve '" + path + "' relative to " + uri + ": " + e, e);
+			}
+		};
+		
+		ret.put("embedded-image", Util.createEmbeddedImagePropertyComputer(resolver));
+		ret.put("embedded-image-data", Util.createEmbeddedImageDataPropertyComputer(resolver));
+		ret.put("include", Util.createIncludePropertyComputer(resolver));
+		ret.put("include-markdown", Util.createIncludeMarkdownPropertyComputer(resolver));
+		
+		return ret;
 	}
 
 	/**

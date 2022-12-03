@@ -1,15 +1,20 @@
 package org.nasdanika.drawio;
 
-import java.nio.charset.StandardCharsets;
-
-import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.json.JSONObject;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.PropertyComputer;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.persistence.ObjectLoaderResource;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 /**
  * Uses {@link ResourceSet} to load objects from spec-uri.
@@ -20,6 +25,17 @@ import org.nasdanika.graph.processor.ProcessorConfig;
  * @param <T>
  */
 public abstract class ResourceSetDrawioEObjectFactory<T extends EObject> extends DrawioEObjectFactory<T> {
+	
+	private static final String EXPR_PREFIX = "expr/";
+	private static final String PROPERTIES_PREFIX = "properties/";
+	
+	/**
+	 * Context for spec interpolation.
+	 * @return
+	 */
+	protected Context getContext() {
+		return Context.EMPTY_CONTEXT;
+	}
 	
 	/**
 	 * @return {@link ResourceSet} to load objects. 
@@ -45,17 +61,81 @@ public abstract class ResourceSetDrawioEObjectFactory<T extends EObject> extends
 	 */
 	@Override
 	protected T load(String spec, String specFormat, URI specBase, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) {
-		JSONObject specObj = new JSONObject();
-		specObj.put("spec", spec);
-		if (!org.nasdanika.common.Util.isBlank(specFormat)) {
-			specObj.put("format", specFormat);
-		}
-		if (specBase != null) {
-			specObj.put("base", specBase.toString());
-		}
-		String specStr = specObj.toString();
-		URI specURI = URI.createURI(ObjectLoaderResource. ";base64," + Base64.encodeBase64String(specStr.getBytes(StandardCharsets.UTF_8)));
+		String interpolatedSpec = createDiagramElementContext(config).interpolateToString(spec);
+		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase);		
 		return load(specURI, specFormat, config, context, progressMonitor);
 	}
+		
+	protected Context createDiagramElementContext(ProcessorConfig<T> config) {
+		MutableContext elementContext = getContext().fork();
+		PropertyComputer propertyComputer = new PropertyComputer() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			public <PT> PT compute(Context context, String key, String path, Class<PT> type) {
+				if (type == null || type.isAssignableFrom(String.class)) {
+					if (Util.isBlank(path)) {
+						return null;
+					}
+					
+					// page name
+					if (config.getElement() instanceof Page) {
+						Page page = (Page) config.getElement();
+						if ("name".equals(path)) {
+							return (PT) page.getName();
+						}
+						if ("id".equals(path)) {
+							return (PT) page.getId();
+						}
+					} else if (config.getElement() instanceof ModelElement) {
+						ModelElement modelElement = (ModelElement) config.getElement();
+
+						if ("id".equals(path)) {
+							return (PT) modelElement.getId();
+						}
+
+						String label = modelElement.getLabel();
+						if ("label".equals(path)) {
+							return (PT) label;
+						}
+
+						if ("label-text".equals(path)) { // Plain text label							
+							return (PT) (Util.isBlank(label) ? label : Jsoup.parse(label).text());
+						}
+
+						if ("link".equals(path)) {
+							return (PT) modelElement.getLink();
+						}
+
+						if ("tooltip".equals(path)) {
+							return (PT) modelElement.getTooltip();
+						}
+
+						if (path.startsWith(PROPERTIES_PREFIX)) {							
+							return (PT) modelElement.getProperty(path.substring(PROPERTIES_PREFIX.length()));
+						}
+
+					}
+					
+					if (path.startsWith(EXPR_PREFIX)) {
+						String expr = path.substring(EXPR_PREFIX.length());
+						if (!org.nasdanika.common.Util.isBlank(expr)) {
+							ExpressionParser parser = new SpelExpressionParser();
+							Expression exp = parser.parseExpression(expr);
+							EvaluationContext evaluationContext = createEvaluationContext();
+							evaluationContext.setVariable("context", context);
+							Object result = exp.getValue(evaluationContext, config.getElement());
+							return result == null ? null : (PT) String.valueOf(result);
+						}								
+					}
+				}
+				return null;
+			}
+		};
+		
+		elementContext.put("diagram-element", propertyComputer);
+		return elementContext;
+	}
+	
 
 }
