@@ -7,12 +7,15 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
@@ -37,22 +40,28 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFactory<T> {
+public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFactory<T> {
 	
 	protected String getPropertyValue(org.nasdanika.graph.Element element, String propertyName) {
 		if (!org.nasdanika.common.Util.isBlank(propertyName) && element instanceof ModelElement) {
-			return ((ModelElement) element).getProperty(getPropertyPrefix() + propertyName);
+			for (String propertyPrefix: getPropertyPrefixes()) {
+				String propertyValue = ((ModelElement) element).getProperty(propertyPrefix + propertyName);
+				if (!org.nasdanika.common.Util.isBlank(propertyValue)) {
+					return propertyValue;
+				}
+			}
 		}
 		return null;
 	}
 	
 	/**
-	 * Prefix added to property names. Override to implement namespacing of properties for elements with multiple semantic mappings. 
+	 * Prefixes added to property names. Override to implement namespacing of properties for elements with multiple semantic mappings. 
+	 * Multiple prefixes may be used for profiles.
 	 * For example, an element may have one mapping for documentation, another for code generation, and one more for status updates - pulling runtime information from monitoring systems and updating diagram elements with health status. 
-	 * @return
+	 * @return This implementation returns a singleton list of an empty string;
 	 */
-	protected String getPropertyPrefix() {
-		return "";
+	protected List<String> getPropertyPrefixes() {
+		return Collections.singletonList("");
 	}
 	
 	// Loading spec
@@ -72,8 +81,9 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	@Override
 	protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
 		String spec = getPropertyValue(config.getElement(), getSpecPropertyName());
+		String specFormat = getPropertyValue(config.getElement(), getSpecFormatPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
-			return load(spec, getBaseURI(), config, progressMonitor);
+			return load(spec, specFormat, getBaseURI(), config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}
 		
 		String specUriStr = getPropertyValue(config.getElement(), getSpecUriPropertyName());
@@ -85,19 +95,29 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 					specURI = specURI.resolve(baseURI);
 				}
 			}
-			return load(specURI, config, progressMonitor);
+			return load(specURI, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}
 		return null;
+	}
+	
+	/**
+	 * Override to create a context to be used for semantic element loading.
+	 * @param config
+	 * @param progressMonitor
+	 * @return
+	 */
+	protected Context getLoadingContext(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+		return Context.EMPTY_CONTEXT;
 	}
 
 	/**
 	 * Loads semantic element from a URI
 	 * @return
 	 */
-	protected T load(URI specURI, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
+	protected T load(URI specURI, String specFormat, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) {
 		try {
 			URL specUrl = new URL(specURI.toString());
-			return load(specUrl, config, progressMonitor);				
+			return load(specUrl, specFormat, config, context, progressMonitor);				
 		} catch (IOException e) {
 			throw new NasdanikaException("Error loading specification from specification URI " + specURI, e);
 		}			
@@ -107,17 +127,17 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * Loads semantic element from a URL
 	 * @return
 	 */
-	protected T load(URL url, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
-		return load(url.openStream(), URI.createURI(url.toString()), config, progressMonitor);
+	protected T load(URL url, String specFormat, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) throws IOException {
+		return load(url.openStream(), specFormat, URI.createURI(url.toString()), config, context, progressMonitor);
 	}
 	
 	/**
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected T load(InputStream inputStream, URI base, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
+	protected T load(InputStream inputStream, String specFormat, URI base, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(inputStream, getCharset())) {
-			return load(DefaultConverter.INSTANCE.toString(reader), base, config, progressMonitor);
+			return load(DefaultConverter.INSTANCE.toString(reader), specFormat, base, config, context, progressMonitor);
 		}		
 	}
 	
@@ -125,8 +145,8 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected T load(Reader reader, URI base, ProcessorConfig<T> config, ProgressMonitor progressMonitor) throws IOException {
-		return load(DefaultConverter.INSTANCE.toString(reader), base, config, progressMonitor);
+	protected T load(Reader reader, String specFormat, URI base, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) throws IOException {
+		return load(DefaultConverter.INSTANCE.toString(reader), specFormat, base, config, context, progressMonitor);
 	}	
 	
 	/**
@@ -143,9 +163,7 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	 * @param specBase Base URI for resolving relative URI's.
 	 * @return
 	 */
-	protected T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-		throw new UnsupportedOperationException("Override this or other load() methods in subclasses");
-	}
+	protected abstract T load(String spec, String specFormat, URI specBase, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor);
 		
 	protected String getSpecPropertyName() {
 		return "spec";
@@ -154,6 +172,14 @@ public class DrawioEObjectFactory<T extends EObject> extends AbstractEObjectFact
 	protected String getSpecUriPropertyName() {
 		return "spec-uri";
 	}		
+	
+	/**
+	 * Specification format (MIME type). E.g. text/yaml or application/json. It is used to load specification. 
+	 * @return
+	 */
+	protected String getSpecFormatPropertyName() {
+		return "spec-format";
+	}			
 
 	// Child
 	/**

@@ -29,12 +29,10 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.yaml.snakeyaml.error.MarkedYAMLException;
 
-public abstract class YamlLoadingDrawioEObjectFactory<T extends EObject> extends DrawioEObjectFactory<T> {
+public abstract class ObjectLoaderDrawioEObjectFactory<T extends EObject> extends DrawioEObjectFactory<T> {
 	
 	private static final String EXPR_PREFIX = "expr/";
 	private static final String PROPERTIES_PREFIX = "properties/";
-
-	protected abstract ObjectLoader getLoader();
 	
 	protected Context getContext() {
 		return Context.EMPTY_CONTEXT;
@@ -171,11 +169,33 @@ public abstract class YamlLoadingDrawioEObjectFactory<T extends EObject> extends
 		return elementContext;
 	}
 	
+	/**
+	 * Specification format. yaml or json. If not specified defaults to YAML unless the specBase URI has .json extension. 
+	 * @return
+	 */
+	protected String getSpecFormatPropertyName() {
+		return "spec-format";
+	}		
+	
+	protected abstract ObjectLoader getLoader();
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
 		try {
-			Object data = getLoader().loadYaml(spec, specBase, progressMonitor);
+			boolean isYaml = true;
+			String specFormat = getPropertyValue(config.getElement(), getSpecFormatPropertyName());
+			if (Util.isBlank(specFormat)) {
+				if (specBase != null) {
+					String lastSegment = specBase.lastSegment();
+					if (!Util.isBlank(lastSegment) && lastSegment.toLowerCase().endsWith(".json")) {
+						isYaml = false;
+					}
+				}
+			} else {
+				isYaml = "yaml".equals(specFormat);
+			}
+			Object data = isYaml ? getLoader().loadYaml(spec, specBase, progressMonitor) : getLoader().loadJsonObject(spec, specBase, progressMonitor);
 			if (data instanceof SupplierFactory) {
 				return (T) Util.call(((SupplierFactory<EObject>) data).create(createDiagramElementContext(config)), progressMonitor, this::onDiagnostic);
 			} 

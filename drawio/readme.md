@@ -150,11 +150,22 @@ ${javadoc/org.nasdanika.drawio.DrawioResource} is a base class for mapping of di
 With DrawioResource drawio files are treated as model resources which can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
 ${javadoc/org.nasdanika.html.model.app.drawio.ResourceFactory} is a concrete implementation for mapping diagram elements to  [application model](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/index.html) [actions](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html).
 
-### AbstractDrawioEObjectFactory
+### DrawioEObjectFactory
 
-TODO
+${javadoc/org.nasdanika.drawio.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams.
+It loads semantic information from properties of diagram elements as explained below.
+``DrawioEObjectFactory`` is abstract. It does not dictate semantic specification format - subclasses shall implement ``T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor)`` method.
 
-Parent ``child-reference``, ``parent-reference``.
+
+
+${javadoc/org.nasdanika.graph.processor.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
+Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``. 
+
+, see [Drawio](../drawio/index.html) for more details.
+
+
+${javadoc/org.nasdanika.emf.persistence.YamlLoadingDrawioEObjectFactory} is a further specialization of ``DrawioEObjectFactory``. 
+${javadoc/org.nasdanika.emf.persistence.YamlLoadingDrawioResourceFactory} leverages ``YamlLoadingDrawioEObjectFactory`` for loading models from Drawio diagrams with YAML specifications, see [EMF](../emf/index.html) for more details.
 
 ## Sorting
 

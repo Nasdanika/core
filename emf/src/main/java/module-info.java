@@ -7,7 +7,6 @@ module org.nasdanika.emf {
 	requires transitive org.nasdanika.drawio;
 	requires transitive org.nasdanika.cli;
 	requires transitive info.picocli;	
-	requires org.apache.commons.codec;
 	requires org.jsoup;
 	requires org.eclipse.emf.ecore.xmi;
 	requires spring.expression;	

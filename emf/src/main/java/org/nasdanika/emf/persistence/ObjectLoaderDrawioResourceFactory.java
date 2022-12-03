@@ -2,6 +2,8 @@ package org.nasdanika.emf.persistence;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -21,13 +23,13 @@ import org.nasdanika.persistence.ObjectLoader;
  * @author Pavel
  *
  */
-public class YamlLoadingDrawioResourceFactory<T extends EObject> extends ResourceFactoryImpl {
+public class ObjectLoaderDrawioResourceFactory<T extends EObject> extends ResourceFactoryImpl {
 	
-	private ProgressMonitor progressMonitor;
-	private ObjectLoader loader;
+	private ProgressMonitor progressMonitor; TODO - get for a resource
+	private ObjectLoader loader; TODO - get for a resource
 	private Context context;
 
-	public YamlLoadingDrawioResourceFactory(ObjectLoader loader, Context context, ProgressMonitor progressMonitor) {
+	public ObjectLoaderDrawioResourceFactory(ObjectLoader loader, Context context, ProgressMonitor progressMonitor) {
 		this.loader = loader;
 		this.context = context;
 		this.progressMonitor = progressMonitor;
@@ -35,7 +37,7 @@ public class YamlLoadingDrawioResourceFactory<T extends EObject> extends Resourc
 
 	@Override
 	public Resource createResource(URI uri) {
-		return new YamlLoadingDrawioResource<T>(uri) {
+		return new ObjectLoaderDrawioResource<T>(uri) {
 			
 			@Override
 			protected ObjectLoader getLoader() {
@@ -58,11 +60,25 @@ public class YamlLoadingDrawioResourceFactory<T extends EObject> extends Resourc
 					T semanticElement,
 					ProgressMonitor progressMonitor) {
 				
-				YamlLoadingDrawioResourceFactory.this.configureSemanticElement(config, semanticElement, this, progressMonitor);
+				ObjectLoaderDrawioResourceFactory.this.configureSemanticElement(config, semanticElement, this, progressMonitor);
+			}
+
+			@Override
+			protected List<String> getPropertyPrefixes() {
+				return ObjectLoaderDrawioResourceFactory.this.getPropertyPrefixes(this);
 			}
 			
 		};
 	}
+
+	/**
+	 * Override to implement property namespacing or profiles.
+	 * @param resource
+	 * @return Property name prefixes. This implementation returns a singleton of an empty string.
+	 */
+	protected java.util.List<String> getPropertyPrefixes(ObjectLoaderDrawioResource<T> resource) {
+		return Collections.singletonList("");
+	};
 	
 	/**
 	 * Override to customize resource context, e.g. add uri-based properties or services.

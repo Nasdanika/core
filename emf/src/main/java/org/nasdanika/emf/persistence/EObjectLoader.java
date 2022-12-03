@@ -579,8 +579,8 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		linkedResourcesAdapter.getLinkedResources().add(linkedResource);
 		
-		if (linkedResource instanceof YamlLoadingDrawioResource) {
-			((YamlLoadingDrawioResource<EObject>) linkedResource).setParent(semanticElement);
+		if (linkedResource instanceof ObjectLoaderDrawioResource) {
+			((ObjectLoaderDrawioResource<EObject>) linkedResource).setParent(semanticElement);
 		}
 		
 		return encodeLinkedResource(semanticElement, resourceUriStr, linkedResource, loader, config, base, context, progressMonitor);

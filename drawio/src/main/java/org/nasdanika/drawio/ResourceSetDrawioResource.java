@@ -1,4 +1,4 @@
-package org.nasdanika.emf.persistence;
+package org.nasdanika.drawio;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -7,42 +7,45 @@ import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.Context;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.DrawioResource;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
-import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Loads EObjects Drawio diagram resources using {@link ObjectLoaderDrawioEObjectFactory}. 
  * @author Pavel
  *
  */
-public abstract class ObjectLoaderDrawioResource<T extends EObject> extends DrawioResource<T> {
+public abstract class ResourceSetDrawioResource<T extends EObject> extends DrawioResource<T> {
 
-	public ObjectLoaderDrawioResource(URI uri) {
+	public ResourceSetDrawioResource(URI uri) {
 		super(uri);
 	}
 	
-	private ObjectLoaderDrawioEObjectFactory<T> processorFactory = new ObjectLoaderDrawioEObjectFactory<T>() {
+	/**
+	 * @return {@link ResourceSet} to load objects.
+	 */
+	protected abstract ResourceSet getLoadingResourceSet();
+	
+	private ResourceSetDrawioEObjectFactory<T> processorFactory = new ResourceSetDrawioEObjectFactory<T>() {
 
 		@Override
-		protected ObjectLoader getLoader() {
-			return ObjectLoaderDrawioResource.this.getLoader();
-		}
-		
-		@Override
-		protected Context getContext() {
-			return ObjectLoaderDrawioResource.this.getContext();
+		protected ResourceSet getResourceSet() {
+			return ResourceSetDrawioResource.this.getLoadingResourceSet();
 		}
 		
 		@Override
 		protected URI getBaseURI() {
-			return ObjectLoaderDrawioResource.this.getURI();
+			return ResourceSetDrawioResource.this.getURI();
 		}
+
+		protected java.util.List<String> getPropertyPrefixes() {
+			return ResourceSetDrawioResource.this.getPropertyPrefixes();
+		};
+		
 		
 		@Override
 		protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
@@ -51,12 +54,8 @@ public abstract class ObjectLoaderDrawioResource<T extends EObject> extends Draw
 				configureSemanticElement(config, semanticElement, progressMonitor);
 			}
 			return semanticElement;
-		}
-		
-		protected java.util.List<String> getPropertyPrefixes() {
-			return ObjectLoaderDrawioResource.this.getPropertyPrefixes();
-		};
-		
+		}		
+				
 	};
 	
 	protected abstract java.util.List<String> getPropertyPrefixes();
@@ -79,15 +78,11 @@ public abstract class ObjectLoaderDrawioResource<T extends EObject> extends Draw
 		return processorFactory;
 	}
 	
-	protected abstract ObjectLoader getLoader();	
-
-	protected abstract Context getContext();
-	
-	protected abstract void configureSemanticElement(ProcessorConfig<T> config, T semanticElement, ProgressMonitor progressMonitor);	
-	
 	@Override
 	protected Stream<? extends EObject> getSemanticElements(Map<Element, ProcessorInfo<T>> registry) {
 		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull);
 	}
+	
+	protected abstract void configureSemanticElement(ProcessorConfig<T> config, T semanticElement, ProgressMonitor progressMonitor);	
 
 }

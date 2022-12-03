@@ -232,9 +232,13 @@ ${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorRes
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
 
 ${javadoc/org.nasdanika.graph.processor.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
-Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``.
+Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``. 
 
-There might be multiple processors and semantic models for the same graph, e.g. a diagram. 
+${javadoc/org.nasdanika.drawio.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams, see [Drawio](../drawio/index.html) for more details.
+${javadoc/org.nasdanika.emf.persistence.ObjectLoaderDrawioEObjectFactory} is a further specialization of ``DrawioEObjectFactory``. 
+${javadoc/org.nasdanika.emf.persistence.ObjectLoaderDrawioResourceFactory} leverages ``ObjectLoaderLoadingDrawioEObjectFactory`` for loading models from Drawio diagrams with YAML or JSON specifications, see [EMF](../emf/index.html) for more details.
+
+There might be multiple processors and semantic models for the same graph, e.g. a diagram. TODO - many to many ...
 It can be thought of as "semantic inversion" - in [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) and tools like [Sirius](https://www.eclipse.org/sirius/) there is a model and multiple representations/views of the model. 
 Visual (view) elements are mapped to model elements. 
 
