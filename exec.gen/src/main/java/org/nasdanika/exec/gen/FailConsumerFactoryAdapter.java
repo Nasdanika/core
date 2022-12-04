@@ -7,8 +7,8 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.exec.Fail;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 public class FailConsumerFactoryAdapter extends AdapterImpl implements ConsumerFactory<BinaryEntityContainer> {
 	

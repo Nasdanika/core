@@ -19,10 +19,10 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.Marked;
-import org.nasdanika.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.content.Resource;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 
 public class ResourceSupplierFactoryAdapter extends AdapterImpl implements SupplierFactory<InputStream> {
 

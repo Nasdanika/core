@@ -3,7 +3,6 @@
 package org.nasdanika.diagram;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.nasdanika.ncore.NamedElement;
 
 /**

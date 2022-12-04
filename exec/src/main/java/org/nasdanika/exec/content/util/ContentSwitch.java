@@ -4,10 +4,15 @@ package org.nasdanika.exec.content.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.exec.content.*;
+import org.nasdanika.exec.content.Base64;
+import org.nasdanika.exec.content.ContentPackage;
+import org.nasdanika.exec.content.Filter;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
+import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
 

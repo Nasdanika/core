@@ -10,10 +10,10 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reference;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.persistence.Util;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.Block;
+import org.nasdanika.persistence.Util;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 public class BlockConsumerFactoryAdapter extends BlockExecutionParticipantAdapter implements ConsumerFactory<BinaryEntityContainer> {
 	

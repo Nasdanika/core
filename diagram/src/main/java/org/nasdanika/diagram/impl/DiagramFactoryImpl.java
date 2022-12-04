@@ -6,12 +6,20 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.nasdanika.diagram.*;
+import org.nasdanika.diagram.Connection;
+import org.nasdanika.diagram.Diagram;
+import org.nasdanika.diagram.DiagramElement;
+import org.nasdanika.diagram.DiagramFactory;
+import org.nasdanika.diagram.DiagramPackage;
+import org.nasdanika.diagram.End;
+import org.nasdanika.diagram.Layer;
+import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Note;
+import org.nasdanika.diagram.NotePlacement;
+import org.nasdanika.diagram.Start;
+import org.nasdanika.diagram.Style;
 
 /**
  * <!-- begin-user-doc -->

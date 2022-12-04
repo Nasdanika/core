@@ -3,7 +3,6 @@
 package org.nasdanika.diagram.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.diagram.DiagramPackage;
 import org.nasdanika.diagram.Start;
 

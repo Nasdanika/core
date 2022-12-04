@@ -4,17 +4,17 @@ import java.util.Objects;
 import java.util.concurrent.CancellationException;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.CollectionCompoundConsumerFactory;
 import org.nasdanika.common.Consumer;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FilterConsumer;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.CollectionCompoundConsumerFactory;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.resources.Container;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 public class ContainerConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<Container> {
 

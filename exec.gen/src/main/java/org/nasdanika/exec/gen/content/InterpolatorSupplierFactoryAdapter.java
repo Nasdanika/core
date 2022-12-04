@@ -14,11 +14,11 @@ import org.nasdanika.common.MarkdownHelper;
 import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.ConfigurationException;
-import org.nasdanika.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.ncore.Marker;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
 
 public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAdapter<Interpolator> {
 

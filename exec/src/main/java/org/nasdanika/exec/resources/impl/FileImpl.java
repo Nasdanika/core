@@ -3,7 +3,6 @@
 package org.nasdanika.exec.resources.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.ResourcesPackage;
 

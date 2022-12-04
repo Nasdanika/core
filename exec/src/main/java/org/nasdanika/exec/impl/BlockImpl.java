@@ -5,14 +5,11 @@ package org.nasdanika.exec.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.ncore.impl.ModelElementImpl;

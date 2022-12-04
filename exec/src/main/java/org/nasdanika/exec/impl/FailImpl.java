@@ -3,7 +3,6 @@
 package org.nasdanika.exec.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
 import org.nasdanika.ncore.impl.ModelElementImpl;

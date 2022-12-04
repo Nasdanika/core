@@ -3,7 +3,6 @@
 package org.nasdanika.exec.content.impl;
 
 import org.eclipse.emf.ecore.EClass;
-
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Interpolator;
 

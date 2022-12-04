@@ -1,7 +1,5 @@
 package org.nasdanika.common;
 
-import java.io.IOException;
-
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONObject;
 

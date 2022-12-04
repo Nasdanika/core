@@ -31,11 +31,11 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.ConfigurationException;
-import org.nasdanika.persistence.Marked;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.ExecPackage;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
 
 public class CallSupplierFactoryAdapter extends AdapterImpl implements SupplierFactory<InputStream> {
 	

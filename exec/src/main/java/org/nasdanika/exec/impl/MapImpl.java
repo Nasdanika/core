@@ -3,16 +3,12 @@
 package org.nasdanika.exec.impl;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EMap;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Map;
 import org.nasdanika.ncore.impl.ModelElementImpl;

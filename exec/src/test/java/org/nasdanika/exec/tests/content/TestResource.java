@@ -17,7 +17,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.tests.TestBase;
 import org.nasdanika.exec.util.ExecObjectLoaderSupplier;

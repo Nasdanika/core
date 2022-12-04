@@ -2,15 +2,14 @@
  */
 package org.nasdanika.exec.content.impl;
 
+import static org.nasdanika.exec.content.ContentPackage.RESOURCE;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.nasdanika.exec.ExecPackage;
-
 import org.nasdanika.exec.content.Base64;
 import org.nasdanika.exec.content.ContentFactory;
 import org.nasdanika.exec.content.ContentPackage;
@@ -18,7 +17,6 @@ import org.nasdanika.exec.content.Filter;
 import org.nasdanika.exec.content.Interpolator;
 import org.nasdanika.exec.content.Markdown;
 import org.nasdanika.exec.content.Resource;
-
 import org.nasdanika.exec.content.Text;
 import org.nasdanika.exec.impl.ExecPackageImpl;
 import org.nasdanika.exec.resources.ResourcesPackage;

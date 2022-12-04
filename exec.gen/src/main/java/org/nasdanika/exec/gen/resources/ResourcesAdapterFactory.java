@@ -1,12 +1,12 @@
 package org.nasdanika.exec.gen.resources;
 
 import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.resources.Container;
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.ResourcesPackage;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 /**
  * Provides adapters for the Engineering model elements.

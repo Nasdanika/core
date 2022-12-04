@@ -3,11 +3,9 @@
 package org.nasdanika.exec.content.impl;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.nasdanika.exec.content.ContentPackage;
 import org.nasdanika.exec.content.Filter;
 import org.nasdanika.ncore.impl.ModelElementImpl;

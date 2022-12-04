@@ -1,7 +1,5 @@
 package org.nasdanika.common.descriptors;
 
-import java.util.function.Function;
-
 /**
  * Descriptor of something with a name.
  * @author Pavel

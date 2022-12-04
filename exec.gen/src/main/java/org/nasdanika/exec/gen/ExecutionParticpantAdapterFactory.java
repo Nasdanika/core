@@ -7,7 +7,6 @@ import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.Block;
@@ -18,6 +17,7 @@ import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.gen.content.ContentAdapterFactory;
 import org.nasdanika.exec.gen.resources.ResourcesAdapterFactory;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 /**
  * Provides adapters for the Engineering model elements.

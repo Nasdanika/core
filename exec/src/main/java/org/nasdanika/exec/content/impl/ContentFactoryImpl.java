@@ -5,12 +5,16 @@ package org.nasdanika.exec.content.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.nasdanika.exec.content.*;
+import org.nasdanika.exec.content.Base64;
+import org.nasdanika.exec.content.ContentFactory;
+import org.nasdanika.exec.content.ContentPackage;
+import org.nasdanika.exec.content.Filter;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
+import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.content.Text;
 
 /**
  * <!-- begin-user-doc -->

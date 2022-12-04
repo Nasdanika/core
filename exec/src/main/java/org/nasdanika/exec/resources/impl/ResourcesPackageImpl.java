@@ -2,23 +2,20 @@
  */
 package org.nasdanika.exec.resources.impl;
 
+import static org.nasdanika.exec.resources.ResourcesPackage.CONTAINER;
+import static org.nasdanika.exec.resources.ResourcesPackage.RESOURCE;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.nasdanika.exec.ExecPackage;
-
 import org.nasdanika.exec.content.ContentPackage;
-
 import org.nasdanika.exec.content.impl.ContentPackageImpl;
-
 import org.nasdanika.exec.impl.ExecPackageImpl;
-
 import org.nasdanika.exec.resources.File;
 import org.nasdanika.exec.resources.ReconcileAction;
 import org.nasdanika.exec.resources.Resource;

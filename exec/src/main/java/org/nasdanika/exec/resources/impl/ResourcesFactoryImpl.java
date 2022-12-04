@@ -6,12 +6,13 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.nasdanika.exec.resources.*;
+import org.nasdanika.exec.resources.File;
+import org.nasdanika.exec.resources.ReconcileAction;
+import org.nasdanika.exec.resources.Resource;
+import org.nasdanika.exec.resources.ResourcesFactory;
+import org.nasdanika.exec.resources.ResourcesPackage;
 
 /**
  * <!-- begin-user-doc -->

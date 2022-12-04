@@ -4,12 +4,16 @@ package org.nasdanika.exec.content.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.exec.content.*;
+import org.nasdanika.exec.content.Base64;
+import org.nasdanika.exec.content.ContentPackage;
+import org.nasdanika.exec.content.Filter;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
+import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.content.Text;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.ModelElement;
 

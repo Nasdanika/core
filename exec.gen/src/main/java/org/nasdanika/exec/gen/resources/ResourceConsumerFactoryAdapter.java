@@ -2,8 +2,8 @@ package org.nasdanika.exec.gen.resources;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.nasdanika.common.ConsumerFactory;
-import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.exec.resources.Resource;
+import org.nasdanika.resources.BinaryEntityContainer;
 
 public abstract class ResourceConsumerFactoryAdapter<T extends Resource> extends AdapterImpl implements ConsumerFactory<BinaryEntityContainer> {
 

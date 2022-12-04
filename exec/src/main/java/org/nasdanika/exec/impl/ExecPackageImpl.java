@@ -3,14 +3,13 @@
 package org.nasdanika.exec.impl;
 
 import java.util.Map;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
 import org.nasdanika.exec.Configurator;
@@ -20,7 +19,6 @@ import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.List;
 import org.nasdanika.exec.content.ContentPackage;
-
 import org.nasdanika.exec.content.impl.ContentPackageImpl;
 import org.nasdanika.exec.resources.ResourcesPackage;
 import org.nasdanika.exec.resources.impl.ResourcesPackageImpl;

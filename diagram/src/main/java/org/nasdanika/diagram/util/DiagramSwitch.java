@@ -4,14 +4,21 @@ package org.nasdanika.diagram.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
-
 import org.nasdanika.common.Adaptable;
-import org.nasdanika.persistence.Marked;
-import org.nasdanika.diagram.*;
+import org.nasdanika.diagram.Connection;
+import org.nasdanika.diagram.Diagram;
+import org.nasdanika.diagram.DiagramElement;
+import org.nasdanika.diagram.DiagramPackage;
+import org.nasdanika.diagram.End;
+import org.nasdanika.diagram.Layer;
+import org.nasdanika.diagram.Link;
+import org.nasdanika.diagram.Note;
+import org.nasdanika.diagram.Start;
+import org.nasdanika.diagram.Style;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.persistence.Marked;
 
 /**
  * <!-- begin-user-doc -->

@@ -16,13 +16,13 @@ import org.nasdanika.common.ListCompoundSupplierFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.EObjectAdaptable;
+import org.nasdanika.exec.resources.File;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.resources.BinaryEntity;
 import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.resources.Merger;
-import org.nasdanika.emf.EObjectAdaptable;
-import org.nasdanika.exec.resources.File;
 
 public class FileConsumerFactoryAdapter extends ResourceConsumerFactoryAdapter<File> {
 
