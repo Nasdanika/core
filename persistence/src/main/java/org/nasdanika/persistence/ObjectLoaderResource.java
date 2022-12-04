@@ -79,11 +79,17 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 				uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
 			}
 			JSONObject specObj = new JSONObject(new JSONTokener(uriStr));
-			boolean isYaml = !specObj.has(FORMAT_KEY) || "yaml".equalsIgnoreCase(specObj.getString(FORMAT_KEY));
+			boolean isYaml;
+			String spec = specObj.getString(SPEC_KEY);
+			if (specObj.has(FORMAT_KEY)) {
+				isYaml = "yaml".equalsIgnoreCase(specObj.getString(FORMAT_KEY));
+			} else {
+				isYaml = spec == null || !(spec.trim().startsWith("{") && spec.trim().endsWith("}")); // If starts with { and ends with } assuming a Json object definition.
+			}
 			URI base = specObj.has(BASE_KEY) ? URI.createURI(specObj.getString(BASE_KEY)) : null;
 			ObjectLoader objectLoader = getObjectLoader();
 			ProgressMonitor progressMonitor = getProgressMonitor();
-			Object obj = isYaml ? objectLoader.loadYaml(specObj.getString(SPEC_KEY), base, progressMonitor) : objectLoader.loadJsonObject(specObj.getString(SPEC_KEY), base, progressMonitor);
+			Object obj = isYaml ? objectLoader.loadYaml(spec, base, progressMonitor) : objectLoader.loadJsonObject(spec, base, progressMonitor);
 			
 			if (obj instanceof SupplierFactory) {
 				obj = Util.call(((SupplierFactory<Object>) obj).create(getContext()), progressMonitor, this::onDiagnostic);
