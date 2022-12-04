@@ -50,20 +50,17 @@ public abstract class ObjectLoaderResourceFactory extends ResourceFactoryImpl {
 
 			@Override
 			protected boolean isJsonObject() {
-				// TODO Auto-generated method stub
-				return false;
+				return ObjectLoaderResourceFactory.this.isJsonObject(this);
 			}
 
 			@Override
 			protected boolean isJsonArray() {
-				// TODO Auto-generated method stub
-				return false;
+				return ObjectLoaderResourceFactory.this.isJsonArray(this);
 			}
 
 			@Override
 			protected Storable toStorable(EObject eObj) {
-				// TODO Auto-generated method stub
-				return null;
+				return ObjectLoaderResourceFactory.this.toStorable(this, eObj);
 			}
 			
 		};
