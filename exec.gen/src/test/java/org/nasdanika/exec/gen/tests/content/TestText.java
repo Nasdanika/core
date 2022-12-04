@@ -19,7 +19,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.EObjectAdaptable;
-import org.nasdanika.exec.gen.ExecGenYamlSupplier;
+import org.nasdanika.exec.gen.ExecGenObjectLoaderSupplier;
 import org.nasdanika.exec.gen.tests.TestBase;
 
 /**
@@ -38,7 +38,7 @@ public class TestText extends TestBase {
 				Consumer<Diagnostic> diagnosticConsumer = diagnostic -> {
 					assertThat(diagnostic.getStatus()).isEqualTo(Status.SUCCESS);
 				};
-				EObject eObject = Objects.requireNonNull(Util.call(new ExecGenYamlSupplier(resourceURI, context), progressMonitor, diagnosticConsumer), "Loaded null from " + resourceURI);
+				EObject eObject = Objects.requireNonNull(Util.call(new ExecGenObjectLoaderSupplier(resourceURI, context), progressMonitor, diagnosticConsumer), "Loaded null from " + resourceURI);
 				SupplierFactory<InputStream> supplierFactory = Objects.requireNonNull(EObjectAdaptable.adaptToSupplierFactory(eObject, InputStream.class), "Cannot adapt to SupplierFactory");
 				InputStream in = Util.call(supplierFactory.create(context), progressMonitor, diagnosticConsumer);
 				assertThat(in).isNotNull();

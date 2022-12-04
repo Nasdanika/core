@@ -1,4 +1,4 @@
-package org.nasdanika.exec.gen;
+package org.nasdanika.flow.util;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,11 +14,11 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class ExecGenYamlSupplier extends ExecGenObjectLoaderExecutionParticipant implements Supplier<EObject> {
+public class FlowObjectLoaderSupplier extends FlowObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	
-	public ExecGenYamlSupplier(URI uri, Context context) {
+	public FlowObjectLoaderSupplier(URI uri, Context context) {
 		super(context);
 		this.uri = uri;
 	}

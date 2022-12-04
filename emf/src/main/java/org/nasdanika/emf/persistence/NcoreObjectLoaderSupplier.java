@@ -14,11 +14,11 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class NcoreYamlSupplier extends NcoreObjectLoaderExecutionParticipant implements Supplier<EObject> {
+public class NcoreObjectLoaderSupplier extends NcoreObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	
-	public NcoreYamlSupplier(URI uri, Context context) {
+	public NcoreObjectLoaderSupplier(URI uri, Context context) {
 		super(context);
 		this.uri = uri;
 	}
