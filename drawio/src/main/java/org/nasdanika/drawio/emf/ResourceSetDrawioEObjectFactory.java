@@ -116,7 +116,6 @@ public abstract class ResourceSetDrawioEObjectFactory<T extends EObject> extends
 						if (path.startsWith(PROPERTIES_PREFIX)) {							
 							return (PT) modelElement.getProperty(path.substring(PROPERTIES_PREFIX.length()));
 						}
-
 					}
 					
 					if (path.startsWith(EXPR_PREFIX)) {

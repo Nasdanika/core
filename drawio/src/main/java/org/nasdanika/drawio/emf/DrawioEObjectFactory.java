@@ -87,7 +87,8 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
 			return load(spec, specFormat, getBaseURI(), config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}
-		
+				
+		// Spec URI
 		String specUriStr = getPropertyValue(config.getElement(), getSpecUriPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(specUriStr)) {
 			URI specURI = URI.createURI(specUriStr);
@@ -97,8 +98,28 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 					specURI = specURI.resolve(baseURI);
 				}
 			}
-			return load(specURI, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
+			try {
+				URL specURL = new URL(specURI.toString());
+				return load(specURL, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
+			} catch (IOException e) {
+				throw new NasdanikaException("Error loading specification from " + specURI, e);
+			}			
+		}		
+		
+		// Semantic URI
+		String semanticUriStr = getPropertyValue(config.getElement(), getSemanticUriPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(semanticUriStr)) {
+			URI semanticURI = URI.createURI(semanticUriStr);
+			if (semanticURI.isRelative()) {
+				URI baseURI = getBaseURI();
+				if (baseURI != null && !baseURI.isRelative()) {
+					semanticURI = semanticURI.resolve(baseURI);
+				}
+			}
+			return load(semanticURI, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}
+		
+		
 		return null;
 	}
 	
@@ -173,6 +194,10 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 	
 	protected String getSpecUriPropertyName() {
 		return "spec-uri";
+	}		
+	
+	protected String getSemanticUriPropertyName() {
+		return "semantic-uri";
 	}		
 	
 	/**
