@@ -31,11 +31,11 @@ import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.Marked;
-import org.nasdanika.persistence.Marker;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.emf.EmfUtil;
 import org.nasdanika.ncore.util.NcoreResourceSet;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
 
 /**
  * {@link ExecutionParticipant} which loads resources, diagnoses them

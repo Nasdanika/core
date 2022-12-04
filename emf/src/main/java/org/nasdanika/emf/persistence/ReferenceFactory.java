@@ -27,11 +27,11 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectFactory;
 import org.nasdanika.persistence.ObjectLoader;
-import org.nasdanika.ncore.util.NcoreUtil;
 import org.yaml.snakeyaml.Yaml;
 
 import io.github.azagniotov.matcher.AntPathMatcher;

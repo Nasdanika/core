@@ -62,7 +62,7 @@ public abstract class ResourceSetDrawioEObjectFactory<T extends EObject> extends
 	@Override
 	protected T load(String spec, String specFormat, URI specBase, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) {
 		String interpolatedSpec = createDiagramElementContext(config).interpolateToString(spec);
-		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase);		
+		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase).appendFragment("/");	// Loading the single root object.	
 		return load(specURI, specFormat, config, context, progressMonitor);
 	}
 		

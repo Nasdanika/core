@@ -6,19 +6,19 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.emf.persistence.YamlResourceFactory;
 import org.nasdanika.exec.gen.ExecutionParticpantAdapterFactory;
-import org.nasdanika.exec.util.ExecYamlLoadingExecutionParticipant;
+import org.nasdanika.exec.util.ExecObjectLoaderExecutionParticipant;
 import org.nasdanika.flow.FlowPackage;
+import org.nasdanika.persistence.ObjectLoaderResourceFactory;
 
 /**
- * {@link YamlLoadingSupplier} for Flow {@link EPackage}.
+ * Registers flow {@link EPackage} and {@link ExecutionParticpantAdapterFactory}
  * @author Pavel
  *
  */
-public abstract class FlowYamlLoadingExecutionParticipant extends ExecYamlLoadingExecutionParticipant {
+public abstract class FlowObjectLoaderExecutionParticipant extends ExecObjectLoaderExecutionParticipant {
 
-	public FlowYamlLoadingExecutionParticipant(Context context) {
+	public FlowObjectLoaderExecutionParticipant(Context context) {
 		super(context);
 	}
 
@@ -30,9 +30,9 @@ public abstract class FlowYamlLoadingExecutionParticipant extends ExecYamlLoadin
 	}
 	
 	@Override
-	protected YamlResourceFactory createYamlResorceFactory(ResourceSet resourceSet, ProgressMonitor progressMonitor) {
+	protected ObjectLoaderResourceFactory createObjectLoaderResorceFactory(ResourceSet resourceSet, ProgressMonitor progressMonitor) {
 		resourceSet.getAdapterFactories().add(new ExecutionParticpantAdapterFactory());
-		return super.createYamlResorceFactory(resourceSet, progressMonitor);
+		return super.createObjectLoaderResorceFactory(resourceSet, progressMonitor);
 	}
 	
 }

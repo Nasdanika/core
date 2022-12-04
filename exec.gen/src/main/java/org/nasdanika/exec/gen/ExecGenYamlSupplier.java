@@ -14,7 +14,7 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class ExecGenYamlSupplier extends ExecGenYamlLoadingExecutionParticipant implements Supplier<EObject> {
+public class ExecGenYamlSupplier extends ExecGenObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -41,6 +42,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.ResourceSetDrawioResource;
 import org.nasdanika.graph.processor.LinkedResourcesAdapter;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.ncore.Marked;
@@ -52,7 +54,6 @@ import org.nasdanika.persistence.Loadable;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectLoader;
 import org.yaml.snakeyaml.Yaml;
-import org.apache.commons.codec.binary.Base64;
 
 public class EObjectLoader extends DispatchingLoader {
 	
@@ -579,8 +580,8 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		linkedResourcesAdapter.getLinkedResources().add(linkedResource);
 		
-		if (linkedResource instanceof ObjectLoaderDrawioResource) {
-			((ObjectLoaderDrawioResource<EObject>) linkedResource).setParent(semanticElement);
+		if (linkedResource instanceof ResourceSetDrawioResource) {
+			((ResourceSetDrawioResource<EObject>) linkedResource).setParent(semanticElement);
 		}
 		
 		return encodeLinkedResource(semanticElement, resourceUriStr, linkedResource, loader, config, base, context, progressMonitor);

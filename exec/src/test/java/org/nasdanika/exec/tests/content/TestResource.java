@@ -20,7 +20,7 @@ import org.nasdanika.common.Util;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.exec.content.Resource;
 import org.nasdanika.exec.tests.TestBase;
-import org.nasdanika.exec.util.ExecYamlSupplier;
+import org.nasdanika.exec.util.ExecObjectLoaderSupplier;
 
 /**
  * Tests of descriptor view parts and wizards.
@@ -34,7 +34,7 @@ public class TestResource extends TestBase {
 		URI resourceURI = URI.createURI(getClass().getResource("resource/resource.yml").toString()); 
 		
 		@SuppressWarnings("resource")
-		Supplier<EObject> resourceSupplier = new ExecYamlSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
 		
 		Consumer<EObject> resourceConsumer = new Consumer<EObject>() {
 
@@ -79,7 +79,7 @@ public class TestResource extends TestBase {
 		URI resourceURI = URI.createURI(getClass().getResource("resource/resource-default-feature.yml").toString()); 
 		
 		@SuppressWarnings("resource")
-		Supplier<EObject> resourceSupplier = new ExecYamlSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
 		
 		Consumer<EObject> resourceConsumer = new Consumer<EObject>() {
 

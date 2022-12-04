@@ -15,13 +15,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.json.JSONArray;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.Storable;
-import org.nasdanika.emf.EObjectAdaptable;
 
 /**
  * Loads EMF classes from JSON arrays using {@link ObjectLoader}s. 

@@ -14,7 +14,7 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class NcoreYamlSupplier extends NcoreYamlLoadingExecutionParticipant implements Supplier<EObject> {
+public class NcoreYamlSupplier extends NcoreObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	

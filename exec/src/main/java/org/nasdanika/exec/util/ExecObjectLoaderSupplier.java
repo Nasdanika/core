@@ -14,11 +14,11 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class ExecYamlSupplier extends ExecYamlLoadingExecutionParticipant implements Supplier<EObject> {
+public class ExecObjectLoaderSupplier extends ExecObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	
-	public ExecYamlSupplier(URI uri, Context context) {
+	public ExecObjectLoaderSupplier(URI uri, Context context) {
 		super(context);
 		this.uri = uri;
 	}

@@ -14,7 +14,7 @@ import org.nasdanika.common.Supplier;
  * @author Pavel
  *
  */
-public class FlowYamlSupplier extends FlowYamlLoadingExecutionParticipant implements Supplier<EObject> {
+public class FlowYamlSupplier extends FlowObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 	private URI uri;
 	

@@ -37,6 +37,7 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DependencyTracer;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
+import org.nasdanika.emf.DiagramTextGenerator.RelationshipDirection;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**

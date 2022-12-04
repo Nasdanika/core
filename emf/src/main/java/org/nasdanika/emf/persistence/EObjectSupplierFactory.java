@@ -23,6 +23,9 @@ import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.emf.EmfUtil.EModelElementDocumentation;
+import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.DelegatingSupplierFactoryFeature;
 import org.nasdanika.persistence.EnumSupplierFactoryAttribute;
@@ -35,9 +38,6 @@ import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.StringSupplierFactoryAttribute;
 import org.nasdanika.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.persistence.TypedSupplierFactoryAttribute;
-import org.nasdanika.emf.EmfUtil;
-import org.nasdanika.emf.EmfUtil.EModelElementDocumentation;
-import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * Loads {@link EObject} {@link EStructuralFeature}s from configuration.

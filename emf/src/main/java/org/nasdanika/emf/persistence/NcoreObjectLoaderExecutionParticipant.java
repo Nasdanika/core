@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
- * {@link YamlLoadingSupplier} for {@link NcorePackage} {@link EPackage}.
- * Registers exec- loader. 
+ * Registers {@link NcorePackage} with the {@link ResourceSet}.
  * @author Pavel
  *
  */
-public abstract class NcoreYamlLoadingExecutionParticipant extends YamlLoadingExecutionParticipant {
+public abstract class NcoreObjectLoaderExecutionParticipant extends ObjectLoaderExecutionParticipant {
 
-	public NcoreYamlLoadingExecutionParticipant(Context context) {
+	public NcoreObjectLoaderExecutionParticipant(Context context) {
 		super(context);
 	}
 

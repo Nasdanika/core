@@ -22,7 +22,7 @@ import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
-import org.nasdanika.flow.util.FlowYamlLoadingExecutionParticipant;
+import org.nasdanika.flow.util.FlowObjectLoaderExecutionParticipant;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -106,7 +106,7 @@ public class TestBase {
 
 		URI resourceURI = URI.createURI(TestBase.this.getClass().getResource(resource).toString());
 
-		class TestCommand extends FlowYamlLoadingExecutionParticipant implements Command {
+		class TestCommand extends FlowObjectLoaderExecutionParticipant implements Command {
 
 			public TestCommand(Context context) {
 				super(context);

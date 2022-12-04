@@ -16,7 +16,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.Util;
 import org.nasdanika.exec.content.Text;
-import org.nasdanika.exec.util.ExecYamlSupplier;
+import org.nasdanika.exec.util.ExecObjectLoaderSupplier;
 import org.nasdanika.ncore.Marker;
 
 /**
@@ -31,7 +31,7 @@ public class TestText {
 		URI resourceURI = URI.createURI(getClass().getResource("text/text.yml").toString()); 
 				
 		@SuppressWarnings("resource")
-		Supplier<EObject> textSupplier = new ExecYamlSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> textSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
 		
 		Consumer<EObject> textConsumer = new Consumer<EObject>() {
 
@@ -79,7 +79,7 @@ public class TestText {
 		URI resourceURI = URI.createURI(getClass().getResource("text/text-default-feature.yml").toString()); 
 		
 		@SuppressWarnings("resource")
-		Supplier<EObject> textSupplier = new ExecYamlSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> textSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
 		
 		Consumer<EObject> textConsumer = new Consumer<EObject>() {
 

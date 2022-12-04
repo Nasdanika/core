@@ -28,7 +28,7 @@ import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.resources.BinaryEntityContainer;
 import org.nasdanika.emf.EObjectAdaptable;
-import org.nasdanika.exec.gen.ExecGenYamlLoadingExecutionParticipant;
+import org.nasdanika.exec.gen.ExecGenObjectLoaderExecutionParticipant;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -87,7 +87,7 @@ public class TestBase {
 			Context context,
 			ProgressMonitor progressMonitor) throws Exception {
 
-		class ObjectSupplier extends ExecGenYamlLoadingExecutionParticipant implements Supplier<EObject> {
+		class ObjectSupplier extends ExecGenObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 			public ObjectSupplier(Context context) {
 				super(context);

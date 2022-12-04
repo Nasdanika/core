@@ -4,10 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.graph.processor.Factories;
-import org.nasdanika.graph.processor.Factory;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.Processor;
 
 public class AliceBobProcessorFactory {
 
