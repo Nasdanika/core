@@ -1,4 +1,4 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
 
 public class NodeProcessorConfigAdapter<P, H, E> extends ProcessorConfigAdapter<P, NodeProcessorConfig<P, H, E>> implements NodeProcessorConfig<P, H, E> {
 

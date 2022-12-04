@@ -1,4 +1,4 @@
-package org.nasdanika.drawio;
+package org.nasdanika.drawio.emf;
 
 import java.net.MalformedURLException;
 import java.net.URL;

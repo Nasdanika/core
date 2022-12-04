@@ -1,10 +1,12 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 
 public class ProcessorConfigAdapter<P, D extends ProcessorConfig<P>> extends AdapterImpl implements ProcessorConfig<P> {
 

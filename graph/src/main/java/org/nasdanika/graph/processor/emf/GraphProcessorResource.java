@@ -1,4 +1,4 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +14,11 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorFactory;
+import org.nasdanika.graph.processor.ProcessorInfo;
 
 
 /**

@@ -1,4 +1,4 @@
-package org.nasdanika.drawio;
+package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +15,8 @@ import javax.xml.transform.TransformerException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.graph.processor.GraphProcessorResource;
+import org.nasdanika.drawio.Document;
+import org.nasdanika.graph.processor.emf.GraphProcessorResource;
 import org.xml.sax.SAXException;
 
 /**

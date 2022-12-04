@@ -7,7 +7,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.ResourceSetDrawioResourceFactory;
+import org.nasdanika.drawio.emf.ResourceSetDrawioResourceFactory;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.ncore.Marked;

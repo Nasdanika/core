@@ -1,8 +1,9 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 
 public class ConnectionProcessorConfigAdapter<P, H, E> extends ProcessorConfigAdapter<P, ConnectionProcessorConfig<P, H, E>> implements ConnectionProcessorConfig<P, H, E> {
 

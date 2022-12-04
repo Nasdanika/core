@@ -1,4 +1,4 @@
-package org.nasdanika.graph.processor;
+package org.nasdanika.graph.processor.emf;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.NopEndpointProcessorFactory;
+import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 
 /**
  * Creates {@link EObject}s from graph elements and wires them together using diagram element properties.

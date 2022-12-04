@@ -1,4 +1,4 @@
-package org.nasdanika.drawio;
+package org.nasdanika.drawio.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,13 +19,15 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Page;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.processor.AbstractEObjectFactory;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
+import org.nasdanika.graph.processor.emf.AbstractEObjectFactory;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;

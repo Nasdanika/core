@@ -231,7 +231,7 @@ ${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorRes
 [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
 
-${javadoc/org.nasdanika.graph.processor.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
+${javadoc/org.nasdanika.graph.processor.emf.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
 Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``. 
 
 ${javadoc/org.nasdanika.drawio.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams, see [Drawio](../drawio/index.html) for more details.

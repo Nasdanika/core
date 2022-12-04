@@ -1,4 +1,4 @@
-package org.nasdanika.drawio;
+package org.nasdanika.drawio.emf;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -9,6 +9,8 @@ import org.nasdanika.common.MutableContext;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertyComputer;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.ModelElement;
+import org.nasdanika.drawio.Page;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.persistence.ObjectLoaderResource;
 import org.springframework.expression.EvaluationContext;
