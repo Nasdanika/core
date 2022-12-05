@@ -142,30 +142,198 @@ To link a page in another document (file):
 
 To traverse document elements you can use either ``accept(<visitor>)`` methods or ``stream()`` method.
 
-## Semantic mapping
+## EMF
 
 ### DrawioResource
 
 ${javadoc/org.nasdanika.drawio.emf.DrawioResource} is a base class for mapping of diagram elements to [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
-With DrawioResource drawio files are treated as model resources which can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
+With DrawioResource Drawio files are treated as model resources which can be loaded into a resource set and as such reference model elements in other resources and be referenced from other resources.
 ${javadoc/org.nasdanika.html.model.app.drawio.ResourceFactory} is a concrete implementation for mapping diagram elements to  [application model](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/index.html) [actions](https://docs.nasdanika.org/modules/html/modules/models/modules/app/modules/model/Action.html).
 
 ### DrawioEObjectFactory
 
-${javadoc/org.nasdanika.drawio.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams.
+${javadoc/org.nasdanika.drawio.emf.DrawioEObjectFactory} is a specialization of ${javadoc/org.nasdanika.graph.processor.emf.AbstractEObjectFactory} for Drawio diagrams.
 It loads semantic information from properties of diagram elements as explained below.
 ``DrawioEObjectFactory`` is abstract. It does not dictate semantic specification format - subclasses shall implement ``T load(String spec, URI specBase, ProcessorConfig<T> config, ProgressMonitor progressMonitor)`` method.
 
+#### Conifguration properties
+
+##### child-injectors
+
+The value of this property shall be a [Spring expression](https://docs.spring.io/spring-framework/docs/5.3.24/reference/html/core.html#expressions)
+which injects children into the semantic element. 
+Expression value is not used.
+To inject multiple children you may use [linine list](https://docs.spring.io/spring-framework/docs/5.3.24/reference/html/core.html#expressions-inline-lists) expression ``{ <expr>[, <expr>] }``
+
+The expression is evaluated in the context of the semantic element with the following variables:
+
+* ``children`` - a map of children with child diagram elements as keys and their ${javadoc/org.nasdanika.graph.processor.ProcessorInfo}s as values
+* ``config`` - semantic element config of type ${javadoc/org.nasdanika.graph.processor.ProcessorConfig}
+* ``element`` - diagram element
+  
+##### child-reference
+
+Reference name of the semantic parent to inject this semantic element into.
+
+##### child-references
+
+A YAML map of reference names to selectors - Spring boolean expressions. 
+Children matching the selector expression are injected into the respective reference of the semantic element.
+Expressions are evaluated in the context of a child semantic element to be matched with the following variables:
+
+* ``config`` - context (child) semantic element ProcessorConfig.
+* ``element`` - child diagram element.
+* ``parent`` - semantic element. 
+* ``parentConfig`` - semantic element ProcessorConfig.
+* ``parentElement`` - diagram element.
+
+##### incoming-injector
+
+Connection property - a spring expression to inject this connection's semantic element (or source semantic element for pass-through connections) into its target's semantic element. 
+Evaluated in the context of the target semantic element with the following variables:
+
+* ``element`` - diagram element
+* ``config`` - processor config
+* ``connection`` - incoming connection
+* ``incoming`` - incoming semantic element
+* ``incomingConfig`` - incoming processor config
+
+##### incoming-reference
+
+Connection property specifying reference name of the connection's target semantic element to inject this connection semantic element or connection's source semantic element if the connection doesn't have its own semantic element (pass-through connection).
+
+##### link-page                
+
+By default semantic elements from linked pages are wired in the same way as element children.
+To disable wiring of linked page elements set this property to ``false``.
+
+##### outgoing-injector
+
+Connection property - a spring expression to inject this connection's semantic element (or target semantic element for pass-through connections) into its source's semantic element. 
+Evaluated in the context of the source semantic element with the following variables:
 
 
-${javadoc/org.nasdanika.graph.processor.emf.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
-Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``. 
+* ``element`` - diagram element
+* ``config`` - processor config
+* ``connection`` - incoming connection
+* ``outgoing`` - outgoing semantic element
+* ``outgoingConfig`` - outgoing processor config
 
-, see [Drawio](../drawio/index.html) for more details.
+##### outgoing-reference
 
+Connection property specifying reference name of the connection's source semantic element to inject this connection semantic element or connection's target semantic element if the connection doesn't have its own semantic element (pass-through connection).
 
-${javadoc/org.nasdanika.emf.persistence.YamlLoadingDrawioEObjectFactory} is a further specialization of ``DrawioEObjectFactory``. 
-${javadoc/org.nasdanika.emf.persistence.YamlLoadingDrawioResourceFactory} leverages ``YamlLoadingDrawioEObjectFactory`` for loading models from Drawio diagrams with YAML specifications, see [EMF](../emf/index.html) for more details.
+##### parent-injector
+
+Spring expression to inject parent into this semantic element. 
+Evaluated in the context of the semantic element with the following variables:
+
+* ``config`` - this semantic element processor config
+* ``element`` -  this diagram element
+* ``parent`` - parent semantic element
+* ``parentConfig`` - parent processor config
+  
+##### parent-reference
+
+Reference name of this semantic element to inject the parent semantic element into.
+
+##### registry-injectors
+
+Spring expression to inject registry entries into this semantic element. 
+Evaluated expression value is not used.
+The expression is evaluated in the context of the semantic element with the following variables:
+
+* ``config`` - this semantic element processor config
+* ``element`` - this diagram element
+* ``registry`` - a map of diagram elements to their registry info's
+
+##### registry-references
+
+A YAML map of reference names to selectors - Spring boolean expressions. 
+Registry entries matching the selector expression are injected into the respective reference of the semantic element.
+Expressions are evaluated in the context of a registry semantic element to be matched with the following variables:
+
+* ``config`` - context (child) semantic element ProcessorConfig.
+* ``element`` - child diagram element.
+* ``registryElement`` - registry diagram element. 
+* ``registryConfig`` - processor config of the registry element. 
+* ``semanticElement`` - semantic element. 
+  
+##### semantic-uri
+
+URI of the semantic element definition. 
+
+The difference between ``semantic-uri`` and ``spec-uri`` is that the spec is loaded as a string, interpolated, and then used to load the semantic element. ``spec-uri`` supports YAML and JSON definitions, whereas ``semantic-uri`` can point to definitions in multiple formats - XMI, Drawio, YAML, Json, MS Excel, ...
+
+##### source-injector
+
+Connection property - a spring expression to inject this connection source semantic element into this connection semantic element. 
+Evaluated in the context of the connection semantic element with the following variables:
+
+* ``element`` - diagram element (connection)
+* ``config`` - processor config
+* ``source`` - source semantic element
+* ``sourceConfig`` - source processor config
+
+##### source-reference
+
+Name of a reference to inject this connection source semantic element into this connection semantic element.
+
+##### spec
+
+Specification of the semantic element. YAML or JSON.
+
+Example:
+
+```yaml
+ncore-temporal: 
+  offset: ${diagram-element/expr/outgoingConnections[0].label}
+  description: ${diagram-element/label}
+```
+
+##### ResourceSetDrawioEObjectFactory
+
+${javadoc/org.nasdanika.drawio.emf.ResourceSetDrawioEObjectFactory} is a specialization of ${javadoc/org.nasdanika.drawio.emf.DrawioEObjectFactory}.
+It is used by ${javadoc/org.nasdanika.drawio.emf.ResourceSetDrawioResource} and ${javadoc/org.nasdanika.drawio.emf.ResourceSetDrawioResourceFactory}.
+
+In ``ResourceSetDrawioEObjectFactory`` specification is interpolated with the following tokens:
+
+* ``diagram-element/expression`` - spring expression evaluated in the context of the diagram element with the following variables:
+    * ``context`` - ${javadoc/org.nasdanika.common.Context} providing access to additional information.
+    * ``config`` - processor config
+* ``diagram-element/id`` - element id for pages and model element
+* ``diagram-element/label`` - model element label
+* ``diagram-element/label-text`` - model element label plain text. Label is parsed as HTML and then converted to text.
+* ``diagram-element/link`` - model element link
+* ``diagram-element/name`` - page name
+* ``diagram-element/properties/<property name>`` - model element property value
+* ``diagram-element/tooltip`` - model element tooltip
+
+Additional tokens may be provided by sub-classing ``ResourceSetDrawioEObjectFactory`` or ``ResourceSetDrawioResourceFactory`` and overriding ``getContext()`` method.
+
+##### spec-format
+
+Specification format - ``yaml`` or ``json``. The format is inferred if not explicitly specified - 
+specifications starting with ``{`` and ending with ``}`` are assumed to be JSON, YAML otherwise.
+
+##### spec-uri
+
+URI of the specification resolved relative to the document URI.
+Specification is loaded from the specification URI, interpolated, and then a semantic element is loaded from it.
+
+##### target-reference
+
+Name of a reference to inject this connection target semantic element into this connection semantic element.
+
+##### target-injector
+
+Connection property - a spring expression to inject this connection target semantic element into this connection semantic element. 
+Evaluated in the context of the connection semantic element with the following variables:
+
+* ``element`` - diagram element (connection)
+* ``config`` - processor config
+* ``target`` - target semantic element
+* ``targetConfig`` - target processor config
 
 ## Sorting
 

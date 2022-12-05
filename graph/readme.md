@@ -56,7 +56,7 @@ A click on a diagram element would navigate to an element documentation page, wh
 ### Dispatching
 
 One form of graph processing is dispatching of graph elements to Java methods annotated with ${javadoc/org.nasdanika.graph.Handler Handler} annotation.
-The annotation takes a [Spring boolean expression](https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions). 
+The annotation takes a [Spring boolean expression](https://docs.spring.io/spring-framework/docs/5.3.24/reference/html/core.html#expressions). 
 Graph elements are passed to methods for which the expression is blank or evaluates to true.
 
 Below is a code snippet from [AliceBobHandlers](https://github.com/Nasdanika/core/blob/master/drawio/src/test/java/org/nasdanika/drawio/tests/AliceBobHandlers.java) class:
@@ -139,7 +139,7 @@ The registry allows the client code to interact with the handler/endpoint/proces
 A good deal of graph processing is matching graph elements to code to be invoked for processing of that elements. 
 It may be quite tedious for large graphs.
 
-${javadoc/org.nasdanika.graph.processor.ReflectiveProcessorFactory ReflectiveProcessorFactory} uses annotations with [Spring expressions](https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions) to create processors and handlers and inject endpoints as explained below.
+${javadoc/org.nasdanika.graph.processor.ReflectiveProcessorFactory ReflectiveProcessorFactory} uses annotations with [Spring expressions](https://docs.spring.io/spring-framework/docs/5.3.24/reference/html/core.html#expressions) to create processors and handlers and inject endpoints as explained below.
 
 ${javadoc/org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory NopEndpointReflectiveProcessorFactory} extends  ``ReflectiveProcessorFactory`` and implements ``NopEndpointProcessorFactory`` providing default implementations for ``createEndpoint()`` method.
 
@@ -225,24 +225,26 @@ public class AliceBobConnectionProcessor {
 }
 ```
 
-## Semantic mapping
+## EMF
 
-${javadoc/org.nasdanika.graph.processor.GraphProcessorResource GraphProcessorResource} is a base class for mapping graph elements to 
+${javadoc/org.nasdanika.graph.processor.emf.GraphProcessorResource GraphProcessorResource} is a base class for mapping graph elements to 
 [EMF](https://www.eclipse.org/modeling/emf/) Ecore model elements. 
 Nasdanika Application Model Drawio is an example of such semantic mapping - it maps elements of Drawio diagrams to actions of [Nasdanika Application Model](../../../html/modules/models/modules/app/modules/model/index.html) which allows to generate HTML sites from diagrams.
 
 ${javadoc/org.nasdanika.graph.processor.emf.AbstractEObjectFactory} is a base class for mapping of graph elements to ${javadoc/org.eclipse.emf.ecore.EObject}'s.
 Concrete implementations of this class can be used in combination with concrete implementations of ``GraphProcessorResource``. 
 
-${javadoc/org.nasdanika.drawio.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams, see [Drawio](../drawio/index.html) for more details.
-${javadoc/org.nasdanika.emf.persistence.ObjectLoaderDrawioEObjectFactory} is a further specialization of ``DrawioEObjectFactory``. 
-${javadoc/org.nasdanika.emf.persistence.ObjectLoaderDrawioResourceFactory} leverages ``ObjectLoaderLoadingDrawioEObjectFactory`` for loading models from Drawio diagrams with YAML or JSON specifications, see [EMF](../emf/index.html) for more details.
+${javadoc/org.nasdanika.drawio.emf.DrawioEObjectFactory} is a specialization of ``AbstractEObjectFactory`` for Drawio diagrams, see [Drawio](../drawio/index.html) for more details.
+${javadoc/org.nasdanika.drawio.emf.ResourceSetDrawioEObjectFactory} is a further specialization of ``DrawioEObjectFactory``. 
+${javadoc/org.nasdanika.drawio.emf.ResourceSetDrawioResourceFactory} leverages ``ResourceSetDrawioEObjectFactory`` for loading models from Drawio diagrams.
 
-There might be multiple processors and semantic models for the same graph, e.g. a diagram. TODO - many to many ...
+There might be multiple processors and semantic models for the same graph, e.g. a diagram. 
 It can be thought of as "semantic inversion" - in [UML](https://en.wikipedia.org/wiki/Unified_Modeling_Language) and tools like [Sirius](https://www.eclipse.org/sirius/) there is a model and multiple representations/views of the model. 
-Visual (view) elements are mapped to model elements. 
+Visual (representation) elements are mapped to model elements, to it is a one-to-many relationship between a semantic element and its repreentations.
 
-In the case of graph processing and semantic mapping it is the opposite - semantic elements are mapped to visual elements and there might be multiple semantic elements in different models mapping to the same visual element.
+In the case of graph processing and semantic mapping the relationship is many-to-many.
+Semantic elements are mapped to visual elements and there might be multiple semantic elements in different models mapping to the same visual element.
+At the same time, multiple visual elements may map to the same semantic element.
 
 An example of such mapping might be a map of United States with a a hierarchy of states and counties.
 Map elements can be mapped to different semantic models - weather, population, election results.
@@ -259,8 +261,14 @@ With semantic mapping a diagram does not have to comply to a specific notation a
 Meaning is assigned to diagram elements by semantic mapping, i.e. the notation may be created after the diagram.
 It can be beneficial when there is no notation for the problem domain at hand, the notation is too complex or people authoring diagrams are not familiar with the notation, but they know how to express what they know or need as a diagram.
 
-Semantic mapping approach can be used to elicit and codify organizational tribal knowledge - the "secret sauce" of an organization.
-An organization may start with pre-existing diagrams and map them actions to generate documentation sites.
+A practical example is mapping of existing diagrams in an organization to a semantic model or models.
+The semantic model may have to be elicited gradually from the diagrams and diagram elements would be mapped to the model in multiple stages. 
+This can be thought of as a two-dimensional effort. 
+One dimension is the depth/richness of the semantic model. It can be called the "Exploration" dimension - how well the problem domain is articulated.
+The other is the breadth - the number of diagram elements mapped to the model. It can be called "Exploitation" - how much the capability of understanding and expressing of the problem domain is utilized to achieve organizational goals.  
+
+To put it slightly differently, semantic mapping approach can be used to elicit and codify organizational tribal knowledge - the "secret sauce" of an organization.
+An organization may start with pre-existing diagrams and map them to actions to generate documentation sites.
 Diagrams similar to [this one](https://docs.nasdanika.org/demo-drawio-actions/) can be used to document software systems.
 [Flow diagrams](https://docs.nasdanika.org/demo-drawio-flow-actions/) can be used to document processes. 
 The diagrams can be interrelated. For example, documentation of some software component may contain flow diagrams instructing how to perform operations on the component, e.g. deployment.   

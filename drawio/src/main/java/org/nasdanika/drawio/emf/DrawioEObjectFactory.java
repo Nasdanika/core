@@ -357,7 +357,7 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 	@Override
 	protected void setIncoming(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo) {
 		super.setIncoming(config, semanticElement, connection, incomingProcessorInfo);
-		String expr = getPropertyValue(config.getElement(), getIncomingInjectorPropertyName());
+		String expr = getPropertyValue(connection, getIncomingInjectorPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(expr)) {
 			ExpressionParser parser = new SpelExpressionParser();
 			Expression exp = parser.parseExpression(expr);
@@ -366,7 +366,7 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 			evaluationContext.setVariable("element", config.getElement());
 			evaluationContext.setVariable("connection", connection);
 			evaluationContext.setVariable("incoming", incomingProcessorInfo.getProcessor());
-			evaluationContext.setVariable("incoingConfig", incomingProcessorInfo.getConfig());			
+			evaluationContext.setVariable("incomingConfig", incomingProcessorInfo.getConfig());			
 			exp.getValue(evaluationContext, semanticElement);
 		}								
 	}
@@ -392,7 +392,7 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 	@Override
 	protected void setOutgoing(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> outgoingProcessorInfo) {
 		super.setOutgoing(config, semanticElement, connection, outgoingProcessorInfo);
-		String expr = getPropertyValue(config.getElement(), getOutgoingInjectorPropertyName());
+		String expr = getPropertyValue(connection, getOutgoingInjectorPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(expr)) {
 			ExpressionParser parser = new SpelExpressionParser();
 			Expression exp = parser.parseExpression(expr);
@@ -437,13 +437,13 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 						ExpressionParser parser = new SpelExpressionParser();
 						Expression exp = parser.parseExpression((String) eValue);
 						EvaluationContext evaluationContext = createEvaluationContext();
-						evaluationContext.setVariable("config", config);
-						evaluationContext.setVariable("element", config.getElement());
-						evaluationContext.setVariable("childElement", child);
-						evaluationContext.setVariable("child", childProcessorInfo.getProcessor());
-						evaluationContext.setVariable("childConfig", childProcessorInfo.getConfig());
+						evaluationContext.setVariable("parentConfig", config);
+						evaluationContext.setVariable("parent", semanticElement);
+						evaluationContext.setVariable("parentElement", config.getElement());
+						evaluationContext.setVariable("element", child);
+						evaluationContext.setVariable("config", childProcessorInfo.getConfig());
 						try {
-							if (exp.getValue(evaluationContext, semanticElement, Boolean.class)) {
+							if (exp.getValue(evaluationContext, childProcessorInfo.getProcessor(), Boolean.class)) {
 								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
 							}
 						} catch (EvaluationException e) {
@@ -488,6 +488,11 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 
 	@Override
 	protected EReference getRegistryReference(ProcessorConfig<T> config, T semanticElement, Element registryElement, ProcessorInfo<T> registryElementProcessorInfo) {
+		T registrySemanticElement = registryElementProcessorInfo.getProcessor();
+		if (registrySemanticElement == null) {
+			return null;
+		}
+		
 		String value = getPropertyValue(config.getElement(), getRegistryReferencesPropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
@@ -507,10 +512,10 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends AbstractEO
 						evaluationContext.setVariable("config", config);
 						evaluationContext.setVariable("element", config.getElement());
 						evaluationContext.setVariable("registryElement", registryElement);
-						evaluationContext.setVariable("registrySemanticElement", registryElementProcessorInfo.getProcessor());
-						evaluationContext.setVariable("registrySemanticElementConfig", registryElementProcessorInfo.getConfig());
+						evaluationContext.setVariable("registryConfig", registryElementProcessorInfo.getConfig());
+						evaluationContext.setVariable("semanticElement", semanticElement);
 						try {
-							if (exp.getValue(evaluationContext, semanticElement, Boolean.class)) {
+							if (exp.getValue(evaluationContext, registrySemanticElement, Boolean.class)) {
 								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
 							}
 						} catch (EvaluationException e) {

@@ -125,6 +125,7 @@ public abstract class ResourceSetDrawioEObjectFactory<T extends EObject> extends
 							Expression exp = parser.parseExpression(expr);
 							EvaluationContext evaluationContext = createEvaluationContext();
 							evaluationContext.setVariable("context", context);
+							evaluationContext.setVariable("config", config);
 							Object result = exp.getValue(evaluationContext, config.getElement());
 							return result == null ? null : (PT) String.valueOf(result);
 						}								
