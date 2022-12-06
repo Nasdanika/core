@@ -6,13 +6,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.PropertySource;
 
 /**
  * Base interface for {@link Model} elements
  * @author Pavel
  *
  */
-public interface ModelElement extends Element {
+public interface ModelElement extends Element, PropertySource<String, String> {
 	
 	/**
 	 * Containing model
@@ -42,8 +43,6 @@ public interface ModelElement extends Element {
 	 * @return style property represented as a map
 	 */
 	Map<String,String> getStyle();
-	
-	String getProperty(String name);
 	
 	void setProperty(String name, String value);
 	

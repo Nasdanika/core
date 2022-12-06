@@ -7,7 +7,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
-import org.nasdanika.drawio.emf.ResourceSetDrawioResourceFactory;
+import org.nasdanika.drawio.emf.DrawioResourceFactory;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.ncore.Marked;
@@ -20,7 +20,7 @@ import org.nasdanika.ncore.NcorePackage;
  *
  * @param <T>
  */
-public abstract class NcoreDrawioResourceFactory<T extends EObject> extends ResourceSetDrawioResourceFactory<T> {
+public abstract class NcoreDrawioResourceFactory<T extends EObject> extends DrawioResourceFactory<T> {
 	
 	protected MarkerFactory getMarkerFactory() {
 		return MarkerFactory.INSTANCE;
@@ -48,14 +48,13 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	}	
 	
 	@Override
-	protected void configureSemanticElement(
+	protected T configureSemanticElement(
 			ProcessorConfig<T> config, 
 			T semanticElement, 
 			Resource resource,
 			ProgressMonitor progressMonitor) {
 		super.configureSemanticElement(config, semanticElement, resource, progressMonitor);
-	
-		
+			
 		Element element = config.getElement();
 		URI uri = resource.getURI();
 		if (uri != null && semanticElement instanceof Marked) {
@@ -84,6 +83,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 		}
 		
+		return semanticElement;		
 	}
 
 }

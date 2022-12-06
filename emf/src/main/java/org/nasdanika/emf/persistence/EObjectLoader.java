@@ -42,8 +42,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.drawio.emf.ResourceSetDrawioResource;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
 import org.nasdanika.graph.processor.emf.LinkedResourcesAdapter;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.util.NcoreUtil;
@@ -580,8 +580,8 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		linkedResourcesAdapter.getLinkedResources().add(linkedResource);
 		
-		if (linkedResource instanceof ResourceSetDrawioResource) {
-			((ResourceSetDrawioResource<EObject>) linkedResource).setParent(semanticElement);
+		if (linkedResource instanceof AbstractEObjectFactoryProcessorResource) {
+			((AbstractEObjectFactoryProcessorResource<EObject>) linkedResource).setParent(semanticElement);
 		}
 		
 		return encodeLinkedResource(semanticElement, resourceUriStr, linkedResource, loader, config, base, context, progressMonitor);

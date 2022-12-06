@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +27,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @author Pavel
  *
  */
-public abstract class GraphProcessorResource<P> extends ResourceImpl {
+public abstract class GraphProcessorResource<P, T extends EObject> extends ResourceImpl {
 	
 	protected abstract ProcessorFactory<P, ?, ?> getProcessorFactory();
 	
@@ -64,13 +65,17 @@ public abstract class GraphProcessorResource<P> extends ResourceImpl {
 	protected ProgressMonitor getProgressMonitor() {
 		return new NullProgressMonitor();
 	}
+	
+	protected abstract T getSemanticElement(P processor);
 
 	/**
 	 * Retrieves semantic elements {@link EObject}s from the registry.
 	 * @param registry
 	 * @return
 	 */
-	protected abstract Stream<? extends EObject> getSemanticElements(Map<Element, ProcessorInfo<P>> registry);
+	protected Stream<T> getSemanticElements(Map<Element, ProcessorInfo<P>> registry) {
+		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).map(this::getSemanticElement);
+	}
 	
 	/**
 	 * @param semanticElement 

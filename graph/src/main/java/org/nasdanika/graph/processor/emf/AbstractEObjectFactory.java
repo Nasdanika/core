@@ -26,14 +26,14 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @author Pavel
  *
  */
-public abstract class AbstractEObjectFactory<T extends EObject> implements NopEndpointProcessorFactory<T, ProcessorInfo<EObject>> {
-	
+public abstract class AbstractEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> implements NopEndpointProcessorFactory<P, ProcessorInfo<P>> {
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public ProcessorInfo<T> createProcessor(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-		T semanticElement = createSemanticElement(config, progressMonitor);		
-		ProcessorInfo<T> processorInfo = ProcessorInfo.of(config, semanticElement);
-		if (semanticElement == null) {
+	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
+		P processor = createProcessor(createSemanticElements(config, progressMonitor));
+		ProcessorInfo<P> processorInfo = ProcessorInfo.of(config, processor);
+		if (processor == null) {
 			if (config instanceof ConnectionProcessorConfig) {
 				// Pass-through wiring source endpoint to target handler and target endpoint to source handler
 				ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> connectionConfig = (ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
@@ -47,7 +47,9 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 			config.getParentProcessorInfo().thenAccept(parentInfo -> setParent(config, semanticElement, parentInfo));
 			
 			// Children
-			setChildren(config, semanticElement, config.getChildProcessorsInfo());
+			for (T semanticElement: processor.getSemanticElements()) {
+				setChildren(config, semanticElement, config.getChildProcessorsInfo());
+			}
 			
 			// Registry
 			config.getRegistry().thenAccept(registry -> setRegistry(config, semanticElement, registry));
@@ -93,6 +95,21 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 		}		
 		
 		return processorInfo;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected P createProcessor(Collection<T> semanticElements) {
+		if (semanticElements == null || semanticElements.isEmpty()) {
+			return null;
+		}
+		return (P) new SemanticProcessor<T>() {
+
+			@Override
+			public Collection<T> getSemanticElements() {
+				return semanticElements;
+			}
+			
+		};
 	}
 	
 	/**
@@ -166,7 +183,7 @@ public abstract class AbstractEObjectFactory<T extends EObject> implements NopEn
 	 * @param config
 	 * @return
 	 */	
-	protected abstract T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor);
+	protected abstract Collection<T> createSemanticElements(ProcessorConfig<P> config, ProgressMonitor progressMonitor);
 	
 	/**
 	 * Sets parent. If parent is null this method sets itself to be called for the grand parent etc. 

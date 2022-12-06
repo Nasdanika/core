@@ -1,6 +1,6 @@
 module org.nasdanika.graph {
 
-	requires transitive org.nasdanika.common;
+	requires transitive org.nasdanika.persistence;
 	requires spring.expression;
 	
 	exports org.nasdanika.graph;

@@ -7,13 +7,11 @@ module org.nasdanika.drawio {
 	requires transitive java.xml;
 	requires transitive java.desktop;
 	requires transitive org.nasdanika.graph;
-	requires org.nasdanika.persistence;
+	requires org.jsoup;
 	requires org.apache.commons.text;
 	requires org.apache.commons.lang3;
 	requires transitive org.nasdanika.common;
 	requires org.eclipse.emf.common;
-	requires org.jsoup;
-	requires spring.expression;
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;
