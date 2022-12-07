@@ -31,12 +31,13 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	@SuppressWarnings("unchecked")
 	@Override
 	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
-		P processor = createProcessor(createSemanticElements(config, progressMonitor));
+		Collection<T> semanticElements = createSemanticElements(config, progressMonitor);
+		P processor = createProcessor(config, semanticElements, progressMonitor);
 		ProcessorInfo<P> processorInfo = ProcessorInfo.of(config, processor);
 		if (processor == null) {
 			if (config instanceof ConnectionProcessorConfig) {
 				// Pass-through wiring source endpoint to target handler and target endpoint to source handler
-				ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> connectionConfig = (ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
+				ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> connectionConfig = (ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
 				connectionConfig.getSourceEndpoint().thenAccept(connectionConfig::setTargetHandler);
 				connectionConfig.getTargetEndpoint().thenAccept(connectionConfig::setSourceHandler);
 			}
@@ -44,73 +45,74 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 			// Wiring			
 
 			// Parent
-			config.getParentProcessorInfo().thenAccept(parentInfo -> setParent(config, semanticElement, parentInfo));
+			config.getParentProcessorInfo().thenAccept(parentInfo -> setParent(config, processor, parentInfo));
 			
 			// Children
-			for (T semanticElement: processor.getSemanticElements()) {
-				setChildren(config, semanticElement, config.getChildProcessorsInfo());
-			}
+			setChildren(config, processor, config.getChildProcessorsInfo());
 			
 			// Registry
-			config.getRegistry().thenAccept(registry -> setRegistry(config, semanticElement, registry));
+			config.getRegistry().thenAccept(registry -> setRegistry(config, processor, registry));
 			
 			if (config instanceof NodeProcessorConfig) {
-				NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> nodeConfig = (NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
-				semanticElement.eAdapters().add(new NodeProcessorConfigAdapter<>(nodeConfig));
+				NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> nodeConfig = (NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
+				for (T semanticElement: processor.getSemanticElements()) {
+					semanticElement.eAdapters().add(new NodeProcessorConfigAdapter<>(nodeConfig));
+				}
 				
 				// Incoming 
-				for (Entry<Connection, CompletionStage<ProcessorInfo<T>>> ie: nodeConfig.getIncomingEndpoints().entrySet()) {
-					ie.getValue().thenAccept(incomingInfo -> setIncoming(nodeConfig, semanticElement, ie.getKey(), incomingInfo));
+				for (Entry<Connection, CompletionStage<ProcessorInfo<P>>> ie: nodeConfig.getIncomingEndpoints().entrySet()) {
+					ie.getValue().thenAccept(incomingInfo -> setIncoming(nodeConfig, processor, ie.getKey(), incomingInfo));
 				}
 				
 				// Outgoing
-				for (Entry<Connection, CompletionStage<ProcessorInfo<T>>> oe: nodeConfig.getOutgoingEndpoints().entrySet()) {
-					oe.getValue().thenAccept(outgoingInfo -> setOutgoing(nodeConfig, semanticElement, oe.getKey(), outgoingInfo));
+				for (Entry<Connection, CompletionStage<ProcessorInfo<P>>> oe: nodeConfig.getOutgoingEndpoints().entrySet()) {
+					oe.getValue().thenAccept(outgoingInfo -> setOutgoing(nodeConfig, processor, oe.getKey(), outgoingInfo));
 				}
 				
 				nodeConfig.getIncomingHandlerConsumers().forEach((k,v) -> v.accept(processorInfo));
 				nodeConfig.getOutgoingHandlerConsumers().forEach((k,v) -> v.accept(processorInfo));				
 			} else if (config instanceof ConnectionProcessorConfig) {
-				ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> connectionConfig = (ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>>) config;
-				semanticElement.eAdapters().add(new ConnectionProcessorConfigAdapter<>(connectionConfig));
+				ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> connectionConfig = (ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
+				for (T semanticElement: processor.getSemanticElements()) {
+					semanticElement.eAdapters().add(new ConnectionProcessorConfigAdapter<>(connectionConfig));
+				}
 				
 				// Source
-				connectionConfig.getSourceEndpoint().thenAccept(sourceInfo -> setTarget(connectionConfig, semanticElement, sourceInfo));
+				connectionConfig.getSourceEndpoint().thenAccept(sourceInfo -> setTarget(connectionConfig, processor, sourceInfo));
 				
 				// Target
-				connectionConfig.getTargetEndpoint().thenAccept(targetInfo -> setTarget(connectionConfig, semanticElement, targetInfo));
+				connectionConfig.getTargetEndpoint().thenAccept(targetInfo -> setTarget(connectionConfig, processor, targetInfo));
 
 				connectionConfig.setSourceHandler(processorInfo);
 				connectionConfig.setTargetHandler(processorInfo);				
 			} else {
-				semanticElement.eAdapters().add(new ProcessorConfigAdapter<T, ProcessorConfig<T>>(config));
+				for (T semanticElement: processor.getSemanticElements()) {
+					semanticElement.eAdapters().add(new ProcessorConfigAdapter<P, ProcessorConfig<P>>(config));
+				}
 			}
 			
-			LinkedResourcesAdapter linkedResourcesAdapter = (LinkedResourcesAdapter) EcoreUtil.getRegisteredAdapter(semanticElement, LinkedResourcesAdapter.class);
-			if (linkedResourcesAdapter != null) {
-				for (Resource linkedResource: linkedResourcesAdapter.getLinkedResources()) {
-					linkResource(config, semanticElement, linkedResource, progressMonitor);
+			for (T semanticElement: processor.getSemanticElements()) {
+				LinkedResourcesAdapter linkedResourcesAdapter = (LinkedResourcesAdapter) EcoreUtil.getRegisteredAdapter(semanticElement, LinkedResourcesAdapter.class);
+				if (linkedResourcesAdapter != null) {
+					for (Resource linkedResource: linkedResourcesAdapter.getLinkedResources()) {
+						linkResource(config, processor, linkedResource, progressMonitor);
+					}
 				}
 			}
 		}		
 		
 		return processorInfo;
 	}
+		
+	/**
+	 * Creates a semantic element for a diagram element. May return null if there is no semantic mapping for a given diagram element.
+	 * @param config
+	 * @return
+	 */	
+	protected abstract Collection<T> createSemanticElements(ProcessorConfig<P> config, ProgressMonitor progressMonitor);	
 	
 	@SuppressWarnings("unchecked")
-	protected P createProcessor(Collection<T> semanticElements) {
-		if (semanticElements == null || semanticElements.isEmpty()) {
-			return null;
-		}
-		return (P) new SemanticProcessor<T>() {
-
-			@Override
-			public Collection<T> getSemanticElements() {
-				return semanticElements;
-			}
-			
-		};
-	}
+	protected abstract P createProcessor(ProcessorConfig<P> config, Collection<T> semanticElements, ProgressMonitor progressMonitor);
 	
 	/**
 	 * Links resource. This implementation calls setChildren() for resource roots.
@@ -120,12 +122,22 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param progressMonitor
 	 */
 	@SuppressWarnings("unchecked")
-	protected void linkResource(ProcessorConfig<T> config, T semanticElement, Resource linkedResource, ProgressMonitor progressMonitor) {
+	protected void linkResource(ProcessorConfig<P> config, P processor, Resource linkedResource, ProgressMonitor progressMonitor) {
 		for (EObject linkedRoot: new ArrayList<>(linkedResource.getContents())) {
-			ProcessorConfig<T> linkedRootConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(linkedRoot, ProcessorConfig.class);
-			setChildren(config, semanticElement, Collections.singletonMap(linkedRootConfig == null ? null : linkedRootConfig.getElement(), ProcessorInfo.of(linkedRootConfig, (T) linkedRoot)));
+			ProcessorConfig<P> linkedRootConfig = (ProcessorConfig<P>) EcoreUtil.getRegisteredAdapter(linkedRoot, ProcessorConfig.class);
+			P linkedRootProcessor = createProcessor(config, Collections.singleton((T) linkedRoot), progressMonitor);
+			setChildren(config, processor, Collections.singletonMap(linkedRootConfig == null ? null : linkedRootConfig.getElement(), ProcessorInfo.of(linkedRootConfig, linkedRootProcessor)));
 		}
 	}
+	
+	/**
+	 * Returns semantic element's {@link EReference} to add a child semantic element to.
+	 * @param config
+	 * @param semanticElement
+	 * @param parentProcessorInfo
+	 * @return
+	 */
+	protected abstract EReference getChildReference(ProcessorConfig<P> config, T semanticElement, Element child, ProcessorInfo<P> childProcessorInfo, T semanticChild);
 	
 	/**
 	 * Sets element children.
@@ -134,21 +146,34 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param children
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setChildren(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> children) {
-		for (Entry<Element, ProcessorInfo<T>> ce: children.entrySet()) {
-			T child = ce.getValue().getProcessor();
-			if (child != null) {
-				EReference childReference = getChildReference(config, semanticElement, ce.getKey(), ce.getValue());
-				if (childReference != null) {
-					if (childReference.isMany()) {
-						((Collection<EObject>) semanticElement.eGet(childReference)).add(child);
-					} else {
-						semanticElement.eSet(childReference, child);
+	protected void setChildren(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> children) {
+		for (T semanticElement: processor.getSemanticElements()) {
+			for (Entry<Element, ProcessorInfo<P>> ce: children.entrySet()) {
+				P childProcessor = ce.getValue().getProcessor();
+				if (childProcessor != null) {
+					for (T semanticChild: childProcessor.getSemanticElements()) {
+						EReference childReference = getChildReference(config, semanticElement, ce.getKey(), ce.getValue(), semanticChild);
+						if (childReference != null) {
+							if (childReference.isMany()) {
+								((Collection<EObject>) semanticElement.eGet(childReference)).add(semanticChild);
+							} else {
+								semanticElement.eSet(childReference, semanticChild);
+							}
+						}
 					}
-				}
-			}																	
+				}																	
+			}
 		}
 	}
+	
+	/**
+	 * Returns semantic element's {@link EReference} to add a registry semantic element to.
+	 * @param config
+	 * @param semanticElement
+	 * @param parentProcessorInfo
+	 * @return
+	 */
+	protected abstract EReference getRegistryReference(ProcessorConfig<P> config, P processor, T semanticElement, Element registryElement, ProcessorInfo<P> registryElementProcessorInfo, T registrySemanticElement);
 	
 	/**
 	 * Sets registry. This method does nothing.
@@ -157,20 +182,29 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param registry
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setRegistry(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry) {
-		for (Entry<Element, ProcessorInfo<T>> re: registry.entrySet()) {
-			T registryElement = re.getValue().getProcessor();
-			if (registryElement != null) {
-				EReference registryReference = getRegistryReference(config, semanticElement, re.getKey(), re.getValue());
-				if (registryReference != null) {
-					if (registryReference.isMany()) {
-						((Collection<EObject>) semanticElement.eGet(registryReference)).add(registryElement);
-					} else {
-						semanticElement.eSet(registryReference, registryElement);
+	protected void setRegistry(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry) {
+		if (processor != null) {
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (Entry<Element, ProcessorInfo<P>> re: registry.entrySet()) {
+					P registryEntryProcessor = re.getValue().getProcessor();
+					if (registryEntryProcessor != null) {
+						for (T registrySemanticElement: registryEntryProcessor.getSemanticElements()) {
+							if (registrySemanticElement != null) {
+								EReference registryReference = getRegistryReference(config, processor, semanticElement, re.getKey(), re.getValue(), registrySemanticElement);
+								if (registryReference != null) {
+									if (registryReference.isMany()) {
+										((Collection<EObject>) semanticElement.eGet(registryReference)).add(registrySemanticElement);
+									} else {
+										semanticElement.eSet(registryReference, registrySemanticElement);
+									}
+								}
+							}
+						}
 					}
 				}
-			}																	
-		}		
+			}
+		}
+				
 	}	
 	
 	@Override
@@ -179,11 +213,22 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	}
 	
 	/**
-	 * Creates a semantic element for a diagram element. May return null if there is no semantic mapping for a given diagram element.
+	 * Returns parent's {@link EReference} to add the semantic element to.
 	 * @param config
+	 * @param semanticElement
+	 * @param parentProcessorInfo
 	 * @return
-	 */	
-	protected abstract Collection<T> createSemanticElements(ProcessorConfig<P> config, ProgressMonitor progressMonitor);
+	 */
+	protected abstract EReference getChildReference(ProcessorConfig<P> config, P processor, T semanticElement, ProcessorInfo<P> parentProcessorInfo, T parentSemanticElement);
+	
+	/**
+	 * Returns semantic element's {@link EReference} to add the parent to.
+	 * @param config
+	 * @param semanticElement
+	 * @param parentProcessorInfo
+	 * @return
+	 */
+	protected abstract EReference getParentReference(ProcessorConfig<P> config, P processor, T semanticElement, ProcessorInfo<P> parentProcessorInfo, T parentSemanticElement);
 	
 	/**
 	 * Sets parent. If parent is null this method sets itself to be called for the grand parent etc. 
@@ -194,30 +239,35 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param parentProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setParent(ProcessorConfig<T> config, T semanticElement, ProcessorInfo<T> parentProcessorInfo) {
-		T parent = parentProcessorInfo.getProcessor();
-		if (parent == null) {
+	protected void setParent(ProcessorConfig<P> config, P processor, ProcessorInfo<P> parentProcessorInfo) {
+		P parentProcessor = parentProcessorInfo.getProcessor();
+		if (parentProcessor == null) {
 			// No processor, need to go up to the parent.
-			ProcessorConfig<T> parentConfig = parentProcessorInfo.getConfig();
+			ProcessorConfig<P> parentConfig = parentProcessorInfo.getConfig();
 			if (parentConfig != null) {
-				parentConfig.getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, semanticElement, grandParentProcessorInfo));
+				parentConfig.getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, processor, grandParentProcessorInfo));
 			}
 		} else {
-			EReference childReference = getChildReference(config, semanticElement, parentProcessorInfo);
-			if (childReference == null) {
-				EReference parentReference = getParentReference(config, semanticElement, parentProcessorInfo);
-				if (parentReference != null) {
-					if (parentReference.isMany()) {
-						((Collection<EObject>) semanticElement.eGet(parentReference)).add(parent);
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (T parentSemanticElement: parentProcessor.getSemanticElements()) {
+					EReference childReference = getChildReference(config, processor, semanticElement, parentProcessorInfo, parentSemanticElement);
+					if (childReference == null) {
+						EReference parentReference = getParentReference(config, processor, semanticElement, parentProcessorInfo, parentSemanticElement);
+						if (parentReference != null) {
+							if (parentReference.isMany()) {
+								((Collection<EObject>) semanticElement.eGet(parentReference)).add(parentSemanticElement);
+							} else {
+								semanticElement.eSet(parentReference, parentSemanticElement);
+							}					
+						}
 					} else {
-						semanticElement.eSet(parentReference, parent);
-					}					
-				}
-			} else {
-				if (childReference.isMany()) {
-					((Collection<EObject>) parent.eGet(childReference)).add(semanticElement);
-				} else {
-					parent.eSet(childReference, semanticElement);
+						if (childReference.isMany()) {
+							((Collection<EObject>) parentSemanticElement.eGet(childReference)).add(semanticElement);
+						} else {
+							parentSemanticElement.eSet(childReference, semanticElement);
+						}
+					}
+					
 				}
 			}
 		}												
@@ -233,47 +283,11 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	@SuppressWarnings("unchecked")
 	public void setParent(T child, T parent) {
 		if (child != null && parent != null) {
-			ProcessorConfig<T> childConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(child, ProcessorConfig.class);
-			ProcessorConfig<T> parentConfig = (ProcessorConfig<T>) EcoreUtil.getRegisteredAdapter(parent, ProcessorConfig.class);
+			ProcessorConfig<P> childConfig = (ProcessorConfig<P>) EcoreUtil.getRegisteredAdapter(child, ProcessorConfig.class);
+			ProcessorConfig<P> parentConfig = (ProcessorConfig<P>) EcoreUtil.getRegisteredAdapter(parent, ProcessorConfig.class);
 			setParent(childConfig, child, ProcessorInfo.of(parentConfig, parent));
 		}
 	}	
-	
-	/**
-	 * Returns parent's {@link EReference} to add the semantic element to.
-	 * @param config
-	 * @param semanticElement
-	 * @param parentProcessorInfo
-	 * @return
-	 */
-	protected abstract EReference getChildReference(ProcessorConfig<T> config, T semanticElement, ProcessorInfo<T> parentProcessorInfo);
-	
-	/**
-	 * Returns semantic element's {@link EReference} to add a child semantic element to.
-	 * @param config
-	 * @param semanticElement
-	 * @param parentProcessorInfo
-	 * @return
-	 */
-	protected abstract EReference getChildReference(ProcessorConfig<T> config, T semanticElement, Element child, ProcessorInfo<T> childProcessorInfo);
-	
-	/**
-	 * Returns semantic element's {@link EReference} to add a registry semantic element to.
-	 * @param config
-	 * @param semanticElement
-	 * @param parentProcessorInfo
-	 * @return
-	 */
-	protected abstract EReference getRegistryReference(ProcessorConfig<T> config, T semanticElement, Element registryElement, ProcessorInfo<T> registryElementProcessorInfo);
-	
-	/**
-	 * Returns semantic element's {@link EReference} to add the parent to.
-	 * @param config
-	 * @param semanticElement
-	 * @param parentProcessorInfo
-	 * @return
-	 */
-	protected abstract EReference getParentReference(ProcessorConfig<T> config, T semanticElement, ProcessorInfo<T> parentProcessorInfo);
 		
 	/**
 	 * Sets connection semantic element source if source reference property is not null.  
@@ -281,7 +295,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param sourceProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setSource(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> sourceProcessorInfo) {
+	protected void setSource(ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, ProcessorInfo<P> sourceProcessorInfo) {
 		T source = sourceProcessorInfo.getProcessor();
 		if (source != null) {
 			EReference sourceReference = getSourceReference(config, semanticElement, sourceProcessorInfo);
@@ -302,7 +316,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param sourceProcessorInfo
 	 * @return
 	 */
-	protected abstract EReference getSourceReference(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> sourceProcessorInfo);	
+	protected abstract EReference getSourceReference(ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, ProcessorInfo<P> sourceProcessorInfo);	
 	
 	/**
 	 * Sets connection semantic element target if target reference property is not null.  
@@ -310,7 +324,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param targetProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setTarget(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> targetProcessorInfo) {
+	protected void setTarget(ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, ProcessorInfo<P> targetProcessorInfo) {
 		T target = targetProcessorInfo.getProcessor();
 		if (target != null) {
 			EReference targetReference = getTargetReference(config, semanticElement, targetProcessorInfo);
@@ -331,7 +345,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param targetProcessorInfo
 	 * @return
 	 */
-	protected abstract EReference getTargetReference(ConnectionProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, ProcessorInfo<T> targetProcessorInfo);
+	protected abstract EReference getTargetReference(ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, ProcessorInfo<P> targetProcessorInfo);
 	
 	/**
 	 * Sets node semantic element incoming semantic element (connection's or source's if connection semantic element is null and the connection is pass-through) if incoming reference property is not null.  
@@ -341,7 +355,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param incomingProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setIncoming(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo) {
+	protected void setIncoming(NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, Connection connection, ProcessorInfo<P> incomingProcessorInfo) {
 		T incoming = incomingProcessorInfo.getProcessor();
 		if (incoming != null) {
 			EReference incomingReference = getIncomingReference(config, semanticElement, connection, incomingProcessorInfo);
@@ -362,7 +376,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param incomingProcessorInfo
 	 * @return
 	 */
-	protected abstract EReference getIncomingReference(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> incomingProcessorInfo);	
+	protected abstract EReference getIncomingReference(NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, Connection connection, ProcessorInfo<P> incomingProcessorInfo);	
 		
 	/**
 	 * Sets node semantic element outgoing semantic element (connection's or target's if connection semantic element is null and the connection is pass-through) if outgoing reference property is not null.
@@ -372,7 +386,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param outgoingProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setOutgoing(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> outgoingProcessorInfo) {
+	protected void setOutgoing(NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, Connection connection, ProcessorInfo<P> outgoingProcessorInfo) {
 		T outgoing = outgoingProcessorInfo.getProcessor();
 		if (outgoing != null) {
 			EReference outgoingReference = getOutgoingReference(config, semanticElement, connection, outgoingProcessorInfo);
@@ -394,6 +408,6 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param outgoingProcessorInfo
 	 * @return
 	 */
-	protected abstract EReference getOutgoingReference(NodeProcessorConfig<T, ProcessorInfo<T>, ProcessorInfo<T>> config, T semanticElement, Connection connection, ProcessorInfo<T> outgoingProcessorInfo);	
+	protected abstract EReference getOutgoingReference(NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> config, P processor, Connection connection, ProcessorInfo<P> outgoingProcessorInfo);	
 
 }
