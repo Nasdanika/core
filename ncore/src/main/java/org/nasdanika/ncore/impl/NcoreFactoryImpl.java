@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
@@ -95,6 +96,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.INTEGER_ENTRY: return (EObject)createIntegerEntry();
 			case NcorePackage.BOOLEAN_ENTRY: return (EObject)createBooleanEntry();
 			case NcorePackage.GIT_MARKER: return createGitMarker();
+			case NcorePackage.COMPOSITE: return createComposite();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -359,6 +361,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public GitMarker createGitMarker() {
 		GitMarkerImpl gitMarker = new GitMarkerImpl();
 		return gitMarker;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Composite createComposite() {
+		CompositeImpl composite = new CompositeImpl();
+		return composite;
 	}
 
 	/**

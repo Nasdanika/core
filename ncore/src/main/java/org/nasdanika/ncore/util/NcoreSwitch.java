@@ -8,6 +8,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
@@ -272,6 +274,24 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseGitMarker(gitMarker);
 				if (result == null) result = caseMarker(gitMarker);
 				if (result == null) result = caseIMarker(gitMarker);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DOCUMENTED: {
+				Documented documented = (Documented)theEObject;
+				T1 result = caseDocumented(documented);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.COMPOSITE: {
+				Composite composite = (Composite)theEObject;
+				T1 result = caseComposite(composite);
+				if (result == null) result = caseNamedElement(composite);
+				if (result == null) result = caseDocumented(composite);
+				if (result == null) result = caseModelElement(composite);
+				if (result == null) result = caseMarked(composite);
+				if (result == null) result = caseAdaptable(composite);
+				if (result == null) result = caseIMarked(composite);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -681,6 +701,36 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseGitMarker(GitMarker object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Documented</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Documented</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDocumented(Documented object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Composite</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Composite</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseComposite(Composite object) {
 		return null;
 	}
 

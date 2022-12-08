@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
@@ -159,6 +161,10 @@ public class NcoreValidator extends EObjectValidator {
 				return validateBooleanEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case NcorePackage.GIT_MARKER:
 				return validateGitMarker((GitMarker)value, diagnostics, context);
+			case NcorePackage.DOCUMENTED:
+				return validateDocumented((Documented)value, diagnostics, context);
+			case NcorePackage.COMPOSITE:
+				return validateComposite((Composite)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -514,6 +520,24 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateGitMarker(GitMarker gitMarker, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(gitMarker, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDocumented(Documented documented, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(documented, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateComposite(Composite composite, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(composite, diagnostics, context);
 	}
 
 	/**

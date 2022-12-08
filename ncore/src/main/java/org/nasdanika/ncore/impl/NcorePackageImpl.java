@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
+import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
@@ -232,6 +234,20 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass gitMarkerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass documentedEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass compositeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1074,6 +1090,56 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDocumented() {
+		return documentedEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getDocumented_Documentation() {
+		return (EReference)documentedEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getComposite() {
+		return compositeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getComposite_Id() {
+		return (EAttribute)compositeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getComposite_Children() {
+		return (EReference)compositeEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1219,6 +1285,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(gitMarkerEClass, GIT_MARKER__HEAD);
 		createEAttribute(gitMarkerEClass, GIT_MARKER__HEAD_REFS);
 
+		documentedEClass = createEClass(DOCUMENTED);
+		createEReference(documentedEClass, DOCUMENTED__DOCUMENTATION);
+
+		compositeEClass = createEClass(COMPOSITE);
+		createEAttribute(compositeEClass, COMPOSITE__ID);
+		createEReference(compositeEClass, COMPOSITE__CHILDREN);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -1272,6 +1345,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		booleanPropertyEClass.getESuperTypes().add(this.getBoolean());
 		eObjectPropertyEClass.getESuperTypes().add(this.getProperty());
 		gitMarkerEClass.getESuperTypes().add(this.getMarker());
+		compositeEClass.getESuperTypes().add(this.getNamedElement());
+		compositeEClass.getESuperTypes().add(this.getDocumented());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1391,6 +1466,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getGitMarker_Branch(), ecorePackage.getEString(), "branch", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGitMarker_Head(), ecorePackage.getEString(), "head", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getGitMarker_HeadRefs(), ecorePackage.getEString(), "headRefs", null, 0, -1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(documentedEClass, Documented.class, "Documented", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDocumented_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, Documented.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(compositeEClass, Composite.class, "Composite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getComposite_Id(), ecorePackage.getEString(), "id", null, 1, 1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getComposite_Children(), this.getComposite(), null, "children", null, 0, -1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getComposite_Children().getEKeys().add(this.getComposite_Id());
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1978,6 +2061,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Refs on the head commit excluding the head itself. E.g. branch, tags."
+		   });
+		addAnnotation
+		  (documentedEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Mix-in interface for classess with documentation."
+		   });
+		addAnnotation
+		  (getDocumented_Documentation(),
+		   source,
+		   new String[] {
+			   "documentation", "Element documentation."
+		   });
+		addAnnotation
+		  (compositeEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A simple class for building hierarchies of documented entities. "
+		   });
+		addAnnotation
+		  (getComposite_Id(),
+		   source,
+		   new String[] {
+			   "documentation", "A unique identifier of this composite among its siblings."
+		   });
+		addAnnotation
+		  (getComposite_Children(),
+		   source,
+		   new String[] {
+			   "documentation", "Composite\'s children."
 		   });
 	}
 

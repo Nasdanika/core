@@ -175,6 +175,15 @@ public interface NcoreFactory extends EFactory {
 	GitMarker createGitMarker();
 
 	/**
+	 * Returns a new object of class '<em>Composite</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composite</em>'.
+	 * @generated
+	 */
+	Composite createComposite();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
