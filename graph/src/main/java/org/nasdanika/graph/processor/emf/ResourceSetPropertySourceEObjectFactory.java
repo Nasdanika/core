@@ -1,11 +1,22 @@
 package org.nasdanika.graph.processor.emf;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
+import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.persistence.ObjectLoaderResource;
@@ -13,6 +24,7 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Uses {@link ResourceSet} to load objects from spec-uri.
@@ -22,7 +34,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  *
  * @param <T>
  */
-public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject> extends PropertySourceEObjectFactory<T> {
+public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends PropertySourceEObjectFactory<T,P> {
 	
 	private static final String EXPR_PREFIX = "expr/";
 	private static final String PROPERTIES_PREFIX = "properties/";
@@ -49,22 +61,88 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject>
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	protected T load(URI specURI, String specFormat, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) {
+	protected Collection<T> load(URI specURI, String specFormat, ProcessorConfig<P> config, Context context, ProgressMonitor progressMonitor) {
 		ResourceSet resourceSet = getResourceSet();
-		return (T) resourceSet.getEObject(specURI, true);
+		String semanticType = getPropertyValue(config.getElement(), getSemanticTypePropertyName());
+		if (!Util.isBlank(semanticType)) {
+			// Proxy. Try to resolve first in case already available in the resource set.
+			T semanticElement = (T) resourceSet.getEObject(specURI, false);
+			if (semanticElement != null) {
+				return Collections.singleton(semanticElement);
+			}
+			Yaml yaml = new Yaml();
+			Object semanticTypeObj = yaml.load(semanticType);
+			if (semanticTypeObj instanceof Map) {
+				Map<?, ?> semanticTypeMap = (Map<?,?>) semanticTypeObj;
+				Object typeName = semanticTypeMap.get("name");
+				if (typeName instanceof String) {
+					Object typeNamespaceUri = semanticTypeMap.get("namespace-uri");
+					if (typeNamespaceUri instanceof String) {
+						EPackage ePackage = resourceSet.getPackageRegistry().getEPackage((String) typeNamespaceUri);
+						if (ePackage == null) {
+							throw new NasdanikaException("EPackage not found for namespace URI " + typeNamespaceUri);												
+						}
+						EClassifier eClassifier = ePackage.getEClassifier((String) typeName);
+						if (eClassifier instanceof EClass) {
+							EObject proxy = ePackage.getEFactoryInstance().create((EClass) eClassifier);
+							if (proxy instanceof InternalEObject) {
+								((InternalEObject) proxy).eSetProxyURI(specURI);
+								return Collections.singleton((T) proxy);
+							} else {
+								throw new NasdanikaException("Cannot set proxy URI, not an instance of InteralEObject: " + proxy);																											
+							}
+						} else {
+							throw new NasdanikaException("EClass '" + typeName + "' not found in " + typeNamespaceUri);																			
+						}
+					} else {
+						throw new NasdanikaException("Semantic type map shall have 'namespace-uri' entry with String value: " + semanticType);					
+					}					
+				} else {
+					throw new NasdanikaException("Semantic type map shall have 'name' entry with String value: " + semanticType);					
+				}				
+			} else {
+				throw new NasdanikaException("Semantic type shall be a map, got " + semanticTypeObj.getClass() + " for " + semanticType);
+			}
+		}
+		
+		if (specURI.hasFragment()) {
+			T semanticElement = (T) resourceSet.getEObject(specURI, isLoadOnDemand(config.getElement())); 
+			return semanticElement == null ? Collections.emptySet() : Collections.singleton(semanticElement);
+		}
+		Resource resource = resourceSet.getResource(specURI, isLoadOnDemand(config.getElement()));
+		return resource == null ? Collections.emptyList() : (Collection<T>) resource.getContents();
 	}
+	
+	protected boolean isLoadOnDemand(Element element) {
+		String loadOnDemandVal = getPropertyValue(element, getSemanticLoadOnDemanPropertyName());
+		return Util.isBlank(loadOnDemandVal) || "true".equals(loadOnDemandVal);
+	}
+	
+	protected String getSemanticLoadOnDemanPropertyName() {
+		return "semantic-load-on-demand";
+	}		
+
+	/**
+	 * YAML map with name and namespace-uri keys to resolve proxy {@link EClass}.
+	 * @return
+	 */
+	protected String getSemanticTypePropertyName() {
+		return "semantic-type";
+	}			
+	
+	// TODO semantic-type, semanticLoadOnDemand, isLoadOnDemand	
 
 	/**
 	 * Encodes spec as a data URI and calls load(uri, ...)
 	 */
 	@Override
-	protected T load(String spec, String specFormat, URI specBase, ProcessorConfig<T> config, Context context, ProgressMonitor progressMonitor) {
+	protected Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig<P> config, Context context, ProgressMonitor progressMonitor) {
 		String interpolatedSpec = createElementContext(config).interpolateToString(spec);
-		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase).appendFragment("/");	// Loading the single root object.	
+		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase);	
 		return load(specURI, specFormat, config, context, progressMonitor);
 	}
 		
-	protected Context createElementContext(ProcessorConfig<T> config) {
+	protected Context createElementContext(ProcessorConfig<P> config) {
 		Context context = getContext();
 		
 		Context propertyAndExpressionComputerContext = new Context() {
@@ -103,8 +181,5 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject>
 		
 		return propertyAndExpressionComputerContext.compose(context.computingContext());
 	}
-	
-
-	// semantic-type, semanticLoadOnDemand, isLoadOnDemand
 	
 }

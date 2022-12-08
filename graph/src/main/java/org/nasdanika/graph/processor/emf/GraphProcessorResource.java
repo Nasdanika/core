@@ -2,6 +2,7 @@ package org.nasdanika.graph.processor.emf;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -9,10 +10,10 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
@@ -48,7 +49,8 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		List<? extends Element> elements = loadElements(inputStream, options).collect(Collectors.toList());
 		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(elements.stream(), getProgressMonitor());
-		getSemanticElements(registry).filter(this::isRoot).forEach(getContents()::add);
+		List<T> roots = getSemanticElements(registry).filter(this::isRoot).collect(Collectors.toList()); // TODO .forEach(getContents()::add) - fails with concurrent modification exception
+		getContents().addAll(roots);
 		for (Element element: elements) {
 			ProcessorInfo<P> info = registry.get(element);
 			ProcessorConfig<P> config = info.getConfig();
@@ -62,11 +64,15 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 		}
 	}
 
-	protected ProgressMonitor getProgressMonitor() {
-		return new NullProgressMonitor();
-	}
+	protected abstract ProgressMonitor getProgressMonitor();
 	
-	protected abstract T getSemanticElement(P processor);
+	@SuppressWarnings("unchecked")
+	protected Stream<T> getSemanticElements(P processor) {
+		if (processor instanceof SemanticProcessor) {
+			return ((SemanticProcessor<T>) processor).getSemanticElements().stream();
+		}
+		return Stream.empty();
+	};
 
 	/**
 	 * Retrieves semantic elements {@link EObject}s from the registry.
@@ -74,7 +80,7 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	 * @return
 	 */
 	protected Stream<T> getSemanticElements(Map<Element, ProcessorInfo<P>> registry) {
-		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).map(this::getSemanticElement);
+		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).flatMap(this::getSemanticElements);
 	}
 	
 	/**

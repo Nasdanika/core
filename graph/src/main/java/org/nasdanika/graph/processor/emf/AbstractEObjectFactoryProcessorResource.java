@@ -1,23 +1,15 @@
 package org.nasdanika.graph.processor.emf;
 
-import java.util.ArrayList;
-
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 
-public abstract class AbstractEObjectFactoryProcessorResource<T extends EObject> extends GraphProcessorResource<T, T> {
-	
-	protected AbstractEObjectFactoryProcessorResource(URI uri) {
-		super(uri);
-	}
-
-	@Override
-	protected abstract AbstractEObjectFactory<T> getProcessorFactory();
-	
-	@Override
-	protected T getSemanticElement(T processor) {
-		return processor;
-	}
+/**
+ * Mix-in interface for resources to set a parent for resource roots. 
+ * @author Pavel
+ *
+ * @param <T>
+ */
+public interface AbstractEObjectFactoryProcessorResource<T extends EObject> extends Resource {
 		
 	/**
 	 * Sets a parent for the resource roots. Delegates to the processor factory to use graph data (diagram element properties) to establish parent/child relationships.
@@ -25,12 +17,12 @@ public abstract class AbstractEObjectFactoryProcessorResource<T extends EObject>
 	 * link diagram's root semantic objects to the parent object. 
 	 * @param parent
 	 */
-	@SuppressWarnings("unchecked")
-	public void setParent(T parent) {
-		AbstractEObjectFactory<T> processorFactory = getProcessorFactory();
-		for (EObject root: new ArrayList<>(getContents())) {
-			processorFactory.setParent((T) root, parent);
-		}
-	}	
+	void setParent(T parent);
+
+// Method implementation: 	
+//		AbstractEObjectFactory<T> processorFactory = getProcessorFactory();
+//		for (EObject root: new ArrayList<>(getContents())) {
+//			processorFactory.setParent((T) root, parent);
+//		}
 
 }

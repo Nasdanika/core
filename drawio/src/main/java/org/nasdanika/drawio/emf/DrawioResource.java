@@ -14,13 +14,9 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.Document;
-import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.emf.ResourceSetPropertySourceEObjectFactoryResource;
+import org.nasdanika.graph.processor.emf.GraphProcessorResource;
 import org.xml.sax.SAXException;
 
 /**
@@ -28,7 +24,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource<T extends EObject> extends ResourceSetPropertySourceEObjectFactoryResource<T> {
+public abstract class DrawioResource<P, T extends EObject> extends GraphProcessorResource<P, T> {
 	
 	protected Document document;
 	
@@ -90,42 +86,5 @@ public abstract class DrawioResource<T extends EObject> extends ResourceSetPrope
 	 * @param document Document to update. It may be a previously loaded document or a new empty document for new resources.
 	 */
 	protected void update(Document document) {}
-		
-// ---
-	
-	private DrawioEObjectFactory<T> processorFactory = new DrawioEObjectFactory<T>() {
-
-		@Override
-		protected ResourceSet getResourceSet() {
-			return DrawioResource.this.getLoadingResourceSet();
-		}
-		
-		@Override
-		protected URI getBaseURI() {
-			return DrawioResource.this.getURI();
-		}
-
-		protected java.util.List<String> getPropertyPrefixes() {
-			return DrawioResource.this.getPropertyPrefixes();
-		};
-		
-		
-		@Override
-		protected T createSemanticElement(ProcessorConfig<T> config, ProgressMonitor progressMonitor) {
-			T semanticElement = super.createSemanticElement(config, progressMonitor);
-			return DrawioResource.this.configureSemanticElement(config, semanticElement, progressMonitor);
-		}		
-		
-		@Override
-		protected Context getContext() {
-			return DrawioResource.this.getContext();
-		}
-				
-	};
-
-	@Override
-	protected DrawioEObjectFactory<T> getProcessorFactory() {
-		return processorFactory;
-	}
-	
+			
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
@@ -12,25 +13,25 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.ResourceSetPropertySourceEObjectFactory;
+import org.nasdanika.graph.processor.emf.SemanticProcessor;
 
 /**
  * @author Pavel
  *
  */
-public abstract class DrawioEObjectFactory<T extends EObject> extends ResourceSetPropertySourceEObjectFactory<T> {
+public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends ResourceSetPropertySourceEObjectFactory<T,P> {
 	
 	@Override
-	protected void setRegistry(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry) {
-		super.setRegistry(config, semanticElement, registry);
+	protected void setRegistry(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry, ProgressMonitor progressMonitor) {
+		super.setRegistry(config, processor, registry, progressMonitor);
 		Element element = config.getElement();
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
 			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
-				linkPage(config, semanticElement, registry, registry.get(linkedPage));
+				linkPage(config, processor, registry, registry.get(linkedPage), progressMonitor);
 			}
 		}				
 	}
-	
 
 	protected String getLinkPagePropertyName() {
 		return "link-page";
@@ -43,20 +44,18 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends ResourceSe
 	 * @param registry
 	 * @param likedPageInfo
 	 */
-	protected void linkPage(ProcessorConfig<T> config, T semanticElement, Map<Element, ProcessorInfo<T>> registry, ProcessorInfo<T> linkedPageInfo) {
-		ProcessorInfo<T> thisInfo = ProcessorInfo.of(config, semanticElement);
+	protected void linkPage(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry, ProcessorInfo<P> linkedPageInfo, ProgressMonitor progressMonitor) {
+		ProcessorInfo<P> thisInfo = ProcessorInfo.of(config, processor);
 		linkedPageInfo.getConfig().getElement().accept(pe -> {
-			ProcessorInfo<T> re = registry.get(pe);
-			if (re.getProcessor() != null && re.getProcessor().eContainer() == null) {
-				setParent(re.getConfig(), re.getProcessor(), thisInfo);
+			ProcessorInfo<P> re = registry.get(pe);
+			if (re.getProcessor() != null) {
+				setParent(re.getConfig(), re.getProcessor(), thisInfo, progressMonitor);
 			}
 		});		
 	}
 	
-// ---
-		
 	@Override
-	protected Context createElementContext(ProcessorConfig<T> config) {
+	protected Context createElementContext(ProcessorConfig<P> config) {
 		Context superContext = super.createElementContext(config);
 		
 		Context context = new Context() {
@@ -112,6 +111,5 @@ public abstract class DrawioEObjectFactory<T extends EObject> extends ResourceSe
 		};
 		return context.compose(superContext);
 	}
-	
 	
 }
