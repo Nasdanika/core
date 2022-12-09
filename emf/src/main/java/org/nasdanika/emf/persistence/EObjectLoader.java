@@ -1,7 +1,6 @@
 package org.nasdanika.emf.persistence;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -616,8 +614,7 @@ public class EObjectLoader extends DispatchingLoader {
 			org.nasdanika.graph.Element element = resourceProcessorConfig.getElement();
 			if (element instanceof org.nasdanika.drawio.Document) {
 				try {
-					String docStr = ((org.nasdanika.drawio.Document) element).save(true);
-					return "data:drawio;base64," + Base64.encodeBase64String(docStr.getBytes(StandardCharsets.UTF_8));
+					return ((org.nasdanika.drawio.Document) element).toDataURI(true).toString();
 				} catch (TransformerException | IOException e) {
 					throw new NasdanikaException("Error saving drawio document: " + e, e);
 				}

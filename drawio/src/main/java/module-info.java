@@ -12,6 +12,7 @@ module org.nasdanika.drawio {
 	requires org.apache.commons.lang3;
 	requires transitive org.nasdanika.common;
 	requires org.eclipse.emf.common;
+	requires org.apache.commons.codec;
 	
 	exports org.nasdanika.drawio;
 	exports org.nasdanika.drawio.comparators;

@@ -267,7 +267,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			}
 			
 			try {
-				Document targetDocument = Document.load(new URL(targetURI.toString()));
+				Document targetDocument = Document.load(targetURI);
 				for (Page page: targetDocument.getPages()) {
 					return page;
 				}

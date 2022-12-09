@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,10 +25,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
@@ -245,6 +249,14 @@ public class DocumentImpl extends ElementImpl implements Document {
 	@Override
 	public URI getURI() {
 		return uri;
+	}
+
+	@Override
+	public URI toDataURI(Boolean compress) throws TransformerException, IOException {
+		String docStr = save(compress);
+		String base64docStr = Base64.encodeBase64String(docStr.getBytes(StandardCharsets.UTF_8));
+		String uriStr = "data:drawio;base64," + URLEncoder.encode(base64docStr, StandardCharsets.UTF_8);
+		return URI.createURI(uriStr);
 	}
 
 }

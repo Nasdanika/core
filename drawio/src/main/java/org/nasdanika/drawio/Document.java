@@ -15,6 +15,7 @@ import javax.imageio.metadata.IIOMetadata;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
@@ -88,7 +89,42 @@ public interface Document extends Element {
 	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
 		return new DocumentImpl(in, uri);
 	}
+
+	/**
+	 * Loads document from an URI - supports data: schema.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
+	static Document load(URI source) throws IOException, ParserConfigurationException, SAXException {
+		if ("data".equals(source.scheme())) {
+			String uriStr = source.toString();
+			String DRAWIO = "data:drawio";
+			if (uriStr.startsWith(DRAWIO +";") || uriStr.startsWith(DRAWIO +",")) {
+				uriStr = uriStr.substring(DRAWIO.length());				
+				String BASE64 = ";base64,";
+				if (uriStr.startsWith(BASE64)) {
+					uriStr = new String(Base64.decodeBase64(URLDecoder.decode(uriStr.substring(BASE64.length()), StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+				} else {
+					uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
+				}
+				return load(uriStr, source);
+			}
+		}
+			
+		return load(new URL(source.toString()));
+	}
 	
+	/**
+	 * Loads document from URL by opening a stream.
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 */
 	static Document load(URL source) throws IOException, ParserConfigurationException, SAXException {
 		try (InputStream in = source.openStream()) {
 			return load(in, URI.createURI(source.toString()));
@@ -157,6 +193,12 @@ public interface Document extends Element {
 	 * @return div tag with the embedded document which can be inserted into HTML pages.
 	 */
 	String toHtml(Boolean compress, String viewer) throws TransformerException, IOException;
+
+	/**
+	 * Encodes document as data: URI.
+	 * @return
+	 */
+	URI toDataURI(Boolean compress) throws TransformerException, IOException;
 
 	/**
 	 * Saves the document to String.

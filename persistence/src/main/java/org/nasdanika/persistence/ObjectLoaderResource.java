@@ -70,7 +70,7 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 	public void load(Map<?, ?> options) throws IOException {
 		String uriStr = getURI().toString();
 		
-		// Loading from data:... urle
+		// Loading from data:... URI
 		if (uriStr.startsWith(OBJECT_SPEC_URI_PREFIX +";") || uriStr.startsWith(OBJECT_SPEC_URI_PREFIX +",")) {
 			uriStr = uriStr.substring(OBJECT_SPEC_URI_PREFIX.length());
 			if (uriStr.startsWith(BASE64)) {
