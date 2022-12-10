@@ -30,7 +30,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;

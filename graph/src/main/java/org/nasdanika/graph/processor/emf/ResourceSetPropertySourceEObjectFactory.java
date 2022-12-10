@@ -138,8 +138,17 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject,
 	@Override
 	protected Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig<P> config, Context context, ProgressMonitor progressMonitor) {
 		String interpolatedSpec = createElementContext(config).interpolateToString(spec);
-		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase);	
+		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase, getElementQualifier(config));	
 		return load(specURI, specFormat, config, context, progressMonitor);
+	}
+
+	/**
+	 * @param config
+	 * @return Qualifier to differentiate identical specifications.
+	 */
+	protected Object getElementQualifier(ProcessorConfig<P> config) {
+		Element element = config.getElement();
+		return element.getClass() + ":" + element.hashCode();
 	}
 		
 	protected Context createElementContext(ProcessorConfig<P> config) {

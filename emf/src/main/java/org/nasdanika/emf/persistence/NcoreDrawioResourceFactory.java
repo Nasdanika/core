@@ -146,6 +146,9 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	protected abstract ProgressMonitor getProgressMonitor(URI uri);
 	
 	protected SemanticProcessor<T> createProcessor(URI uri, ProcessorConfig<SemanticProcessor<T>> config, Collection<T> semanticElements, ProgressMonitor progressMonitor) {		
+		if (semanticElements == null || semanticElements.isEmpty()) {
+			return null; // For pass-through to parent.
+		}
 		
 		return new SemanticProcessor<T>() {
 
@@ -212,7 +215,12 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 				String label = modelElement.getLabel();
 				if (!Util.isBlank(label) && semanticElement instanceof NamedElement && !semanticElement.eIsSet(NcorePackage.Literals.NAMED_ELEMENT__NAME)) {
 					((NamedElement) semanticElement).setName(label);				
-				}	
+				}
+				
+				String id = modelElement.getId();
+				if (!Util.isBlank(id) && semanticElement instanceof org.nasdanika.ncore.Composite && !semanticElement.eIsSet(NcorePackage.Literals.COMPOSITE__ID)) {
+					((org.nasdanika.ncore.Composite) semanticElement).setId(id);				
+				}
 				
 				if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 					String semanticUuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();

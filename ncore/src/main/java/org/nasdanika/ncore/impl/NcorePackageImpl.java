@@ -1471,7 +1471,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getDocumented_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, Documented.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(compositeEClass, Composite.class, "Composite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getComposite_Id(), ecorePackage.getEString(), "id", null, 1, 1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getComposite_Id(), ecorePackage.getEString(), "id", null, 0, 1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComposite_Children(), this.getComposite(), null, "children", null, 0, -1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getComposite_Children().getEKeys().add(this.getComposite_Id());
 
@@ -1622,6 +1622,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   });
 		addAnnotation
 		  (getEObjectProperty_Value(),
+		   source,
+		   new String[] {
+			   "default-feature", "true"
+		   });
+		addAnnotation
+		  (getComposite_Id(),
 		   source,
 		   new String[] {
 			   "default-feature", "true"

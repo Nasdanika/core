@@ -32,7 +32,7 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		extensionToFactoryMap.put("yml", objectLoaderResourceFactory);
 		extensionToFactoryMap.put("json", objectLoaderResourceFactory);
 		
-		resourceSet.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);
+		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);
 		
 		return ret;
 	}

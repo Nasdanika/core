@@ -38,7 +38,7 @@ public interface Composite extends NamedElement, Documented {
 	 * @return the value of the '<em>Id</em>' attribute.
 	 * @see #setId(String)
 	 * @see org.nasdanika.ncore.NcorePackage#getComposite_Id()
-	 * @model required="true"
+	 * @model annotation="urn:org.nasdanika default-feature='true'"
 	 * @generated
 	 */
 	String getId();

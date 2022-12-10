@@ -1,5 +1,6 @@
 package org.nasdanika.drawio.emf;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -110,6 +111,21 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 			
 		};
 		return context.compose(superContext);
+	}
+	
+	@Override
+	protected Object getElementQualifier(ProcessorConfig<P> config) {
+		Map<String,Object> qualifier = new LinkedHashMap<>();
+		Element element = config.getElement();
+		qualifier.put("type", element.getClass().getCanonicalName());
+		if (element instanceof Page) {
+			qualifier.put("id", ((Page) element).getId());
+		} else if (element instanceof ModelElement) {
+			qualifier.put("id", ((ModelElement) element).getId());			
+		} else {
+			qualifier.put("hash", element.hashCode());
+		}
+		return qualifier;
 	}
 	
 }

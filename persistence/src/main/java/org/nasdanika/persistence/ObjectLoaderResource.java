@@ -37,12 +37,22 @@ import org.yaml.snakeyaml.error.MarkedYAMLException;
 public abstract class ObjectLoaderResource extends ResourceImpl {
 	
 	private static final String BASE_KEY = "base";
+	private static final String QUALIFIER_KEY = "qualifier";
 	private static final String FORMAT_KEY = "format";
 	private static final String SPEC_KEY = "spec";
 	private static final String BASE64 = ";base64,";
 	private static final String OBJECT_SPEC_URI_PREFIX = "data:application/json-eobject-spec";
 	
-	public static URI encode(String spec, String format, URI base) {
+	/**
+	 * 
+	 * @param spec
+	 * @param format
+	 * @param base
+	 * @param qualifier Used to differentiate two identical specs so they yield different URI's and are considered to be different resources. 
+	 * Can be null. If null, the URI is a "value object" URI, and otherwise it is an "entity URI".
+	 * @return
+	 */
+	public static URI encode(String spec, String format, URI base, Object qualifier) {
 		JSONObject specObj = new JSONObject();
 		specObj.put(SPEC_KEY, spec);
 		if (!org.nasdanika.common.Util.isBlank(format)) {
@@ -50,6 +60,9 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 		}
 		if (base != null) {
 			specObj.put(BASE_KEY, base.toString());
+		}
+		if (qualifier != null) {
+			specObj.put(QUALIFIER_KEY, qualifier);			
 		}
 		String specStr = specObj.toString();
 		return URI.createURI(OBJECT_SPEC_URI_PREFIX + BASE64 + URLEncoder.encode(Base64.encodeBase64String(specStr.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8));		
