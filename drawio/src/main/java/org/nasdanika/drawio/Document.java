@@ -17,6 +17,8 @@ import javax.xml.transform.TransformerException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.nasdanika.drawio.impl.DocumentImpl;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -89,6 +91,19 @@ public interface Document extends Element {
 	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
 		return new DocumentImpl(in, uri);
 	}
+	
+	/**
+	 * @param uri
+	 * @return true if the argument URI is drawio data URI, i.e. is starts with data:drawio[;base64],
+	 */
+	static boolean isDataURI(URI uri) {
+		if (uri != null && "data".equals(uri.scheme())) {
+			String uriStr = uri.toString();
+			String DRAWIO = "data:drawio";
+			return uriStr.startsWith(DRAWIO +";base64,") || uriStr.startsWith(DRAWIO +",");
+		}
+		return false;
+	}
 
 	/**
 	 * Loads document from an URI - supports data: schema.
@@ -99,19 +114,17 @@ public interface Document extends Element {
 	 * @throws SAXException
 	 */
 	static Document load(URI source) throws IOException, ParserConfigurationException, SAXException {
-		if ("data".equals(source.scheme())) {
+		if (isDataURI(source)) {
 			String uriStr = source.toString();
-			String DRAWIO = "data:drawio";
-			if (uriStr.startsWith(DRAWIO +";") || uriStr.startsWith(DRAWIO +",")) {
-				uriStr = uriStr.substring(DRAWIO.length());				
-				String BASE64 = ";base64,";
-				if (uriStr.startsWith(BASE64)) {
-					uriStr = new String(Base64.decodeBase64(URLDecoder.decode(uriStr.substring(BASE64.length()), StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-				} else {
-					uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
-				}
-				return load(uriStr, source);
+			uriStr = uriStr.substring("data:drawio".length());				
+			String BASE64 = ";base64,";
+			if (uriStr.startsWith(BASE64)) {
+				uriStr = new String(Base64.decodeBase64(URLDecoder.decode(uriStr.substring(BASE64.length()), StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+			} else {
+				uriStr = URLDecoder.decode(uriStr.substring(1), StandardCharsets.UTF_8);
 			}
+			JSONObject payload = new JSONObject(new JSONTokener(uriStr));
+			return load(payload.getString("document"), payload.has("uri") ? URI.createURI(payload.getString("uri")) : null);
 		}
 			
 		return load(new URL(source.toString()));

@@ -253,7 +253,14 @@ public class DocumentImpl extends ElementImpl implements Document {
 	@Override
 	public URI toDataURI(Boolean compress) throws TransformerException, IOException {
 		String docStr = save(compress);
-		String base64docStr = Base64.encodeBase64String(docStr.getBytes(StandardCharsets.UTF_8));
+		JSONObject payload = new JSONObject();
+		payload.put("document", docStr);
+		URI docURI = getURI();
+		if (docURI != null) {
+			payload.put("uri", docURI.toString());
+		}
+		String payloadStr = payload.toString();
+		String base64docStr = Base64.encodeBase64String(payloadStr.getBytes(StandardCharsets.UTF_8));
 		String uriStr = "data:drawio;base64," + URLEncoder.encode(base64docStr, StandardCharsets.UTF_8);
 		return URI.createURI(uriStr);
 	}
