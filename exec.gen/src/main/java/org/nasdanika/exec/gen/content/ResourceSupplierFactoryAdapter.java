@@ -83,6 +83,10 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 			@Override
 			public InputStream execute(ProgressMonitor progressMonitor) {
 				try {
+					Resource resource = (Resource) getTarget();		
+					if (resource.isInterpolate()) {
+						return Util.filter(context, theURL.openStream(), context::interpolateToString);
+					}
 					return theURL.openStream();
 				} catch (IOException e) {
 					throw new ExecutionException(e, this);
