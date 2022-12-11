@@ -6,13 +6,14 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.persistence.Marked;
 
 /**
  * {@link Document} element, including the Document itself, backed by {@link org.w3c.dom.Element}.
  * @author Pavel
  *
  */
-public interface Element extends org.nasdanika.graph.Element {
+public interface Element extends org.nasdanika.graph.Element, Marked {
 	
 	/**
 	 * @return The underlying XML element.

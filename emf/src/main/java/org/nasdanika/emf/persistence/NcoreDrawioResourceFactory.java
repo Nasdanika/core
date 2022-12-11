@@ -3,7 +3,10 @@ package org.nasdanika.emf.persistence;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.transform.TransformerException;
@@ -18,7 +21,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.ModelElement;
-import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.emf.DrawioEObjectFactory;
 import org.nasdanika.drawio.emf.DrawioResource;
 import org.nasdanika.graph.Element;
@@ -101,11 +103,21 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 			
 			/**
-			 * Injecting representations after all processors have been created. 
+			 * Checking for failures, injecting representations after all processors have been created. 
 			 */
 			@Override
 			public Map<Element, ProcessorInfo<SemanticProcessor<T>>> createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
 				Map<Element, ProcessorInfo<SemanticProcessor<T>>> registry = super.createProcessors(elements, progressMonitor);
+				
+				List<Throwable> failures = registry.values().stream().flatMap(pi -> pi.getFailures().stream()).collect(Collectors.toList());
+				if (!failures.isEmpty()) {
+					NasdanikaException ne = new NasdanikaException("Theres's been " + failures.size() +  " failures during processor creation: " + failures);
+					for (Throwable failure: failures) {
+						ne.addSuppressed(failure);
+					}
+					throw ne;
+				}				
+				
 				String representationPropertyName = getRepresentationPropertyName(uri);
 								
 				registry.entrySet().forEach(re -> configureRegistryEntry(re.getKey(), re.getValue(), getPropertyValue(re.getKey(), representationPropertyName)));
@@ -150,11 +162,14 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			return null; // For pass-through to parent.
 		}
 		
+		// To avoid concurrent modification exception for situations when processor is backed by a resource and semantic elements get reparented and move out of the resource. 
+		Collection<T> semanticElementsSnapshot = Collections.unmodifiableCollection(new ArrayList<>(semanticElements));
+		
 		return new SemanticProcessor<T>() {
 
 			@Override
 			public Collection<T> getSemanticElements() {
-				return semanticElements;
+				return semanticElementsSnapshot;
 			}
 			
 		};
@@ -163,27 +178,6 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	protected MarkerFactory getMarkerFactory() {
 		return MarkerFactory.INSTANCE;
 	}
-		
-	protected String getMarkerPosition(Element element) {
-		if (element instanceof Page) {
-			return "name: " + ((Page) element).getName() + ", id: " + ((Page) element).getId();
-		} else if (element instanceof ModelElement) {
-			StringBuilder positionBuilder = new StringBuilder();
-			ModelElement modelElement = (ModelElement) element;
-			Page page = modelElement.getModel().getPage();
-			positionBuilder.append("page-name: " + page.getName() + ", page-id: " + page.getId());
-			String label = modelElement.getLabel();
-			if (!Util.isBlank(label)) {
-				positionBuilder.append(", label: "+ label);
-			}
-			String id = modelElement.getId();
-			if (!Util.isBlank(id)) {
-				positionBuilder.append(", id:" + id);
-			}
-			return positionBuilder.toString();
-		}		
-		return null;
-	}	
 		
 	protected Collection<T> configureSemanticElements(
 			URI uri,
@@ -199,10 +193,12 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			return semanticElements;
 		}
 		for (T semanticElement: semanticElements) {
-			if (uri != null && semanticElement instanceof Marked) {
-				org.nasdanika.ncore.Marker marker = getMarkerFactory().createMarker(uri.toString(), progressMonitor);
-				marker.setPosition(getMarkerPosition(element));
-				((Marked) semanticElement).getMarkers().add(marker);
+			if (uri != null && semanticElement instanceof Marked && element instanceof Marked) {
+				for (org.nasdanika.persistence.Marker elementMarker: ((Marked) element).getMarkers()) {
+					org.nasdanika.ncore.Marker marker = getMarkerFactory().createMarker(elementMarker.getLocation(), progressMonitor);
+					marker.setPosition(elementMarker.getPosition());
+					((Marked) semanticElement).getMarkers().add(marker);
+				}
 			}
 			
 			if (element instanceof ModelElement) {

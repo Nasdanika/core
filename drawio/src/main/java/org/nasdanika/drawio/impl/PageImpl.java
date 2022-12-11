@@ -107,5 +107,15 @@ class PageImpl extends ElementImpl implements Page {
 	public String toString() {
 		return super.toString() + " " + getName();
 	}
+	
+	@Override
+	protected String getMarkerPosition() {
+		return "name: " + getName() + ", id: " + getId();
+	}	
+	
+	@Override
+	protected String getMarkerLocation() {
+		return ((DocumentImpl) getDocument()).getMarkerLocation();
+	}
 
 }

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -27,31 +29,40 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  *
  */
 public abstract class AbstractEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> implements NopEndpointProcessorFactory<P, ProcessorInfo<P>> {
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
 		Collection<T> semanticElements = createSemanticElements(config, progressMonitor);
 		P processor = createProcessor(config, semanticElements, progressMonitor);
-		ProcessorInfo<P> processorInfo = ProcessorInfo.of(config, processor);
+		Collection<Throwable> failures = new ArrayList<>();
+		BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler  = (result, failure) -> {
+			if (failure != null) {
+				failures.add(failure);
+			}
+			return null;
+		};
+		ProcessorInfo<P> processorInfo = ProcessorInfo.of(config, processor, () -> {
+			return failures;
+		});
 		if (processor == null) {
 			if (config instanceof ConnectionProcessorConfig) {
 				// Pass-through wiring source endpoint to target handler and target endpoint to source handler
 				ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> connectionConfig = (ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
-				connectionConfig.getSourceEndpoint().thenAccept(connectionConfig::setTargetHandler);
-				connectionConfig.getTargetEndpoint().thenAccept(connectionConfig::setSourceHandler);
+				connectionConfig.getSourceEndpoint().thenAccept(connectionConfig::setTargetHandler).handle(failureHandler);
+				connectionConfig.getTargetEndpoint().thenAccept(connectionConfig::setSourceHandler).handle(failureHandler);
 			}
 		} else {
 			// Wiring			
 
 			// Parent
-			config.getParentProcessorInfo().thenAccept(parentInfo -> setParent(config, processor, parentInfo, progressMonitor));
+			config.getParentProcessorInfo().thenAccept(parentInfo -> setParent(config, processor, parentInfo, progressMonitor, failures::add)).handle(failureHandler);
 			
 			// Children
 			setChildren(config, processor, config.getChildProcessorsInfo(), progressMonitor);
 			
 			// Registry
-			config.getRegistry().thenAccept(registry -> setRegistry(config, processor, registry, progressMonitor));
+			config.getRegistry().thenAccept(registry -> setRegistry(config, processor, registry, progressMonitor)).handle(failureHandler);
 			
 			if (config instanceof NodeProcessorConfig) {
 				NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> nodeConfig = (NodeProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
@@ -61,12 +72,12 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 				
 				// Incoming 
 				for (Entry<Connection, CompletionStage<ProcessorInfo<P>>> ie: nodeConfig.getIncomingEndpoints().entrySet()) {
-					ie.getValue().thenAccept(incomingInfo -> setIncoming(nodeConfig, processor, ie.getKey(), incomingInfo, progressMonitor));
+					ie.getValue().thenAccept(incomingInfo -> setIncoming(nodeConfig, processor, ie.getKey(), incomingInfo, progressMonitor)).handle(failureHandler);
 				}
 				
 				// Outgoing
 				for (Entry<Connection, CompletionStage<ProcessorInfo<P>>> oe: nodeConfig.getOutgoingEndpoints().entrySet()) {
-					oe.getValue().thenAccept(outgoingInfo -> setOutgoing(nodeConfig, processor, oe.getKey(), outgoingInfo, progressMonitor));
+					oe.getValue().thenAccept(outgoingInfo -> setOutgoing(nodeConfig, processor, oe.getKey(), outgoingInfo, progressMonitor)).handle(failureHandler);
 				}
 				
 				nodeConfig.getIncomingHandlerConsumers().forEach((k,v) -> v.accept(processorInfo));
@@ -78,10 +89,10 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 				}
 				
 				// Source
-				connectionConfig.getSourceEndpoint().thenAccept(sourceInfo -> setSource(connectionConfig, processor, sourceInfo, progressMonitor));
+				connectionConfig.getSourceEndpoint().thenAccept(sourceInfo -> setSource(connectionConfig, processor, sourceInfo, progressMonitor)).handle(failureHandler);
 				
 				// Target
-				connectionConfig.getTargetEndpoint().thenAccept(targetInfo -> setTarget(connectionConfig, processor, targetInfo, progressMonitor));
+				connectionConfig.getTargetEndpoint().thenAccept(targetInfo -> setTarget(connectionConfig, processor, targetInfo, progressMonitor)).handle(failureHandler);
 
 				connectionConfig.setSourceHandler(processorInfo);
 				connectionConfig.setTargetHandler(processorInfo);				
@@ -132,7 +143,7 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 		for (EObject linkedRoot: new ArrayList<>(linkedResource.getContents())) {
 			ProcessorConfig<P> linkedRootConfig = (ProcessorConfig<P>) EcoreUtil.getRegisteredAdapter(linkedRoot, ProcessorConfig.class);
 			P linkedRootProcessor = createProcessor(config, Collections.singleton((T) linkedRoot), progressMonitor);
-			setChildren(config, processor, Collections.singletonMap(linkedRootConfig == null ? null : linkedRootConfig.getElement(), ProcessorInfo.of(linkedRootConfig, linkedRootProcessor)), progressMonitor);
+			setChildren(config, processor, Collections.singletonMap(linkedRootConfig == null ? null : linkedRootConfig.getElement(), ProcessorInfo.of(linkedRootConfig, linkedRootProcessor, null)), progressMonitor);
 		}
 	}
 	
@@ -245,13 +256,18 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 	 * @param parentProcessorInfo
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setParent(ProcessorConfig<P> config, P processor, ProcessorInfo<P> parentProcessorInfo, ProgressMonitor progressMonitor) {
+	protected void setParent(ProcessorConfig<P> config, P processor, ProcessorInfo<P> parentProcessorInfo, ProgressMonitor progressMonitor, Consumer<Throwable> failureConsumer) {
 		P parentProcessor = parentProcessorInfo.getProcessor();
 		if (parentProcessor == null) {
 			// No processor, need to go up to the parent.
 			ProcessorConfig<P> parentConfig = parentProcessorInfo.getConfig();
 			if (parentConfig != null) {
-				parentConfig.getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, processor, grandParentProcessorInfo, progressMonitor));
+				parentConfig.getParentProcessorInfo().thenAccept(grandParentProcessorInfo -> setParent(config, processor, grandParentProcessorInfo, progressMonitor, failureConsumer)).handle((result, failure) -> {
+					if (failure != null) {
+						failureConsumer.accept(failure);
+					}
+					return null; 
+				} );
 			}
 		} else {
 			for (T semanticElement: processor.getSemanticElements()) {
@@ -293,7 +309,9 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 			ProcessorConfig<P> parentConfig = (ProcessorConfig<P>) EcoreUtil.getRegisteredAdapter(parent, ProcessorConfig.class);
 			P childProcessor = createProcessor(childConfig, Collections.singleton(child), progressMonitor);
 			P parentProcessor = createProcessor(parentConfig, Collections.singleton(parent), progressMonitor);
-			setParent(childConfig, childProcessor, ProcessorInfo.of(parentConfig, parentProcessor), progressMonitor);
+			setParent(childConfig, childProcessor, ProcessorInfo.of(parentConfig, parentProcessor, null), progressMonitor, f -> {
+				f.printStackTrace();
+			}); // Should be no failures here
 		}
 	}	
 	

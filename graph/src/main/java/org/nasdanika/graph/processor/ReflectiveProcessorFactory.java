@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -16,6 +17,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -103,31 +105,39 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					boolean hideWired = elementProcessorAnnotation.hideWired();
 					Map<Element, ProcessorInfo<P>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), processorIntrospectionLevel);
 					wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo(), processorIntrospectionLevel);
-					
+
+					Collection<Throwable> failures = new ArrayList<>();
+					BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler  = (result, failure) -> {
+						if (failure != null) {
+							failures.add(failure);
+						}
+						return null;
+					};
+
 					Consumer<ProcessorInfo<P>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
 					if (pc != null) {
-						config.getParentProcessorInfo().thenAccept(pc);
+						config.getParentProcessorInfo().thenAccept(pc).handle(failureHandler);
 					}
 					wireProcessorElement(processor, config.getElement(), processorIntrospectionLevel);
 					
-					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel));
+					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel)).handle(failureHandler);
 					
 					Consumer<Map<Element, ProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
 					if (rc != null) {
-						config.getRegistry().thenAccept(rc);
+						config.getRegistry().thenAccept(rc).handle(failureHandler);
 					}
 					
 					ProcessorConfig<P> unwiredConfig;
 					
 					if (config instanceof NodeProcessorConfig) {
 						NodeProcessorConfig<P, H, E> nodeProcessorConfig = (NodeProcessorConfig<P, H, E>) config;
-						Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
+						Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel, failureHandler);
 						wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
 						wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers(), processorIntrospectionLevel);
 						
-						Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
+						Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel, failureHandler);
 						wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints(), processorIntrospectionLevel);
 						
 						Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
@@ -177,9 +187,9 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 						};
 					} else if (config instanceof ConnectionProcessorConfig) {
 						ConnectionProcessorConfig<P, H, E> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E>) config;
-						boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), processorIntrospectionLevel);
+						boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), processorIntrospectionLevel, failureHandler);
 						boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
-						boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), processorIntrospectionLevel);
+						boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), processorIntrospectionLevel, failureHandler);
 						boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
 						
 						unwiredConfig = new ConnectionProcessorConfig<P, H, E>() {
@@ -256,7 +266,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 						};
 					}
 
-					return ProcessorInfo.of(hideWired ? unwiredConfig : config, (P) processor);
+					return ProcessorInfo.of(hideWired ? unwiredConfig : config, (P) processor, () -> failures);
 				}
 			}
 			
@@ -507,7 +517,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
-			IntrospectionLevel processorIntrospectionLevel) {
+			IntrospectionLevel processorIntrospectionLevel,
+			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 
@@ -532,7 +543,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							invokeMethod(processor, endpointMethod, incomingEndpointEntry.getKey(), incomingEndpoint);						
 						}
 					}					
-				});
+				}).handle(failureHandler);
 				ret.remove(incomingEndpointEntry.getKey());
 			});
 				
@@ -643,7 +654,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	protected Map<Connection, CompletionStage<E>> wireOutgoingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
-			IntrospectionLevel processorIntrospectionLevel) {
+			IntrospectionLevel processorIntrospectionLevel,
+			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 
@@ -668,7 +680,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							invokeMethod(processor, endpointMethod, outgoingEndpointEntry.getKey(), outgoingEndpoint);						
 						}
 					}					
-				});
+				}).handle(failureHandler);
 				ret.remove(outgoingEndpointEntry.getKey());
 			});
 				
@@ -709,7 +721,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	protected boolean wireTargetEndpoint(
 			Object processor, 
 			CompletionStage<E> targetEndpointCompletionStage, 
-			IntrospectionLevel processorIntrospectionLevel) {
+			IntrospectionLevel processorIntrospectionLevel,
+			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
@@ -720,7 +733,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		if (setter.isPresent()) {
 			targetEndpointCompletionStage.thenAccept(targetEndpoint -> {
 				set(processor, setter.get(), targetEndpoint);	
-			});
+			}).handle(failureHandler);
 			return true;
 		}
 		return false;
@@ -748,7 +761,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	protected boolean wireSourceEndpoint(
 			Object processor, 
 			CompletionStage<E> sourceEndpointCompletionStage,
-			IntrospectionLevel processorIntrospectionLevel) {
+			IntrospectionLevel processorIntrospectionLevel,
+			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
@@ -759,7 +773,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		if (setter.isPresent()) {
 			sourceEndpointCompletionStage.thenAccept(sourceEndpoint -> {
 				set(processor, setter.get(), sourceEndpoint);	
-			});				
+			}).handle(failureHandler);				
 			return true;
 		}
 		return false;

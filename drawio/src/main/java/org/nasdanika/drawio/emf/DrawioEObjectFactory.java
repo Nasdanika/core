@@ -46,11 +46,13 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	 * @param likedPageInfo
 	 */
 	protected void linkPage(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry, ProcessorInfo<P> linkedPageInfo, ProgressMonitor progressMonitor) {
-		ProcessorInfo<P> thisInfo = ProcessorInfo.of(config, processor);
+		ProcessorInfo<P> thisInfo = ProcessorInfo.of(config, processor, null);
 		linkedPageInfo.getConfig().getElement().accept(pe -> {
 			ProcessorInfo<P> re = registry.get(pe);
 			if (re.getProcessor() != null) {
-				setParent(re.getConfig(), re.getProcessor(), thisInfo, progressMonitor);
+				setParent(re.getConfig(), re.getProcessor(), thisInfo, progressMonitor, f -> {
+					f.printStackTrace(); // Should never happen
+				});
 			}
 		});		
 	}

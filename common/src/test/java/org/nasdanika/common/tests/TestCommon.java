@@ -7,14 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import org.apache.commons.codec.binary.Base64;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Disabled;
@@ -26,6 +24,7 @@ import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.MutableContext;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
@@ -379,6 +378,24 @@ public class TestCommon {
 		cf.thenAccept(v -> System.out.println("After completion handler: " + v));
 		
 		cf.complete("Universe");
+		
+		
 	}
+	
+	@Test 
+	public void testCompletableFutureFailure() {
+		CompletableFuture<String> cf = new CompletableFuture<String>();
+		
+		cf.whenComplete((v,e) -> System.out.println("Before completion handler: " + v + ", " + e));
+		cf.thenAccept(v -> System.out.println("Normally: " + v)).exceptionally(e -> {
+			System.err.println("Handling exception: " + e);
+			return null;
+		});
+		cf.complete("Life is good!");
+//		cf.completeExceptionally(new NasdanikaException("I failed"));
+		cf.exceptionally(e -> "After completion handler: " + e).thenAccept(v -> System.out.println("Exceptionally: " + v));
+		
+	}
+	
 	
 }

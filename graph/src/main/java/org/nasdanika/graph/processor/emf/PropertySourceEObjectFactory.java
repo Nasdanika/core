@@ -12,10 +12,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.NasdanikaException;
@@ -27,6 +30,10 @@ import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.MarkerImpl;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -92,12 +99,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 					specURI = specURI.resolve(baseURI);
 				}
 			}
-			try {
-				URL specURL = new URL(specURI.toString());
-				return load(specURL, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
-			} catch (IOException e) {
-				throw new NasdanikaException("Error loading specification from " + specURI, e);
-			}			
+			return load(specURI, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}		
 		
 		// Semantic URI
@@ -210,6 +212,21 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	protected String getChildReferencePropertyName() {
 		return "child-reference";
 	}
+	
+	protected Marked getMarked(ProcessorConfig<P> config) {
+		Element element = config.getElement();
+		if (element instanceof Marked) {
+			return (Marked) element;
+		}
+		return new Marked() {
+
+			@Override
+			public List<? extends Marker> getMarkers() {
+				return Collections.singletonList(new MarkerImpl(null, String.valueOf(config.getElement())));
+			}
+			
+		};
+	}
 
 	@Override
 	protected EReference getChildReference(ProcessorConfig<P> config, P processor, T semanticElement, ProcessorInfo<P> parentProcessorInfo, T parentSemanticElement) {
@@ -220,7 +237,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) parentSemanticElement.eClass().getEStructuralFeature(value);
+		EClass eClass = parentSemanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}
 	
 	// Parent
@@ -237,7 +259,13 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
+		
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}	
 	
 	protected String getParentInjectorPropertyName() {
@@ -245,8 +273,8 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	}
 	
 	@Override
-	protected void setParent(ProcessorConfig<P> config, P processor, ProcessorInfo<P> parentProcessorInfo, ProgressMonitor progressMonitor) {
-		super.setParent(config, processor, parentProcessorInfo, progressMonitor);
+	protected void setParent(ProcessorConfig<P> config, P processor, ProcessorInfo<P> parentProcessorInfo, ProgressMonitor progressMonitor, Consumer<Throwable> failureConsumer) {
+		super.setParent(config, processor, parentProcessorInfo, progressMonitor, failureConsumer);
 		if (config != null) {
 			String expr = getPropertyValue(config.getElement(), getParentInjectorPropertyName());
 			P parentProcessor = parentProcessorInfo.getProcessor();
@@ -283,7 +311,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}
 	
 	protected String getSourceInjectorPropertyName() {
@@ -323,7 +356,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}
 	
 	protected String getTargetInjectorPropertyName() {
@@ -363,7 +401,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}
 	
 	protected String getIncomingInjectorPropertyName() {
@@ -404,7 +447,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		if (org.nasdanika.common.Util.isBlank(value)) {
 			return null;
 		}
-		return (EReference) semanticElement.eClass().getEStructuralFeature(value);
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}
 	
 	protected String getOutgoingInjectorPropertyName() {
@@ -472,7 +520,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 						evaluationContext.setVariable("config", childProcessorInfo.getConfig());
 						try {
 							if (exp.getValue(evaluationContext, childProcessorInfo.getProcessor(), Boolean.class)) {
-								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
+								EClass eClass = semanticElement.eClass();
+								EStructuralFeature ref = eClass.getEStructuralFeature((String) key);
+								if (ref instanceof EReference) {
+									return (EReference) ref;
+								}
+								throw new ConfigurationException("Reference '" + key + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 							}
 						} catch (EvaluationException e) {
 							// NOP - continue
@@ -545,7 +598,12 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 						evaluationContext.setVariable("semanticElement", semanticElement);
 						try {
 							if (exp.getValue(evaluationContext, registrySemanticElement, Boolean.class)) {
-								return (EReference) semanticElement.eClass().getEStructuralFeature((String) key);																					
+								EClass eClass = semanticElement.eClass();
+								EStructuralFeature ref = eClass.getEStructuralFeature((String) key);
+								if (ref instanceof EReference) {
+									return (EReference) ref;
+								}
+								throw new ConfigurationException("Reference '" + key + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 							}
 						} catch (EvaluationException e) {
 							// NOP - continue

@@ -264,5 +264,10 @@ public class DocumentImpl extends ElementImpl implements Document {
 		String uriStr = "data:drawio;base64," + URLEncoder.encode(base64docStr, StandardCharsets.UTF_8);
 		return URI.createURI(uriStr);
 	}
+	
+	@Override
+	protected String getMarkerLocation() {
+		return uri == null || "data".equals(uri.scheme()) ? null : uri.toString();
+	}
 
 }

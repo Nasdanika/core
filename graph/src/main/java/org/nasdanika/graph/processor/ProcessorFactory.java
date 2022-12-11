@@ -51,7 +51,7 @@ public interface ProcessorFactory<P,H,E> extends Composeable<ProcessorFactory<P,
 	 * @return
 	 */
 	default ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
-		return ProcessorInfo.of(config, null);
+		return ProcessorInfo.of(config, null, null);
 	}
 	
 	default Map<Element,ProcessorInfo<P>> createProcessors(ProgressMonitor progressMonitor, Element... elements) {

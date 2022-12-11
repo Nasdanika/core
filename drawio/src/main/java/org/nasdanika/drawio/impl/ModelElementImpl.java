@@ -326,5 +326,27 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	public boolean equals(Object obj) {
 		return super.equals(obj) && obj instanceof ModelElement && getModel().equals(((ModelElement) obj).getModel());
 	}
+
+	@Override
+	protected String getMarkerPosition() {
+		StringBuilder positionBuilder = new StringBuilder();
+		Page page = getModel().getPage();
+		positionBuilder.append("page-name: " + page.getName() + ", page-id: " + page.getId());
+		String label = getLabel();
+		if (!Util.isBlank(label)) {
+			positionBuilder.append(", label: "+ label);
+		}
+		String id = getId();
+		if (!Util.isBlank(id)) {
+			positionBuilder.append(", id:" + id);
+		}
+		return positionBuilder.toString();
+	}
+	
+	@Override	
+	protected String getMarkerLocation() {
+		return ((ElementImpl) getModel().getPage()).getMarkerLocation();
+	}
+	
 	
 }

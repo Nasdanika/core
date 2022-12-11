@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Element;
+import org.nasdanika.persistence.Marker;
+import org.nasdanika.persistence.MarkerImpl;
 
 abstract class ElementImpl implements Element {
 	
@@ -83,6 +85,24 @@ abstract class ElementImpl implements Element {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public List<Marker> getMarkers() {
+		String markerLocation = getMarkerLocation();
+		String markerPosition = getMarkerPosition();
+		if (org.nasdanika.common.Util.isBlank(markerLocation) && org.nasdanika.common.Util.isBlank(markerPosition)) {
+			return Collections.emptyList();
+		}
+		return Collections.singletonList(new MarkerImpl(markerLocation, markerPosition));
+	}
+		
+	protected String getMarkerPosition() {
+		return null;
+	}	
+	
+	protected String getMarkerLocation() {
+		return null;
 	}
 
 }
