@@ -302,7 +302,7 @@ public class MarkdownHelper {
 	    		| Extensions.STRIKETHROUGH 
 	    		| Extensions.SUPERSCRIPT 
 	    		| Extensions.TOC 
-	    		| (Extensions.ALL ^ Extensions.HARDWRAPS ^ Extensions.SUPPRESS_HTML_BLOCKS ^ Extensions.SUPPRESS_ALL_HTML));
+	    		| (Extensions.ALL ^ Extensions.HARDWRAPS ^ Extensions.SUPPRESS_HTML_BLOCKS ^ Extensions.SUPPRESS_INLINE_HTML ^ Extensions.SUPPRESS_ALL_HTML));
 	}	
 	
 	protected Parser createMarkdownParser() {
