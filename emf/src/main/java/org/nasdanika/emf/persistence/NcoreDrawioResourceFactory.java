@@ -129,6 +129,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 
 	/**
 	 * Injects encoded document into semantic elements of model elements with representation property.
+	 * Sorts references.
 	 * @param element
 	 * @param info
 	 */
@@ -151,6 +152,10 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 				}
 			}
 		}
+		
+		// TODO - sort - YAML map of references to comparators. Comparator either String - comparator name or a map - name to configuration. 
+		// Use ECollections to sort. Expression (SPEL) comparator.
+
 	}
 	
 	protected abstract ResourceSet getResourceSet();
