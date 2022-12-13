@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
@@ -210,12 +211,12 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 				ModelElement modelElement = (ModelElement) element;
 				String tooltip = modelElement.getTooltip();
 				if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement && !semanticElement.eIsSet(NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION)) {
-					((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);				
+					((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(Jsoup.parse(tooltip).text());				
 				}
 				
 				String label = modelElement.getLabel();
 				if (!Util.isBlank(label) && semanticElement instanceof NamedElement && !semanticElement.eIsSet(NcorePackage.Literals.NAMED_ELEMENT__NAME)) {
-					((NamedElement) semanticElement).setName(label);				
+					((NamedElement) semanticElement).setName(Jsoup.parse(label).text());				
 				}
 				
 				String id = modelElement.getId();

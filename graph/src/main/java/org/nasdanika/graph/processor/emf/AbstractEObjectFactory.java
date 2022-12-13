@@ -49,8 +49,15 @@ public abstract class AbstractEObjectFactory<T extends EObject, P extends Semant
 			if (config instanceof ConnectionProcessorConfig) {
 				// Pass-through wiring source endpoint to target handler and target endpoint to source handler
 				ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>> connectionConfig = (ConnectionProcessorConfig<P, ProcessorInfo<P>, ProcessorInfo<P>>) config;
-				connectionConfig.getSourceEndpoint().thenAccept(connectionConfig::setTargetHandler).handle(failureHandler);
-				connectionConfig.getTargetEndpoint().thenAccept(connectionConfig::setSourceHandler).handle(failureHandler);
+				CompletionStage<ProcessorInfo<P>> sourceEndpoint = connectionConfig.getSourceEndpoint();
+				if (sourceEndpoint != null) {
+					sourceEndpoint.thenAccept(connectionConfig::setTargetHandler).handle(failureHandler);
+				}
+				
+				CompletionStage<ProcessorInfo<P>> targetEndpoint = connectionConfig.getTargetEndpoint();
+				if (targetEndpoint != null) {
+					targetEndpoint.thenAccept(connectionConfig::setSourceHandler).handle(failureHandler);
+				}
 			}
 		} else {
 			// Wiring			
