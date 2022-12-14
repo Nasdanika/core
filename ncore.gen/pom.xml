@@ -7,9 +7,9 @@
 	    <version>2022.12.0</version>
 	    <relativePath>..</relativePath>
 	  </parent>
-	<artifactId>exec-gen</artifactId>
+	<artifactId>ncore-gen</artifactId>
 	<packaging>jar</packaging>
-	<name>Nasdanika Exec Generation Adapters</name>
+	<name>Nasdanika Ncore Generation Adapters</name>
 	<url>https://docs.nasdanika.org/modules/core/modules/exec/modules/gen/index.html</url>
 	<build>
 	    <plugins>
@@ -39,12 +39,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
-			<artifactId>exec</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>ncore-gen</artifactId>
+			<artifactId>emf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

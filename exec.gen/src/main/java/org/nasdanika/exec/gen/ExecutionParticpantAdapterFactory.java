@@ -7,7 +7,6 @@ import org.nasdanika.common.CommandFactory;
 import org.nasdanika.common.ConsumerFactory;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
-import org.nasdanika.emf.ComposedAdapterFactory;
 import org.nasdanika.emf.FunctionAdapterFactory;
 import org.nasdanika.exec.Block;
 import org.nasdanika.exec.Call;
@@ -17,6 +16,7 @@ import org.nasdanika.exec.ExecPackage;
 import org.nasdanika.exec.Fail;
 import org.nasdanika.exec.gen.content.ContentAdapterFactory;
 import org.nasdanika.exec.gen.resources.ResourcesAdapterFactory;
+import org.nasdanika.ncore.gen.NcoreAdapterFactory;
 import org.nasdanika.resources.BinaryEntityContainer;
 
 /**
@@ -24,7 +24,7 @@ import org.nasdanika.resources.BinaryEntityContainer;
  * @author Pavel
  *
  */
-public class ExecutionParticpantAdapterFactory extends ComposedAdapterFactory {
+public class ExecutionParticpantAdapterFactory extends NcoreAdapterFactory {
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static final Class<SupplierFactory<java.util.Map<String,Object>>> MAP_SUPPLIER_FACTORY_CLASS = (Class) SupplierFactory.class;

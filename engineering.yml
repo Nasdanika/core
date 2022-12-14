@@ -21,6 +21,11 @@ engineering-product:
            - exec/engineering.yml
            - exec.gen/engineering.yml
      - flow/engineering/engineering.yml
-     - ncore/engineering.yml
+     - engineering-module:
+         path: ncore
+         name: Ncore
+         modules:
+           - ncore/engineering.yml
+           - ncore.gen/engineering.yml
      - persistence/engineering.yml
      - resources/engineering.yml
