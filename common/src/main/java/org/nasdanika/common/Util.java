@@ -34,6 +34,9 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
 
 public class Util {
@@ -660,6 +663,13 @@ public class Util {
 			}
 		}
 		
+		if (obj instanceof EObject) {
+			Adapter adapter = EcoreUtil.getRegisteredAdapter((EObject) obj, SupplierFactory.class);
+			if (adapter instanceof SupplierFactory) {
+				return (SupplierFactory<T>) adapter;
+			}
+		}
+		
 		return null;
 	}
 
@@ -723,6 +733,13 @@ public class Util {
 			}
 		}
 		
+		if (obj instanceof EObject) {
+			Adapter adapter = EcoreUtil.getRegisteredAdapter((EObject) obj, ConsumerFactory.class);
+			if (adapter instanceof ConsumerFactory) {
+				return (ConsumerFactory<T>) adapter;
+			}
+		}		
+		
 		throw new NasdanikaException(obj.getClass() + " cannot be wrapped/adapted to a consumer factory");
 	}
 
@@ -748,6 +765,12 @@ public class Util {
 			CommandFactory adapter = ((Adaptable) obj).adaptTo(CommandFactory.class);
 			if (adapter != null) {
 				return adapter;
+			}
+		}
+		if (obj instanceof EObject) {
+			Adapter adapter = EcoreUtil.getRegisteredAdapter((EObject) obj, CommandFactory.class);
+			if (adapter instanceof CommandFactory) {
+				return (CommandFactory) adapter;
 			}
 		}
 				
