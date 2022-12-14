@@ -29,8 +29,10 @@ import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
 import org.nasdanika.graph.processor.emf.SemanticProcessor;
+import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -210,8 +212,14 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			if (element instanceof ModelElement) {
 				ModelElement modelElement = (ModelElement) element;
 				String tooltip = modelElement.getTooltip();
-				if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement && !semanticElement.eIsSet(NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION)) {
-					((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(Jsoup.parse(tooltip).text());				
+				if (!Util.isBlank(tooltip)) {
+					if (semanticElement instanceof org.nasdanika.ncore.ModelElement && !semanticElement.eIsSet(NcorePackage.Literals.MODEL_ELEMENT__DESCRIPTION)) {
+						String firstTooltipSentence = org.nasdanika.common.Util.firstPlainTextSentence(tooltip, 50, 250);
+						((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(firstTooltipSentence);						
+					}
+					if (semanticElement instanceof Documented && ((Documented) semanticElement).getDocumentation().isEmpty()) {
+						((Documented) semanticElement).getDocumentation().add(wrapString("<pre style='white-space:pre-wrap'>" + System.lineSeparator() + tooltip + System.lineSeparator() + "</pre>"));
+					}
 				}
 				
 				String label = modelElement.getLabel();
@@ -235,6 +243,12 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 		}
 		
 		return semanticElements;		
+	}
+	
+	protected EObject wrapString(String str) {
+		org.nasdanika.ncore.String strObj = NcoreFactory.eINSTANCE.createString();
+		strObj.setValue(str);		
+		return strObj;
 	}
 	
 	/**
