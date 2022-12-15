@@ -5,9 +5,9 @@ package org.nasdanika.flow.impl;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.Map.Entry;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
@@ -17,9 +17,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.diagram.DiagramElement;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.ArtifactParticipantResponsibility;
@@ -57,7 +55,6 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getOutboundRelationships <em>Outbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInboundRelationships <em>Inbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#isPartition <em>Partition</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getStyle <em>Style</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getTemplateKeys <em>Template Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getTemplates <em>Templates</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.ArtifactImpl#getInstances <em>Instances</em>}</li>
@@ -279,36 +276,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public DiagramElement getStyle() {
-		return (DiagramElement)eDynamicGet(FlowPackage.ARTIFACT__STYLE, FlowPackage.Literals.ARTIFACT__STYLE, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetStyle(DiagramElement newStyle, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newStyle, FlowPackage.ARTIFACT__STYLE, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStyle(DiagramElement newStyle) {
-		eDynamicSet(FlowPackage.ARTIFACT__STYLE, FlowPackage.Literals.ARTIFACT__STYLE, newStyle);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public EList<String> getTemplateKeys() {
@@ -395,8 +362,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return ((InternalEList<?>)getOutboundRelationships()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__INBOUND_RELATIONSHIPS:
 				return ((InternalEList<?>)getInboundRelationships()).basicRemove(otherEnd, msgs);
-			case FlowPackage.ARTIFACT__STYLE:
-				return basicSetStyle(null, msgs);
 			case FlowPackage.ARTIFACT__TEMPLATES:
 				return ((InternalEList<?>)getTemplates()).basicRemove(otherEnd, msgs);
 			case FlowPackage.ARTIFACT__INSTANCES:
@@ -442,8 +407,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return getInboundRelationships();
 			case FlowPackage.ARTIFACT__PARTITION:
 				return isPartition();
-			case FlowPackage.ARTIFACT__STYLE:
-				return getStyle();
 			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
 				return getTemplateKeys();
 			case FlowPackage.ARTIFACT__TEMPLATES:
@@ -479,9 +442,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 			case FlowPackage.ARTIFACT__PARTITION:
 				setPartition((Boolean)newValue);
 				return;
-			case FlowPackage.ARTIFACT__STYLE:
-				setStyle((DiagramElement)newValue);
-				return;
 			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
 				getTemplateKeys().clear();
 				getTemplateKeys().addAll((Collection<? extends String>)newValue);
@@ -512,9 +472,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return;
 			case FlowPackage.ARTIFACT__PARTITION:
 				setPartition(PARTITION_EDEFAULT);
-				return;
-			case FlowPackage.ARTIFACT__STYLE:
-				setStyle((DiagramElement)null);
 				return;
 			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
 				getTemplateKeys().clear();
@@ -557,8 +514,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				return !getInboundRelationships().isEmpty();
 			case FlowPackage.ARTIFACT__PARTITION:
 				return isPartition() != PARTITION_EDEFAULT;
-			case FlowPackage.ARTIFACT__STYLE:
-				return getStyle() != null;
 			case FlowPackage.ARTIFACT__TEMPLATE_KEYS:
 				return !getTemplateKeys().isEmpty();
 			case FlowPackage.ARTIFACT__TEMPLATES:
@@ -642,12 +597,6 @@ public class ArtifactImpl extends ParticipantResponsibilityImpl<Artifact> implem
 				instanceArtifacts.put(artifactKey, instanceArtifact);
 				artifact.apply(instanceArtifact);
 			}
-		}
-		
-		// Style
-		DiagramElement style = getStyle();
-		if (style != null) {
-			instance.setStyle(EcoreUtil.copy(style));
 		}
 
 		// Relationships

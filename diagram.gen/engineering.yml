@@ -1,9 +1,0 @@
-engineering-module:
-  name: Generators
-  path: gen
-  action-prototype: "javadoc-action-prototype.xml#/"
-  documentation:
-    content-markdown:
-      style: true
-      source:
-        content-resource: diagram-gen.md        

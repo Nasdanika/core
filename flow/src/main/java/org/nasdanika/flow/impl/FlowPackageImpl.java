@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-import org.nasdanika.diagram.DiagramPackage;
 import org.nasdanika.flow.Activity;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.ArtifactParticipantResponsibility;
@@ -354,7 +353,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		isInited = true;
 
 		// Initialize simple dependencies
-		DiagramPackage.eINSTANCE.eClass();
 		NcorePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
@@ -1057,18 +1055,8 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getArtifact_Style() {
-		return (EReference)artifactEClass.getEStructuralFeatures().get(12);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getArtifact_TemplateKeys() {
-		return (EAttribute)artifactEClass.getEStructuralFeatures().get(13);
+		return (EAttribute)artifactEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -1078,7 +1066,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EReference getArtifact_Templates() {
-		return (EReference)artifactEClass.getEStructuralFeatures().get(14);
+		return (EReference)artifactEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -1088,7 +1076,7 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	 */
 	@Override
 	public EReference getArtifact_Instances() {
-		return (EReference)artifactEClass.getEStructuralFeatures().get(15);
+		return (EReference)artifactEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -1159,16 +1147,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 	@Override
 	public EReference getRelationship_Target() {
 		return (EReference)relationshipEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getRelationship_Style() {
-		return (EReference)relationshipEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1896,7 +1874,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		createEReference(artifactEClass, ARTIFACT__OUTBOUND_RELATIONSHIPS);
 		createEReference(artifactEClass, ARTIFACT__INBOUND_RELATIONSHIPS);
 		createEAttribute(artifactEClass, ARTIFACT__PARTITION);
-		createEReference(artifactEClass, ARTIFACT__STYLE);
 		createEAttribute(artifactEClass, ARTIFACT__TEMPLATE_KEYS);
 		createEReference(artifactEClass, ARTIFACT__TEMPLATES);
 		createEReference(artifactEClass, ARTIFACT__INSTANCES);
@@ -1913,7 +1890,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		relationshipEClass = createEClass(RELATIONSHIP);
 		createEAttribute(relationshipEClass, RELATIONSHIP__TARGET_KEY);
 		createEReference(relationshipEClass, RELATIONSHIP__TARGET);
-		createEReference(relationshipEClass, RELATIONSHIP__STYLE);
 
 		relationshipEntryEClass = createEClass(RELATIONSHIP_ENTRY);
 		createEAttribute(relationshipEntryEClass, RELATIONSHIP_ENTRY__KEY);
@@ -2023,7 +1999,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 
 		// Obtain other dependent packages
 		NcorePackage theNcorePackage = (NcorePackage)EPackage.Registry.INSTANCE.getEPackage(NcorePackage.eNS_URI);
-		DiagramPackage theDiagramPackage = (DiagramPackage)EPackage.Registry.INSTANCE.getEPackage(DiagramPackage.eNS_URI);
 
 		// Create type parameters
 		ETypeParameter packageElementEClass_T = addETypeParameter(packageElementEClass, "T");
@@ -2243,7 +2218,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEReference(getArtifact_OutboundRelationships(), this.getRelationshipEntry(), null, "outboundRelationships", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getArtifact_InboundRelationships(), this.getRelationship(), this.getRelationship_Target(), "inboundRelationships", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtifact_Partition(), ecorePackage.getEBoolean(), "partition", null, 0, 1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getArtifact_Style(), theDiagramPackage.getDiagramElement(), null, "style", null, 0, 1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getArtifact_TemplateKeys(), ecorePackage.getEString(), "templateKeys", null, 0, -1, Artifact.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getArtifact_Templates(), this.getArtifact(), this.getArtifact_Instances(), "templates", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEReference(getArtifact_Instances(), this.getArtifact(), this.getArtifact_Templates(), "instances", null, 0, -1, Artifact.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
@@ -2260,7 +2234,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		initEClass(relationshipEClass, Relationship.class, "Relationship", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRelationship_TargetKey(), ecorePackage.getEString(), "targetKey", null, 1, 1, Relationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRelationship_Target(), this.getArtifact(), this.getArtifact_InboundRelationships(), "target", null, 0, 1, Relationship.class, IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-		initEReference(getRelationship_Style(), theDiagramPackage.getConnection(), null, "style", null, 0, 1, Relationship.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(relationshipEntryEClass, Map.Entry.class, "RelationshipEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRelationshipEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2530,13 +2503,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "feature-key", "relationships"
 		   });
 		addAnnotation
-		  (getArtifact_Style(),
-		   source,
-		   new String[] {
-			   "homogenous", "true",
-			   "load-doc-reference", "doc/artifact--style-load-doc.md"
-		   });
-		addAnnotation
 		  (getArtifact_TemplateKeys(),
 		   source,
 		   new String[] {
@@ -2573,12 +2539,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   new String[] {
 			   "feature-key", "target",
 			   "default-feature", "true"
-		   });
-		addAnnotation
-		  (getRelationship_Style(),
-		   source,
-		   new String[] {
-			   "homogenous", "true"
 		   });
 		addAnnotation
 		  (getRelationshipEntry_Value(),
@@ -3168,12 +3128,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 			   "documentation", "If true, this composite artifact shall be displayed as a partition on the parent component diagram."
 		   });
 		addAnnotation
-		  (getArtifact_Style(),
-		   source,
-		   new String[] {
-			   "documentation", "Diagram element style for component diagrams. If specified, the style diagram element is used as a template for a diagram element created to represent this artiact on a diagram."
-		   });
-		addAnnotation
 		  (getArtifact_TemplateKeys(),
 		   source,
 		   new String[] {
@@ -3244,12 +3198,6 @@ public class FlowPackageImpl extends EPackageImpl implements FlowPackage {
 		   source,
 		   new String[] {
 			   "documentation", "Relationship target."
-		   });
-		addAnnotation
-		  (getRelationship_Style(),
-		   source,
-		   new String[] {
-			   "documentation", "Connection style (template) for component diagrams."
 		   });
 		addAnnotation
 		  (relationshipEntryEClass,

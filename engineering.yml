@@ -3,14 +3,7 @@ engineering-product:
   path: core
   action-prototype: "javadoc-action-prototype.xml#/"
   modules:
-     - cli/engineering.yml
      - common/engineering/engineering.yml
-     - engineering-module:
-         path: diagram
-         name: Diagram
-         modules:
-           - diagram/engineering.yml
-           - diagram.gen/engineering.yml
      - drawio/engineering.yml
      - emf/engineering.yml
      - graph/engineering.yml

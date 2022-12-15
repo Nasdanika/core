@@ -201,11 +201,8 @@
 		<module>ncore</module>
 		<module>ncore.gen</module>
 		<module>flow</module>
-		<module>diagram</module>
-		<module>diagram.gen</module>
 		<module>exec</module>
 		<module>exec.gen</module>
-		<module>cli</module>
 		<module>emf</module>
 		<!-- <module>mxgraph</module> --> 
 	</modules>	

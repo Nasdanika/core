@@ -11,8 +11,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.diagram.Connection;
 import org.nasdanika.flow.Artifact;
 import org.nasdanika.flow.FlowPackage;
 import org.nasdanika.flow.Relationship;
@@ -28,7 +26,6 @@ import org.nasdanika.ncore.util.NcoreUtil;
  * <ul>
  *   <li>{@link org.nasdanika.flow.impl.RelationshipImpl#getTargetKey <em>Target Key</em>}</li>
  *   <li>{@link org.nasdanika.flow.impl.RelationshipImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link org.nasdanika.flow.impl.RelationshipImpl#getStyle <em>Style</em>}</li>
  * </ul>
  *
  * @generated
@@ -129,36 +126,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 	 * @generated
 	 */
 	@Override
-	public Connection getStyle() {
-		return (Connection)eDynamicGet(FlowPackage.RELATIONSHIP__STYLE, FlowPackage.Literals.RELATIONSHIP__STYLE, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetStyle(Connection newStyle, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newStyle, FlowPackage.RELATIONSHIP__STYLE, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStyle(Connection newStyle) {
-		eDynamicSet(FlowPackage.RELATIONSHIP__STYLE, FlowPackage.Literals.RELATIONSHIP__STYLE, newStyle);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case FlowPackage.RELATIONSHIP__TARGET:
@@ -180,8 +147,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		switch (featureID) {
 			case FlowPackage.RELATIONSHIP__TARGET:
 				return basicSetTarget(null, msgs);
-			case FlowPackage.RELATIONSHIP__STYLE:
-				return basicSetStyle(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -199,8 +164,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 			case FlowPackage.RELATIONSHIP__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
-			case FlowPackage.RELATIONSHIP__STYLE:
-				return getStyle();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -216,9 +179,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 			case FlowPackage.RELATIONSHIP__TARGET_KEY:
 				setTargetKey((String)newValue);
 				return;
-			case FlowPackage.RELATIONSHIP__STYLE:
-				setStyle((Connection)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -233,9 +193,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		switch (featureID) {
 			case FlowPackage.RELATIONSHIP__TARGET_KEY:
 				setTargetKey(TARGET_KEY_EDEFAULT);
-				return;
-			case FlowPackage.RELATIONSHIP__STYLE:
-				setStyle((Connection)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -253,8 +210,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 				return TARGET_KEY_EDEFAULT == null ? getTargetKey() != null : !TARGET_KEY_EDEFAULT.equals(getTargetKey());
 			case FlowPackage.RELATIONSHIP__TARGET:
 				return basicGetTarget() != null;
-			case FlowPackage.RELATIONSHIP__STYLE:
-				return getStyle() != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -273,17 +228,6 @@ public class RelationshipImpl extends PackageElementImpl<Relationship> implement
 		}
 		return super.computeCachedFeature(feature);
 	}	
-	
-	@Override
-	public void apply(Relationship instance) {
-		super.apply(instance);
-		
-		// Style
-		Connection style = getStyle();
-		if (style != null) {
-			instance.setStyle(EcoreUtil.copy(style));
-		}		
-	}
 	
 	@SuppressWarnings("unchecked")
 	@Override

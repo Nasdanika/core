@@ -12,7 +12,6 @@ Export-Package: org.nasdanika.flow,
  org.nasdanika.flow.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- org.nasdanika.diagram;visibility:=reexport,
  org.nasdanika.ncore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;bundle-version="2.15.0";visibility:=reexport,
  org.apache.commons.codec;bundle-version="1.14.0"

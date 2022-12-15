@@ -1,1 +1,0 @@
-A note. Can be standalone or attached to a diagram element or connection.

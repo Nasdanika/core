@@ -3,7 +3,7 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.nasdanika.flow/src/main/java" creationIcons="false"
     editorDirectory="" modelPluginID="org.nasdanika.flow" modelName="Flow" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     importerID="org.eclipse.emf.importer.ecore" featureDelegation="Dynamic" complianceLevel="8.0"
-    suppressGenModelAnnotations="false" copyrightFields="false" usedGenPackages="../../org.nasdanika.diagram/model/diagram.genmodel#//diagram ../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
+    suppressGenModelAnnotations="false" copyrightFields="false" usedGenPackages="../../org.nasdanika.ncore/model/ncore.genmodel#//ncore"
     operationReflection="true" importOrganizing="true">
   <foreignModel>flow.ecore</foreignModel>
   <genPackages prefix="Flow" basePackage="org.nasdanika" disposableProviderFactory="true"
@@ -91,7 +91,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/outboundRelationships"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/inboundRelationships"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Artifact/partition"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Artifact/style"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Artifact/templateKeys"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/templates"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Artifact/instances"/>
@@ -108,7 +107,6 @@
     <genClasses ecoreClass="flow.ecore#//Relationship">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//Relationship/targetKey"/>
       <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference flow.ecore#//Relationship/target"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference flow.ecore#//Relationship/style"/>
     </genClasses>
     <genClasses ecoreClass="flow.ecore#//RelationshipEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute flow.ecore#//RelationshipEntry/key"/>

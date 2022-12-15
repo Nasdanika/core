@@ -64,17 +64,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>diagram</artifactId>
-			<version>${project.version}</version>
-		</dependency>		
-		<dependency>
-			<groupId>org.nasdanika.core</groupId>
-			<artifactId>diagram-gen</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>		
-		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
 			<version>3.23.1</version>

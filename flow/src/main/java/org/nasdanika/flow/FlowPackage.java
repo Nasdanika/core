@@ -1834,22 +1834,13 @@ public interface FlowPackage extends EPackage {
 	int ARTIFACT__PARTITION = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 12;
 
 	/**
-	 * The feature id for the '<em><b>Style</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ARTIFACT__STYLE = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
-
-	/**
 	 * The feature id for the '<em><b>Template Keys</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__TEMPLATE_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
+	int ARTIFACT__TEMPLATE_KEYS = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Templates</b></em>' reference list.
@@ -1858,7 +1849,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__TEMPLATES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 15;
+	int ARTIFACT__TEMPLATES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Instances</b></em>' reference list.
@@ -1867,7 +1858,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT__INSTANCES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 16;
+	int ARTIFACT__INSTANCES = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 15;
 
 	/**
 	 * The number of structural features of the '<em>Artifact</em>' class.
@@ -1876,7 +1867,7 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ARTIFACT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 17;
+	int ARTIFACT_FEATURE_COUNT = PARTICIPANT_RESPONSIBILITY_FEATURE_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -2387,22 +2378,13 @@ public interface FlowPackage extends EPackage {
 	int RELATIONSHIP__TARGET = PACKAGE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Style</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RELATIONSHIP__STYLE = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>Relationship</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RELATIONSHIP_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 3;
+	int RELATIONSHIP_FEATURE_COUNT = PACKAGE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Create</em>' operation.
@@ -9911,17 +9893,6 @@ public interface FlowPackage extends EPackage {
 	EAttribute getArtifact_Partition();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.nasdanika.flow.Artifact#getStyle <em>Style</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Style</em>'.
-	 * @see org.nasdanika.flow.Artifact#getStyle()
-	 * @see #getArtifact()
-	 * @generated
-	 */
-	EReference getArtifact_Style();
-
-	/**
 	 * Returns the meta object for the attribute list '{@link org.nasdanika.flow.Artifact#getTemplateKeys <em>Template Keys</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10028,17 +9999,6 @@ public interface FlowPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRelationship_Target();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.nasdanika.flow.Relationship#getStyle <em>Style</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Style</em>'.
-	 * @see org.nasdanika.flow.Relationship#getStyle()
-	 * @see #getRelationship()
-	 * @generated
-	 */
-	EReference getRelationship_Style();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Relationship Entry</em>}'.
@@ -11294,14 +11254,6 @@ public interface FlowPackage extends EPackage {
 		EAttribute ARTIFACT__PARTITION = eINSTANCE.getArtifact_Partition();
 
 		/**
-		 * The meta object literal for the '<em><b>Style</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ARTIFACT__STYLE = eINSTANCE.getArtifact_Style();
-
-		/**
 		 * The meta object literal for the '<em><b>Template Keys</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -11384,14 +11336,6 @@ public interface FlowPackage extends EPackage {
 		 * @generated
 		 */
 		EReference RELATIONSHIP__TARGET = eINSTANCE.getRelationship_Target();
-
-		/**
-		 * The meta object literal for the '<em><b>Style</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RELATIONSHIP__STYLE = eINSTANCE.getRelationship_Style();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.flow.impl.RelationshipEntryImpl <em>Relationship Entry</em>}' class.

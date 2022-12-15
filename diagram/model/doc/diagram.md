@@ -1,1 +1,0 @@
-A diagram contains connected diagram elements.

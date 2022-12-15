@@ -1,1 +1,0 @@
-Represents a shape/node/vertex on a diagram.

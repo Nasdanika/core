@@ -2,8 +2,6 @@
  */
 package org.nasdanika.flow;
 
-import org.nasdanika.diagram.Connection;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Relationship</b></em>'.
@@ -15,7 +13,6 @@ import org.nasdanika.diagram.Connection;
  * <ul>
  *   <li>{@link org.nasdanika.flow.Relationship#getTargetKey <em>Target Key</em>}</li>
  *   <li>{@link org.nasdanika.flow.Relationship#getTarget <em>Target</em>}</li>
- *   <li>{@link org.nasdanika.flow.Relationship#getStyle <em>Style</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.flow.FlowPackage#getRelationship()
@@ -64,31 +61,5 @@ public interface Relationship extends PackageElement<Relationship> {
 	 * @generated
 	 */
 	Artifact getTarget();
-
-	/**
-	 * Returns the value of the '<em><b>Style</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Connection style (template) for component diagrams.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Style</em>' containment reference.
-	 * @see #setStyle(Connection)
-	 * @see org.nasdanika.flow.FlowPackage#getRelationship_Style()
-	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true'"
-	 * @generated
-	 */
-	Connection getStyle();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.flow.Relationship#getStyle <em>Style</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Style</em>' containment reference.
-	 * @see #getStyle()
-	 * @generated
-	 */
-	void setStyle(Connection value);
 
 } // Relationship

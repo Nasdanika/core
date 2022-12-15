@@ -4,7 +4,6 @@ package org.nasdanika.flow;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.nasdanika.diagram.DiagramElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -27,7 +26,6 @@ import org.nasdanika.diagram.DiagramElement;
  *   <li>{@link org.nasdanika.flow.Artifact#getOutboundRelationships <em>Outbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getInboundRelationships <em>Inbound Relationships</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#isPartition <em>Partition</em>}</li>
- *   <li>{@link org.nasdanika.flow.Artifact#getStyle <em>Style</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getTemplateKeys <em>Template Keys</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getTemplates <em>Templates</em>}</li>
  *   <li>{@link org.nasdanika.flow.Artifact#getInstances <em>Instances</em>}</li>
@@ -244,32 +242,6 @@ public interface Artifact extends ParticipantResponsibility<Artifact>, ServicePr
 	 * @generated
 	 */
 	void setPartition(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Style</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Diagram element style for component diagrams. If specified, the style diagram element is used as a template for a diagram element created to represent this artiact on a diagram.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Style</em>' containment reference.
-	 * @see #setStyle(DiagramElement)
-	 * @see org.nasdanika.flow.FlowPackage#getArtifact_Style()
-	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' load-doc-reference='doc/artifact--style-load-doc.md'"
-	 * @generated
-	 */
-	DiagramElement getStyle();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.flow.Artifact#getStyle <em>Style</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Style</em>' containment reference.
-	 * @see #getStyle()
-	 * @generated
-	 */
-	void setStyle(DiagramElement value);
 
 	/**
 	 * Returns the value of the '<em><b>Template Keys</b></em>' attribute list.

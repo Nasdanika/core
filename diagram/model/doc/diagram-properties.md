@@ -1,4 +1,0 @@
-Diagram properties. 
-Generator specific.
-
-
