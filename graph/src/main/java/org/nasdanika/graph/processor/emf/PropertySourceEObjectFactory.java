@@ -286,6 +286,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 						EvaluationContext evaluationContext = createEvaluationContext();
 						evaluationContext.setVariable("config", config);
 						evaluationContext.setVariable("element", config.getElement());
+						evaluationContext.setVariable("parentElement", parentProcessorInfo.getConfig().getElement());			
 						evaluationContext.setVariable("parentProcessor", parentProcessor);
 						evaluationContext.setVariable("parentSemanticElement", parentSemanticElement);
 						evaluationContext.setVariable("parentConfig", parentProcessorInfo.getConfig());			
