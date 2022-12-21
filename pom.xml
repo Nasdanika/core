@@ -200,7 +200,6 @@
 		<module>graph</module>
 		<module>ncore</module>
 		<module>ncore.gen</module>
-		<module>flow</module>
 		<module>exec</module>
 		<module>exec.gen</module>
 		<module>emf</module>
