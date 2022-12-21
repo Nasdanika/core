@@ -1,7 +1,0 @@
-flow-package:
-  uri: nasdanika:extended
-  extends: base.yml
-  sub-packages:
-    common: 
-      name: Extended common definitions
-    to-suppress: null

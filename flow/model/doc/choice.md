@@ -1,1 +1,0 @@
-Choice is a conditional [pseudo-state](PseudoState.html).

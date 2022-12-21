@@ -1,2 +1,0 @@
-Output pin is a [pseudo-state](PseudoState.html) displayed as a square on the border of the containing partition
-[flow](Flow.html) through which [calls](Call.html) are made to other [flow elements](FlowElement.html).

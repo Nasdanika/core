@@ -1,1 +1,0 @@
-Package is a container of sub-packages, [flows](Flow.html), [resources](Resource.html), [participants](Participant.html), and [artifacts](Artifact.html).

@@ -1,1 +1,0 @@
-Tracing definitions to Git files, lines, and commits.

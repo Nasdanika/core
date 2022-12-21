@@ -1,1 +1,0 @@
-PlantUML and Draw.io. TODO - how to configure representations and how to edit Draw.io diagrams - where to place.
