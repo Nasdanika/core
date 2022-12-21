@@ -84,7 +84,7 @@ public class InterpolatorSupplierFactoryAdapter extends FilterSupplierFactoryAda
 			resourceBase = resource.getURI();
 		}
 		
-		if (markerBase != null && markerBase.hasAbsolutePath() && path.startsWith("./")) {
+		if (markerBase != null && !markerBase.isRelative() && path.startsWith("./")) {
 			uri = uri.resolve(markerBase);
 		} else if (resourceBase != null) {
 			uri = uri.resolve(resourceBase);

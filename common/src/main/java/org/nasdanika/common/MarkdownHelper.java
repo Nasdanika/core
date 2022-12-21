@@ -173,7 +173,7 @@ public class MarkdownHelper {
 						try {		
 							URI resourceURI = URI.createURI(bareSpec);
 							URI resourceBase = getResourceBase();
-							if (resourceBase != null && resourceBase.hasAbsolutePath()) {
+							if (resourceBase != null && !resourceBase.isRelative()) {
 								resourceURI = resourceURI.resolve(resourceBase);
 							}
 							bareSpec = loadResource(resourceURI, dialect == null);

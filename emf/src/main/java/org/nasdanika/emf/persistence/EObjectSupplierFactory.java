@@ -134,7 +134,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					@Override
 					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) {
 						Object ret = super.create(loader, config, base, progressMonitor, markers);
-						if (base != null && base.hasAbsolutePath() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
+						if (base != null && !base.isRelative() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
 							return URI.createURI((String) ret).resolve(base).toString();
 						}
 						return ret;

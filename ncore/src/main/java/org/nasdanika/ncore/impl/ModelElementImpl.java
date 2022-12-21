@@ -42,7 +42,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getMarkers <em>Markers</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUri <em>Uri</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUris <em>Uris</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getActionPrototype <em>Action Prototype</em>}</li>
@@ -52,16 +52,6 @@ import org.nasdanika.ncore.util.NcoreUtil;
  * @generated
  */
 public abstract class ModelElementImpl extends MinimalEObjectImpl.Container implements ModelElement {
-	/**
-	 * The default value of the '{@link #getUri() <em>Uri</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUri()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String URI_EDEFAULT = null;
-
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -128,19 +118,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public String getUri() {
-		return (String)eDynamicGet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, true, true);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setUri(String newUri) {
-		eDynamicSet(NcorePackage.MODEL_ELEMENT__URI, NcorePackage.Literals.MODEL_ELEMENT__URI, newUri);
+	public EList<String> getUris() {
+		return (EList<String>)eDynamicGet(NcorePackage.MODEL_ELEMENT__URIS, NcorePackage.Literals.MODEL_ELEMENT__URIS, true, true);
 	}
 
 	/**
@@ -249,8 +230,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				return getMarkers();
-			case NcorePackage.MODEL_ELEMENT__URI:
-				return getUri();
+			case NcorePackage.MODEL_ELEMENT__URIS:
+				return getUris();
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return getDescription();
 			case NcorePackage.MODEL_ELEMENT__UUID:
@@ -278,8 +259,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				getMarkers().clear();
 				getMarkers().addAll((Collection<? extends Marker>)newValue);
 				return;
-			case NcorePackage.MODEL_ELEMENT__URI:
-				setUri((String)newValue);
+			case NcorePackage.MODEL_ELEMENT__URIS:
+				getUris().clear();
+				getUris().addAll((Collection<? extends String>)newValue);
 				return;
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription((String)newValue);
@@ -308,8 +290,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				getMarkers().clear();
 				return;
-			case NcorePackage.MODEL_ELEMENT__URI:
-				setUri(URI_EDEFAULT);
+			case NcorePackage.MODEL_ELEMENT__URIS:
+				getUris().clear();
 				return;
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				setDescription(DESCRIPTION_EDEFAULT);
@@ -337,8 +319,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				return !getMarkers().isEmpty();
-			case NcorePackage.MODEL_ELEMENT__URI:
-				return URI_EDEFAULT == null ? getUri() != null : !URI_EDEFAULT.equals(getUri());
+			case NcorePackage.MODEL_ELEMENT__URIS:
+				return !getUris().isEmpty();
 			case NcorePackage.MODEL_ELEMENT__DESCRIPTION:
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
 			case NcorePackage.MODEL_ELEMENT__UUID:
@@ -366,9 +348,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			while (cit.hasNext()) {
 				Object next = cit.next(); 
 				if (type.isInstance(next)) {
-					URI nextURI = NcoreUtil.getUri((T) next);
-					if (nextURI != null && nextURI.equals(uri)) {					
-						return (T) next;
+					for (URI nextURI: NcoreUtil.getUris((T) next)) {
+						if (nextURI != null && nextURI.equals(uri)) {					
+							return (T) next;
+						}
 					}
 				}
 			}
@@ -415,9 +398,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	public URI eProxyURI() {
 		URI eProxyURI = super.eProxyURI();
 		if (eProxyURI != null && eProxyURI.isRelative()) {
-			URI base = NcoreUtil.getUri(this);
-			if (base != null && !base.isRelative()) {
-				return eProxyURI.resolve(base);
+			for (URI base: NcoreUtil.getUris(this)) {
+				if (base != null && !base.isRelative()) {
+					return eProxyURI.resolve(base);
+				}
 			}
 		}
 		return eProxyURI;

@@ -108,13 +108,13 @@ public interface ContentPackage extends EPackage {
 	int FILTER__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILTER__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int FILTER__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -142,6 +142,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILTER__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -180,13 +189,13 @@ public interface ContentPackage extends EPackage {
 	int BASE64__MARKERS = FILTER__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE64__URI = FILTER__URI;
+	int BASE64__URIS = FILTER__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -214,6 +223,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE64__ACTION_PROTOTYPE = FILTER__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__REPRESENTATIONS = FILTER__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -252,13 +270,13 @@ public interface ContentPackage extends EPackage {
 	int RESOURCE__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int RESOURCE__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -286,6 +304,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -333,13 +360,13 @@ public interface ContentPackage extends EPackage {
 	int TEXT__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int TEXT__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -367,6 +394,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -425,13 +461,13 @@ public interface ContentPackage extends EPackage {
 	int INTERPOLATOR__MARKERS = FILTER__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INTERPOLATOR__URI = FILTER__URI;
+	int INTERPOLATOR__URIS = FILTER__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -459,6 +495,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int INTERPOLATOR__ACTION_PROTOTYPE = FILTER__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__REPRESENTATIONS = FILTER__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -525,13 +570,13 @@ public interface ContentPackage extends EPackage {
 	int MARKDOWN__MARKERS = FILTER__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKDOWN__URI = FILTER__URI;
+	int MARKDOWN__URIS = FILTER__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -559,6 +604,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKDOWN__ACTION_PROTOTYPE = FILTER__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__REPRESENTATIONS = FILTER__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.

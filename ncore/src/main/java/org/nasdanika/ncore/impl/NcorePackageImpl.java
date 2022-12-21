@@ -630,7 +630,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getModelElement_Uri() {
+	public EAttribute getModelElement_Uris() {
 		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -1219,7 +1219,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(periodEClass, PERIOD__DURATION);
 
 		modelElementEClass = createEClass(MODEL_ELEMENT);
-		createEAttribute(modelElementEClass, MODEL_ELEMENT__URI);
+		createEAttribute(modelElementEClass, MODEL_ELEMENT__URIS);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__UUID);
 		createEReference(modelElementEClass, MODEL_ELEMENT__ACTION_PROTOTYPE);
@@ -1399,7 +1399,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getPeriod_Duration(), this.getDuration(), "duration", null, 0, 1, Period.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getModelElement_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getModelElement_Uris(), ecorePackage.getEString(), "uris", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Uuid(), ecorePackage.getEString(), "uuid", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_ActionPrototype(), ecorePackage.getEObject(), null, "actionPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1793,10 +1793,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Base class for many Nasdanika model classes."
 		   });
 		addAnnotation
-		  (getModelElement_Uri(),
+		  (getModelElement_Uris(),
 		   source,
 		   new String[] {
-			   "documentation", "If element\'s URI is not set then its default value is derived from the container URI and containment reference. \nThis is a logical URI and it can be used for cross-referencing of elements in a resource-independent fashion.\n"
+			   "documentation", "Element URI\'s - there might be more than one. See ``NcoreUtil.getUris()`` for more details.\nURI\'s can be used for cross-referencing of elements in a resource-independent fashion.\n"
 		   });
 		addAnnotation
 		  (getModelElement_Description(),

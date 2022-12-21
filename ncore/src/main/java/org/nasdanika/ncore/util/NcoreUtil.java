@@ -3,9 +3,12 @@ package org.nasdanika.ncore.util;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -25,12 +28,12 @@ import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Util;
-import org.nasdanika.persistence.LoadTracker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.persistence.LoadTracker;
 import org.yaml.snakeyaml.Yaml;
 
 public final class NcoreUtil {
@@ -157,6 +160,7 @@ public final class NcoreUtil {
 	 * Containment path relative to the object container. If the container is a map entry its key is added to path and the entry container is skipped. This happens recursively. 
 	 * @param eObject
 	 * @return null if there is no container. BiSupplier with first returning the first container which is not EMap entry and reference name concatenated with object key for {@link EMap}'s and with object index for many-references.
+	 * Containment index is constructed taking eKeys into account.
 	 */
 	public static BiSupplier<EObject, String> containmentPath(EObject eObj) {
 		EObject container = eObj.eContainer();
@@ -226,90 +230,92 @@ public final class NcoreUtil {
 	}
 
 	/**
-		 * Returns {@link ModelElement}.getUri() if the argument is an instance of ModelElement and getUri() returns a non blank string.
-		 * Computes URI from the containment reference otherwise.
+		 * Uses {@link ModelElement}.getUris() if the argument is an instance of ModelElement to compute URI's.
+		 * Computes {@link URI}'s from the containment reference otherwise.
 		 * @param eObj
 		 * @return
 		 */
-		public static URI getUri(EObject eObj) {
+		public static List<URI> getUris(EObject eObj) {
 			if (eObj == null || isEMapEntry(eObj)) {
-				return null; // EMap entries do not have URI's.
+				return Collections.emptyList(); // EMap entries do not have URI's.
 			}
 
-			URI ret = null;
+			List<URI> eObjURIs = new ArrayList<>();
 			if (eObj instanceof ModelElement) {
-				String uri = ((ModelElement) eObj).getUri();
-				if (!Util.isBlank(uri)) {
-					ret = URI.createURI(uri);
-					if (ret.hasAbsolutePath()) {
-						return ret;
+				for (String uri: ((ModelElement) eObj).getUris()) {
+					if (!Util.isBlank(uri)) {
+						eObjURIs.add(URI.createURI(uri));
 					}
 				}
-			}			
+			}
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
 			if (containmentPath == null) {
-				return ret;
+				return eObjURIs;
 			}
+			
 			EObject container = containmentPath.getFirst();
-			if (container == null) {
-				if (ret == null && eObj instanceof ModelElement) {
-					String uuid = ((ModelElement) eObj).getUuid();
-					if (!Util.isBlank(uuid)) {
-						return URI.createURI("uuid://" + uuid);
+			
+			// Using containment path only if there are no explicitly specified URI's
+			if (eObjURIs.isEmpty()) {
+				eObjURIs.add(URI.createURI(containmentPath.getSecond()));
+			}
+			
+			// Computing all permutations
+			Collection<URI> ret = new HashSet<>();
+			for (URI cURI: getUris(container)) {
+				if (!cURI.isRelative()) {
+					String cLastSegment = cURI.lastSegment();
+					if (cLastSegment == null || cLastSegment.length() > 0) {
+						cURI = cURI.appendSegment("");
 					}
 				}
-				return ret;
-			}
-			
-			URI cURI = getUri(container);
-			if (cURI == null) {
-				return ret;
-			}
-			
-			URI cpURI = URI.createURI(containmentPath.getSecond());
-			
-			if (cURI.hasAbsolutePath()) {
-				String cLastSegment = cURI.lastSegment();
-				if (cLastSegment == null || cLastSegment.length() > 0) {
-					cURI = cURI.appendSegment("");
+				
+				for (URI eObjURI: eObjURIs) {
+					ret.add(resolve(eObjURI,cURI));  
 				}
-				URI containementURI = cpURI.resolve(cURI);
-				return ret == null ? containementURI : ret.resolve(containementURI);
+			}
+			
+			return ret.stream().distinct().collect(Collectors.toList());
+		}
+		
+		private static URI resolve(URI uri, URI base) {		
+			if (uri.isRelative() && !base.isRelative()) {
+				return uri.resolve(base);
 			}
 			
 			// Resolving containment path URI against container URI by combining all segments and treating the first first segment as scheme, second as authority and the rest as segments.			
 			List<String> allParts = new ArrayList<>();
-			if (cURI.scheme() != null) {
-				allParts.add(cURI.scheme());
+			if (base.scheme() != null) {
+				allParts.add(base.scheme());
 			}
-			if (cURI.authority() != null) {
-				allParts.add(cURI.authority());
+			if (base.authority() != null) {
+				allParts.add(base.authority());
 			}
-			allParts.addAll(cURI.segmentsList());
+			allParts.addAll(base.segmentsList());
 			
-			if (cpURI.scheme() != null) {
-				allParts.add(cpURI.scheme());
+			if (uri.scheme() != null) {
+				allParts.add(uri.scheme());
 			}
-			if (cpURI.authority() != null) {
-				allParts.add(cpURI.authority());
+			if (uri.authority() != null) {
+				allParts.add(uri.authority());
 			}
-			allParts.addAll(cpURI.segmentsList());
+			allParts.addAll(uri.segmentsList());
 			
 			if (allParts.size() == 0) {
-				return ret;
+				return uri;
 			}
 			
 			if (allParts.size() == 1) {
-				return ret == null ? URI.createURI(allParts.get(0)) : ret;
+				return URI.createURI(allParts.get(0));
 			}
 
 			if (allParts.size() == 2 && allParts.get(1).length() == 0) {
-				return URI.createURI(String.join("/", allParts) + (ret == null ? "" : ret));				
+				return URI.createURI(String.join("/", allParts) + (uri == null ? "" : uri));				
 			}
 			
 			URI allPartsURI = URI.createHierarchicalURI(allParts.get(0), allParts.get(1), null, allParts.subList(2, allParts.size()).toArray(new String[allParts.size() - 2]), null, null);
-			return ret == null ? allPartsURI : ret.resolve(allPartsURI);
+			return uri == null ? allPartsURI : uri.resolve(allPartsURI);
 		}
 
 	/**

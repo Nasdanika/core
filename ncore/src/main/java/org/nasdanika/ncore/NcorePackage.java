@@ -267,13 +267,13 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__MARKERS = MARKED__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__URI = MARKED_FEATURE_COUNT + 0;
+	int MODEL_ELEMENT__URIS = MARKED_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -339,13 +339,13 @@ public interface NcorePackage extends EPackage {
 	int TEMPORAL__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEMPORAL__URI = MODEL_ELEMENT__URI;
+	int TEMPORAL__URIS = MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -547,13 +547,13 @@ public interface NcorePackage extends EPackage {
 	int PERIOD__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PERIOD__URI = MODEL_ELEMENT__URI;
+	int PERIOD__URIS = MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -702,13 +702,13 @@ public interface NcorePackage extends EPackage {
 	int NAMED_ELEMENT__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_ELEMENT__URI = MODEL_ELEMENT__URI;
+	int NAMED_ELEMENT__URIS = MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1603,13 +1603,13 @@ public interface NcorePackage extends EPackage {
 	int COMPOSITE__MARKERS = NAMED_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__URI = NAMED_ELEMENT__URI;
+	int COMPOSITE__URIS = NAMED_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -2028,15 +2028,15 @@ public interface NcorePackage extends EPackage {
 	EClass getModelElement();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ModelElement#getUri <em>Uri</em>}'.
+	 * Returns the meta object for the attribute list '{@link org.nasdanika.ncore.ModelElement#getUris <em>Uris</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Uri</em>'.
-	 * @see org.nasdanika.ncore.ModelElement#getUri()
+	 * @return the meta object for the attribute list '<em>Uris</em>'.
+	 * @see org.nasdanika.ncore.ModelElement#getUris()
 	 * @see #getModelElement()
 	 * @generated
 	 */
-	EAttribute getModelElement_Uri();
+	EAttribute getModelElement_Uris();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ModelElement#getDescription <em>Description</em>}'.
@@ -2885,12 +2885,12 @@ public interface NcorePackage extends EPackage {
 		EClass MODEL_ELEMENT = eINSTANCE.getModelElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Uri</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Uris</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MODEL_ELEMENT__URI = eINSTANCE.getModelElement_Uri();
+		EAttribute MODEL_ELEMENT__URIS = eINSTANCE.getModelElement_Uris();
 
 		/**
 		 * The meta object literal for the '<em><b>Description</b></em>' attribute feature.

@@ -2,6 +2,8 @@ package org.nasdanika.exec.tests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -36,7 +38,7 @@ public class TestConfigurator extends TestBase {
 	}
 	
 	@Test
-	public void testURI() throws Exception {	
+	public void testURIs() throws Exception {	
 		load(
 				"configurator/configurator-with-uri.yml", 
 				obj -> {
@@ -46,9 +48,9 @@ public class TestConfigurator extends TestBase {
 					assertThat(properties).hasSize(1);
 					EObject nameProperty = properties.get("name");
 					assertThat(nameProperty).isNotNull().isInstanceOf(Text.class);
-					URI namePropertyURI = NcoreUtil.getUri(nameProperty);
-					assertThat(namePropertyURI).isNotNull();
-					assertThat(namePropertyURI.toString()).isEqualTo("nasdanika://exec/configurator/properties/name");
+					Collection<URI> namePropertyURIs = NcoreUtil.getUris(nameProperty);
+					assertThat(namePropertyURIs).isNotEmpty();
+					assertThat(namePropertyURIs.toString()).isEqualTo("[nasdanika://exec/configurator/properties/name]");
 				},
 				diagnostic -> {
 					if (diagnostic.getStatus() == Status.ERROR) {

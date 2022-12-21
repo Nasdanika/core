@@ -38,9 +38,10 @@ public class NcoreResourceSet extends ResourceSetImpl {
 		if (NcoreUtil.isEMapEntry(eObj)) {
 			return false; // Ignoring EMap entries.
 		}
-		URI objUri = NcoreUtil.getUri(eObj);
-		if (objUri != null && objUri.equals(uri)) {
-			return true;
+		for (URI objUri: NcoreUtil.getUris(eObj)) {
+			if (objUri != null && objUri.equals(uri)) {
+				return true;
+			}
 		}
 		if (eObj instanceof ModelElement) {
 			String uuid = ((ModelElement) eObj).getUuid();

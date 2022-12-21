@@ -262,7 +262,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		if (link.startsWith(FIRST_DATA_PAGE_PREFIX)) {
 			URI targetURI = URI.createURI(link.substring(FIRST_DATA_PAGE_PREFIX.length()));
 			URI docURI = document.getURI();
-			if (targetURI.isRelative() && !docURI.isRelative()) {
+			if (targetURI.isRelative() && docURI != null && !docURI.isRelative()) {
 				targetURI = targetURI.resolve(docURI);
 			}
 			
@@ -291,7 +291,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			String targetUriStr = link.substring(NAME_DATA_PAGE_PREFIX.length());
 			URI targetURI = URI.createURI(targetUriStr);
 			URI docURI = document.getURI();
-			if (targetURI.isRelative() && !docURI.isRelative()) {
+			if (targetURI.isRelative() && docURI != null && !docURI.isRelative()) {
 				targetURI = targetURI.resolve(docURI);
 			}
 				

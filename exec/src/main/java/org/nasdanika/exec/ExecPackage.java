@@ -78,13 +78,13 @@ public interface ExecPackage extends EPackage {
 	int BLOCK__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BLOCK__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int BLOCK__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -112,6 +112,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int BLOCK__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
@@ -179,13 +188,13 @@ public interface ExecPackage extends EPackage {
 	int CALL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CALL__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int CALL__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -213,6 +222,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -362,13 +380,13 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURATOR__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int CONFIGURATOR__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -396,6 +414,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONFIGURATOR__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -454,13 +481,13 @@ public interface ExecPackage extends EPackage {
 	int EVAL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVAL__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int EVAL__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -488,6 +515,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVAL__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Script</b></em>' containment reference.
@@ -546,13 +582,13 @@ public interface ExecPackage extends EPackage {
 	int FAIL__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FAIL__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int FAIL__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -580,6 +616,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int FAIL__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
@@ -629,13 +674,13 @@ public interface ExecPackage extends EPackage {
 	int LIST__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LIST__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int LIST__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -663,6 +708,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int LIST__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -712,13 +766,13 @@ public interface ExecPackage extends EPackage {
 	int MAP__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MAP__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int MAP__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -746,6 +800,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAP__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' map.

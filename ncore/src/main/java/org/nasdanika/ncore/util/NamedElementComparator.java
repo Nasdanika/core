@@ -1,5 +1,6 @@
 package org.nasdanika.ncore.util;
 
+import java.util.Collection;
 import java.util.Comparator;
 
 import org.eclipse.emf.common.util.URI;
@@ -23,18 +24,18 @@ public class NamedElementComparator implements Comparator<NamedElement> {
 		}
 		if (Util.isBlank(a.getName())) {
 			if (Util.isBlank(b.getName())) {
-				URI aUri = NcoreUtil.getUri(a);
-				URI bUri = NcoreUtil.getUri(b);
-				if (aUri == null) {
-					if (bUri == null) {
+				Collection<URI> aUris = NcoreUtil.getUris(a);
+				Collection<URI> bUris = NcoreUtil.getUris(b);
+				if (aUris.isEmpty()) {
+					if (bUris.isEmpty()) {
 						return a.hashCode() - b.hashCode();
 					}
 					return 1;
 				}
-				if (bUri == null) {
+				if (bUris.isEmpty()) {
 					return -1;
 				}
-				return aUri.toString().compareTo(bUri.toString());
+				return aUris.toString().compareTo(bUris.toString());
 			}
 			
 			return 1;

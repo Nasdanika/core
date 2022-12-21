@@ -80,13 +80,13 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE__MARKERS = NcorePackage.MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__URI = NcorePackage.MODEL_ELEMENT__URI;
+	int RESOURCE__URIS = NcorePackage.MODEL_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -114,6 +114,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__ACTION_PROTOTYPE = NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -189,13 +198,13 @@ public interface ResourcesPackage extends EPackage {
 	int CONTAINER__MARKERS = RESOURCE__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER__URI = RESOURCE__URI;
+	int CONTAINER__URIS = RESOURCE__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -223,6 +232,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTAINER__ACTION_PROTOTYPE = RESOURCE__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__REPRESENTATIONS = RESOURCE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -325,13 +343,13 @@ public interface ResourcesPackage extends EPackage {
 	int FILE__MARKERS = RESOURCE__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Uri</b></em>' attribute.
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILE__URI = RESOURCE__URI;
+	int FILE__URIS = RESOURCE__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -359,6 +377,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILE__ACTION_PROTOTYPE = RESOURCE__ACTION_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__REPRESENTATIONS = RESOURCE__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

@@ -195,9 +195,9 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Base class for many Nasdanika model classes."/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uris" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="documentation" value="If element's URI is not set then its default value is derived from the container URI and containment reference. &#xA;This is a logical URI and it can be used for cross-referencing of elements in a resource-independent fashion.&#xA;"/>
+        <details key="documentation" value="Element URI's - there might be more than one. See ``NcoreUtil.getUris()`` for more details.&#xA;URI's can be used for cross-referencing of elements in a resource-independent fashion.&#xA;"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
