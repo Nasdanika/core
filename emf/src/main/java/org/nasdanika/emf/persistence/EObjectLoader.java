@@ -565,7 +565,7 @@ public class EObjectLoader extends DispatchingLoader {
 			ProgressMonitor progressMonitor) {
 		
 		URI resourceURI = URI.createURI(resourceUriStr);
-		if (resourceURI.isRelative() && base != null && !base.isRelative()) {
+		if (resourceURI.isRelative() && base != null && !base.isRelative() && base.isHierarchical()) {
 			resourceURI = resourceURI.resolve(base);
 		}
 		Resource linkedResource = resourceSet.getResource(resourceURI, true);

@@ -399,7 +399,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		URI eProxyURI = super.eProxyURI();
 		if (eProxyURI != null && eProxyURI.isRelative()) {
 			for (URI base: NcoreUtil.getUris(this)) {
-				if (base != null && !base.isRelative()) {
+				if (base != null && !base.isRelative() && base.isHierarchical()) {
 					return eProxyURI.resolve(base);
 				}
 			}

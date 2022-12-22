@@ -95,7 +95,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			URI specURI = URI.createURI(specUriStr);
 			if (specURI.isRelative()) {
 				URI baseURI = getBaseURI();
-				if (baseURI != null && !baseURI.isRelative()) {
+				if (baseURI != null && !baseURI.isRelative() && baseURI.isHierarchical()) {
 					specURI = specURI.resolve(baseURI);
 				}
 			}
@@ -108,7 +108,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			URI semanticURI = URI.createURI(semanticUriStr);
 			if (semanticURI.isRelative()) {
 				URI baseURI = getBaseURI();
-				if (baseURI != null && !baseURI.isRelative()) {
+				if (baseURI != null && !baseURI.isRelative() && baseURI.isHierarchical()) {
 					semanticURI = semanticURI.resolve(baseURI);
 				}
 			}

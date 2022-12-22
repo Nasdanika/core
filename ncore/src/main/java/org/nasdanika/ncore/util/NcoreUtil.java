@@ -264,7 +264,7 @@ public final class NcoreUtil {
 			// Computing all permutations
 			Collection<URI> ret = new HashSet<>();
 			for (URI cURI: getUris(container)) {
-				if (!cURI.isRelative()) {
+				if (!cURI.isRelative() && cURI.isHierarchical()) {
 					String cLastSegment = cURI.lastSegment();
 					if (cLastSegment == null || cLastSegment.length() > 0) {
 						cURI = cURI.appendSegment("");
@@ -272,7 +272,10 @@ public final class NcoreUtil {
 				}
 				
 				for (URI eObjURI: eObjURIs) {
-					ret.add(resolve(eObjURI,cURI));  
+					URI resolved = resolve(eObjURI,cURI);
+					if (resolved != null) {
+						ret.add(resolved);
+					}
 				}
 			}
 			
@@ -280,42 +283,45 @@ public final class NcoreUtil {
 		}
 		
 		private static URI resolve(URI uri, URI base) {		
-			if (uri.isRelative() && !base.isRelative()) {
-				return uri.resolve(base);
-			}
-			
-			// Resolving containment path URI against container URI by combining all segments and treating the first first segment as scheme, second as authority and the rest as segments.			
-			List<String> allParts = new ArrayList<>();
-			if (base.scheme() != null) {
-				allParts.add(base.scheme());
-			}
-			if (base.authority() != null) {
-				allParts.add(base.authority());
-			}
-			allParts.addAll(base.segmentsList());
-			
-			if (uri.scheme() != null) {
-				allParts.add(uri.scheme());
-			}
-			if (uri.authority() != null) {
-				allParts.add(uri.authority());
-			}
-			allParts.addAll(uri.segmentsList());
-			
-			if (allParts.size() == 0) {
-				return uri;
-			}
-			
-			if (allParts.size() == 1) {
-				return URI.createURI(allParts.get(0));
+			if (uri.isRelative() && base.isHierarchical()) {
+				if (!base.isRelative()) { 
+					return uri.resolve(base);
+				}
+				// Resolving containment path URI against container URI by combining all segments and treating the first first segment as scheme, second as authority and the rest as segments.			
+				List<String> allParts = new ArrayList<>();
+				if (base.scheme() != null) {
+					allParts.add(base.scheme());
+				}
+				if (base.authority() != null) {
+					allParts.add(base.authority());
+				}
+				allParts.addAll(base.segmentsList());
+				
+				if (uri.scheme() != null) {
+					allParts.add(uri.scheme());
+				}
+				if (uri.authority() != null) {
+					allParts.add(uri.authority());
+				}
+				allParts.addAll(uri.segmentsList());
+				
+				if (allParts.size() == 0) {
+					return uri;
+				}
+				
+				if (allParts.size() == 1) {
+					return URI.createURI(allParts.get(0));
+				}
+
+				if (allParts.size() == 2 && allParts.get(1).length() == 0) {
+					return URI.createURI(String.join("/", allParts) + (uri == null ? "" : uri));				
+				}
+				
+				URI allPartsURI = URI.createHierarchicalURI(allParts.get(0), allParts.get(1), null, allParts.subList(2, allParts.size()).toArray(new String[allParts.size() - 2]), null, null);
+				return uri == null ? allPartsURI : uri.resolve(allPartsURI);
 			}
 
-			if (allParts.size() == 2 && allParts.get(1).length() == 0) {
-				return URI.createURI(String.join("/", allParts) + (uri == null ? "" : uri));				
-			}
-			
-			URI allPartsURI = URI.createHierarchicalURI(allParts.get(0), allParts.get(1), null, allParts.subList(2, allParts.size()).toArray(new String[allParts.size() - 2]), null, null);
-			return uri == null ? allPartsURI : uri.resolve(allPartsURI);
+			return null;
 		}
 
 	/**

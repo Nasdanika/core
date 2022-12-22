@@ -13,7 +13,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Disabled;
@@ -25,7 +24,6 @@ import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.DiagramGenerator;
 import org.nasdanika.common.ListCompoundSupplier;
 import org.nasdanika.common.MutableContext;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.PrintStreamProgressMonitor;
 import org.nasdanika.common.ProgressEntry;
 import org.nasdanika.common.ProgressMonitor;
@@ -318,12 +316,12 @@ public class TestCommon {
 //		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));
 	}
 	
-	@Test
-	public void testURI() throws Exception {
-		URI uri = URI.createURI("http://my-server");
-		System.out.println(uri.hasAbsolutePath() + " " + uri.isRelative() + " " + uri.appendSegment(""));
-		System.out.println(URI.createURI("param").resolve(uri));
-	}
+//	@Test
+//	public void testURI() throws Exception {
+//		URI uri = URI.createURI("mailto:someone@somewhere.com");
+//		System.out.println(uri.hasAbsolutePath() + " " + uri.isRelative() + " " + uri.isHierarchical() + " " + uri.appendSegment(""));
+//		System.out.println(URI.createURI("param").resolve(uri));
+//	}
 	
 	@Test
 	public void testDelimitedStringMap() {
