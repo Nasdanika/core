@@ -61,18 +61,6 @@ Below is a summary of Nasdanika EMF adapters:
 
 See [JavaDoc](apidocs/index.html) for more details.
 
-### Model execution
-
-Nasdanika EMF provides the following CLI command classes:
-
-* ${javadoc/org.nasdanika.emf.ResourceSetCommand} - base class for commands which use a set of resources (models).
-* ${javadoc/org.nasdanika.emf.ModelCommand} - loads a model from a URL or a file path, optionally validates and passes to a consumer for further processing.
-* ${javadoc/org.nasdanika.emf.AdapterModelCommand} - base class for commands which execute models by adapting them to a specific adapter type and then creating a ${javadoc/org.nasdanika.common.CommandFactory} from that adapter.
-* ${javadoc/org.nasdanika.emf.ConsumerModelCommand} - base class for commands which adapt models to ${javadoc/org.nasdanika.common.ConsumerFactory} and then combine input supplier with the consumer to execute the command.
-* ${javadoc/org.nasdanika.emf.ExecuteModelCommand} - adapts the root model element to CommandFactory and executes it.
-* ${javadoc/org.nasdanika.emf.FunctionModelCommand} - base class for commands which adapt models to ${javadoc/org.nasdanika.common.FunctionFactory} and then combine input supplier with the function and output consumer to execute the command.
-* ${javadoc/org.nasdanika.emf.SupplierModelCommand} - base class for commands which adapt models to ${javadoc/org.nasdanika.common.SupplierFactory} and then combine the supplier with the output consumer to execute the command.
-
 ### Persistence
 
 Nasdanika EMF persistence allows to load Ecore models from key-value sources such as:

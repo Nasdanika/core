@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="ASCII"?>
-<org.nasdanika.html.model.app:Action 
-	xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:org.nasdanika.exec.content="urn:org.nasdanika.exec.content" 
-	xmlns:org.nasdanika.html.model.app="urn:org.nasdanika.html.model.app">
-  <navigation xsi:type="org.nasdanika.html.model.app:Link" text="Javadoc" icon="fab fa-java" location="apidocs/index.html"/>
-</org.nasdanika.html.model.app:Action>
-          
