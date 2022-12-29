@@ -14,6 +14,8 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -27,6 +29,7 @@ import java.util.StringTokenizer;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1188,6 +1191,8 @@ public class Util {
 		};
 	}
 
+	// --- File utilities ---
+	
 	/**
 	 * Walks the directory passing files and their paths to the listener.
 	 * @param source
@@ -1209,5 +1214,64 @@ public class Util {
 			}
 		}
 	}
+	
+	public static void copy(File source, File target, boolean cleanTarget, BiConsumer<File,File> listener) throws IOException {
+		if (cleanTarget && target.isDirectory()) {
+			delete(target.listFiles());
+		}
+		if (source.isDirectory()) {
+			target.mkdirs();
+			for (File sc: source.listFiles()) {
+				copy(sc, new File(target, sc.getName()), false, listener);
+			}
+		} else if (source.isFile()) {
+			Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);			
+			if (listener != null) {
+				listener.accept(source, target);
+			}
+		}
+	}
+	
+	public static void delete(File... files) {
+		for (File file: files) {
+			if (file.exists()) {
+				if (file.isDirectory()) {
+					delete(file.listFiles());
+				}
+				file.delete();
+			}
+		}
+	}
+		
+	public static void copy(File source, File target, boolean cleanTarget, Predicate<String> cleanPredicate, BiConsumer<File,File> listener) throws IOException {
+		if (cleanTarget && target.isDirectory()) {
+			delete(null, cleanPredicate, target.listFiles());
+		}
+		if (source.isDirectory()) {
+			target.mkdirs();
+			for (File sc: source.listFiles()) {
+				copy(sc, new File(target, sc.getName()), false, listener);
+			}
+		} else if (source.isFile()) {
+			Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);			
+			if (listener != null) {
+				listener.accept(source, target);
+			}
+		}
+	}
+	
+	public static void delete(String path, Predicate<String> deletePredicate, File... files) {
+		for (File file: files) {
+			String filePath = path == null ? file.getName() : path + "/" + file.getName();
+			if (file.exists() && (deletePredicate == null || deletePredicate.test(filePath))) {
+				if (file.isDirectory()) {
+					delete(filePath, deletePredicate, file.listFiles());
+				}
+				file.delete();
+			}
+		}
+	}	
+	
+	
 	
 }
