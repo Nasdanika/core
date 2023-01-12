@@ -46,7 +46,7 @@ public class MarkdownSupplierFactoryAdapter extends FilterSupplierFactoryAdapter
 			
 			@Override
 			protected DiagramGenerator getDiagramGenerator() {
-				return context == null ? super.getDiagramGenerator() : context.get(DiagramGenerator.class, super.getDiagramGenerator()); 
+				return context == null ? super.getDiagramGenerator() : context.computingContext().get(DiagramGenerator.class, super.getDiagramGenerator()); 
 			}
 			
 		};

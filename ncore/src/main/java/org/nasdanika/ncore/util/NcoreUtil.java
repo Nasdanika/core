@@ -240,29 +240,26 @@ public final class NcoreUtil {
 				return Collections.emptyList(); // EMap entries do not have URI's.
 			}
 
-			List<URI> eObjURIs = new ArrayList<>();
+			List<URI> ownURIs = new ArrayList<>();
 			if (eObj instanceof ModelElement) {
 				for (String uri: ((ModelElement) eObj).getUris()) {
 					if (!Util.isBlank(uri)) {
-						eObjURIs.add(URI.createURI(uri));
+						ownURIs.add(URI.createURI(uri));
 					}
 				}
 			}
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
 			if (containmentPath == null) {
-				return eObjURIs;
+				return ownURIs;
 			}
 			
 			EObject container = containmentPath.getFirst();
 			
-			// Using containment path only if there are no explicitly specified URI's
-			if (eObjURIs.isEmpty()) {
-				eObjURIs.add(URI.createURI(containmentPath.getSecond()));
-			}
-			
 			// Computing all permutations
-			Collection<URI> ret = new HashSet<>();
+			Collection<URI> ret = new HashSet<>(ownURIs);
+			
+			// Resolving containment URI's
 			for (URI cURI: getUris(container)) {
 				if (!cURI.isRelative() && cURI.isHierarchical()) {
 					String cLastSegment = cURI.lastSegment();
@@ -270,12 +267,11 @@ public final class NcoreUtil {
 						cURI = cURI.appendSegment("");
 					}
 				}
-				
-				for (URI eObjURI: eObjURIs) {
-					URI resolved = resolve(eObjURI,cURI);
-					if (resolved != null) {
-						ret.add(resolved);
-					}
+
+				URI containmentURI = URI.createURI(containmentPath.getSecond());				
+				URI resolved = resolve(containmentURI,cURI);
+				if (resolved != null) {
+					ret.add(resolved);
 				}
 			}
 			
