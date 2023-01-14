@@ -257,7 +257,16 @@ public final class NcoreUtil {
 			EObject container = containmentPath.getFirst();
 			
 			// Computing all permutations
-			Collection<URI> ret = new HashSet<>(ownURIs);
+			Collection<URI> ret = new HashSet<>();
+			
+			List<URI> relativeOwnURIs = new ArrayList<>();
+			for (URI ownURI: ownURIs) {
+				if (ownURI.isRelative()) {
+					relativeOwnURIs.add(ownURI);
+				} else {
+					ret.add(ownURI); // Absolute or opaque
+				}
+			}
 			
 			// Resolving containment URI's
 			for (URI cURI: getUris(container)) {
@@ -266,12 +275,20 @@ public final class NcoreUtil {
 					if (cLastSegment == null || cLastSegment.length() > 0) {
 						cURI = cURI.appendSegment("");
 					}
+					for (URI relativeOwnURI: relativeOwnURIs) {
+						URI resolved = resolve(relativeOwnURI,cURI);
+						if (resolved != null) {
+							ret.add(resolved);
+						}						
+					}
 				}
 
-				URI containmentURI = URI.createURI(containmentPath.getSecond());				
-				URI resolved = resolve(containmentURI,cURI);
-				if (resolved != null) {
-					ret.add(resolved);
+				if (ownURIs.isEmpty()) { // Resorting to containment URI's only if there are no own URI's.
+					URI containmentURI = URI.createURI(containmentPath.getSecond());				
+					URI resolved = resolve(containmentURI,cURI);
+					if (resolved != null) {
+						ret.add(resolved);
+					}
 				}
 			}
 			
