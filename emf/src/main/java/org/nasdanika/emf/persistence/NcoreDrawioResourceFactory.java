@@ -32,8 +32,8 @@ import org.nasdanika.graph.processor.emf.SemanticProcessor;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.NamedElement;
-import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * This factory uses {@link DrawioResource} with {@link DrawioEObjectFactory}. 
@@ -218,7 +218,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 						((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(firstTooltipSentence);						
 					}
 					if (semanticElement instanceof Documented && ((Documented) semanticElement).getDocumentation().isEmpty()) {
-						((Documented) semanticElement).getDocumentation().add(wrapString("<pre style='white-space:pre-wrap'>" + System.lineSeparator() + tooltip + System.lineSeparator() + "</pre>"));
+						((Documented) semanticElement).getDocumentation().add(NcoreUtil.wrapString("<pre style='white-space:pre-wrap'>" + System.lineSeparator() + tooltip + System.lineSeparator() + "</pre>"));
 					}
 				}
 				
@@ -243,12 +243,6 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 		}
 		
 		return semanticElements;		
-	}
-	
-	protected EObject wrapString(String str) {
-		org.nasdanika.ncore.String strObj = NcoreFactory.eINSTANCE.createString();
-		strObj.setValue(str);		
-		return strObj;
 	}
 	
 	/**

@@ -30,6 +30,7 @@ import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
+import org.nasdanika.ncore.NcoreFactory;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Temporal;
@@ -507,5 +508,11 @@ public final class NcoreUtil {
 		}
 		return null;		
 	}	
+	
+	public static org.nasdanika.ncore.String wrapString(String str) {
+		org.nasdanika.ncore.String strObj = NcoreFactory.eINSTANCE.createString();
+		strObj.setValue(str);		
+		return strObj;
+	}
 	
 }
