@@ -1,0 +1,10 @@
+app-action:
+  text: Drawio
+  location: drawio/index.html
+  uris: drawio
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.drawio/module-summary.html

@@ -1,6 +1,5 @@
 package org.nasdanika.emf.persistence;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,8 +11,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
-
-import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -35,12 +32,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FunctionFactory;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
+import org.nasdanika.common.URIEncodable;
 import org.nasdanika.common.Util;
-import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
 import org.nasdanika.graph.processor.emf.LinkedResourcesAdapter;
 import org.nasdanika.ncore.Marked;
@@ -608,23 +604,13 @@ public class EObjectLoader extends DispatchingLoader {
 			Context context,
 			ProgressMonitor progressMonitor) {
 		
-		// Injection of diagram document. TODO - handle pages.
-		ProcessorConfig<?> resourceProcessorConfig = (ProcessorConfig<?>) EcoreUtil.getRegisteredAdapter(linkedResource, ProcessorConfig.class);
-		if (resourceProcessorConfig != null) {
-			org.nasdanika.graph.Element element = resourceProcessorConfig.getElement();
-			if (element instanceof org.nasdanika.drawio.Document) {
-				try {
-					return ((org.nasdanika.drawio.Document) element).toDataURI(true).toString();
-				} catch (TransformerException | IOException e) {
-					throw new NasdanikaException("Error saving drawio document: " + e, e);
-				}
-			}
+		if (linkedResource instanceof URIEncodable) {
+			return ((URIEncodable) linkedResource).encode().toString();
 		}
 		
 		return resourceUriStr;	
 	}
-	
-	
+		
 	/**
 	 * Creates a new {@link EObjectSupplierFactory}. This implementation calls EObjectSupplierFactory constructor.
 	 * @param eClass

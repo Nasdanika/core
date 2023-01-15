@@ -1,0 +1,10 @@
+app-action:
+  text: Persistence
+  location: persistence/index.html
+  uris: persistence
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.persistence/module-summary.html

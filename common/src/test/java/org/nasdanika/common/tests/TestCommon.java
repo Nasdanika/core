@@ -318,7 +318,7 @@ public class TestCommon {
 	
 //	@Test
 //	public void testURI() throws Exception {
-//		URI uri = URI.createURI("mailto:someone@somewhere.com");
+//		URI uri = URI.createURI("mailto:someone@somewhere.com").appendFragment("fragment");
 //		System.out.println(uri.hasAbsolutePath() + " " + uri.isRelative() + " " + uri.isHierarchical() + " " + uri.appendSegment(""));
 //		System.out.println(URI.createURI("param").resolve(uri));
 //	}

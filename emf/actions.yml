@@ -1,0 +1,10 @@
+app-action:
+  text: EMF
+  location: emf/index.html
+  uris: emf
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.emf/module-summary.html

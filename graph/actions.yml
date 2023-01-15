@@ -1,0 +1,10 @@
+app-action:
+  text: Graph
+  location: graph/index.html
+  uris: graph
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.graph/module-summary.html

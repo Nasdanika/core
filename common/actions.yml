@@ -1,0 +1,20 @@
+app-action:
+  text: Common
+  location: common/index.html
+  uris: common
+  children:
+     - app-action:
+         text: Execution Model
+         location: features/execution-model/index.html
+         content:
+           content-markdown:
+             source:
+               content-resource:
+                 location: docs/execution-model.md
+                 interpolate: true
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.common/module-summary.html

@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.URIEncodable;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.graph.processor.emf.GraphProcessorResource;
 import org.xml.sax.SAXException;
@@ -24,7 +25,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource<P, T extends EObject> extends GraphProcessorResource<P, T> {
+public abstract class DrawioResource<P, T extends EObject> extends GraphProcessorResource<P, T> implements URIEncodable {
 	
 	protected Document document;
 	
@@ -86,5 +87,14 @@ public abstract class DrawioResource<P, T extends EObject> extends GraphProcesso
 	 * @param document Document to update. It may be a previously loaded document or a new empty document for new resources.
 	 */
 	protected void update(Document document) {}
+	
+	@Override
+	public URI encode() {
+		try {
+			return document.toDataURI(true);
+		} catch (TransformerException | IOException e) {
+			throw new NasdanikaException("Error encoding document to URI: " + e, e);
+		}
+	}
 			
 }

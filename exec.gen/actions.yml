@@ -1,0 +1,10 @@
+app-action:
+  text: Gen
+  location: exec/gen/index.html
+  uris: exec/gen
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.exec.gen/module-summary.html

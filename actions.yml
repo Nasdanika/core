@@ -1,0 +1,29 @@
+app-action:
+  text: Core
+  location: core/index.html
+  uris: nasdanika://core
+  children:
+     - common/actions.yml
+     - drawio/actions.yml
+     - emf/actions.yml
+     - app-action:
+         text: Exec
+         location: exec/index.html
+         children:
+           - "../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"
+           - exec.gen/actions.yml              
+     - graph/actions.yml
+     - app-action:
+         text: Ncore
+         location: ncore/index.html
+         children:
+           - "../nasdanika.github.io/target/model-doc/actions/ncore.genmodel.xml#/"
+           - ncore.gen/actions.yml              
+     - persistence/actions.yml
+     - resources/actions.yml
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: apidocs/index.html

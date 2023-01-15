@@ -1,0 +1,10 @@
+app-action:
+  text: Resources
+  location: resources/index.html
+  uris: resources
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../apidocs/org.nasdanika.resources/module-summary.html
