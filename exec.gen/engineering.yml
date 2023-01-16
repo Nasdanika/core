@@ -1,5 +1,0 @@
-engineering-module:
-  name: Generation Adapters
-  path: gen
-  action-prototype: "javadoc-action-prototype.xml#/"
-   

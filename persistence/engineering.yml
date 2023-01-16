@@ -1,6 +1,0 @@
-engineering-module:
-  name: Persistence
-  path: persistence
-  action-prototype: "javadoc-action-prototype.xml#/"
-
-     

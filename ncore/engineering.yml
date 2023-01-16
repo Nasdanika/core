@@ -1,6 +1,0 @@
-engineering-module:
-  name: Ncore
-  path: ncore
-  dependencies:
-    - engineering://nasdanika/modules/core/modules/common
-  action-prototype: "../../nasdanika.github.io/target/model-doc/actions/ncore.genmodel.xml#/"    

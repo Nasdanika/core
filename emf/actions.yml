@@ -2,6 +2,12 @@ app-action:
   text: EMF
   location: emf/index.html
   uris: emf
+  content:
+    content-markdown:
+      source:
+        content-resource:
+          location: readme.md
+          interpolate: true
   navigation:
     - app-link:
         text: Javadoc

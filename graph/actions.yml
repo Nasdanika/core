@@ -2,6 +2,12 @@ app-action:
   text: Graph
   location: graph/index.html
   uris: graph
+  content:
+    content-markdown:
+      source:
+        content-resource:
+          location: readme.md
+          interpolate: true
   navigation:
     - app-link:
         text: Javadoc
