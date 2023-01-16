@@ -1155,13 +1155,13 @@ public class Util {
 		urls.put(java11, java11);
 		
 		// Core
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/core/apidocs/"), gitDir, "core/target/site/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/core/apidocs/"), gitDir, "core/target/site/apidocs");
 		
 		// HTML
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/html/apidocs/"), gitDir, "html/target/site/apidocs");
+		addUrl(urls, new URL("https://docs.nasdanika.org/html/apidocs/"), gitDir, "html/target/site/apidocs");
 		
-		// Engineering		
-		addUrl(urls, new URL("https://docs.nasdanika.org/modules/engineering/apidocs/"), gitDir, "engineering/target/site/apidocs");
+		// Architecture Framework		
+		addUrl(urls, new URL("https://docs.nasdanika.org/architecture-framework/apidocs/"), gitDir, "architecture-framework/target/site/apidocs");
 		
 		return createJavadocResolver(urls, progressMonitor);
 	}
