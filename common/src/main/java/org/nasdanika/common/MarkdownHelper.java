@@ -26,6 +26,9 @@ import com.vladsch.flexmark.util.data.DataHolder;
  */
 public class MarkdownHelper {
 	
+	private static final String FENSED_BLOCK_START_PREFIX_REGEX = "(^|((\\R|^)(\\s)*\\R))"; //String start or an empty line before   "\\R(\\s)*\\R"; 
+	private static final String FENCED_BLOCK_START_SUFFIX_REGEX = "(\\s)*\\R"; // Zero or more whitespace followed by a new line.
+
 	/**
 	 * Shared instance with default configuration.
 	 */
@@ -46,55 +49,57 @@ public class MarkdownHelper {
 	public static final String HIGHLIGHT_JS_CSS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/default.min.css";
 	public static final String HIGHLIGHT_JS_SCRIPT_CDN = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js";
 	public static final String HIGHLIGHT_JS_INIT_SCRIPT = "hljs.initHighlightingOnLoad();";
-		
+	
 	public static final int MIN_FIRST_SENTENCE_LENGTH = 20;
 	public static final int MAX_FIRST_SENTENCE_LENGTH = 250;	
 	public static final String[] ABBREVIATIONS = { "e.g.", "i.e.", "etc." };
 		
+//	private static final String 	
+	
 	private static final String START_UML_BLOCK = "```uml";
 	private static final String START_UML_RESOURCE_BLOCK = "```uml-resource";
-	private static final Pattern START_UML_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_UML_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_UML_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_UML_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_UML_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_UML_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_UML_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String START_WIREFRAME_BLOCK = "```wireframe";
 	private static final String START_WIREFRAME_RESOURCE_BLOCK = "```wireframe-resource";
-	private static final Pattern START_WIREFRAME_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_WIREFRAME_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WIREFRAME_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WIREFRAME_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_WIREFRAME_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_WIREFRAME_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_WIREFRAME_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String START_GANTT_BLOCK = "```gantt";
 	private static final String START_GANTT_RESOURCE_BLOCK = "```gantt-resource";
-	private static final Pattern START_GANTT_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_GANTT_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_GANTT_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_GANTT_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_GANTT_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_GANTT_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_GANTT_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String START_MINDMAP_BLOCK = "```mindmap";
 	private static final String START_MINDMAP_RESOURCE_BLOCK = "```mindmap-resource";
-	private static final Pattern START_MINDMAP_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_MINDMAP_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MINDMAP_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_MINDMAP_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_MINDMAP_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_MINDMAP_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_MINDMAP_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String START_WBS_BLOCK = "```wbs";
 	private static final String START_WBS_RESOURCE_BLOCK = "```wbs-resource";
-	private static final Pattern START_WBS_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_WBS_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_WBS_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_WBS_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_WBS_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_WBS_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_WBS_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 	
 	private static final String START_DRAWIO_BLOCK = "```drawio";
 	private static final String START_DRAWIO_RESOURCE_BLOCK = "```drawio-resource";
-	private static final Pattern START_DRAWIO_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_DRAWIO_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_DRAWIO_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_DRAWIO_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_DRAWIO_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_DRAWIO_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_DRAWIO_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 	
 	private static final String START_MERMAID_BLOCK = "```mermaid";
 	private static final String START_MERMAID_RESOURCE_BLOCK = "```mermaid-resource";
-	private static final Pattern START_MERMAID_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MERMAID_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_MERMAID_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_MERMAID_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_MERMAID_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_MERMAID_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_MERMAID_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_MERMAID_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 	
 	private static final String START_PNG_BLOCK = "```png";
 	private static final String START_PNG_RESOURCE_BLOCK = "```png-resource";
-	private static final Pattern START_PNG_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_PNG_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_PNG_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_PNG_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_PNG_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_PNG_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_PNG_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_PNG_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 	
 	private static final String START_JPEG_BLOCK = "```jpeg";
 	private static final String START_JPEG_RESOURCE_BLOCK = "```jpeg-resource";
-	private static final Pattern START_JPEG_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_JPEG_BLOCK+"(\\s)*\\R");
-	private static final Pattern START_JPEG_RESOURCE_PATTERN = Pattern.compile("\\R(\\s)*\\R"+START_JPEG_RESOURCE_BLOCK+"(\\s)*\\R");
+	private static final Pattern START_JPEG_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_JPEG_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
+	private static final Pattern START_JPEG_RESOURCE_PATTERN = Pattern.compile(FENSED_BLOCK_START_PREFIX_REGEX+START_JPEG_RESOURCE_BLOCK+FENCED_BLOCK_START_SUFFIX_REGEX);
 
 	private static final String FENCED_BLOCK = "```";
 	private static final Pattern FENCED_BLOCK_PATTERN = Pattern.compile("\\R"+FENCED_BLOCK+"(\\s)*((\\R(\\s)*\\R)|$)");	
@@ -159,12 +164,14 @@ public class MarkdownHelper {
 		int i = 0;
 		while (startMatcher.find()) {
 		    int startMatcherStart = startMatcher.start();
-		    if (startMatcherStart > i) { // Need to reproduce a situation when i is greater than startMatcherStart
+		    if (startMatcherStart >= i) { // Need to reproduce a situation when i is greater than startMatcherStart
 				int startMatcherEnd = startMatcher.end();
 				String endMatcherContent = input.substring(startMatcherEnd);
 				Matcher endMatcher = FENCED_BLOCK_PATTERN.matcher(endMatcherContent);			
 				if (endMatcher.find()) {
-					output.append(input.substring(i, startMatcherStart));
+					if (startMatcherStart > i) {
+						output.append(input.substring(i, startMatcherStart));
+					}
 					String bareSpec = processSpec(dialect, endMatcherContent.substring(0, endMatcher.start())) ;
 					String match = endMatcherContent.substring(endMatcher.start(), endMatcher.end());
 				    i = startMatcherEnd + endMatcher.start() + match.indexOf("```") + 3; // Just the closing back-ticks, no space or new line characters.

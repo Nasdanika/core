@@ -2,6 +2,7 @@ package org.nasdanika.common.tests;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -300,7 +302,7 @@ public class TestCommon {
 		
 		Function<String, String> nasdanikaResolver = Util.createNasdanikaJavadocResolver(new File("../.."), progressMonitor);
 		String contextLink = nasdanikaResolver.apply("org.nasdanika.common.Context");
-		assertEquals("<a href='https://docs.nasdanika.org/modules/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
+		assertEquals("<a href='https://docs.nasdanika.org/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>", contextLink);		
 	}
 	
 	@Test
@@ -310,7 +312,7 @@ public class TestCommon {
 		
 		MutableContext context = Context.EMPTY_CONTEXT.fork();
 		context.put("javadoc", Util.createJavadocPropertyComputer(nasdanikaResolver));
-		String expected = "Hello <a href='https://docs.nasdanika.org/modules/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
+		String expected = "Hello <a href='https://docs.nasdanika.org/core/apidocs/org.nasdanika.common/org/nasdanika/common/Context.html'>org.nasdanika.common.Context</a>!";
 		assertEquals(expected, context.interpolateToString("Hello ${javadoc/org.nasdanika.common.Context}!"));
 		
 //		System.out.println(context.interpolateToString("${javadoc/org.nasdanika.common.SupplierFactory}<${javadoc/java.io.InputStream}>"));
@@ -383,6 +385,16 @@ public class TestCommon {
 //		cf.completeExceptionally(new NasdanikaException("I failed"));
 		cf.exceptionally(e -> "After completion handler: " + e).thenAccept(v -> System.out.println("Exceptionally: " + v));
 		
+	}
+	
+	@Test
+	public void testFencedBlockStartPrefixRegex() {
+		Pattern pattern = Pattern.compile("(^|((\\R|^)(\\s)*\\R))Hello");
+		assertTrue(pattern.matcher("Hello").matches());
+		assertFalse(pattern.matcher(" Hello").matches());
+		assertTrue(pattern.matcher("More\n     \nHello").find());
+		assertFalse(pattern.matcher("More\nHello").find());
+		assertTrue(pattern.matcher("\nHello").find());
 	}
 	
 	
