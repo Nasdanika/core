@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,11 +113,6 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 
 	@Override
-	public String getLabel() {
-		return "mxCell".equals(element.getTagName()) ? element.getAttribute(ATTRIBUTE_VALUE) : element.getAttribute(ATTRIBUTE_LABEL);
-	}
-
-	@Override
 	public void setLabel(String label) {
 		element.setAttribute("mxCell".equals(element.getTagName()) ? ATTRIBUTE_VALUE : ATTRIBUTE_LABEL, label);
 	}
@@ -157,10 +153,70 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 			
 		};
 	}
+	
+	@Override
+	public String getLabel() {
+		return interpolate("mxCell".equals(element.getTagName()) ? element.getAttribute(ATTRIBUTE_VALUE) : element.getAttribute(ATTRIBUTE_LABEL), new HashSet<>());
+	}
+
+	/**
+	 * Unexpanded property.
+	 * @param name
+	 * @return
+	 */
+	private String getRawProperty(String name) {
+		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(name);
+	}
+	
+	private String interpolate(String str, Set<String> expanded) {		
+		if (!Util.isBlank(str) && "1".equals(getRawProperty("placeholders"))) {
+			StringBuilder retBuilder = new StringBuilder();
+			int i = 0;
+			int start;
+			while (i < str.length() &&  (start = str.indexOf("%", i)) != -1) {
+				int end = str.indexOf("%", start + 1);
+				if (end == -1) {
+					break; 
+				}
+
+				String pName = str.substring(start + 1, end);
+				String pValue = getRawProperty(pName);
+				if (expanded.add(pName)) {
+					pValue = interpolate(pValue, expanded);
+				}
+				if (Util.isBlank(pValue)) {
+					pValue = getInheritedProperty(getParent(), pName);
+				}
+				
+				if (Util.isBlank(pValue)) {
+					retBuilder.append(str.substring(i, end));
+					i = end;
+				} else {
+					retBuilder.append(str.substring(i, start)).append(pValue);
+					i = end + 1;
+				}
+			}
+			retBuilder.append(str.substring(i));
+			return retBuilder.toString();
+		}
+
+		return str;
+	}
+	
+	private static String getInheritedProperty(ModelElement modelElement, String name) {
+		if (modelElement == null) {
+			return null;
+		}
+		String val = modelElement.getProperty(name);
+		if (!Util.isBlank(val)) {
+			return val;
+		}
+		return getInheritedProperty(modelElement.getParent(), name);
+	}
 
 	@Override
 	public String getProperty(String name) {
-		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(name);
+		return interpolate(getRawProperty(name), new HashSet<>());
 	}
 
 	@Override
