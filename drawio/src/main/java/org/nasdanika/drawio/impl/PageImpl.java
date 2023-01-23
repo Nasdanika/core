@@ -60,6 +60,15 @@ class PageImpl extends ElementImpl implements Page {
 	public void setName(String name) {
 		element.setAttribute(ATTRIBUTE_NAME, name);
 	}
+	
+	/**
+	 * Saves as compressed if there are no mxGraphModel child elements.
+	 * @throws TransformerException
+	 * @throws IOException
+	 */
+	void save() throws TransformerException, IOException {
+		save(DocumentImpl.getChildrenElements(element, "mxGraphModel").isEmpty());
+	}
 
 	/**
 	 * Saves any modifications. Doesn't do anything of compress null and uncompressed documents.
@@ -88,8 +97,7 @@ class PageImpl extends ElementImpl implements Page {
 					model = new ModelImpl(this, modelElement);
 				}
 			}			
-		}
-		
+		}		
 	}	
 	
 	@Override

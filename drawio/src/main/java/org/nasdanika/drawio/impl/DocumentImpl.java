@@ -30,6 +30,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.Document;
 import org.nasdanika.drawio.Page;
@@ -120,9 +121,15 @@ public class DocumentImpl extends ElementImpl implements Document {
 				} else {
 					getElement().insertBefore(cloneAndImportPageElement(page), get(index).getElement());
 				}
+				pages.clear();
 			}
 
 			private Node cloneAndImportPageElement(Page page) {
+				try {
+					((PageImpl) page).save();
+				} catch (TransformerException | IOException e) {
+					throw new NasdanikaException(e);
+				}
 				Node pageElementClone = page.getElement().cloneNode(true);
 				Node importedPageElementClone = document.importNode(pageElementClone, true);
 				((org.w3c.dom.Element) importedPageElementClone).setAttribute(ATTRIBUTE_ID, UUID.randomUUID().toString()); // New ID.
@@ -133,6 +140,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page set(int index, Page page) {
 				Page oldPage = get(index);
 				getElement().replaceChild(cloneAndImportPageElement(page), oldPage.getElement());
+				pages.clear();
 				return oldPage;
 			}
 			
@@ -140,6 +148,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			public Page remove(int index) {
 				Page page = get(index);
 				getElement().removeChild(page.getElement());
+				pages.clear();
 				return page;
 			}
 		};
