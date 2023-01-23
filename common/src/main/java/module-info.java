@@ -16,6 +16,7 @@ module org.nasdanika.common {
 	requires flexmark.util.builder;
 	requires org.jsoup;
 	requires org.apache.commons.lang3;
+	requires transitive java.xml;
 	
 	exports org.nasdanika.common;
 	exports org.nasdanika.common.descriptors;

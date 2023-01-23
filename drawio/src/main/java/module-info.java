@@ -4,7 +4,6 @@
  */
 module org.nasdanika.drawio {
 	
-	requires transitive java.xml;
 	requires transitive java.desktop;
 	requires transitive org.nasdanika.graph;
 	requires org.jsoup;

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
@@ -19,10 +20,24 @@ import java.time.Period;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Reflective converter providing some common conversions, some of them chained
@@ -312,6 +327,33 @@ public class DefaultConverter extends ReflectiveConverter {
 	@ConverterMethod
 	public JSONObject toJSONObject(URI uri) throws IOException {
 		return new JSONObject(toReader(uri));
+	}
+	
+	@ConverterMethod
+	public String toString(Node node) throws TransformerException, IOException {
+	    DOMSource source = new DOMSource(node);
+	    StringWriter out = new StringWriter();
+		TransformerFactory tFactory = TransformerFactory.newInstance();
+	    Transformer transformer = tFactory.newTransformer();
+	    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+    	transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	    
+	    try (out) {
+	    	transformer.transform(source, new StreamResult(out));
+	    }
+		return out.toString();
+	}
+	@ConverterMethod
+	public Document parseXML(Reader reader) throws ParserConfigurationException, SAXException, IOException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		return dBuilder.parse(new InputSource(reader));
+	}
+	
+	@ConverterMethod
+	public Document parseXML(String xmlStr) throws ParserConfigurationException, SAXException, IOException {
+		return parseXML(new StringReader(xmlStr));
 	}
 	
 }
