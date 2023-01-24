@@ -41,6 +41,8 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 
 	@Override
 	public Supplier<InputStream> create(Context context) {
+		ClassLoader[] classLoaders = { getClass().getClassLoader(), Thread.currentThread().getContextClassLoader(), context.get(ClassLoader.class) };		
+		
 		return new Supplier<InputStream>() {
 			
 			private URL theURL;
@@ -58,11 +60,24 @@ public class ResourceSupplierFactoryAdapter extends AdapterImpl implements Suppl
 						}
 					}
 					
-					String iUrl = uri.toString(); 
+					String iUrl = uri.toString();					
 					
-					theURL = iUrl.startsWith(Util.CLASSPATH_URL_PREFIX) ? getClass().getClassLoader().getResource(iUrl.substring(Util.CLASSPATH_URL_PREFIX.length())) : new URL(iUrl);
-					if (theURL == null) {
-						return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, markers);						
+					if (iUrl.startsWith(Util.CLASSPATH_URL_PREFIX)) {
+						String resourcePath = iUrl.substring(Util.CLASSPATH_URL_PREFIX.length());
+						for (ClassLoader classLoader: classLoaders) {
+							if (classLoader != null) {
+								theURL = classLoader.getResource(resourcePath);
+								if (theURL != null) {
+									break;
+								}
+							}
+						}						
+						
+						if (theURL == null) {
+							return new BasicDiagnostic(Status.ERROR, "Classpath resource not found: " + iUrl, markers);						
+						}
+					} else {
+						theURL = new URL(iUrl);
 					}
 					return Supplier.super.diagnose(progressMonitor);
 				} catch (MalformedURLException e) {					
