@@ -220,5 +220,10 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 		}
 		return super.eIsSet(featureID);
 	}
+	
+	@Override
+	public String toString() {
+		return org.nasdanika.persistence.Marker.toString(this);
+	}
 
 } //MarkerImpl
