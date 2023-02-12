@@ -230,7 +230,7 @@ public final class NcoreUtil {
 		return null;
 	}
 
-	/**
+		/**
 		 * Uses {@link ModelElement}.getUris() if the argument is an instance of ModelElement to compute URI's.
 		 * Computes {@link URI}'s from the containment reference otherwise.
 		 * @param eObj

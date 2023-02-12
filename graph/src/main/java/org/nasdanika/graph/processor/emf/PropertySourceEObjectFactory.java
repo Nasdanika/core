@@ -114,8 +114,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			}
 			return load(semanticURI, specFormat, config, getLoadingContext(config, progressMonitor), progressMonitor);
 		}
-		
-		
+				
 		return Collections.emptyList();
 	}
 	

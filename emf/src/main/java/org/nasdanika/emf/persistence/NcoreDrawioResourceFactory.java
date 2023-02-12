@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,12 +38,14 @@ import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * This factory uses {@link DrawioResource} with {@link DrawioEObjectFactory}. 
- * It injects name, description, and markers in configureSemanticElement(). It 
+ * It injects name, description, and markers in configureSemanticElement(). 
  * @author Pavel
  *
  * @param <T>
  */
 public abstract class NcoreDrawioResourceFactory<T extends EObject> extends ResourceFactoryImpl {
+	
+	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";	
 	
 	private class NcoreDrawioResource extends DrawioResource<SemanticProcessor<T>, T> implements AbstractEObjectFactoryProcessorResource<T> {
 
@@ -79,6 +82,20 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	public Resource createResource(URI uri) {
 		return new NcoreDrawioResource(uri, createProcessorFactory(uri), getProgressMonitor(uri));
 	}
+	
+	/**
+	 * Allows to override the default behavior of using spec, spec-uri, and semantic-uri properties for creation of semantic elements.
+	 * @param config
+	 * @param progressMonitor
+	 * @param fallback
+	 * @return
+	 */
+	protected Collection<T> createSemanticElements(
+			ProcessorConfig<SemanticProcessor<T>> config, 
+			ProgressMonitor progressMonitor, 
+			BiFunction<ProcessorConfig<SemanticProcessor<T>>, ProgressMonitor, Collection<T>> defaultFactory) {
+		return defaultFactory.apply(config, progressMonitor);
+	}
 		
 	protected DrawioEObjectFactory<T, SemanticProcessor<T>> createProcessorFactory(URI uri) {
 		return new DrawioEObjectFactory<T, SemanticProcessor<T>>() {
@@ -100,7 +117,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			
 			@Override
 			protected Collection<T> createSemanticElements(ProcessorConfig<SemanticProcessor<T>> config, ProgressMonitor progressMonitor) {
-				Collection<T> semanticElements = super.createSemanticElements(config, progressMonitor);
+				Collection<T> semanticElements = NcoreDrawioResourceFactory.this.createSemanticElements(config, progressMonitor, super::createSemanticElements);
 				Collection<T> configuredSemanticElements = NcoreDrawioResourceFactory.this.configureSemanticElements(uri, config, semanticElements, progressMonitor);
 				return configuredSemanticElements;
 			}
@@ -235,7 +252,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 				if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 					String semanticUuid = ((org.nasdanika.ncore.ModelElement) semanticElement).getUuid();
 					if (!Util.isBlank(semanticUuid)) {
-						modelElement.setProperty("semantic-uuid", semanticUuid);
+						modelElement.setProperty(SEMANTIC_UUID_KEY, semanticUuid);
 					}
 				}
 			}
