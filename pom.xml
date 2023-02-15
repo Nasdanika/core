@@ -27,6 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
 		<linksource>true</linksource>
+		<aspectj.version>1.8.10</aspectj.version>
 	</properties>	
 
 	<build>
@@ -34,35 +35,10 @@
 	      <extension>
 	        <groupId>org.apache.maven.wagon</groupId>
 	         <artifactId>wagon-ssh</artifactId>
-	         <version>3.4.3</version>
+	         <version>3.5.3</version>
 	      </extension>
 	    </extensions>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>	
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>								
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -88,13 +64,38 @@
 		        <plugin>
 		            <groupId>org.apache.maven.plugins</groupId>
 		            <artifactId>maven-surefire-plugin</artifactId>
-		            <version>3.0.0-M7</version>
+		            <version>3.0.0-M9</version>
+
+                <configuration>
+                <testFailureIgnore>false</testFailureIgnore>
+                        <argLine>
+                            -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                        </argLine>
+                    <systemProperties>
+                        <property>
+                            <name>junit.jupiter.extensions.autodetection.enabled</name>
+                            <value>true</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+
+
+
+
 		            <dependencies>
 		                <dependency>
 		                    <groupId>org.junit.jupiter</groupId>
 		                    <artifactId>junit-jupiter-engine</artifactId>
 		                    <version>5.9.1</version>
 		                </dependency>
+
+
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+
 		            </dependencies>
 		        </plugin>
 			<plugin>
@@ -163,6 +164,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-maven</artifactId>
+				<version>2.12.0</version>
+                <configuration>
+                    <reportVersion>2.21.0</reportVersion>
+                </configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -173,6 +182,12 @@
 		    <version>5.9.1</version>
 		    <scope>test</scope>
 		</dependency>		
+        	<dependency>
+	            <groupId>io.qameta.allure</groupId>
+	            <artifactId>allure-junit5</artifactId>
+	            <version>2.21.0</version>
+	            <scope>test</scope>
+	        </dependency>
 	</dependencies>
 
 	<organization>
@@ -206,14 +221,48 @@
 		<!-- <module>mxgraph</module> --> 
 	</modules>	
 
-	<distributionManagement>
-		<repository>
+	 <profiles>
+		<profile>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>	
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>3.0.1</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>	
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.13</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>								
+				</plugins>
+			</build>
+			<distributionManagement>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+				</repository>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>	
+		</profile>
+	</profiles>
 </project>
