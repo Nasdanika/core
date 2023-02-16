@@ -101,7 +101,7 @@ public interface ModelElement extends Marked, Adaptable {
 	void setUuid(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Action Prototype</b></em>' reference.
+	 * Returns the value of the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
@@ -110,19 +110,19 @@ public interface ModelElement extends Marked, Adaptable {
 	 * Otherwise the reference value it is adapted to ActionProvider which is used to create an action. 
 	 * This allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation.
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Action Prototype</em>' reference.
+	 * @return the value of the '<em>Action Prototype</em>' containment reference.
 	 * @see #setActionPrototype(EObject)
 	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_ActionPrototype()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EObject getActionPrototype();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}' reference.
+	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Action Prototype</em>' reference.
+	 * @param value the new value of the '<em>Action Prototype</em>' containment reference.
 	 * @see #getActionPrototype()
 	 * @generated
 	 */

@@ -179,8 +179,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EObject basicGetActionPrototype() {
-		return (EObject)eDynamicGet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, false, true);
+	public NotificationChain basicSetActionPrototype(EObject newActionPrototype, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newActionPrototype, NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, msgs);
+		return msgs;
 	}
 
 	/**
@@ -214,6 +215,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
+			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
+				return basicSetActionPrototype(null, msgs);
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
 		}
@@ -237,8 +240,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return getUuid();
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				if (resolve) return getActionPrototype();
-				return basicGetActionPrototype();
+				return getActionPrototype();
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				if (coreType) return getRepresentations();
 				else return getRepresentations().map();
@@ -326,7 +328,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return UUID_EDEFAULT == null ? getUuid() != null : !UUID_EDEFAULT.equals(getUuid());
 			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				return basicGetActionPrototype() != null;
+				return getActionPrototype() != null;
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return !getRepresentations().isEmpty();
 		}

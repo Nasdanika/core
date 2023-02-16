@@ -294,7 +294,7 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__UUID = MARKED_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -366,7 +366,7 @@ public interface NcorePackage extends EPackage {
 	int TEMPORAL__UUID = MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -574,7 +574,7 @@ public interface NcorePackage extends EPackage {
 	int PERIOD__UUID = MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -729,7 +729,7 @@ public interface NcorePackage extends EPackage {
 	int NAMED_ELEMENT__UUID = MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1630,7 +1630,7 @@ public interface NcorePackage extends EPackage {
 	int COMPOSITE__UUID = NAMED_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2061,10 +2061,10 @@ public interface NcorePackage extends EPackage {
 	EAttribute getModelElement_Uuid();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Action Prototype</em>'.
+	 * @return the meta object for the containment reference '<em>Action Prototype</em>'.
 	 * @see org.nasdanika.ncore.ModelElement#getActionPrototype()
 	 * @see #getModelElement()
 	 * @generated
@@ -2909,7 +2909,7 @@ public interface NcorePackage extends EPackage {
 		EAttribute MODEL_ELEMENT__UUID = eINSTANCE.getModelElement_Uuid();
 
 		/**
-		 * The meta object literal for the '<em><b>Action Prototype</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Action Prototype</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
