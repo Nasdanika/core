@@ -13,6 +13,7 @@ app-action:
            - "../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"
            - exec.gen/actions.yml              
      - graph/actions.yml
+     - maven/actions.yml
      - app-action:
          text: Ncore
          location: ncore/index.html

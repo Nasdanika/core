@@ -38,6 +38,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Reflective converter providing some common conversions, some of them chained
@@ -344,6 +345,19 @@ public class DefaultConverter extends ReflectiveConverter {
 	    }
 		return out.toString();
 	}
+	
+	// XML
+	
+	@ConverterMethod
+	public Document parseXML(URI uri) throws ParserConfigurationException, SAXException, IOException {
+		return parseXML(toInputStream(uri));
+	}	
+	
+	@ConverterMethod
+	public Document parseXML(InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+		return parseXML(toReader(inputStream));
+	}	
+	
 	@ConverterMethod
 	public Document parseXML(Reader reader) throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -354,6 +368,68 @@ public class DefaultConverter extends ReflectiveConverter {
 	@ConverterMethod
 	public Document parseXML(String xmlStr) throws ParserConfigurationException, SAXException, IOException {
 		return parseXML(new StringReader(xmlStr));
+	}
+
+	// YAML
+
+	public Object loadYAML(URI uri) throws IOException {
+		return loadYAML(toInputStream(uri));
+	}	
+	
+	public Object loadYAML(InputStream inputStream) throws IOException  {
+		return loadYAML(toReader(inputStream));
+	}	
+	
+	public Object loadYAML(Reader reader) throws IOException {
+		return loadYAML(toString(reader));
+	}
+	
+	public Object loadYAML(String yamlStr) {
+		Yaml yaml = new Yaml();
+		return yaml.load(yamlStr);
+	}
+	
+	// JSON
+	
+	@ConverterMethod
+	public JSONObject loadJSONObject(URI uri) throws IOException {
+		return loadJSONObject(toInputStream(uri));
+	}	
+	
+	@ConverterMethod
+	public JSONObject loadJSONObject(InputStream inputStream) throws IOException {
+		return loadJSONObject(toReader(inputStream));
+	}	
+	
+	@ConverterMethod
+	public JSONObject loadJSONObject(Reader reader) throws IOException {
+		return loadJSONObject(toString(reader));
+	}
+	
+	@ConverterMethod
+	public JSONObject loadJSONObject(String jsonStr) {
+		return new JSONObject(new JSONTokener(jsonStr));
+	}
+	
+	
+	@ConverterMethod
+	public JSONArray loadJSONArray(URI uri) throws IOException {
+		return loadJSONArray(toInputStream(uri));
+	}	
+	
+	@ConverterMethod
+	public JSONArray loadJSONArray(InputStream inputStream) throws IOException {
+		return loadJSONArray(toReader(inputStream));
+	}	
+	
+	@ConverterMethod
+	public JSONArray loadJSONArray(Reader reader) throws IOException {
+		return loadJSONArray(toString(reader));
+	}
+	
+	@ConverterMethod
+	public JSONArray loadJSONArray(String jsonStr) {
+		return new JSONArray(new JSONTokener(jsonStr));
 	}
 	
 }

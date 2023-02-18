@@ -397,5 +397,4 @@ public class TestCommon {
 		assertTrue(pattern.matcher("\nHello").find());
 	}
 	
-	
 }

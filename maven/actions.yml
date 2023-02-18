@@ -1,0 +1,10 @@
+app-action:
+  text: Base classes for building Maven plug-ins
+  location: maven/index.html
+  uris: maven
+  navigation:
+    - app-link:
+        text: Javadoc
+        uris: javadoc
+        icon: fab fa-java
+        location: ../../apidocs/org.nasdanika.maven/module-summary.html
