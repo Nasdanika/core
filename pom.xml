@@ -49,6 +49,11 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>4.0.0-M5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>3.2.1</version>
 				<executions>
@@ -180,6 +185,13 @@
 		<module>emf</module>
 		<module>maven</module>
 	</modules>	
+
+	<distributionManagement>
+		<site>
+			<id>docs.nasdanika.org</id>
+			<url>scp://docs.nasdanika.org/core/maven-site</url>
+		</site>
+	</distributionManagement>	
 
 	 <profiles>
 		<profile>
