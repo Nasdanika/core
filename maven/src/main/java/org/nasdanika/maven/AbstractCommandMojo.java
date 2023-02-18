@@ -68,10 +68,10 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 	 * @throws IOException 
 	 * @throws MojoExecutionException 
 	 */
+	@SuppressWarnings("unchecked")
 	protected Context createContext() throws IOException, MojoExecutionException {
 		Context context = Context.singleton(MavenProject.class, project);
 		
-		@SuppressWarnings("unchecked")
 		Map<Object, Object> pc = getPluginContext();
 		if (pc != null) {
 			Context wpc = Context.wrap(pc::get); 
@@ -88,7 +88,7 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 				if (lastSegment.endsWith(".yml") || lastSegment.endsWith(".yaml")) {
 					Object yamlObj = DefaultConverter.INSTANCE.loadYAML(ctxURI);
 					if (yamlObj instanceof Map) {
-						context = context.compose(Context.wrap(((Map) yamlObj)::get));
+						context = context.compose(Context.wrap(((Map<Object, Object>) yamlObj)::get));
 					} else {
 						String message = "Context is not a YAML map: " + ctxURI;
 						getLog().error(message);
@@ -101,7 +101,6 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 			}
 		}
 		
-		// TODO - context URL's load, ...
 		return context;
 	}
 	
