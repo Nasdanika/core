@@ -37,7 +37,7 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 	private File progressOutput;	
 
 	/**
-	 * File to output diagnostic. If not set, progress is output to the log.
+	 * File to output diagnostic. If not set, diagnostic is output to the log.
 	 */
 	@Parameter()	
 	private File diagnosticOutput;	
@@ -119,6 +119,10 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 //			// JSON output progress monitor
 //			
 //		}
+		File parent = progressOutput.getParentFile();
+		if (parent != null) {
+			parent.mkdirs();
+		}
 		
 		return new PrintStreamProgressMonitor(new PrintStream(progressOutput), 0, 2, true);
 	}
@@ -171,6 +175,10 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 		if (diagnosticOutput == null) {
 			log(diagnostic, 0, getLog());
 		} else {
+			File parent = diagnosticOutput.getParentFile();
+			if (parent != null) {
+				parent.mkdirs();
+			}
 			try (PrintStream out = new PrintStream(diagnosticOutput)) {
 				diagnostic.dump(out, 0);
 			}
@@ -194,35 +202,43 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 		Status status = diagnostic.getStatus();
 		if (status == Status.ERROR) {
 			log.error(messageBuilder);
-			for (Object de: data) {
-				if (de instanceof Throwable) {
-					log.error((Throwable) de);
+			if (data != null) {
+				for (Object de: data) {
+					if (de instanceof Throwable) {
+						log.error((Throwable) de);
+					}
 				}
-			}			
+			}
 		} else if (status == Status.WARNING) {
 			log.warn(messageBuilder);
-			for (Object de: data) {
-				if (de instanceof Throwable) {
-					log.warn((Throwable) de);
+			if (data != null) {
+				for (Object de: data) {
+					if (de instanceof Throwable) {
+						log.warn((Throwable) de);
+					}
 				}
-			}			
+			}
 		} else if (status == Status.INFO) {
 			log.info(messageBuilder);
-			for (Object de: data) {
-				if (de instanceof Throwable) {
-					log.info((Throwable) de);
+			if (data != null) {
+				for (Object de: data) {
+					if (de instanceof Throwable) {
+						log.info((Throwable) de);
+					}
 				}
-			}			
+			}
 		} else {
 			if (status != null) {
 				messageBuilder.insert(0, "[" + status.name() + "] ");
 			}
 			log.debug(messageBuilder);
-			for (Object de: data) {
-				if (de instanceof Throwable) {
-					log.debug((Throwable) de);
+			if (data != null) {
+				for (Object de: data) {
+					if (de instanceof Throwable) {
+						log.debug((Throwable) de);
+					}
 				}
-			}			
+			}
 		}
 		
 	    List<Diagnostic> children = diagnostic.getChildren();
