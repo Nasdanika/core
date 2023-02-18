@@ -17,7 +17,11 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,6 +35,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -430,6 +438,65 @@ public class DefaultConverter extends ReflectiveConverter {
 	@ConverterMethod
 	public JSONArray loadJSONArray(String jsonStr) {
 		return new JSONArray(new JSONTokener(jsonStr));
+	}
+	
+	/**
+	 * Outputs EObject as a Map of {@link EStructuralFeature}s names to their values. Such a map can then be used to output to YAML or JSON.
+	 * @param eObj EObject
+	 * @param referenceProvider Providers or values for non-containment references. If null such references are not output to the map.
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> toMap(EObject eObj, java.util.function.Function<EObject, Object> referenceProvider) {
+		if (eObj == null) {
+			return null;
+		}
+		Map<String, Object> ret = new LinkedHashMap<>();
+		for (EStructuralFeature sf: eObj.eClass().getEAllStructuralFeatures()) {
+			if (eObj.eIsSet(sf)) {
+				if (sf instanceof EAttribute) {
+					if (sf.isMany()) {
+						Collection<Object> vList = new ArrayList<>();
+						for (Object av: (Collection<Object>) eObj.eGet(sf)) {
+							vList.add(av);
+						}
+						if (!vList.isEmpty()) {
+							ret.put(sf.getName(), vList);
+						}
+					} else {
+						ret.put(sf.getName(), eObj.eGet(sf));
+					}
+				} else {
+					EReference eRef = (EReference) sf;
+					if (eRef.isContainment()) {
+						if (eRef.isMany()) {
+							Collection<Map<String, Object>> vList = new ArrayList<>();
+							for (EObject rv: (Collection<EObject>) eObj.eGet(sf)) {
+								vList.add(toMap(rv, referenceProvider));
+							}
+							if (!vList.isEmpty()) {
+								ret.put(sf.getName(), vList);
+							}
+						} else {
+							ret.put(sf.getName(), toMap((EObject) eObj.eGet(sf), referenceProvider));
+						}
+					} else if (referenceProvider != null) {
+						if (eRef.isMany()) {
+							Collection<Object> vList = new ArrayList<>();
+							for (EObject rv: (Collection<EObject>) eObj.eGet(sf)) {
+								vList.add(referenceProvider.apply(rv));
+							}
+							if (!vList.isEmpty()) {
+								ret.put(sf.getName(), vList);
+							}
+						} else {
+							ret.put(sf.getName(), referenceProvider.apply((EObject) eObj.eGet(sf)));
+						}						
+					}
+				}
+			}			
+		}
+		return ret;
 	}
 	
 }
