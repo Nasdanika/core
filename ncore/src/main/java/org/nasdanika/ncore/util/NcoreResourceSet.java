@@ -1,5 +1,7 @@
 package org.nasdanika.ncore.util;
 
+import java.util.Optional;
+
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -15,6 +17,13 @@ public class NcoreResourceSet extends ResourceSetImpl {
 		TreeIterator<Notifier> cit = getAllContents();
 		while (cit.hasNext()) {
 			Notifier next = cit.next();
+			if (next instanceof EObjectLocator) {
+				cit.prune();
+				Optional<EObject> ret = ((EObjectLocator) next).get(uri);
+				if (ret != null) {
+					return ret.orElse(null);
+				}
+			}
 			if (next instanceof EObject) {
 				EObject nextEObject = (EObject) next;
 				if (matchURI(nextEObject, uri)) {
