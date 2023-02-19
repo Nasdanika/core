@@ -88,7 +88,8 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 				if (lastSegment.endsWith(".yml") || lastSegment.endsWith(".yaml")) {
 					Object yamlObj = DefaultConverter.INSTANCE.loadYAML(ctxURI);
 					if (yamlObj instanceof Map) {
-						context = context.compose(Context.wrap(((Map<Object, Object>) yamlObj)::get));
+						Map<Object, Object> yamlMap = (Map<Object, Object>) yamlObj;						
+						context = context.compose(Context.wrap(context.interpolate(yamlMap)::get));
 					} else {
 						String message = "Context is not a YAML map: " + ctxURI;
 						getLog().error(message);
@@ -96,7 +97,8 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 					}
 				} else {
 					JSONObject jsonObject = DefaultConverter.INSTANCE.loadJSONObject(ctxURI);
-					context = context.compose(Context.wrap(jsonObject.toMap()::get));
+					Map<String, Object> jsonMap = jsonObject.toMap();
+					context = context.compose(Context.wrap(context.interpolate(jsonMap)::get));
 				}
 			}
 		}
