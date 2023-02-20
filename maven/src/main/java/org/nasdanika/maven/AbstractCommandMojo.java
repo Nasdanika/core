@@ -33,25 +33,25 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 	/**
 	 * File to output progress. If not set, progress is output to the log.
 	 */
-	@Parameter()	
+	@Parameter	
 	private File progressOutput;	
 
 	/**
 	 * File to output diagnostic. If not set, diagnostic is output to the log.
 	 */
-	@Parameter()	
+	@Parameter	
 	private File diagnosticOutput;	
 	
 	/**
 	 * Statuses on which to fail execution. FAIL if empty. Available statuses: FAIL, ERROR, WARNING, SUCCESS, INFO, CANCEL
 	 */
-    @Parameter( )
+    @Parameter
     private Status[] failStatuses;
     
     /**
      * URL's of YAML or JSON resources which are loaded as contexts. if the URL ends with .yaml or .yml then it is treated as YAML, as a JSON object otherwise. 
      */
-    @Parameter()
+    @Parameter
     private List<String> contexts;
     	
 //	@Parameter(name = "json-progress")	

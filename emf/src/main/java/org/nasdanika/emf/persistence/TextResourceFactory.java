@@ -29,6 +29,7 @@ public class TextResourceFactory extends ResourceFactoryImpl {
 			super(uri);
 		}
 		
+		@Override
 		public void load(java.util.Map<?,?> options) throws IOException {
 			if (isDataURI(getURI())) {
 				String uriStr = getURI().toString();
@@ -41,7 +42,7 @@ public class TextResourceFactory extends ResourceFactoryImpl {
 			} else {
 				super.load(options);
 			}			
-		};
+		}
 		
 		@Override
 		protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
