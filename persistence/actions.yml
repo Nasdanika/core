@@ -7,4 +7,8 @@ app-action:
         text: Javadoc
         uris: javadoc
         icon: fab fa-java
-        location: ../apidocs/org.nasdanika.persistence/module-summary.html
+        location: ../maven-site/apidocs/org.nasdanika.persistence/module-summary.html
+    - app-link:
+        text: Maven site
+        uris: maven-site
+        location: ../maven-site/persistence/index.html

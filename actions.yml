@@ -9,6 +9,7 @@ app-action:
      - app-action:
          text: Exec
          location: exec/index.html
+         uris: exec
          children:
            - "../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"
            - exec.gen/actions.yml              
@@ -16,6 +17,7 @@ app-action:
      - maven/actions.yml
      - app-action:
          text: Ncore
+         uris: ncore
          location: ncore/index.html
          children:
            - "../nasdanika.github.io/target/model-doc/actions/ncore.genmodel.xml#/"
@@ -27,4 +29,8 @@ app-action:
         text: Javadoc
         uris: javadoc
         icon: fab fa-java
-        location: apidocs/index.html
+        location: maven-site/apidocs/index.html
+    - app-link:
+        text: Maven site
+        uris: maven-site
+        location: maven-site/index.html

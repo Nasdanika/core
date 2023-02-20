@@ -17,4 +17,8 @@ app-action:
         text: Javadoc
         uris: javadoc
         icon: fab fa-java
-        location: ../apidocs/org.nasdanika.common/module-summary.html
+        location: ../maven-site/apidocs/org.nasdanika.common/module-summary.html
+    - app-link:
+        text: Maven site
+        uris: maven-site
+        location: ../maven-site/common/index.html

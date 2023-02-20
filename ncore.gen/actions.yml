@@ -1,10 +1,14 @@
 app-action:
   text: Gen
-  location: ncore/gen/index.html
-  uris: ncore/gen
+  location: gen/index.html
+  uris: gen
   navigation:
     - app-link:
         text: Javadoc
         uris: javadoc
         icon: fab fa-java
-        location: ../apidocs/org.nasdanika.ncore.gen/module-summary.html
+        location: ../../maven-site/apidocs/org.nasdanika.ncore.gen/module-summary.html
+    - app-link:
+        text: Maven site
+        uris: maven-site
+        location: ../../maven-site/ncore-gen/index.html

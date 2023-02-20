@@ -1,1 +1,1 @@
-mvn clean install source:test-jar javadoc:aggregate deploy site site:stage
+mvn clean install source:test-jar javadoc:aggregate deploy -P ossrh 
