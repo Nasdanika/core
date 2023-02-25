@@ -162,12 +162,11 @@ public class TemporalImpl extends ModelElementImpl implements Temporal {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public EList<Temporal> getDerivatives() {
-		return (EList<Temporal>)eDynamicGet(NcorePackage.TEMPORAL__DERIVATIVES, NcorePackage.Literals.TEMPORAL__DERIVATIVES, true, true);
+		return getOppositeReferrers(NcorePackage.Literals.TEMPORAL__DERIVATIVES);		
 	}
 
 	/**
