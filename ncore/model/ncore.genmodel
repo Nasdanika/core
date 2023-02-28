@@ -60,6 +60,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//ModelElement/uuid"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/actionPrototype"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/representations"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/annotations"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//RepresentationEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//RepresentationEntry/key"/>

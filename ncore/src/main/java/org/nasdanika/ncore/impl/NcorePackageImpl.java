@@ -680,6 +680,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getModelElement_Annotations() {
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getRepresentationEntry() {
 		return representationEntryEClass;
 	}
@@ -1224,6 +1234,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__UUID);
 		createEReference(modelElementEClass, MODEL_ELEMENT__ACTION_PROTOTYPE);
 		createEReference(modelElementEClass, MODEL_ELEMENT__REPRESENTATIONS);
+		createEReference(modelElementEClass, MODEL_ELEMENT__ANNOTATIONS);
 
 		representationEntryEClass = createEClass(REPRESENTATION_ENTRY);
 		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__KEY);
@@ -1404,6 +1415,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getModelElement_Uuid(), ecorePackage.getEString(), "uuid", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_ActionPrototype(), ecorePackage.getEObject(), null, "actionPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_Annotations(), this.getProperty(), null, "annotations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getModelElement_Annotations().getEKeys().add(this.getProperty_Name());
 
 		initEClass(representationEntryEClass, java.util.Map.Entry.class, "RepresentationEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRepresentationEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1576,6 +1589,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "homogenous", "true",
 			   "load-doc-reference", "doc/model-element--representations.md"
+		   });
+		addAnnotation
+		  (getModelElement_Annotations(),
+		   source,
+		   new String[] {
+			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty",
+			   "value-feature", "value"
 		   });
 		addAnnotation
 		  (getRepresentationEntry_Value(),
@@ -1821,6 +1841,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Mapping of representation keys to URI\'s of representation resources. URI\'s are resolved relative to the model element resource URI.\nDuring object loading resources are loaded and linked to the object. Additional processing depends on the resource type.\nIn case of Drawio diagrams, diagram elements are semantically mapped to model elements and representation resource root elements are added as children to the object.\nSee [Nasdanika Core Drawio](../drawio/index.html) and [Nasdanika Core EMF](../emf/index.html) documentation for more information.\n\n"
+		   });
+		addAnnotation
+		  (getModelElement_Annotations(),
+		   source,
+		   new String[] {
+			   "documentation", "Annotations are used to store custom data similar to Java and Ecore annotations. "
 		   });
 		addAnnotation
 		  (representationEntryEClass,

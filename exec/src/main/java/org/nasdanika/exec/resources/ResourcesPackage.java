@@ -107,7 +107,7 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -123,6 +123,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -225,7 +234,7 @@ public interface ResourcesPackage extends EPackage {
 	int CONTAINER__UUID = RESOURCE__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -241,6 +250,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTAINER__REPRESENTATIONS = RESOURCE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ANNOTATIONS = RESOURCE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -370,7 +388,7 @@ public interface ResourcesPackage extends EPackage {
 	int FILE__UUID = RESOURCE__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -386,6 +404,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILE__REPRESENTATIONS = RESOURCE__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__ANNOTATIONS = RESOURCE__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.

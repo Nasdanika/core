@@ -31,6 +31,7 @@ import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
@@ -47,6 +48,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getActionPrototype <em>Action Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getRepresentations <em>Representations</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getAnnotations <em>Annotations</em>}</li>
  * </ul>
  *
  * @generated
@@ -210,6 +212,17 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<Property> getAnnotations() {
+		return (EList<Property>)eDynamicGet(NcorePackage.MODEL_ELEMENT__ANNOTATIONS, NcorePackage.Literals.MODEL_ELEMENT__ANNOTATIONS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -219,6 +232,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return basicSetActionPrototype(null, msgs);
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
+			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
+				return ((InternalEList<?>)getAnnotations()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -244,6 +259,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				if (coreType) return getRepresentations();
 				else return getRepresentations().map();
+			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
+				return getAnnotations();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -277,6 +294,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
 				return;
+			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
+				getAnnotations().clear();
+				getAnnotations().addAll((Collection<? extends Property>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -307,6 +328,9 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				getRepresentations().clear();
 				return;
+			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
+				getAnnotations().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -331,6 +355,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getActionPrototype() != null;
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return !getRepresentations().isEmpty();
+			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
+				return !getAnnotations().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

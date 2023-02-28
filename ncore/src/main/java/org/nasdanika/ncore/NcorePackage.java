@@ -312,13 +312,22 @@ public interface NcorePackage extends EPackage {
 	int MODEL_ELEMENT__REPRESENTATIONS = MARKED_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__ANNOTATIONS = MARKED_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 5;
+	int MODEL_ELEMENT_FEATURE_COUNT = MARKED_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -382,6 +391,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int TEMPORAL__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEMPORAL__ANNOTATIONS = MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Instant</b></em>' attribute.
@@ -592,6 +610,15 @@ public interface NcorePackage extends EPackage {
 	int PERIOD__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PERIOD__ANNOTATIONS = MODEL_ELEMENT__ANNOTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Start</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -745,6 +772,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int NAMED_ELEMENT__REPRESENTATIONS = MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_ELEMENT__ANNOTATIONS = MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1648,6 +1684,15 @@ public interface NcorePackage extends EPackage {
 	int COMPOSITE__REPRESENTATIONS = NAMED_ELEMENT__REPRESENTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__ANNOTATIONS = NAMED_ELEMENT__ANNOTATIONS;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2081,6 +2126,17 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getModelElement_Representations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.ModelElement#getAnnotations <em>Annotations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Annotations</em>'.
+	 * @see org.nasdanika.ncore.ModelElement#getAnnotations()
+	 * @see #getModelElement()
+	 * @generated
+	 */
+	EReference getModelElement_Annotations();
 
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Representation Entry</em>}'.
@@ -2923,6 +2979,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference MODEL_ELEMENT__REPRESENTATIONS = eINSTANCE.getModelElement_Representations();
+
+		/**
+		 * The meta object literal for the '<em><b>Annotations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference MODEL_ELEMENT__ANNOTATIONS = eINSTANCE.getModelElement_Annotations();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.RepresentationEntryImpl <em>Representation Entry</em>}' class.

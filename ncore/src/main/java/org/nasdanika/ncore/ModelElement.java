@@ -26,6 +26,7 @@ import org.nasdanika.common.Adaptable;
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getRepresentations <em>Representations</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.ModelElement#getAnnotations <em>Annotations</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
@@ -149,5 +150,21 @@ public interface ModelElement extends Marked, Adaptable {
 	 * @generated
 	 */
 	EMap<String, String> getRepresentations();
+
+	/**
+	 * Returns the value of the '<em><b>Annotations</b></em>' containment reference list.
+	 * The list contents are of type {@link org.nasdanika.ncore.Property}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Annotations are used to store custom data similar to Java and Ecore annotations. 
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Annotations</em>' containment reference list.
+	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Annotations()
+	 * @model containment="true" keys="name"
+	 *        annotation="urn:org.nasdanika reference-type='map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty' value-feature='value'"
+	 * @generated
+	 */
+	EList<Property> getAnnotations();
 
 } // ModelElement

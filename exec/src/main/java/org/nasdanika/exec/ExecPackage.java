@@ -105,7 +105,7 @@ public interface ExecPackage extends EPackage {
 	int BLOCK__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -121,6 +121,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int BLOCK__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BLOCK__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
@@ -215,7 +224,7 @@ public interface ExecPackage extends EPackage {
 	int CALL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -231,6 +240,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CALL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -407,7 +425,7 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -423,6 +441,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONFIGURATOR__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURATOR__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
@@ -508,7 +535,7 @@ public interface ExecPackage extends EPackage {
 	int EVAL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -524,6 +551,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVAL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVAL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Script</b></em>' containment reference.
@@ -609,7 +645,7 @@ public interface ExecPackage extends EPackage {
 	int FAIL__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -625,6 +661,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int FAIL__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FAIL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
@@ -701,7 +746,7 @@ public interface ExecPackage extends EPackage {
 	int LIST__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -717,6 +762,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int LIST__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
@@ -793,7 +847,7 @@ public interface ExecPackage extends EPackage {
 	int MAP__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -809,6 +863,15 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAP__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' map.

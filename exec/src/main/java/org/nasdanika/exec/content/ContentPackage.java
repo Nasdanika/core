@@ -135,7 +135,7 @@ public interface ContentPackage extends EPackage {
 	int FILTER__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -151,6 +151,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILTER__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -216,7 +225,7 @@ public interface ContentPackage extends EPackage {
 	int BASE64__UUID = FILTER__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -232,6 +241,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE64__REPRESENTATIONS = FILTER__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__ANNOTATIONS = FILTER__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -297,7 +315,7 @@ public interface ContentPackage extends EPackage {
 	int RESOURCE__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -313,6 +331,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -387,7 +414,7 @@ public interface ContentPackage extends EPackage {
 	int TEXT__UUID = NcorePackage.MODEL_ELEMENT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -403,6 +430,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT__REPRESENTATIONS = NcorePackage.MODEL_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -488,7 +524,7 @@ public interface ContentPackage extends EPackage {
 	int INTERPOLATOR__UUID = FILTER__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -504,6 +540,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int INTERPOLATOR__REPRESENTATIONS = FILTER__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__ANNOTATIONS = FILTER__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -597,7 +642,7 @@ public interface ContentPackage extends EPackage {
 	int MARKDOWN__UUID = FILTER__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Action Prototype</b></em>' reference.
+	 * The feature id for the '<em><b>Action Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -613,6 +658,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKDOWN__REPRESENTATIONS = FILTER__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__ANNOTATIONS = FILTER__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
