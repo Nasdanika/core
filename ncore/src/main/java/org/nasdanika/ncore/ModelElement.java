@@ -3,6 +3,9 @@
 package org.nasdanika.ncore;
 
 import java.lang.String;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
@@ -166,5 +169,161 @@ public interface ModelElement extends Marked, Adaptable {
 	 * @generated
 	 */
 	EList<Property> getAnnotations();
+	
+	// Annotation convenience methods
+	
+	default Property getAnnotation(java.lang.String key) {
+		if (key == null) {
+			return null;
+		}
+		for (Property property: getAnnotations()) {
+			if (key.equals(property.getName())) {
+				return property;
+			}
+		}
+		
+		return null;
+	}
+	
+	default Property setAnnotation(java.lang.String key, boolean value) {
+		BooleanProperty property = NcoreFactory.eINSTANCE.createBooleanProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		annotations.add(property);
+		return ret;
+	}
+	
+	default Property setAnnotation(java.lang.String key, int value) {
+		IntegerProperty property = NcoreFactory.eINSTANCE.createIntegerProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		annotations.add(property);
+		return ret;
+	}
+	
+	default Property setAnnotation(java.lang.String key, java.lang.String value) {
+		StringProperty property = NcoreFactory.eINSTANCE.createStringProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		annotations.add(property);
+		return ret;
+	}
+	
+	default Property setAnnotation(java.lang.String key, EObject value) {
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			EObjectProperty property = NcoreFactory.eINSTANCE.createEObjectProperty();
+			property.setName(key);
+			property.setValue(value);
+			annotations.add(property);
+		}
+		return ret;
+	}
+		
+	default Property setAnnotation(java.lang.String key, java.util.Map<java.lang.String, ?> value) {
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			MapProperty property = MapProperty.from(value);
+			property.setName(key);
+			annotations.add(property);
+		}
+		return ret;
+	}
+	
+	default Property setAnnotation(java.lang.String key, Iterable<?> value) {
+		Property ret = null;
+		EList<Property> annotations = getAnnotations();
+		Iterator<Property> pit = annotations.iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		if (value != null) {
+			ListProperty property = ListProperty.from(value);;
+			property.setName(key);
+			annotations.add(property);
+		}
+		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	default void setAnnotations(java.util.Map<java.lang.String, ?> map) {
+		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
+			java.lang.String key = entry.getKey();
+			Object value = entry.getValue();
+			if (value instanceof Boolean) {
+				setAnnotation(key, (Boolean) value);
+			} else if (value instanceof EObject) {
+				setAnnotation(key, (EObject) value);
+			} else if (value instanceof Integer) {
+				setAnnotation(key, (Integer) value);
+			} else if (value instanceof Iterable) {
+				setAnnotation(key, (Iterable<?>) value);
+			} else if (value instanceof java.lang.String) {
+				setAnnotation(key, (java.lang.String) value);
+			} else if (value instanceof java.util.Map) {
+				setAnnotation(key, (java.util.Map<java.lang.String,Object>) value);
+			} else if (value != null) {
+				throw new IllegalArgumentException("Cannot set annotation of type " + value.getClass() + " and value: " + value);
+			}
+		}
+	}	
 
 } // ModelElement

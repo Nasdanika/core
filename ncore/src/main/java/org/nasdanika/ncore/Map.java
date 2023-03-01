@@ -171,9 +171,9 @@ public interface Map extends EObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Map from(java.util.Map<java.lang.String, Object> map) {
+	static Map from(java.util.Map<java.lang.String, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
-		for (Entry<java.lang.String, Object> entry: map.entrySet()) {
+		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
 			java.lang.String key = entry.getKey();
 			Object value = entry.getValue();
 			if (value instanceof Boolean) {

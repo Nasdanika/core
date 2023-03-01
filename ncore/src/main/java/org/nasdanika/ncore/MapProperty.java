@@ -23,9 +23,9 @@ import org.eclipse.emf.ecore.EObject;
 public interface MapProperty extends Property, Map {
 		
 	@SuppressWarnings("unchecked")
-	static MapProperty from(java.util.Map<java.lang.String, Object> map) {
+	static MapProperty from(java.util.Map<java.lang.String, ?> map) {
 		MapProperty ret = NcoreFactory.eINSTANCE.createMapProperty();
-		for (Entry<java.lang.String, Object> entry: map.entrySet()) {
+		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
 			java.lang.String key = entry.getKey();
 			Object value = entry.getValue();
 			if (value instanceof Boolean) {
