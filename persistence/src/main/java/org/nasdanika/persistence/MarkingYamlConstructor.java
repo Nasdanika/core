@@ -26,7 +26,8 @@ public class MarkingYamlConstructor extends Constructor {
 	
 	private String location;
 
-	public MarkingYamlConstructor(String location) {
+	public MarkingYamlConstructor(LoaderOptions loadingConfig, String location) {
+		super(loadingConfig);
 		this.location = location;
 	}
 	
@@ -79,7 +80,8 @@ public class MarkingYamlConstructor extends Constructor {
 	public static Yaml createMarkingYaml(String location) {
 		LoaderOptions loaderOptions = new LoaderOptions();
 		loaderOptions.setAllowDuplicateKeys(false);
-		return new Yaml(new MarkingYamlConstructor(location), new Representer(), new DumperOptions(), loaderOptions, new Resolver());
+		DumperOptions dumperOptions = new DumperOptions();
+		return new Yaml(new MarkingYamlConstructor(loaderOptions, location), new Representer(dumperOptions), dumperOptions, loaderOptions, new Resolver());
 	}
 
 }
