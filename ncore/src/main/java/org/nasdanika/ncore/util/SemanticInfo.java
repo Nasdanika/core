@@ -277,5 +277,34 @@ public class SemanticInfo extends SemanticIdentity {
 			}
 		};
 	}
-
+	
+	@Override
+	public JSONObject toJSON() {
+		JSONObject ret = super.toJSON();
+		if (!Util.isBlank(getName())) {
+			ret.put(ContainerInfo.NAME_KEY, getName());
+		}
+		if (!Util.isBlank(getDescription())) {
+			ret.put(DESCRIPTION_KEY, getDescription());
+		}
+		if (getLocation() != null) {
+			ret.put(LOCATION_KEY, getLocation().toString());
+		}
+		
+		ContainerInfo cInfo = getContainerInfo();
+		if (cInfo != null) {
+			ret.put(CONTAINER_KEY, cInfo.toJSON());
+		}
+		
+		TypeInfo tInfo = getTypeInfo();
+		if (tInfo != null) {
+			JSONObject jType = new JSONObject();
+			jType.put(ContainerInfo.NAME_KEY, tInfo.getName());
+			jType.put(NS_URI_KEY, tInfo.getNsURI());
+			ret.put(TYPE_KEY, jType);
+		}
+		
+		return ret;
+	}
+	
 }
