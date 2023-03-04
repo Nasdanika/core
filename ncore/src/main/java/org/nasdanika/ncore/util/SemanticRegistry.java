@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.URI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.nasdanika.common.Util;
 
 /**
  * Registry of semantic identities with methods to find by another identity, UUID, and URI
@@ -129,7 +128,7 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 		load(jsonArray, base);
 	}
 	
-	public void loadJsonArray(URL url) throws IOException {
+	public void load(URL url) throws IOException {
 		load(url.openStream(), URI.createURI(url.toString()));
 	}	
 	
