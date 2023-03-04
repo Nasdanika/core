@@ -56,10 +56,10 @@ public class ContainerInfo extends SemanticIdentity {
 	public JSONObject toJSON() {
 		JSONObject ret = super.toJSON();
 		if (name != null) {
-			ret.put(NAME_KEY, uuid);
+			ret.put(NAME_KEY, name);
 		}
 		if (reference != null) {
-			ret.put(REFERENCE_KEY, uuid);
+			ret.put(REFERENCE_KEY, reference);
 		}
 		return ret;
 	}

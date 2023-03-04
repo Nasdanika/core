@@ -42,6 +42,7 @@ public class SemanticIdentity {
 				semanticURIs.add(uri);
 			}
 		}
+		this.uris = Collections.unmodifiableList(semanticURIs);
 		if (semanticElement instanceof ModelElement) {
 			uuid = ((ModelElement) semanticElement).getUuid();
 		}
@@ -75,6 +76,8 @@ public class SemanticIdentity {
 				aURIs.add(URI.createURI((String) el));
 			}
 			uris = Collections.unmodifiableList(aURIs);
+		} else {
+			uris = Collections.emptyList();
 		}
 	}
 		

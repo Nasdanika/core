@@ -101,13 +101,13 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	}
 	
 	/**
-	 * Find value by identity UUID
+	 * Find entry by UUID
 	 */
-	public V find(String uuid) {
+	public Entry<SemanticIdentity,V> find(String uuid) {
 		if (!Util.isBlank(uuid)) {
 			for (Entry<SemanticIdentity, V> e: entrySet()) {
 				if (uuid.equals(e.getKey().getUUID())) {
-					return e.getValue();
+					return e;
 				}
 			}
 		}
@@ -115,15 +115,15 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	}
 	
 	/**
-	 * Find identity in the registry by UUID
+	 * Find entry by URI
 	 * @param key
 	 * @return
 	 */
-	public V find(URI uri) {
+	public Entry<SemanticIdentity,V> find(URI uri) {
 		if (uri != null) {
 			for (Entry<SemanticIdentity, V> e: entrySet()) {
 				if (e.getKey().getURIs().contains(uri)) {
-					return e.getValue();
+					return e;
 				}
 			}
 		}
