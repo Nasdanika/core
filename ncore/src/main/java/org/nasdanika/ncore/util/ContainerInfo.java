@@ -1,13 +1,13 @@
 package org.nasdanika.ncore.util;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.json.JSONObject;
 import org.nasdanika.ncore.NamedElement;
 
-public class ContainerInfo extends SemanticIdentity {
+public class ContainerInfo extends SemanticIdentityImpl {
 
 	public static String REFERENCE_KEY = "reference";
 	public static String NAME_KEY = "name";
@@ -16,12 +16,11 @@ public class ContainerInfo extends SemanticIdentity {
 	protected String name;
 
 	public ContainerInfo(
-			String uuid, 
-			List<URI> uris, 
+			Collection<URI> identifiers, 
 			String reference, 
 			String name) {
 		
-		super(uuid, uris);
+		super(identifiers);
 		this.reference = reference;
 		this.name = name;
 	}

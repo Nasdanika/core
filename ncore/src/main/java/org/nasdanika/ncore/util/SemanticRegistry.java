@@ -60,30 +60,10 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 		if (key == null) {
 			return null;
 		}
-		SemanticIdentity ret = find(key.getUUID());
-		if (ret != null) {
-			return ret;
-		}
-		for (URI uri: key.getURIs()) {
-			ret = find(uri);
+		for (URI identifier: key.getIdentifiers()) {
+			SemanticIdentity ret = find(identifier);
 			if (ret != null) {
 				return ret;
-			}
-		}
-		return ret;
-	}
-	
-	/**
-	 * Find identity in the registry by UUID
-	 * @param key
-	 * @return
-	 */
-	public SemanticIdentity find(String uuid) {
-		if (!Util.isBlank(uuid)) {
-			for (SemanticIdentity e: this) {
-				if (uuid.equals(e.getUUID())) {
-					return e;
-				}
 			}
 		}
 		return null;
@@ -94,10 +74,10 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 	 * @param key
 	 * @return
 	 */
-	public SemanticIdentity find(URI uri) {
-		if (uri != null) {
+	public SemanticIdentity find(URI identifier) {
+		if (identifier != null) {
 			for (SemanticIdentity e: this) {
-				if (e.getURIs().contains(uri)) {
+				if (e.getIdentifiers().contains(identifier)) {
 					return e;
 				}
 			}
@@ -117,10 +97,9 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 			if (je instanceof JSONObject) {
 				JSONObject jo = (JSONObject) je;
 				HashSet<String> keySet = new HashSet<>(jo.keySet());
-				keySet.remove(SemanticIdentity.URIS_KEY);
-				keySet.remove(SemanticIdentity.UUID_KEY);
+				keySet.remove(SemanticIdentityImpl.IDENTIFIERS_KEY);
 				if (keySet.isEmpty()) {
-					add(new SemanticIdentity(jo));
+					add(new SemanticIdentityImpl(jo));
 				} else {
 					add(new SemanticInfo(jo, base));
 				}
@@ -157,7 +136,9 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 	public JSONArray toJSON(int indent) {
 		JSONArray ret = new JSONArray();
 		for (SemanticIdentity e: this) {
-			ret.put(e.toJSON());
+			if (e instanceof SemanticIdentityImpl) {
+				ret.put(((SemanticIdentityImpl) e).toJSON());
+			}
 		}
 		return ret;
 	}	

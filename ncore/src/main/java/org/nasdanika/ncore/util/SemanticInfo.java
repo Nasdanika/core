@@ -1,6 +1,7 @@
 package org.nasdanika.ncore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import org.nasdanika.ncore.Property;
  * @author Pavel
  *
  */
-public class SemanticInfo extends SemanticIdentity {
+public class SemanticInfo extends SemanticIdentityImpl {
 	
 	public static String KEY = "semantic-element";
 	
@@ -51,8 +52,7 @@ public class SemanticInfo extends SemanticIdentity {
 	protected URI location;
 	
 	public SemanticInfo(
-			String uuid, 
-			List<URI> uris, 
+			Collection<URI> identifiers, 
 			String name,
 			String description,
 			String icon,
@@ -61,7 +61,7 @@ public class SemanticInfo extends SemanticIdentity {
 			String typeName,
 			String typeNsURI) {
 		
-		super(uuid, uris);
+		super(identifiers);
 		this.name = name;
 		this.description = description;
 		this.icon = icon;
@@ -141,15 +141,14 @@ public class SemanticInfo extends SemanticIdentity {
 			Property annotation = ((ModelElement) eObj).getAnnotation(KEY);
 			if (annotation instanceof MapProperty) {
 				MapProperty semanticElementAnnotation = (MapProperty) annotation;
-				Property urisProperty = semanticElementAnnotation.get(URIS_KEY);
-				List<URI> uris = urisProperty == null ? Collections.emptyList() : ((ListProperty) urisProperty).getValue()
+				Property identifiersProperty = semanticElementAnnotation.get(IDENTIFIERS_KEY);
+				List<URI> identifiers = identifiersProperty == null ? Collections.emptyList() : ((ListProperty) identifiersProperty).getValue()
 					.stream()
 					.map(org.nasdanika.ncore.String.class::cast)
 					.map(org.nasdanika.ncore.String::getValue)
 					.map(URI::createURI)
 					.collect(Collectors.toList());
 				
-				Property uuidProperty = semanticElementAnnotation.get(UUID_KEY);		
 				Property nameProperty = semanticElementAnnotation.get(ContainerInfo.NAME_KEY);		
 				Property descriptionProperty = semanticElementAnnotation.get(DESCRIPTION_KEY);		
 				Property iconProperty = semanticElementAnnotation.get(ICON_KEY);		
@@ -162,21 +161,19 @@ public class SemanticInfo extends SemanticIdentity {
 					containerInfo = null;
 				} else {
 					MapProperty containerMap = containerProperty instanceof MapProperty ? (MapProperty) containerProperty : null;
-					Property containerUrisProperty = containerMap == null ? null : containerMap.get(URIS_KEY);
-					List<URI> containerURIs = containerUrisProperty == null ? Collections.emptyList() : ((ListProperty) containerUrisProperty).getValue()
+					Property containerIdentifiersProperty = containerMap == null ? null : containerMap.get(IDENTIFIERS_KEY);
+					List<URI> containerIdentifiers = containerIdentifiersProperty == null ? Collections.emptyList() : ((ListProperty) containerIdentifiersProperty).getValue()
 						.stream()
 						.map(org.nasdanika.ncore.String.class::cast)
 						.map(org.nasdanika.ncore.String::getValue)
 						.map(URI::createURI)
 						.collect(Collectors.toList());
 					
-					Property containerUuidProperty = containerMap == null ? null : containerMap.get(UUID_KEY);						
 					Property referenceProperty = containerMap == null ? null : containerMap.get(ContainerInfo.REFERENCE_KEY);						
 					Property containerNameProperty = containerMap == null ? null : containerMap.get(ContainerInfo.NAME_KEY);
 					
 					containerInfo = new ContainerInfo(
-							containerUuidProperty == null ? null : ((org.nasdanika.ncore.String) containerUuidProperty).getValue(), 
-							containerURIs, 
+							containerIdentifiers, 
 							referenceProperty == null ? null : ((org.nasdanika.ncore.String) referenceProperty).getValue(),
 							containerNameProperty == null ? null : ((org.nasdanika.ncore.String) containerNameProperty).getValue()); 
 				}
@@ -187,8 +184,7 @@ public class SemanticInfo extends SemanticIdentity {
 				Property typeNameProperty = typeMap == null ? null : typeMap.get(ContainerInfo.NAME_KEY);						
 				
 				return new SemanticInfo(
-						uuidProperty == null ? null : ((org.nasdanika.ncore.String) uuidProperty).getValue(), 
-						uris, 
+						identifiers, 
 						nameProperty == null ? null : ((org.nasdanika.ncore.String) nameProperty).getValue(),
 						descriptionProperty == null ? null : ((org.nasdanika.ncore.String) descriptionProperty).getValue(),
 						iconProperty == null ? null : ((org.nasdanika.ncore.String) iconProperty).getValue(),
@@ -205,15 +201,11 @@ public class SemanticInfo extends SemanticIdentity {
 	public void annotate(ModelElement target) {
 		// Semantic element annotation
 		Map<String,Object> semanticAnnotation = new LinkedHashMap<>();		
-		List<String> semanticURIs = new ArrayList<>();
-		for (URI uri: getURIs()) {
-			semanticURIs.add(uri.toString());
+		List<String> semanticIdentifiers = new ArrayList<>();
+		for (URI uri: getIdentifiers()) {
+			semanticIdentifiers.add(uri.toString());
 		}	
-		semanticAnnotation.put(URIS_KEY, semanticURIs);
-		String uuid = getUUID();
-		if (!Util.isBlank(uuid)) {
-			semanticAnnotation.put(UUID_KEY, uuid);
-		}
+		semanticAnnotation.put(IDENTIFIERS_KEY, semanticIdentifiers);
 		String name = getName();
 		if (!Util.isBlank(name)) {
 			semanticAnnotation.put(ContainerInfo.NAME_KEY, name);
@@ -231,14 +223,10 @@ public class SemanticInfo extends SemanticIdentity {
 		if (containerInfo != null) {
 			Map<String, Object> containerSpec = new LinkedHashMap<>();
 			List<String> containerURIs = new ArrayList<>();
-			for (URI uri: containerInfo.getURIs()) {
+			for (URI uri: containerInfo.getIdentifiers()) {
 				containerURIs.add(uri.toString());
 			}	
-			containerSpec.put(URIS_KEY, containerURIs);
-			String containerUUID = containerInfo.getUUID();
-			if (!Util.isBlank(containerUUID)) {
-				containerSpec.put(UUID_KEY, containerUUID);
-			}
+			containerSpec.put(IDENTIFIERS_KEY, containerURIs);
 			
 			String containerName = containerInfo.getName();
 			if (!Util.isBlank(containerName)) {

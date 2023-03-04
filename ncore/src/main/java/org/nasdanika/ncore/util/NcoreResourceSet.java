@@ -7,8 +7,6 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.nasdanika.common.Util;
-import org.nasdanika.ncore.ModelElement;
 
 public class NcoreResourceSet extends ResourceSetImpl {
 
@@ -47,18 +45,9 @@ public class NcoreResourceSet extends ResourceSetImpl {
 		if (NcoreUtil.isEMapEntry(eObj)) {
 			return false; // Ignoring EMap entries.
 		}
-		for (URI objUri: NcoreUtil.getUris(eObj)) {
+		for (URI objUri: NcoreUtil.getIdentifiers(eObj)) {
 			if (objUri != null && objUri.equals(uri)) {
 				return true;
-			}
-		}
-		if (eObj instanceof ModelElement) {
-			String uuid = ((ModelElement) eObj).getUuid();
-			if (!Util.isBlank(uuid)) {
-				URI uuidUri = URI.createURI("uuid:" + uuid);
-				if (uuidUri.equals(uri)) {
-					return true;
-				}
 			}
 		}
 		return false;

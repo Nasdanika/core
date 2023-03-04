@@ -236,23 +236,35 @@ public final class NcoreUtil {
 		 * @param eObj
 		 * @return
 		 */
-		public static List<URI> getUris(EObject eObj) {
+		public static List<URI> getIdentifiers(EObject eObj) {
 			if (eObj == null || isEMapEntry(eObj)) {
 				return Collections.emptyList(); // EMap entries do not have URI's.
 			}
+			
+			int ignoredOwnIdentifiers = 0; // Sets to 1 for UUID so containment URI's are resolved despite its presence.
 
-			List<URI> ownURIs = new ArrayList<>();
+			List<URI> ownIdentifiers = new ArrayList<>();
 			if (eObj instanceof ModelElement) {
 				for (String uri: ((ModelElement) eObj).getUris()) {
 					if (!Util.isBlank(uri)) {
-						ownURIs.add(URI.createURI(uri));
+						ownIdentifiers.add(URI.createURI(uri));
 					}
 				}
+				
+				String uuid = ((ModelElement) eObj).getUuid();
+				if (!Util.isBlank(uuid)) {
+					ownIdentifiers.add(URI.createGenericURI("uuid", uuid, null));
+					++ignoredOwnIdentifiers;
+				}
+			}			
+			
+			if (eObj instanceof SemanticIdentity) {
+				ownIdentifiers.addAll(((SemanticIdentity) eObj).getIdentifiers());
 			}
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
 			if (containmentPath == null) {
-				return ownURIs;
+				return ownIdentifiers;
 			}
 			
 			EObject container = containmentPath.getFirst();
@@ -260,23 +272,23 @@ public final class NcoreUtil {
 			// Computing all permutations
 			Collection<URI> ret = new HashSet<>();
 			
-			List<URI> relativeOwnURIs = new ArrayList<>();
-			for (URI ownURI: ownURIs) {
+			List<URI> relativeOwnIdentifiers = new ArrayList<>();
+			for (URI ownURI: ownIdentifiers) {
 				if (ownURI.isRelative()) {
-					relativeOwnURIs.add(ownURI);
+					relativeOwnIdentifiers.add(ownURI);
 				} else {
 					ret.add(ownURI); // Absolute or opaque
 				}
 			}
 			
 			// Resolving containment URI's
-			for (URI cURI: getUris(container)) {
+			for (URI cURI: getIdentifiers(container)) {
 				if (!cURI.isRelative() && cURI.isHierarchical()) {
 					String cLastSegment = cURI.lastSegment();
 					if (cLastSegment == null || cLastSegment.length() > 0) {
 						cURI = cURI.appendSegment("");
 					}
-					for (URI relativeOwnURI: relativeOwnURIs) {
+					for (URI relativeOwnURI: relativeOwnIdentifiers) {
 						URI resolved = resolve(relativeOwnURI,cURI);
 						if (resolved != null) {
 							ret.add(resolved);
@@ -284,7 +296,7 @@ public final class NcoreUtil {
 					}
 				}
 
-				if (ownURIs.isEmpty()) { // Resorting to containment URI's only if there are no own URI's.
+				if (ownIdentifiers.size() == ignoredOwnIdentifiers) { // Resorting to containment URI's only if there are no own URI's which are not UUID.
 					URI containmentURI = URI.createURI(containmentPath.getSecond());				
 					URI resolved = resolve(containmentURI,cURI);
 					if (resolved != null) {

@@ -24,8 +24,8 @@ public class NamedElementComparator implements Comparator<NamedElement> {
 		}
 		if (Util.isBlank(a.getName())) {
 			if (Util.isBlank(b.getName())) {
-				Collection<URI> aUris = NcoreUtil.getUris(a);
-				Collection<URI> bUris = NcoreUtil.getUris(b);
+				Collection<URI> aUris = NcoreUtil.getIdentifiers(a);
+				Collection<URI> bUris = NcoreUtil.getIdentifiers(b);
 				if (aUris.isEmpty()) {
 					if (bUris.isEmpty()) {
 						return a.hashCode() - b.hashCode();

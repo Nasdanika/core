@@ -48,7 +48,7 @@ public class TestConfigurator extends TestBase {
 					assertThat(properties).hasSize(1);
 					EObject nameProperty = properties.get("name");
 					assertThat(nameProperty).isNotNull().isInstanceOf(Text.class);
-					Collection<URI> namePropertyURIs = NcoreUtil.getUris(nameProperty);
+					Collection<URI> namePropertyURIs = NcoreUtil.getIdentifiers(nameProperty);
 					assertThat(namePropertyURIs).isNotEmpty();
 					assertThat(namePropertyURIs.toString()).isEqualTo("[nasdanika://exec/configurator/properties/name]");
 				},

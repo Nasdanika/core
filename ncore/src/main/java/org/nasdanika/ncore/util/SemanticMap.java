@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.URI;
-import org.nasdanika.common.Util;
 
 /**
  * A map which takes specifics of {@link SemanticIdentity} equals into account and also provides get methods by UUID and URI
@@ -101,20 +100,6 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	}
 	
 	/**
-	 * Find entry by UUID
-	 */
-	public Entry<SemanticIdentity,V> find(String uuid) {
-		if (!Util.isBlank(uuid)) {
-			for (Entry<SemanticIdentity, V> e: entrySet()) {
-				if (uuid.equals(e.getKey().getUUID())) {
-					return e;
-				}
-			}
-		}
-		return null;
-	}
-	
-	/**
 	 * Find entry by URI
 	 * @param key
 	 * @return
@@ -122,7 +107,7 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	public Entry<SemanticIdentity,V> find(URI uri) {
 		if (uri != null) {
 			for (Entry<SemanticIdentity, V> e: entrySet()) {
-				if (e.getKey().getURIs().contains(uri)) {
+				if (e.getKey().getIdentifiers().contains(uri)) {
 					return e;
 				}
 			}

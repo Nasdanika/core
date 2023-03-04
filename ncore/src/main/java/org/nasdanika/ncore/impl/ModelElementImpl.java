@@ -376,7 +376,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			while (cit.hasNext()) {
 				Object next = cit.next(); 
 				if (type.isInstance(next)) {
-					for (URI nextURI: NcoreUtil.getUris((T) next)) {
+					for (URI nextURI: NcoreUtil.getIdentifiers((T) next)) {
 						if (nextURI != null && nextURI.equals(uri)) {					
 							return (T) next;
 						}
@@ -426,7 +426,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	public URI eProxyURI() {
 		URI eProxyURI = super.eProxyURI();
 		if (eProxyURI != null && eProxyURI.isRelative()) {
-			for (URI base: NcoreUtil.getUris(this)) {
+			for (URI base: NcoreUtil.getIdentifiers(this)) {
 				if (base != null && !base.isRelative() && base.isHierarchical()) {
 					return eProxyURI.resolve(base);
 				}
