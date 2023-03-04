@@ -153,7 +153,7 @@ public interface ObjectLoader {
 		return load(jsonArray.toList(), base, progressMonitor);
 	}
 	
-	default Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws Exception {
+	default Object loadJsonArray(URL url, ProgressMonitor progressMonitor) throws IOException {
 		progressMonitor.worked(1, "Loading JSON array from " + url);
 		return loadJsonArray(url.openStream(), URI.createURI(url.toString()), progressMonitor);
 	}
@@ -171,7 +171,8 @@ public interface ObjectLoader {
 	 * Use URL fragment to address Sheets and ranges. E.g. myworkbook.xslx#Sheet1:A1:C100
 	 * If no fragment - a map of sheet names to lists of maps with first row as key names and subsequent rows as data.
 	 * For streams - pass sheet and range as method parameters.
-	 * Figure out how to get the type, e.g. if the type is known beforehand.
+	 * Figure out how to get the type, e.g. if the type is known beforehand - type provider function taking a tuple. 
+	 * Maybe too complex to be handled at this level. 
 	 */
 	
 }
