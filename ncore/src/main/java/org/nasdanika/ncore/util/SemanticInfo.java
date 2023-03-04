@@ -33,6 +33,7 @@ public class SemanticInfo extends SemanticIdentity {
 	public static String CONTAINER_KEY = "container";
 	public static String DESCRIPTION_KEY = "description";
 	public static String LOCATION_KEY = "location";
+	public static String ICON_KEY = "icon";
 		
 	public interface TypeInfo {
 		
@@ -46,6 +47,7 @@ public class SemanticInfo extends SemanticIdentity {
 	protected String typeNsURI;
 	protected String name;
 	protected String description;
+	protected String icon;
 	protected URI location;
 	
 	public SemanticInfo(
@@ -53,6 +55,7 @@ public class SemanticInfo extends SemanticIdentity {
 			List<URI> uris, 
 			String name,
 			String description,
+			String icon,
 			URI location,
 			ContainerInfo containerInfo,
 			String typeName,
@@ -61,6 +64,7 @@ public class SemanticInfo extends SemanticIdentity {
 		super(uuid, uris);
 		this.name = name;
 		this.description = description;
+		this.icon = icon;
 		this.location = location;
 		this.containerInfo = containerInfo;
 		this.typeName = typeName;
@@ -93,6 +97,9 @@ public class SemanticInfo extends SemanticIdentity {
 		if (jsonObj.has(DESCRIPTION_KEY)) {
 			description = jsonObj.getString(DESCRIPTION_KEY);
 		}
+		if (jsonObj.has(ICON_KEY)) {
+			icon = jsonObj.getString(ICON_KEY);
+		}
 		if (jsonObj.has(LOCATION_KEY)) {
 			location = URI.createURI(jsonObj.getString(LOCATION_KEY));
 			if (base != null && !base.isRelative() && location.isRelative()) {
@@ -117,6 +124,14 @@ public class SemanticInfo extends SemanticIdentity {
 		this.location = location;
 	}
 	
+	public String getIcon() {
+		return icon;
+	}
+	
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
 	/**
 	 * @param eObj
 	 * @return {@link SemanticInfo} if eObj is a {@link ModelElement} and has semantic-element annotation
@@ -137,6 +152,7 @@ public class SemanticInfo extends SemanticIdentity {
 				Property uuidProperty = semanticElementAnnotation.get(UUID_KEY);		
 				Property nameProperty = semanticElementAnnotation.get(ContainerInfo.NAME_KEY);		
 				Property descriptionProperty = semanticElementAnnotation.get(DESCRIPTION_KEY);		
+				Property iconProperty = semanticElementAnnotation.get(ICON_KEY);		
 				Property locationProperty = semanticElementAnnotation.get(LOCATION_KEY);		
 				
 				ContainerInfo containerInfo;
@@ -175,6 +191,7 @@ public class SemanticInfo extends SemanticIdentity {
 						uris, 
 						nameProperty == null ? null : ((org.nasdanika.ncore.String) nameProperty).getValue(),
 						descriptionProperty == null ? null : ((org.nasdanika.ncore.String) descriptionProperty).getValue(),
+						iconProperty == null ? null : ((org.nasdanika.ncore.String) iconProperty).getValue(),
 						locationProperty == null ? null : URI.createURI(((org.nasdanika.ncore.String) locationProperty).getValue()),
 						containerInfo,
 						typeNameProperty == null ? null : ((org.nasdanika.ncore.String) typeNameProperty).getValue(),
@@ -286,6 +303,9 @@ public class SemanticInfo extends SemanticIdentity {
 		}
 		if (!Util.isBlank(getDescription())) {
 			ret.put(DESCRIPTION_KEY, getDescription());
+		}
+		if (!Util.isBlank(getIcon())) {
+			ret.put(ICON_KEY, getIcon());
 		}
 		if (getLocation() != null) {
 			ret.put(LOCATION_KEY, getLocation().toString());
