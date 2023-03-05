@@ -16,11 +16,11 @@ import org.eclipse.emf.common.util.URI;
  *
  * @param <V>
  */
-public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
+public class SemanticMap<K extends SemanticIdentity, V> extends AbstractMap<K,V> {
 	
-	private Collection<Entry<SemanticIdentity, V>> data = new ArrayList<>();
+	private Collection<Entry<K, V>> data = new ArrayList<>();
 	
-	private Set<Entry<SemanticIdentity, V>> entrySet = new AbstractSet<Entry<SemanticIdentity, V>>() {
+	private Set<Entry<K, V>> entrySet = new AbstractSet<Entry<K, V>>() {
 
 		@Override
 		public int size() {
@@ -28,9 +28,9 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 		}
 
 		@Override
-		public Iterator<Entry<SemanticIdentity, V>> iterator() {
-			Iterator<Entry<SemanticIdentity, V>> dataIterator = data.iterator();
-			return new Iterator<Entry<SemanticIdentity,V>>() {
+		public Iterator<Entry<K, V>> iterator() {
+			Iterator<Entry<K, V>> dataIterator = data.iterator();
+			return new Iterator<Entry<K,V>>() {
 
 				@Override
 				public boolean hasNext() {
@@ -38,7 +38,7 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 				}
 
 				@Override
-				public Entry<SemanticIdentity, V> next() {
+				public Entry<K, V> next() {
 					return dataIterator.next();
 				}
 				
@@ -50,8 +50,8 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 		}
 
 		@Override
-		public boolean add(Entry<SemanticIdentity, V> e) {
-			for (Entry<SemanticIdentity, V> de: data) {
+		public boolean add(Entry<K, V> e) {
+			for (Entry<K, V> de: data) {
 				if (Objects.equals(de.getKey(), e.getKey())) {
 					return false;
 				}
@@ -62,24 +62,24 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	};
 
 	@Override
-	public Set<Entry<SemanticIdentity, V>> entrySet() {
+	public Set<Entry<K, V>> entrySet() {
 		return entrySet;
 	}
 	
 	@Override
-	public V put(SemanticIdentity key, V value) {
-		for (Entry<SemanticIdentity, V> de: data) {
+	public V put(K key, V value) {
+		for (Entry<K, V> de: data) {
 			if (Objects.equals(de.getKey(), key)) {
 				return de.setValue(value);
 			}
 		}
 		
-		data.add(new Entry<SemanticIdentity, V>() {
+		data.add(new Entry<K, V>() {
 			
 			V entryValue = value;
 
 			@Override
-			public SemanticIdentity getKey() {
+			public K getKey() {
 				return key;
 			}
 
@@ -104,9 +104,9 @@ public class SemanticMap<V> extends AbstractMap<SemanticIdentity,V> {
 	 * @param key
 	 * @return
 	 */
-	public Entry<SemanticIdentity,V> find(URI uri) {
+	public Entry<K,V> find(URI uri) {
 		if (uri != null) {
-			for (Entry<SemanticIdentity, V> e: entrySet()) {
+			for (Entry<K, V> e: entrySet()) {
 				if (e.getKey().getIdentifiers().contains(uri)) {
 					return e;
 				}

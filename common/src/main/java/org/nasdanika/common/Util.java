@@ -790,11 +790,23 @@ public class Util {
 	 */
 	public static <K, T> Map<K, List<T>> groupBy(Collection<T> elements, java.util.function.Function<? super T, ? extends K> classifier) {
 		Map<K, List<T>> ret = new LinkedHashMap<>();
+		groupBy(elements, classifier, ret);
+		return ret;
+	}	
+	
+	/**
+	 * Grouping by with support of null keys.
+	 * @param <K>
+	 * @param <T>
+	 * @param elements
+	 * @param keyFeature
+	 * @return
+	 */
+	public static <K, T> void groupBy(Collection<T> elements, java.util.function.Function<? super T, ? extends K> classifier, Map<K, List<T>> collector) {
 		for (T e: elements) {
 			K k = classifier.apply(e);
-			ret.computeIfAbsent(k, key -> new ArrayList<>()).add(e);
+			collector.computeIfAbsent(k, key -> new ArrayList<>()).add(e);
 		}
-		return ret;
 	}	
 
 	// --- Property computers

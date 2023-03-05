@@ -22,7 +22,7 @@ import org.json.JSONTokener;
  */
 public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 	
-// Override these methods to implement indexing by uuid and uri		
+// Override these methods to implement indexing by identifiers		
 //	@Override
 //	public boolean addAll(Collection<? extends SemanticIdentity> c) {
 //		return super.addAll(c);
