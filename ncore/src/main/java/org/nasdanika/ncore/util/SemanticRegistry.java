@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -49,6 +50,15 @@ public class SemanticRegistry extends ArrayList<SemanticIdentity> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Find identity in the registry by another identity as a key 
+	 * @param key
+	 * @return
+	 */
+	public SemanticIdentity find(EObject eObj) {
+		return find(SemanticIdentity.of(eObj));
+	}
 
 	/**
 	 * Find identity in the registry by another identity as a key 
