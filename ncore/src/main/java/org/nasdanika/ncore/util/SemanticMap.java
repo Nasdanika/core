@@ -104,10 +104,10 @@ public class SemanticMap<K extends SemanticIdentity, V> extends AbstractMap<K,V>
 	 * @param key
 	 * @return
 	 */
-	public Entry<K,V> find(URI uri) {
-		if (uri != null) {
+	public Entry<K,V> find(URI identifier) {
+		if (identifier != null) {
 			for (Entry<K, V> e: entrySet()) {
-				if (e.getKey().getIdentifiers().contains(uri)) {
+				if (e.getKey().getIdentifiers().contains(identifier)) {
 					return e;
 				}
 			}
