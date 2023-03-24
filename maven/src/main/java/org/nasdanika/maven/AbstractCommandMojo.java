@@ -14,6 +14,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.emf.common.util.URI;
 import org.json.JSONObject;
+import org.nasdanika.common.BeanPropertyComputer;
 import org.nasdanika.common.Command;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.DefaultConverter;
@@ -27,6 +28,7 @@ import org.nasdanika.common.Util;
 /**
  * Base class for plugins which execute {@link Command}'s. 
  * This class creates a {@link Context} and a {@link ProgressMonitor} and then executes a command returned from createCommand() method.
+ * Properties of the maven project are available under <code>maven/project</code> prefix in the context. E.g. <code>maven/project/version</code>.
  */
 public abstract class AbstractCommandMojo extends AbstractMojo {
 
@@ -70,12 +72,12 @@ public abstract class AbstractCommandMojo extends AbstractMojo {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Context createContext() throws IOException, MojoExecutionException {
-		Context context = Context.singleton(MavenProject.class, project);
+		Context context = Context.singleton(MavenProject.class, project).compose(Context.singleton("maven/project", new BeanPropertyComputer(project)));
 		
 		Map<Object, Object> pc = getPluginContext();
 		if (pc != null) {
 			Context wpc = Context.wrap(pc::get); 
-			context = context.compose(wpc);
+			context = context.mount(wpc, "maven/plugin");
 		}
 		
 		if (contexts != null && !contexts.isEmpty()) {
