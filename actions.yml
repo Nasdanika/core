@@ -11,7 +11,7 @@ app-action:
          location: exec/index.html
          uris: exec
          children:
-           - "../nasdanika.github.io/target/model-doc/actions/exec.genmodel.xml#/"
+           - "../nasdanika.github.io/target/model-doc/actions/org.nasdanika.exec.exec.genmodel.xml#/"
            - exec.gen/actions.yml              
      - graph/actions.yml
      - maven/actions.yml
@@ -20,7 +20,7 @@ app-action:
          uris: ncore
          location: ncore/index.html
          children:
-           - "../nasdanika.github.io/target/model-doc/actions/ncore.genmodel.xml#/"
+           - "../nasdanika.github.io/target/model-doc/actions/org.nasdanika.ncore.ncore.genmodel.xml#/"
            - ncore.gen/actions.yml              
      - persistence/actions.yml
      - resources/actions.yml

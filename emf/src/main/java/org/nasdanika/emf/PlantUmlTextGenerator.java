@@ -632,6 +632,10 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	}
 	
 	protected String qualifiedName(EClassifier eClassifier) {
+		Class<?> ic = eClassifier.getInstanceClass();
+		if (ic != null) {
+			return ic.getName();
+		}
 		EPackage ePackage = eClassifier.getEPackage();
 		if (ePackage == null) {
 			return getLabel(eClassifier);				
