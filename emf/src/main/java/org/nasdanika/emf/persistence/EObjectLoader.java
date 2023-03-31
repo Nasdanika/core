@@ -336,30 +336,56 @@ public class EObjectLoader extends DispatchingLoader {
 	 */
 	public BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> resolveEClass(String type) {		
 		for (Entry<String, EPackageEntry> re: getRegistry()) {
+			EPackageEntry ePackageEntry = re.getValue();
 			if (type.startsWith(re.getKey())) {
-				EPackageEntry ePackageEntry = re.getValue();
 				for (EClassifier eClassifier: ePackageEntry.ePackage.getEClassifiers()) {
 					if (eClassifier instanceof EClass && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eClassifier, IS_LOADABLE, "true"))) {
 						String eClassifierKey = ePackageEntry.keyProvider.apply(null, eClassifier);
 						if (eClassifierKey != null && type.equals(re.getKey() + eClassifierKey)) {
-							return new BiSupplier<EClass, BiFunction<EClass,ENamedElement,String>>() {
-
-								@Override
-								public EClass getFirst() {
-									return (EClass) eClassifier;
+							return resolveResult(ePackageEntry, eClassifier); 
+						}
+					}
+				}
+			} else {
+				String exportsAnnotation = NcoreUtil.getNasdanikaAnnotationDetail(ePackageEntry.ePackage, "exports");
+				if (!Util.isBlank(exportsAnnotation)) {
+					Yaml yaml = new Yaml();
+					Map<String,Object> exportsMap = yaml.load(exportsAnnotation);
+					for (Entry<String, Object> eme: exportsMap.entrySet()) {
+						EClassifier eClassifier = ePackageEntry.ePackage.getEClassifier(eme.getKey());
+						if (eClassifier instanceof EClass && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eClassifier, IS_LOADABLE, "true"))) {
+							Object val = eme.getValue();
+							if (val instanceof Collection) {
+								for (Object vale: (Collection<?>) val) {
+									if (type.equals(vale)) {
+										return resolveResult(ePackageEntry, eClassifier);
+									}
 								}
-
-								@Override
-								public BiFunction<EClass,ENamedElement, String> getSecond() {
-									return ePackageEntry.keyProvider;
-								}
-							}; 
+							} else if (type.equals(val)) {
+								return resolveResult(ePackageEntry, eClassifier);								
+							}
 						}
 					}
 				}
 			}
 		}
 		return null;		
+	}
+
+	private BiSupplier<EClass, BiFunction<EClass, ENamedElement, String>> resolveResult(EPackageEntry ePackageEntry,
+			EClassifier eClassifier) {
+		return new BiSupplier<EClass, BiFunction<EClass,ENamedElement,String>>() {
+
+			@Override
+			public EClass getFirst() {
+				return (EClass) eClassifier;
+			}
+
+			@Override
+			public BiFunction<EClass,ENamedElement, String> getSecond() {
+				return ePackageEntry.keyProvider;
+			}
+		};
 	}
 	
 	/**
