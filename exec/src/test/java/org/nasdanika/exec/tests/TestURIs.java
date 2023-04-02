@@ -16,11 +16,11 @@ class TestURIs {
 	void testECoreURI() {
 		List<URI> mapIdentifiers = NcoreUtil.getIdentifiers(ExecPackage.Literals.CALL__METHOD);
 		assertEquals(1, mapIdentifiers.size());
-		assertEquals(URI.createURI("ecore://nasdanika.org/core/exec/Call/method"), mapIdentifiers.get(0));
+		assertEquals(URI.createURI("ecore://nasdanika.org/core/exec/eClassifiers/Call/eStructuralFeatures/method"), mapIdentifiers.get(0));
 		
 		List<URI> periodStartIdentifiers = NcoreUtil.getIdentifiers(ContentPackage.Literals.MARKDOWN__STYLE);
 		assertEquals(1, periodStartIdentifiers.size());
-		assertEquals(URI.createURI("ecore://nasdanika.org/core/exec/content/Markdown/style"), periodStartIdentifiers.get(0));
+		assertEquals(URI.createURI("ecore://nasdanika.org/core/exec/content/eClassifiers/Markdown/eStructuralFeatures/style"), periodStartIdentifiers.get(0));
 	}
 
 }

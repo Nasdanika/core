@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -271,8 +272,15 @@ public final class NcoreUtil {
 					if (eObj instanceof ENamedElement) {
 						if (eObj instanceof EOperation) {
 							// Need a signature, not yet supported
+						} if (eObj instanceof EPackage) {
+							ownIdentifiers.add(URI.createURI(((EPackage) eObj).getNsURI()));
 						} else {
-							ownIdentifiers.add(URI.createURI(((ENamedElement) eObj).getName()));
+							EReference containmentFeature = eObj.eContainmentFeature();
+							if (containmentFeature == null) {
+								ownIdentifiers.add(URI.createURI(((ENamedElement) eObj).getName()));
+							} else {
+								ownIdentifiers.add(URI.createURI(containmentFeature.getName() + "/" + ((ENamedElement) eObj).getName()));								
+							}
 						}
 					}
 				} else {

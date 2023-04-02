@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.content.ContentFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/content/package-summary.md'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/content/package-summary.md' identifiers='ecore://nasdanika.org/core/exec/content'"
  * @generated
  */
 public interface ContentPackage extends EPackage {

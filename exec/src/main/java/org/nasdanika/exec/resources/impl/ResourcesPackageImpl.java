@@ -370,7 +370,8 @@ public class ResourcesPackageImpl extends EPackageImpl implements ResourcesPacka
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/resources/package-summary.md"
+			   "documentation-reference", "doc/resources/package-summary.md",
+			   "identifiers", "ecore://nasdanika.org/core/exec/resources"
 		   });
 		addAnnotation
 		  (resourceEClass,
