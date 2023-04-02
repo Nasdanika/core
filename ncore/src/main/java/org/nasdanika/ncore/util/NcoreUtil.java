@@ -18,7 +18,9 @@ import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EModelElement;
+import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -260,6 +262,32 @@ public final class NcoreUtil {
 			
 			if (eObj instanceof SemanticIdentity) {
 				ownIdentifiers.addAll(((SemanticIdentity) eObj).getIdentifiers());
+			}
+			
+			if (eObj instanceof EModelElement) {
+				// Annotation, fallback to name for named elements
+				String identifiersAnnotation = NcoreUtil.getNasdanikaAnnotationDetail((EModelElement) eObj, "identifiers");
+				if (Util.isBlank(identifiersAnnotation)) {
+					if (eObj instanceof ENamedElement) {
+						if (eObj instanceof EOperation) {
+							// Need a signature, not yet supported
+						} else {
+							ownIdentifiers.add(URI.createURI(((ENamedElement) eObj).getName()));
+						}
+					}
+				} else {
+					Yaml yaml = new Yaml();
+					Object identifiersObj = yaml.load(identifiersAnnotation);
+					if (identifiersObj instanceof Iterable) {
+						for (Object e: (Iterable<?>) identifiersObj) {
+							if (e instanceof String) {
+								ownIdentifiers.add(URI.createURI((String) e));								
+							}
+						} 
+					} else if (identifiersObj instanceof String) {
+						ownIdentifiers.add(URI.createURI((String) identifiersObj));														
+					}
+				}
 			}
 			
 			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);

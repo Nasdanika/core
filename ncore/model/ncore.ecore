@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ncore" nsURI="urn:org.nasdanika.ncore" nsPrefix="org.nasdanika.ncore">
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/package-summary.md"/>
+    <details key="identifiers" value="ecore://nasdanika.org/core/ncore"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Adaptable" instanceClassName="org.nasdanika.common.Adaptable"
       abstract="true" interface="true"/>

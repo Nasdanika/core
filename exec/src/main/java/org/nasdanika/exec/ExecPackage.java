@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.ExecFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md' identifiers='ecore://nasdanika.org/core/exec'"
  * @generated
  */
 public interface ExecPackage extends EPackage {

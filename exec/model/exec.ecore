@@ -3,6 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="exec" nsURI="urn:org.nasdanika.exec" nsPrefix="org.nasdanika.exec">
   <eAnnotations source="urn:org.nasdanika">
     <details key="documentation-reference" value="doc/package-summary.md"/>
+    <details key="identifiers" value="ecore://nasdanika.org/core/exec"/>
   </eAnnotations>
   <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//ModelElement">
     <eAnnotations source="urn:org.nasdanika">
