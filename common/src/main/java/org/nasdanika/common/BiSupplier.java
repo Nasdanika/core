@@ -5,6 +5,7 @@ import java.util.function.BiConsumer;
 /**
  * Supplier of two values of different type.
  * @author Pavel
+ * @deprecated Use {@link Record}s.
  *
  * @param <T>
  * @param <U>

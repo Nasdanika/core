@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+
 /**
  * By convention Supplier does not split the monitor for itself - this is the responsibility of the caller.
  * 
@@ -283,28 +284,21 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 		};
 	}	
 	
+	public record FunctionResult<T,R>(T argument, R result) {
+		
+	}
+	
 	/**
 	 * @return Function which executes this supplier and returns the argument and the result as a {@link BiSupplier}.
 	 * This method can be used for embedding suppliers into function chains.
 	 */
-	default <V> Function<V,BiSupplier<V,T>> asFunction() {
-		return new Function<V,BiSupplier<V,T>>() {
+	default <V> Function<V,FunctionResult<V,T>> asFunction() {
+		return new Function<V,FunctionResult<V,T>>() {
 			
 			@Override
-			public BiSupplier<V,T> execute(V arg, ProgressMonitor progressMonitor) {
+			public FunctionResult<V,T> execute(V arg, ProgressMonitor progressMonitor) {
 				T result = Supplier.this.execute(progressMonitor);
-				return new BiSupplier<V, T>() {
-
-					@Override
-					public V getFirst() {
-						return arg;
-					}
-
-					@Override
-					public T getSecond() {
-						return result;
-					}
-				};
+				return new FunctionResult<V, T>(arg, result);
 			}
 			
 			@Override
@@ -339,5 +333,47 @@ public interface Supplier<T> extends ExecutionParticipant, ExecutionParticipantI
 			
 		};
 	}
+	
+
+	/**
+	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
+	 * @param monitor
+	 * @param diagnosticConsumer TODO
+	 * @param context
+	 * @param component
+	 * @return
+	 */
+	default T call(ProgressMonitor monitor, java.util.function.Consumer<Diagnostic> diagnosticConsumer, Status... failOnStatuses) {
+		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
+			Diagnostic diagnostic = splitAndDiagnose(progressMonitor);
+			if (diagnosticConsumer != null) {
+				diagnosticConsumer.accept(diagnostic);
+			}
+			Status status = diagnostic.getStatus();
+			if (failOnStatuses.length == 0) {
+				if (status == Status.FAIL) {
+					throw new DiagnosticException(diagnostic);
+				}
+			} else {
+				for (Status failStatus: failOnStatuses) {
+					if (status == failStatus) {
+						throw new DiagnosticException(diagnostic);
+					}					
+				}
+			}
+			
+			try {
+				T result = splitAndExecute(progressMonitor);
+				splitAndCommit(progressMonitor);
+				return result;
+			} catch (Exception e) {
+				splitAndRollback(progressMonitor);
+				throw e;
+			}
+		} finally {
+			close();
+		}
+	}
+	
 	
 }

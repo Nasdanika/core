@@ -612,8 +612,7 @@ public class ExecPackageImpl extends EPackageImpl implements ExecPackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-summary.md",
-			   "identifiers", "ecore://nasdanika.org/core/exec"
+			   "documentation-reference", "doc/package-summary.md"
 		   });
 		addAnnotation
 		  (blockEClass,

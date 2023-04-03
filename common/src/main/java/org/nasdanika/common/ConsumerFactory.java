@@ -27,12 +27,12 @@ public interface ConsumerFactory<T> extends ExecutionParticipantFactory<Consumer
 		};
 	}
 	
-	default <R> FunctionFactory<BiSupplier<T,R>,R> asBiSupplierFunctionFactory() {
-		return new FunctionFactory<BiSupplier<T,R>, R>() {
+	default <R> FunctionFactory<Supplier.FunctionResult<T,R>,R> asResultFunctionFactory() {
+		return new FunctionFactory<Supplier.FunctionResult<T,R>, R>() {
 
 			@Override
-			public Function<BiSupplier<T,R>, R> create(Context context) {
-				return ConsumerFactory.this.create(context).asBiSupplierFunction();
+			public Function<Supplier.FunctionResult<T,R>, R> create(Context context) {
+				return ConsumerFactory.this.create(context).asResultFunction();
 			}
 			
 		};

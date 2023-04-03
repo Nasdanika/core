@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.ExecFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md' identifiers='ecore://nasdanika.org/core/exec'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md'"
  * @generated
  */
 public interface ExecPackage extends EPackage {
@@ -40,7 +40,7 @@ public interface ExecPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "urn:org.nasdanika.exec";
+	String eNS_URI = "ecore://nasdanika.org/core/exec";
 
 	/**
 	 * The package namespace name.

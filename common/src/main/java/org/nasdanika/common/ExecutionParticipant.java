@@ -87,6 +87,5 @@ public interface ExecutionParticipant extends Diagnosable, ExecutionParticipantI
 			return diagnose(subMonitor);
 		}
 	}
-	
-	
+		
 }

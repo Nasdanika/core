@@ -22,7 +22,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.content.ContentFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/content/package-summary.md' identifiers='ecore://nasdanika.org/core/exec/content'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/content/package-summary.md'"
  * @generated
  */
 public interface ContentPackage extends EPackage {
@@ -40,7 +40,7 @@ public interface ContentPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "urn:org.nasdanika.exec.content";
+	String eNS_URI = "ecore://nasdanika.org/core/exec/content";
 
 	/**
 	 * The package namespace name.

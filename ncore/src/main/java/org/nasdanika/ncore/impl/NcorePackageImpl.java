@@ -1516,8 +1516,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/package-summary.md",
-			   "identifiers", "ecore://nasdanika.org/core/ncore"
+			   "documentation-reference", "doc/package-summary.md"
 		   });
 		addAnnotation
 		  (markedEClass,

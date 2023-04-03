@@ -1,10 +1,34 @@
 package org.nasdanika.common;
 
 import java.io.PrintStream;
+import java.util.Collections;
 import java.util.List;
 
-public interface Diagnostic {
+public interface Diagnostic extends Composeable<Diagnostic> {
 	
+	Diagnostic SUCCESS = new Diagnostic() {
+		
+		@Override
+		public Status getStatus() {
+			return Status.SUCCESS;
+		}
+		
+		@Override
+		public String getMessage() {
+			return null;
+		}
+		
+		@Override
+		public List<Object> getData() {
+			return null;
+		}
+		
+		@Override
+		public List<Diagnostic> getChildren() {
+			return Collections.emptyList();
+		}
+	};
+
 	Status getStatus();
 	
 	String getMessage();
@@ -75,6 +99,22 @@ public interface Diagnostic {
 		    	children.forEach(c -> c.dump(out, indent + 1, statuses));
 		    }
 		}		
+	}
+	
+	@Override
+	default Diagnostic compose(Diagnostic other) {
+		if (other == null || other == this || other == SUCCESS) {
+			return this;
+		}
+		
+		if (this == SUCCESS) {
+			return other;
+		}
+		
+		BasicDiagnostic composed = new BasicDiagnostic(Status.SUCCESS, null);
+		composed.add(this);
+		composed.add(other);
+		return composed;
 	}
 	
 }

@@ -24,7 +24,7 @@ import org.nasdanika.ncore.NcorePackage;
  * <!-- end-user-doc -->
  * @see org.nasdanika.exec.resources.ResourcesFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/resources/package-summary.md' identifiers='ecore://nasdanika.org/core/exec/resources'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/resources/package-summary.md'"
  * @generated
  */
 public interface ResourcesPackage extends EPackage {
@@ -42,7 +42,7 @@ public interface ResourcesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "urn:org.nasdanika.exec.resources";
+	String eNS_URI = "ecore://nasdanika.org/core/exec/resources";
 
 	/**
 	 * The package namespace name.

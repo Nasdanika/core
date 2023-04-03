@@ -495,6 +495,8 @@ public class Util {
 		}
 		return firstSentence(Jsoup.parse(html).text(), minSentenceLength, maxSentenceLength, abbreviations);
 	}	
+	
+	
 
 	/**
 	 * Executes full supplier lifecycle - diagnose, execute, commit/rollback, close.
@@ -502,38 +504,12 @@ public class Util {
 	 * @param diagnosticConsumer TODO
 	 * @param context
 	 * @param component
+	 * @deprecated Use {@link Supplier}.call()
 	 * @return
 	 */
+	@Deprecated(since = "2023.4.1", forRemoval = true)
 	public static <T> T call(Supplier<T> supplier, ProgressMonitor monitor, Consumer<Diagnostic> diagnosticConsumer, Status... failOnStatuses) {
-		try (ProgressMonitor progressMonitor = monitor.setWorkRemaining(3).split("Calling supplier", 3)) {
-			Diagnostic diagnostic = supplier.splitAndDiagnose(progressMonitor);
-			if (diagnosticConsumer != null) {
-				diagnosticConsumer.accept(diagnostic);
-			}
-			Status status = diagnostic.getStatus();
-			if (failOnStatuses.length == 0) {
-				if (status == Status.FAIL) {
-					throw new DiagnosticException(diagnostic);
-				}
-			} else {
-				for (Status failStatus: failOnStatuses) {
-					if (status == failStatus) {
-						throw new DiagnosticException(diagnostic);
-					}					
-				}
-			}
-			
-			try {
-				T result = supplier.splitAndExecute(progressMonitor);
-				supplier.splitAndCommit(progressMonitor);
-				return result;
-			} catch (Exception e) {
-				supplier.splitAndRollback(progressMonitor);
-				throw e;
-			}
-		} finally {
-			supplier.close();
-		}
+		return supplier.call(monitor, diagnosticConsumer, failOnStatuses);
 	}
 	
 	/**

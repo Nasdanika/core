@@ -10,13 +10,13 @@ import java.util.Objects;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EObject;
-import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.Function;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.MapCompoundSupplierFactory;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.EObjectAdaptable;
@@ -54,7 +54,7 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 		
 		
 		if (type == null || type == Object.class) {
-			FunctionFactory<BiSupplier<InputStream, Map<String,Object>>, Object> functionFactory = context -> new Function<BiSupplier<InputStream, Map<String,Object>>, Object>() {
+			FunctionFactory<Supplier.FunctionResult<InputStream, Map<String,Object>>, Object> functionFactory = context -> new Function<Supplier.FunctionResult<InputStream, Map<String,Object>>, Object>() {
 
 				@Override
 				public double size() {
@@ -67,8 +67,8 @@ public class EvalSupplierFactoryProviderAdapter extends AdapterImpl implements S
 				}
 
 				@Override
-				public Object execute(BiSupplier<InputStream, Map<String,Object>> input, ProgressMonitor progressMonitor) {
-					Map<String,Object> bindings = new HashMap<>(input.getSecond());
+				public Object execute(Supplier.FunctionResult<InputStream, Map<String,Object>> input, ProgressMonitor progressMonitor) {
+					Map<String,Object> bindings = new HashMap<>(input.result());
 					bindings.put(CONTEXT_BINDING, context);
 					bindings.put(PROGRESS_MONITOR_BINDING, progressMonitor);					
 					throw new UnsupportedOperationException("TODO - implement with Spring Expression language or drop eval");

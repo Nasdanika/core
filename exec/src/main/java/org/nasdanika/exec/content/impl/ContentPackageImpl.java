@@ -412,8 +412,7 @@ public class ContentPackageImpl extends EPackageImpl implements ContentPackage {
 		  (this,
 		   source,
 		   new String[] {
-			   "documentation-reference", "doc/content/package-summary.md",
-			   "identifiers", "ecore://nasdanika.org/core/exec/content"
+			   "documentation-reference", "doc/content/package-summary.md"
 		   });
 		addAnnotation
 		  (base64EClass,

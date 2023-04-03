@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EReference;
  * <!-- end-user-doc -->
  * @see org.nasdanika.ncore.NcoreFactory
  * @model kind="package"
- *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md' identifiers='ecore://nasdanika.org/core/ncore'"
+ *        annotation="urn:org.nasdanika documentation-reference='doc/package-summary.md'"
  * @generated
  */
 public interface NcorePackage extends EPackage {
@@ -42,7 +42,7 @@ public interface NcorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "urn:org.nasdanika.ncore";
+	String eNS_URI = "ecore://nasdanika.org/core/ncore";
 
 	/**
 	 * The package namespace name.

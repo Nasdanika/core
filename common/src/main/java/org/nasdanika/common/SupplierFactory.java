@@ -49,11 +49,11 @@ public interface SupplierFactory<T> extends ExecutionParticipantFactory<Supplier
 		return create(context).apply(progressMonitor);
 	}
 	
-	default <V> FunctionFactory<V,BiSupplier<V,T>> asFunctionFactory() { 
-		return new FunctionFactory<V, BiSupplier<V,T>>() {
+	default <V> FunctionFactory<V,Supplier.FunctionResult<V,T>> asFunctionFactory() { 
+		return new FunctionFactory<V, Supplier.FunctionResult<V,T>>() {
 
 			@Override
-			public Function<V, BiSupplier<V, T>> create(Context context) {				
+			public Function<V, Supplier.FunctionResult<V, T>> create(Context context) {				
 				return SupplierFactory.this.create(context).asFunction();
 			}
 		};
