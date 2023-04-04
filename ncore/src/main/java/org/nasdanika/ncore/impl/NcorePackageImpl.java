@@ -660,7 +660,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getModelElement_ActionPrototype() {
+	public EReference getModelElement_LabelPrototype() {
 		return (EReference)modelElementEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1232,7 +1232,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__URIS);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__DESCRIPTION);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__UUID);
-		createEReference(modelElementEClass, MODEL_ELEMENT__ACTION_PROTOTYPE);
+		createEReference(modelElementEClass, MODEL_ELEMENT__LABEL_PROTOTYPE);
 		createEReference(modelElementEClass, MODEL_ELEMENT__REPRESENTATIONS);
 		createEReference(modelElementEClass, MODEL_ELEMENT__ANNOTATIONS);
 
@@ -1413,7 +1413,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getModelElement_Uris(), ecorePackage.getEString(), "uris", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Description(), ecorePackage.getEString(), "description", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Uuid(), ecorePackage.getEString(), "uuid", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getModelElement_ActionPrototype(), ecorePackage.getEObject(), null, "actionPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getModelElement_LabelPrototype(), ecorePackage.getEObject(), null, "labelPrototype", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Annotations(), this.getProperty(), null, "annotations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getModelElement_Annotations().getEKeys().add(this.getProperty_Name());
@@ -1831,10 +1831,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Optional unique identifier for this model element. For root objects UUID is used to compute URI, if the URI is not set."
 		   });
 		addAnnotation
-		  (getModelElement_ActionPrototype(),
+		  (getModelElement_LabelPrototype(),
 		   source,
 		   new String[] {
-			   "documentation", "If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. \nIf this reference is set and is Action then a copy of the action is created and returned.\nOtherwise the reference value it is adapted to ActionProvider which is used to create an action. \nThis allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation."
+			   "documentation", "If this reference is not set then EObjectLabelBuilder creates a new Label of its subclass (Link or Action) using AppFactory in newLabel() method. \nIf this reference is set and is and instanceof Label then a copy of the label is created and returned.\nOtherwise the reference value it is adapted to LabelProvider which is used to create a label. \nThis allows to merge labels and chain label generation. \n"
 		   });
 		addAnnotation
 		  (getModelElement_Representations(),

@@ -27,7 +27,7 @@ import org.nasdanika.common.Adaptable;
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUris <em>Uris</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getUuid <em>Uuid</em>}</li>
- *   <li>{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.ModelElement#getLabelPrototype <em>Label Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getAnnotations <em>Annotations</em>}</li>
  * </ul>
@@ -105,32 +105,33 @@ public interface ModelElement extends Marked, Adaptable {
 	void setUuid(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Action Prototype</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Label Prototype</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
-	 * If this reference is not set then EObjectActionProvider creates a new Action using AppFactory in newAction() method. 
-	 * If this reference is set and is Action then a copy of the action is created and returned.
-	 * Otherwise the reference value it is adapted to ActionProvider which is used to create an action. 
-	 * This allows to merge actions and chain action generation. E.g. generate Ecore model documentation and merge it into the Engineering documentation.
+	 * If this reference is not set then EObjectLabelBuilder creates a new Label of its subclass (Link or Action) using AppFactory in newLabel() method. 
+	 * If this reference is set and is and instanceof Label then a copy of the label is created and returned.
+	 * Otherwise the reference value it is adapted to LabelProvider which is used to create a label. 
+	 * This allows to merge labels and chain label generation. 
+	 * 
 	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Action Prototype</em>' containment reference.
-	 * @see #setActionPrototype(EObject)
-	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_ActionPrototype()
+	 * @return the value of the '<em>Label Prototype</em>' containment reference.
+	 * @see #setLabelPrototype(EObject)
+	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_LabelPrototype()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EObject getActionPrototype();
+	EObject getLabelPrototype();
 
 	/**
-	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getActionPrototype <em>Action Prototype</em>}' containment reference.
+	 * Sets the value of the '{@link org.nasdanika.ncore.ModelElement#getLabelPrototype <em>Label Prototype</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Action Prototype</em>' containment reference.
-	 * @see #getActionPrototype()
+	 * @param value the new value of the '<em>Label Prototype</em>' containment reference.
+	 * @see #getLabelPrototype()
 	 * @generated
 	 */
-	void setActionPrototype(EObject value);
+	void setLabelPrototype(EObject value);
 
 	/**
 	 * Returns the value of the '<em><b>Representations</b></em>' map.

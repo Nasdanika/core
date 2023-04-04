@@ -46,7 +46,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUris <em>Uris</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getUuid <em>Uuid</em>}</li>
- *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getActionPrototype <em>Action Prototype</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getLabelPrototype <em>Label Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getAnnotations <em>Annotations</em>}</li>
  * </ul>
@@ -172,8 +172,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public EObject getActionPrototype() {
-		return (EObject)eDynamicGet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, true, true);
+	public EObject getLabelPrototype() {
+		return (EObject)eDynamicGet(NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__LABEL_PROTOTYPE, true, true);
 	}
 
 	/**
@@ -181,8 +181,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetActionPrototype(EObject newActionPrototype, NotificationChain msgs) {
-		msgs = eDynamicInverseAdd((InternalEObject)newActionPrototype, NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, msgs);
+	public NotificationChain basicSetLabelPrototype(EObject newLabelPrototype, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newLabelPrototype, NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE, msgs);
 		return msgs;
 	}
 
@@ -192,8 +192,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
-	public void setActionPrototype(EObject newActionPrototype) {
-		eDynamicSet(NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__ACTION_PROTOTYPE, newActionPrototype);
+	public void setLabelPrototype(EObject newLabelPrototype) {
+		eDynamicSet(NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE, NcorePackage.Literals.MODEL_ELEMENT__LABEL_PROTOTYPE, newLabelPrototype);
 	}
 
 	/**
@@ -228,8 +228,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case NcorePackage.MODEL_ELEMENT__MARKERS:
 				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
-			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				return basicSetActionPrototype(null, msgs);
+			case NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE:
+				return basicSetLabelPrototype(null, msgs);
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return ((InternalEList<?>)getRepresentations()).basicRemove(otherEnd, msgs);
 			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
@@ -254,8 +254,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return getDescription();
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return getUuid();
-			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				return getActionPrototype();
+			case NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE:
+				return getLabelPrototype();
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				if (coreType) return getRepresentations();
 				else return getRepresentations().map();
@@ -288,8 +288,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				setUuid((String)newValue);
 				return;
-			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				setActionPrototype((EObject)newValue);
+			case NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE:
+				setLabelPrototype((EObject)newValue);
 				return;
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				((EStructuralFeature.Setting)getRepresentations()).set(newValue);
@@ -322,8 +322,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				setUuid(UUID_EDEFAULT);
 				return;
-			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				setActionPrototype((EObject)null);
+			case NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE:
+				setLabelPrototype((EObject)null);
 				return;
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				getRepresentations().clear();
@@ -351,8 +351,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return DESCRIPTION_EDEFAULT == null ? getDescription() != null : !DESCRIPTION_EDEFAULT.equals(getDescription());
 			case NcorePackage.MODEL_ELEMENT__UUID:
 				return UUID_EDEFAULT == null ? getUuid() != null : !UUID_EDEFAULT.equals(getUuid());
-			case NcorePackage.MODEL_ELEMENT__ACTION_PROTOTYPE:
-				return getActionPrototype() != null;
+			case NcorePackage.MODEL_ELEMENT__LABEL_PROTOTYPE:
+				return getLabelPrototype() != null;
 			case NcorePackage.MODEL_ELEMENT__REPRESENTATIONS:
 				return !getRepresentations().isEmpty();
 			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
