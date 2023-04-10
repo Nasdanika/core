@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.graph.Element;
@@ -21,7 +22,7 @@ public class ResourceSetElement implements Element {
 	public ResourceSetElement(ResourceSet resourceSet) {
 		this.resourceSet = resourceSet;
 		for (Resource resource: resourceSet.getResources()) {
-			resourceElements.add(new ResourceElement(resource));
+			resourceElements.add(new ResourceElement(resource, this::createNode));
 		}
 		
 		Function<EObject, EObjectNode> registry = accept(this::buildRegistry)::get;
@@ -41,7 +42,7 @@ public class ResourceSetElement implements Element {
 	
 	private void resolve(Element element, Function<EObject, EObjectNode> registry) {
 		if (element instanceof EObjectNode) {
-			((EObjectNode) element).resolve(registry);
+			((EObjectNode) element).resolve(registry, this::createConnection);
 		}
 	}
 	
@@ -56,6 +57,14 @@ public class ResourceSetElement implements Element {
 			results.put(resourceElement, resourceElement.accept(visitor));
 		}
 		return visitor.apply(this, results);
+	}
+	
+	protected EObjectNode createNode(EObject eObject) {
+		return new EObjectNode(eObject, this::createNode, this::createConnection);
+	}
+	
+	protected EReferenceConnection createConnection(EObjectNode source, EObjectNode taret, EReference reference, int index) {
+		return new EReferenceConnection(source, taret, reference, index);
 	}
 
 }

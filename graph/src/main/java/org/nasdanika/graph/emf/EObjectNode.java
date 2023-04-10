@@ -1,6 +1,7 @@
 package org.nasdanika.graph.emf;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -17,11 +18,11 @@ import org.nasdanika.graph.Node;
 public class EObjectNode implements Node, PropertySource<String, Object> {
 	
 	private EObject target;
-	private Collection<EReferenceConnection> incomingConnections;
-	private Collection<EReferenceConnection> outgoingConnections;
+	private Collection<EReferenceConnection> incomingConnections = new HashSet<>();
+	private Collection<EReferenceConnection> outgoingConnections = new HashSet<>();
 
 	@SuppressWarnings("unchecked")
-	public EObjectNode(EObject target) {
+	public EObjectNode(EObject target, Function<EObject,EObjectNode> nodeFactory, EReferenceConnection.Factory connectionFactory) {
 		this.target = target;
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
@@ -31,12 +32,12 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 					if (eReference.isMany()) {
 						int idx = 0;
 						for (EObject element: (Collection<EObject>) val) {
-							EObjectNode targetNode = new EObjectNode(element);
-							new EReferenceConnection(this, targetNode, eReference, idx++);							
+							EObjectNode targetNode = nodeFactory.apply(element);;
+							connectionFactory.create(this, targetNode, eReference, idx++);							
 						}
 					} else {
-						EObjectNode targetNode = new EObjectNode((EObject) val);
-						new EReferenceConnection(this, targetNode, eReference, -1);
+						EObjectNode targetNode = nodeFactory.apply((EObject) val);
+						connectionFactory.create(this, targetNode, eReference, -1);
 					}
 				}
 			}
@@ -48,7 +49,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 * @param registry
 	 */
 	@SuppressWarnings("unchecked")
-	void resolve(Function<EObject,EObjectNode> registry) {		
+	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory connectionFactory) {		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (!eReference.isContainment()) {
 				Object val = target.eGet(eReference);
@@ -58,13 +59,13 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 						for (EObject element: (Collection<EObject>) val) {
 							EObjectNode targetNode = registry.apply(element);
 							if (targetNode != null) {
-								new EReferenceConnection(this, targetNode, eReference, idx++);
+								connectionFactory.create(this, targetNode, eReference, idx++);
 							}
 						}
 					} else {
 						EObjectNode targetNode = registry.apply((EObject) val);
 						if (targetNode != null) {
-							new EReferenceConnection(this, targetNode, eReference, -1);
+							connectionFactory.create(this, targetNode, eReference, -1);
 						}
 					}
 				}
@@ -79,7 +80,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	@Override
 	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
 		Map<EReferenceConnection, T> results = new LinkedHashMap<>();
-		for (EReferenceConnection connection: outgoingConnections) {
+		for (EReferenceConnection connection: getOutgoingConnections()) {
 			results.put(connection, connection.accept(visitor));
 		}
 		return visitor.apply(this, results);

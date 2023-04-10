@@ -10,6 +10,12 @@ import org.nasdanika.graph.Element;
 
 public class EReferenceConnection implements Connection {
 	
+	interface Factory {
+		
+		EReferenceConnection create(EObjectNode source, EObjectNode taret, EReference reference, int index);
+		
+	}
+	
 	private EObjectNode source;
 	private EObjectNode target;
 	private EReference reference;
