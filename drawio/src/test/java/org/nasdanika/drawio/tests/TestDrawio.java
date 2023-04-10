@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -382,12 +383,12 @@ public class TestDrawio {
 	@Test 
 	public void testProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 			
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config, ProgressMonitor progressMonitor) {
+			public ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, ProgressMonitor progressMonitor) {
 				if (config instanceof NodeProcessorConfig) {
-					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
+					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
@@ -417,15 +418,21 @@ public class TestDrawio {
 				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
 			}
 
+			@SuppressWarnings("unchecked")
+			@Override
+			public Map<Element, ProcessorInfo<Object, ?>> createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object, ?>>>> registry) {				
+				return (Map) registry;
+			}
+
 			
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.createProcessors(progressMonitor, document);
-		Optional<ProcessorInfo<Object>> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
+		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.createProcessors(progressMonitor, document);
+		Optional<?> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorOptional.isPresent()).isTrue();
-		ProcessorInfo<Object> aliceProcessor = aliceProcessorOptional.get();
-		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) aliceProcessor.getConfig();
+		ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> aliceProcessor = (ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessorOptional.get();
+		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessor.getConfig();
 		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
@@ -450,13 +457,13 @@ public class TestDrawio {
 	@Test 
 	public void testConnectionProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public ProcessorInfo<Object> createProcessor(ProcessorConfig<Object> config, ProgressMonitor progressMonitor) {
+			public ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
-					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
+					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
 						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
@@ -482,7 +489,7 @@ public class TestDrawio {
 						
 					}
 				} else if (config instanceof ConnectionProcessorConfig) {
-					ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>> connectionProcessorConfig = (ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>>) config;
+					ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> connectionProcessorConfig = (ConnectionProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
 					
 					connectionProcessorConfig.setSourceHandler(new Function<String, String>() {
 						
@@ -517,16 +524,22 @@ public class TestDrawio {
 			public boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
 			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public Map<Element, ProcessorInfo<Object, ?>> createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object, ?>>>> registry) {
+				return (Map) registry;
+			}
 			
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> registry = processorFactory.compose(processorFactory).createProcessors(progressMonitor, document);
+		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.compose(processorFactory).createProcessors(progressMonitor, document);
 
-		Optional<ProcessorInfo<Object>> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
+		Optional<?> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
-		ProcessorInfo<Object> aliceProcessorInfo = aliceProcessorInfoOptional.get();
-		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>>) aliceProcessorInfo.getConfig();
+		ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> aliceProcessorInfo = (ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessorInfoOptional.get();
+		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessorInfo.getConfig();
 		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
 		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
 		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
@@ -550,7 +563,7 @@ public class TestDrawio {
 	public void testReflectiveProcessorFactory() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 				
-		org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<Object, Function<String, String>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
+		org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
 			
 			/**
 			 * A trick around module things - test classes are not exported.
@@ -617,6 +630,18 @@ public class TestDrawio {
 			@Override
 			public boolean isPassThrough(org.nasdanika.graph.Connection connection) {
 				return false;
+			}
+
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@Override
+			public Map<Element, ProcessorInfo<Object, ?>> createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object, ?>>>> registry) {
+				return (Map) registry;
+			}
+
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@Override
+			protected Iterable<Entry<org.nasdanika.graph.Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object, ?>>>>> registryEntries(Map<Element, ProcessorInfo<Object, ?>> registry) {
+				return (Iterable) registry.entrySet();
 			}
 			
 		};	

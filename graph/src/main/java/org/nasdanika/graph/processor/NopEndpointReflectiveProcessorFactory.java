@@ -7,7 +7,7 @@ package org.nasdanika.graph.processor;
  * @param <P>
  * @param <H>
  */
-public abstract class NopEndpointReflectiveProcessorFactory<P, H> extends ReflectiveProcessorFactory<P, H, H> implements NopEndpointProcessorFactory<P, H> {
+public abstract class NopEndpointReflectiveProcessorFactory<P, H, R> extends ReflectiveProcessorFactory<P, H, H, R> implements NopEndpointProcessorFactory<P, H, R> {
 
 	public NopEndpointReflectiveProcessorFactory(IntrospectionLevel introspectionLevel, Object... targets) {
 		super(introspectionLevel, targets);

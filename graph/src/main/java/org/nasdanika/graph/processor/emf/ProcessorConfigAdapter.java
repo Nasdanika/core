@@ -8,7 +8,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
-public class ProcessorConfigAdapter<P, D extends ProcessorConfig<P>> extends AdapterImpl implements ProcessorConfig<P> {
+public class ProcessorConfigAdapter<P, R, D extends ProcessorConfig<P, R>> extends AdapterImpl implements ProcessorConfig<P, R> {
 
 	protected D delegate;
 
@@ -27,17 +27,17 @@ public class ProcessorConfigAdapter<P, D extends ProcessorConfig<P>> extends Ada
 	}
 
 	@Override
-	public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+	public Map<Element, ProcessorInfo<P, R>> getChildProcessorsInfo() {
 		return delegate.getChildProcessorsInfo();
 	}
 
 	@Override
-	public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
+	public CompletionStage<ProcessorInfo<P, R>> getParentProcessorInfo() {
 		return delegate.getParentProcessorInfo();
 	}
 
 	@Override
-	public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
+	public CompletionStage<R> getRegistry() {
 		return delegate.getRegistry();
 	}	
 	

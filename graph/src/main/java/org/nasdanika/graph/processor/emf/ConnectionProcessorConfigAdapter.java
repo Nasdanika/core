@@ -5,9 +5,9 @@ import java.util.concurrent.CompletionStage;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 
-public class ConnectionProcessorConfigAdapter<P, H, E> extends ProcessorConfigAdapter<P, ConnectionProcessorConfig<P, H, E>> implements ConnectionProcessorConfig<P, H, E> {
+public class ConnectionProcessorConfigAdapter<P, H, E, R> extends ProcessorConfigAdapter<P, R, ConnectionProcessorConfig<P, H, E, R>> implements ConnectionProcessorConfig<P, H, E, R> {
 
-	public ConnectionProcessorConfigAdapter(ConnectionProcessorConfig<P, H, E> delegate) {
+	public ConnectionProcessorConfigAdapter(ConnectionProcessorConfig<P, H, E, R> delegate) {
 		super(delegate);
 	}
 	

@@ -20,19 +20,25 @@ import org.nasdanika.graph.processor.emf.SemanticProcessor;
  * @author Pavel
  *
  */
-public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends ResourceSetPropertySourceEObjectFactory<T,P> {
+public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> extends ResourceSetPropertySourceEObjectFactory<T,P,R> {
 	
 	@Override
-	protected void setRegistry(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry, ProgressMonitor progressMonitor) {
+	protected void setRegistry(
+				ProcessorConfig<P, R> config,
+				P processor,
+				R registry,
+				ProgressMonitor progressMonitor) {
 		super.setRegistry(config, processor, registry, progressMonitor);
 		Element element = config.getElement();
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
 			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
-				linkPage(config, processor, registry, registry.get(linkedPage), progressMonitor);
+				linkPage(config, processor, registry, getProcessorInfo(registry, linkedPage), progressMonitor);
 			}
 		}				
 	}
+	
+	protected abstract ProcessorInfo<P, R> getProcessorInfo(R registry, Element element);
 
 	protected String getLinkPagePropertyName() {
 		return "link-page";
@@ -45,12 +51,18 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	 * @param registry
 	 * @param likedPageInfo
 	 */
-	protected void linkPage(ProcessorConfig<P> config, P processor, Map<Element, ProcessorInfo<P>> registry, ProcessorInfo<P> linkedPageInfo, ProgressMonitor progressMonitor) {
-		ProcessorInfo<P> thisInfo = ProcessorInfo.of(config, processor, null);
-		linkedPageInfo.getConfig().getElement().accept(pe -> {
-			ProcessorInfo<P> re = registry.get(pe);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected void linkPage(
+			ProcessorConfig<P, R> config, 
+			P processor, 
+			R registry,
+			ProcessorInfo<P, ?> processorInfo,
+			ProgressMonitor progressMonitor) {
+		ProcessorInfo<P, R> thisInfo = ProcessorInfo.of(config, processor, null);
+		processorInfo.getConfig().getElement().accept(pe -> {
+			ProcessorInfo<P, ?> re = getProcessorInfo(registry, pe);
 			if (re.getProcessor() != null) {
-				setParent(re.getConfig(), re.getProcessor(), thisInfo, progressMonitor, f -> {
+				setParent((ProcessorConfig) re.getConfig(), re.getProcessor(), thisInfo, progressMonitor, f -> {
 					f.printStackTrace(); // Should never happen
 				});
 			}
@@ -58,7 +70,7 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	}
 	
 	@Override
-	protected Context createElementContext(ProcessorConfig<P> config) {
+	protected Context createElementContext(ProcessorConfig<P, R> config) {
 		Context superContext = super.createElementContext(config);
 		
 		Context context = new Context() {
@@ -116,7 +128,7 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	}
 	
 	@Override
-	protected Object getElementQualifier(ProcessorConfig<P> config) {
+	protected Object getElementQualifier(ProcessorConfig<P, R> config) {
 		Map<String,Object> qualifier = new LinkedHashMap<>();
 		Element element = config.getElement();
 		qualifier.put("type", element.getClass().getCanonicalName());

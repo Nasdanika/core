@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Supplier;
 
-public interface ProcessorInfo<P> {
+public interface ProcessorInfo<P,R> {
 	
-	ProcessorConfig<P> getConfig();
+	ProcessorConfig<P,R> getConfig();
 	
 	P getProcessor();
 	
@@ -15,12 +15,12 @@ public interface ProcessorInfo<P> {
 	 */
 	Collection<Throwable> getFailures();
 	
-	static <P> ProcessorInfo<P> of(ProcessorConfig<P> config, P processor, Supplier<Collection<Throwable>> failuresSupplier) {
+	static <P,R> ProcessorInfo<P,R> of(ProcessorConfig<P,R> config, P processor, Supplier<Collection<Throwable>> failuresSupplier) {
 		
-		return new ProcessorInfo<P>() {
+		return new ProcessorInfo<P,R>() {
 
 			@Override
-			public ProcessorConfig<P> getConfig() {
+			public ProcessorConfig<P,R> getConfig() {
 				return config;
 			}
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,16 +44,16 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *
  * @param <T>
  */
-public abstract class NcoreDrawioResourceFactory<T extends EObject> extends ResourceFactoryImpl {
+public abstract class NcoreDrawioResourceFactory<T extends EObject, R> extends ResourceFactoryImpl {
 	
 	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";	
 	
-	private class NcoreDrawioResource extends DrawioResource<SemanticProcessor<T>, T> implements AbstractEObjectFactoryProcessorResource<T> {
+	private class NcoreDrawioResource extends DrawioResource<SemanticProcessor<T>, T, R> implements AbstractEObjectFactoryProcessorResource<T> {
 
-		private DrawioEObjectFactory<T, SemanticProcessor<T>> processorFactory;
+		private DrawioEObjectFactory<T, SemanticProcessor<T>, R> processorFactory;
 		private ProgressMonitor progressMonitor;
 
-		protected NcoreDrawioResource(URI uri, DrawioEObjectFactory<T, SemanticProcessor<T>> processorFactory, ProgressMonitor progressMonitor) {
+		protected NcoreDrawioResource(URI uri, DrawioEObjectFactory<T, SemanticProcessor<T>, R> processorFactory, ProgressMonitor progressMonitor) {
 			super(uri);
 			this.processorFactory = processorFactory;
 			this.progressMonitor = progressMonitor;
@@ -67,16 +68,34 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 		}
 
 		@Override
-		protected DrawioEObjectFactory<T, SemanticProcessor<T>> getProcessorFactory() {
+		protected DrawioEObjectFactory<T, SemanticProcessor<T>, R> getProcessorFactory() {
 			return processorFactory;
 		}
 		
 		@Override
 		protected ProgressMonitor getProgressMonitor() {
 			return progressMonitor;
+		}
+
+		@Override
+		protected ProcessorInfo<SemanticProcessor<T>, R> getProcessorInfo(R registry, Element element) {
+			return NcoreDrawioResourceFactory.this.getProcessorInfo(registry, element);
+		}
+
+		@Override
+		protected Stream<T> getRegistrySemanticElements(R registry) {
+			return NcoreDrawioResourceFactory.this.getRegistrySemanticElements(registry);
 		};
 		
 	}
+	
+	protected abstract ProcessorInfo<SemanticProcessor<T>, R> getProcessorInfo(R registry, Element element);
+
+	protected abstract Stream<T> getRegistrySemanticElements(R registry);
+	
+	protected abstract R createRegistry(Map<Element, ProcessorInfo<SemanticProcessor<T>, R>> registry);
+	
+	protected abstract Collection<Entry<Element, ProcessorInfo<SemanticProcessor<T>, R>>> registryEntries(R registry);
 	
 	@Override
 	public Resource createResource(URI uri) {
@@ -91,14 +110,14 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	 * @return
 	 */
 	protected Collection<T> createSemanticElements(
-			ProcessorConfig<SemanticProcessor<T>> config, 
+			ProcessorConfig<SemanticProcessor<T>, R> config, 
 			ProgressMonitor progressMonitor, 
-			BiFunction<ProcessorConfig<SemanticProcessor<T>>, ProgressMonitor, Collection<T>> defaultFactory) {
+			BiFunction<ProcessorConfig<SemanticProcessor<T>, R>, ProgressMonitor, Collection<T>> defaultFactory) {
 		return defaultFactory.apply(config, progressMonitor);
 	}
 		
-	protected DrawioEObjectFactory<T, SemanticProcessor<T>> createProcessorFactory(URI uri) {
-		return new DrawioEObjectFactory<T, SemanticProcessor<T>>() {
+	protected DrawioEObjectFactory<T, SemanticProcessor<T>, R> createProcessorFactory(URI uri) {
+		return new DrawioEObjectFactory<T, SemanticProcessor<T>, R>() {
 
 			@Override
 			protected ResourceSet getResourceSet() {
@@ -106,7 +125,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 
 			@Override
-			protected SemanticProcessor<T> createProcessor(ProcessorConfig<SemanticProcessor<T>> config, Collection<T> semanticElements, ProgressMonitor progressMonitor) {
+			protected SemanticProcessor<T> createProcessor(ProcessorConfig<SemanticProcessor<T>, R> config, Collection<T> semanticElements, ProgressMonitor progressMonitor) {
 				return NcoreDrawioResourceFactory.this.createProcessor(uri, config, semanticElements, progressMonitor);
 			}
 
@@ -116,20 +135,17 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 			
 			@Override
-			protected Collection<T> createSemanticElements(ProcessorConfig<SemanticProcessor<T>> config, ProgressMonitor progressMonitor) {
+			protected Collection<T> createSemanticElements(ProcessorConfig<SemanticProcessor<T>, R> config, ProgressMonitor progressMonitor) {
 				Collection<T> semanticElements = NcoreDrawioResourceFactory.this.createSemanticElements(config, progressMonitor, super::createSemanticElements);
 				Collection<T> configuredSemanticElements = NcoreDrawioResourceFactory.this.configureSemanticElements(uri, config, semanticElements, progressMonitor);
 				return configuredSemanticElements;
 			}
 			
-			/**
-			 * Checking for failures, injecting representations after all processors have been created. 
-			 */
 			@Override
-			public Map<Element, ProcessorInfo<SemanticProcessor<T>>> createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
-				Map<Element, ProcessorInfo<SemanticProcessor<T>>> registry = super.createProcessors(elements, progressMonitor);
+			public R createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
+				R registry = super.createProcessors(elements, progressMonitor);
 				
-				List<Throwable> failures = registry.values().stream().flatMap(pi -> pi.getFailures().stream()).collect(Collectors.toList());
+				List<Throwable> failures = registryEntries(registry).stream().map(Map.Entry::getValue).flatMap(pi -> pi.getFailures().stream()).collect(Collectors.toList());
 				if (!failures.isEmpty()) {
 					NasdanikaException ne = new NasdanikaException("Theres's been " + failures.size() +  " failures during processor creation: " + failures);
 					for (Throwable failure: failures) {
@@ -140,12 +156,29 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 				
 				String representationPropertyName = getRepresentationPropertyName(uri);
 								
-				registry.entrySet().forEach(re -> configureRegistryEntry(re.getKey(), re.getValue(), getPropertyValue(re.getKey(), representationPropertyName)));
+				registryEntries(registry).forEach(re -> configureRegistryEntry(re.getKey(), re.getValue(), getPropertyValue(re.getKey(), representationPropertyName)));
 				return registry;
+			}
+
+			@Override
+			public R createRegistry(Map<Element, ProcessorInfo<SemanticProcessor<T>, R>> registry) {
+				return NcoreDrawioResourceFactory.this.createRegistry(registry);
+			}
+
+			@Override
+			protected ProcessorInfo<SemanticProcessor<T>, R> getProcessorInfo(R registry, Element element) {
+				return NcoreDrawioResourceFactory.this.getProcessorInfo(registry, element);
+			}
+
+			@Override
+			protected Collection<Entry<Element, ProcessorInfo<SemanticProcessor<T>, R>>> registryEntries(R registry) {
+				return NcoreDrawioResourceFactory.this.registryEntries(registry);
 			}
 			
 		};
 	}
+	
+	
 
 	/**
 	 * Injects encoded document into semantic elements of model elements with representation property.
@@ -153,7 +186,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	 * @param element
 	 * @param info
 	 */
-	protected void configureRegistryEntry(Element element, ProcessorInfo<SemanticProcessor<T>> info, String representationKey) {
+	protected void configureRegistryEntry(Element element, ProcessorInfo<SemanticProcessor<T>, R> info, String representationKey) {
 		if (info != null && !Util.isBlank(representationKey)) {
 			SemanticProcessor<T> processor = info.getProcessor();
 			if (processor != null && element instanceof ModelElement) {
@@ -182,7 +215,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	
 	protected abstract ProgressMonitor getProgressMonitor(URI uri);
 	
-	protected SemanticProcessor<T> createProcessor(URI uri, ProcessorConfig<SemanticProcessor<T>> config, Collection<T> semanticElements, ProgressMonitor progressMonitor) {		
+	protected SemanticProcessor<T> createProcessor(URI uri, ProcessorConfig<SemanticProcessor<T>, R> config, Collection<T> semanticElements, ProgressMonitor progressMonitor) {		
 		if (semanticElements == null || semanticElements.isEmpty()) {
 			return null; // For pass-through to parent.
 		}
@@ -206,7 +239,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 		
 	protected Collection<T> configureSemanticElements(
 			URI uri,
-			ProcessorConfig<SemanticProcessor<T>> config, 
+			ProcessorConfig<SemanticProcessor<T>, R> config, 
 			Collection<T> semanticElements, 
 			ProgressMonitor progressMonitor) {
 

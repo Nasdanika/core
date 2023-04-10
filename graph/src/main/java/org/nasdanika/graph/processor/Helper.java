@@ -1,23 +1,19 @@
 package org.nasdanika.graph.processor;
 
-import java.util.Map;
-
-import org.nasdanika.graph.Element;
-
-abstract class Helper<P> {
+abstract class Helper<P,R> {
 	
-	private ProcessorInfo<P> processorInfo;
+	private ProcessorInfo<P,R> processorInfo;
 
-	Helper(ProcessorInfo<P> processorInfo) {
+	Helper(ProcessorInfo<P,R> processorInfo) {
 		this.processorInfo = processorInfo;
 	}
 	
-	abstract void setParentProcessorInfo(ProcessorInfo<P> parentProcessorInfo);
+	abstract void setParentProcessorInfo(ProcessorInfo<P,R> parentProcessorInfo);
 
-	ProcessorInfo<P> getProcessorInfo() {
+	ProcessorInfo<P,R> getProcessorInfo() {
 		return processorInfo;
 	}
 	
-	abstract void setRegistry(Map<Element, ProcessorInfo<P>> registry);	
+	abstract void setRegistry(R registry);	
 	
 }

@@ -44,7 +44,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * @param <U>
  * @param <S>
  */
-public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFactory<P, H, E> {
+public abstract class ReflectiveProcessorFactory<P, H, E, R> implements ProcessorFactory<P, H, E, R> {
 	
 	private Object[] targets;
 	private IntrospectionLevel introspectionLevel;
@@ -54,8 +54,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		this.targets = targets;
 	}
 	
-	public Map<Element, ProcessorInfo<P>> createProcessors(Element element, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor, Object... registryTargets) {
-		Map<Element, ProcessorInfo<P>> registry = ProcessorFactory.super.createProcessors(progressMonitor, element);
+	public R createProcessors(Element element, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor, Object... registryTargets) {
+		R registry = ProcessorFactory.super.createProcessors(progressMonitor, element);
 		for (Object registryTarget: registryTargets) {
 			// TODO  - progress moinitor			
 			wireRegistryEntry(registryTarget, introspectionLevel).accept(registry);
@@ -65,11 +65,11 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}
 	
 	@Override
-	public ProcessorInfo<P> createProcessor(ProcessorConfig<P> config, ProgressMonitor progressMonitor) {
+	public ProcessorInfo<P,R> createProcessor(ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {
 		if (introspectionLevel != IntrospectionLevel.NONE) {
 			for (Object target: targets) {
 				// TODO - split
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(target, config, introspectionLevel, progressMonitor);
+				ProcessorInfo<P,R> elementProcessorInfo = createProcessor(target, config, introspectionLevel, progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -79,7 +79,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	}		
 	
 	@SuppressWarnings("unchecked")
-	protected ProcessorInfo<P> createProcessor(Object target, ProcessorConfig<P> config, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor) {	
+	protected ProcessorInfo<P,R> createProcessor(Object target, ProcessorConfig<P,R> config, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor) {	
 		if (target != null && (target.getClass().getAnnotation(Factory.class) == null || matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value()))) {
 			// TODO - progress steps.
 			Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
@@ -103,18 +103,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					}
 					
 					boolean hideWired = elementProcessorAnnotation.hideWired();
-					Map<Element, ProcessorInfo<P>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), processorIntrospectionLevel);
+					Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), processorIntrospectionLevel);
 					wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo(), processorIntrospectionLevel);
 
 					Collection<Throwable> failures = new ArrayList<>();
-					BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler  = (result, failure) -> {
+					BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler  = (result, failure) -> {
 						if (failure != null) {
 							failures.add(failure);
 						}
 						return null;
 					};
 
-					Consumer<ProcessorInfo<P>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
+					Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
 					if (pc != null) {
 						config.getParentProcessorInfo().thenAccept(pc).handle(failureHandler);
 					}
@@ -122,15 +122,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 					
 					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel)).handle(failureHandler);
 					
-					Consumer<Map<Element, ProcessorInfo<P>>> rc = wireRegistry(processor, processorIntrospectionLevel);
+					Consumer<R> rc = wireRegistry(processor, processorIntrospectionLevel);
 					if (rc != null) {
 						config.getRegistry().thenAccept(rc).handle(failureHandler);
 					}
 					
-					ProcessorConfig<P> unwiredConfig;
+					ProcessorConfig<P,R> unwiredConfig;
 					
 					if (config instanceof NodeProcessorConfig) {
-						NodeProcessorConfig<P, H, E> nodeProcessorConfig = (NodeProcessorConfig<P, H, E>) config;
+						NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
 						Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel, failureHandler);
 						wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints(), processorIntrospectionLevel);
 						
@@ -143,20 +143,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 						Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
 						wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers(), processorIntrospectionLevel);
 						
-						unwiredConfig = new NodeProcessorConfig<P, H, E>() {
+						unwiredConfig = new NodeProcessorConfig<P, H, E, R>() {
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 	
 							@Override
-							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
+							public CompletionStage<R> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -186,26 +186,26 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 						};
 					} else if (config instanceof ConnectionProcessorConfig) {
-						ConnectionProcessorConfig<P, H, E> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E>) config;
+						ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E, R>) config;
 						boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), processorIntrospectionLevel, failureHandler);
 						boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
 						boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), processorIntrospectionLevel, failureHandler);
 						boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig, processorIntrospectionLevel);
 						
-						unwiredConfig = new ConnectionProcessorConfig<P, H, E>() {
+						unwiredConfig = new ConnectionProcessorConfig<P, H, E, R>() {
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 							
 							@Override
-							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
+							public CompletionStage<R> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -241,20 +241,20 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 							}
 						};
 					} else {
-						unwiredConfig = new ProcessorConfig<P>() {
+						unwiredConfig = new ProcessorConfig<P,R>() {
 	
 							@Override
-							public Map<Element, ProcessorInfo<P>> getChildProcessorsInfo() {
+							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
 								return unwiredChildProcessorsInfo;
 							}
 							
 							@Override
-							public CompletionStage<ProcessorInfo<P>> getParentProcessorInfo() {
+							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
 								return config.getParentProcessorInfo();
 							}
 	
 							@Override
-							public CompletionStage<Map<Element, ProcessorInfo<P>>> getRegistry() {
+							public CompletionStage<R> getRegistry() {
 								return config.getRegistry();
 							}
 	
@@ -281,7 +281,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
 				// TODO - sub-monitors
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
+				ProcessorInfo<P,R> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -297,7 +297,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			
 			for (Entry<Object, IntrospectionLevel> factory: factories) {
 				// TODO - sub-monitors
-				ProcessorInfo<P> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
+				ProcessorInfo<P,R> elementProcessorInfo = createProcessor(factory.getKey(), config, factory.getValue(), progressMonitor);
 				if (elementProcessorInfo != null) {
 					return elementProcessorInfo;
 				}
@@ -335,7 +335,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return a.getName().compareTo(b.getName());
 	}
 		
-	protected Consumer<Map<Element, ProcessorInfo<P>>> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
+	protected Consumer<R> wireRegistryEntry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
 		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
@@ -343,7 +343,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		
 		return registry -> {
 			registryEntrySetters.forEach(setter -> {
-				for (Entry<Element, ProcessorInfo<P>> re: registry.entrySet()) {
+				for (Entry<Element, ProcessorInfo<P,R>> re: registryEntries(registry)) {
 					RegistryEntry registryEntryAnnotation = setter.getAnnotation(RegistryEntry.class);
 					if (matchPredicate(re.getKey(), registryEntryAnnotation.value())) {
 						set(processor, setter, registryEntryAnnotation.config() ? re.getValue().getConfig() : re.getValue().getProcessor());
@@ -352,8 +352,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			});						
 		};
 	}
+	
+	/**
+	 * Iterable of registry entries for wiring using {@link RegistryEntry} annotation
+	 * @param registry
+	 * @return
+	 */
+	protected abstract Iterable<Entry<Element, ProcessorInfo<P,R>>> registryEntries(R registry);
 
-	protected Consumer<Map<Element, ProcessorInfo<P>>> wireRegistry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
+	protected Consumer<R> wireRegistry(Object processor, IntrospectionLevel processorIntrospectionLevel) {
 		List<AccessibleObject> registrySetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 				.filter(ae -> ae.getAnnotation(Registry.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + ae))
@@ -374,7 +381,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 				});						
 	}
 
-	protected Consumer<ProcessorInfo<P>> wireParentProcessor(
+	protected Consumer<ProcessorInfo<P,R>> wireParentProcessor(
 			Object processor, 
 			IntrospectionLevel processorIntrospectionLevel) {
 		List<AccessibleObject> parentProcessorSetters = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -390,18 +397,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			};
 	}
 	
-	private Map<Element, ProcessorInfo<P>> wireChildProcessor(
+	private Map<Element, ProcessorInfo<P,R>> wireChildProcessor(
 			Object processor, 
-			Map<Element, ProcessorInfo<P>> childProcessorsInfo,
+			Map<Element, ProcessorInfo<P,R>> childProcessorsInfo,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
-		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>(childProcessorsInfo); 
+		Map<Element, ProcessorInfo<P,R>> ret = new LinkedHashMap<>(childProcessorsInfo); 
 		
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(ChildProcessor.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.forEach(setter -> {
-				for (Entry<Element, ProcessorInfo<P>> ce: childProcessorsInfo.entrySet()) {
+				for (Entry<Element, ProcessorInfo<P,R>> ce: childProcessorsInfo.entrySet()) {
 					ChildProcessor childProcessorAnnotation = setter.getAnnotation(ChildProcessor.class);
 					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
 						set(processor, setter, childProcessorAnnotation.config() ? ce.getValue().getConfig() : ce.getValue().getProcessor());
@@ -414,7 +421,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 
 	protected void wireChildProcessors(
 			Object processor, 
-			Map<Element, ProcessorInfo<P>> childProcessorsInfo,
+			Map<Element, ProcessorInfo<P,R>> childProcessorsInfo,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -518,7 +525,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
+			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 
@@ -655,7 +662,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Object processor, 
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
+			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 
@@ -702,7 +709,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	@SuppressWarnings("unchecked")
 	protected boolean wireTargetHandler(
 			Object processor, 
-			ConnectionProcessorConfig<P, H, E> connectionProcessorConfig, 
+			ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig, 
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -722,7 +729,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Object processor, 
 			CompletionStage<E> targetEndpointCompletionStage, 
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
+			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
@@ -742,7 +749,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 	@SuppressWarnings("unchecked")
 	protected boolean wireSourceHandler(
 			Object processor, 
-			ConnectionProcessorConfig<P, H, E> connectionProcessorConfig,
+			ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig,
 			IntrospectionLevel processorIntrospectionLevel) {
 		
 		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
@@ -762,7 +769,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 			Object processor, 
 			CompletionStage<E> sourceEndpointCompletionStage,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P>> failureHandler) {
+			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
@@ -779,7 +786,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E> implements ProcessorFa
 		return false;
 	}
 	
-	protected boolean matchFactoryMethod(ProcessorConfig<P> elementProcessorConfig, Method method) {
+	protected boolean matchFactoryMethod(ProcessorConfig<P,R> elementProcessorConfig, Method method) {
 		if (Modifier.isAbstract(method.getModifiers())) {
 			return false;
 		}

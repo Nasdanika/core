@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Util;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
@@ -159,6 +158,8 @@ public final class NcoreUtil {
 		}
 		return proxy;
 	}
+	
+	public static record ContainmentPath(EObject container, String path) {}
 
 	/**
 	 * Containment path relative to the object container. If the container is a map entry its key is added to path and the entry container is skipped. This happens recursively. 
@@ -166,7 +167,7 @@ public final class NcoreUtil {
 	 * @return null if there is no container. BiSupplier with first returning the first container which is not EMap entry and reference name concatenated with object key for {@link EMap}'s and with object index for many-references.
 	 * Containment index is constructed taking eKeys into account.
 	 */
-	public static BiSupplier<EObject, String> containmentPath(EObject eObj) {
+	public static ContainmentPath containmentPath(EObject eObj) {
 		EObject container = eObj.eContainer();
 		if (container == null) {
 			return null;
@@ -197,7 +198,7 @@ public final class NcoreUtil {
 		} 
 	
 		containmentIndex.addFirst(NcoreUtil.getFeatureKey(container.eClass(), eContainmentFeature));
-		return BiSupplier.of(container, String.join("/", containmentIndex));				
+		return new ContainmentPath(container, String.join("/", containmentIndex));				
 	}
 
 	/**
@@ -298,12 +299,12 @@ public final class NcoreUtil {
 				}
 			}
 			
-			BiSupplier<EObject, String> containmentPath = containmentPath(eObj);
+			ContainmentPath containmentPath = containmentPath(eObj);
 			if (containmentPath == null) {
 				return ownIdentifiers;
 			}
 			
-			EObject container = containmentPath.getFirst();
+			EObject container = containmentPath.container();
 			
 			// Computing all permutations
 			Collection<URI> ret = new HashSet<>();
@@ -333,7 +334,7 @@ public final class NcoreUtil {
 				}
 
 				if (ownIdentifiers.size() == ignoredOwnIdentifiers) { // Resorting to containment URI's only if there are no own URI's which are not UUID.
-					URI containmentURI = URI.createURI(containmentPath.getSecond());				
+					URI containmentURI = URI.createURI(containmentPath.path());				
 					URI resolved = resolve(containmentURI,cURI);
 					if (resolved != null) {
 						ret.add(resolved);

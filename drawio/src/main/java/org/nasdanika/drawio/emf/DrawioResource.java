@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource<P, T extends EObject> extends GraphProcessorResource<P, T> implements URIEncodable {
+public abstract class DrawioResource<P, T extends EObject, R> extends GraphProcessorResource<P, T, R> implements URIEncodable {
 	
 	protected Document document;
 	

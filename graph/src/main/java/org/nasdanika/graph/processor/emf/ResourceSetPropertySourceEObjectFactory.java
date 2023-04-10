@@ -34,7 +34,7 @@ import org.yaml.snakeyaml.Yaml;
  *
  * @param <T>
  */
-public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends PropertySourceEObjectFactory<T,P> {
+public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> extends PropertySourceEObjectFactory<T,P, R> {
 	
 	private static final String EXPR_PREFIX = "expr/";
 	private static final String PROPERTIES_PREFIX = "properties/";
@@ -61,7 +61,7 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject,
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Collection<T> load(URI specURI, String specFormat, ProcessorConfig<P> config, Context context, ProgressMonitor progressMonitor) {
+	protected Collection<T> load(URI specURI, String specFormat, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) {
 		ResourceSet resourceSet = getResourceSet();
 		String semanticType = getPropertyValue(config.getElement(), getSemanticTypePropertyName());
 		if (!Util.isBlank(semanticType)) {
@@ -136,7 +136,7 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject,
 	 * Encodes spec as a data URI and calls load(uri, ...)
 	 */
 	@Override
-	protected Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig<P> config, Context context, ProgressMonitor progressMonitor) {
+	protected Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) {
 		String interpolatedSpec = createElementContext(config).interpolateToString(spec);
 		URI specURI = ObjectLoaderResource.encode(interpolatedSpec, specFormat, specBase, getElementQualifier(config));	
 		return load(specURI, specFormat, config, context, progressMonitor);
@@ -146,12 +146,12 @@ public abstract class ResourceSetPropertySourceEObjectFactory<T extends EObject,
 	 * @param config
 	 * @return Qualifier to differentiate identical specifications.
 	 */
-	protected Object getElementQualifier(ProcessorConfig<P> config) {
+	protected Object getElementQualifier(ProcessorConfig<P, R> config) {
 		Element element = config.getElement();
 		return element.getClass() + ":" + element.hashCode();
 	}
 		
-	protected Context createElementContext(ProcessorConfig<P> config) {
+	protected Context createElementContext(ProcessorConfig<P, R> config) {
 		Context context = getContext();
 		
 		Context propertyAndExpressionComputerContext = new Context() {

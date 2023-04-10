@@ -31,20 +31,20 @@ public class BobProcessor implements Runnable {
 	private Node bobNode;
 	
 	@ParentProcessor(true)
-	private ProcessorConfig<Object> parentConfig;
+	private ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> parentConfig;
 	
 	@RegistryEntry("label == 'Library'")
 	private Function<String,String> library;
 	
-	private NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>> libraryConfig;
+	private NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> libraryConfig;
 	
 	@RegistryEntry(value = "label == 'Library'", config = true)
-	public void setLibraryConfig(NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>> libraryConfig) {
+	public void setLibraryConfig(NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> libraryConfig) {
 		this.libraryConfig = libraryConfig;
 	};
 	
 	@Registry
-	private Map<Element, ProcessorInfo<Object>> registry;
+	private Map<Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>> registry;
 	
 	@IncomingHandler("source.label == 'Alice'")
 	private Function<String,String> aliceIncomingHandler = request -> {

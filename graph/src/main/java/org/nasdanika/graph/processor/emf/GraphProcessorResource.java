@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,9 +25,9 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @author Pavel
  *
  */
-public abstract class GraphProcessorResource<P, T extends EObject> extends ResourceImpl {
+public abstract class GraphProcessorResource<P, T extends EObject, R> extends ResourceImpl {
 	
-	protected abstract ProcessorFactory<P, ?, ?> getProcessorFactory();
+	protected abstract ProcessorFactory<P, ?, ?, R> getProcessorFactory();
 	
 	protected GraphProcessorResource(URI uri) {
 		super(uri);
@@ -46,16 +45,16 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		List<? extends Element> elements = loadElements(inputStream, options).collect(Collectors.toList());
-		Map<Element, ProcessorInfo<P>> registry = getProcessorFactory().createProcessors(elements.stream(), getProgressMonitor());
-		List<T> roots = getSemanticElements(registry).filter(this::isRoot).collect(Collectors.toList()); // TODO .forEach(getContents()::add) - fails with concurrent modification exception
+		R registry = getProcessorFactory().createProcessors(elements.stream(), getProgressMonitor());
+		List<T> roots = getRegistrySemanticElements(registry).filter(this::isRoot).collect(Collectors.toList()); // TODO .forEach(getContents()::add) - fails with concurrent modification exception
 		getContents().addAll(roots);
 		for (Element element: elements) {
-			ProcessorInfo<P> info = registry.get(element);
-			ProcessorConfig<P> config = info.getConfig();
+			ProcessorInfo<P, R> info = getProcessorInfo(registry, element);
+			ProcessorConfig<P, R> config = info.getConfig();
 			if (config instanceof NodeProcessorConfig) {
-				eAdapters().add(new NodeProcessorConfigAdapter<>((NodeProcessorConfig<P, ?, ?>) config));
+				eAdapters().add(new NodeProcessorConfigAdapter<>((NodeProcessorConfig<P, ?, ?, R>) config));
 			} else if (config instanceof ConnectionProcessorConfig) {
-				eAdapters().add(new ConnectionProcessorConfigAdapter<>((ConnectionProcessorConfig<P, ?, ?>) config));				
+				eAdapters().add(new ConnectionProcessorConfigAdapter<>((ConnectionProcessorConfig<P, ?, ?, R>) config));				
 			} else {
 				eAdapters().add(new ProcessorConfigAdapter<>(config));				
 			}
@@ -71,15 +70,16 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 		}
 		return Stream.empty();
 	};
+	
+	protected abstract ProcessorInfo<P,R> getProcessorInfo(R registry, Element element);
 
 	/**
 	 * Retrieves semantic elements {@link EObject}s from the registry.
 	 * @param registry
 	 * @return
 	 */
-	protected Stream<T> getSemanticElements(Map<Element, ProcessorInfo<P>> registry) {
-		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).flatMap(this::getSemanticElements);
-	}
+	protected abstract Stream<T> getRegistrySemanticElements(R registry);
+//		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).flatMap(this::getSemanticElements);
 	
 	/**
 	 * @param semanticElement 
