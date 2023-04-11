@@ -10,7 +10,7 @@ import org.nasdanika.graph.Element;
 
 public class EReferenceConnection implements Connection {
 	
-	interface Factory {
+	public interface Factory {
 		
 		EReferenceConnection create(EObjectNode source, EObjectNode taret, EReference reference, int index);
 		
@@ -58,6 +58,11 @@ public class EReferenceConnection implements Connection {
 	
 	public int getIndex() {
 		return index;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + reference.getName() + " " + index;
 	}
 
 }

@@ -14,6 +14,11 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.graph.Element;
 
+/**
+ * {@link ResourceSet} element. Resolves cross-references between {@link EObjectNode}s.
+ * @author Pavel
+ *
+ */
 public class ResourceSetElement implements Element {
 	
 	private ResourceSet resourceSet;	
@@ -25,19 +30,8 @@ public class ResourceSetElement implements Element {
 			resourceElements.add(new ResourceElement(resource, this::createNode));
 		}
 		
-		Function<EObject, EObjectNode> registry = accept(this::buildRegistry)::get;
+		Function<EObject, EObjectNode> registry = accept(Util::buildRegistry)::get;
 		accept(e -> resolve(e, registry));
-	}
-
-	private Map<EObject, EObjectNode> buildRegistry(Element element, Map<? extends Element, Map<EObject, EObjectNode>> childRegistries) {
-		Map<EObject, EObjectNode> result = new HashMap<>();
-		if (element instanceof EObjectNode) {
-			result.put(((EObjectNode) element).getTarget(), (EObjectNode) element);
-		}
-		for (Map<EObject, EObjectNode> cr: childRegistries.values()) {
-			result.putAll(cr);
-		}
-		return result;
 	}
 	
 	private void resolve(Element element, Function<EObject, EObjectNode> registry) {

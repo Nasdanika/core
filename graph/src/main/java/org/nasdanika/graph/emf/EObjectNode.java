@@ -101,5 +101,10 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		EStructuralFeature sf = getTarget().eClass().getEStructuralFeature(name);
 		return sf instanceof EAttribute ? getTarget().eGet(sf) : null;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + " " + getTarget() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
+	}
 
 }
