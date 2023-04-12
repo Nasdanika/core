@@ -58,7 +58,7 @@ public interface ProcessorFactory<P,H,E,R> extends Composeable<ProcessorFactory<
 		return createProcessors(Arrays.stream(elements), progressMonitor);
 	}
 	
-	default R createProcessors(Collection<Element> elements, ProgressMonitor progressMonitor) {
+	default R createProcessors(Collection<? extends Element> elements, ProgressMonitor progressMonitor) {
 		return createProcessors(elements.stream(), progressMonitor);
 	}
 	
