@@ -262,7 +262,7 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				registry.put(element, processorInfo);
 			}
 			
-			subMonitor.worked(0, "Created a processor", element, processorInfo);
+			subMonitor.worked(1, "Created a processor", element, processorInfo);
 			
 			return new Helper<>(processorInfo) {
 	

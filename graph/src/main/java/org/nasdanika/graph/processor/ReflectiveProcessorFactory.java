@@ -17,8 +17,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -107,7 +107,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 					wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo(), processorIntrospectionLevel);
 
 					Collection<Throwable> failures = new ArrayList<>();
-					BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler  = (result, failure) -> {
+					Function<Throwable, Void> failureHandler  = failure -> {
 						if (failure != null) {
 							failures.add(failure);
 						}
@@ -116,15 +116,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 					Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor, processorIntrospectionLevel);
 					if (pc != null) {
-						config.getParentProcessorInfo().thenAccept(pc).handle(failureHandler);
+						config.getParentProcessorInfo().thenAccept(pc).exceptionally(failureHandler);
 					}
 					wireProcessorElement(processor, config.getElement(), processorIntrospectionLevel);
 					
-					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel)).handle(failureHandler);
+					config.getRegistry().thenAccept(wireRegistryEntry(processor, processorIntrospectionLevel)).exceptionally(failureHandler);
 					
 					Consumer<R> rc = wireRegistry(processor, processorIntrospectionLevel);
 					if (rc != null) {
-						config.getRegistry().thenAccept(rc).handle(failureHandler);
+						config.getRegistry().thenAccept(rc).exceptionally(failureHandler);
 					}
 					
 					ProcessorConfig<P,R> unwiredConfig;
@@ -525,7 +525,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
+			Function<Throwable, Void> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 
@@ -550,7 +550,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 							invokeMethod(processor, endpointMethod, incomingEndpointEntry.getKey(), incomingEndpoint);						
 						}
 					}					
-				}).handle(failureHandler);
+				}).exceptionally(failureHandler);
 				ret.remove(incomingEndpointEntry.getKey());
 			});
 				
@@ -662,7 +662,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			Object processor, 
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
+			Function<Throwable, Void> failureHandler) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 
@@ -687,7 +687,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 							invokeMethod(processor, endpointMethod, outgoingEndpointEntry.getKey(), outgoingEndpoint);						
 						}
 					}					
-				}).handle(failureHandler);
+				}).exceptionally(failureHandler);
 				ret.remove(outgoingEndpointEntry.getKey());
 			});
 				
@@ -729,7 +729,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			Object processor, 
 			CompletionStage<E> targetEndpointCompletionStage, 
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
+			Function<Throwable, Void> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
@@ -740,7 +740,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		if (setter.isPresent()) {
 			targetEndpointCompletionStage.thenAccept(targetEndpoint -> {
 				set(processor, setter.get(), targetEndpoint);	
-			}).handle(failureHandler);
+			}).exceptionally(failureHandler);
 			return true;
 		}
 		return false;
@@ -769,7 +769,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			Object processor, 
 			CompletionStage<E> sourceEndpointCompletionStage,
 			IntrospectionLevel processorIntrospectionLevel,
-			BiFunction<Void, Throwable, ProcessorInfo<P,R>> failureHandler) {
+			Function<Throwable, Void> failureHandler) {
 		
 		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
@@ -780,7 +780,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		if (setter.isPresent()) {
 			sourceEndpointCompletionStage.thenAccept(sourceEndpoint -> {
 				set(processor, setter.get(), sourceEndpoint);	
-			}).handle(failureHandler);				
+			}).exceptionally(failureHandler);				
 			return true;
 		}
 		return false;

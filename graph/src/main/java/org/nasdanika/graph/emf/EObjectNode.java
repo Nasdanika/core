@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -17,6 +18,23 @@ import org.nasdanika.graph.Node;
 
 public class EObjectNode implements Node, PropertySource<String, Object> {
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(target);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EObjectNode other = (EObjectNode) obj;
+		return Objects.equals(target, other.target);
+	}
+
 	private EObject target;
 	private Collection<EReferenceConnection> incomingConnections = new HashSet<>();
 	private Collection<EReferenceConnection> outgoingConnections = new HashSet<>();

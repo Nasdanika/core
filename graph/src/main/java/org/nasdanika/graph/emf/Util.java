@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.common.Reference;
 import org.nasdanika.graph.Element;
 
@@ -17,15 +21,20 @@ import org.nasdanika.graph.Element;
  */
 public final class Util {
 	
+	public interface ReferencePathComputer {
+		
+		String path(EObjectNode source, EObjectNode target, EReference reference, int index);
+	}
+	
 	private Util() {
 		// Singleton
 	}
 	
-	public static List<EObjectNode> load(Iterable<? extends EObject> elements) {
-		EReferenceConnection.Factory connectionFactory = EReferenceConnection::new;
+	public static List<EObjectNode> load(Iterable<? extends EObject> elements, ReferencePathComputer referencePathComputer) {
+		EReferenceConnection.Factory connectionFactory = (source, target, reference, index) -> new EReferenceConnection(source, target, reference, index, referencePathComputer == null ? path(source, target, reference, index, null) : referencePathComputer.path(source, target, reference, index));
 		Reference<Function<EObject,EObjectNode>> nodeFactory = new Reference<>();
 		nodeFactory.set(target -> new EObjectNode(target, nodeFactory.get(), connectionFactory));		
-		return load(elements, nodeFactory.get(), EReferenceConnection::new);
+		return load(elements, nodeFactory.get(), connectionFactory);
 	}
 	
 	public static List<EObjectNode> load(
@@ -67,6 +76,29 @@ public final class Util {
 		}
 		return result;
 	}
-	
+		
+	public static String path(EObjectNode source, EObjectNode target, EReference reference, int index, BiFunction<EAttribute, Object, Object> eKeyToPathSegment) {
+		String position = String.valueOf(index);
+		if (reference.isMany()) {
+			EList<EAttribute> eKeys = reference.getEKeys();
+			if (eKeys.isEmpty()) {
+				return position;
+			} else {
+				StringBuilder pathBuilder = new StringBuilder();
+				for (EAttribute eKey: eKeys) {
+					Object value = eKeyToPathSegment == null ? target.getTarget().eGet(eKey) : eKeyToPathSegment.apply(eKey, target.getTarget().eGet(eKey));
+					if (value == null || (value instanceof String && org.nasdanika.common.Util.isBlank((String) value))) {
+						return pathBuilder.length() == 0 ? position : pathBuilder.toString();
+					}
+					if (pathBuilder.length() > 0) {
+						pathBuilder.append("/");
+					}
+					pathBuilder.append(value);
+				}
+				return pathBuilder.toString();		
+			}
+		}
+		return null;
+	}
 
 }
