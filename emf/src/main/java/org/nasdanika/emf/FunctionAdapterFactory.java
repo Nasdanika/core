@@ -8,13 +8,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
 /**
- * Creates an adapter using a {@link Function} passing the notifier (target) as an argument.
+ * Creates an adapter using a factory {@link Function} passing the notifier (target) as an argument.
  * @param <T> Adapter type.
  * @param <N> Notifier type.
  */
 public class FunctionAdapterFactory<T, N> extends DelegatingAdapterFactory<T> {
 	
-	private Function<N, T> function;
+	private Function<N, T> factory;
 	
 	/**
 	 * Uses {@link EObject}'s {@link EClass} as eClass argument
@@ -26,15 +26,15 @@ public class FunctionAdapterFactory<T, N> extends DelegatingAdapterFactory<T> {
 		this(EcorePackage.Literals.EOBJECT, type, proxyClassLoader, function);
 	} 
 	
-	public FunctionAdapterFactory(EClass eClass, Class<T> type, ClassLoader proxyClassLoader, Function<N, T> function) {
+	public FunctionAdapterFactory(EClass eClass, Class<T> type, ClassLoader proxyClassLoader, Function<N, T> factory) {
 		super(eClass, type, proxyClassLoader);
-		this.function = function;
+		this.factory = factory;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected T doCreateAdapter(Notifier target) {
-		return function.apply((N) target);
+		return factory.apply((N) target);
 	}
 
 }
