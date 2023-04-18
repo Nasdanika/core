@@ -30,6 +30,10 @@ public final class Util {
 		// Singleton
 	}
 	
+	public static List<EObjectNode> load(Iterable<? extends EObject> elements) {		 
+		return load(elements, (source, target, reference, index) -> path(source, target, reference, index, null));
+	}
+	
 	public static List<EObjectNode> load(Iterable<? extends EObject> elements, ReferencePathComputer referencePathComputer) {
 		EReferenceConnection.Factory connectionFactory = (source, target, reference, index) -> new EReferenceConnection(source, target, reference, index, referencePathComputer == null ? path(source, target, reference, index, null) : referencePathComputer.path(source, target, reference, index));
 		Reference<Function<EObject,EObjectNode>> nodeFactory = new Reference<>();

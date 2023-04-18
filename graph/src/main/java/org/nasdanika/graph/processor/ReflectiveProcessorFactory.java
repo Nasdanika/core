@@ -49,7 +49,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	private Object[] targets;
 	private IntrospectionLevel introspectionLevel;
 
-	public ReflectiveProcessorFactory(IntrospectionLevel introspectionLevel, Object... targets) {
+	protected ReflectiveProcessorFactory(IntrospectionLevel introspectionLevel, Object... targets) {
 		this.introspectionLevel = introspectionLevel == null ? IntrospectionLevel.NONE : introspectionLevel;
 		this.targets = targets;
 	}
