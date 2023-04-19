@@ -389,12 +389,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if value is set to true: " + ae))
 				.collect(Collectors.toList());
 			
-			return parentProcessorInfo -> {
-				parentProcessorSetters.forEach(setter -> {
+			return createParentProcessorInfoConsumer(processor, parentProcessorSetters);
+	}
+	
+	protected Consumer<ProcessorInfo<P,R>> createParentProcessorInfoConsumer(Object processor, List<AccessibleObject> parentProcessorSetters) {
+		return parentProcessorInfo -> {
+			if (parentProcessorInfo != null) {
+				for (AccessibleObject setter: parentProcessorSetters) {
 					ParentProcessor parentProcessorAnnotation = setter.getAnnotation(ParentProcessor.class);
-					set(processor, setter, parentProcessorAnnotation.value() ? parentProcessorInfo.getConfig() : parentProcessorInfo.getProcessor());
-				});						
-			};
+					set(processor, setter, parentProcessorAnnotation.value() ? parentProcessorInfo.getConfig() : parentProcessorInfo.getProcessor());			
+				}
+			}
+		};
 	}
 	
 	private Map<Element, ProcessorInfo<P,R>> wireChildProcessor(
@@ -464,13 +470,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(incomingHandlerConsumers);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
-		// then filtering using matchIncomingHandler, sorting by priority, finding first, wiring it and removing from ret.
+		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
 			.filter(e -> matchIncomingHandler(e.getKey(), e.getValue().getKey()))
 			.sorted((a, b) -> b.getKey().getAnnotation(IncomingHandler.class).priority() - a.getKey().getAnnotation(IncomingHandler.class).priority())
-			.findFirst().ifPresent(e -> {
+			.forEach(e -> {
 				AccessibleObject handlerMember = e.getKey();
 				Entry<Connection, Consumer<H>> incomingHandlerConsumerEntry = e.getValue();
 				if (handlerMember instanceof Field) {					
@@ -530,13 +536,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
-		// then filtering using matchIncomingEndpoint, sorting by priority, finding first, wiring it and removing from ret.
+		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> Map.entry(ae, iee)))
 			.filter(e -> matchIncomingEndpoint(e.getKey(), e.getValue().getKey()))
 			.sorted((a, b) -> b.getKey().getAnnotation(IncomingEndpoint.class).priority() - a.getKey().getAnnotation(IncomingEndpoint.class).priority())
-			.findFirst().ifPresent(e -> {
+			.forEach(e -> {
 				AccessibleObject endpointMember = e.getKey();
 				Entry<Connection, CompletionStage<E>> incomingEndpointEntry = e.getValue();
 				incomingEndpointEntry.getValue().thenAccept(incomingEndpoint -> {
@@ -601,21 +607,21 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(outgoingHandlerConsumers);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing handler consumers.
-		// then filtering using matchOutgoingHandler, sorting by priority, finding first, wiring it and removing from ret.
+		// then filtering using matchOutgoingHandler, sorting by priority, wiring all matching and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
 			.filter(e -> matchOutgoingHandler(e.getKey(), e.getValue().getKey()))
 			.sorted((a, b) -> b.getKey().getAnnotation(OutgoingHandler.class).priority() - a.getKey().getAnnotation(OutgoingHandler.class).priority())
-			.findFirst().ifPresent(e -> {
+			.forEach(e -> {
 				AccessibleObject handlerMember = e.getKey();
 				Entry<Connection, Consumer<H>> outgoingHandlerConsumerEntry = e.getValue();
 				if (handlerMember instanceof Field) {					
 					outgoingHandlerConsumerEntry.getValue().accept((H) getFieldValue(processor, (Field) handlerMember));
 				} else {
 					Method handlerSupplierMethod = (Method) handlerMember;
-					Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, outgoingHandlerConsumerEntry.getKey());
-					outgoingHandlerConsumerEntry.getValue().accept((H) incomingHandler);
+					Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, outgoingHandlerConsumerEntry.getKey());
+					outgoingHandlerConsumerEntry.getValue().accept((H) outgoinggHandler);
 				}
 				ret.remove(outgoingHandlerConsumerEntry.getKey());
 			});
@@ -667,13 +673,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
-		// then filtering using matchOutgoingEndpoint, sorting by priority, finding first, wiring it and removing from ret.
+		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingEndpoints.entrySet().stream().map(iee -> Map.entry(ae, iee)))
 			.filter(e -> matchOutgoingEndpoint(e.getKey(), e.getValue().getKey()))
 			.sorted((a, b) -> b.getKey().getAnnotation(OutgoingEndpoint.class).priority() - a.getKey().getAnnotation(OutgoingEndpoint.class).priority())
-			.findFirst().ifPresent(e -> {
+			.forEach(e -> {
 				AccessibleObject endpointMember = e.getKey();
 				Entry<Connection, CompletionStage<E>> outgoingEndpointEntry = e.getValue();
 				outgoingEndpointEntry.getValue().thenAccept(outgoingEndpoint -> {
@@ -829,8 +835,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		try {			
 			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
 		} catch (EvaluationException e) {
+			onEvaluationException(obj, expr, evaluationContext);
 			return false;
 		}
+	}
+	
+	/**
+	 * Override to troubleshoot SPEL predicates.
+	 * @param obj
+	 * @param expr
+	 * @param evaluationContext
+	 */
+	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext) {
+		
 	}
 	
 	/**
