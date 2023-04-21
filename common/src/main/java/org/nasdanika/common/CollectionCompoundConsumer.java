@@ -19,8 +19,8 @@ public class CollectionCompoundConsumer<E> extends ListCompoundExecutionParticip
 	}
 	
 	@SafeVarargs
-	public CollectionCompoundConsumer(String name, Consumer<? super E>... suppliers) {
-		this(name, Arrays.asList(suppliers));
+	public CollectionCompoundConsumer(String name, Consumer<? super E>... consumers) {
+		this(name, Arrays.asList(consumers));
 	}
 
 	@Override
