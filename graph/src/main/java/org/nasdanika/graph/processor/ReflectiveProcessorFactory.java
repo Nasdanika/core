@@ -10,7 +10,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -476,20 +475,24 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
-			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
-			.filter(e -> matchIncomingHandler(e.getKey(), e.getValue().getKey()))
-			.sorted(createAccessibleObjectsComparator(ao -> ao.getAnnotation(IncomingHandler.class).priority(), ao -> ao.getAnnotation(IncomingHandler.class).value()))
-			.forEach(e -> {
-				AccessibleObject handlerMember = e.getKey();
-				Entry<Connection, Consumer<H>> incomingHandlerConsumerEntry = e.getValue();
-				Connection incomingConnection = incomingHandlerConsumerEntry.getKey();
+			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
+					ae, 
+					ihce.getKey(), 
+					ihce.getValue(), 
+					ao -> ao.getAnnotation(IncomingHandler.class).priority(), 
+					ao -> ao.getAnnotation(IncomingHandler.class).value())))
+			.filter(mr -> matchIncomingHandler(mr.accessibleObject(), mr.connection()))
+			.sorted()
+			.forEach(mr -> {
+				AccessibleObject handlerMember = mr.accessibleObject();
+				Connection incomingConnection = mr.connection();
 				if (ret.containsKey(incomingConnection)) { // Wiring once
 					if (handlerMember instanceof Field) {					
-						incomingHandlerConsumerEntry.getValue().accept((H) getFieldValue(processor, (Field) handlerMember));
+						mr.value().accept((H) getFieldValue(processor, (Field) handlerMember));
 					} else {
 						Method handlerSupplierMethod = (Method) handlerMember;
 						Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, incomingConnection);
-						incomingHandlerConsumerEntry.getValue().accept((H) incomingHandler);
+						mr.value().accept((H) incomingHandler);
 					}
 					ret.remove(incomingConnection);
 				}
@@ -532,59 +535,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				
 		return matchPredicate(incomingConnection, incomingEndpointAnnotation.value());
 	}	
-
-	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
-			Object processor, 
-			Map<Connection, CompletionStage<E>> incomingEndpoints,
-			IntrospectionLevel processorIntrospectionLevel,
-			Function<Throwable, Void> failureHandler) {
-						
-		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
-		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
-
-		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
-		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
-		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
-			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
-			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> Map.entry(ae, iee)))
-			.filter(e -> matchIncomingEndpoint(e.getKey(), e.getValue().getKey()))
-			.sorted(createAccessibleObjectsComparator(ao -> ao.getAnnotation(IncomingEndpoint.class).priority(), ao -> ao.getAnnotation(IncomingEndpoint.class).value()))
-			.forEach(e -> {
-				AccessibleObject endpointMember = e.getKey();
-				Entry<Connection, CompletionStage<E>> incomingEndpointEntry = e.getValue();
-				Connection incomingConnection = incomingEndpointEntry.getKey();
-				if (ret.containsKey(incomingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring an endpoint once and setting a field once
-					incomingEndpointEntry.getValue().thenAccept(incomingEndpoint -> {
-						if (endpointMember instanceof Field) {
-							setFieldValue(processor, (Field) endpointMember, incomingEndpoint);
-						} else {
-							Method endpointMethod = (Method) endpointMember;
-							if (endpointMethod.getParameterCount() == 1) {
-								invokeMethod(processor, endpointMethod, incomingEndpoint);
-							} else {
-								invokeMethod(processor, endpointMethod, incomingConnection, incomingEndpoint);						
-							}
-						}					
-					}).exceptionally(failureHandler);
-					ret.remove(incomingConnection);
-				}
-			});
-				
-		return ret;
-	}
 	
-	/**
-	 * Compares two objects by priority first, then length of selector (longer first - more specific) and then by declaring class - subclass first as more specific
-	 * @param a
-	 * @param b
-	 * @param priorityGetter
-	 * @param selectorGetter
-	 * @return
-	 */
-	protected Comparator<Map.Entry<AccessibleObject,?>> createAccessibleObjectsComparator(Function<AccessibleObject, Integer> priorityGetter, Function<AccessibleObject, String> selectorGetter) {
-		return (ae, be) -> {
-			AccessibleObject a = ae.getKey();
-			AccessibleObject b = be.getKey();
+	protected record ConnectionMatchRecord<T>(
+			AccessibleObject accessibleObject, 
+			Connection connection, 
+			T value, 
+			Function<AccessibleObject, Integer> priorityGetter, 
+			Function<AccessibleObject, String> selectorGetter) implements Comparable<ConnectionMatchRecord<T>> {
+
+		@Override
+		public int compareTo(ConnectionMatchRecord<T> o) {
+			AccessibleObject a = accessibleObject();
+			AccessibleObject b = o.accessibleObject();
 			
 			if (priorityGetter != null) {
 				Integer pa = priorityGetter.apply(a);
@@ -614,7 +576,52 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			}
 			
 			return a.hashCode() - b.hashCode();
-		};
+		}
+		
+	}
+
+	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
+			Object processor, 
+			Map<Connection, CompletionStage<E>> incomingEndpoints,
+			IntrospectionLevel processorIntrospectionLevel,
+			Function<Throwable, Void> failureHandler) {
+						
+		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
+		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
+				
+		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
+		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
+		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
+			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
+			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
+					ae, 
+					iee.getKey(), 
+					iee.getValue(), 
+					ao -> ao.getAnnotation(IncomingEndpoint.class).priority(), 
+					ao -> ao.getAnnotation(IncomingEndpoint.class).value())))
+			.filter(mr -> matchIncomingEndpoint(mr.accessibleObject(), mr.connection()))
+			.sorted()
+			.forEach(mr -> {
+				AccessibleObject endpointMember = mr.accessibleObject();
+				Connection incomingConnection = mr.connection();
+				if (ret.containsKey(incomingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring an endpoint once and setting a field once
+					mr.value().thenAccept(incomingEndpoint -> {
+						if (endpointMember instanceof Field) {
+							setFieldValue(processor, (Field) endpointMember, incomingEndpoint);
+						} else {
+							Method endpointMethod = (Method) endpointMember;
+							if (endpointMethod.getParameterCount() == 1) {
+								invokeMethod(processor, endpointMethod, incomingEndpoint);
+							} else {
+								invokeMethod(processor, endpointMethod, incomingConnection, incomingEndpoint);						
+							}
+						}					
+					}).exceptionally(failureHandler);
+					ret.remove(incomingConnection);
+				}
+			});
+				
+		return ret;
 	}
 
 	protected void wireIncomingEndpoints(
@@ -664,20 +671,24 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		// then filtering using matchOutgoingHandler, sorting by priority, wiring all matching and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
-			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> Map.entry(ae, ihce)))
-			.filter(e -> matchOutgoingHandler(e.getKey(), e.getValue().getKey()))
-			.sorted(createAccessibleObjectsComparator(ao -> ao.getAnnotation(OutgoingHandler.class).priority(), ao -> ao.getAnnotation(OutgoingHandler.class).value()))
-			.forEach(e -> {
-				AccessibleObject handlerMember = e.getKey();
-				Entry<Connection, Consumer<H>> outgoingHandlerConsumerEntry = e.getValue();
-				Connection outgoingConnection = outgoingHandlerConsumerEntry.getKey();
+			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
+					ae, 
+					ihce.getKey(), 
+					ihce.getValue(), 
+					ao -> ao.getAnnotation(OutgoingHandler.class).priority(), 
+					ao -> ao.getAnnotation(OutgoingHandler.class).value())))
+			.filter(mr -> matchOutgoingHandler(mr.accessibleObject(), mr.connection()))
+			.sorted()
+			.forEach(mr -> {
+				AccessibleObject handlerMember = mr.accessibleObject();
+				Connection outgoingConnection = mr.connection();
 				if (ret.containsKey(outgoingConnection)) {
 					if (handlerMember instanceof Field) {					
-						outgoingHandlerConsumerEntry.getValue().accept((H) getFieldValue(processor, (Field) handlerMember));
+						mr.value().accept((H) getFieldValue(processor, (Field) handlerMember));
 					} else {
 						Method handlerSupplierMethod = (Method) handlerMember;
 						Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, outgoingConnection);
-						outgoingHandlerConsumerEntry.getValue().accept((H) outgoinggHandler);
+						mr.value().accept((H) outgoinggHandler);
 					}
 					ret.remove(outgoingConnection);
 				}
@@ -734,15 +745,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		getFieldsAndMethods(processor.getClass(), processorIntrospectionLevel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
-			.flatMap(ae -> outgoingEndpoints.entrySet().stream().map(iee -> Map.entry(ae, iee)))
-			.filter(e -> matchOutgoingEndpoint(e.getKey(), e.getValue().getKey()))
-			.sorted(createAccessibleObjectsComparator(ao -> ao.getAnnotation(OutgoingEndpoint.class).priority(), ao -> ao.getAnnotation(OutgoingEndpoint.class).value()))
-			.forEach(e -> {
-				AccessibleObject endpointMember = e.getKey();
-				Entry<Connection, CompletionStage<E>> outgoingEndpointEntry = e.getValue();
-				Connection outgoingConnection = outgoingEndpointEntry.getKey();
+			.flatMap(ae -> outgoingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
+					ae, 
+					iee.getKey(), 
+					iee.getValue(), 
+					ao -> ao.getAnnotation(OutgoingEndpoint.class).priority(), 
+					ao -> ao.getAnnotation(OutgoingEndpoint.class).value())))
+			.filter(mr -> matchOutgoingEndpoint(mr.accessibleObject(), mr.connection()))
+			.sorted()
+			.forEach(mr -> {
+				AccessibleObject endpointMember = mr.accessibleObject();
+				Connection outgoingConnection = mr.connection();
 				if (ret.containsKey(outgoingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring once and setting a field once
-					outgoingEndpointEntry.getValue().thenAccept(outgoingEndpoint -> {
+					mr.value().thenAccept(outgoingEndpoint -> {
 						if (endpointMember instanceof Field) {
 							setFieldValue(processor, (Field) endpointMember, outgoingEndpoint);
 						} else {
