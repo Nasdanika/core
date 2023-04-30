@@ -29,7 +29,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.BiSupplier;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
@@ -313,9 +312,9 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @return
 	 */
 	public Object create(ObjectLoader loader, String type, Object config, java.util.function.Function<EClass, EObject> constructor, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> result = resolveEClass(type);
+		ResolutionResult result = resolveEClass(type);
 		if (result != null) {
-			return create(loader, result.getFirst(), config, base, progressMonitor, markers, result.getSecond(), constructor);
+			return create(loader, result.eClass(), config, base, progressMonitor, markers, result.keyProvider(), constructor);
 		}
 		
 		return super.create(loader, type, config, base, progressMonitor, markers);
@@ -329,12 +328,14 @@ public class EObjectLoader extends DispatchingLoader {
 		return create(loader, type, config, threadConstructor.get(), base, progressMonitor, markers);
 	}	
 	
+	public record ResolutionResult(EClass eClass, BiFunction<EClass,ENamedElement,String> keyProvider) {}
+	
 	/**
 	 * Resolves EClass and key provider from type name.
 	 * @param type
 	 * @return
 	 */
-	public BiSupplier<EClass,BiFunction<EClass,ENamedElement,String>> resolveEClass(String type) {		
+	public ResolutionResult resolveEClass(String type) {		
 		for (Entry<String, EPackageEntry> re: getRegistry()) {
 			EPackageEntry ePackageEntry = re.getValue();
 			if (type.startsWith(re.getKey())) {
@@ -372,20 +373,8 @@ public class EObjectLoader extends DispatchingLoader {
 		return null;		
 	}
 
-	private BiSupplier<EClass, BiFunction<EClass, ENamedElement, String>> resolveResult(EPackageEntry ePackageEntry,
-			EClassifier eClassifier) {
-		return new BiSupplier<EClass, BiFunction<EClass,ENamedElement,String>>() {
-
-			@Override
-			public EClass getFirst() {
-				return (EClass) eClassifier;
-			}
-
-			@Override
-			public BiFunction<EClass,ENamedElement, String> getSecond() {
-				return ePackageEntry.keyProvider;
-			}
-		};
+	private ResolutionResult resolveResult(EPackageEntry ePackageEntry,	EClassifier eClassifier) {
+		return new ResolutionResult((EClass) eClassifier, ePackageEntry.keyProvider);
 	}
 	
 	/**
