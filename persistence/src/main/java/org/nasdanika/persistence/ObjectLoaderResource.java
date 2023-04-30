@@ -23,7 +23,6 @@ import org.nasdanika.common.Context;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.SupplierFactory;
-import org.nasdanika.common.Util;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
@@ -105,7 +104,7 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 			Object obj = isYaml ? objectLoader.loadYaml(spec, base, progressMonitor) : objectLoader.loadJsonObject(spec, base, progressMonitor);
 			
 			if (obj instanceof SupplierFactory) {
-				obj = Util.call(((SupplierFactory<Object>) obj).create(getContext()), progressMonitor, this::onDiagnostic);
+				obj = ((SupplierFactory<Object>) obj).create(getContext()).call(progressMonitor, this::onDiagnostic);
 			} 
 			
 			if (obj instanceof EObject) {
@@ -151,7 +150,7 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 				getContents().addAll((Collection<EObject>) data);
 			} else {
 				if (data instanceof SupplierFactory) {
-					EObject eObject = Util.call(((SupplierFactory<EObject>) data).create(getContext()), progressMonitor, this::onDiagnostic);
+					EObject eObject = ((SupplierFactory<EObject>) data).create(getContext()).call(progressMonitor, this::onDiagnostic);
 					getContents().add(eObject);
 				} else if (data instanceof EObject) {
 					getContents().add((EObject) data);
