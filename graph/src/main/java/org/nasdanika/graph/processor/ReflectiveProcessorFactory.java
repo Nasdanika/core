@@ -724,7 +724,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			if (pc == 0 || pc > 2) {
 				throw new NasdanikaException("A method annotated with OutgoingEndpoint shall have one or two parameters: " + endpointMethod);
 			}
-			if (!endpointMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
+			if (pc == 2 && !endpointMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
 				throw new NasdanikaException("The first parameter type of a method annotated with OutgoingEndpoint shall be assignable from Connection: " + endpointMethod);				
 			}
 		}
@@ -911,7 +911,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		try {			
 			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
 		} catch (EvaluationException e) {
-			onEvaluationException(obj, expr, evaluationContext);
+			onEvaluationException(obj, expr, evaluationContext, e);
 			return false;
 		}
 	}
@@ -922,7 +922,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	 * @param expr
 	 * @param evaluationContext
 	 */
-	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext) {
+	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
 		
 	}
 	
