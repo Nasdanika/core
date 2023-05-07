@@ -35,7 +35,12 @@ public final class Util {
 	}
 	
 	public static List<EObjectNode> load(Iterable<? extends EObject> elements, ReferencePathComputer referencePathComputer) {
-		EReferenceConnection.Factory connectionFactory = (source, target, reference, index) -> new EReferenceConnection(source, target, reference, index, referencePathComputer == null ? path(source, target, reference, index, null) : referencePathComputer.path(source, target, reference, index));
+		EReferenceConnection.Factory connectionFactory = (source, target, reference, index) -> new EReferenceConnection(
+				source, 
+				target, 
+				reference, 
+				index, 
+				referencePathComputer == null ? path(source, target, reference, index, null) : referencePathComputer.path(source, target, reference, index));
 		Reference<Function<EObject,EObjectNode>> nodeFactory = new Reference<>();
 		nodeFactory.set(target -> new EObjectNode(target, nodeFactory.get(), connectionFactory));		
 		return load(elements, nodeFactory.get(), connectionFactory);
