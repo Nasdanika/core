@@ -494,7 +494,9 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 						Object incomingHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, incomingConnection);
 						mr.value().accept((H) incomingHandler);
 					}
-					ret.remove(incomingConnection);
+					if (handlerMember.getAnnotation(IncomingHandler.class).consume()) {
+						ret.remove(incomingConnection);
+					}
 				}
 			});
 				
@@ -554,15 +556,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				if (!Objects.equals(pa, pb)) {
 					return pb - pa;
 				}
-			}
-			
-			if (selectorGetter != null) {
-				String sa = selectorGetter.apply(a);
-				String sb = selectorGetter.apply(b);
-				if (sa.length() != sb.length()) {
-					return sb.length() - sa.length();
-				}
-			}
+			}			
 			if (a instanceof Member && b instanceof Member) {
 				Class<?> adc = ((Member) a).getDeclaringClass();
 				Class<?> bdc = ((Member) b).getDeclaringClass();
@@ -572,6 +566,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				
 				if (bdc.isAssignableFrom(adc)) {
 					return -1;
+				}
+			}
+			if (selectorGetter != null) {
+				String sa = selectorGetter.apply(a);
+				String sb = selectorGetter.apply(b);
+				if (sa.length() != sb.length()) {
+					return sb.length() - sa.length();
 				}
 			}
 			
@@ -617,7 +618,9 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 							}
 						}					
 					}).exceptionally(failureHandler);
-					ret.remove(incomingConnection);
+					if (endpointMember.getAnnotation(IncomingEndpoint.class).consume()) {
+						ret.remove(incomingConnection);
+					}
 				}
 			});
 				
@@ -690,7 +693,9 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 						Object outgoinggHandler = handlerSupplierMethod.getParameterCount() == 0 ? invokeMethod(processor, handlerSupplierMethod) : invokeMethod(processor, handlerSupplierMethod, outgoingConnection);
 						mr.value().accept((H) outgoinggHandler);
 					}
-					ret.remove(outgoingConnection);
+					if (handlerMember.getAnnotation(OutgoingHandler.class).consume()) {
+						ret.remove(outgoingConnection);
+					}
 				}
 			});
 				
@@ -769,7 +774,9 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 							}
 						}					
 					}).exceptionally(failureHandler);
-					ret.remove(outgoingConnection);
+					if (endpointMember.getAnnotation(OutgoingEndpoint.class).consume()) {
+						ret.remove(outgoingConnection);
+					}
 				}
 			});
 				

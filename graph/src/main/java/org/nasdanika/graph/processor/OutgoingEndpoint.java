@@ -29,5 +29,12 @@ public @interface OutgoingEndpoint {
 	 * @return
 	 */
 	int priority() default 0;
+	
+	/**
+	 * If true, outgoing endpoint is injected once to the first matching field or method.
+	 * If false, default, it is injected into all matching fields and methods.
+	 * @return
+	 */
+	boolean consume() default false;
 		
 }

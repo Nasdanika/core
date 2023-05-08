@@ -31,4 +31,11 @@ public @interface IncomingHandler {
 	 * @return
 	 */
 	int priority() default 0;
+	
+	/**
+	 * If true, incoming handler is injected once to the first matching field or method.
+	 * If false, default, it is injected into all matching fields and methods.
+	 * @return
+	 */
+	boolean consume() default false;
 }
