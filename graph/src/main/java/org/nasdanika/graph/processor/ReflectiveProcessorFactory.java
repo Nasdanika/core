@@ -455,7 +455,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				throw new NasdanikaException("A method annotated with IncomingHandler shall have zero or one parameter: " + handlerMethod);
 			}
 			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
-				throw new NasdanikaException("A single parameter type of a method annotated with IncomingHandler shall be assignable from Connection: " + handlerMethod);				
+				return false;				
 			}
 		}
 				
@@ -530,8 +530,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			if (pc == 0 || pc > 2) {
 				throw new NasdanikaException("A method annotated with IncomingEndpoint shall have one or two parameters: " + endpointMethod);
 			}
-			if (!endpointMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
-				throw new NasdanikaException("The first parameter type of a method annotated with IncomingEndpoint shall be assignable from Connection: " + endpointMethod);				
+			if (pc == 2 && !endpointMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
+				return false;				
 			}
 		}
 				
@@ -655,7 +655,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				throw new NasdanikaException("A method annotated with OutgoingHandler shall have zero or one parameter: " + handlerMethod);
 			}
 			if (pc == 1 && !handlerMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
-				throw new NasdanikaException("A single parameter type of a method annotated with OutgoingHandler shall be assignable from Connection: " + handlerMethod);				
+				return false;				
 			}
 		}
 				
@@ -730,7 +730,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				throw new NasdanikaException("A method annotated with OutgoingEndpoint shall have one or two parameters: " + endpointMethod);
 			}
 			if (pc == 2 && !endpointMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
-				throw new NasdanikaException("The first parameter type of a method annotated with OutgoingEndpoint shall be assignable from Connection: " + endpointMethod);				
+				return false;				
 			}
 		}
 				

@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.PropertySource;
@@ -17,6 +18,13 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 
 public class EObjectNode implements Node, PropertySource<String, Object> {
+	
+	/**
+	 * isNew is true if a new node was crated, false if it was retrieved from a registry of existing nodes
+	 * @author Pavel
+	 *
+	 */
+	public static record ResultRecord(EObjectNode node, boolean isNew) {}	
 	
 	@Override
 	public int hashCode() {
@@ -36,11 +44,15 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	}
 
 	private EObject target;
-	private Collection<EReferenceConnection> incomingConnections = new HashSet<>();
-	private Collection<EReferenceConnection> outgoingConnections = new HashSet<>();
+	private Collection<Connection> incomingConnections = new HashSet<>();
+	private Collection<Connection> outgoingConnections = new HashSet<>();
 
 	@SuppressWarnings("unchecked")
-	public EObjectNode(EObject target, Function<EObject,EObjectNode> nodeFactory, EReferenceConnection.Factory connectionFactory) {
+	public EObjectNode(
+			EObject target, 
+			Function<EObject,ResultRecord> nodeFactory, 
+			EReferenceConnection.Factory referenceConnectionFactory, 
+			EOperationConnection.Factory operationConnectionFactory) {
 		this.target = target;
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
@@ -50,15 +62,21 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 					if (eReference.isMany()) {
 						int idx = 0;
 						for (EObject element: (Collection<EObject>) val) {
-							EObjectNode targetNode = nodeFactory.apply(element);;
-							connectionFactory.create(this, targetNode, eReference, idx++);							
+							EObjectNode targetNode = nodeFactory.apply(element).node();
+							referenceConnectionFactory.create(this, targetNode, idx++, eReference);							
 						}
 					} else {
-						EObjectNode targetNode = nodeFactory.apply((EObject) val);
-						connectionFactory.create(this, targetNode, eReference, -1);
+						EObjectNode targetNode = nodeFactory.apply((EObject) val).node();
+						referenceConnectionFactory.create(this, targetNode, -1, eReference);
 					}
 				}
 			}
+		}
+	
+		if (operationConnectionFactory != null) {
+			for (EOperation eOperation: target.eClass().getEAllOperations()) {
+				operationConnectionFactory.create(this, eOperation, nodeFactory);
+			}		
 		}		
 	}
 	
@@ -67,7 +85,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 * @param registry
 	 */
 	@SuppressWarnings("unchecked")
-	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory connectionFactory) {		
+	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory) {		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (!eReference.isContainment()) {
 				Object val = target.eGet(eReference);
@@ -77,13 +95,13 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 						for (EObject element: (Collection<EObject>) val) {
 							EObjectNode targetNode = registry.apply(element);
 							if (targetNode != null) {
-								connectionFactory.create(this, targetNode, eReference, idx++);
+								referenceConnectionFactory.create(this, targetNode, idx++, eReference);
 							}
 						}
 					} else {
 						EObjectNode targetNode = registry.apply((EObject) val);
 						if (targetNode != null) {
-							connectionFactory.create(this, targetNode, eReference, -1);
+							referenceConnectionFactory.create(this, targetNode, -1, eReference);
 						}
 					}
 				}
@@ -97,20 +115,20 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		Map<EReferenceConnection, T> results = new LinkedHashMap<>();
-		for (EReferenceConnection connection: getOutgoingConnections()) {
+		Map<Connection, T> results = new LinkedHashMap<>();
+		for (Connection connection: getOutgoingConnections()) {
 			results.put(connection, connection.accept(visitor));
 		}
 		return visitor.apply(this, results);
 	}
 
 	@Override
-	public Collection<EReferenceConnection> getIncomingConnections() {
+	public Collection<Connection> getIncomingConnections() {
 		return incomingConnections;
 	}
 
 	@Override
-	public Collection<EReferenceConnection> getOutgoingConnections() {
+	public Collection<Connection> getOutgoingConnections() {
 		return outgoingConnections;
 	}
 
