@@ -12,7 +12,7 @@ public class EReferenceConnection extends Connection {
 	
 	public interface Factory {
 		
-		EReferenceConnection create(EObjectNode source, EObjectNode target, int index, EReference reference);
+		void create(EObjectNode source, EObjectNode target, int index, EReference reference);
 		
 	}
 	

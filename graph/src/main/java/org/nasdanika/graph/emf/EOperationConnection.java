@@ -1,6 +1,5 @@
 package org.nasdanika.graph.emf;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ public class EOperationConnection extends Connection {
 		
 	public interface Factory {
 		
-		Collection<EOperationConnection> create(EObjectNode source, EOperation operation, Function<EObject, EObjectNode.ResultRecord> nodeFactory);
+		void create(EObjectNode source, EOperation operation, Function<EObject, EObjectNode.ResultRecord> nodeFactory);
 		
 	}
 	

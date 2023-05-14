@@ -48,22 +48,19 @@ public class EObjectGraphFactory {
 				this::createOperationConnections);
 	}	
 	
-	protected EReferenceConnection createReferenceConnection(EObjectNode source, EObjectNode target, int index, EReference reference) {
-		return new EReferenceConnection(source, target, index, referencePath(source, target, reference, index), reference);
+	protected void createReferenceConnection(EObjectNode source, EObjectNode target, int index, EReference reference) {
+		new EReferenceConnection(source, target, index, referencePath(source, target, reference, index), reference);
 	}
 	
-	protected EOperationConnection createOperationConnection(EObjectNode source, EObjectNode target, int index, EOperation operation, List<Object> arguments, boolean visitTarget) {
-		return new EOperationConnection(source, target, index, operationPath(source, target, operation, arguments, index), operation, arguments, visitTarget);
+	protected void createOperationConnection(EObjectNode source, EObjectNode target, int index, EOperation operation, List<Object> arguments, boolean visitTarget) {
+		new EOperationConnection(source, target, index, operationPath(source, target, operation, arguments, index), operation, arguments, visitTarget);
 	}
 	
-	protected List<EOperationConnection> createOperationConnections(EObjectNode source, EOperation operation, Function<EObject,EObjectNode.ResultRecord> nodeFactory) {
-		List<EOperationConnection> ret = new ArrayList<>();
+	protected void createOperationConnections(EObjectNode source, EOperation operation, Function<EObject,EObjectNode.ResultRecord> nodeFactory) {
 		for (EList<Object> arguments: createBindings(source, operation)) {
-			ret.addAll(createOperationConnections(source, operation, arguments, nodeFactory));
+			createOperationConnections(source, operation, arguments, nodeFactory);
 		}
-		return ret;
-	}
-	
+	}	
 	
 	/**
 	 * Invokes operation with given arguments and creates a connection
@@ -72,34 +69,26 @@ public class EObjectGraphFactory {
 	 * @param arguments
 	 * @return
 	 */
-	protected List<EOperationConnection> createOperationConnections(EObjectNode source, EOperation operation, EList<Object> arguments, Function<EObject,EObjectNode.ResultRecord> nodeFactory) {
+	protected void createOperationConnections(EObjectNode source, EOperation operation, EList<Object> arguments, Function<EObject,EObjectNode.ResultRecord> nodeFactory) {
 		try {
 			Object result = source.getTarget().eInvoke(operation, arguments);
 			
 			if (operation.isMany()) {
-				List<EOperationConnection> ret = new ArrayList<>();
 				int index = 0;
 				for (Object e: ((Iterable<?>) result)) {
 					if (e instanceof EObject) {
 						EObjectNode.ResultRecord resultRecord = nodeFactory.apply((EObject) e);
-						ret.add(createOperationConnection(source, resultRecord.node(), index++, operation, arguments, resultRecord.isNew()));
+						createOperationConnection(source, resultRecord.node(), index++, operation, arguments, resultRecord.isNew());
 					} else if (e != null) {
 						throw new ExecutionException("Cannot create an operation connection for non-EObject result: " + operation + " " + arguments + " -> " + e);
 					}
 				}
-				return ret;
-			}
-
-			if (result == null) {
-				return Collections.emptyList();
-			}
-			
-			if (result instanceof EObject) {
+			} else if (result instanceof EObject) {
 				EObjectNode.ResultRecord resultRecord = nodeFactory.apply((EObject) result);
-				return Collections.singletonList(createOperationConnection(source, resultRecord.node(), -1, operation, arguments, resultRecord.isNew()));
+				createOperationConnection(source, resultRecord.node(), -1, operation, arguments, resultRecord.isNew());
+			} else {			
+				throw new ExecutionException("Cannot create an operation connection for non-EObject result: " + operation + " " + arguments + " -> " + result);
 			}
-			
-			throw new ExecutionException("Cannot create an operation connection for non-EObject result: " + operation + " " + arguments + " -> " + result);
 		} catch (InvocationTargetException e) {
 			throw new ExecutionException(e);
 		}
