@@ -908,7 +908,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			return true;
 		}
 		
-		ExpressionParser parser = new SpelExpressionParser();
+		ExpressionParser parser = getExpressionParser();
 		Expression exp = parser.parseExpression(expr);
 		EvaluationContext evaluationContext = getEvaluationContext();
 		try {			
@@ -917,6 +917,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			onEvaluationException(obj, expr, evaluationContext, e);
 			return false;
 		}
+	}
+	
+	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
+		
+		@Override
+		protected SpelExpressionParser initialValue() {
+			return new SpelExpressionParser();			
+		}
+		
+	};
+
+	protected SpelExpressionParser getExpressionParser() {
+		return expressionParserThreadLocal.get();
 	}
 	
 	/**
