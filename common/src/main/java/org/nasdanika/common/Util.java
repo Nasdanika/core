@@ -19,6 +19,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -33,6 +34,7 @@ import java.util.function.Predicate;
 import java.util.function.ToIntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -1259,7 +1261,23 @@ public class Util {
 			}
 		}
 	}	
-	
-	
+
+	/**
+	 * Flattened inheritance hierarchy from the argument class to all of its supertypes.
+	 * @param eClass
+	 * @return
+	 */
+	public static List<Class<?>> lineage(Class<?> clazz) {
+		if (clazz == null) {
+			return Collections.emptyList();
+		}
+		List<Class<?>> ret = new ArrayList<>();
+		ret.add(clazz);
+		ret.addAll(lineage(clazz.getSuperclass()));
+		for (Class<?> i: clazz.getInterfaces()) {
+			ret.addAll(lineage(i));
+		}
+		return ret.stream().distinct().collect(Collectors.toList());
+	}
 	
 }
