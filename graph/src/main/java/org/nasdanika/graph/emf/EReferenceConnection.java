@@ -6,13 +6,14 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.EReference;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
 public class EReferenceConnection extends Connection {
 	
 	public interface Factory {
 		
-		void create(EObjectNode source, EObjectNode target, int index, EReference reference);
+		void create(EObjectNode source, EObjectNode target, int index, EReference reference, ProgressMonitor progressMonitor);
 		
 	}
 	
@@ -25,7 +26,13 @@ public class EReferenceConnection extends Connection {
 	 * @param eReference
 	 * @param index -1 for single references.
 	 */
-	EReferenceConnection(EObjectNode source, EObjectNode target, int index, String path, EReference reference) {
+	EReferenceConnection(
+			EObjectNode source,
+			EObjectNode target,
+			int index,
+			String path,
+			EReference reference) {
+		
 		super(source, target, index, path);
 		this.reference = reference;
 	}

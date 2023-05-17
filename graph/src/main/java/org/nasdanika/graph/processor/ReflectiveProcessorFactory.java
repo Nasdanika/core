@@ -315,8 +315,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			return priorityCmp;
 		}
 		
-		Class<Element> aType = a.getAnnotation(Processor.class).type();
-		Class<Element> bType = b.getAnnotation(Processor.class).type();
+		Class<? extends Element> aType = a.getAnnotation(Processor.class).type();
+		Class<? extends Element> bType = b.getAnnotation(Processor.class).type();
 		if (!Objects.equals(aType, bType)) {
 			if (aType.isAssignableFrom(bType)) {
 				// b is more specific
@@ -919,6 +919,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		}
 	}
 	
+	protected EvaluationContext getEvaluationContext() {
+		return null;
+	}
+	
 	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
 		
 		@Override
@@ -1121,10 +1125,6 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 	protected boolean isValueSupplier(AnnotatedElement element) {
 		return element instanceof Field || (element instanceof Method && ((Method) element).getParameterCount() == 0);
-	}
-	
-	protected EvaluationContext getEvaluationContext() {
-		return null;
 	}
 	
 }

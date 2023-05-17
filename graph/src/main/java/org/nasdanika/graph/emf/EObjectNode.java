@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
@@ -50,9 +51,10 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
 			EObject target, 
-			Function<EObject,ResultRecord> nodeFactory, 
+			BiFunction<EObject, ProgressMonitor,ResultRecord> nodeFactory, 
 			EReferenceConnection.Factory referenceConnectionFactory, 
-			EOperationConnection.Factory operationConnectionFactory) {
+			EOperationConnection.Factory operationConnectionFactory, 
+			ProgressMonitor progressMonitor) {
 		this.target = target;
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
@@ -62,12 +64,12 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 					if (eReference.isMany()) {
 						int idx = 0;
 						for (EObject element: (Collection<EObject>) val) {
-							EObjectNode targetNode = nodeFactory.apply(element).node();
-							referenceConnectionFactory.create(this, targetNode, idx++, eReference);							
+							EObjectNode targetNode = nodeFactory.apply(element, progressMonitor).node();
+							referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);							
 						}
 					} else {
-						EObjectNode targetNode = nodeFactory.apply((EObject) val).node();
-						referenceConnectionFactory.create(this, targetNode, -1, eReference);
+						EObjectNode targetNode = nodeFactory.apply((EObject) val, progressMonitor).node();
+						referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
 					}
 				}
 			}
@@ -75,7 +77,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	
 		if (operationConnectionFactory != null) {
 			for (EOperation eOperation: target.eClass().getEAllOperations()) {
-				operationConnectionFactory.create(this, eOperation, nodeFactory);
+				operationConnectionFactory.create(this, eOperation, nodeFactory, progressMonitor);
 			}		
 		}		
 	}
@@ -85,7 +87,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 * @param registry
 	 */
 	@SuppressWarnings("unchecked")
-	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory) {		
+	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory, ProgressMonitor progressMonitor) {		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (!eReference.isContainment()) {
 				Object val = target.eGet(eReference);
@@ -95,13 +97,13 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 						for (EObject element: (Collection<EObject>) val) {
 							EObjectNode targetNode = registry.apply(element);
 							if (targetNode != null) {
-								referenceConnectionFactory.create(this, targetNode, idx++, eReference);
+								referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);
 							}
 						}
 					} else {
 						EObjectNode targetNode = registry.apply((EObject) val);
 						if (targetNode != null) {
-							referenceConnectionFactory.create(this, targetNode, -1, eReference);
+							referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
 						}
 					}
 				}

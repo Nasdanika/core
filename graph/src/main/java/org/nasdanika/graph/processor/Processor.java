@@ -39,7 +39,11 @@ public @interface Processor {
 	 */
 	int priority() default 0;
 	
-	Class<Element> type() default Element.class; 
+	/**
+	 * Matching by object type.
+	 * @return
+	 */
+	Class<? extends Element> type() default Element.class; 
 	
 	/**
 	 * @return If true, handlers and endpoints wired to annotated methods and fields are removed from {@link ProcessorConfig} returned from {@link ProcessorInfo}.getConfig().
