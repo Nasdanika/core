@@ -17,7 +17,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
  * An annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 
  * to methods and fields with annotations.
  * 
- * When applied to a type (class) value is used as a base URI to resolve URI of method annotations.
+ * When applied to a type (class) identifier is used as a base URI to resolve URI of method annotations, type and value are used for filtering in addition to method annotation and priority is ignored.
  * @author Pavel
  *
  */

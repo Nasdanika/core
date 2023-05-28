@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.emf.EObjectNode;
+import org.nasdanika.graph.processor.Factory;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.ncore.util.NcoreUtil;
@@ -24,12 +25,28 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * @author Pavel
  *
  */
-//@Factory(type = EObjectNode.class)
+@Factory(type = EObjectNode.class)
 public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 		
 	@Processor(type = EObjectNode.class)
 	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config) {
 		EObject eObj = ((EObjectNode) config.getElement()).getTarget();
+		URI[] identifierBase = { null };
+		EObjectNodeProcessor classAnnotation = getClass().getAnnotation(EObjectNodeProcessor.class);
+		if (classAnnotation != null) {
+			if (!classAnnotation.type().isInstance(eObj)) {
+				return null;
+			}
+			
+			String identifierStr = classAnnotation.identifier();
+			if (!Util.isBlank(identifierStr)) {
+				identifierBase[0] = URI.createURI(identifierStr); 
+			}
+			if (!matchPredicate(eObj, classAnnotation.value())) {
+				return null;
+			};			
+		}
+		
 		Optional<Method> factoryMethod = Stream.of(getClass().getMethods())
 				.filter(m -> {
 					EObjectNodeProcessor annotation = m.getAnnotation(EObjectNodeProcessor.class);
@@ -37,7 +54,7 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 						return false;
 					}
 					
-					if (!m.getAnnotation(EObjectNodeProcessor.class).type().isInstance(eObj)) {
+					if (!annotation.type().isInstance(eObj)) {
 						return false;
 					}
 					
@@ -46,9 +63,8 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 						return true;
 					}
 					URI identifier = URI.createURI(identifierStr);
-					return NcoreUtil.getIdentifiers(eObj).contains(identifier);
+					return NcoreUtil.getIdentifiers(eObj).contains(identifier) ? matchPredicate(eObj, annotation.value()) : false;
 				})
-				.filter(m -> matchPredicate(eObj, m.getAnnotation(EObjectNodeProcessor.class).value()))
 				.sorted((a, b) -> b.getAnnotation(EObjectNodeProcessor.class).priority() - a.getAnnotation(EObjectNodeProcessor.class).priority())
 				.findFirst();
 		
