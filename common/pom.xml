@@ -44,6 +44,11 @@
 		    <version>2.33.0</version>
 		</dependency> 		
 		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.ecore.xmi</artifactId>
+			<version>2.18.0</version>
+		</dependency>
+		<dependency>
 		    <groupId>org.json</groupId>
 		    <artifactId>json</artifactId>
 		    <version>20230227</version>

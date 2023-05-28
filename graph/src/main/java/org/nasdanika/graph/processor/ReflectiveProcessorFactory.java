@@ -82,7 +82,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	
 	@SuppressWarnings("unchecked")
 	protected ProcessorInfo<P,R> createProcessor(Object target, ProcessorConfig<P,R> config, IntrospectionLevel introspectionLevel, ProgressMonitor progressMonitor) {	
-		if (target != null && (target.getClass().getAnnotation(Factory.class) == null || matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value()))) {
+		if (target != null 
+				&& (target.getClass().getAnnotation(Factory.class) == null 
+					|| (target.getClass().getAnnotation(Factory.class).type().isInstance(config.getElement()) && matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value())))) {
+			
 			// TODO - progress steps.
 			Optional<Method> match = getMethods(target.getClass(), introspectionLevel)
 				.filter(m -> matchFactoryMethod(config, m))

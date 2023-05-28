@@ -5,8 +5,11 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import org.nasdanika.graph.Element;
 
 /**
  * On a type this annotation is used to filter reflective factory targets using this annotation value as a predicate.
@@ -18,6 +21,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RUNTIME)
 @Target({ FIELD, METHOD, TYPE })
+@Inherited
 public @interface Factory {
 	
 	/**
@@ -37,5 +41,11 @@ public @interface Factory {
 	 * @return
 	 */
 	int priority() default 0;
+	
+	/**
+	 * Matching by object type.
+	 * @return
+	 */
+	Class<? extends Element> type() default Element.class; 
 
 }
