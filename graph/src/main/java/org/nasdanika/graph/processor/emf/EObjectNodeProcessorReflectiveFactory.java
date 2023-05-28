@@ -65,7 +65,7 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 					URI identifier = URI.createURI(identifierStr);
 					return NcoreUtil.getIdentifiers(eObj).contains(identifier) ? matchPredicate(eObj, annotation.value()) : false;
 				})
-				.sorted((a, b) -> b.getAnnotation(EObjectNodeProcessor.class).priority() - a.getAnnotation(EObjectNodeProcessor.class).priority())
+				.sorted(this::compareFactoryMethods)
 				.findFirst();
 		
 		if (factoryMethod.isEmpty()) {
@@ -77,6 +77,27 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new NasdanikaException("Error invoking " + factoryMethod.get() + ": " + e, e);
 		}
+	}
+
+	protected int compareFactoryMethods(Method a, Method b) {
+		EObjectNodeProcessor aAnnotation = a.getAnnotation(EObjectNodeProcessor.class);
+		EObjectNodeProcessor bAnnotation = b.getAnnotation(EObjectNodeProcessor.class);
+		int priorityCmp = bAnnotation.priority() - aAnnotation.priority();
+		if (priorityCmp != 0) {
+			return priorityCmp;
+		}
+		Class<? extends EObject> aType = aAnnotation.type(); 
+		Class<? extends EObject> bType = bAnnotation.type();
+		if (aType == bType) {
+			return 0;
+		}
+		if (aType.isAssignableFrom(bType)) {
+			return 1;
+		}
+		if (bType.isAssignableFrom(aType)) {
+			return -1;
+		}
+		return a.hashCode() - b.hashCode();
 	}			
 
 	/**
