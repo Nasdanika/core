@@ -11,12 +11,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
@@ -1279,5 +1283,33 @@ public class Util {
 		}
 		return ret.stream().distinct().collect(Collectors.toList());
 	}
+	
+	// --- For reflection ---
+		
+	/**
+	 * @return A stream of methods. Accessible methods for the introspection level ACCESSIBLE and declared methods from the class and all super classes and implemented interfaces for the introspection level DECLARED.
+	 */
+	public static Stream<Method> getMethods(Class<?> clazz) {
+		if (clazz == null || Object.class.equals(clazz)) {
+			return Stream.empty();
+		}
+		
+		return Arrays.stream(clazz.getMethods());
+	}
+	
+	/**
+	 * @return A stream of fields. Accessible fields for the introspection level ACCESSIBLE and declared fields from the class and all super classes and implemented interfaces for the introspection level DECLARED.
+	 */
+	public static Stream<Field> getFields(Class<?> clazz) {
+		if (clazz == null ||  Object.class.equals(clazz)) {
+			return Stream.empty();
+		}
+		
+		return Arrays.stream(clazz.getFields());
+	}
+	
+	public static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz) {
+		return Stream.concat(getMethods(clazz), getFields(clazz));
+	}	
 	
 }

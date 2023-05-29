@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
@@ -46,7 +47,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * @param <U>
  * @param <S>
  */
-public abstract class ReflectiveProcessorFactory<P, H, E, R> implements ProcessorFactory<P, H, E, R> {
+public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector implements ProcessorFactory<P, H, E, R> {
 	
 	private Object[] targets;
 
@@ -83,7 +84,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 					|| (target.getClass().getAnnotation(Factory.class).type().isInstance(config.getElement()) && matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value())))) {
 			
 			// TODO - progress steps.
-			Optional<Method> match = getMethods(target.getClass())
+			Optional<Method> match = Util.getMethods(target.getClass())
 				.filter(m -> matchFactoryMethod(config, m))
 				.sorted(this::compareProcessorMethods)
 				.findFirst();
@@ -268,7 +269,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			}
 			
 			// Factories
-			List<Object> factories = getFieldsAndMethods(target.getClass())
+			List<Object> factories = Util.getFieldsAndMethods(target.getClass())
 					.filter(ae -> ae.getAnnotation(Factory.class) != null)
 					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factory.class).value()))
 					.filter(ae -> mustGet(ae, null, "Methods annotated with Factory shall have no parameters: " + ae))
@@ -284,7 +285,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				}
 			}
 			
-			factories = getFieldsAndMethods(target.getClass())
+			factories = Util.getFieldsAndMethods(target.getClass())
 					.filter(ae -> ae.getAnnotation(Factories.class) != null)
 					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factories.class).value()))
 					.filter(ae -> mustGet(ae, Collection.class, "Methods and fields annotated with Factories shall be of type/return Collection. Methods shall have no parameters: " + ae))
@@ -333,7 +334,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 		
 	protected Consumer<R> wireRegistryEntry(Object processor) {
-		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass())
+		List<AccessibleObject> registryEntrySetters = Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.collect(Collectors.toList());
@@ -358,7 +359,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	protected abstract Iterable<Entry<Element, ProcessorInfo<P,R>>> registryEntries(R registry);
 
 	protected Consumer<R> wireRegistry(Object processor) {
-		List<AccessibleObject> registrySetters = getFieldsAndMethods(processor.getClass())
+		List<AccessibleObject> registrySetters = Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(Registry.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + ae))
 				.collect(Collectors.toList());
@@ -367,7 +368,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 
 	protected void wireProcessorElement(Object processor, Element element) {
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(ProcessorElement.class) != null)
 				.filter(ae -> mustSet(ae, element.getClass(), "Methods annotated with ProcessorElement must have one parameter compatible with the processor element type (" + element.getClass() + "): " + ae))
 				.forEach(setter -> {
@@ -376,7 +377,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 
 	protected Consumer<ProcessorInfo<P,R>> wireParentProcessor(Object processor) {
-		List<AccessibleObject> parentProcessorSetters = getFieldsAndMethods(processor.getClass())
+		List<AccessibleObject> parentProcessorSetters = Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(ParentProcessor.class) != null)
 				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if value is set to true: " + ae))
 				.collect(Collectors.toList());
@@ -398,7 +399,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	private Map<Element, ProcessorInfo<P,R>> wireChildProcessor(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo) {		
 		Map<Element, ProcessorInfo<P,R>> ret = new LinkedHashMap<>(childProcessorsInfo); 
 		
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(ChildProcessor.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.forEach(setter -> {
@@ -414,7 +415,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}	
 
 	protected void wireChildProcessors(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo) {		
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(ChildProcessors.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, childProcessorsInfo));
@@ -451,7 +452,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
 		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
 					ae, 
@@ -480,7 +481,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}	
 	
 	protected void wireIncomingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers) {				
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(IncomingHandlerConsumers.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, incomingHandlerConsumers));
@@ -563,7 +564,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 				
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
 		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
 					ae, 
@@ -599,7 +600,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 
 	protected void wireIncomingEndpoints(Object processor, Map<Connection, CompletionStage<E>> incomingEndpoints) {
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(IncomingEndpoints.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingEndpoints must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, incomingEndpoints));
@@ -636,7 +637,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing handler consumers.
 		// then filtering using matchOutgoingHandler, sorting by priority, wiring all matching and removing from ret.
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
 					ae, 
@@ -665,7 +666,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 	
 	protected void wireOutgoingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers) {
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(OutgoingHandlerConsumers.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, outgoingHandlerConsumers));
@@ -705,7 +706,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
 		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
 					ae, 
@@ -741,7 +742,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	}
 
 	protected void wireOutgoingEndpoints(Object processor, Map<Connection, CompletionStage<E>> outgoingEndpoints) {
-		getFieldsAndMethods(processor.getClass())
+		Util.getFieldsAndMethods(processor.getClass())
 				.filter(ae -> ae.getAnnotation(OutgoingEndpoints.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingEndpoints must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, outgoingEndpoints));
@@ -750,7 +751,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 	// Connection wiring
 	@SuppressWarnings("unchecked")
 	protected boolean wireTargetHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig) {
-		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> getter = Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(TargetHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get target connection handler"))
 			.findFirst();
@@ -768,7 +769,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			CompletionStage<E> targetEndpointCompletionStage, 
 			Function<Throwable, Void> failureHandler) {
 		
-		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> setter = Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
 			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set target connection endpoint"))
 			.findFirst();
@@ -785,7 +786,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 
 	@SuppressWarnings("unchecked")
 	protected boolean wireSourceHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig) {
-		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> getter = Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(SourceHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get source connection handler"))
 			.findFirst();
@@ -803,7 +804,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 			CompletionStage<E> sourceEndpointCompletionStage,
 			Function<Throwable, Void> failureHandler) {
 		
-		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> setter = Util.getFieldsAndMethods(processor.getClass())
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
 			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set source connection endpoint"))
 			.findFirst();
@@ -842,186 +843,6 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> implements Processo
 		}
 		
 		return matchPredicate(elementProcessorConfig.getElement(), elementProcessorAnnotation.value());
-	}
-
-	/**
-	 * Parses and evaluates expression using <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions">Spring Expression Language</a> 
-	 * @param obj
-	 * @param expr 
-	 * @return true if expression is blank or evaluates to true, false if the expression evaluates to false or throws EvaluationException.
-	 */
-	protected boolean matchPredicate(Object obj, String expr) {
-		if (Util.isBlank(expr)) {
-			return true;
-		}
-		
-		ExpressionParser parser = getExpressionParser();
-		Expression exp = parser.parseExpression(expr);
-		EvaluationContext evaluationContext = getEvaluationContext();
-		try {			
-			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
-		} catch (EvaluationException e) {
-			onEvaluationException(obj, expr, evaluationContext, e);
-			return false;
-		}
-	}
-	
-	protected EvaluationContext getEvaluationContext() {
-		return null;
-	}
-	
-	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
-		
-		@Override
-		protected SpelExpressionParser initialValue() {
-			return new SpelExpressionParser();			
-		}
-		
-	};
-
-	protected SpelExpressionParser getExpressionParser() {
-		return expressionParserThreadLocal.get();
-	}
-	
-	/**
-	 * Override to troubleshoot SPEL predicates.
-	 * @param obj
-	 * @param expr
-	 * @param evaluationContext
-	 */
-	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
-		
-	}
-	
-	/**
-	 * @return A stream of methods. Accessible methods for the introspection level ACCESSIBLE and declared methods from the class and all super classes and implemented interfaces for the introspection level DECLARED.
-	 */
-	protected static Stream<Method> getMethods(Class<?> clazz) {
-		if (clazz == null || Object.class.equals(clazz)) {
-			return Stream.empty();
-		}
-		
-		return Arrays.stream(clazz.getMethods());
-	}
-	
-	/**
-	 * @return A stream of fields. Accessible fields for the introspection level ACCESSIBLE and declared fields from the class and all super classes and implemented interfaces for the introspection level DECLARED.
-	 */
-	protected static Stream<Field> getFields(Class<?> clazz) {
-		if (clazz == null ||  Object.class.equals(clazz)) {
-			return Stream.empty();
-		}
-		
-		return Arrays.stream(clazz.getFields());
-	}
-	
-	protected static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz) {
-		return Stream.concat(getMethods(clazz), getFields(clazz));
-	}
-	
-	/**
-	 * Retrieves field value. May need to be overridden if the target class is not exported by its module.
-	 * @param target
-	 * @param field
-	 * @return
-	 */
-	protected Object getFieldValue(Object target, Field field) {
-		try {
-			return  field.get(target);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
-		}	
-	}
-
-	/**
-	 * Sets field value. May need to be overridden if the target class is not exported by its module.
-	 * @param target
-	 * @param field
-	 * @param value
-	 * @return
-	 */
-	protected void setFieldValue(Object target, Field field, Object value) {
-		try {
-			field.set(target, value);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
-		}	
-	}
-	
-	/**
-	 * Invokes method. May need to be overridden if the target class is not exported by its module.
-	 * @param target
-	 * @param method
-	 * @param args
-	 * @return
-	 */
-	protected Object invokeMethod(Object target, Method method, Object... args) {
-		try {
-			return method.invoke(target, args);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			throw new NasdanikaException("Error invoking " + method + " of " + target + ": " + e, e);
-		}		
-	}
-	
-	protected boolean canSet(AnnotatedElement element, Class<?> type) {
-		if (element instanceof Field) {
-			return type == null || ((Field) element).getType().isAssignableFrom(type);
-		}
-		if (element instanceof Method) {
-			Method method = (Method) element;
-			return !Modifier.isAbstract(((Member) method).getModifiers()) && method.getParameterCount() == 1 && (type == null || method.getParameterTypes()[0].isAssignableFrom(type));
-		}
-		return false;
-	}
-	
-	protected boolean mustSet(AnnotatedElement element, Class<?> type, String message) {
-		if (canSet(element, type)) {
-			return true;
-		}
-		throw new NasdanikaException(message);
-	}
-	
-	protected void set(Object target, AnnotatedElement element, Object value) {
-		if (element instanceof Field) {
-			setFieldValue(target, (Field) element, value);
-		} else if (element instanceof Method) {
-			invokeMethod(target, (Method) element, value);
-		} else {
-			throw new IllegalArgumentException("Cannot set value into " + element);
-		}
-	}
-	
-	protected Object get(Object target, AnnotatedElement element) {
-		if (element instanceof Field) {
-			return getFieldValue(target, (Field) element);
-		} 
-		if (element instanceof Method) {
-			return invokeMethod(target, (Method) element);
-		}
-		
-		throw new IllegalArgumentException("Cannot get value from " + element);
-	}
-	
-	protected boolean canGet(AnnotatedElement element, Class<?> type) {
-		if (element instanceof Field) {
-			return type == null || type.isAssignableFrom(((Field) element).getType());
-		}
-		if (element instanceof Method) {
-			Method method = (Method) element;					
-			return !Modifier.isAbstract(((Member) method).getModifiers()) && method.getParameterCount() == 0 && (type == null || type.isAssignableFrom(method.getReturnType()));
-		}
-		return false;
-	}
-	
-	protected boolean mustGet(AnnotatedElement element, Class<?> type, String message) {
-		if (canGet(element, type)) {
-			return true;
-		}
-		throw new NasdanikaException(message);
-	}
-
-	protected boolean isValueSupplier(AnnotatedElement element) {
-		return element instanceof Field || (element instanceof Method && ((Method) element).getParameterCount() == 0);
 	}
 	
 }

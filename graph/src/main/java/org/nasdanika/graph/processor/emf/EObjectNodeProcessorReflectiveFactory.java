@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.NasdanikaException;
+import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.processor.Factory;
@@ -26,7 +27,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  *
  */
 @Factory(type = EObjectNode.class)
-public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
+public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 		
 	@Processor(type = EObjectNode.class)
 	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config) {
@@ -99,54 +100,5 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> {
 		}
 		return a.hashCode() - b.hashCode();
 	}			
-
-	/**
-	 * Parses and evaluates expression using <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions">Spring Expression Language</a> 
-	 * @param obj
-	 * @param expr 
-	 * @return true if expression is blank or evaluates to true, false if the expression evaluates to false or throws EvaluationException.
-	 */
-	protected boolean matchPredicate(Object obj, String expr) {
-		if (Util.isBlank(expr)) {
-			return true;
-		}
-		
-		ExpressionParser parser = getExpressionParser();
-		Expression exp = parser.parseExpression(expr);
-		EvaluationContext evaluationContext = getEvaluationContext();
-		try {			
-			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
-		} catch (EvaluationException e) {
-			onEvaluationException(obj, expr, evaluationContext, e);
-			return false;
-		}
-	}
-	
-	protected EvaluationContext getEvaluationContext() {
-		return null;
-	}
-	
-	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
-		
-		@Override
-		protected SpelExpressionParser initialValue() {
-			return new SpelExpressionParser();			
-		}
-		
-	};
-
-	protected SpelExpressionParser getExpressionParser() {
-		return expressionParserThreadLocal.get();
-	}
-	
-	/**
-	 * Override to troubleshoot SPEL predicates.
-	 * @param obj
-	 * @param expr
-	 * @param evaluationContext
-	 */
-	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
-		
-	}
 	
 }
