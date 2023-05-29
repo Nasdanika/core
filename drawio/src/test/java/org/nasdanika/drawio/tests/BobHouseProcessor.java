@@ -5,7 +5,7 @@ import org.nasdanika.graph.processor.ChildProcessor;
 public class BobHouseProcessor implements Runnable {
 
 	@ChildProcessor("label == 'Bob'")
-	private BobProcessor bobProcessor;
+	public BobProcessor bobProcessor;
 	
 	
 	@Override

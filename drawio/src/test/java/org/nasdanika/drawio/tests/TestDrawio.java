@@ -46,7 +46,6 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.IntrospectionLevel;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
@@ -563,7 +562,7 @@ public class TestDrawio {
 	public void testReflectiveProcessorFactory() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
 				
-		org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<>(IntrospectionLevel.DECLARED, new AliceBobProcessorFactory()) {
+		org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointReflectiveProcessorFactory<>(new AliceBobProcessorFactory()) {
 			
 			/**
 			 * A trick around module things - test classes are not exported.
@@ -648,7 +647,7 @@ public class TestDrawio {
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
-		processorFactory.createProcessors(document, IntrospectionLevel.DECLARED, progressMonitor, registry);
+		processorFactory.createProcessors(document, progressMonitor, registry);
 		
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	

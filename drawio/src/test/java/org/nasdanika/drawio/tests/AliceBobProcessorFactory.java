@@ -29,7 +29,7 @@ public class AliceBobProcessorFactory {
 	}
 	
 //	@Factory
-	private Object libraryProcessor = new Object() {
+	public Object libraryProcessor = new Object() {
 	
 		@Processor("label == 'Library'")
 		public Function<String,String> createLibraryProcessor(NodeProcessorConfig<Object, Function<String,String>, Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> config) {

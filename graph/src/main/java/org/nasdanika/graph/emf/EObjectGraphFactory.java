@@ -51,7 +51,7 @@ public class EObjectGraphFactory {
 	}
 
 	protected EObjectNode createNode(EObject eObject, BiFunction<EObject, ProgressMonitor, ResultRecord> nodeFactory, ProgressMonitor progressMonitor) {
-		for (Method method: getClass().getMethods()) { 
+		for (Method method: getClass().getMethods()) { // TODO - targets?
 			if (matchNodeFactoryMethod(eObject, method)) {
 				try {
 					return (EObjectNode) method.invoke(this, eObject, nodeFactory, progressMonitor);

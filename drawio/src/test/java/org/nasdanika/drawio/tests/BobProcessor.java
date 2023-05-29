@@ -28,13 +28,13 @@ public class BobProcessor implements Runnable {
 	} 
 	
 	@ProcessorElement
-	private Node bobNode;
+	public Node bobNode;
 	
 	@ParentProcessor(true)
-	private ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> parentConfig;
+	public ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> parentConfig;
 	
 	@RegistryEntry("label == 'Library'")
-	private Function<String,String> library;
+	public Function<String,String> library;
 	
 	private NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> libraryConfig;
 	
@@ -44,10 +44,10 @@ public class BobProcessor implements Runnable {
 	};
 	
 	@Registry
-	private Map<Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>> registry;
+	public Map<Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>> registry;
 	
 	@IncomingHandler("source.label == 'Alice'")
-	private Function<String,String> aliceIncomingHandler = request -> {
+	public Function<String,String> aliceIncomingHandler = request -> {
 		System.out.println("Request: " + request);
 		System.out.println("Request: " + library.apply(request));
 		System.out.println(library.apply("Hello!"));		

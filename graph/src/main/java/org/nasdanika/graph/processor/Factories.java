@@ -26,11 +26,6 @@ public @interface Factories {
 	String value() default "";
 	
 	/**
-	 * @return {@link IntrospectionLevel}, DECLARED by default.
-	 */
-	IntrospectionLevel introspect() default IntrospectionLevel.DECLARED;
-	
-	/**
 	 * Matching priority. Defaults to 0. Higher priorities are matched before lower priorities.
 	 * @return
 	 */

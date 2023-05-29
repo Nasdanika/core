@@ -10,15 +10,15 @@ import org.nasdanika.graph.processor.ProcessorElement;
 public class AliceProcessor extends BobHouseProcessor {
 	
 	@ProcessorElement
-	private Node aliceNode;
+	public Node aliceNode;
 	
 	@OutgoingHandler("target.label == 'Bob'")
-	private Function<String,String> replyToBob = request -> {
+	public Function<String,String> replyToBob = request -> {
 		return request + System.lineSeparator() + "[" + aliceNode.getLabel() + "] My name is " + aliceNode.getLabel() + ".";
 	};
 	
 	@OutgoingEndpoint("target.label == 'Bob'")
-	private Function<String,String> bobEndpoint;
+	public Function<String,String> bobEndpoint;
 	
 	public String talkToBob(String str) {
 		return bobEndpoint.apply("[" + aliceNode.getLabel() + "] Hello!");

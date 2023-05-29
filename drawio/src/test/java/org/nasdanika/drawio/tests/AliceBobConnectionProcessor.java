@@ -10,15 +10,15 @@ import org.nasdanika.graph.processor.TargetHandler;
 public class AliceBobConnectionProcessor {
 	
 	@SourceEndpoint
-	Function<String,String> sourceEndpoint;
+	public Function<String,String> sourceEndpoint;
 	
 	@TargetEndpoint
-	Function<String,String> targetEndpoint;
+	public Function<String,String> targetEndpoint;
 	
 	@SourceHandler
-	Function<String,String> sourceHandler = request -> ">> " + targetEndpoint.apply(request);
+	public Function<String,String> sourceHandler = request -> ">> " + targetEndpoint.apply(request);
 	
 	@TargetHandler
-	Function<String,String> targetHandler = response -> "<< " + sourceEndpoint.apply(response);	
+	public Function<String,String> targetHandler = response -> "<< " + sourceEndpoint.apply(response);	
 	
 }
