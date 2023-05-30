@@ -86,8 +86,12 @@ public class Reflector {
 			if (other == null) {
 				return this;
 			}
-			
-			return new AnnotatedElementRecord<T>(this.and(other), target, annotatedElement);
+						
+			return new AnnotatedElementRecord<T>(e -> test(e) && other.test(e), target, annotatedElement);
+		}
+		
+		public AnnotatedElement getAnnotatedElement() {
+			return annotatedElement;
 		}
 		
 	}	

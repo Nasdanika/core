@@ -86,243 +86,193 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return registry;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProcessorInfo<P,R> createProcessor(ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {
-		for (Object target: targets) {
-			// TODO - split
-			ProcessorInfo<P,R> elementProcessorInfo = createProcessor(target, config, progressMonitor);
-			if (elementProcessorInfo != null) {
-				return elementProcessorInfo;
+		// TODO - progress steps.
+		Optional<AnnotatedElementRecord<Element>> match = annotatedElementRecords.stream()
+			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement()))
+			.sorted((a, b) -> compareProcessorMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
+			.findFirst();
+		
+		if (match.isPresent()) {
+			AnnotatedElementRecord<Element> matchedRecord = match.get();
+			Method method = (Method) matchedRecord.getAnnotatedElement();
+			Object processor;
+			if (method.getParameterCount() == 0) {
+				processor = matchedRecord.invoke();
+			} else {
+				processor = matchedRecord.invoke(config);
 			}
-		}
-		return ProcessorFactory.super.createProcessor(config, progressMonitor); 		
-	}		
-	
-	@SuppressWarnings("unchecked")
-	protected ProcessorInfo<P,R> createProcessor(Object target, ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {	
-		if (target != null 
-				&& (target.getClass().getAnnotation(Factory.class) == null 
-					|| (target.getClass().getAnnotation(Factory.class).type().isInstance(config.getElement()) && matchPredicate(config.getElement(), target.getClass().getAnnotation(Factory.class).value())))) {
-			
-			// TODO - progress steps.
-			Optional<Method> match = Util.getMethods(target.getClass())
-				.filter(m -> matchFactoryMethod(config, m))
-				.sorted(this::compareProcessorMethods)
-				.findFirst();
-			
-			if (match.isPresent()) {
-				Method method = match.get();
-				Object processor;
-				if (method.getParameterCount() == 0) {
-					processor = invokeMethod(target, method);
-				} else {
-					processor = invokeMethod(target, method, config);
-				}
-				if (processor != null) {
-					Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
-					
-					boolean hideWired = elementProcessorAnnotation.hideWired();
-					Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo());
-					wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo());
+			if (processor != null) {
+				Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
+				
+				boolean hideWired = elementProcessorAnnotation.hideWired();
+				Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo());
+				wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo());
 
-					Collection<Throwable> failures = new ArrayList<>();
-					Function<Throwable, Void> failureHandler  = failure -> {
-						if (failure != null) {
-							failures.add(failure);
+				Collection<Throwable> failures = new ArrayList<>();
+				Function<Throwable, Void> failureHandler  = failure -> {
+					if (failure != null) {
+						failures.add(failure);
+					}
+					return null;
+				};
+
+				Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor);
+				if (pc != null) {
+					config.getParentProcessorInfo().thenAccept(pc).exceptionally(failureHandler);
+				}
+				wireProcessorElement(processor, config.getElement());
+				
+				config.getRegistry().thenAccept(wireRegistryEntry(processor)).exceptionally(failureHandler);
+				
+				Consumer<R> rc = wireRegistry(processor);
+				if (rc != null) {
+					config.getRegistry().thenAccept(rc).exceptionally(failureHandler);
+				}
+				
+				ProcessorConfig<P,R> unwiredConfig;
+				
+				if (config instanceof NodeProcessorConfig) {
+					NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
+					Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), failureHandler);
+					wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints());
+					
+					Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers());
+					wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers());
+					
+					Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), failureHandler);
+					wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints());
+					
+					Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers());
+					wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers());
+					
+					unwiredConfig = new NodeProcessorConfig<P, H, E, R>() {
+
+						@Override
+						public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
+							return unwiredChildProcessorsInfo;
 						}
-						return null;
+
+						@Override
+						public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
+							return config.getParentProcessorInfo();
+						}
+
+						@Override
+						public CompletionStage<R> getRegistry() {
+							return config.getRegistry();
+						}
+
+						@Override
+						public Node getElement() {
+							return (Node) config.getElement();
+						}
+
+						@Override
+						public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
+							return unwiredIncomingEndpoints;
+						}
+
+						@Override
+						public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
+							return unwiredIncomingHandlerConsumers;
+						}
+
+						@Override
+						public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
+							return unwiredOutgoingEndpoints;
+						}
+
+						@Override
+						public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
+							return unwiredOutgoingHandlerConsumers;
+						}
 					};
+				} else if (config instanceof ConnectionProcessorConfig) {
+					ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E, R>) config;
+					boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), failureHandler);
+					boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig);
+					boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), failureHandler);
+					boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig);
+					
+					unwiredConfig = new ConnectionProcessorConfig<P, H, E, R>() {
 
-					Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor);
-					if (pc != null) {
-						config.getParentProcessorInfo().thenAccept(pc).exceptionally(failureHandler);
-					}
-					wireProcessorElement(processor, config.getElement());
-					
-					config.getRegistry().thenAccept(wireRegistryEntry(processor)).exceptionally(failureHandler);
-					
-					Consumer<R> rc = wireRegistry(processor);
-					if (rc != null) {
-						config.getRegistry().thenAccept(rc).exceptionally(failureHandler);
-					}
-					
-					ProcessorConfig<P,R> unwiredConfig;
-					
-					if (config instanceof NodeProcessorConfig) {
-						NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
-						Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), failureHandler);
-						wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints());
+						@Override
+						public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
+							return unwiredChildProcessorsInfo;
+						}
 						
-						Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers());
-						wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers());
-						
-						Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), failureHandler);
-						wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints());
-						
-						Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers());
-						wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers());
-						
-						unwiredConfig = new NodeProcessorConfig<P, H, E, R>() {
-	
-							@Override
-							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-								return unwiredChildProcessorsInfo;
-							}
-	
-							@Override
-							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-								return config.getParentProcessorInfo();
-							}
-	
-							@Override
-							public CompletionStage<R> getRegistry() {
-								return config.getRegistry();
-							}
-	
-							@Override
-							public Node getElement() {
-								return (Node) config.getElement();
-							}
-	
-							@Override
-							public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-								return unwiredIncomingEndpoints;
-							}
-	
-							@Override
-							public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
-								return unwiredIncomingHandlerConsumers;
-							}
-	
-							@Override
-							public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-								return unwiredOutgoingEndpoints;
-							}
-	
-							@Override
-							public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
-								return unwiredOutgoingHandlerConsumers;
-							}
-						};
-					} else if (config instanceof ConnectionProcessorConfig) {
-						ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E, R>) config;
-						boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), failureHandler);
-						boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig);
-						boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), failureHandler);
-						boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig);
-						
-						unwiredConfig = new ConnectionProcessorConfig<P, H, E, R>() {
-	
-							@Override
-							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-								return unwiredChildProcessorsInfo;
-							}
-							
-							@Override
-							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-								return config.getParentProcessorInfo();
-							}
-	
-							@Override
-							public CompletionStage<R> getRegistry() {
-								return config.getRegistry();
-							}
-	
-							@Override
-							public Connection getElement() {
-								return (Connection) config.getElement();
-							}
-	
-							@Override
-							public CompletionStage<E> getSourceEndpoint() {
-								return wiredSourceEndpoint ? null : connectionProcessorConfig.getSourceEndpoint();
-							}
-	
-							@Override
-							public void setSourceHandler(H sourceHandler) {
-								if (wiredSourceHandler) {
-									throw new IllegalStateException("Source handler is already wired for " + getElement());
-								}
-								connectionProcessorConfig.setSourceHandler(sourceHandler);
-							}
-	
-							@Override
-							public CompletionStage<E> getTargetEndpoint() {
-								return wiredTargetEndpoint ? null : connectionProcessorConfig.getTargetEndpoint();
-							}
-	
-							@Override
-							public void setTargetHandler(H targetHandler) {
-								if (wiredTargetHandler) {
-									throw new IllegalStateException("Target handler is already wired for " + getElement());
-								}
-								connectionProcessorConfig.setTargetHandler(targetHandler);
-							}
-						};
-					} else {
-						unwiredConfig = new ProcessorConfig<P,R>() {
-	
-							@Override
-							public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-								return unwiredChildProcessorsInfo;
-							}
-							
-							@Override
-							public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-								return config.getParentProcessorInfo();
-							}
-	
-							@Override
-							public CompletionStage<R> getRegistry() {
-								return config.getRegistry();
-							}
-	
-							@Override
-							public Element getElement() {
-								return config.getElement();
-							}
-	
-						};
-					}
+						@Override
+						public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
+							return config.getParentProcessorInfo();
+						}
 
-					return ProcessorInfo.of(hideWired ? unwiredConfig : config, (P) processor, () -> failures);
+						@Override
+						public CompletionStage<R> getRegistry() {
+							return config.getRegistry();
+						}
+
+						@Override
+						public Connection getElement() {
+							return (Connection) config.getElement();
+						}
+
+						@Override
+						public CompletionStage<E> getSourceEndpoint() {
+							return wiredSourceEndpoint ? null : connectionProcessorConfig.getSourceEndpoint();
+						}
+
+						@Override
+						public void setSourceHandler(H sourceHandler) {
+							if (wiredSourceHandler) {
+								throw new IllegalStateException("Source handler is already wired for " + getElement());
+							}
+							connectionProcessorConfig.setSourceHandler(sourceHandler);
+						}
+
+						@Override
+						public CompletionStage<E> getTargetEndpoint() {
+							return wiredTargetEndpoint ? null : connectionProcessorConfig.getTargetEndpoint();
+						}
+
+						@Override
+						public void setTargetHandler(H targetHandler) {
+							if (wiredTargetHandler) {
+								throw new IllegalStateException("Target handler is already wired for " + getElement());
+							}
+							connectionProcessorConfig.setTargetHandler(targetHandler);
+						}
+					};
+				} else {
+					unwiredConfig = new ProcessorConfig<P,R>() {
+
+						@Override
+						public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
+							return unwiredChildProcessorsInfo;
+						}
+						
+						@Override
+						public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
+							return config.getParentProcessorInfo();
+						}
+
+						@Override
+						public CompletionStage<R> getRegistry() {
+							return config.getRegistry();
+						}
+
+						@Override
+						public Element getElement() {
+							return config.getElement();
+						}
+
+					};
 				}
+
+				return ProcessorInfo.of(hideWired ? unwiredConfig : config, (P) processor, () -> failures);
 			}
-			
-			// Factories - TODO - recursive
-			List<Object> factories = Util.getFieldsAndMethods(target.getClass())
-					.filter(ae -> ae.getAnnotation(Factory.class) != null)
-					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factory.class).value()))
-					.filter(ae -> mustGet(ae, null, "Methods annotated with Factory shall have no parameters: " + ae))
-					.sorted((a, b) -> b.getAnnotation(Factory.class).priority() - a.getAnnotation(Factory.class).priority())
-					.map(ae -> get(target, ae))
-					.collect(Collectors.toList());
-			
-			for (Object factory: factories) {
-				// TODO - sub-monitors
-				ProcessorInfo<P,R> elementProcessorInfo = createProcessor(factory, config, progressMonitor);
-				if (elementProcessorInfo != null) {
-					return elementProcessorInfo;
-				}
-			}
-			
-			// TODO - recursive
-			factories = Util.getFieldsAndMethods(target.getClass())
-					.filter(ae -> ae.getAnnotation(Factories.class) != null)
-					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factories.class).value()))
-					.filter(ae -> mustGet(ae, Collection.class, "Methods and fields annotated with Factories shall be of type/return Collection. Methods shall have no parameters: " + ae))
-					.sorted((a, b) -> b.getAnnotation(Factories.class).priority() - a.getAnnotation(Factories.class).priority())
-					.flatMap(ae -> ((Collection<Object>) get(target, ae)).stream())
-					.collect(Collectors.toList());
-			
-			for (Object factory: factories) {
-				// TODO - sub-monitors
-				ProcessorInfo<P,R> elementProcessorInfo = createProcessor(factory, config, progressMonitor);
-				if (elementProcessorInfo != null) {
-					return elementProcessorInfo;
-				}
-			}			
-			
 		}
 		return null;
 	}
