@@ -3,12 +3,10 @@ package org.nasdanika.graph.processor;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -21,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,11 +30,6 @@ import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.EvaluationException;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 /**
  * Creates processor and wires hanlders and endpoints using annotations. 
@@ -49,10 +43,37 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  */
 public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector implements ProcessorFactory<P, H, E, R> {
 	
-	private Object[] targets;
+	private List<AnnotatedElementRecord<Element>> annotatedElementRecords = new ArrayList<>();
 
 	protected ReflectiveProcessorFactory(Object... targets) {
-		this.targets = targets;
+		for (Object target: targets) {
+			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+		}
+	}
+	
+	/**
+	 * Recursively collects annotated elements
+	 * @param target
+	 * @return
+	 */
+	protected Stream<AnnotatedElementRecord<Element>> getAnnotatedElementRecords(Object target) {
+		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae));
+	}
+	
+	protected Stream<AnnotatedElementRecord<Element>> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {
+		Factory factory = annotatedElement.getAnnotation(Factory.class);
+		if (factory == null) {			
+			Factories factories = annotatedElement.getAnnotation(Factories.class);
+			if (factories == null) {
+				return Stream.of(new AnnotatedElementRecord<>(null, target, annotatedElement));
+			}
+			Predicate<Element> factoriesPredicate = e -> factories.type().isInstance(e) && matchPredicate(e, factories.value());
+			@SuppressWarnings("unchecked")
+			Collection<Object> factoriesTargets = (Collection<Object>) get(target, annotatedElement);
+			return factoriesTargets.stream().flatMap(this::getAnnotatedElementRecords).map(r -> r.and(factoriesPredicate));
+		}
+		Predicate<Element> factoryPredicate = e -> factory.type().isInstance(e) && matchPredicate(e, factory.value());
+		return getAnnotatedElementRecords(get(target, annotatedElement)).map(r -> r.and(factoryPredicate));
 	}
 	
 	public R createProcessors(Element element, ProgressMonitor progressMonitor, Object... registryTargets) {
@@ -268,7 +289,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			}
 			
-			// Factories
+			// Factories - TODO - recursive
 			List<Object> factories = Util.getFieldsAndMethods(target.getClass())
 					.filter(ae -> ae.getAnnotation(Factory.class) != null)
 					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factory.class).value()))
@@ -285,6 +306,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			}
 			
+			// TODO - recursive
 			factories = Util.getFieldsAndMethods(target.getClass())
 					.filter(ae -> ae.getAnnotation(Factories.class) != null)
 					.filter(ae -> matchPredicate(config.getElement(), ae.getAnnotation(Factories.class).value()))

@@ -32,12 +32,6 @@ public @interface Factory {
 	String value() default "";
 	
 	/**
-	 * Matching priority. Defaults to 0. Higher priorities are matched before lower priorities.
-	 * @return
-	 */
-	int priority() default 0;
-	
-	/**
 	 * Matching by object type.
 	 * @return
 	 */

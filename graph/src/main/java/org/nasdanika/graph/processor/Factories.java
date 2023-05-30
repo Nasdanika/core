@@ -8,6 +8,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.Collection;
 
+import org.nasdanika.graph.Element;
+
 /**
  * For methods and fields this annotation indicates that the method return value or field value shall be a {@link Collection} 
  * whose elements are used as introspection targets to create element processors.
@@ -26,9 +28,9 @@ public @interface Factories {
 	String value() default "";
 	
 	/**
-	 * Matching priority. Defaults to 0. Higher priorities are matched before lower priorities.
+	 * Matching by object type.
 	 * @return
 	 */
-	int priority() default 0;
+	Class<? extends Element> type() default Element.class; 
 
 }
