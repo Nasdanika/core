@@ -1,13 +1,23 @@
 package org.nasdanika.common;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 import java.lang.annotation.Annotation;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
@@ -23,18 +33,72 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 public class Reflector {
 	
 	/**
+	 * On a type this annotation is used to filter reflective factory targets using this annotation value as a predicate.
+	 * Annotating a class without providing a value makes no sense.
+	 * 
+	 * For methods and fields this annotation indicates that the method return value or field value shall be used as 
+	 * introspection/reflection targets.
+	 * @author Pavel
+	 *
+	 */
+	@Retention(RUNTIME)
+	@Target({ FIELD, METHOD, TYPE })
+	@Inherited
+	public @interface Factory {
+		
+		/**
+		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions">Spring boolean expression</a>
+		 * which is evaluated in the context of an element. 
+		 * @return
+		 */
+		String value() default "";
+		
+		/**
+		 * Matching by object type.
+		 * @return
+		 */
+		Class<?> type() default Object.class; 
+
+	}
+	
+	/**
+	 * For methods and fields this annotation indicates that the method return value or field value shall be a {@link Collection} 
+	 * whose elements are used as introspection/reflection targets.
+	 * @author Pavel
+	 *
+	 */
+	@Retention(RUNTIME)
+	@Target({ FIELD, METHOD })
+	public @interface Factories {
+		
+		/**
+		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions">Spring boolean expression</a>
+		 * which is evaluated in the context of an element. 
+		 * @return
+		 */
+		String value() default "";
+		
+		/**
+		 * Matching by object type.
+		 * @return
+		 */
+		Class<?> type() default Object.class; 
+
+	}	
+	
+	/**
 	 * A record-like class of an {@link AnnotatedElement} - {@link Method} or {@link Field} - used for reflective operations.
 	 * Using class instead of a record to have access to the enclosing Reflector.
 	 * @author Pavel
 	 *
 	 */
-	protected class AnnotatedElementRecord<T> implements Predicate<T> {
+	protected class AnnotatedElementRecord implements Predicate<Object> {
 		
-		private Predicate<T> predicate;
+		private Predicate<Object> predicate;
 		private Object target;
 		private AnnotatedElement annotatedElement;
 
-		public AnnotatedElementRecord(Predicate<T> predicate, Object target, AnnotatedElement annotatedElement) {
+		public AnnotatedElementRecord(Predicate<Object> predicate, Object target, AnnotatedElement annotatedElement) {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
@@ -45,7 +109,7 @@ public class Reflector {
 		}
 
 		@Override
-		public boolean test(T t) {
+		public boolean test(Object t) {
 			return predicate == null ? true : predicate.test(t);
 		}
 		
@@ -82,12 +146,12 @@ public class Reflector {
 		}
 		
 		@Override
-		public AnnotatedElementRecord<T> and(Predicate<? super T> other) {
+		public AnnotatedElementRecord and(Predicate<Object> other) {
 			if (other == null) {
 				return this;
 			}
 						
-			return new AnnotatedElementRecord<T>(e -> test(e) && other.test(e), target, annotatedElement);
+			return new AnnotatedElementRecord(e -> test(e) && other.test(e), target, annotatedElement);
 		}
 		
 		public AnnotatedElement getAnnotatedElement() {
@@ -95,6 +159,31 @@ public class Reflector {
 		}
 		
 	}	
+	
+	/**
+	 * Recursively collects annotated elements
+	 * @param target
+	 * @return
+	 */
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target) {
+		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae));
+	}
+	
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {
+		Factory factory = annotatedElement.getAnnotation(Factory.class);
+		if (factory == null) {			
+			Factories factories = annotatedElement.getAnnotation(Factories.class);
+			if (factories == null) {
+				return Stream.of(new AnnotatedElementRecord(null, target, annotatedElement));
+			}
+			Predicate<Object> factoriesPredicate = e -> factories.type().isInstance(e) && matchPredicate(e, factories.value());
+			@SuppressWarnings("unchecked")
+			Collection<Object> factoriesTargets = (Collection<Object>) get(target, annotatedElement);
+			return factoriesTargets.stream().flatMap(this::getAnnotatedElementRecords).map(r -> r.and(factoriesPredicate));
+		}
+		Predicate<Object> factoryPredicate = e -> factory.type().isInstance(e) && matchPredicate(e, factory.value());
+		return getAnnotatedElementRecords(get(target, annotatedElement)).map(r -> r.and(factoryPredicate));
+	}
 
 	/**
 	 * Parses and evaluates expression using <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions">Spring Expression Language</a> 

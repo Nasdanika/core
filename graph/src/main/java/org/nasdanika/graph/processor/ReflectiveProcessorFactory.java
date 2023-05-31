@@ -19,9 +19,7 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
@@ -43,37 +41,12 @@ import org.nasdanika.graph.Node;
  */
 public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector implements ProcessorFactory<P, H, E, R> {
 	
-	private List<AnnotatedElementRecord<Element>> annotatedElementRecords = new ArrayList<>();
+	private List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 
 	protected ReflectiveProcessorFactory(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
-	}
-	
-	/**
-	 * Recursively collects annotated elements
-	 * @param target
-	 * @return
-	 */
-	protected Stream<AnnotatedElementRecord<Element>> getAnnotatedElementRecords(Object target) {
-		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae));
-	}
-	
-	protected Stream<AnnotatedElementRecord<Element>> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {
-		Factory factory = annotatedElement.getAnnotation(Factory.class);
-		if (factory == null) {			
-			Factories factories = annotatedElement.getAnnotation(Factories.class);
-			if (factories == null) {
-				return Stream.of(new AnnotatedElementRecord<>(null, target, annotatedElement));
-			}
-			Predicate<Element> factoriesPredicate = e -> factories.type().isInstance(e) && matchPredicate(e, factories.value());
-			@SuppressWarnings("unchecked")
-			Collection<Object> factoriesTargets = (Collection<Object>) get(target, annotatedElement);
-			return factoriesTargets.stream().flatMap(this::getAnnotatedElementRecords).map(r -> r.and(factoriesPredicate));
-		}
-		Predicate<Element> factoryPredicate = e -> factory.type().isInstance(e) && matchPredicate(e, factory.value());
-		return getAnnotatedElementRecords(get(target, annotatedElement)).map(r -> r.and(factoryPredicate));
 	}
 	
 	public R createProcessors(Element element, ProgressMonitor progressMonitor, Object... registryTargets) {
@@ -90,13 +63,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	@Override
 	public ProcessorInfo<P,R> createProcessor(ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {
 		// TODO - progress steps.
-		Optional<AnnotatedElementRecord<Element>> match = annotatedElementRecords.stream()
+		Optional<AnnotatedElementRecord> match = annotatedElementRecords.stream()
 			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement()))
 			.sorted((a, b) -> compareProcessorMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
 			.findFirst();
 		
 		if (match.isPresent()) {
-			AnnotatedElementRecord<Element> matchedRecord = match.get();
+			AnnotatedElementRecord matchedRecord = match.get();
 			Method method = (Method) matchedRecord.getAnnotatedElement();
 			Object processor;
 			if (method.getParameterCount() == 0) {

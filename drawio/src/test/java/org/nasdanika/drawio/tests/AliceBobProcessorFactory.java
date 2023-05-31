@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.nasdanika.common.Reflector.Factories;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.processor.Factories;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.graph.processor.ProcessorInfo;
