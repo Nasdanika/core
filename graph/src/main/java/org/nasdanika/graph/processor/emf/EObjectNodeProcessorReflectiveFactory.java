@@ -1,16 +1,18 @@
 package org.nasdanika.graph.processor.emf;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Reflector;
+import org.nasdanika.common.Reflector.Factory;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.emf.EObjectNode;
-import org.nasdanika.graph.processor.Factory;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.Processor;
 import org.nasdanika.ncore.util.NcoreUtil;
@@ -23,41 +25,60 @@ import org.nasdanika.ncore.util.NcoreUtil;
 @Factory(type = EObjectNode.class)
 public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 	
-	TODO
-	
-	protected Object[] targets; // TODO - Target record with predicate
-	
+	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
+
 	public EObjectNodeProcessorReflectiveFactory(Object... targets) {
-		// TODO - all targets - recurse through @Factory and @Factories
-		this.targets = targets;
+		for (Object target: targets) {
+			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
+		}
 	}
 	
-	record MethodRecord(Object target, URI identifierBase, Method method) {} 
+	protected class MethodEntry {
 		
+		AnnotatedElementRecord annotatedElementRecord;
+		URI identifierBase;
+		public MethodEntry(AnnotatedElementRecord annotatedElementRecord, URI identifierBase) {
+			super();
+			this.annotatedElementRecord = annotatedElementRecord;
+			this.identifierBase = identifierBase;
+		}
+
+		public AnnotatedElementRecord getAnnotatedElementRecord() {
+			return annotatedElementRecord;
+		}
+		
+		public URI getIdentifierBase() {
+			return identifierBase;
+		}
+		
+	}
+	
 	@Processor(type = EObjectNode.class)
 	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config) {
 		EObject eObj = ((EObjectNode) config.getElement()).getTarget();
 		
-		Optional<MethodRecord> factoryMethodRecordOptional = Stream.of(targets)
-				.flatMap(t -> Util.getMethods(t.getClass()).map(m -> createMethodRecord(t, m, eObj)))
+		Optional<MethodEntry> factoryMethodEntryOptional = annotatedElementRecords
+				.stream()
+				.filter(aer -> aer.test(config.getElement()) && aer.getAnnotatedElement() instanceof Method)
+				.map(aer -> createMethodEntry(aer, eObj))
 				.filter(Objects::nonNull)
-				.filter(mr -> isFactoryMethod(mr.method(), mr.identifierBase, eObj))
-				.sorted((a,b) -> compareFactoryMethods(a.method(), b.method()))
+				.filter(me -> isFactoryMethod(me, eObj))
+				.sorted((a,b) -> compareFactoryMethods(a.getAnnotatedElementRecord().getAnnotatedElement(), b.getAnnotatedElementRecord().getAnnotatedElement()))
 				.findFirst();
 		
-		if (factoryMethodRecordOptional.isEmpty()) {
+		if (factoryMethodEntryOptional.isEmpty()) {
 			return null;
 		}
 		
-		MethodRecord factoryMethodRecord = factoryMethodRecordOptional.get();
-		return invokeMethod(factoryMethodRecord.target(), factoryMethodRecord.method(), config);
+		MethodEntry factoryMethodEntry = factoryMethodEntryOptional.get();
+		return factoryMethodEntry.getAnnotatedElementRecord().invoke(config);
 	}
 	
-	protected MethodRecord createMethodRecord(Object target, Method method, EObject eObj) {
+	protected MethodEntry createMethodEntry(AnnotatedElementRecord aer, EObject eObj) {		
 		URI identifierBase = null;
 		EObjectNodeProcessor classAnnotation = getClass().getAnnotation(EObjectNodeProcessor.class);
 		if (classAnnotation == null) {
-			return new MethodRecord(target, null, method);
+			return new MethodEntry(aer, identifierBase);
 		}
 		if (!classAnnotation.type().isInstance(eObj)) {
 			return null;
@@ -70,11 +91,11 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 		if (!Util.isBlank(identifierStr)) {
 			identifierBase = URI.createURI(identifierStr); 
 		}
-		return new MethodRecord(target, identifierBase, method);		
+		return new MethodEntry(aer, identifierBase);
 	}
 	
-	protected boolean isFactoryMethod(Method method, URI identifierBase, EObject eObj) {
-		EObjectNodeProcessor annotation = method.getAnnotation(EObjectNodeProcessor.class);
+	protected boolean isFactoryMethod(MethodEntry methodEntry, EObject eObj) {
+		EObjectNodeProcessor annotation = methodEntry.getAnnotatedElementRecord().getAnnotation(EObjectNodeProcessor.class);
 		if (annotation == null) {
 			return false;
 		}
@@ -88,11 +109,14 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 			return true;
 		}
 		URI identifier = URI.createURI(identifierStr);
-		return NcoreUtil.getIdentifiers(eObj).contains(identifier) ? matchPredicate(eObj, annotation.value()) : false;
-		
+		URI identifierBase = methodEntry.getIdentifierBase();
+		if (identifierBase != null && !identifierBase.isRelative()) {
+			identifier = identifier.resolve(identifierBase);
+		}
+		return NcoreUtil.getIdentifiers(eObj).contains(identifier) ? matchPredicate(eObj, annotation.value()) : false;		
 	}
 
-	protected int compareFactoryMethods(Method a, Method b) {
+	protected int compareFactoryMethods(AnnotatedElement a, AnnotatedElement b) {
 		EObjectNodeProcessor aAnnotation = a.getAnnotation(EObjectNodeProcessor.class);
 		EObjectNodeProcessor bAnnotation = b.getAnnotation(EObjectNodeProcessor.class);
 		int priorityCmp = bAnnotation.priority() - aAnnotation.priority();
