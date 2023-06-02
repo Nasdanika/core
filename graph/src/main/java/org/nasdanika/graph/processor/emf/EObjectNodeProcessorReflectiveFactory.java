@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Reflector.Factory;
 import org.nasdanika.common.Util;
@@ -54,7 +55,7 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 	}
 	
 	@Processor(type = EObjectNode.class)
-	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config) {
+	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config, ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).getTarget();
 		
 		Optional<MethodEntry> factoryMethodEntryOptional = annotatedElementRecords
@@ -70,8 +71,9 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 			return null;
 		}
 		
-		MethodEntry factoryMethodEntry = factoryMethodEntryOptional.get();
-		return factoryMethodEntry.getAnnotatedElementRecord().invoke(config);
+		MethodEntry factoryMethodEntry = factoryMethodEntryOptional.get();		
+		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntry.getAnnotatedElementRecord();		
+		return ((Method) factoryAnnotatedElementRecord.getAnnotatedElement()).getParameterCount() == 2 ? factoryAnnotatedElementRecord.invoke(config, progressMonitor) : factoryAnnotatedElementRecord.invoke(config); 
 	}
 	
 	protected MethodEntry createMethodEntry(AnnotatedElementRecord aer, EObject eObj) {		

@@ -6,12 +6,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
 /**
  * Annotation for a method creating an {@link Element} processor.
- * The method shall have zero or one parameter. In the second case the parameter type shall be assignable from 
- * {@link ProcessorConfig} or its subclasses - {@link NodeProcessorConfig} or {@link ConnectionProcessorConfig}.
+ * The method shall have zero to two parameters. The first parameter type shall be assignable from 
+ * {@link ProcessorConfig} or its subclasses - {@link NodeProcessorConfig} or {@link ConnectionProcessorConfig}, the second - from {@link ProgressMonitor}.
  * An annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 
  * to methods and fields with annotations.
  * @author Pavel

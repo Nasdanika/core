@@ -77,8 +77,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		Object processor;
 		if (method.getParameterCount() == 0) {
 			processor = matchedRecord.invoke();
-		} else {
+		} else if (method.getParameterCount() == 1) {
 			processor = matchedRecord.invoke(config);
+		} else {
+			processor = matchedRecord.invoke(config, progressMonitor);			
 		}
 		if (processor == null) {
 			return ProcessorFactory.super.createProcessor(config, progressMonitor);			
@@ -781,11 +783,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 			return false;
 		}
 		
-		if (method.getParameterCount() > 1) {
+		if (method.getParameterCount() > 2) {
 			return false;
 		}
 		
-		if (method.getParameterCount() == 1 && !method.getParameterTypes()[0].isInstance(elementProcessorConfig)) {
+		if (method.getParameterCount() > 0 && !method.getParameterTypes()[0].isInstance(elementProcessorConfig)) {
+			return false;
+		}
+
+		if (method.getParameterCount() == 2 && !method.getParameterTypes()[1].isAssignableFrom(ProgressMonitor.class)) {
 			return false;
 		}
 		
