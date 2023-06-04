@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.URI;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -97,11 +98,19 @@ public class Reflector {
 		private Predicate<Object> predicate;
 		private Object target;
 		private AnnotatedElement annotatedElement;
+		private URI baseURI;
 
 		public AnnotatedElementRecord(Predicate<Object> predicate, Object target, AnnotatedElement annotatedElement) {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
+			if (annotatedElement instanceof Method) {
+				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Method) annotatedElement).getDeclaringClass().getName().replace('.', '/'));				
+			} else if (annotatedElement instanceof Field) {
+				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Field) annotatedElement).getDeclaringClass().getName().replace('.', '/'));								
+			} else if (annotatedElement instanceof Class) {
+				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Class<?>) annotatedElement).getName().replace('.', '/'));				
+			}
 		}
 		
 		public void set(Object value) {
@@ -157,6 +166,14 @@ public class Reflector {
 		public AnnotatedElement getAnnotatedElement() {
 			return annotatedElement;
 		}
+
+		/**
+		 * Classpath URI of the declaring class. Use to resolve resource references.
+		 * @return
+		 */
+		public URI getBaseURI() {
+			return baseURI;
+		}
 		
 	}	
 	
@@ -166,7 +183,15 @@ public class Reflector {
 	 * @return
 	 */
 	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target) {
-		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae));
+		Predicate<Object> targetPredicate = getTargetPredicate(target);
+		return Util.getFieldsAndMethods(target.getClass()).flatMap(ae -> getAnnotatedElementRecords(target, ae)).map(aer -> aer.and(targetPredicate));
+	}
+	
+	/**
+	 * @return target-specific predicate, e.g. filtering by an annotation on a target.
+	 */
+	protected Predicate<Object> getTargetPredicate(Object target) {
+		return null;
 	}
 	
 	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {
