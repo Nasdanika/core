@@ -32,11 +32,12 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 			Object key, 
 			Function<K,V> valueFactory,
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			Map<K,V> defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.valueFactory = valueFactory;
 	}
 

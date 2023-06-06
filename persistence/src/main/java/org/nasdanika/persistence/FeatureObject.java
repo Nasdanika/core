@@ -55,7 +55,11 @@ public class FeatureObject implements Marked, Loadable {
 	@Override
 	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		this.markers = markers;			
-		if (config instanceof Map) {
+		Optional<Feature<?>> constructorFeatureOptional = features.stream().filter(Feature::isConstructor).findFirst();
+		if (constructorFeatureOptional.isPresent()) {
+			Feature<?> constructorFeature = constructorFeatureOptional.get();
+			constructorFeature.load(loader, Collections.singletonMap(constructorFeature.getKey(), config), base, progressMonitor, markers);			
+		} else if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;
 			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).collect(Collectors.toList()));
 			for (Feature<?> feature: features) {

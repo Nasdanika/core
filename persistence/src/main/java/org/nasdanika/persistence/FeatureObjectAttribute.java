@@ -14,11 +14,12 @@ public class FeatureObjectAttribute<T extends FeatureObject> extends Attribute<T
 			Object key,
 			Supplier<T> factory,
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			T defaultValue, 
 			String description,
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.factory = factory;
 	}
 	

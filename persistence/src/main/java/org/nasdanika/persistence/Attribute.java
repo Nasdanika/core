@@ -15,17 +15,20 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	private boolean required;
 	private Object[] exclusiveWith;
 	private boolean isDefault;
+	private boolean isConstructor;
 	private String description;
 	
 	public Attribute(
 			Object key, 
 			boolean isDefault, 
+			boolean isConstructor,
 			boolean required, 
 			T defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
 		this.key = key;
 		this.isDefault = isDefault;
+		this.isConstructor = isConstructor;
 		this.required = required;
 		this.value = defaultValue;
 		this.description = description;
@@ -95,6 +98,11 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	@Override
 	public boolean isDefault() {
 		return isDefault;
+	}
+	
+	@Override
+	public boolean isConstructor() {
+		return isConstructor;
 	}
 
 	@Override

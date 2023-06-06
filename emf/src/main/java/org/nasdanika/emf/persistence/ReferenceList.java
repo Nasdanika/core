@@ -45,6 +45,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	public ReferenceList(
 			Object key, 
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			List<T> defaultValue, 
 			String description, 
@@ -54,7 +55,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 			boolean referenceSupplierFactory,
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.referenceFactory = new ReferenceFactory(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
 		this.keyProvider = keyProvider;
 		for (EAttribute rKey: eReference.getEKeys()) {
@@ -66,7 +67,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		if (config instanceof Map) {
 			if (!keys.isEmpty()) {
-				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getEReference());
+				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getETypedElement());
 				if (keys.size() == 1) {
 					// Converting entry set to a list of maps
 					String keyName = keys.get(0);

@@ -1,6 +1,6 @@
 package org.nasdanika.persistence;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 /**
  * Adapter interface to track features which were loaded. 
@@ -19,7 +19,7 @@ public interface LoadTracker {
 	 * @param feature
 	 * @return
 	 */
-	boolean isLoaded(EStructuralFeature feature);
+	boolean isLoaded(ETypedElement feature);
 	
 	/**
 	 * Feature is being loaded. This method
@@ -29,7 +29,7 @@ public interface LoadTracker {
 	 * @param feature
 	 * @return
 	 */
-	boolean isLoading(EStructuralFeature feature);
+	boolean isLoading(ETypedElement feature);
 	
 	/**
 	 * Returns loaded value which was provided to feature setter for changeable features.
@@ -37,6 +37,6 @@ public interface LoadTracker {
 	 * @param feature
 	 * @return
 	 */
-	Object get(EStructuralFeature feature);
+	Object get(ETypedElement feature);
 
 }

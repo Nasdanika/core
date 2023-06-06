@@ -44,6 +44,10 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		return delegate.isDefault();
 	}
 	
+	public boolean isConstructor() {
+		return delegate.isConstructor();
+	}
+	
 	public String getDescription() {
 		return delegate.getDescription();
 	}

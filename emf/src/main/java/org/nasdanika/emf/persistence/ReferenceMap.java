@@ -38,6 +38,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	public ReferenceMap(
 			Object key, 
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			Map<K,V> defaultValue, 
 			String description, 
@@ -47,7 +48,7 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 			boolean referenceSupplierFactory,
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		EStructuralFeature valueFeature = eReference.getEReferenceType().getEStructuralFeature("value");
 		if (valueFeature instanceof EReference) {
 			this.valueFactory = new ReferenceFactory(eClass, (EReference) valueFeature, eReference.getName(), resolver, referenceSupplierFactory, keyProvider);

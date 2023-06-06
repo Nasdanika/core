@@ -13,11 +13,12 @@ public class EnumAttribute<T extends Enum<T>> extends Attribute<T> {
 			Object key, 
 			Class<T> type, 
 			boolean isDefault,
+			boolean isConstructor, 
 			boolean required, 
 			T defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.type = type;
 	}
 	

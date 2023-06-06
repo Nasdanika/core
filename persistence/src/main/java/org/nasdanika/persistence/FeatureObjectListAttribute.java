@@ -20,11 +20,12 @@ public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAtt
 			Object key, 
 			Supplier<T> elementFactory,
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			List<T> defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.elementFactory = elementFactory;
 	}
 

@@ -20,9 +20,11 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
@@ -75,10 +77,18 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String LOAD_DOC_REF = "load-doc-reference";
 	
 	/**
-	 * If this Nasdanika annotation details is set to "true" on a {@link EStructuralFeature} and configuration object is not a map
-	 * then the configuration object is loaded into this feature. 
+	 * If this Nasdanika annotation details is set to "true" on {@link EStructuralFeature} or {@link EOperation} and configuration object is not a map
+	 * then the configuration object is loaded into this feature. On {@link EClass} annotation value is used as a name of default feature.
 	 */
 	public static final String IS_DEFAULT_FEATURE = "default-feature";
+	
+	/**
+	 * If this Nasdanika annotation details is set to "true" on {@link EStructuralFeature} or {@link EOperation} and configuration object is not a map
+	 * then the configuration object is loaded into this feature. On {@link EClass} annotation value is used as a name of constructor feature.
+	 */
+	public static final String IS_CONSTRUCTOR_FEATURE = "constructor-feature";
+	
+	// TODO - constructor operation taking the entire configuration
 	
 	/**
 	 * {@link EReference} annotation with a name of value feature as a value. 
@@ -133,7 +143,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param feature
 	 * @return Features in the argument class the argument feature is exclusive with.
 	 */
-	public static Object[] getExclusiveWith(EClass eClass, EStructuralFeature feature, BiFunction<EClass,ENamedElement,String> keyProvider) {
+	public static Object[] getExclusiveWith(EClass eClass, ENamedElement feature, BiFunction<EClass,ENamedElement,String> keyProvider) {
 		Set<String> ret = new HashSet<>();
 		for (EStructuralFeature sf: eClass.getEAllStructuralFeatures()) {
 			String exclusiveWithStr = NcoreUtil.getNasdanikaAnnotationDetail(sf, "exclusive-with"); // A space-separated list of load keys which are mutually exclusive with the annotated feature.
@@ -158,7 +168,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 */
 	public static final String IS_COMPUTED = "computed";
 	
-	public static boolean isDefaultFeature(EClass eClass, EStructuralFeature feature) {
+	public static boolean isDefaultFeature(EClass eClass, ENamedElement feature) {
 		if ("true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, IS_DEFAULT_FEATURE))) {
 			return true;
 		}
@@ -175,8 +185,25 @@ public class EObjectLoader extends DispatchingLoader {
 		return false;
 	}
 	
-	public static String getValueFeature(EReference eReference) {
-		return NcoreUtil.getNasdanikaAnnotationDetail(eReference, VALUE_FEATURE);
+	public static boolean isConstructorFeature(EClass eClass, ENamedElement feature) {
+		if ("true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, IS_CONSTRUCTOR_FEATURE))) {
+			return true;
+		}
+		String dfName = NcoreUtil.getNasdanikaAnnotationDetail(eClass, IS_CONSTRUCTOR_FEATURE);
+		if (!Util.isBlank(dfName)) {
+			return feature.getName().equals(dfName);
+		}
+		for (EClass st: eClass.getEAllSuperTypes()) {
+			dfName = NcoreUtil.getNasdanikaAnnotationDetail(st, IS_CONSTRUCTOR_FEATURE);
+			if (!Util.isBlank(dfName)) {
+				return feature.getName().equals(dfName);
+			}			
+		}
+		return false;
+	}
+	
+	public static String getValueFeature(ETypedElement eTypedElement) {
+		return NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, VALUE_FEATURE);
 	}	
 	
 	/**

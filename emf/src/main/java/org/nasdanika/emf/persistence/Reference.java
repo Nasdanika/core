@@ -37,6 +37,7 @@ public class Reference<T> extends Attribute<T> {
 	public Reference(
 			Object key, 
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			T defaultValue, 
 			String description, 
@@ -46,7 +47,7 @@ public class Reference<T> extends Attribute<T> {
 			boolean referenceSupplierFactory,
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.referenceFactory = new ReferenceFactory(eClass, eReference, null, resolver, referenceSupplierFactory, keyProvider);
 	}
 	

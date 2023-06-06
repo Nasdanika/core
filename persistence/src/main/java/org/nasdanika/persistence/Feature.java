@@ -21,6 +21,11 @@ public interface Feature<T> extends Marked {
 	 * @return If true, this feature is loaded if {@link FeatureObject} configuration is not a map. E.g. HTTP call can be configured with just a URL string, i.e. URL is the default feature of HTTP Call. 
 	 */
 	boolean isDefault();
+	
+	/**
+	 * @return If true, this feature is set to the entire configuration object. If there is a constructor feature all other features are ignored during loading. 
+	 */
+	boolean isConstructor();
 
 	void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);
 	

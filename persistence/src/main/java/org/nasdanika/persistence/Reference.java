@@ -12,8 +12,15 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public class Reference extends Attribute<Object> {
 
-	public Reference(Object key, boolean isDefault, boolean required, Object defaultValue, String description, Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+	public Reference(
+			Object key, 
+			boolean isDefault, 
+			boolean isConstructor, 
+			boolean required, 
+			Object defaultValue, 
+			String description, 
+			Object... exclusiveWith) {
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 	}
 	
 	@Override

@@ -20,11 +20,12 @@ public class Choice<T> extends Attribute<T> {
 			Object key, 
 			Function<Object, ObjectFactory<T>> selector,
 			boolean isDefault, 
+			boolean isConstructor, 
 			boolean required, 
 			T defaultValue, 
 			String description, 
 			Object... exclusiveWith) {
-		super(key, isDefault, required, defaultValue, description, exclusiveWith);
+		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.selector = selector;
 	}
 	
