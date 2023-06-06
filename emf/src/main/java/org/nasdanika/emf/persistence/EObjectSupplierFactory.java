@@ -42,6 +42,7 @@ import org.nasdanika.persistence.MapSupplierFactoryAttribute;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.StringSupplierFactoryAttribute;
+import org.nasdanika.persistence.SupplierFactoryFeatureObject;
 import org.nasdanika.persistence.TypedSupplierFactoryAttribute;
 
 /**
@@ -49,8 +50,11 @@ import org.nasdanika.persistence.TypedSupplierFactoryAttribute;
  * @author Pavel
  *
  */
-public class EObjectSupplierFactory extends ETypedElementSupplierFactoryFeatureObject<EObject> {
+public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject> {
 	
+	protected Map<String, ETypedElement> featureMap = new LinkedHashMap<>();
+	protected EObjectLoader loader;
+
 	private EClass eClass;
 		
 	private java.util.function.Function<EClass, EObject> constructor = this::instantiate;
@@ -68,7 +72,7 @@ public class EObjectSupplierFactory extends ETypedElementSupplierFactoryFeatureO
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			java.util.function.Function<EClass, EObject> constructor) {
 
-		super(loader);
+		this.loader = loader;
 		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
 		if (keyProvider == null) {
 			keyProvider = EObjectLoader.LOAD_KEY_PROVIDER; 
