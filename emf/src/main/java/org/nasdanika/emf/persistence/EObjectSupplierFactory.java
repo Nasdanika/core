@@ -113,35 +113,20 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
-		return wrapFeature(featureKey, feature, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, feature), EObjectLoader.isConstructorFeature(eClass, feature));
-	}
-	
-	/**
-	 * Wraps {@link EOperation} into {@link Feature}
-	 * @param operationKey
-	 * @param operation
-	 * @return
-	 */
-	protected Feature<?> wrapOperation(
-			String operationKey, 
-			EOperation operation, 
-			EObjectLoader loader, 
-			BiFunction<EClass,ENamedElement,String> keyProvider) {
-		
-		return wrapOperation(operationKey, operation, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, operation), EObjectLoader.isConstructorFeature(eClass, operation));
+		return wrapTypedElement(featureKey, feature, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, feature), EObjectLoader.isConstructorFeature(eClass, feature));
 	}
 
 	/**
-	 * Wraps {@link EStructuralFeature} into {@link Feature}. 
+	 * Wraps {@link ETypedElement} into {@link Feature}. 
 	 * Static version is needed for {@link EMap} support. 
 	 * @param featureKey
 	 * @param feature
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Feature<?> wrapFeature(
+	public Feature<?> wrapTypedElement(
 			String featureKey, 
-			EStructuralFeature feature, 
+			ETypedElement feature, 
 			EObjectLoader loader, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			boolean isDefault,
@@ -271,6 +256,21 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 	}
 	
 	/**
+	 * Wraps {@link EOperation} into {@link Feature}
+	 * @param operationKey
+	 * @param operation
+	 * @return
+	 */
+	protected Feature<?> wrapOperation(
+			String operationKey, 
+			EOperation operation, 
+			EObjectLoader loader, 
+			BiFunction<EClass,ENamedElement,String> keyProvider) {
+		
+		return wrapOperation(operationKey, operation, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, operation), EObjectLoader.isConstructorFeature(eClass, operation));
+	}
+	
+	/**
 	 * Wraps {@link EStructuralFeature} into {@link Feature}. 
 	 * Static version is needed for {@link EMap} support. 
 	 * @param featureKey
@@ -287,15 +287,6 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		
 		Object[] exclusiveWith = EObjectLoader.getExclusiveWith(eClass, operation, keyProvider);		
 		EModelElementDocumentation documentation = EmfUtil.getDocumentation(operation);
-		EList<EParameter> parameters = operation.getEParameters();
-		
-		// Wrapping parameters into features, building a map and then calling the operation. 
-		
-		if (parameters.size() == 1) {
-			// Same as a feature, attribute vs reference by parameter type - EClass or not.
-			
-			
-		}
 		
 		ParameterMap parameterMap = new ParameterMap(
 				operationKey, 
@@ -311,125 +302,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				exclusiveWith);
 		
 		return new MapSupplierFactoryAttribute<>(parameterMap, true);
-		
-		
-//		if (operation instanceof EAttribute) {
-//			if (feature.isMany()) {
-//				return new ListSupplierFactoryAttribute<>(new org.nasdanika.persistence.ReferenceList<>(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), true);
-//			}
-//			
-//			EClassifier featureType = feature.getEType();
-//			Class<?> featureClass = featureType.getInstanceClass();
-//			boolean interpolate = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
-//			if (String.class == featureClass) {
-//				org.nasdanika.persistence.Reference delegate = new org.nasdanika.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith) {
-//					
-//					@Override
-//					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) {
-//						Object ret = super.create(loader, config, base, progressMonitor, markers);
-//						if (base != null && !base.isRelative() && base.isHierarchical() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
-//							return URI.createURI((String) ret).resolve(base).toString();
-//						}
-//						return ret;
-//					}
-//					
-//				};
-//				return new StringSupplierFactoryAttribute(delegate, interpolate);
-//			}
-//			
-//			if (featureClass.isEnum()) {
-//				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate);
-//				return new EnumSupplierFactoryAttribute(stringAttribute, featureClass, null);
-//			}
-//			
-//			if (EClass.class == featureClass) {
-//				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate);
-//				FunctionFactory<String,EClass> functionFactory = new FunctionFactory<String, EClass>() {
-//
-//					@Override
-//					public Function<String, EClass> create(Context ctx) {
-//						return new Function<String, EClass>() {
-//
-//							@Override
-//							public double size() {
-//								return 1;
-//							}
-//
-//							@Override
-//							public String name() {
-//								return "Resolving type to EClass";
-//							}
-//
-//							@Override
-//							public EClass execute(String type, ProgressMonitor progressMonitor) {
-//								ResolutionResult result = loader.resolveEClass(type);
-//								if (result == null) {
-//									throw new ConfigurationException("Cannot resolve " + type+ " to EClass", EObjectSupplierFactory.this.getMarkers());
-//								}
-//								return result.eClass();
-//							}
-//							
-//						};
-//					}
-//					
-//				};
-//				return new FunctionSupplierFactoryAttribute(stringAttribute, functionFactory);
-//			}
-//			
-//			Function converter = null; // TODO: From annotations for, say, dates - parse pattern - SimpleDateFormat?
-//			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.persistence.Reference(featureKey, isDefault, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate, converter);			
-//		}
-//		
-//		if (feature instanceof EReference) {
-//			EReference eReference = (EReference) feature;
-//			if (feature.isMany()) {
-//				// EMap
-//				if (feature.getEType().getInstanceClass() == Map.Entry.class) {
-//					return new MapSupplierFactoryAttribute<>(new ReferenceMap<>(
-//							featureKey, 
-//							isDefault, 
-//							feature.isRequired(), 
-//							null, 
-//							documentation == null ? null : documentation.documentation(),
-//							eClass,
-//							eReference,
-//							loader,
-//							true,
-//							keyProvider,
-//							exclusiveWith), true);
-//				}
-//				return new ListSupplierFactoryAttribute<>(new ReferenceList<>(
-//						featureKey, 
-//						isDefault, 
-//						feature.isRequired(), 
-//						null, 
-//						documentation == null ? null : documentation.documentation(),
-//						eClass,
-//						eReference,
-//						loader,
-//						true,
-//						keyProvider,
-//						exclusiveWith), true);
-//			}
-//			
-//			return new DelegatingSupplierFactoryFeature<>(new Reference<>(
-//					featureKey, 
-//					isDefault, 
-//					feature.isRequired(), 
-//					null, 
-//					documentation == null ? null : documentation.documentation(),
-//					eClass,
-//					eReference,
-//					loader,
-//					true,					
-//					keyProvider,
-//					exclusiveWith));
-//			
-//		}
-//		
-//		throw new UnsupportedOperationException("Unusupported feature type: " + feature);
-	}
-	
+	}	
 
 	@Override
 	protected Function<Map<Object, Object>, EObject> createResultFunction(Context context) {
@@ -552,7 +425,15 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 									arguments.add(value);
 								} else {
 									for (EParameter parameter: operation.getEParameters()) {
-										arguments.add(((Map<String,Object>) value).get(parameter.getName()));
+										Object pValue = ((Map<String,Object>) value).get(parameter.getName());
+										if (parameter.isMany()) {
+											if (pValue instanceof Iterable) {
+												pValue = ECollections.newBasicEList((Iterable<?>) pValue);
+											} else {
+												pValue = ECollections.newBasicEList(pValue);
+											}
+										}
+										arguments.add(pValue);
 									}
 								}								
 								invokeOperation(ret, operation, arguments); 
