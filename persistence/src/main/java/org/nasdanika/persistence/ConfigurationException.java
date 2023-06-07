@@ -31,7 +31,7 @@ public class ConfigurationException extends NasdanikaException {
 	}
 
 	public ConfigurationException(String message, Throwable cause, List<? extends Marker> markers) {
-		super(markers == null || markers.isEmpty() ? message : message + " at " + markers.stream().map(m -> Marker.toString(m)).collect(Collectors.joining(", ")));
+		super(markers == null || markers.isEmpty() ? message : message + " at " + markers.stream().map(m -> Marker.toString(m)).collect(Collectors.joining(", ")), cause);
 		this.markers = markers;
 	}
 
