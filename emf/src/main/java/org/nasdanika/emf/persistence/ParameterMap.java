@@ -58,6 +58,15 @@ public class ParameterMap extends MapAttribute<String,Object> {
 	}
 	
 	@Override
+	public Map<String, Object> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+		// Single parameter unqualified 
+		if (parameterRecords.size() == 1) {
+			return super.create(loader, Map.of(parameterRecords.keySet().iterator().next(), config), base, progressMonitor, markers); 
+		}
+		return super.create(loader, config, base, progressMonitor, markers);
+	}
+	
+	@Override
 	protected Object createValue(ObjectLoader loader, String key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
 		ParameterRecord parameterRecord = parameterRecords.get(key);
 		if (parameterRecord == null) {
@@ -76,67 +85,3 @@ public class ParameterMap extends MapAttribute<String,Object> {
 	}
 	
 }
-
-// --- Value conversion based on EObject or not, single or many, ...
-
-//// Unwrapping singleton lists
-//if (structuralFeature instanceof EReference) {
-//	if (structuralFeature.isMany()) {
-//		if (value instanceof List) {
-//			List<Object> theValue = new ArrayList<>();
-//			for (Object element: (List<?>) value) {
-//				if (element instanceof List) {
-//					theValue.addAll((List<Object>) element);
-//				} else {
-//					theValue.add(element);
-//				}												
-//			}
-//			setFeature(ret, structuralFeature, theValue);
-//		} else if (value instanceof Map) {
-//			EClass refType = ((EReference) structuralFeature).getEReferenceType();
-//			boolean isManyValue = false;
-//			Class<?> refTypeInstanceClass = refType.getInstanceClass();
-//			if (refTypeInstanceClass != null && Map.Entry.class.isAssignableFrom(refTypeInstanceClass)) {
-//				EStructuralFeature valueFeature = refType.getEStructuralFeature("value");
-//				isManyValue = valueFeature != null && valueFeature.isMany();
-//			}
-//			Map<Object,Object> theValue = new LinkedHashMap<>();
-//			for (Entry<Object, Object> entry: ((Map<Object,Object>) value).entrySet()) {
-//				Object entryValue = entry.getValue();
-//				if (entryValue instanceof List) {
-//					List<?> entryValueList = (List<?>) entryValue;
-//					if (isManyValue) {
-//						List<Object> theEntryValueList = new ArrayList<>();
-//						for (Object entryValueElement: (List<?>) entryValueList) {
-//							if (entryValueElement instanceof List) {
-//								theEntryValueList.addAll((List<Object>) entryValueElement);
-//							} else {
-//								theEntryValueList.add(entryValueElement);
-//							}												
-//						}	
-//						theValue.put(entry.getKey(), theEntryValueList);
-//					} else {
-//						if (entryValueList.size() == 1) {
-//							theValue.put(entry.getKey(), entryValueList.get(0));														
-//						} else if (!entryValueList.isEmpty()) {
-//							throw new ConfigurationException("Map entry value list size is more than one: "+ entryValue, markers);
-//						}
-//					}
-//				} else {
-//					theValue.put(entry.getKey(), entryValue);
-//				}												
-//			}
-//			setFeature(ret, structuralFeature, theValue);											
-//		} else {
-//			setFeature(ret, structuralFeature, value);											
-//		}
-//	} else {
-//		if (value instanceof List && ((List<?>) value).size() == 1) {
-//			setFeature(ret, structuralFeature, ((List<?>) value).get(0));
-//		} else {
-//			setFeature(ret, structuralFeature, value);
-//		}
-//	}
-//} else {
-//	setFeature(ret, structuralFeature, value);
-//}

@@ -292,7 +292,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				operationKey, 
 				isDefault, 
 				isConstructor,
-				operation.isRequired(),
+				false, // TODO - annotation for operations which are required to be called during loading 
 				null,
 				documentation == null ? null : documentation.documentation(),
 				eClass,
@@ -421,21 +421,17 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							} else {
 								EOperation operation = (EOperation) featureTarget;
 								EList<Object> arguments = ECollections.newBasicEList();
-								if (operation.getEParameters().size() == 1) {
-									arguments.add(value);
-								} else {
-									for (EParameter parameter: operation.getEParameters()) {
-										Object pValue = ((Map<String,Object>) value).get(parameter.getName());
-										if (parameter.isMany()) {
-											if (pValue instanceof Iterable) {
-												pValue = ECollections.newBasicEList((Iterable<?>) pValue);
-											} else {
-												pValue = ECollections.newBasicEList(pValue);
-											}
+								for (EParameter parameter: operation.getEParameters()) {
+									Object pValue = ((Map<String,Object>) value).get(parameter.getName());
+									if (parameter.isMany()) {
+										if (pValue instanceof Iterable) {
+											pValue = ECollections.newBasicEList((Iterable<?>) pValue);
+										} else {
+											pValue = ECollections.newBasicEList(pValue);
 										}
-										arguments.add(pValue);
 									}
-								}								
+									arguments.add(pValue);
+								}
 								invokeOperation(ret, operation, arguments); 
 							}
 							loadedFeatures.put(featureTarget, value);
