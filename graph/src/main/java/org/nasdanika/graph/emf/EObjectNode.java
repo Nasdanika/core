@@ -1,6 +1,7 @@
 package org.nasdanika.graph.emf;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EReference;
@@ -26,27 +28,10 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 *
 	 */
 	public static record ResultRecord(EObjectNode node, boolean isNew) {}	
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(target);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EObjectNode other = (EObjectNode) obj;
-		return Objects.equals(target, other.target);
-	}
 
 	private EObject target;
-	private Collection<Connection> incomingConnections = new HashSet<>();
-	private Collection<Connection> outgoingConnections = new HashSet<>();
+	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
+	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
 
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
@@ -108,7 +93,15 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 					}
 				}
 			}
-		}		
+		}	
+		
+		EClass eClass = target.eClass();
+		if (eClass != target) {
+			EObjectNode eClassNode = registry.apply(eClass);
+			if (eClassNode != null) {
+				new EClassConnection(this, eClassNode);
+			}			
+		}
 	}
 	
 	public EObject getTarget() {
@@ -117,22 +110,36 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		Map<Connection, T> results = new LinkedHashMap<>();
-		for (Connection connection: getOutgoingConnections()) {
-			results.put(connection, connection.accept(visitor));
+		Map<org.nasdanika.graph.Connection, T> results = new LinkedHashMap<>();
+		synchronized (outgoingConnections) {
+			for (org.nasdanika.graph.Connection connection: outgoingConnections) {
+				results.put(connection, connection.accept(visitor));
+			}
 		}
 		return visitor.apply(this, results);
 	}
 
 	@Override
-	public Collection<Connection> getIncomingConnections() {
+	public Collection<org.nasdanika.graph.Connection> getIncomingConnections() {
 		return incomingConnections;
 	}
 
 	@Override
-	public Collection<Connection> getOutgoingConnections() {
+	public Collection<org.nasdanika.graph.Connection> getOutgoingConnections() {
 		return outgoingConnections;
 	}
+		
+	public void addIncomingConnection(org.nasdanika.graph.Connection connection) {
+		synchronized (incomingConnections) {
+			incomingConnections.add(connection);
+		}
+	}
+
+	public void addOutgoingConnection(org.nasdanika.graph.Connection connection) {
+		synchronized (outgoingConnections) {
+			outgoingConnections.add(connection);
+		}
+	}	
 
 	@Override
 	public Object getProperty(String name) {
@@ -143,6 +150,23 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	@Override
 	public String toString() {
 		return super.toString() + " " + getTarget() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(target);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EObjectNode other = (EObjectNode) obj;
+		return Objects.equals(target, other.target);
 	}
 
 }

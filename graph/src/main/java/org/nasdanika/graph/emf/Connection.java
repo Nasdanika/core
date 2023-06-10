@@ -20,8 +20,8 @@ public abstract class Connection implements org.nasdanika.graph.Connection {
 		this.target = target;
 		this.index = index;
 		this.path = path;
-		source.getOutgoingConnections().add(this);
-		target.getIncomingConnections().add(this);
+		source.addOutgoingConnection(this);
+		target.addIncomingConnection(this);
 	}
 
 	@Override
@@ -66,7 +66,6 @@ public abstract class Connection implements org.nasdanika.graph.Connection {
 			return false;
 		Connection other = (Connection) obj;
 		return getIndex() == other.getIndex() && Objects.equals(getSource(), other.getSource()) && Objects.equals(getTarget(), other.getTarget());
-	}
-	
+	}	
 	
 }
