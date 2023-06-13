@@ -770,7 +770,7 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T> Map<K, List<T>> groupBy(Collection<T> elements, java.util.function.Function<? super T, ? extends K> classifier) {
+	public static <K, T> Map<K, List<T>> groupBy(Collection<? extends T> elements, java.util.function.Function<? super T, ? extends K> classifier) {
 		Map<K, List<T>> ret = new LinkedHashMap<>();
 		groupBy(elements, classifier, ret);
 		return ret;
@@ -784,7 +784,7 @@ public class Util {
 	 * @param keyFeature
 	 * @return
 	 */
-	public static <K, T> void groupBy(Collection<T> elements, java.util.function.Function<? super T, ? extends K> classifier, Map<K, List<T>> collector) {
+	public static <K, T> void groupBy(Collection<? extends T> elements, java.util.function.Function<? super T, ? extends K> classifier, Map<K, List<T>> collector) {
 		for (T e: elements) {
 			K k = classifier.apply(e);
 			collector.computeIfAbsent(k, key -> new ArrayList<>()).add(e);

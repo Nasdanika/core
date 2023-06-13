@@ -72,7 +72,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 * @param registry
 	 */
 	@SuppressWarnings("unchecked")
-	void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory, ProgressMonitor progressMonitor) {		
+	protected void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory, ProgressMonitor progressMonitor) {		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (!eReference.isContainment()) {
 				Object val = target.eGet(eReference);

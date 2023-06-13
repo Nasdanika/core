@@ -22,8 +22,6 @@ public class EClassConnection implements org.nasdanika.graph.Connection {
 	/**
 	 * @param source
 	 * @param target
-	 * @param eReference
-	 * @param index -1 for single references.
 	 */
 	protected EClassConnection(EObjectNode source, EObjectNode target) {
 		this.source = source;
