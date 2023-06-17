@@ -1,9 +1,11 @@
 package org.nasdanika.graph.emf;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -29,7 +31,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 */
 	public static record ResultRecord(EObjectNode node, boolean isNew) {}	
 
-	private EObject target;
+	private List<EObject> targets = Collections.synchronizedList(new ArrayList<>());
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
 
@@ -40,7 +42,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			EReferenceConnection.Factory referenceConnectionFactory, 
 			EOperationConnection.Factory operationConnectionFactory, 
 			ProgressMonitor progressMonitor) {
-		this.target = target;
+		this.targets.add(target);
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (eReference.isContainment()) {
@@ -73,39 +75,47 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory, ProgressMonitor progressMonitor) {		
-		for (EReference eReference: target.eClass().getEAllReferences()) {
-			if (!eReference.isContainment()) {
-				Object val = target.eGet(eReference);
-				if (val != null) {
-					if (eReference.isMany()) {
-						int idx = 0;
-						for (EObject element: (Collection<EObject>) val) {
-							EObjectNode targetNode = registry.apply(element);
-							if (targetNode != null) {
-								referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);
+		synchronized (targets) {
+			for (EObject target: targets) {
+				for (EReference eReference: target.eClass().getEAllReferences()) {
+					if (!eReference.isContainment()) {
+						Object val = target.eGet(eReference);
+						if (val != null) {
+							if (eReference.isMany()) {
+								int idx = 0;
+								for (EObject element: (Collection<EObject>) val) {
+									EObjectNode targetNode = registry.apply(element);
+									if (targetNode != null) {
+										referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);
+									}
+								}
+							} else {
+								EObjectNode targetNode = registry.apply((EObject) val);
+								if (targetNode != null) {
+									referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
+								}
 							}
 						}
-					} else {
-						EObjectNode targetNode = registry.apply((EObject) val);
-						if (targetNode != null) {
-							referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
-						}
 					}
+				}	
+				
+				EClass eClass = target.eClass();
+				if (eClass != target) {
+					EObjectNode eClassNode = registry.apply(eClass);
+					if (eClassNode != null) {
+						new EClassConnection(this, eClassNode);
+					}			
 				}
 			}
-		}	
-		
-		EClass eClass = target.eClass();
-		if (eClass != target) {
-			EObjectNode eClassNode = registry.apply(eClass);
-			if (eClassNode != null) {
-				new EClassConnection(this, eClassNode);
-			}			
 		}
 	}
 	
 	public EObject getTarget() {
-		return target;
+		return targets.get(0);
+	}
+	
+	public List<EObject> getTargets() {
+		return targets;
 	}
 
 	@Override
@@ -143,18 +153,25 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public Object getProperty(String name) {
-		EStructuralFeature sf = getTarget().eClass().getEStructuralFeature(name);
-		return sf instanceof EAttribute ? getTarget().eGet(sf) : null;
+		synchronized (targets) {
+			for (EObject target: targets) {
+				EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
+				if (sf instanceof EAttribute) {
+					return getTarget().eGet(sf);
+				}				
+			}
+		}
+		return null;
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + " " + getTarget() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
+		return super.toString() + " " + getTargets() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(target);
+		return Objects.hash(targets);
 	}
 
 	@Override
@@ -166,7 +183,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		if (getClass() != obj.getClass())
 			return false;
 		EObjectNode other = (EObjectNode) obj;
-		return Objects.equals(target, other.target);
+		return Objects.equals(targets, other.targets);
 	}
 
 }

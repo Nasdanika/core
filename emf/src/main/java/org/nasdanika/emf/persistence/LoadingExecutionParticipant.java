@@ -33,6 +33,7 @@ import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.EObjectAdaptable;
 import org.nasdanika.emf.EmfUtil;
+import org.nasdanika.ncore.util.FeatureCacheAdapter;
 import org.nasdanika.ncore.util.NcoreResourceSet;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;

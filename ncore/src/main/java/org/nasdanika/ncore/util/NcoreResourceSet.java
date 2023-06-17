@@ -3,12 +3,20 @@ package org.nasdanika.ncore.util;
 import java.util.Optional;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.nasdanika.ncore.ModelElement;
 
 public class NcoreResourceSet extends ResourceSetImpl {
+	
+	// TODO - EObject <-> URI map for computing aliases
+	
+	public EList<ModelElement> getAliases(EObject eObj) {
+		throw new UnsupportedOperationException("TODO - resource-level adapter holding a graph of URI (identifier) - EObject. Two maps - EObject -> Set<URI>, URI -> Set<EObject>. Compute on demand and traverse on demand");
+	}
 
 	@Override
 	public EObject getEObject(URI uri, boolean loadOnDemand) {		

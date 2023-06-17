@@ -1,11 +1,11 @@
-package org.nasdanika.emf.persistence;
+package org.nasdanika.ncore.util;
 
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.nasdanika.emf.EObjectAdaptable;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * Computes feature value and caches. 
@@ -27,7 +27,7 @@ public interface FeatureCache {
 	 * @param add If true and adapter is not present, adds the adapter.
 	 */
 	static <F extends EStructuralFeature, T> T get(EObject target, F feature, BiFunction<EObject, F, T> computer, boolean add) {
-		FeatureCache adapter = EObjectAdaptable.adaptTo(target, FeatureCache.class);
+		FeatureCache adapter = (FeatureCache) EcoreUtil.getRegisteredAdapter(target, FeatureCache.class);
 		if (adapter == null) {
 			if (add) {
 				adapter = new FeatureCacheAdapter();

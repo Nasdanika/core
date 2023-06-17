@@ -1,4 +1,4 @@
-package org.nasdanika.emf.persistence;
+package org.nasdanika.ncore.util;
 
 import java.util.HashMap;
 import java.util.Map;

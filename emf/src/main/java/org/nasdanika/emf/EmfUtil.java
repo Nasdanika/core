@@ -41,7 +41,7 @@ import org.nasdanika.common.Diagnostic;
 import org.nasdanika.common.Status;
 import org.nasdanika.common.Util;
 import org.nasdanika.emf.persistence.EObjectLoader;
-import org.nasdanika.emf.persistence.FeatureCacheAdapter;
+import org.nasdanika.ncore.util.FeatureCacheAdapter;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 public class EmfUtil {

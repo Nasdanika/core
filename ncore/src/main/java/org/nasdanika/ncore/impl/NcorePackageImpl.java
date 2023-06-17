@@ -690,6 +690,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getModelElement_Aliases() {
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getRepresentationEntry() {
 		return representationEntryEClass;
 	}
@@ -1235,6 +1245,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEReference(modelElementEClass, MODEL_ELEMENT__LABEL_PROTOTYPE);
 		createEReference(modelElementEClass, MODEL_ELEMENT__REPRESENTATIONS);
 		createEReference(modelElementEClass, MODEL_ELEMENT__ANNOTATIONS);
+		createEReference(modelElementEClass, MODEL_ELEMENT__ALIASES);
 
 		representationEntryEClass = createEClass(REPRESENTATION_ENTRY);
 		createEAttribute(representationEntryEClass, REPRESENTATION_ENTRY__KEY);
@@ -1417,6 +1428,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getModelElement_Representations(), this.getRepresentationEntry(), null, "representations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_Annotations(), this.getProperty(), null, "annotations", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getModelElement_Annotations().getEKeys().add(this.getProperty_Name());
+		initEReference(getModelElement_Aliases(), this.getModelElement(), null, "aliases", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, !IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
 		initEClass(representationEntryEClass, java.util.Map.Entry.class, "RepresentationEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRepresentationEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1596,6 +1608,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty",
 			   "value-feature", "value"
+		   });
+		addAnnotation
+		  (getModelElement_Aliases(),
+		   source,
+		   new String[] {
+			   "opposite", "aliases"
 		   });
 		addAnnotation
 		  (getRepresentationEntry_Value(),
@@ -1847,6 +1865,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Annotations are used to store custom data similar to Java and Ecore annotations. "
+		   });
+		addAnnotation
+		  (getModelElement_Aliases(),
+		   source,
+		   new String[] {
+			   "documentation", "Two model elements are aliases if they have overlapping URI\'s."
 		   });
 		addAnnotation
 		  (representationEntryEClass,

@@ -2,16 +2,17 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -27,12 +28,14 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.BasicInternalEList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.util.FeatureCache;
+import org.nasdanika.ncore.util.NcoreResourceSet;
 import org.nasdanika.ncore.util.NcoreUtil;
+import org.nasdanika.persistence.ConfigurationException;
 
 /**
  * <!-- begin-user-doc -->
@@ -49,6 +52,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getLabelPrototype <em>Label Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getAnnotations <em>Annotations</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.ModelElementImpl#getAliases <em>Aliases</em>}</li>
  * </ul>
  *
  * @generated
@@ -221,6 +225,25 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * Works only in NcoreResourceSet
+	 * @generated NOT
+	 */
+	@Override
+	public EList<ModelElement> getAliases() {
+		Resource eResource = eResource();
+		if (eResource != null) {
+			ResourceSet resourceSet = eResource.getResourceSet();
+			if (resourceSet instanceof NcoreResourceSet) {
+				return FeatureCache.get(this, NcorePackage.Literals.MODEL_ELEMENT__ALIASES, (BiFunction<EObject, EReference, EList<ModelElement>>) (obj, ref) -> ((NcoreResourceSet) resourceSet).getAliases(obj), true);		
+				
+			}
+		}		
+		return ECollections.emptyEList(); // return (EList<ModelElement>)eDynamicGet(NcorePackage.MODEL_ELEMENT__ALIASES, NcorePackage.Literals.MODEL_ELEMENT__ALIASES, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -261,6 +284,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				else return getRepresentations().map();
 			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
 				return getAnnotations();
+			case NcorePackage.MODEL_ELEMENT__ALIASES:
+				return getAliases();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -357,6 +382,8 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return !getRepresentations().isEmpty();
 			case NcorePackage.MODEL_ELEMENT__ANNOTATIONS:
 				return !getAnnotations().isEmpty();
+			case NcorePackage.MODEL_ELEMENT__ALIASES:
+				return !getAliases().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
