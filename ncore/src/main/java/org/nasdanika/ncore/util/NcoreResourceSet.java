@@ -1,8 +1,15 @@
 package org.nasdanika.ncore.util;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -12,10 +19,47 @@ import org.nasdanika.ncore.ModelElement;
 
 public class NcoreResourceSet extends ResourceSetImpl {
 	
-	// TODO - EObject <-> URI map for computing aliases
+	private Map<URI, Set<ModelElement>> uriToModelElementtMap;
+	private Map<ModelElement, List<URI>> modelElementToURIMap;
 	
-	public EList<ModelElement> getAliases(EObject eObj) {
-		throw new UnsupportedOperationException("TODO - resource-level adapter holding a graph of URI (identifier) - EObject. Two maps - EObject -> Set<URI>, URI -> Set<EObject>. Compute on demand and traverse on demand");
+	
+	public EList<ModelElement> getAliases(ModelElement modelElement) {
+		if (uriToModelElementtMap == null) {
+			uriToModelElementtMap = new HashMap<>();
+			modelElementToURIMap = new HashMap<>();
+			TreeIterator<Notifier> cit = getAllContents();
+			while (cit.hasNext()) {
+				Notifier next = cit.next();				
+				if (next instanceof ModelElement) {
+					ModelElement nextModelElement = (ModelElement) next;
+					List<URI> identifiers = NcoreUtil.getIdentifiers(nextModelElement);
+					modelElementToURIMap.put(nextModelElement, identifiers);
+					for (URI identifier: identifiers) {
+						uriToModelElementtMap.computeIfAbsent(identifier, uri -> new HashSet<>()).add(nextModelElement);
+					}
+				}
+			}	
+									
+			// Removing single (no alias) uri -> Model Element mappings
+			uriToModelElementtMap.entrySet().removeIf(e -> e.getValue().size() == 1);
+		}
+		Set<ModelElement> collector = new HashSet<>();
+		collectAliases(modelElement, collector);
+		collector.remove(modelElement);
+		return ECollections.unmodifiableEList(ECollections.toEList(collector));
+	}
+	
+	private void collectAliases(ModelElement modelElement, Set<ModelElement> collector) {
+		if (modelElement != null && collector.add(modelElement)) {
+			for (URI identifier: modelElementToURIMap.get(modelElement)) {				
+				Set<ModelElement> modelElements = uriToModelElementtMap.get(identifier);
+				if (modelElements != null) {
+					for (ModelElement me: modelElements) {
+						collectAliases(me, collector);
+					}
+				}
+			}
+		}
 	}
 
 	@Override

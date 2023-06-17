@@ -277,10 +277,13 @@ public final class NcoreUtil {
 							ownIdentifiers.add(URI.createURI(((EPackage) eObj).getNsURI()));
 						} else {
 							EReference containmentFeature = eObj.eContainmentFeature();
-							if (containmentFeature == null) {
-								ownIdentifiers.add(URI.createURI(((ENamedElement) eObj).getName()));
-							} else {
-								ownIdentifiers.add(URI.createURI(containmentFeature.getName() + "/" + ((ENamedElement) eObj).getName()));								
+							String name = ((ENamedElement) eObj).getName();
+							if (!Util.isBlank(name)) {
+								if (containmentFeature == null) {
+									ownIdentifiers.add(URI.createURI(name));
+								} else {
+									ownIdentifiers.add(URI.createURI(containmentFeature.getName() + "/" + name));								
+								}
 							}
 						}
 					}

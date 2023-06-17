@@ -234,7 +234,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		if (eResource != null) {
 			ResourceSet resourceSet = eResource.getResourceSet();
 			if (resourceSet instanceof NcoreResourceSet) {
-				return FeatureCache.get(this, NcorePackage.Literals.MODEL_ELEMENT__ALIASES, (BiFunction<EObject, EReference, EList<ModelElement>>) (obj, ref) -> ((NcoreResourceSet) resourceSet).getAliases(obj), true);		
+				return FeatureCache.get(this, NcorePackage.Literals.MODEL_ELEMENT__ALIASES, (BiFunction<EObject, EReference, EList<ModelElement>>) (obj, ref) -> ((NcoreResourceSet) resourceSet).getAliases((ModelElement) obj), true);		
 				
 			}
 		}		
