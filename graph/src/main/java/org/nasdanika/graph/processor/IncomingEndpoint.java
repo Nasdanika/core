@@ -7,9 +7,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.nasdanika.common.ProgressMonitor;
+
 /**
- * Field or method to inject a matching incoming endpoint. A method shall have one or two parameters. 
+ * Field or method to inject a matching incoming endpoint. A method shall have one, two or three parameters. 
  * If a single parameter than the endpoint is passed to the method. If two parameters then the connection and endpoint are passed - it allows to use one method for more than one connection/endpoint.   
+ * In case of 3 parameters a {@link ProgressMonitor} is passed as the third argument   
  * @author Pavel
  *
  */

@@ -116,13 +116,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		
 		if (config instanceof NodeProcessorConfig) {
 			NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
-			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), failureHandler);
+			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), failureHandler, progressMonitor);
 			wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints());
 			
 			Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers());
 			wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers());
 			
-			Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), failureHandler);
+			Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), failureHandler, progressMonitor);
 			wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints());
 			
 			Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers());
@@ -449,10 +449,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		if (endpointMember instanceof Method) {
 			Method endpointMethod = (Method) endpointMember;
 			int pc = endpointMethod.getParameterCount();
-			if (pc == 0 || pc > 2) {
-				throw new NasdanikaException("A method annotated with IncomingEndpoint shall have one or two parameters: " + endpointMethod);
+			if (pc == 0 || pc > 3) {
+				throw new NasdanikaException("A method annotated with IncomingEndpoint shall have 1 - 3 parameters: " + endpointMethod);
 			}
-			if (pc == 2 && !endpointMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
+			if (pc > 1 && !endpointMethod.getParameterTypes()[0].isInstance(incomingConnection)) {
 				return false;				
 			}
 		}
@@ -506,7 +506,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
-			Function<Throwable, Void> failureHandler) {
+			Function<Throwable, Void> failureHandler, 
+			ProgressMonitor progressMonitor) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
 		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
@@ -532,11 +533,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 							setFieldValue(processor, (Field) endpointMember, incomingEndpoint);
 						} else {
 							Method endpointMethod = (Method) endpointMember;
-							if (endpointMethod.getParameterCount() == 1) {
+							switch (endpointMethod.getParameterCount()) {
+							case 1:
 								invokeMethod(processor, endpointMethod, incomingEndpoint);
-							} else {
+								break;
+							case 2:
 								invokeMethod(processor, endpointMethod, incomingConnection, incomingEndpoint);						
-							}
+								break;
+							case 3:
+								invokeMethod(processor, endpointMethod, incomingConnection, incomingEndpoint, progressMonitor);						
+								break;								
+							default:
+								throw new NasdanikaException("Incoming endpoint method shall have 1 to 3 parameters: " + endpointMethod);
+							}							
 						}					
 					}).exceptionally(failureHandler);
 					if (endpointMember.getAnnotation(IncomingEndpoint.class).consume()) {
@@ -634,10 +643,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		if (endpointMember instanceof Method) {
 			Method endpointMethod = (Method) endpointMember;
 			int pc = endpointMethod.getParameterCount();
-			if (pc == 0 || pc > 2) {
-				throw new NasdanikaException("A method annotated with OutgoingEndpoint shall have one or two parameters: " + endpointMethod);
+			if (pc == 0 || pc > 3) {
+				throw new NasdanikaException("A method annotated with OutgoingEndpoint shall have 1 - 3 parameters: " + endpointMethod);
 			}
-			if (pc == 2 && !endpointMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
+			if (pc > 1 && !endpointMethod.getParameterTypes()[0].isInstance(outgoingConnection)) {
 				return false;				
 			}
 		}
@@ -648,7 +657,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	protected Map<Connection, CompletionStage<E>> wireOutgoingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
-			Function<Throwable, Void> failureHandler) {
+			Function<Throwable, Void> failureHandler, 
+			ProgressMonitor progressMonitor) {
 						
 		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
 		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
@@ -674,10 +684,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 							setFieldValue(processor, (Field) endpointMember, outgoingEndpoint);
 						} else {
 							Method endpointMethod = (Method) endpointMember;
-							if (endpointMethod.getParameterCount() == 1) {
+							switch (endpointMethod.getParameterCount()) {
+							case 1:
 								invokeMethod(processor, endpointMethod, outgoingEndpoint);
-							} else {
-								invokeMethod(processor, endpointMethod, outgoingConnection, outgoingEndpoint);						
+								break;
+							case 2:
+								invokeMethod(processor, endpointMethod, outgoingConnection, outgoingEndpoint);
+								break;
+							case 3:
+								invokeMethod(processor, endpointMethod, outgoingConnection, outgoingEndpoint, progressMonitor);
+								break;								
+							default:
+								throw new NasdanikaException("Outgoing endpoint method shall have 1 to 3 parameters: " + endpointMethod);
 							}
 						}					
 					}).exceptionally(failureHandler);
