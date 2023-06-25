@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -450,7 +451,7 @@ public final class NcoreUtil {
 	 * @param feature Feature
 	 * @return
 	 */
-	public static String getFeatureKey(EClass eClass, EStructuralFeature feature) {
+	public static String getFeatureKey(EClass eClass, ETypedElement feature) {
 		String featureKey = NcoreUtil.getNasdanikaAnnotationDetail(feature, FEATURE_KEY);
 		if (!Util.isBlank(featureKey)) {
 			return featureKey;
