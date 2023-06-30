@@ -1,7 +1,6 @@
 package org.nasdanika.drawio.tests;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +89,7 @@ public class GraphComputer implements NopEndpointJoiningBiFunctionProcessorFacto
 			Map<Connection, BiFunction<String, ProgressMonitor, String>> incomingEndpoints,
 			Map<Connection, BiFunction<String, ProgressMonitor, String>> outgoingEndpoints,
 			NodeProcessorConfig<BiFunction<String, ProgressMonitor, String>, BiFunction<String, ProgressMonitor, String>, BiFunction<String, ProgressMonitor, String>, Object> nodeProcessorConfig,
-			Collection<Throwable> failures, Map<Connection, List<History<String>>> incomingHistory,
+			Map<Connection, List<History<String>>> incomingHistory,
 			Map<Connection, List<History<String>>> outgoingHistory) {
 		
 		StringBuilder sb = new StringBuilder();		

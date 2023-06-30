@@ -1,6 +1,5 @@
 package org.nasdanika.graph.processor.function;
 
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +49,9 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 		
 		History<H> history = createHistory(input, progressMonitor);
 		List<History<H>> sourceHistory = getSourceHistory(connectionProcessorConfig.getElement(), progressMonitor);
-		sourceHistory.add(history);
+		synchronized (sourceHistory) {
+			sourceHistory.add(history);
+		}
 		return sourceApply(connectionProcessorConfig, input, progressMonitor, targetEndpoint, sourceHistory);
 	}
 	
@@ -72,7 +73,9 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 			ProgressMonitor progressMonitor, 
 			BiFunction<V, ProgressMonitor, W> sourceEndpoint) {
 		List<History<H>> targetHistory = getTargetHistory(connectionProcessorConfig.getElement(), progressMonitor);
-		targetHistory.add(createHistory(input, progressMonitor));
+		synchronized (targetHistory) {
+			targetHistory.add(createHistory(input, progressMonitor));
+		}
 		return targetApply(connectionProcessorConfig, input, progressMonitor, sourceEndpoint, targetHistory);
 	}
 
@@ -81,7 +84,7 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 			T input, 
 			ProgressMonitor progressMonitor, 
 			BiFunction<V, ProgressMonitor, W> sourceEndpoint,
-			List<History<H>> sourceHistory);
+			List<History<H>> targetHistory);
 	
 	@Override
 	default U nodeApply(
@@ -91,15 +94,16 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 			T input, 
 			ProgressMonitor progressMonitor,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
-			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
-			Collection<Throwable> failures) {
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints) {
 		
 		Map<Connection, List<History<H>>> incomingHistory = new LinkedHashMap<>();
 		Node node = nodeProcessorConfig.getElement();
 		for (Connection incomingConnection: node.getIncomingConnections()) {
 			List<History<H>> ich = getIncomingHistory(node, incomingConnection, progressMonitor);
 			if (isIncoming && connection == incomingConnection) {
-				ich.add(createHistory(input, progressMonitor));				
+				synchronized (ich) {				
+					ich.add(createHistory(input, progressMonitor));
+				}
 			}
 			incomingHistory.put(incomingConnection, ich);
 		}
@@ -108,7 +112,9 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 		for (Connection outgoingConnection: node.getOutgoingConnections()) {
 			List<History<H>> och = getIncomingHistory(node, outgoingConnection, progressMonitor);
 			if (!isIncoming && connection == outgoingConnection) {
-				och.add(createHistory(input, progressMonitor));				
+				synchronized (och) {
+					och.add(createHistory(input, progressMonitor));
+				}
 			}
 			outgoingHistory.put(outgoingConnection, och);
 		}
@@ -121,7 +127,6 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 				incomingEndpoints, 
 				outgoingEndpoints, 
 				nodeProcessorConfig, 
-				failures, 
 				incomingHistory, 
 				outgoingHistory);
 	}
@@ -134,7 +139,6 @@ public interface JoiningBiFunctionProcessorFactory<T,U,V,W,R,H> extends BiFuncti
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
 			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> nodeProcessorConfig,
-			Collection<Throwable> failures,
 			Map<Connection, List<History<H>>> incomingHistory,
 			Map<Connection, List<History<H>>> outgoingHistory);	
 }

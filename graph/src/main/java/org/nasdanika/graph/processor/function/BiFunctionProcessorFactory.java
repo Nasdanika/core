@@ -78,16 +78,16 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 			}		
 			
 			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> incomingHandlerConsumerEntry: nodeProcessorConfig.getIncomingHandlerConsumers().entrySet()) {
-				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, incomingHandlerConsumerEntry.getKey(), true, t, pm, incomingEndpoints, outgoingEndpoints, failures));
+				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, incomingHandlerConsumerEntry.getKey(), true, t, pm, incomingEndpoints, outgoingEndpoints));
 			}
 			
 			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> outgoingHandlerConsumerEntry: nodeProcessorConfig.getOutgoingHandlerConsumers().entrySet()) {
-				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, outgoingHandlerConsumerEntry.getKey(), false, t, pm, incomingEndpoints, outgoingEndpoints, failures));				
+				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, outgoingHandlerConsumerEntry.getKey(), false, t, pm, incomingEndpoints, outgoingEndpoints));				
 			}
 			
 			return ProcessorInfo.of(
 					config,
-					(t,pm) -> nodeApply(nodeProcessorConfig, null, false, t, pm, incomingEndpoints, outgoingEndpoints, failures),
+					(t,pm) -> nodeApply(nodeProcessorConfig, null, false, t, pm, incomingEndpoints, outgoingEndpoints),
 					() -> failures);						
 		} 
 		
@@ -167,8 +167,7 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 			T input,
 			ProgressMonitor progressMonitor,
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
-			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints,			
-			Collection<Throwable> failures);
+			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints);
 	
 	
 }

@@ -684,5 +684,29 @@ public class TestDrawio {
 			System.out.println(processor.apply("Third", progressMonitor));			
 		}
 	}		
+
+	/**
+	 * Tests a synchronous compute graph
+	 * @throws Exception
+	 */
+	@Test 
+	public void testAsyncComputeGraph() throws Exception {
+		Document document = Document.load(getClass().getResource("compute-graph.drawio"));		
+		AsyncGraphComputer graphComputer = new AsyncGraphComputer();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
+		@SuppressWarnings("unchecked")
+		Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) graphComputer.createProcessors(progressMonitor, document);
+		
+		// Failures
+		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
+		
+		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
+		if (startProcessorInfoOptional.isPresent()) {
+			BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = startProcessorInfoOptional.get().getProcessor();
+			processor.apply("First", progressMonitor).thenAccept(System.out::println);
+			processor.apply("Second", progressMonitor).thenAccept(System.out::println);
+			processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
+		}
+	}		
 	
 }
