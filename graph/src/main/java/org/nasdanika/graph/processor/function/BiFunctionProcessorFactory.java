@@ -31,6 +31,11 @@ import org.nasdanika.graph.processor.ProcessorInfo;
 public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> {
 	
 	@Override
+	default boolean isPassThrough(Connection connection) {
+		return false;
+	}
+	
+	@Override
 	default BiFunction<V,ProgressMonitor, W> createEndpoint(Connection connection, BiFunction<T,ProgressMonitor, U> handler, HandlerType type) {
 		return (arg, progressMonitor) -> convertResult(handler.apply(convertArgument(arg), adaptProgressMonitor(progressMonitor)));
 	}

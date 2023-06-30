@@ -660,5 +660,29 @@ public class TestDrawio {
 		Object result = document.dispatch(aliceBobHandlers);
 		System.out.println(result);
 	}	
+
+	/**
+	 * Tests a synchronous compute graph
+	 * @throws Exception
+	 */
+	@Test 
+	public void testComputeGraph() throws Exception {
+		Document document = Document.load(getClass().getResource("compute-graph.drawio"));		
+		GraphComputer graphComputer = new GraphComputer();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
+		@SuppressWarnings("unchecked")
+		Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>> registry = (Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>>) graphComputer.createProcessors(progressMonitor, document);
+		
+		// Failures
+		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
+		
+		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
+		if (startProcessorInfoOptional.isPresent()) {
+			BiFunction<String, ProgressMonitor, String> processor = startProcessorInfoOptional.get().getProcessor();
+			System.out.println(processor.apply("First", progressMonitor));
+			System.out.println(processor.apply("Second", progressMonitor));
+			System.out.println(processor.apply("Third", progressMonitor));			
+		}
+	}		
 	
 }
