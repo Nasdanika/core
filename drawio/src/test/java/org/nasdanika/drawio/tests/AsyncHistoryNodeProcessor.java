@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.tests;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,7 @@ public abstract class AsyncHistoryNodeProcessor implements HistoryBiFunctionNode
 		return CompletableFuture.allOf(cfs).thenApply(rg);
 	}
 
-	protected abstract List<BiFunction<String, ProgressMonitor, CompletionStage<String>>> getOutgoingEndpoints();
+	protected abstract Collection<BiFunction<String, ProgressMonitor, CompletionStage<String>>> getOutgoingEndpoints();
 
 	@Override
 	public CompletionStage<String> applyOutgoing(
@@ -85,7 +86,7 @@ public abstract class AsyncHistoryNodeProcessor implements HistoryBiFunctionNode
 		
 		StringBuilder sb = new StringBuilder();
 		List<CompletionStage<String>> rcs = new ArrayList<>();
-		for (BiFunction<String, ProgressMonitor, CompletionStage<String>> oe: outgoingEndpoints.values()) {
+		for (BiFunction<String, ProgressMonitor, CompletionStage<String>> oe: getOutgoingEndpoints()) {
 			CompletionStage<String> oer = oe.apply(input, progressMonitor);
 			rcs.add(oer);
 			oer.thenAccept(r -> sb.append(r).append(" "));

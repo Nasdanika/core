@@ -170,19 +170,6 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 	ConnectionProcessor<T,U,V,W> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> connectionProcessorConfig,
 			ProgressMonitor progressMonitor);
-	
-	/**
-	 * Processes invocation from connection's source outgoing endpoint.
-	 * @param arg
-	 * @param sourceEndpoint
-	 * @param connectionProcessorConfig
-	 * @return
-	 */
-	U sourceApply(
-			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> connectionProcessorConfig,
-			T input,
-			ProgressMonitor progressMonitor,
-			BiFunction<V,ProgressMonitor,W> targetEndpoint);
 
 	/**
 	 * Processes invocation from a connection endpoint or the client via the processor.

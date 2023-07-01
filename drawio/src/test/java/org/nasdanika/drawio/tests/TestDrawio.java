@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
+import org.nasdanika.graph.processor.function.CompletionStageNopEndpointBiFunctionProcessorFactory;
 
 public class TestDrawio {
 
@@ -666,36 +668,47 @@ public class TestDrawio {
 	 * @throws Exception
 	 */
 	@Test 
-	public void testComputeGraph() throws Exception {
-		Document document = Document.load(getClass().getResource("compute-graph.drawio"));		
-		GraphComputer graphComputer = new GraphComputer();
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
-		@SuppressWarnings("unchecked")
-		Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>> registry = (Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>>) graphComputer.createProcessors(progressMonitor, document);
-		
-		// Failures
-		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
-		
-		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, String>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
-		if (startProcessorInfoOptional.isPresent()) {
-			BiFunction<String, ProgressMonitor, String> processor = startProcessorInfoOptional.get().getProcessor();
-			System.out.println(processor.apply("First", progressMonitor));
-			System.out.println(processor.apply("Second", progressMonitor));
-			System.out.println(processor.apply("Third", progressMonitor));			
-		}
-	}		
-
-	/**
-	 * Tests a synchronous compute graph
-	 * @throws Exception
-	 */
-	@Test 
 	public void testAsyncComputeGraph() throws Exception {
-		Document document = Document.load(getClass().getResource("compute-graph.drawio"));		
-		AsyncGraphComputer graphComputer = new AsyncGraphComputer();
+		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
+		CompletionStageNopEndpointBiFunctionProcessorFactory<String,String,Object> processorFactory = new CompletionStageNopEndpointBiFunctionProcessorFactory<String,String,Object>() {
+
+			@Override
+			public ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
+					ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object> connectionProcessorConfig,
+					ProgressMonitor progressMonitor) {
+				return new AsyncHistoryConnectionProcessor();
+			}
+
+			@Override
+			public NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
+					NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object> nodeProcessorConfig,
+					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
+					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
+					ProgressMonitor progressMonitor) {
+				return new AsyncHistoryNodeProcessor() {
+					
+					@Override
+					public org.nasdanika.graph.Node getNode() {
+						return nodeProcessorConfig.getElement();
+					}
+					
+					@Override
+					protected Collection<BiFunction<String, ProgressMonitor, CompletionStage<String>>> getOutgoingEndpoints() {
+						return outgoingEndpoints.values();
+					}
+				};
+			}
+
+			@Override
+			public Object createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry) {
+				return registry;
+			}
+			
+		};
+		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
 		@SuppressWarnings("unchecked")
-		Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) graphComputer.createProcessors(progressMonitor, document);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, document);
 		
 		// Failures
 		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			

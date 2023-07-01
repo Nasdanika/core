@@ -11,7 +11,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
 import org.nasdanika.graph.processor.function.HistoryBiFunctionConnectionProcessor;
 
-public abstract class AsyncHistoryConnectionProcessor implements HistoryBiFunctionConnectionProcessor<String,CompletionStage<String>,String,CompletionStage<String>,String> {
+public class AsyncHistoryConnectionProcessor implements HistoryBiFunctionConnectionProcessor<String,CompletionStage<String>,String,CompletionStage<String>,String> {
 
 	@Override
 	public Supplier<String> createHistory(String input, ProgressMonitor progressMonitor) {
