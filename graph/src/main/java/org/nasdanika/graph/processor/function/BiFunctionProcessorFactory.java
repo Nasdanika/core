@@ -53,11 +53,47 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 	
 	W convertResult(U result);
 	
+	interface NodeProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
+		
+		U applyIncoming(Connection connection, T input, ProgressMonitor progressMonitor);
+		
+		U applyOutgoing(Connection connection, T input,	ProgressMonitor progressMonitor);
+		
+	}
+	
+	interface ConnectionProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
+		
+		/**
+		 * Processes invocation from connection's target incoming endpoint. 
+		 * @param arg
+		 * @param sourceEndpoint
+		 * @param connectionProcessorConfig
+		 * @return
+		 */
+		U targetApply(
+				T input,
+				ProgressMonitor progressMonitor,
+				BiFunction<V,ProgressMonitor,W> sourceEndpoint);
+		
+		/**
+		 * Processes invocation from connection's source outgoing endpoint.
+		 * @param arg
+		 * @param sourceEndpoint
+		 * @param connectionProcessorConfig
+		 * @return
+		 */
+		U sourceApply(
+				T input,
+				ProgressMonitor progressMonitor,
+				BiFunction<V,ProgressMonitor,W> targetEndpoint);
+		
+	}
+	
 	@Override
 	default ProcessorInfo<BiFunction<T,ProgressMonitor,U>, R> createProcessor(ProcessorConfig<BiFunction<T,ProgressMonitor,U>, R> config, ProgressMonitor progressMonitor) {
 		if (config instanceof NodeProcessorConfig) {
 			@SuppressWarnings("unchecked")
-			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> nodeProcessorConfig = (NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>,R>) config;			
+			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> nodeProcessorConfig = (NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R>) config;
 
 			Collection<Throwable> failures = new ArrayList<>();
 			Function<Throwable, Void> failureHandler  = failure -> {
@@ -75,20 +111,19 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints = new ConcurrentHashMap<>();
 			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor,W>>> outgoingEndpointEntry: nodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
 				outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)).exceptionally(failureHandler);				
-			}		
+			}
+						
+			NodeProcessor<T, U, V, W> nodeProcessor = createNodeProcessor(nodeProcessorConfig, incomingEndpoints, outgoingEndpoints, progressMonitor);			
 			
 			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> incomingHandlerConsumerEntry: nodeProcessorConfig.getIncomingHandlerConsumers().entrySet()) {
-				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, incomingHandlerConsumerEntry.getKey(), true, t, pm, incomingEndpoints, outgoingEndpoints));
+				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyIncoming(incomingHandlerConsumerEntry.getKey(), t, pm));
 			}
 			
 			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> outgoingHandlerConsumerEntry: nodeProcessorConfig.getOutgoingHandlerConsumers().entrySet()) {
-				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeApply(nodeProcessorConfig, outgoingHandlerConsumerEntry.getKey(), false, t, pm, incomingEndpoints, outgoingEndpoints));				
+				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyOutgoing(outgoingHandlerConsumerEntry.getKey(), t, pm));
 			}
 			
-			return ProcessorInfo.of(
-					config,
-					(t,pm) -> nodeApply(nodeProcessorConfig, null, false, t, pm, incomingEndpoints, outgoingEndpoints),
-					() -> failures);						
+			return ProcessorInfo.of(config, nodeProcessor, () -> failures);						
 		} 
 		
 		if (config instanceof ConnectionProcessorConfig) {
@@ -103,21 +138,23 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 				return null;
 			};
 			
+			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, progressMonitor);
+			
 			connectionProcessorConfig
 				.getSourceEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setTargetHandler((t,pm) -> targetApply(connectionProcessorConfig, t, pm, endpoint));
+					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, pm, endpoint));
 				})
 				.exceptionally(failureHandler);
 			
 			connectionProcessorConfig
 				.getTargetEndpoint()
 				.thenAccept(endpoint -> {										
-					connectionProcessorConfig.setSourceHandler((t,pm) -> sourceApply(connectionProcessorConfig, t, pm, endpoint));
+					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, pm, endpoint));
 				})
 				.exceptionally(failureHandler);
 			
-			return ProcessorInfo.of(config, null, () -> failures);			
+			return ProcessorInfo.of(config, connectionProcessor, () -> failures);			
 		}
 		
 		return ProcessorFactory.super.createProcessor(config, progressMonitor);
@@ -130,11 +167,9 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 	 * @param connectionProcessorConfig
 	 * @return
 	 */
-	U targetApply(
+	ConnectionProcessor<T,U,V,W> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> connectionProcessorConfig,
-			T input,
-			ProgressMonitor progressMonitor,
-			BiFunction<V,ProgressMonitor,W> sourceEndpoint);
+			ProgressMonitor progressMonitor);
 	
 	/**
 	 * Processes invocation from connection's source outgoing endpoint.
@@ -160,14 +195,10 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 	 * @param failures Endpoint wiring failures
 	 * @return
 	 */
-	U nodeApply(
-			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> nodeProcessorConfig,
-			Connection connection,
-			boolean isIncoming,
-			T input,
-			ProgressMonitor progressMonitor,
-			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
-			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints);
-	
+	 NodeProcessor<T,U,V,W> createNodeProcessor(
+			 NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> nodeProcessorConfig,
+			 Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
+			 Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints,			 
+			 ProgressMonitor progressMonitor);
 	
 }

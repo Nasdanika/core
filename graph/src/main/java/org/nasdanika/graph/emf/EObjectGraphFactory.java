@@ -36,6 +36,12 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  */
 public class EObjectGraphFactory {
 	
+	private boolean parallelAccept;
+
+	public EObjectGraphFactory(boolean parallelAccept) {
+		this.parallelAccept = true;
+	}
+	
 	protected ResultRecord createNodeResultRecord(EObject eObject, Function<EObject, EObjectNode> existingNodeResolver, ProgressMonitor progressMonitor) {
 		if (existingNodeResolver != null) {
 			EObjectNode node = existingNodeResolver.apply(eObject);
@@ -66,6 +72,7 @@ public class EObjectGraphFactory {
 				nodeFactory,
 				this::createReferenceConnection, 
 				this::createOperationConnections,
+				parallelAccept,
 				progressMonitor);
 	}	
 	

@@ -1,0 +1,129 @@
+package org.nasdanika.graph.processor.function;
+
+import java.util.LinkedHashMap;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+
+import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Supplier;
+import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.Node;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
+
+public interface JoiningBiFunctionProcessor<T,U,V,W,R,H> extends BiFunctionProcessorFactory.NodeProcessor<T, U, V, W> {
+	
+	Supplier<H> createHistory(T input, ProgressMonitor progressMonitor);
+		
+	List<Supplier<H>> getSourceHistory(Connection connection, ProgressMonitor progressMonitor);
+		
+	List<Supplier<H>> getTargetHistory(Connection connection, ProgressMonitor progressMonitor);
+
+	List<Supplier<H>> getIncomingHistory(Node node, Connection incomingConnection, ProgressMonitor progressMonitor);
+	
+	List<Supplier<H>> getOutgoingHistory(Node node, Connection outgoingConnection, ProgressMonitor progressMonitor);		
+		
+	@Override
+	default U sourceApply(
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> connectionProcessorConfig,
+			T input, 
+			ProgressMonitor progressMonitor, 
+			BiFunction<V, ProgressMonitor, W> targetEndpoint) {
+		
+		History<H> history = createHistory(input, progressMonitor);
+		List<History<H>> sourceHistory = getSourceHistory(connectionProcessorConfig.getElement(), progressMonitor);
+		synchronized (sourceHistory) {
+			sourceHistory.add(history);
+		}
+		return sourceApply(connectionProcessorConfig, input, progressMonitor, targetEndpoint, sourceHistory);
+	}
+	
+	/**
+	 * Source apply with history
+	 * @param history History with already added current entry.
+	 */
+	U sourceApply(
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> connectionProcessorConfig,
+			T input, 
+			ProgressMonitor progressMonitor, 
+			BiFunction<V, ProgressMonitor, W> targetEndpoint,
+			List<History<H>> sourceHistory);	
+	
+	@Override
+	default U targetApply(
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> connectionProcessorConfig,
+			T input, 
+			ProgressMonitor progressMonitor, 
+			BiFunction<V, ProgressMonitor, W> sourceEndpoint) {
+		List<History<H>> targetHistory = getTargetHistory(connectionProcessorConfig.getElement(), progressMonitor);
+		synchronized (targetHistory) {
+			targetHistory.add(createHistory(input, progressMonitor));
+		}
+		return targetApply(connectionProcessorConfig, input, progressMonitor, sourceEndpoint, targetHistory);
+	}
+
+	U targetApply(
+			ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> connectionProcessorConfig,
+			T input, 
+			ProgressMonitor progressMonitor, 
+			BiFunction<V, ProgressMonitor, W> sourceEndpoint,
+			List<History<H>> targetHistory);
+	
+	@Override
+	default U nodeApply(
+			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> nodeProcessorConfig,
+			Connection connection, 
+			boolean isIncoming, 
+			T input, 
+			ProgressMonitor progressMonitor,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints) {
+		
+		Map<Connection, List<History<H>>> incomingHistory = new LinkedHashMap<>();
+		Node node = nodeProcessorConfig.getElement();
+		for (Connection incomingConnection: node.getIncomingConnections()) {
+			List<History<H>> ich = getIncomingHistory(node, incomingConnection, progressMonitor);
+			if (isIncoming && connection == incomingConnection) {
+				synchronized (ich) {				
+					ich.add(createHistory(input, progressMonitor));
+				}
+			}
+			incomingHistory.put(incomingConnection, ich);
+		}
+		
+		Map<Connection, List<History<H>>> outgoingHistory = new LinkedHashMap<>();
+		for (Connection outgoingConnection: node.getOutgoingConnections()) {
+			List<History<H>> och = getIncomingHistory(node, outgoingConnection, progressMonitor);
+			if (!isIncoming && connection == outgoingConnection) {
+				synchronized (och) {
+					och.add(createHistory(input, progressMonitor));
+				}
+			}
+			outgoingHistory.put(outgoingConnection, och);
+		}
+		
+		return nodeApply(
+				connection, 
+				isIncoming, 
+				input, 
+				progressMonitor, 
+				incomingEndpoints, 
+				outgoingEndpoints, 
+				nodeProcessorConfig, 
+				incomingHistory, 
+				outgoingHistory);
+	}
+	
+	U nodeApply(
+			Connection connection, 
+			boolean isIncoming, 
+			T input, 
+			ProgressMonitor progressMonitor,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
+			Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
+			NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R> nodeProcessorConfig,
+			Map<Connection, List<History<H>>> incomingHistory,
+			Map<Connection, List<History<H>>> outgoingHistory);	
+}

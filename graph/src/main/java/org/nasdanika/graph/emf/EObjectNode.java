@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -34,6 +35,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	private List<EObject> targets = Collections.synchronizedList(new ArrayList<>());
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
+	private boolean parallelAccept;
 
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
@@ -41,6 +43,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			BiFunction<EObject, ProgressMonitor,ResultRecord> nodeFactory, 
 			EReferenceConnection.Factory referenceConnectionFactory, 
 			EOperationConnection.Factory operationConnectionFactory, 
+			boolean parallelAccept,
 			ProgressMonitor progressMonitor) {
 		this.targets.add(target);
 		
@@ -67,6 +70,8 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 				operationConnectionFactory.create(this, eOperation, nodeFactory, progressMonitor);
 			}		
 		}		
+		
+		this.parallelAccept = parallelAccept;
 	}
 	
 	/**
@@ -120,11 +125,14 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		Map<org.nasdanika.graph.Connection, T> results = new LinkedHashMap<>();
+		Map<org.nasdanika.graph.Connection, T> results = Collections.synchronizedMap(new LinkedHashMap<>());
 		synchronized (outgoingConnections) {
-			for (org.nasdanika.graph.Connection connection: outgoingConnections) {
-				results.put(connection, connection.accept(visitor));
-			}
+			Stream<org.nasdanika.graph.Connection> ocStream = parallelAccept ? outgoingConnections.parallelStream() : outgoingConnections.stream();
+			ocStream.forEach(connection -> {
+				T result = connection.accept(visitor);
+				results.put(connection, result);
+				System.out.println(Thread.currentThread().getName());
+			});
 		}
 		return visitor.apply(this, results);
 	}
