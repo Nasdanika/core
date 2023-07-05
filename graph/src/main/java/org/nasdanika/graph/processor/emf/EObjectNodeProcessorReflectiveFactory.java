@@ -78,7 +78,11 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 	
 	protected MethodEntry createMethodEntry(AnnotatedElementRecord aer, EObject eObj) {		
 		URI identifierBase = null;
-		EObjectNodeProcessor classAnnotation = getClass().getAnnotation(EObjectNodeProcessor.class);
+		Class<?> declaringClass = aer.getDeclaringClass();
+		if (declaringClass == null) {
+			return new MethodEntry(aer, identifierBase);
+		}
+		EObjectNodeProcessor classAnnotation = declaringClass.getAnnotation(EObjectNodeProcessor.class);
 		if (classAnnotation == null) {
 			return new MethodEntry(aer, identifierBase);
 		}
