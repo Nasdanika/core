@@ -44,8 +44,6 @@ public @interface EObjectNodeProcessor {
 	 */
 	int priority() default 0;
 	
-	// TODO - EObject type
-	
 	/**
 	 * Node's object type
 	 * @return
