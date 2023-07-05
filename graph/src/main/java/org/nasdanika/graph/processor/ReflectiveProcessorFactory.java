@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo());
 		wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo());
 
-		Collection<Throwable> failures = new ArrayList<>();
+		Collection<Throwable> failures = Collections.synchronizedCollection(new ArrayList<>());
 		Function<Throwable, Void> failureHandler  = failure -> {
 			if (failure != null) {
 				failures.add(failure);
@@ -116,17 +117,33 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		
 		if (config instanceof NodeProcessorConfig) {
 			NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
-			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), failureHandler, progressMonitor);
-			wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : nodeProcessorConfig.getIncomingEndpoints());
+			Map<Connection, CompletionStage<E>> incomingEndpoints = nodeProcessorConfig.getIncomingEndpoints();
+			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints;
+			synchronized (incomingEndpoints) {
+				unwiredIncomingEndpoints = wireIncomingEndpoint(processor, incomingEndpoints, failureHandler, progressMonitor);
+				wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : incomingEndpoints);
+			}
 			
-			Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, nodeProcessorConfig.getIncomingHandlerConsumers());
-			wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : nodeProcessorConfig.getIncomingHandlerConsumers());
+			Map<Connection, Consumer<H>> incomingHandlerConsumers = nodeProcessorConfig.getIncomingHandlerConsumers();
+			Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers;
+			synchronized (incomingHandlerConsumers) {
+				unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, incomingHandlerConsumers);
+				wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : incomingHandlerConsumers);
+			}
 			
-			Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, nodeProcessorConfig.getOutgoingEndpoints(), failureHandler, progressMonitor);
-			wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : nodeProcessorConfig.getOutgoingEndpoints());
+			Map<Connection, CompletionStage<E>> outgoingEndpoints = nodeProcessorConfig.getOutgoingEndpoints();
+			Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints;
+			synchronized (outgoingEndpoints) {
+				unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, outgoingEndpoints, failureHandler, progressMonitor);
+				wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : outgoingEndpoints);
+			}
 			
-			Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, nodeProcessorConfig.getOutgoingHandlerConsumers());
-			wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : nodeProcessorConfig.getOutgoingHandlerConsumers());
+			Map<Connection, Consumer<H>> outgoingHandlerConsumers = nodeProcessorConfig.getOutgoingHandlerConsumers();
+			Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers;
+			synchronized (outgoingHandlerConsumers) {
+				unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, outgoingHandlerConsumers);
+				wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : outgoingHandlerConsumers);
+			}
 			
 			unwiredConfig = new NodeProcessorConfig<P, H, E, R>() {
 
@@ -516,7 +533,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
 		Util.getFieldsAndMethods(processor.getClass())
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
-			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
+			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>( 
 					ae, 
 					iee.getKey(), 
 					iee.getValue(), 
