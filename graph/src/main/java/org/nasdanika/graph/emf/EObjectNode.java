@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -32,10 +33,11 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 */
 	public static record ResultRecord(EObjectNode node, boolean isNew) {}	
 
-	private List<EObject> targets = Collections.synchronizedList(new ArrayList<>());
+	private List<EObject> targets;
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private boolean parallelAccept;
+	private int hashCode;
 
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
@@ -45,7 +47,10 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			EOperationConnection.Factory operationConnectionFactory, 
 			boolean parallelAccept,
 			ProgressMonitor progressMonitor) {
-		this.targets.add(target);
+		targets = Collections.unmodifiableList(Collections.singletonList(target));
+		hashCode = Objects.hash(targets);
+		
+		this.parallelAccept = parallelAccept;
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
 			if (eReference.isContainment()) {
@@ -69,9 +74,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			for (EOperation eOperation: target.eClass().getEAllOperations()) {
 				operationConnectionFactory.create(this, eOperation, nodeFactory, progressMonitor);
 			}		
-		}		
-		
-		this.parallelAccept = parallelAccept;
+		}				
 	}
 	
 	/**
@@ -125,15 +128,18 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		Map<org.nasdanika.graph.Connection, T> results = Collections.synchronizedMap(new LinkedHashMap<>());
+		Map<org.nasdanika.graph.Connection, T> results = new LinkedHashMap<>();
+		
+		List<org.nasdanika.graph.Connection> occ; // snapshot
 		synchronized (outgoingConnections) {
-			Stream<org.nasdanika.graph.Connection> ocStream = parallelAccept ? outgoingConnections.parallelStream() : outgoingConnections.stream();
-			ocStream.forEach(connection -> {
-				T result = connection.accept(visitor);
-				results.put(connection, result);
-				System.out.println(Thread.currentThread().getName());
-			});
+			occ = new ArrayList<>(outgoingConnections);
 		}
+		Stream<org.nasdanika.graph.Connection> ocStream = parallelAccept ? occ.parallelStream() : occ.stream();
+		record Result<R>(org.nasdanika.graph.Connection connection, R result) {}
+		ocStream
+			.map(connection -> new Result<T>(connection, connection.accept(visitor)))
+			.collect(Collectors.toList())			
+			.forEach(result -> results.put(result.connection(), result.result()));
 		return visitor.apply(this, results);
 	}
 
@@ -161,13 +167,11 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public Object getProperty(String name) {
-		synchronized (targets) {
-			for (EObject target: targets) {
-				EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
-				if (sf instanceof EAttribute) {
-					return getTarget().eGet(sf);
-				}				
-			}
+		for (EObject target: targets) {
+			EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
+			if (sf instanceof EAttribute) {
+				return getTarget().eGet(sf);
+			}				
 		}
 		return null;
 	}
@@ -179,7 +183,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(targets);
+		return hashCode;
 	}
 
 	@Override
@@ -191,7 +195,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		if (getClass() != obj.getClass())
 			return false;
 		EObjectNode other = (EObjectNode) obj;
-		return Objects.equals(targets, other.targets);
+		return Objects.equals(targets, other.getTargets());
 	}
 
 }

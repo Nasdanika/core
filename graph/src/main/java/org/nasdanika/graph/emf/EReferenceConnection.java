@@ -38,7 +38,7 @@ public class EReferenceConnection extends Connection {
 	}
 
 	@Override
-	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
+	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {		
 		return visitor.apply(this, reference.isContainment() ? Collections.singletonMap(getTarget(), getTarget().accept(visitor)) : Collections.emptyMap());
 	}
 	

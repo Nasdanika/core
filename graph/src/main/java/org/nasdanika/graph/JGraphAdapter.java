@@ -20,7 +20,7 @@ import org.nasdanika.common.Util;
  */
 public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 	
-	protected Map<Node, V> node2vertexMap = new HashMap<>();
+	protected Map<Node, V> node2vertexMap = Collections.synchronizedMap(new HashMap<>());
 	
 	private Graph<V, E> graph;
 
@@ -41,7 +41,10 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 	public void accept(Element element) {
 		if (element instanceof Node) {
 			Node node = (Node) element;
-			V vertex = node2vertexMap.computeIfAbsent(node, this::createAndAddVertex);
+			V vertex;
+			synchronized (node2vertexMap) {
+				vertex = node2vertexMap.computeIfAbsent(node, this::createAndAddVertex);
+			}
 			if (vertex != null) {
 				if (groupConnections) {
 					for (Entry<Node, List<Connection>> group: Util.<Node,Connection>groupBy(node.getOutgoingConnections(), Connection::getTarget).entrySet()) {
@@ -61,7 +64,10 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 					for (Connection connection: node.getOutgoingConnections()) {
 						Node connectionTarget = connection.getTarget();
 						if (connectionTarget != null) {
-							V targetVertex = node2vertexMap.computeIfAbsent(connectionTarget, this::createAndAddVertex);
+							V targetVertex;
+							synchronized(node2vertexMap) {
+								targetVertex = node2vertexMap.computeIfAbsent(connectionTarget, this::createAndAddVertex);
+							}
 							if (targetVertex != null) {
 								if (createEdges) {
 									E edge = createEdge(vertex, targetVertex, Collections.singleton(connection));

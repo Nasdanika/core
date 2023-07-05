@@ -36,10 +36,10 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  */
 public class EObjectGraphFactory {
 	
-	private boolean parallelAccept;
+	protected boolean parallelAccept;
 
 	public EObjectGraphFactory(boolean parallelAccept) {
-		this.parallelAccept = true;
+		this.parallelAccept = parallelAccept;
 	}
 	
 	protected ResultRecord createNodeResultRecord(EObject eObject, Function<EObject, EObjectNode> existingNodeResolver, ProgressMonitor progressMonitor) {

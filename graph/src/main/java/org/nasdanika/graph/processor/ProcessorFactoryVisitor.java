@@ -24,19 +24,20 @@ import org.nasdanika.graph.Node;
 class ProcessorFactoryVisitor<P,H,E,R> {
 	
 	private ProcessorFactory<P,H,E,R> factory;
-	private Map<Element, ProcessorInfo<P,R>> registry = new LinkedHashMap<>();
+	
+	private Map<Element, ProcessorInfo<P,R>> registry = Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	// Endpoints for connection source to call the connection
-	private Map<Connection,CompletableFuture<E>> sourceEndpoints = new LinkedHashMap<>();
+	private Map<Connection,CompletableFuture<E>> sourceEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	// Endpoints for connection target to call the connection
-	private Map<Connection, CompletableFuture<E>> targetEndpoints = new LinkedHashMap<>();
+	private Map<Connection, CompletableFuture<E>> targetEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	// Endpoints for incoming connections to call the target node
-	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = new LinkedHashMap<>();
+	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	// Endpoints for outgoing connections to call the source node
-	private Map<Node, Map<Connection, CompletableFuture<E>>> outgoingEndpoints = new LinkedHashMap<>();	
+	private Map<Node, Map<Connection, CompletableFuture<E>>> outgoingEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());	
 
 	ProcessorFactoryVisitor(ProcessorFactory<P,H,E,R> factory) {
 		this.factory = factory;
@@ -56,12 +57,14 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 			ProcessorConfig<P,R> config;
 			if (element instanceof Node) {
 				Node node = (Node) element;
-				Map<Connection, Consumer<H>> incomingHandlerConsumers = new LinkedHashMap<>();
+				Map<Connection, Consumer<H>> incomingHandlerConsumers = Collections.synchronizedMap(new LinkedHashMap<>());
 				for (Connection incomingConnection: node.getIncomingConnections()) {
 					// Incoming endpoint - creating if not there
-					incomingEndpoints
-						.computeIfAbsent(node, n -> new LinkedHashMap<>())
-						.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+					synchronized (incomingEndpoints) {
+						incomingEndpoints
+							.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
+							.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+					}
 					
 					// Incoming handler consumer - wiring to the connection target endpoint or to the node outgoing endpoint
 					CompletableFuture<E> endpoint;
@@ -71,13 +74,17 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 						if (source == null) {
 							endpoint = null;
 						} else {
-							endpoint = outgoingEndpoints
-									.computeIfAbsent(source, n -> new LinkedHashMap<>())
-									.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+							synchronized (outgoingEndpoints) {
+								endpoint = outgoingEndpoints
+										.computeIfAbsent(source, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
+										.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+							}
 						}
 					} else {
 						// Wiring to the connection target endpoint
-						endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>()); 
+						synchronized (targetEndpoints) {
+							endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
+						}
 					}
 					
 					incomingHandlerConsumers.put(incomingConnection, handler -> {
@@ -89,9 +96,11 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				
 				Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
 				for (Connection outgoingConnection: node.getOutgoingConnections()) {
-					outgoingEndpoints
-						.computeIfAbsent(node, n -> new LinkedHashMap<>())
-						.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+					synchronized (outgoingEndpoints) {
+						outgoingEndpoints
+							.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
+							.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+					}
 					
 					// Outgoing handler consumer - wiring to the connection source endpoint or to the node incoming endpoint
 					CompletableFuture<E> endpoint;
@@ -101,13 +110,15 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 						if (target == null) {
 							endpoint = null;
 						} else {
-							endpoint = incomingEndpoints
-									.computeIfAbsent(target, n -> new LinkedHashMap<>())
-									.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+							synchronized (incomingEndpoints) {
+								endpoint = incomingEndpoints
+										.computeIfAbsent(target, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
+										.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
+							}
 						}
 					} else {
 						// Wiring to the connection target endpoint
-						endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>()); 
+						endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
 					}
 					
 					outgoingHandlerConsumers.put(outgoingConnection, handler -> {
@@ -143,7 +154,9 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	
 					@Override
 					public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-						return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
+						synchronized(incomingEndpoints) {
+							return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> Collections.synchronizedMap(new LinkedHashMap<>())));
+						}
 					}
 	
 					@Override
@@ -153,7 +166,9 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	
 					@Override
 					public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-						return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> new LinkedHashMap<>()));
+						synchronized(outgoingEndpoints) {
+							return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> Collections.synchronizedMap(new LinkedHashMap<>())));
+						}
 					}
 	
 					@Override
@@ -172,9 +187,8 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 					
 					CompletableFuture<E> sourceEndpoint = source == null ? null : sourceEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
 					CompletableFuture<E> targetEndpoint = target == null ? null : targetEndpoints.computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-												
-					CompletableFuture<E> outgoingEndpoint = source == null ? null : outgoingEndpoints.computeIfAbsent(source, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
-					CompletableFuture<E> incomingEndpoint = target == null ? null : incomingEndpoints.computeIfAbsent(target, n -> new LinkedHashMap<>()).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+					CompletableFuture<E> outgoingEndpoint = source == null ? null : outgoingEndpoints.computeIfAbsent(source, n -> Collections.synchronizedMap(new LinkedHashMap<>())).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
+					CompletableFuture<E> incomingEndpoint = target == null ? null : incomingEndpoints.computeIfAbsent(target, n -> Collections.synchronizedMap(new LinkedHashMap<>())).computeIfAbsent(connection, ic -> new CompletableFuture<E>());
 					
 					config = new ConnectionProcessorConfig<P, H, E, R>() {
 						
