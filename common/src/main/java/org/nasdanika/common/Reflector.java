@@ -16,6 +16,8 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -99,18 +101,25 @@ public class Reflector {
 		private Object target;
 		private AnnotatedElement annotatedElement;
 		private URI baseURI;
+		private Class<?> declaringClass;
 
 		public AnnotatedElementRecord(Predicate<Object> predicate, Object target, AnnotatedElement annotatedElement) {
 			this.predicate = predicate;
 			this.target = target;
 			this.annotatedElement = annotatedElement;
 			if (annotatedElement instanceof Method) {
-				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Method) annotatedElement).getDeclaringClass().getName().replace('.', '/'));				
+				declaringClass = ((Method) annotatedElement).getDeclaringClass();
+				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));				
 			} else if (annotatedElement instanceof Field) {
-				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Field) annotatedElement).getDeclaringClass().getName().replace('.', '/'));								
+				declaringClass = ((Field) annotatedElement).getDeclaringClass();
+				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));								
 			} else if (annotatedElement instanceof Class) {
 				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Class<?>) annotatedElement).getName().replace('.', '/'));				
 			}
+		}
+		
+		public Class<?> getDeclaringClass() {
+			return declaringClass;
 		}
 		
 		public void set(Object value) {
@@ -194,7 +203,7 @@ public class Reflector {
 		return null;
 	}
 	
-	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {
+	protected Stream<AnnotatedElementRecord> getAnnotatedElementRecords(Object target, AnnotatedElement annotatedElement) {		
 		Factory factory = annotatedElement.getAnnotation(Factory.class);
 		if (factory == null) {			
 			Factories factories = annotatedElement.getAnnotation(Factories.class);
@@ -221,6 +230,12 @@ public class Reflector {
 			return true;
 		}
 		
+		return evalCache.computeIfAbsent(obj, o -> new ConcurrentHashMap<>()).computeIfAbsent(expr, e -> evaluatePredicate(obj, e));
+	}
+	
+	protected Map<Object, Map<String,Boolean>> evalCache = new ConcurrentHashMap<>();
+
+	protected boolean evaluatePredicate(Object obj, String expr) {
 		ExpressionParser parser = getExpressionParser();
 		Expression exp = parser.parseExpression(expr);
 		EvaluationContext evaluationContext = getEvaluationContext();
