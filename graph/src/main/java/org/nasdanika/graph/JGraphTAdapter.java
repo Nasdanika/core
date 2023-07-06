@@ -18,7 +18,7 @@ import org.nasdanika.common.Util;
  * @param <V>
  * @param <E>
  */
-public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
+public abstract class JGraphTAdapter<V,E> implements Consumer<Element> {
 	
 	protected Map<Node, V> node2vertexMap = Collections.synchronizedMap(new HashMap<>());
 	
@@ -28,7 +28,7 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 
 	private boolean createEdges;
 
-	protected JGraphAdapter(Graph<V,E> graph, boolean createEdges, boolean groupConnections) {
+	protected JGraphTAdapter(Graph<V,E> graph, boolean createEdges, boolean groupConnections) {
 		this.graph = graph;
 		this.groupConnections = groupConnections;
 		this.createEdges = createEdges;
@@ -53,10 +53,14 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 							if (createEdges) {
 								E edge = createEdge(vertex, targetVertex, group.getValue());
 								if (edge != null) {
-									graph.addEdge(vertex, targetVertex, edge);
+									synchronized (graph) {
+										graph.addEdge(vertex, targetVertex, edge);
+									}
 								}
 							} else {
-								graph.addEdge(vertex, targetVertex);
+								synchronized (graph) {
+									graph.addEdge(vertex, targetVertex);
+								}
 							}
 						}
 					}
@@ -72,10 +76,14 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 								if (createEdges) {
 									E edge = createEdge(vertex, targetVertex, Collections.singleton(connection));
 									if (edge != null) {
-										graph.addEdge(vertex, targetVertex, edge);
+										synchronized (graph) {
+											graph.addEdge(vertex, targetVertex, edge);
+										}
 									}
 								} else {
-									graph.addEdge(vertex, targetVertex);
+									synchronized (graph) {
+										graph.addEdge(vertex, targetVertex);
+									}
 								}
 							}
 						}
@@ -88,7 +96,9 @@ public abstract class JGraphAdapter<V,E> implements Consumer<Element> {
 	protected V createAndAddVertex(Node node) {
 		V vertex = createVertex(node);
 		if (vertex != null) {
-			graph.addVertex(vertex);
+			synchronized (graph) {
+				graph.addVertex(vertex);
+			}
 		}
 		return vertex;
 	}
