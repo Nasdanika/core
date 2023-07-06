@@ -50,6 +50,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.CompletionStageNopEndpointBiFunctionProcessorFactory;
+import org.nasdanika.graph.processor.function.CompletionStageNopEndpointReflectiveBiFunctionProcessorFactory;
 
 public class TestDrawio {
 
@@ -653,7 +654,7 @@ public class TestDrawio {
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	
 	
-	@Disabled("Does not work because AliceBobHandlers is not exported and reflective method invocation fails")
+	@Disabled("Does not work unless the module is open so AliceBobHandlers can be accessed using reflection")
 	@Test 
 	public void testDispatch() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
@@ -720,6 +721,41 @@ public class TestDrawio {
 			processor.apply("Second", progressMonitor).thenAccept(System.out::println);
 			processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
 		}
+	}
+	
+	/**
+	 * Tests a synchronous compute graph
+	 * @throws Exception
+	 */	
+	@Test
+	@Disabled("Does not work unless the module is open so ReflectiveTarget can be accessed using reflection")
+	public void testAsyncReflectiveComputeGraph() throws Exception {
+		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
+		ReflectiveTarget reflectiveTarget = new ReflectiveTarget();
+		CompletionStageNopEndpointReflectiveBiFunctionProcessorFactory<String,String,Object> processorFactory = new CompletionStageNopEndpointReflectiveBiFunctionProcessorFactory<String,String,Object>(reflectiveTarget) {
+
+			@Override
+			public Object createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry) {
+				return registry;
+			}
+			
+		};
+		
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
+		@SuppressWarnings("unchecked")
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, document);
+		
+		// Failures
+		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
+		
+		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
+		if (startProcessorInfoOptional.isPresent()) {
+			BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = startProcessorInfoOptional.get().getProcessor();
+			processor.apply("First", progressMonitor).thenAccept(System.out::println);
+			processor.apply("Second", progressMonitor).thenAccept(System.out::println);
+			processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
+		}
 	}		
+	
 	
 }

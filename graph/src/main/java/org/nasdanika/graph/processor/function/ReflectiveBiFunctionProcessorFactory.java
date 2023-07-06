@@ -84,7 +84,7 @@ public abstract class ReflectiveBiFunctionProcessorFactory<T,U,V,W,R> extends Re
 	
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 
-	public ReflectiveBiFunctionProcessorFactory(Object... targets) {
+	protected ReflectiveBiFunctionProcessorFactory(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
