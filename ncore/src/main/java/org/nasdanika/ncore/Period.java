@@ -35,7 +35,7 @@ public interface Period extends ModelElement {
 	 * @see #setStart(Temporal)
 	 * @see org.nasdanika.ncore.NcorePackage#getPeriod_Start()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 *        annotation="urn:org.nasdanika homogeneous='true' strict-containment='true'"
 	 * @generated
 	 */
 	Temporal getStart();
@@ -61,7 +61,7 @@ public interface Period extends ModelElement {
 	 * @see #setEnd(Temporal)
 	 * @see org.nasdanika.ncore.NcorePackage#getPeriod_End()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 *        annotation="urn:org.nasdanika homogeneous='true' strict-containment='true'"
 	 * @generated
 	 */
 	Temporal getEnd();

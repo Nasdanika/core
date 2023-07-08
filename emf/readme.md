@@ -195,7 +195,7 @@ In many cases reference values are either of the same type or their type can be 
 In this case explicitly specifying the type is unnecessary and may lead to configuration errors.
 For example, in the above code snippet ``releases`` reference can contain only instances of its reference type - [Release](../../../engineering/modules/model/Release.html).
 
-To specify that the type of refernce elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogenous`` Nasdanika annotation details key to ``true`` on the reference. 
+To specify that the type of refernce elements shall be derived from the reference type or annotations instead of being supplied explicitly set ``homogeneous`` Nasdanika annotation details key to ``true`` on the reference. 
 
 In some situations the type of reference element can be derived from the type of its configuration - string, integer, map, list, boolean, date. In such cases add ``reference-type`` Nasdanika annotation key with a value containing a YAML map of configuration value types to element types.
 
@@ -216,7 +216,7 @@ Map values can be strings for types in the same EPackage or maps with the follow
 In situations when it is necessary to override reference type in a subclass add ``reference-types`` Nasdanika annotation to the subclass. The value shall be a YAML map of reference names to element types.
 Element types can be strings for the types in the same package or maps with ``ns-uri`` and ``name`` keys as explained above.
 
-By default, if an element value of a homogenous reference is a string then it is treated as a relative URI of a resource from which the element shall be loaded. 
+By default, if an element value of a homogeneous reference is a string then it is treated as a relative URI of a resource from which the element shall be loaded. 
 In this case that resource has to contain type definition.
 For elements with a default feature this behavior can be modified by setting ``strict-containment`` Nasdanika annotation detail to ``true`` to treat the string value in configuration as the value of the default feature. In this case it is not possible to load reference elements from external resources.
 

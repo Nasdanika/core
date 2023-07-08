@@ -6,6 +6,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 
 import org.nasdanika.common.ProgressMonitor;
+//import org.nasdanika.common.Reflector.Factory;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.ConnectionProcessor;
@@ -13,6 +14,7 @@ import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodePro
 import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactory.ConnectionProcessorFactory;
 import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactory.NodeProcessorFactory;
 
+//@Factory("Some bred for testing")
 public class ReflectiveTarget {
 	
 	@ConnectionProcessorFactory

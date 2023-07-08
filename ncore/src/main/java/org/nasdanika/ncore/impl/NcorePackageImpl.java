@@ -1565,14 +1565,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getTemporal_LowerBounds(),
 		   source,
 		   new String[] {
-			   "homogenous", "true",
+			   "homogeneous", "true",
 			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (getTemporal_UpperBounds(),
 		   source,
 		   new String[] {
-			   "homogenous", "true",
+			   "homogeneous", "true",
 			   "strict-containment", "true"
 		   });
 		addAnnotation
@@ -1585,21 +1585,21 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		  (getPeriod_Start(),
 		   source,
 		   new String[] {
-			   "homogenous", "true",
+			   "homogeneous", "true",
 			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (getPeriod_End(),
 		   source,
 		   new String[] {
-			   "homogenous", "true",
+			   "homogeneous", "true",
 			   "strict-containment", "true"
 		   });
 		addAnnotation
 		  (getModelElement_Representations(),
 		   source,
 		   new String[] {
-			   "homogenous", "true",
+			   "homogeneous", "true",
 			   "load-doc-reference", "doc/model-element--representations.md"
 		   });
 		addAnnotation

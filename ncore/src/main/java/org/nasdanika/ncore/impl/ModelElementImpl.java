@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.String;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

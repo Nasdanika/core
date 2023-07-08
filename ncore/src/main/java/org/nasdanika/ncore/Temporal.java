@@ -149,7 +149,7 @@ public interface Temporal extends ModelElement {
 	 * @return the value of the '<em>Lower Bounds</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getTemporal_LowerBounds()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 *        annotation="urn:org.nasdanika homogeneous='true' strict-containment='true'"
 	 * @generated
 	 */
 	EList<Temporal> getLowerBounds();
@@ -165,7 +165,7 @@ public interface Temporal extends ModelElement {
 	 * @return the value of the '<em>Upper Bounds</em>' containment reference list.
 	 * @see org.nasdanika.ncore.NcorePackage#getTemporal_UpperBounds()
 	 * @model containment="true"
-	 *        annotation="urn:org.nasdanika homogenous='true' strict-containment='true'"
+	 *        annotation="urn:org.nasdanika homogeneous='true' strict-containment='true'"
 	 * @generated
 	 */
 	EList<Temporal> getUpperBounds();

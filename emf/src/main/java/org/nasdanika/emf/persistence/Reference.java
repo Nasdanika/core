@@ -31,7 +31,7 @@ public class Reference<T> extends Attribute<T> {
 	 * @param defaultValue
 	 * @param description
 	 * @param resolver
-	 * @param referenceType Reference type if the reference is homogenous, i.e. its type is known beforehand.
+	 * @param referenceType Reference type if the reference is homogeneous, i.e. its type is known beforehand.
 	 * @param exclusiveWith
 	 */
 	public Reference(

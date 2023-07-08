@@ -109,12 +109,12 @@ public class Reflector {
 			this.annotatedElement = annotatedElement;
 			if (annotatedElement instanceof Method) {
 				declaringClass = ((Method) annotatedElement).getDeclaringClass();
-				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));				
+				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));				
 			} else if (annotatedElement instanceof Field) {
 				declaringClass = ((Field) annotatedElement).getDeclaringClass();
-				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));								
+				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));								
 			} else if (annotatedElement instanceof Class) {
-				this.baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Class<?>) annotatedElement).getName().replace('.', '/'));				
+				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Class<?>) annotatedElement).getName().replace('.', '/'));				
 			}
 		}
 		
@@ -128,6 +128,19 @@ public class Reflector {
 
 		@Override
 		public boolean test(Object t) {
+			if (declaringClass != null) {
+				Factory factory = declaringClass.getDeclaredAnnotation(Factory.class);
+				if (factory != null) {
+					if (!factory.type().isInstance(t)) { 
+						return false;
+					}
+					
+					if (!matchPredicate(t, factory.value())) {
+						return false;
+					}
+				}
+			}
+			
 			return predicate == null ? true : predicate.test(t);
 		}
 		

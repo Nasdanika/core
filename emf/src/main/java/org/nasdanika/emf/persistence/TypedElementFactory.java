@@ -58,7 +58,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	protected boolean isStrictContainment;
 	protected boolean referenceSupplierFactory;
 	protected boolean resolveProxies;
-	protected boolean isHomogenous;
+	protected boolean isHomogeneous;
 	protected ETypedElement eTypedElement;
 	protected EClass eClass;
 	protected Object elementKey;
@@ -67,8 +67,8 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 		return eTypedElement;
 	}
 	
-	public boolean isHomogenous() {
-		return isHomogenous;
+	public boolean isHomogeneous() {
+		return isHomogeneous;
 	}
 
 	/**
@@ -95,8 +95,8 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 		this.referenceSupplierFactory = referenceSupplierFactory;
 		this.keyProvider = keyProvider;
 		
-		this.isHomogenous = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.IS_HOMOGENOUS)) || NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.REFERENCE_TYPE) != null;			
-		this.isStrictContainment = isHomogenous && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.IS_STRICT_CONTAINMENT));			
+		this.isHomogeneous = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.IS_HOMOGENEOUS)) || NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.REFERENCE_TYPE) != null;			
+		this.isStrictContainment = isHomogeneous && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(eTypedElement, EObjectLoader.IS_STRICT_CONTAINMENT));			
 	}
 	
 	@Override
@@ -134,7 +134,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 				}
 				return loadReference((String) element, base, markers, progressMonitor);
 			}
-			Object ret = isHomogenous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
+			Object ret = isHomogeneous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return Collections.singletonList(resolver.resolve((EObject) ret));
 			}

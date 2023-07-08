@@ -39,7 +39,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	 * @param defaultValue
 	 * @param description
 	 * @param resolver
-	 * @param referenceType Reference type if the reference is homogenous, i.e. its type is known beforehand.
+	 * @param referenceType Reference type if the reference is Homogeneous, i.e. its type is known beforehand.
 	 * @param exclusiveWith
 	 */
 	public ReferenceList(
@@ -80,7 +80,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 							valueMarkers = ((MarkedLinkedHashMap<?, ?>) config).getEntryMarkers(entry.getKey());
 						}
 						
-						if (referenceFactory.isHomogenous()) {
+						if (referenceFactory.isHomogeneous()) {
 							// Config shall be a map with potentially multiple entries, type is already known
 							MarkedLinkedHashMap<Object, Object> entryConfig = new MarkedLinkedHashMap<>();
 							entryConfig.mark(valueMarkers);

@@ -143,7 +143,7 @@
         <details key="documentation" value="Lower bounds of a temporal. E.g. exact time of some temporal might not be known at a moment, but it might be known that it should not be before than some other temporal - a lower bound. Lower bounds are used in validations and before/after computations. "/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
+        <details key="homogeneous" value="true"/>
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -153,7 +153,7 @@
         <details key="documentation" value="Upper bounds of a temporal. E.g. exact time of some temporal might not be known at a moment, but it might be known that it should not be after some other temporal - an upper bound. Upper bounds are used in validations and before/after computations. "/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
+        <details key="homogeneous" value="true"/>
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -171,7 +171,7 @@
         <details key="documentation" value="Period start."/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
+        <details key="homogeneous" value="true"/>
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -181,7 +181,7 @@
         <details key="documentation" value="Period end."/>
       </eAnnotations>
       <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
+        <details key="homogeneous" value="true"/>
         <details key="strict-containment" value="true"/>
       </eAnnotations>
     </eStructuralFeatures>
@@ -219,7 +219,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="representations" upperBound="-1"
         eType="#//RepresentationEntry" containment="true">
       <eAnnotations source="urn:org.nasdanika">
-        <details key="homogenous" value="true"/>
+        <details key="homogeneous" value="true"/>
         <details key="load-doc-reference" value="doc/model-element--representations.md"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

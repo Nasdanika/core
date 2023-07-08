@@ -104,7 +104,7 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String IS_RESOLVE_URI = "resolve-uri";
 	
 	/**
-	 * This annotation allows to override element types for homogenous references.
+	 * This annotation allows to override element types for homogeneous references.
 	 * The value shall be a YAML map of reference names to types. If entry value is a string it is treated as a class name from the same
 	 * {@link EPackage} as the annotated {@link EClass}. If it is a map then it shall contain <code>ns-uri</code> and <code>name</code> keys.
 	 * EClass is looked up in the loader's {@link ResourceSet} package registry.
@@ -112,7 +112,7 @@ public class EObjectLoader extends DispatchingLoader {
 	public static final String REFERENCE_TYPES = "reference-types";
 	
 	/**
-	 * This annotation allows to customize element types for homogenous references based on configuration element type
+	 * This annotation allows to customize element types for homogeneous references based on configuration element type
 	 * The value shall be a YAML map of configuration types (string, map, list, number, boolean) to reference types. 
 	 * If entry value is a string it is treated as a class name from the same
 	 * {@link EPackage} as the annotated {@link EReference}'s {@link EClass}. 
@@ -215,10 +215,10 @@ public class EObjectLoader extends DispatchingLoader {
 	 * If this Nasdanika annotation details is set to "true" on a {@link EReference} with a concrete element type then reference element(s) are loaded using the reference type
 	 * and they shall be a maps of features as opposed of a map of type to a map of features.
 	 */
-	public static final String IS_HOMOGENOUS = "homogenous";
+	public static final String IS_HOMOGENEOUS = "homogeneous";
 	
 	/**
-	 * If this Nasdanika annotation details is set to "true" on a homogenous {@link EReference} then string values are treated as default features, not as object references. 
+	 * If this Nasdanika annotation details is set to "true" on a homogeneous {@link EReference} then string values are treated as default features, not as object references. 
 	 */
 	public static final String IS_STRICT_CONTAINMENT = "strict-containment";
 	
