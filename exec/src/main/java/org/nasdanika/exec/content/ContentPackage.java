@@ -162,6 +162,15 @@ public interface ContentPackage extends EPackage {
 	int FILTER__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILTER__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
+
+	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -252,6 +261,15 @@ public interface ContentPackage extends EPackage {
 	int BASE64__ANNOTATIONS = FILTER__ANNOTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE64__ALIASES = FILTER__ALIASES;
+
+	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -340,6 +358,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int RESOURCE__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -439,6 +466,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int TEXT__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Content</b></em>' attribute.
@@ -549,6 +585,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int INTERPOLATOR__ANNOTATIONS = FILTER__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTERPOLATOR__ALIASES = FILTER__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.
@@ -667,6 +712,15 @@ public interface ContentPackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKDOWN__ANNOTATIONS = FILTER__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKDOWN__ALIASES = FILTER__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' containment reference.

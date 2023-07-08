@@ -134,6 +134,15 @@ public interface ResourcesPackage extends EPackage {
 	int RESOURCE__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
+
+	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -259,6 +268,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTAINER__ANNOTATIONS = RESOURCE__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__ALIASES = RESOURCE__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -413,6 +431,15 @@ public interface ResourcesPackage extends EPackage {
 	 * @ordered
 	 */
 	int FILE__ANNOTATIONS = RESOURCE__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE__ALIASES = RESOURCE__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
