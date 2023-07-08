@@ -44,6 +44,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
@@ -1310,6 +1311,10 @@ public class Util {
 	
 	public static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz) {
 		return Stream.concat(getMethods(clazz), getFields(clazz));
-	}	
+	}
+	
+	public static URI createClassURI(Class<?> clazz) {
+		return URI.createURI(Util.CLASSPATH_URL_PREFIX + clazz.getName().replace('.', '/'));
+	}
 	
 }

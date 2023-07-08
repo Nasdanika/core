@@ -109,12 +109,12 @@ public class Reflector {
 			this.annotatedElement = annotatedElement;
 			if (annotatedElement instanceof Method) {
 				declaringClass = ((Method) annotatedElement).getDeclaringClass();
-				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));				
+				baseURI = Util.createClassURI(declaringClass);				
 			} else if (annotatedElement instanceof Field) {
 				declaringClass = ((Field) annotatedElement).getDeclaringClass();
-				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + declaringClass.getName().replace('.', '/'));								
+				baseURI = Util.createClassURI(declaringClass);								
 			} else if (annotatedElement instanceof Class) {
-				baseURI = URI.createURI(Util.CLASSPATH_URL_PREFIX + ((Class<?>) annotatedElement).getName().replace('.', '/'));				
+				baseURI = Util.createClassURI((Class<?>) annotatedElement);				
 			}
 		}
 		
