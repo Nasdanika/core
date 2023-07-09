@@ -443,7 +443,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			});
 				
-		return ret;
+		return Collections.unmodifiableMap(ret);
 	}	
 	
 	protected void wireIncomingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers) {				
@@ -571,7 +571,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			});
 				
-		return ret;
+		return Collections.unmodifiableMap(ret);
 	}
 
 	protected void wireIncomingEndpoints(Object processor, Map<Connection, CompletionStage<E>> incomingEndpoints) {
@@ -637,7 +637,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			});
 				
-		return ret;
+		return Collections.unmodifiableMap(ret);
 	}
 	
 	protected void wireOutgoingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers) {
@@ -722,7 +722,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				}
 			});
 				
-		return ret;
+		return Collections.unmodifiableMap(ret);
 	}
 
 	protected void wireOutgoingEndpoints(Object processor, Map<Connection, CompletionStage<E>> outgoingEndpoints) {
