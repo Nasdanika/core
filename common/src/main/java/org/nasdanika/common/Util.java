@@ -13,7 +13,9 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -1315,6 +1317,56 @@ public class Util {
 	
 	public static URI createClassURI(Class<?> clazz) {
 		return URI.createURI(Util.CLASSPATH_URL_PREFIX + clazz.getName().replace('.', '/'));
+	}
+	
+	interface InvocationListener<T> {
+		
+		void before(T target, T proxy, Method method, Object[] args);
+		
+		void after(T target, T proxy, Method method, Object[] args, Object result);
+		
+		void afterError(T target, T proxy, Method method, Object[] args, Throwable error);		
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T createListeningProxy(T target, InvocationListener<T> listener) {
+		Class<? extends Object> targetClass = target.getClass();
+		@SuppressWarnings("rawtypes")
+		Class[] interfaces = lineage(targetClass).stream().filter(Class::isInterface).collect(Collectors.toList()).toArray(new Class[0]);
+		InvocationHandler invocationHandler = (proxy, method, args) -> {
+			listener.before(target, (T) proxy, method, args);
+			try {
+				Object result = method.invoke(target, args);
+				listener.after(target, (T) proxy, method, args, result);
+				return result;
+			} catch (Throwable th) {
+				listener.afterError(target, (T) proxy, method, args, th);
+				throw th;
+			}
+		};
+		return (T) Proxy.newProxyInstance(targetClass.getClassLoader(), interfaces, invocationHandler);
+	}
+	
+	public static <T> T createListeningProxy(T target, java.util.function.Consumer<InvocationRecord<T>> invocationRecordConsumer) {
+		return createListeningProxy(target, new InvocationListener<T>() {
+
+			@Override
+			public void before(T target, T proxy, Method method, Object[] args) {
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, false, null, null, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+			}
+
+			@Override
+			public void after(T target, T proxy, Method method, Object[] args, Object result) {
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, result, null, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+			}
+
+			@Override
+			public void afterError(T target, T proxy, Method method, Object[] args, Throwable error) {
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, null, error, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+			}
+		});		
+		
 	}
 	
 }
