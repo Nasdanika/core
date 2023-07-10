@@ -7,7 +7,6 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -17,10 +16,12 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
@@ -28,7 +29,6 @@ import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.Node;
 
 /**
  * Creates processor and wires hanlders and endpoints using annotations. 
@@ -50,27 +50,33 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		}
 	}
 	
-	public R createProcessors(Element element, ProgressMonitor progressMonitor, Object... registryTargets) {
-		R registry = ProcessorFactory.super.createProcessors(progressMonitor, element);
+	public R createProcessors(Element element, boolean parallel, ProgressMonitor progressMonitor, Object... registryTargets) {
+		R registry = ProcessorFactory.super.createProcessors(progressMonitor, parallel, element);
 		for (Object registryTarget: registryTargets) {
 			// TODO  - progress moinitor			
-			wireRegistryEntry(registryTarget).accept(registry);
-			wireRegistry(registryTarget).accept(registry);
+			wireRegistryEntry(registryTarget, parallel).accept(registry);
+			wireRegistry(registryTarget, parallel).accept(registry);
 		}
 		return registry;
 	}
 	
+	private <K,V> Map<K,V> synchroCopy(Map<K,V> map) {
+		synchronized (map) {
+			return Collections.synchronizedMap(new LinkedHashMap<>(map));
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ProcessorInfo<P,R> createProcessor(ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {
+	public CompletionStage<P> createProcessor(ProcessorConfig<P,R> config, boolean parallel, ProgressMonitor progressMonitor) {
 		// TODO - progress steps.
-		Optional<AnnotatedElementRecord> match = annotatedElementRecords.stream()
+		Optional<AnnotatedElementRecord> match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
 			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement()))
 			.sorted((a, b) -> compareProcessorMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
 			.findFirst();
 		
 		if (match.isEmpty()) {
-			return ProcessorFactory.super.createProcessor(config, progressMonitor);			
+			return ProcessorFactory.super.createProcessor(config, parallel, progressMonitor);			
 		}
 		
 		AnnotatedElementRecord matchedRecord = match.get();
@@ -84,191 +90,84 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 			processor = matchedRecord.invoke(config, progressMonitor);			
 		}
 		if (processor == null) {
-			return ProcessorFactory.super.createProcessor(config, progressMonitor);			
+			return ProcessorFactory.super.createProcessor(config, parallel, progressMonitor);			
 		}
 		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 		
 		boolean hideWired = elementProcessorAnnotation.hideWired();
-		Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo());
-		wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo());
+		Map<Element, ProcessorInfo<P,R>> unwiredChildProcessorsInfo = wireChildProcessor(processor, config.getChildProcessorsInfo(), parallel);
+		wireChildProcessors(processor, hideWired ? unwiredChildProcessorsInfo : config.getChildProcessorsInfo(), parallel);
+		
+		List<CompletionStage<?>> allStages = new ArrayList<>();
 
-		Collection<Throwable> failures = Collections.synchronizedCollection(new ArrayList<>());
-		Function<Throwable, Void> failureHandler  = failure -> {
-			if (failure != null) {
-				failures.add(failure);
-			}
-			return null;
-		};
-
-		Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor);
+		Consumer<ProcessorInfo<P,R>> pc = wireParentProcessor(processor, parallel);
 		if (pc != null) {
-			config.getParentProcessorInfo().thenAccept(pc).exceptionally(failureHandler);
+			allStages.add(config.getParentProcessorInfo().thenAccept(pc));
 		}
-		wireProcessorElement(processor, config.getElement());
+		wireProcessorElement(processor, config.getElement(), parallel);
 		
-		config.getRegistry().thenAccept(wireRegistryEntry(processor)).exceptionally(failureHandler);
+		allStages.add(config.getRegistry().thenAccept(wireRegistryEntry(processor, parallel)));
 		
-		Consumer<R> rc = wireRegistry(processor);
+		Consumer<R> rc = wireRegistry(processor, parallel);
 		if (rc != null) {
-			config.getRegistry().thenAccept(rc).exceptionally(failureHandler);
+			allStages.add(config.getRegistry().thenAccept(rc));
 		}
-		
-		ProcessorConfig<P,R> unwiredConfig;
 		
 		if (config instanceof NodeProcessorConfig) {
 			NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
-			Map<Connection, CompletionStage<E>> incomingEndpoints = nodeProcessorConfig.getIncomingEndpoints();
-			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints;
-			synchronized (incomingEndpoints) {
-				unwiredIncomingEndpoints = wireIncomingEndpoint(processor, incomingEndpoints, failureHandler, progressMonitor);
-				wireIncomingEndpoints(processor, hideWired ? unwiredIncomingEndpoints : incomingEndpoints);
-			}
+
+			Map<Connection, CompletionStage<E>> incomingEndpoints = synchroCopy(nodeProcessorConfig.getIncomingEndpoints()); // Making a copy to remove wired on completion 
+			wireIncomingEndpoint(processor, incomingEndpoints, parallel, progressMonitor).forEach(r -> {
+				if (r.consume()) {
+					incomingEndpoints.remove(r.connection());
+				}
+				allStages.add(r.result());
+			});
+			wireIncomingEndpoints(processor, incomingEndpoints, parallel);
 			
 			Map<Connection, Consumer<H>> incomingHandlerConsumers = nodeProcessorConfig.getIncomingHandlerConsumers();
 			Map<Connection, Consumer<H>> unwiredIncomingHandlerConsumers;
 			synchronized (incomingHandlerConsumers) {
-				unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, incomingHandlerConsumers);
-				wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : incomingHandlerConsumers);
+				unwiredIncomingHandlerConsumers = wireIncomingHandler(processor, incomingHandlerConsumers, parallel);
+				wireIncomingHandlerConsumers(processor, hideWired ? unwiredIncomingHandlerConsumers : incomingHandlerConsumers, parallel);
 			}
 			
-			Map<Connection, CompletionStage<E>> outgoingEndpoints = nodeProcessorConfig.getOutgoingEndpoints();
-			Map<Connection, CompletionStage<E>> unwiredOutgoingEndpoints;
-			synchronized (outgoingEndpoints) {
-				unwiredOutgoingEndpoints = wireOutgoingEndpoint(processor, outgoingEndpoints, failureHandler, progressMonitor);
-				wireOutgoingEndpoints(processor, hideWired ? unwiredOutgoingEndpoints : outgoingEndpoints);
-			}
+			Map<Connection, CompletionStage<E>> outgoingEndpoints = synchroCopy(nodeProcessorConfig.getOutgoingEndpoints());
+			wireOutgoingEndpoint(processor, outgoingEndpoints, parallel, progressMonitor).forEach(r -> {
+				if (r.consume()) {
+					outgoingEndpoints.remove(r.connection());
+				}
+				allStages.add(r.result());
+			});
+			wireOutgoingEndpoints(processor, outgoingEndpoints, parallel);
 			
 			Map<Connection, Consumer<H>> outgoingHandlerConsumers = nodeProcessorConfig.getOutgoingHandlerConsumers();
 			Map<Connection, Consumer<H>> unwiredOutgoingHandlerConsumers;
 			synchronized (outgoingHandlerConsumers) {
-				unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, outgoingHandlerConsumers);
-				wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : outgoingHandlerConsumers);
+				unwiredOutgoingHandlerConsumers = wireOutgoingHandler(processor, outgoingHandlerConsumers, parallel);
+				wireOutgoingHandlerConsumers(processor, hideWired ? unwiredOutgoingHandlerConsumers : outgoingHandlerConsumers, parallel);
 			}
-			
-			unwiredConfig = new NodeProcessorConfig<P, H, E, R>() {
-
-				@Override
-				public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-					return unwiredChildProcessorsInfo;
-				}
-
-				@Override
-				public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-					return config.getParentProcessorInfo();
-				}
-
-				@Override
-				public CompletionStage<R> getRegistry() {
-					return config.getRegistry();
-				}
-
-				@Override
-				public Node getElement() {
-					return (Node) config.getElement();
-				}
-
-				@Override
-				public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-					return unwiredIncomingEndpoints;
-				}
-
-				@Override
-				public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
-					return unwiredIncomingHandlerConsumers;
-				}
-
-				@Override
-				public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-					return unwiredOutgoingEndpoints;
-				}
-
-				@Override
-				public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
-					return unwiredOutgoingHandlerConsumers;
-				}
-			};
 		} else if (config instanceof ConnectionProcessorConfig) {
 			ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig = (ConnectionProcessorConfig<P, H, E, R>) config;
-			boolean wiredSourceEndpoint = wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), failureHandler);
-			boolean wiredSourceHandler = wireSourceHandler(processor, connectionProcessorConfig);
-			boolean wiredTargetEndpoint = wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), failureHandler);
-			boolean wiredTargetHandler = wireTargetHandler(processor, connectionProcessorConfig);
-			
-			unwiredConfig = new ConnectionProcessorConfig<P, H, E, R>() {
-
-				@Override
-				public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-					return unwiredChildProcessorsInfo;
-				}
-				
-				@Override
-				public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-					return config.getParentProcessorInfo();
-				}
-
-				@Override
-				public CompletionStage<R> getRegistry() {
-					return config.getRegistry();
-				}
-
-				@Override
-				public Connection getElement() {
-					return (Connection) config.getElement();
-				}
-
-				@Override
-				public CompletionStage<E> getSourceEndpoint() {
-					return wiredSourceEndpoint ? null : connectionProcessorConfig.getSourceEndpoint();
-				}
-
-				@Override
-				public void setSourceHandler(H sourceHandler) {
-					if (wiredSourceHandler) {
-						throw new IllegalStateException("Source handler is already wired for " + getElement());
-					}
-					connectionProcessorConfig.setSourceHandler(sourceHandler);
-				}
-
-				@Override
-				public CompletionStage<E> getTargetEndpoint() {
-					return wiredTargetEndpoint ? null : connectionProcessorConfig.getTargetEndpoint();
-				}
-
-				@Override
-				public void setTargetHandler(H targetHandler) {
-					if (wiredTargetHandler) {
-						throw new IllegalStateException("Target handler is already wired for " + getElement());
-					}
-					connectionProcessorConfig.setTargetHandler(targetHandler);
-				}
-			};
-		} else {
-			unwiredConfig = new ProcessorConfig<P,R>() {
-
-				@Override
-				public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-					return unwiredChildProcessorsInfo;
-				}
-				
-				@Override
-				public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
-					return config.getParentProcessorInfo();
-				}
-
-				@Override
-				public CompletionStage<R> getRegistry() {
-					return config.getRegistry();
-				}
-
-				@Override
-				public Element getElement() {
-					return config.getElement();
-				}
-
-			};
+			allStages.add(wireSourceEndpoint(processor, connectionProcessorConfig.getSourceEndpoint(), parallel));
+			wireSourceHandler(processor, connectionProcessorConfig, parallel);
+			allStages.add(wireTargetEndpoint(processor, connectionProcessorConfig.getTargetEndpoint(), parallel));
+			wireTargetHandler(processor, connectionProcessorConfig, parallel);
 		}
-
-		return ProcessorInfo.of(hideWired ? unwiredConfig : config, (P) processor, () -> failures);
+		
+		CompletableFuture<?>[] allStagesArray = allStages.stream().map(CompletionStage::toCompletableFuture).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
+		return CompletableFuture.allOf(allStagesArray).handle((r, e) -> {
+			if (e == null) {
+				return (P) processor;
+			}
+			NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
+			for (CompletableFuture<?> cf: allStagesArray) {
+				if (cf.isCompletedExceptionally()) {
+					cf.whenComplete((rs, ex) -> ne.addSuppressed(ex));
+				}
+			}
+			throw ne;
+		});
 	}
 
 	protected int compareProcessorMethods(Method a, Method b) {
@@ -299,8 +198,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return a.getName().compareTo(b.getName());
 	}
 		
-	protected Consumer<R> wireRegistryEntry(Object processor) {
-		List<AccessibleObject> registryEntrySetters = Util.getFieldsAndMethods(processor.getClass())
+	protected Consumer<R> wireRegistryEntry(Object processor, boolean parallel) {
+		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.collect(Collectors.toList());
@@ -324,8 +223,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	 */
 	protected abstract Iterable<Entry<Element, ProcessorInfo<P,R>>> registryEntries(R registry);
 
-	protected Consumer<R> wireRegistry(Object processor) {
-		List<AccessibleObject> registrySetters = Util.getFieldsAndMethods(processor.getClass())
+	protected Consumer<R> wireRegistry(Object processor, boolean parallel) {
+		List<AccessibleObject> registrySetters = getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(Registry.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with Registry must have (parameter) type assignable from Map: " + ae))
 				.collect(Collectors.toList());
@@ -333,8 +232,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return registry -> registrySetters.forEach(setter -> set(processor, setter, registry));
 	}
 
-	protected void wireProcessorElement(Object processor, Element element) {
-		Util.getFieldsAndMethods(processor.getClass())
+	protected void wireProcessorElement(Object processor, Element element, boolean parallel) {
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ProcessorElement.class) != null)
 				.filter(ae -> mustSet(ae, element.getClass(), "Methods annotated with ProcessorElement must have one parameter compatible with the processor element type (" + element.getClass() + "): " + ae))
 				.forEach(setter -> {
@@ -342,8 +241,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				});						
 	}
 
-	protected Consumer<ProcessorInfo<P,R>> wireParentProcessor(Object processor) {
-		List<AccessibleObject> parentProcessorSetters = Util.getFieldsAndMethods(processor.getClass())
+	protected Consumer<ProcessorInfo<P,R>> wireParentProcessor(Object processor, boolean parallel) {
+		List<AccessibleObject> parentProcessorSetters = getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ParentProcessor.class) != null)
 				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if value is set to true: " + ae))
 				.collect(Collectors.toList());
@@ -362,10 +261,10 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		};
 	}
 	
-	private Map<Element, ProcessorInfo<P,R>> wireChildProcessor(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo) {		
+	private Map<Element, ProcessorInfo<P,R>> wireChildProcessor(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo, boolean parallel) {		
 		Map<Element, ProcessorInfo<P,R>> ret = new LinkedHashMap<>(childProcessorsInfo); 
 		
-		Util.getFieldsAndMethods(processor.getClass())
+		getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(ChildProcessor.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.forEach(setter -> {
@@ -373,6 +272,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 					ChildProcessor childProcessorAnnotation = setter.getAnnotation(ChildProcessor.class);
 					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
 						set(processor, setter, childProcessorAnnotation.config() ? ce.getValue().getConfig() : ce.getValue().getProcessor());
+						ret.remove(ce.getKey());
 					};						
 				}				
 				
@@ -380,8 +280,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return ret;
 	}	
 
-	protected void wireChildProcessors(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo) {		
-		Util.getFieldsAndMethods(processor.getClass())
+	protected void wireChildProcessors(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo, boolean parallel) {		
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ChildProcessors.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, childProcessorsInfo));
@@ -413,12 +313,12 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	
 	// Node wiring
 	@SuppressWarnings("unchecked")
-	protected Map<Connection, Consumer<H>> wireIncomingHandler(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers) {		
+	protected Map<Connection, Consumer<H>> wireIncomingHandler(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers, boolean parallel) {		
 		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(incomingHandlerConsumers);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming handler consumers.
 		// then filtering using matchIncomingHandler, sorting by priority, for all matching - wiring and removing from ret.
-		Util.getFieldsAndMethods(processor.getClass())
+		getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
 					ae, 
@@ -446,8 +346,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return Collections.unmodifiableMap(ret);
 	}	
 	
-	protected void wireIncomingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers) {				
-		Util.getFieldsAndMethods(processor.getClass())
+	protected void wireIncomingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> incomingHandlerConsumers, boolean parallel) {				
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(IncomingHandlerConsumers.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, incomingHandlerConsumers));
@@ -519,19 +419,27 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		}
 		
 	}
+	
+	private record EndpointWireRecord(Connection connection, CompletionStage<Void> result, boolean consume) {};
 
-	protected Map<Connection, CompletionStage<E>> wireIncomingEndpoint(
+	/**
+	 * @param processor
+	 * @param incomingEndpoints
+	 * @param progressMonitor
+	 * @return Wired incoming endpoints for collection of failures
+	 */
+	protected List<EndpointWireRecord> wireIncomingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
-			Function<Throwable, Void> failureHandler, 
+			boolean parallel,
 			ProgressMonitor progressMonitor) {
 						
-		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(incomingEndpoints);
-		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
+		Set<AccessibleObject> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
+		Set<Connection> wiredConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 				
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
 		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
-		Util.getFieldsAndMethods(processor.getClass())
+		return getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> incomingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>( 
 					ae, 
@@ -541,11 +449,11 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 					ao -> ao.getAnnotation(IncomingEndpoint.class).value())))
 			.filter(mr -> matchIncomingEndpoint(mr.accessibleObject(), mr.connection()))
 			.sorted()
-			.forEach(mr -> {
+			.map(mr -> {
 				AccessibleObject endpointMember = mr.accessibleObject();
 				Connection incomingConnection = mr.connection();
-				if (ret.containsKey(incomingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring an endpoint once and setting a field once
-					mr.value().thenAccept(incomingEndpoint -> {
+				if (wiredConnections.add(incomingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring an endpoint once and setting a field once
+					CompletionStage<Void> result = mr.value().thenAccept(incomingEndpoint -> {
 						if (endpointMember instanceof Field) {
 							setFieldValue(processor, (Field) endpointMember, incomingEndpoint);
 						} else {
@@ -563,19 +471,18 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 							default:
 								throw new NasdanikaException("Incoming endpoint method shall have 1 to 3 parameters: " + endpointMethod);
 							}							
-						}					
-					}).exceptionally(failureHandler);
-					if (endpointMember.getAnnotation(IncomingEndpoint.class).consume()) {
-						ret.remove(incomingConnection);
-					}
+						}
+					});
+					return new EndpointWireRecord(incomingConnection, result, endpointMember.getAnnotation(IncomingEndpoint.class).consume());
 				}
-			});
-				
-		return Collections.unmodifiableMap(ret);
+				return null;
+			})
+			.filter(null)
+			.collect(Collectors.toList());				
 	}
-
-	protected void wireIncomingEndpoints(Object processor, Map<Connection, CompletionStage<E>> incomingEndpoints) {
-		Util.getFieldsAndMethods(processor.getClass())
+	
+	protected void wireIncomingEndpoints(Object processor, Map<Connection, CompletionStage<E>> incomingEndpoints, boolean parallel) {
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(IncomingEndpoints.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with IncomingEndpoints must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, incomingEndpoints));
@@ -606,13 +513,13 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected Map<Connection, Consumer<H>> wireOutgoingHandler(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers) {
+	protected Map<Connection, Consumer<H>> wireOutgoingHandler(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers, boolean parallel) {
 
 		Map<Connection, Consumer<H>> ret = new LinkedHashMap<>(outgoingHandlerConsumers);
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing handler consumers.
 		// then filtering using matchOutgoingHandler, sorting by priority, wiring all matching and removing from ret.
-		Util.getFieldsAndMethods(processor.getClass())
+		getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingHandlerConsumers.entrySet().stream().map(ihce -> new ConnectionMatchRecord<Consumer<H>>(
 					ae, 
@@ -640,8 +547,8 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return Collections.unmodifiableMap(ret);
 	}
 	
-	protected void wireOutgoingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers) {
-		Util.getFieldsAndMethods(processor.getClass())
+	protected void wireOutgoingHandlerConsumers(Object processor, Map<Connection, Consumer<H>> outgoingHandlerConsumers, boolean parallel) {
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(OutgoingHandlerConsumers.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingHandlersConsumers must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, outgoingHandlerConsumers));
@@ -670,19 +577,19 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 				
 		return matchPredicate(outgoingConnection, outgoingEndpointAnnotation.value());
 	}	
-
-	protected Map<Connection, CompletionStage<E>> wireOutgoingEndpoint(
+	
+	protected List<EndpointWireRecord> wireOutgoingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
-			Function<Throwable, Void> failureHandler, 
+			boolean parallel,
 			ProgressMonitor progressMonitor) {
 						
-		Map<Connection, CompletionStage<E>> ret = new LinkedHashMap<>(outgoingEndpoints);
-		Set<AccessibleObject> wiredFields = new HashSet<>(); // For setting a field once, setter methods may be invoked multiple times.
+		Set<AccessibleObject> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
+		Set<Connection> wiredConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
 		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
-		Util.getFieldsAndMethods(processor.getClass())
+		return getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(m -> !Modifier.isAbstract(((Member) m).getModifiers()))
 			.flatMap(ae -> outgoingEndpoints.entrySet().stream().map(iee -> new ConnectionMatchRecord<CompletionStage<E>>(
 					ae, 
@@ -692,11 +599,11 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 					ao -> ao.getAnnotation(OutgoingEndpoint.class).value())))
 			.filter(mr -> matchOutgoingEndpoint(mr.accessibleObject(), mr.connection()))
 			.sorted()
-			.forEach(mr -> {
+			.map(mr -> {
 				AccessibleObject endpointMember = mr.accessibleObject();
 				Connection outgoingConnection = mr.connection();
-				if (ret.containsKey(outgoingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring once and setting a field once
-					mr.value().thenAccept(outgoingEndpoint -> {
+				if (wiredConnections.add(outgoingConnection) && (!(endpointMember instanceof Field) || wiredFields.add(endpointMember))) { // Wiring once and setting a field once
+					CompletionStage<Void> result = mr.value().thenAccept(outgoingEndpoint -> {
 						if (endpointMember instanceof Field) {
 							setFieldValue(processor, (Field) endpointMember, outgoingEndpoint);
 						} else {
@@ -715,92 +622,88 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 								throw new NasdanikaException("Outgoing endpoint method shall have 1 to 3 parameters: " + endpointMethod);
 							}
 						}					
-					}).exceptionally(failureHandler);
-					if (endpointMember.getAnnotation(OutgoingEndpoint.class).consume()) {
-						ret.remove(outgoingConnection);
-					}
+					});
+					return new EndpointWireRecord(outgoingConnection, result, endpointMember.getAnnotation(OutgoingEndpoint.class).consume());
 				}
-			});
-				
-		return Collections.unmodifiableMap(ret);
+				return null;
+			})
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());				
 	}
 
-	protected void wireOutgoingEndpoints(Object processor, Map<Connection, CompletionStage<E>> outgoingEndpoints) {
-		Util.getFieldsAndMethods(processor.getClass())
+	protected void wireOutgoingEndpoints(Object processor, Map<Connection, CompletionStage<E>> outgoingEndpoints, boolean parallel) {
+		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(OutgoingEndpoints.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with OutgoingEndpoints must have (parameter) type assignable from Map: " + ae))
 				.forEach(setter -> set(processor, setter, outgoingEndpoints));
 	}
+	
+	protected static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz, boolean parallel) {		
+		Stream<AccessibleObject> fieldsAndMethods = Util.getFieldsAndMethods(clazz);
+		return parallel ? fieldsAndMethods : fieldsAndMethods.parallel();
+	}
 
 	// Connection wiring
 	@SuppressWarnings("unchecked")
-	protected boolean wireTargetHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig) {
-		Optional<AccessibleObject> getter = Util.getFieldsAndMethods(processor.getClass())
+	protected void wireTargetHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig, boolean parallel) {
+		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(TargetHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get target connection handler"))
 			.findFirst();
 		
-		
 		if (getter.isPresent()) {
 			 connectionProcessorConfig.setTargetHandler((H) get(processor, getter.get()));
-			 return true;
 		}
-		return false;
 	}
 
-	protected boolean wireTargetEndpoint(
+	protected CompletionStage<Void> wireTargetEndpoint(
 			Object processor, 
 			CompletionStage<E> targetEndpointCompletionStage, 
-			Function<Throwable, Void> failureHandler) {
+			boolean parallel) {
 		
-		Optional<AccessibleObject> setter = Util.getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(TargetEndpoint.class) != null)
 			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set target connection endpoint"))
 			.findFirst();
 		
 		
 		if (setter.isPresent()) {
-			targetEndpointCompletionStage.thenAccept(targetEndpoint -> {
+			return targetEndpointCompletionStage.thenAccept(targetEndpoint -> {
 				set(processor, setter.get(), targetEndpoint);	
-			}).exceptionally(failureHandler);
-			return true;
+			});
 		}
-		return false;
+		return CompletableFuture.completedStage(null);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected boolean wireSourceHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig) {
-		Optional<AccessibleObject> getter = Util.getFieldsAndMethods(processor.getClass())
+	protected void wireSourceHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig, boolean parallel) {
+		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(SourceHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get source connection handler"))
 			.findFirst();
 		
-		
 		if (getter.isPresent()) {
 			 connectionProcessorConfig.setSourceHandler((H) get(processor, getter.get()));
-			 return true;
 		}
-		return false;
 	}
 
-	protected boolean wireSourceEndpoint(
+	protected CompletionStage<Void> wireSourceEndpoint(
 			Object processor, 
 			CompletionStage<E> sourceEndpointCompletionStage,
-			Function<Throwable, Void> failureHandler) {
+			boolean parallel) {
 		
-		Optional<AccessibleObject> setter = Util.getFieldsAndMethods(processor.getClass())
+		Optional<AccessibleObject> setter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(SourceEndpoint.class) != null)
 			.filter(ae -> mustSet(ae, null, "Cannot use " + ae + " to set source connection endpoint"))
 			.findFirst();
 		
 		
 		if (setter.isPresent()) {
-			sourceEndpointCompletionStage.thenAccept(sourceEndpoint -> {
+			return sourceEndpointCompletionStage.thenAccept(sourceEndpoint -> {
 				set(processor, setter.get(), sourceEndpoint);	
-			}).exceptionally(failureHandler);				
-			return true;
+			});				
 		}
-		return false;
+		return CompletableFuture.completedStage(null);
 	}
 	
 	protected boolean matchFactoryMethod(ProcessorConfig<P,R> elementProcessorConfig, Method method) {

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +25,7 @@ import org.nasdanika.graph.Element;
  * @param <E> Endpoint type. Endpoints pass invocations to handlers.
  * @param <R> Registry type
  */
-public interface ProcessorFactory<P,H,E,R> extends Composeable<ProcessorFactory<P,H,E,R>> {
+public interface ProcessorFactory<P,H,E,R> /* extends Composeable<ProcessorFactory<P,H,E,R>> */ {
 	
 	/**
 	 * If a connection is pass-through its source endpoint is connected directly to the target node handler and vice versa.
@@ -50,23 +52,30 @@ public interface ProcessorFactory<P,H,E,R> extends Composeable<ProcessorFactory<
 	 * @param registryCallbackConsumer
 	 * @return
 	 */
-	default ProcessorInfo<P,R> createProcessor(ProcessorConfig<P,R> config, ProgressMonitor progressMonitor) {
-		return ProcessorInfo.of(config, null, null);
+	default CompletionStage<P> createProcessor(ProcessorConfig<P,R> config, boolean parallel, ProgressMonitor progressMonitor) {
+		return CompletableFuture.completedStage(null);
 	}
 	
-	default R createProcessors(ProgressMonitor progressMonitor, Element... elements) {
-		return createProcessors(Arrays.stream(elements), progressMonitor);
+	default R createProcessors(ProgressMonitor progressMonitor, boolean parallel, Element... elements) {
+		Stream<Element> stream = Arrays.stream(elements);
+		return createProcessors(parallel ? stream.parallel() : stream , parallel, progressMonitor);
 	}
 	
-	default R createProcessors(Collection<? extends Element> elements, ProgressMonitor progressMonitor) {
-		return createProcessors(elements.stream(), progressMonitor);
+	default R createProcessors(Collection<? extends Element> elements, boolean parallel, ProgressMonitor progressMonitor) {
+		return createProcessors(parallel ? elements.parallelStream() : elements.stream(), parallel, progressMonitor);
 	}
 	
-	default R createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
+	default R createProcessors(Stream<? extends Element> elements, boolean parallel, ProgressMonitor progressMonitor) {
 		ProcessorFactoryVisitor<P, H, E, R> visitor = new ProcessorFactoryVisitor<>(this);				
-		BiFunction<Element, Map<? extends Element, Helper<P,R>>, Helper<P,R>> createElementProcessor = (element, childProcessors) -> visitor.createElementProcessor(element, childProcessors, progressMonitor);
+		BiFunction<Element, Map<? extends Element, Helper<P,R>>, Helper<P,R>> createElementProcessor = (element, childProcessors) -> visitor.createElementProcessorHelper(element, childProcessors, progressMonitor);
 		List<Helper<P,R>> helpers = elements.map(element -> element.accept(createElementProcessor)).collect(Collectors.toList());
 		R registry = createRegistry(visitor.getRegistry());
+		Stream<Helper<P,R>> helpersStream = parallel ? helpers.parallelStream() : helpers.stream();
+		helpersStream.forEach(helper -> {
+			CompletionStage<P> pc = createProcessor(helper.getConfig(), parallel, progressMonitor);
+			pc.whenComplete(helper::setProcessor);
+		});
+		
 		helpers.forEach(helper -> helper.setRegistry(registry));
 		return registry;		
 	}
@@ -78,40 +87,40 @@ public interface ProcessorFactory<P,H,E,R> extends Composeable<ProcessorFactory<
 	 */
 	R createRegistry(Map<Element, ProcessorInfo<P,R>> registry);
 	
-	/**
-	 * Composes this and the other factory
-	 */
-	@Override
-	default ProcessorFactory<P, H, E, R> compose(ProcessorFactory<P, H, E, R> other) {
-		if (other == null) {
-			return this;
-		}
-		
-		return new ProcessorFactory<P, H, E, R>() {
-
-			@Override
-			public E createEndpoint(Connection connection, H handler, HandlerType type) {
-				E endpoint = ProcessorFactory.this.createEndpoint(connection, handler, type);
-				if (endpoint != null) {
-					return endpoint;
-				}
-				return other.createEndpoint(connection, handler, type);
-			}
-			
-			@Override
-			public ProcessorInfo<P, R> createProcessor(ProcessorConfig<P, R> config, ProgressMonitor progressMonitor) {				
-				// TODO - split monitor?
-				ProcessorInfo<P, R> info = ProcessorFactory.this.createProcessor(config, progressMonitor);
-				return info.getProcessor() == null ? other.createProcessor(config, progressMonitor) : info;
-			}
-
-			@Override
-			public R createRegistry(Map<Element, ProcessorInfo<P, R>> registry) {
-				return ProcessorFactory.this.createRegistry(registry);
-			}
-		};
-		
-	}
+//	/**
+//	 * Composes this and the other factory
+//	 */
+//	@Override
+//	default ProcessorFactory<P, H, E, R> compose(ProcessorFactory<P, H, E, R> other) {
+//		if (other == null) {
+//			return this;
+//		}
+//		
+//		return new ProcessorFactory<P, H, E, R>() {
+//
+//			@Override
+//			public E createEndpoint(Connection connection, H handler, HandlerType type) {
+//				E endpoint = ProcessorFactory.this.createEndpoint(connection, handler, type);
+//				if (endpoint != null) {
+//					return endpoint;
+//				}
+//				return other.createEndpoint(connection, handler, type);
+//			}
+//			
+//			@Override
+//			public CompletionStage<P> createProcessor(ProcessorConfig<P, R> config, boolean parallel, ProgressMonitor progressMonitor) {				
+//				// TODO - split monitor?
+//				ProcessorInfo<P, R> info = ProcessorFactory.this.createProcessor(config, progressMonitor);
+//				return info.getProcessor() == null ? other.createProcessor(config, progressMonitor) : info;
+//			}
+//
+//			@Override
+//			public R createRegistry(Map<Element, ProcessorInfo<P, R>> registry) {
+//				return ProcessorFactory.this.createRegistry(registry);
+//			}
+//		};
+//		
+//	}
 	
 	/**
 	 * Composes a stream of factories into a single factory.

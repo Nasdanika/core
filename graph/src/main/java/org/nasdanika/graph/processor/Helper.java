@@ -1,17 +1,35 @@
 package org.nasdanika.graph.processor;
 
-abstract class Helper<P,R> {
-	
-	private ProcessorInfo<P,R> processorInfo;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
-	Helper(ProcessorInfo<P,R> processorInfo) {
-		this.processorInfo = processorInfo;
+abstract class Helper<P,R> implements ProcessorInfo<P,R> {
+	
+	private ProcessorConfig<P,R> config;
+	private CompletableFuture<P> processorCompletableFuture = new CompletableFuture<>();
+
+	Helper(ProcessorConfig<P,R> config) {
+		this.config = config;
 	}
 	
 	abstract void setParentProcessorInfo(ProcessorInfo<P,R> parentProcessorInfo);
-
-	ProcessorInfo<P,R> getProcessorInfo() {
-		return processorInfo;
+	
+	@Override
+	public ProcessorConfig<P, R> getConfig() {
+		return config;
+	}
+	
+	void setProcessor(P processor, Throwable ex) {
+		if (ex == null) {
+			processorCompletableFuture.complete(processor);
+		} else {
+			processorCompletableFuture.completeExceptionally(ex);
+		}
+	}
+	
+	@Override
+	public CompletionStage<P> getProcessor() {
+		return processorCompletableFuture;
 	}
 	
 	abstract void setRegistry(R registry);	

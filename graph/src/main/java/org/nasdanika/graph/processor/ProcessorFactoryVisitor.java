@@ -18,7 +18,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 
 /**
- * 
+ * Creates a map/registry of element to processor config. 
  * @author Pavel
  *
  * @param <P> Processor type.
@@ -36,15 +36,6 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	
 	// Endpoints for connection target to call the connection
 	private Map<Connection, CompletableFuture<E>> targetEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
-	
-//	private Collection<InvocationRecord<Map<Node, Map<Connection, CompletableFuture<E>>>>> invocations = Collections.synchronizedCollection(new ArrayList<>());
-	
-	// Endpoints for incoming connections to call the target node
-//	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = Collections.synchronizedMap(Util.createListeningProxy(new LinkedHashMap<>(), ir -> {
-//		if (ir.method().getDeclaringClass() != Object.class) {
-//			invocations.add(ir);
-//		}
-//	}));
 
 	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
@@ -54,16 +45,16 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	ProcessorFactoryVisitor(ProcessorFactory<P,H,E,R> factory) {
 		this.factory = factory;
 	}
-		
+			
 	Map<Element, ProcessorInfo<P,R>> getRegistry() {
 		return registry;
 	}	
 
-	Helper<P,R> createElementProcessor(Element element, Map<? extends Element, Helper<P,R>> childProcessors, ProgressMonitor progressMonitor) {
+	Helper<P,R> createElementProcessorHelper(Element element, Map<? extends Element, Helper<P,R>> childHelpers, ProgressMonitor progressMonitor) {
 		if (progressMonitor.isCancelled()) {
 			throw new CancellationException();
 		}		
-		try (ProgressMonitor subMonitor =  progressMonitor.split("Creating element processor", 1, element)) {
+		try (ProgressMonitor subMonitor =  progressMonitor.split("Creating element helper", 1, element)) {
 			CompletableFuture<ProcessorInfo<P,R>> parentProcessorInfoCompletableFuture = new CompletableFuture<>();
 			CompletableFuture<R> registryCompletableFuture = new CompletableFuture<>();
 			ProcessorConfig<P,R> config;
@@ -142,20 +133,19 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 						return node;
 					}
 	
+					@SuppressWarnings({ "unchecked", "rawtypes" })
 					@Override
 					public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-						Map<Element,ProcessorInfo<P,R>> ret = new LinkedHashMap<>();
-						childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
-						return ret;
+						return (Map) childHelpers;
 					}
 					
 					@Override
-					public CompletableFuture<ProcessorInfo<P,R>> getParentProcessorInfo() {
+					public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
 						return parentProcessorInfoCompletableFuture;
 					}
 	
 					@Override
-					public CompletableFuture<R> getRegistry() {
+					public CompletionStage<R> getRegistry() {
 						return registryCompletableFuture;
 					}
 	
@@ -202,20 +192,19 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 							return connection;
 						}
 	
+						@SuppressWarnings({ "unchecked", "rawtypes" })
 						@Override
 						public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
-							Map<Element,ProcessorInfo<P,R>> ret = new LinkedHashMap<>();
-							childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
-							return ret;
+							return (Map) childHelpers;
 						}
 	
 						@Override
-						public CompletableFuture<ProcessorInfo<P,R>> getParentProcessorInfo() {
+						public CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo() {
 							return parentProcessorInfoCompletableFuture;
 						}
 	
 						@Override
-						public CompletableFuture<R> getRegistry() {
+						public CompletionStage<R> getRegistry() {
 							return registryCompletableFuture;
 						}
 	
@@ -252,11 +241,10 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 						return element;
 					}
 	
+					@SuppressWarnings({ "unchecked", "rawtypes" })
 					@Override
-					public Map<Element, ProcessorInfo<P, R>> getChildProcessorsInfo() {
-						Map<Element,ProcessorInfo<P,R>> ret = new LinkedHashMap<>();
-						childProcessors.entrySet().forEach(e -> ret.put(e.getKey(), e.getValue().getProcessorInfo()));
-						return ret;
+					public Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo() {
+						return (Map) childHelpers;
 					}
 	
 					@Override
@@ -272,18 +260,11 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				};
 			}
 			
-			ProcessorInfo<P,R> processorInfo = config == null ? null : factory.createProcessor(config, subMonitor);
-			
-			if (childProcessors != null) {
-				childProcessors.values().forEach(ch -> ch.setParentProcessorInfo(processorInfo));
-			}
-			if (processorInfo != null) {
-				registry.put(element, processorInfo);
+			if (config == null) {
+				return null;
 			}
 			
-			subMonitor.worked(1, "Created a processor", element, processorInfo);
-			
-			return new Helper<>(processorInfo) {
+			Helper<P,R> helper = new Helper<>(config) {
 	
 				@Override
 				void setParentProcessorInfo(ProcessorInfo<P,R> parentProcessorInfo) {
@@ -292,11 +273,19 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	
 				@Override
 				void setRegistry(R registry) {
-					childProcessors.values().forEach(ch -> ch.setRegistry(registry));
+					childHelpers.values().forEach(ch -> ch.setRegistry(registry));
 					registryCompletableFuture.complete(registry);
 				}
 				
 			};
+			
+			if (childHelpers != null) {
+				childHelpers.values().forEach(ch -> ch.setParentProcessorInfo(helper));
+			}
+			registry.put(element, helper);
+			
+			subMonitor.worked(1, "Created a helper", element, helper);
+			return helper;
 		} 
 	}
 

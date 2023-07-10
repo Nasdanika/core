@@ -1,21 +1,18 @@
 package org.nasdanika.graph.processor;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public interface ProcessorInfo<P,R> {
 	
 	ProcessorConfig<P,R> getConfig();
 	
-	P getProcessor();
+	CompletionStage<P> getProcessor();
 	
-	/**
-	 * @return Wiring failures. 
-	 */
-	Collection<Throwable> getFailures();
 	
-	static <P,R> ProcessorInfo<P,R> of(ProcessorConfig<P,R> config, P processor, Supplier<Collection<Throwable>> failuresSupplier) {
+	static <P,R> ProcessorInfo<P,R> of(ProcessorConfig<P,R> config, P processor) {
+		
+		CompletionStage<P> pcs = CompletableFuture.completedStage(processor);
 		
 		return new ProcessorInfo<P,R>() {
 
@@ -25,13 +22,8 @@ public interface ProcessorInfo<P,R> {
 			}
 
 			@Override
-			public P getProcessor() {
-				return processor;
-			}
-			
-			@Override
-			public Collection<Throwable> getFailures() {
-				return failuresSupplier == null ? Collections.emptyList() : failuresSupplier.get();
+			public CompletionStage<P> getProcessor() {
+				return pcs;
 			}
 			
 		};

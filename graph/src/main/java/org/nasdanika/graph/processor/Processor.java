@@ -42,7 +42,7 @@ public @interface Processor {
 	Class<? extends Element> type() default Element.class; 
 	
 	/**
-	 * @return If true, handlers and endpoints wired to annotated methods and fields are removed from {@link ProcessorConfig} returned from {@link ProcessorInfo}.getConfig().
+	 * @return If true, handlers, children, and endpoints wired to annotated methods and fields are removed from wired maps for handlers, children, and endpoints  
 	 */
 	boolean hideWired() default true;
 
