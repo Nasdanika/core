@@ -1289,7 +1289,7 @@ public class Util {
 	}
 	
 	// --- For reflection ---
-		
+	
 	/**
 	 * @return A stream of methods. Accessible methods for the introspection level ACCESSIBLE and declared methods from the class and all super classes and implemented interfaces for the introspection level DECLARED.
 	 */
@@ -1315,6 +1315,8 @@ public class Util {
 	public static Stream<AccessibleObject> getFieldsAndMethods(Class<?> clazz) {
 		return Stream.concat(getMethods(clazz), getFields(clazz));
 	}
+	
+	
 	
 	public static URI createClassURI(Class<?> clazz) {
 		return URI.createURI(Util.CLASSPATH_URL_PREFIX + clazz.getName().replace('.', '/'));
