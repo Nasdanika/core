@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -1351,19 +1352,21 @@ public class Util {
 	public static <T> T createListeningProxy(T target, java.util.function.Consumer<InvocationRecord<T>> invocationRecordConsumer) {
 		return createListeningProxy(target, new InvocationListener<T>() {
 
+			private AtomicLong counter = new AtomicLong();
+			
 			@Override
 			public void before(T target, T proxy, Method method, Object[] args) {
-				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, false, null, null, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, false, null, null, Thread.currentThread(), new Throwable().getStackTrace(), counter.incrementAndGet(), System.nanoTime()));				
 			}
 
 			@Override
 			public void after(T target, T proxy, Method method, Object[] args, Object result) {
-				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, result, null, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, result, null, Thread.currentThread(), new Throwable().getStackTrace(), counter.incrementAndGet(), System.nanoTime()));				
 			}
 
 			@Override
 			public void afterError(T target, T proxy, Method method, Object[] args, Throwable error) {
-				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, null, error, Thread.currentThread(), new Throwable().getStackTrace(), System.nanoTime()));				
+				invocationRecordConsumer.accept(new InvocationRecord<T>(target, proxy, method, args, true, null, error, Thread.currentThread(), new Throwable().getStackTrace(), counter.incrementAndGet(), System.nanoTime()));				
 			}
 		});		
 		

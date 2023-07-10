@@ -12,6 +12,7 @@ public record InvocationRecord<T>(
 		Throwable error, 
 		Thread thread, 
 		StackTraceElement[] stackTrace,
+		long seqNo,
 		long nanoTime) {
 
 }
