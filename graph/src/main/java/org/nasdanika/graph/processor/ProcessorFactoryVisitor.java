@@ -1,5 +1,7 @@
 package org.nasdanika.graph.processor;
 
+//import java.util.ArrayList;
+//import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -8,7 +10,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
+//import org.nasdanika.common.InvocationRecord;
 import org.nasdanika.common.ProgressMonitor;
+//import org.nasdanika.common.Util;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
@@ -33,7 +37,15 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 	// Endpoints for connection target to call the connection
 	private Map<Connection, CompletableFuture<E>> targetEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
+//	private Collection<InvocationRecord<Map<Node, Map<Connection, CompletableFuture<E>>>>> invocations = Collections.synchronizedCollection(new ArrayList<>());
+	
 	// Endpoints for incoming connections to call the target node
+//	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = Collections.synchronizedMap(Util.createListeningProxy(new LinkedHashMap<>(), ir -> {
+//		if (ir.method().getDeclaringClass() != Object.class) {
+//			invocations.add(ir);
+//		}
+//	}));
+
 	private Map<Node, Map<Connection, CompletableFuture<E>>> incomingEndpoints = Collections.synchronizedMap(new LinkedHashMap<>());
 	
 	// Endpoints for outgoing connections to call the source node
@@ -58,13 +70,11 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 			if (element instanceof Node) {
 				Node node = (Node) element;
 				Map<Connection, Consumer<H>> incomingHandlerConsumers = Collections.synchronizedMap(new LinkedHashMap<>());
+				Map<Connection, CompletableFuture<E>> nodeIncomingEndpoints = incomingEndpoints.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()));
+				
 				for (Connection incomingConnection: node.getIncomingConnections()) {
 					// Incoming endpoint - creating if not there
-					synchronized (incomingEndpoints) {
-						incomingEndpoints
-							.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
-							.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
-					}
+					nodeIncomingEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
 					
 					// Incoming handler consumer - wiring to the connection target endpoint or to the node outgoing endpoint
 					CompletableFuture<E> endpoint;
@@ -95,12 +105,9 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				}
 				
 				Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
+				Map<Connection, CompletableFuture<E>> nodeOutgoingEndpoints = outgoingEndpoints.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()));
 				for (Connection outgoingConnection: node.getOutgoingConnections()) {
-					synchronized (outgoingEndpoints) {
-						outgoingEndpoints
-							.computeIfAbsent(node, n -> Collections.synchronizedMap(new LinkedHashMap<>()))
-							.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
-					}
+					nodeOutgoingEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
 					
 					// Outgoing handler consumer - wiring to the connection source endpoint or to the node incoming endpoint
 					CompletableFuture<E> endpoint;
@@ -152,28 +159,26 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 						return registryCompletableFuture;
 					}
 	
+					@SuppressWarnings({ "unchecked", "rawtypes" }) 
 					@Override
 					public Map<Connection, CompletionStage<E>> getIncomingEndpoints() {
-						synchronized(incomingEndpoints) {
-							return Collections.unmodifiableMap(incomingEndpoints.computeIfAbsent(node, e -> Collections.synchronizedMap(new LinkedHashMap<>())));
-						}
+						return (Map) nodeIncomingEndpoints; // Rude cast to resolve compiler's unhappiness
 					}
 	
 					@Override
 					public Map<Connection, Consumer<H>> getIncomingHandlerConsumers() {
-						return Collections.unmodifiableMap(incomingHandlerConsumers);
+						return incomingHandlerConsumers;
 					}
 	
+					@SuppressWarnings({ "unchecked", "rawtypes" }) 
 					@Override
 					public Map<Connection, CompletionStage<E>> getOutgoingEndpoints() {
-						synchronized(outgoingEndpoints) {
-							return Collections.unmodifiableMap(outgoingEndpoints.computeIfAbsent(node, e -> Collections.synchronizedMap(new LinkedHashMap<>())));
-						}
+						return (Map) nodeOutgoingEndpoints; // Rude cast to resolve compiler's unhappiness
 					}
 	
 					@Override
 					public Map<Connection, Consumer<H>> getOutgoingHandlerConsumers() {
-						return Collections.unmodifiableMap(outgoingHandlerConsumers);
+						return outgoingHandlerConsumers;
 					}
 				};
 	
