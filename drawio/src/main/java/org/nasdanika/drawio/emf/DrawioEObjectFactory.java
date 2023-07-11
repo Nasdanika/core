@@ -1,7 +1,9 @@
 package org.nasdanika.drawio.emf;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
@@ -23,19 +25,16 @@ import org.nasdanika.graph.processor.emf.SemanticProcessor;
 public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> extends ResourceSetPropertySourceEObjectFactory<T,P,R> {
 	
 	@Override
-	protected void setRegistry(
-				ProcessorConfig<P, R> config,
-				P processor,
-				R registry,
-				ProgressMonitor progressMonitor) {
-		super.setRegistry(config, processor, registry, progressMonitor);
+	protected List<CompletionStage<ProcessorEntryRecord<P>>> setRegistry(ProcessorConfig<P, R> config, P processor,	R registry, ProgressMonitor progressMonitor) {
+		List<CompletionStage<ProcessorEntryRecord<P>>> ret = super.setRegistry(config, processor, registry, progressMonitor);
 		Element element = config.getElement();
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
 			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
 				linkPage(config, processor, registry, getProcessorInfo(registry, linkedPage), progressMonitor);
 			}
-		}				
+		}						
+		return ret;
 	}
 	
 	protected abstract ProcessorInfo<P, R> getProcessorInfo(R registry, Element element);
@@ -51,20 +50,18 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	 * @param registry
 	 * @param likedPageInfo
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void linkPage(
 			ProcessorConfig<P, R> config, 
 			P processor, 
 			R registry,
 			ProcessorInfo<P, ?> processorInfo,
 			ProgressMonitor progressMonitor) {
-		ProcessorInfo<P, R> thisInfo = ProcessorInfo.of(config, processor, null);
+		ProcessorInfo<P, R> thisInfo = ProcessorInfo.of(config, processor);
 		processorInfo.getConfig().getElement().accept(pe -> {
 			ProcessorInfo<P, ?> re = getProcessorInfo(registry, pe);
 			if (re.getProcessor() != null) {
-				setParent((ProcessorConfig) re.getConfig(), re.getProcessor(), thisInfo, progressMonitor, f -> {
-					f.printStackTrace(); // Should never happen
-				});
+				throw new UnsupportedOperationException("TODO: Complete refactoring to completion stages");
+//				setParent((ProcessorConfig) re.getConfig(), re.getProcessor(), thisInfo, progressMonitor);
 			}
 		});		
 	}

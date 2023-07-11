@@ -27,10 +27,12 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  */
 public abstract class GraphProcessorResource<P, T extends EObject, R> extends ResourceImpl {
 	
+	private boolean parallel;
 	protected abstract ProcessorFactory<P, ?, ?, R> getProcessorFactory();
 	
-	protected GraphProcessorResource(URI uri) {
+	protected GraphProcessorResource(URI uri, boolean parallel) {
 		super(uri);
+		this.parallel = parallel;
 	}
 
 	/**
@@ -45,7 +47,7 @@ public abstract class GraphProcessorResource<P, T extends EObject, R> extends Re
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		List<? extends Element> elements = loadElements(inputStream, options).collect(Collectors.toList());
-		R registry = getProcessorFactory().createProcessors(elements.stream(), getProgressMonitor());
+		R registry = getProcessorFactory().createProcessors(elements.stream(), parallel, getProgressMonitor());
 		List<T> roots = getRegistrySemanticElements(registry).filter(this::isRoot).collect(Collectors.toList()); // TODO .forEach(getContents()::add) - fails with concurrent modification exception
 		getContents().addAll(roots);
 		for (Element element: elements) {

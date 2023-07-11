@@ -1,14 +1,11 @@
 package org.nasdanika.graph.processor.function;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
@@ -17,7 +14,6 @@ import org.nasdanika.graph.processor.HandlerType;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
-import org.nasdanika.graph.processor.ProcessorInfo;
 
 /**
  * A processor factory with {@link BiFunction} handler and endpoint
@@ -90,27 +86,24 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 	}
 	
 	@Override
-	default ProcessorInfo<BiFunction<T,ProgressMonitor,U>, R> createProcessor(ProcessorConfig<BiFunction<T,ProgressMonitor,U>, R> config, ProgressMonitor progressMonitor) {
+	default BiFunction<T,ProgressMonitor,U> createProcessor(
+			ProcessorConfig<BiFunction<T,ProgressMonitor,U>, R> config, 
+			boolean parallel, 
+			Consumer<CompletionStage<?>> stageCollector, 
+			ProgressMonitor progressMonitor) {
+		
 		if (config instanceof NodeProcessorConfig) {
 			@SuppressWarnings("unchecked")
 			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> nodeProcessorConfig = (NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R>) config;
 
-			Collection<Throwable> failures = new ArrayList<>();
-			Function<Throwable, Void> failureHandler  = failure -> {
-				if (failure != null) {
-					failures.add(failure);
-				}
-				return null;
-			};
-
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints = new ConcurrentHashMap<>();
 			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor, W>>> incomingEndpointEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-				incomingEndpointEntry.getValue().thenAccept(endpoint -> incomingEndpoints.put(incomingEndpointEntry.getKey(), endpoint)).exceptionally(failureHandler);
+				stageCollector.accept(incomingEndpointEntry.getValue().thenAccept(endpoint -> incomingEndpoints.put(incomingEndpointEntry.getKey(), endpoint)));
 			}
 						
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints = new ConcurrentHashMap<>();
 			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor,W>>> outgoingEndpointEntry: nodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-				outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)).exceptionally(failureHandler);				
+				stageCollector.accept(outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)));				
 			}
 						
 			NodeProcessor<T, U, V, W> nodeProcessor = createNodeProcessor(nodeProcessorConfig, incomingEndpoints, outgoingEndpoints, progressMonitor);			
@@ -123,41 +116,30 @@ public interface BiFunctionProcessorFactory<T,U,V,W,R> extends ProcessorFactory<
 				outgoingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyOutgoing(outgoingHandlerConsumerEntry.getKey(), t, pm));
 			}
 			
-			return ProcessorInfo.of(config, nodeProcessor, () -> failures);						
+			return nodeProcessor;						
 		} 
 		
 		if (config instanceof ConnectionProcessorConfig) {
 			@SuppressWarnings("unchecked")
-			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> connectionProcessorConfig = (ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R>) config;
-			
-			Collection<Throwable> failures = new ArrayList<>();
-			Function<Throwable, Void> failureHandler  = failure -> {
-				if (failure != null) {
-					failures.add(failure);
-				}
-				return null;
-			};
-			
+			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> connectionProcessorConfig = (ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>, R>) config;			
 			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, progressMonitor);
 			
-			connectionProcessorConfig
+			stageCollector.accept(connectionProcessorConfig
 				.getSourceEndpoint()
 				.thenAccept(endpoint -> {										
 					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, pm, endpoint));
-				})
-				.exceptionally(failureHandler);
+				}));
 			
-			connectionProcessorConfig
+			stageCollector.accept(connectionProcessorConfig
 				.getTargetEndpoint()
 				.thenAccept(endpoint -> {										
 					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, pm, endpoint));
-				})
-				.exceptionally(failureHandler);
+				}));
 			
-			return ProcessorInfo.of(config, connectionProcessor, () -> failures);			
+			return connectionProcessor;			
 		}
 		
-		return ProcessorFactory.super.createProcessor(config, progressMonitor);
+		return ProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 	}
 	
 	/**

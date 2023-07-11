@@ -33,7 +33,7 @@ public class TestResource extends TestBase {
 		URI resourceURI = URI.createURI(getClass().getResource("resource/resource.yml").toString()); 
 		
 		@SuppressWarnings("resource")
-		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"), false);
 		
 		Consumer<EObject> resourceConsumer = new Consumer<EObject>() {
 
@@ -78,7 +78,7 @@ public class TestResource extends TestBase {
 		URI resourceURI = URI.createURI(getClass().getResource("resource/resource-default-feature.yml").toString()); 
 		
 		@SuppressWarnings("resource")
-		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"));
+		Supplier<EObject> resourceSupplier = new ExecObjectLoaderSupplier(resourceURI, Context.singleton("token", "World"), false);
 		
 		Consumer<EObject> resourceConsumer = new Consumer<EObject>() {
 

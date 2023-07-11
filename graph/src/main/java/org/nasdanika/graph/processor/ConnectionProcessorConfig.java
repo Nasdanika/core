@@ -4,7 +4,7 @@ import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Connection;
 
-public interface ConnectionProcessorConfig<P,H,E,R> extends ProcessorConfig<P,R> {
+public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig {
 	
 	@Override
 	Connection getElement();

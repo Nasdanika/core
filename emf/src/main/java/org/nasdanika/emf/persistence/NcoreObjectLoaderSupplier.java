@@ -18,8 +18,8 @@ public class NcoreObjectLoaderSupplier extends NcoreObjectLoaderExecutionPartici
 
 	private URI uri;
 	
-	public NcoreObjectLoaderSupplier(URI uri, Context context) {
-		super(context);
+	public NcoreObjectLoaderSupplier(URI uri, Context context, boolean parallel) {
+		super(context, parallel);
 		this.uri = uri;
 	}
 

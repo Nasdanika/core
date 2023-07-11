@@ -1,18 +1,17 @@
 package org.nasdanika.graph.processor;
 
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
 
 import org.nasdanika.graph.Element;
 
-public interface ProcessorConfig<P,R> {
+public interface ProcessorConfig {
 	
 	Element getElement();
 	
-	Map<Element, ProcessorInfo<P,R>> getChildProcessorsInfo();
+	Map<Element, ProcessorConfig> getChildProcessorsConfig();
 	
-	CompletionStage<ProcessorInfo<P,R>> getParentProcessorInfo();
+	ProcessorConfig getParentProcessorConfig();
 	
-	CompletionStage<R> getRegistry();
+	Map<Element,ProcessorConfig> getRegistry();
 	
 }

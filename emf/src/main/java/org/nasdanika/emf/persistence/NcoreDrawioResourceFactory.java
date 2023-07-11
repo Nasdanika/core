@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.xml.transform.TransformerException;
@@ -46,15 +44,20 @@ import org.nasdanika.ncore.util.NcoreUtil;
  */
 public abstract class NcoreDrawioResourceFactory<T extends EObject, R> extends ResourceFactoryImpl {
 	
-	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";	
+	public static final String SEMANTIC_UUID_KEY = "semantic-uuid";
+	private boolean parallel;	
+	
+	public NcoreDrawioResourceFactory(boolean parallel) {
+		this.parallel = parallel;
+	}
 	
 	private class NcoreDrawioResource extends DrawioResource<SemanticProcessor<T>, T, R> implements AbstractEObjectFactoryProcessorResource<T> {
 
 		private DrawioEObjectFactory<T, SemanticProcessor<T>, R> processorFactory;
 		private ProgressMonitor progressMonitor;
 
-		protected NcoreDrawioResource(URI uri, DrawioEObjectFactory<T, SemanticProcessor<T>, R> processorFactory, ProgressMonitor progressMonitor) {
-			super(uri);
+		protected NcoreDrawioResource(URI uri, boolean parallel, DrawioEObjectFactory<T, SemanticProcessor<T>, R> processorFactory, ProgressMonitor progressMonitor) {
+			super(uri, parallel);
 			this.processorFactory = processorFactory;
 			this.progressMonitor = progressMonitor;
 		}
@@ -99,7 +102,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject, R> extends R
 	
 	@Override
 	public Resource createResource(URI uri) {
-		return new NcoreDrawioResource(uri, createProcessorFactory(uri), getProgressMonitor(uri));
+		return new NcoreDrawioResource(uri, parallel, createProcessorFactory(uri), getProgressMonitor(uri));
 	}
 	
 	/**
@@ -142,18 +145,9 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject, R> extends R
 			}
 			
 			@Override
-			public R createProcessors(Stream<? extends Element> elements, ProgressMonitor progressMonitor) {
-				R registry = super.createProcessors(elements, progressMonitor);
-				
-				List<Throwable> failures = registryEntries(registry).stream().map(Map.Entry::getValue).flatMap(pi -> pi.getFailures().stream()).collect(Collectors.toList());
-				if (!failures.isEmpty()) {
-					NasdanikaException ne = new NasdanikaException("Theres's been " + failures.size() +  " failures during processor creation: " + failures);
-					for (Throwable failure: failures) {
-						ne.addSuppressed(failure);
-					}
-					throw ne;
-				}				
-				
+			public R createProcessors(Stream<? extends Element> elements, boolean parallel, ProgressMonitor progressMonitor) {
+				R registry = super.createProcessors(elements, parallel, progressMonitor);
+								
 				String representationPropertyName = getRepresentationPropertyName(uri);
 								
 				registryEntries(registry).forEach(re -> configureRegistryEntry(re.getKey(), re.getValue(), getPropertyValue(re.getKey(), representationPropertyName)));

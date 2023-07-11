@@ -9,6 +9,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 //import org.nasdanika.common.InvocationRecord;
 import org.nasdanika.common.ProgressMonitor;
@@ -50,7 +51,7 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 		return registry;
 	}	
 
-	Helper<P,R> createElementProcessorHelper(Element element, Map<? extends Element, Helper<P,R>> childHelpers, ProgressMonitor progressMonitor) {
+	Registration<P,R> createElementProcessorHelper(Element element, Map<? extends Element, Registration<P,R>> childHelpers, ProgressMonitor progressMonitor) {
 		if (progressMonitor.isCancelled()) {
 			throw new CancellationException();
 		}		
@@ -264,7 +265,7 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				return null;
 			}
 			
-			Helper<P,R> helper = new Helper<>(config) {
+			Registration<P,R> helper = new Registration<>(config) {
 	
 				@Override
 				void setParentProcessorInfo(ProcessorInfo<P,R> parentProcessorInfo) {
@@ -275,6 +276,26 @@ class ProcessorFactoryVisitor<P,H,E,R> {
 				void setRegistry(R registry) {
 					childHelpers.values().forEach(ch -> ch.setRegistry(registry));
 					registryCompletableFuture.complete(registry);
+				}
+				
+				private P processor;
+				
+				private CompletableFuture<P> processorCompletionStage = new CompletableFuture<>();
+
+				void createProcessor(Function<ProcessorConfig<P,R>, P> constructor) {
+					this.processor = constructor.apply(config);
+					processorCompletionStage.complete(processor);
+					childHelpers.values().forEach(ch -> ch.createProcessor(constructor));
+				}
+				
+				@Override
+				public P getProcessor() {
+					return processor;
+				}
+				
+				@Override
+				public CompletionStage<P> getProcessorCompletionStage() {
+					return processorCompletionStage;
 				}
 				
 			};

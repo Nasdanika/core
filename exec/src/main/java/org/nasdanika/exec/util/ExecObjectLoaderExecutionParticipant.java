@@ -16,8 +16,8 @@ import org.nasdanika.exec.resources.ResourcesPackage;
  */
 public abstract class ExecObjectLoaderExecutionParticipant extends NcoreObjectLoaderExecutionParticipant {
 
-	public ExecObjectLoaderExecutionParticipant(Context context) {
-		super(context);
+	public ExecObjectLoaderExecutionParticipant(Context context, boolean parallel) {
+		super(context, parallel);
 	}
 
 	@Override

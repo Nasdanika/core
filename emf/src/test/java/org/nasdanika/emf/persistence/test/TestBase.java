@@ -109,7 +109,7 @@ public class TestBase {
 		class TestCommand extends NcoreObjectLoaderExecutionParticipant implements Command {
 
 			public TestCommand(Context context) {
-				super(context);
+				super(context, false);
 			}
 
 			@Override

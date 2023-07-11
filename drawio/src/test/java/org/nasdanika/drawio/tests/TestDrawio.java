@@ -387,7 +387,7 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 			
 			@Override
-			public ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, ProgressMonitor progressMonitor) {
+			public Object createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, boolean parallel, Consumer<CompletionStage<?>> stageCollector, ProgressMonitor progressMonitor) {
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
@@ -416,7 +416,7 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 			}
 
 			@SuppressWarnings("unchecked")
@@ -429,7 +429,7 @@ public class TestDrawio {
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.createProcessors(progressMonitor, document);
+		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.createProcessors(progressMonitor, false, document);
 		Optional<?> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorOptional.isPresent()).isTrue();
 		ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> aliceProcessor = (ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessorOptional.get();
@@ -461,7 +461,7 @@ public class TestDrawio {
 		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
 
 			@Override
-			public ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, ProgressMonitor progressMonitor) {
+			public Object createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, boolean parallel, Consumer<CompletionStage<?>> stageCollector, ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
 					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
@@ -518,7 +518,7 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
+				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 			}
 			
 			@Override
@@ -535,7 +535,7 @@ public class TestDrawio {
 		};
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.compose(processorFactory).createProcessors(progressMonitor, document);
+		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.compose(processorFactory).createProcessors(progressMonitor, false, document);
 
 		Optional<?> aliceProcessorInfoOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
 		assertThat(aliceProcessorInfoOptional.isPresent()).isTrue();
@@ -649,7 +649,7 @@ public class TestDrawio {
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
-		processorFactory.createProcessors(document, progressMonitor, registry);
+		processorFactory.createProcessors(document, false, progressMonitor, registry);
 		
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	
@@ -709,10 +709,7 @@ public class TestDrawio {
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
 		@SuppressWarnings("unchecked")
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, document);
-		
-		// Failures
-		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, false, document);
 		
 		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
 		if (startProcessorInfoOptional.isPresent()) {
@@ -743,10 +740,7 @@ public class TestDrawio {
 		
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();		
 		@SuppressWarnings("unchecked")
-		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, document);
-		
-		// Failures
-		registry.entrySet().stream().flatMap(e -> e.getValue().getFailures().stream()).forEach(Throwable::printStackTrace);			
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> registry = (Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>>) processorFactory.createProcessors(progressMonitor, false, document);
 		
 		Optional<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object>> startProcessorInfoOptional = registry.entrySet().stream().filter(re -> re.getKey() instanceof Node && "Start".equals(((Node) re.getKey()).getLabel())).map(Entry::getValue).findFirst();
 		if (startProcessorInfoOptional.isPresent()) {

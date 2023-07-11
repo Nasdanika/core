@@ -29,8 +29,8 @@ public abstract class DrawioResource<P, T extends EObject, R> extends GraphProce
 	
 	protected Document document;
 	
-	protected DrawioResource(URI uri) {
-		super(uri);
+	protected DrawioResource(URI uri, boolean parallel) {
+		super(uri, parallel);
 	}
 	
 	@Override

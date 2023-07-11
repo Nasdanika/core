@@ -90,7 +90,7 @@ public class TestBase {
 		class ObjectSupplier extends ExecGenObjectLoaderExecutionParticipant implements Supplier<EObject> {
 
 			public ObjectSupplier(Context context) {
-				super(context);
+				super(context, false);
 			}
 
 			@Override

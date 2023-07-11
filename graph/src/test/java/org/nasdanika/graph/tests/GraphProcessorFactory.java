@@ -2,9 +2,10 @@ package org.nasdanika.graph.tests;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,10 @@ public class GraphProcessorFactory implements NopEndpointProcessorFactory<Suppli
 	}
 	
 	@Override
-	public ProcessorInfo<Supplier<EClassifierRecord>, Registry> createProcessor(
+	public Supplier<EClassifierRecord> createProcessor(
 			ProcessorConfig<Supplier<EClassifierRecord>, Registry> config,
+			boolean parallel,
+			Consumer<CompletionStage<?>> stageCollector,
 			ProgressMonitor progressMonitor) {
 		
 		if (config.getElement() instanceof EObjectNode) {
@@ -75,10 +78,10 @@ public class GraphProcessorFactory implements NopEndpointProcessorFactory<Suppli
 					return new EClassifierRecord(jObj, links);
 				};								
 				
-				return ProcessorInfo.of(config, processor, null);
+				return processor;
 			}
 		}
-		return NopEndpointProcessorFactory.super.createProcessor(config, progressMonitor);
+		return NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 	}
 	
 	/**

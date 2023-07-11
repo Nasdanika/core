@@ -27,8 +27,11 @@ import org.nasdanika.persistence.ObjectLoaderResourceFactory;
  */
 public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionParticipant {
 
-	public ObjectLoaderExecutionParticipant(Context context) {
+	private boolean parallel;
+
+	public ObjectLoaderExecutionParticipant(Context context, boolean parallel) {
 		super(context);
+		this.parallel = parallel;
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);
 		GitMarkerFactory markerFactory = new GitMarkerFactory();
 		
-		NcoreDrawioResourceFactory<EObject, RegistryRecord<SemanticProcessor<EObject>>> ncoreDrawioResourceFactory = new NcoreDrawioResourceFactory<EObject, RegistryRecord<SemanticProcessor<EObject>>>() {
+		NcoreDrawioResourceFactory<EObject, RegistryRecord<SemanticProcessor<EObject>>> ncoreDrawioResourceFactory = new NcoreDrawioResourceFactory<EObject, RegistryRecord<SemanticProcessor<EObject>>>(parallel) {
 			
 			@Override
 			protected ResourceSet getResourceSet() {
