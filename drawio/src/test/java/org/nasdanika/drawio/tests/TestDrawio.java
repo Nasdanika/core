@@ -384,7 +384,7 @@ public class TestDrawio {
 	@Test 
 	public void testProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<>() {
 			
 			@Override
 			public Object createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, boolean parallel, Consumer<CompletionStage<?>> stageCollector, ProgressMonitor progressMonitor) {
@@ -416,7 +416,7 @@ public class TestDrawio {
 					}
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
+				return org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 			}
 
 			@SuppressWarnings("unchecked")
@@ -458,7 +458,7 @@ public class TestDrawio {
 	@Test 
 	public void testConnectionProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.graph.processor.NopEndpointProcessorFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorFactory<>() {
+		org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<>() {
 
 			@Override
 			public Object createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, boolean parallel, Consumer<CompletionStage<?>> stageCollector, ProgressMonitor progressMonitor) {
@@ -518,7 +518,7 @@ public class TestDrawio {
 					
 				}
 				
-				return org.nasdanika.graph.processor.NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
+				return org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 			}
 			
 			@Override

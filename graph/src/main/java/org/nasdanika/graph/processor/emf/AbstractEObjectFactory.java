@@ -19,7 +19,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.Helper;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
-import org.nasdanika.graph.processor.NopEndpointProcessorFactory;
+import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
@@ -29,7 +29,7 @@ import org.nasdanika.graph.processor.ProcessorInfo;
  * @author Pavel
  *
  */
-public abstract class AbstractEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> implements NopEndpointProcessorFactory<P, ProcessorInfo<P,R>, R> {
+public abstract class AbstractEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> implements NopEndpointProcessorConfigFactory<P, ProcessorInfo<P,R>, R> {
 	
 	protected record ProcessorEntryRecord<P>(Element key, P processor) {};
 	

@@ -9,7 +9,7 @@ import org.nasdanika.graph.Connection;
  * @param <P> Processor type.
  * @param <H> Handler type.
  */
-public interface NopEndpointProcessorFactory<P,H,R> extends ProcessorFactory<P,H,H,R> {
+public interface NopEndpointProcessorConfigFactory<H> extends ProcessorConfigFactory<H,H> {
 
 	/**
 	 * Returns argument handler.

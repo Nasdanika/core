@@ -133,7 +133,7 @@ class ProcessorConfigFactoryVisitor<H,E> {
 					});
 				}
 				
-				config = new NodeProcessorConfig() {
+				config = new NodeProcessorConfig<H,E>() {
 					
 					@Override
 					public Node getElement() {

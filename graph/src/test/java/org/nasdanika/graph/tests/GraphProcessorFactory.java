@@ -18,11 +18,11 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.emf.EReferenceConnection;
-import org.nasdanika.graph.processor.NopEndpointProcessorFactory;
+import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
-public class GraphProcessorFactory implements NopEndpointProcessorFactory<Supplier<EClassifierRecord>, Void, Registry> {
+public class GraphProcessorFactory implements NopEndpointProcessorConfigFactory<Supplier<EClassifierRecord>, Void, Registry> {
 
 	@Override
 	public Registry createRegistry(Map<Element, ProcessorInfo<Supplier<EClassifierRecord>, Registry>> registry) {
@@ -81,7 +81,7 @@ public class GraphProcessorFactory implements NopEndpointProcessorFactory<Suppli
 				return processor;
 			}
 		}
-		return NopEndpointProcessorFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
+		return NopEndpointProcessorConfigFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
 	}
 	
 	/**
