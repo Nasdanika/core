@@ -9,13 +9,13 @@ import org.nasdanika.graph.Connection;
  * @param <P> Processor type.
  * @param <H> Handler type.
  */
-public interface NopEndpointProcessorConfigFactory<H> extends ProcessorConfigFactory<H,H> {
+public class NopEndpointProcessorConfigFactory<H> extends ProcessorConfigFactory<H,H> {
 
 	/**
 	 * Returns argument handler.
 	 */
 	@Override
-	default H createEndpoint(Connection connection, H handler, HandlerType type) {
+	protected H createEndpoint(Connection connection, H handler, HandlerType type) {
 		return handler;
 	}
 	

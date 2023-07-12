@@ -1,5 +1,7 @@
 package org.nasdanika.graph.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.module.ModuleDescriptor;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -45,6 +48,7 @@ import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EObjectGraphFactory;
 import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
+import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.EObjectNodeProcessorReflectiveFactory;
@@ -76,7 +80,7 @@ import org.nasdanika.persistence.ObjectLoaderResource;
  */
 public class TestGraph {
 	
-	private void testProcessorFactory(boolean parallel, int passes) throws IOException, DiagnosticException {
+	private void testProcessorFactory(boolean parallel, int passes, boolean passThrough) throws IOException, DiagnosticException {
 		List<EPackage> ePackages = Arrays.asList(
 				EcorePackage.eINSTANCE, 
 				NcorePackage.eINSTANCE);
@@ -88,8 +92,8 @@ public class TestGraph {
 			List<EObjectNode> nodes = graphFactory.createGraph(ePackages, progressMonitor);
 			System.out.println("Roots: " + nodes.size());
 			
-			AtomicLong nodeCounter = new AtomicLong();
-			AtomicLong connectionCounter = new AtomicLong();
+			AtomicInteger nodeCounter = new AtomicInteger();
+			AtomicInteger connectionCounter = new AtomicInteger();
 			for (EObjectNode node: nodes) {
 				node.accept(e -> {
 					(e instanceof Node ? nodeCounter : connectionCounter).incrementAndGet();
@@ -98,7 +102,21 @@ public class TestGraph {
 			System.out.println("Nodes: " + nodeCounter.get() + ", Connections: " + connectionCounter.get());
 			
 			ProcessorConfigFactory<Object, Object> processorConfigFactory = new NopEndpointProcessorConfigFactory<Object>() {
+				
+				@Override
+				protected boolean isPassThrough(Connection connection) {
+					return passThrough;
+				}
+				
 			};
+			Map<Element, ProcessorConfig> configs = processorConfigFactory.createConfigs(nodes, parallel, progressMonitor);
+			System.out.println("Configs: " + configs.size());
+			int expectedConfigSize = nodeCounter.get();
+			if (!passThrough) {
+				expectedConfigSize += connectionCounter.get();
+			}
+			assertEquals(expectedConfigSize, configs.size());
+			
 			
 //			Context context = Context.EMPTY_CONTEXT;
 //			Consumer<Diagnostic> diagnosticConsumer = d -> d.dump(System.out, 0);
@@ -132,12 +150,14 @@ public class TestGraph {
 		
 	@Test
 	public void testProcessorFactoryParallel() throws IOException, DiagnosticException {
-		testProcessorFactory(true, 10);
+		testProcessorFactory(true, 10, true);
+		testProcessorFactory(true, 10, false);
 	}	
 	
 	@Test
 	public void testProcessorFactorySequential() throws IOException, DiagnosticException {
-		testProcessorFactory(false, 1);
+		testProcessorFactory(false, 1, true);
+		testProcessorFactory(false, 1, false);
 	}	
 	
 }

@@ -69,7 +69,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 			}		
 			try (ProgressMonitor subMonitor =  progressMonitor.split("Creating element helper", 1, element)) {
 				Map<Element, ProcessorConfig> childConfigs = new LinkedHashMap<>();
-				childRegistrations.forEach((e,h) -> childConfigs.put(e, h.getConfig()));
+				childRegistrations.forEach((e,r) -> childConfigs.put(e, r.getConfig()));
 				
 				Reference<ProcessorConfig> parentReference = new Reference<>();
 				Reference<Map<Element, ProcessorConfig>> registryReference = new Reference<>();
@@ -267,10 +267,6 @@ public abstract class ProcessorConfigFactory<H,E> {
 					};
 				}
 				
-				if (config == null) {
-					return null;
-				}
-				
 				Registration registration = new Registration() {
 					
 					@Override
@@ -330,14 +326,19 @@ public abstract class ProcessorConfigFactory<H,E> {
 	}
 	
 	public Map<Element, ProcessorConfig> createProcessors(Stream<? extends Element> elements, boolean parallel, ProgressMonitor progressMonitor) {
-		ProcessorConfigFactoryVisitor<H, E> visitor = new ProcessorConfigFactoryVisitor<>(this);				
-		BiFunction<Element, Map<? extends Element, ProcessorConfigFactoryVisitor.Registration>, ProcessorConfigFactoryVisitor.Registration> createElementProcessorConfig = (element, childProcessors) -> visitor.createElementProcessorHelper(element, childProcessors, progressMonitor);
-		Map<Element, ProcessorConfig> registry = new LinkedHashMap<>();
-		visitor.getRegistry().forEach((e,r) -> registry.put(e, r.getConfig()));		
-		Stream<ProcessorConfigFactoryVisitor.Registration> registrations = elements.map(element -> element.accept(createElementProcessorConfig)).collect(Collectors.toList()).stream();
+		Visitor visitor = new Visitor();				
+		BiFunction<Element, Map<? extends Element, Registration>, Registration> createElementProcessorConfig = (element, childProcessors) -> visitor.createElementProcessorHelper(element, childProcessors, progressMonitor);
+		Stream<Registration> registrations = elements.map(element -> element.accept(createElementProcessorConfig)).collect(Collectors.toList()).stream();
 		if (parallel) {
 			registrations = registrations.parallel();
 		}
+		Map<Element, ProcessorConfig> registry = new LinkedHashMap<>();
+		visitor.getRegistry().forEach((e,r) -> {
+			ProcessorConfig config = r.getConfig();
+			if (config != null) {
+				registry.put(e, config);
+			}
+		});		
 		registrations.forEach(helper -> helper.setRegistry(registry));
 		return registry;		
 	}
