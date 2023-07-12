@@ -6,7 +6,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.DiagnosticException;
 import org.eclipse.emf.ecore.EPackage;
@@ -19,9 +24,12 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EObjectGraphFactory;
 import org.nasdanika.graph.emf.EObjectNode;
+import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
+import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -67,6 +75,50 @@ public class TestGraph {
 				expectedConfigSize += connectionCounter.get();
 			}
 			assertEquals(expectedConfigSize, configs.size());
+			
+			ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected Object createProcessor(
+						ProcessorConfig config, 
+						boolean parallel,
+						Function<Element, CompletionStage<Object>> processorProvider,
+						Consumer<CompletionStage<?>> stageConsumer, 
+						ProgressMonitor progressMonitor) {
+					
+					if (config instanceof NodeProcessorConfig) {
+						return new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer, passThrough);
+					}
+					
+					if (config instanceof ConnectionProcessorConfig) {
+						return new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer);
+					}
+					
+					throw new IllegalArgumentException("Neither node nor connection config: " + config);
+				}
+				
+			};
+			
+			Map<Element, Object> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			assertEquals(configs.size(), processors.size());
+			
+			@SuppressWarnings("unchecked")
+			Stream<Supplier<Integer>> ps = processors
+					.values()
+					.stream()
+					.filter(Supplier.class::isInstance)
+					.map(s -> (Supplier<Integer>) s);
+			
+			if (parallel) {
+				ps = ps.parallel();
+			}
+			
+			int calls = ps.mapToInt(Supplier<Integer>::get).sum();
+			System.out.println("Calls: " + calls);
+			assertEquals(connectionCounter.get() * 2, calls);
+			
+			// TODO - some assertions
 			
 			
 //			Context context = Context.EMPTY_CONTEXT;
