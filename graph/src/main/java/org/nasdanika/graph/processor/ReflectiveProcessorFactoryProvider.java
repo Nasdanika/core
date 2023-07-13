@@ -113,13 +113,13 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 		});		
 		wireChildProcessors(processor, childProcessorConfigsCopy , processorProvider, parallel);
 		
-		Function<ProcessorInfo<P, R>, List<CompletionStage<Void>>> pc = wireParentProcessor(processor, parallel);
-		if (pc != null) {
-			stageConsumer.accept(config.getParentProcessorInfo().thenApply(pc).thenAccept(csl -> csl.forEach(stageConsumer)));
+		ProcessorConfig parentConfig = config.getParentProcessorConfig();
+		if (parentConfig != null) {			
+			wireParentProcessor(processor, parentConfig, processorProvider.apply(parentConfig.getElement()), parallel).forEach(stageConsumer);
 		}
-		wireProcessorElement(processor, config.getElement(), parallel);
 		
-		stageConsumer.accept(config.getRegistry().thenAccept(wireRegistryEntry(processor, parallel)));
+		wireProcessorElement(processor, config.getElement(), parallel);		
+		wireRegistryEntry(processor, config.getRegistry(), processorProvider, parallel).forEach(stageConsumer);
 		
 		Consumer<R> rc = wireRegistry(processor, parallel);
 		if (rc != null) {
@@ -127,16 +127,16 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 		}
 		
 		if (config instanceof NodeProcessorConfig) {
-			NodeProcessorConfig<P, H, E, R> nodeProcessorConfig = (NodeProcessorConfig<P, H, E, R>) config;
+			NodeProcessorConfig<H, E> nodeProcessorConfig = (NodeProcessorConfig<H, E>) config;
 
-			Map<Connection, CompletionStage<E>> incomingEndpoints = synchroCopy(nodeProcessorConfig.getIncomingEndpoints()); // Making a copy to remove wired on completion 
-			wireIncomingEndpoint(processor, incomingEndpoints, parallel, progressMonitor).forEach(r -> {
+			Map<Connection, CompletionStage<E>> unwiredIncomingEndpoints = new LinkedHashMap<>(nodeProcessorConfig.getIncomingEndpoints()); // Making a copy to remove wired on completion 
+			wireIncomingEndpoint(processor, nodeProcessorConfig.getIncomingEndpoints(), parallel, progressMonitor).forEach(r -> {
 				if (r.consume()) {
-					incomingEndpoints.remove(r.connection());
+					unwiredIncomingEndpoints.remove(r.connection());
 				}
 				stageConsumer.accept(r.result());
 			});
-			wireIncomingEndpoints(processor, incomingEndpoints, parallel);
+			wireIncomingEndpoints(processor, unwiredIncomingEndpoints, parallel);
 			
 			Map<Connection, Consumer<H>> incomingHandlerConsumers = nodeProcessorConfig.getIncomingHandlerConsumers();
 			Collection<Connection> wiredHandlerIncomingConnections = wireIncomingHandler(processor, incomingHandlerConsumers, parallel);
@@ -206,23 +206,28 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 		
 		return a.getName().compareTo(b.getName());
 	}
+	
+	protected record RegistryMatchRecord(RegistryEntry annotation, AnnotatedElement setter, Element element, ProcessorConfig config) {}
 		
-	protected Consumer<R> wireRegistryEntry(Object processor, boolean parallel) {
-		List<AccessibleObject> registryEntrySetters = getFieldsAndMethods(processor.getClass(), parallel)
+	protected Stream<CompletionStage<Void>> wireRegistryEntry(
+			Object processor, 
+			Map<Element, ProcessorConfig> registry,
+			Function<Element,CompletionStage<P>> processorProvider,
+			boolean parallel) {
+		
+		return getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
-			.collect(Collectors.toList());
-		
-		return registry -> {
-			registryEntrySetters.forEach(setter -> {
-				for (Entry<Element, ProcessorInfo<P,R>> re: registryEntries(registry)) {
-					RegistryEntry registryEntryAnnotation = setter.getAnnotation(RegistryEntry.class);
-					if (matchPredicate(re.getKey(), registryEntryAnnotation.value())) {
-						set(processor, setter, registryEntryAnnotation.config() ? re.getValue().getConfig() : re.getValue().getProcessor());
-					};						
-				}				
-			});						
-		};
+			.flatMap(setter -> registry.entrySet().stream().map(re -> new RegistryMatchRecord(setter.getAnnotation(RegistryEntry.class), setter, re.getKey(), re.getValue())))
+			.filter(rmr -> matchPredicate(rmr.element(), rmr.annotation().value()))
+			.map(rmr -> {
+				if (rmr.annotation().config()) {
+					set(processor, rmr.setter(), rmr.config());				
+					return null;
+				}
+				return processorProvider.apply(rmr.element()).thenAccept(rp -> set(processor, rmr.setter(), rp));				
+			})
+			.filter(Objects::nonNull);
 	}
 	
 	/**
@@ -250,34 +255,26 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 				});						
 	}
 
-	protected Function<ProcessorInfo<P,R>,List<CompletionStage<Void>>> wireParentProcessor(Object processor, boolean parallel) {
-		List<AccessibleObject> parentProcessorSetters = getFieldsAndMethods(processor.getClass(), parallel)
+	protected Stream<CompletionStage<Void>> wireParentProcessor(			
+			Object processor,
+			ProcessorConfig parentConfig, 
+			CompletionStage<P> parentProcessorProvider,
+			boolean parallel) {
+
+		return getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ParentProcessor.class) != null)
 				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if value is set to true: " + ae))
-				.collect(Collectors.toList());
-			
-			return createParentProcessorInfoConsumer(processor, parentProcessorSetters);
-	}
-	
-	protected Function<ProcessorInfo<P,R>,List<CompletionStage<Void>>> createParentProcessorInfoConsumer(Object processor, List<AccessibleObject> parentProcessorSetters) {		
-		return parentProcessorInfo -> {
-			List<CompletionStage<Void>> ret = new ArrayList<>();
-			if (parentProcessorInfo != null) {
-				for (AccessibleObject setter: parentProcessorSetters) {
+				.map(setter -> {
 					ParentProcessor parentProcessorAnnotation = setter.getAnnotation(ParentProcessor.class);
 					if (parentProcessorAnnotation.value()) {
 						// Wiring config
-						set(processor, setter, parentProcessorInfo.getConfig());
-					} else {
-						CompletionStage<Void> cs = ((Helper<P,R>) parentProcessorInfo).getProcessorCompletionStage().thenAccept(parentProcessor -> {
-							set(processor, setter, parentProcessor);							
-						});
-						ret.add(cs);
+						set(processor, setter, parentConfig);
+						return null;
 					}
-				}
-			}
-			return ret;
-		};
+					
+					return parentProcessorProvider.thenAccept(parentProcessor -> set(processor, setter, parentProcessor));							
+				})
+				.filter(Objects::nonNull);
 	}
 	
 	private record ChildWireRecord(Element child, CompletionStage<Void> result) {};
@@ -469,7 +466,7 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 	 * @param progressMonitor
 	 * @return Wired incoming endpoints for collection of failures
 	 */
-	protected List<EndpointWireRecord> wireIncomingEndpoint(
+	protected Stream<EndpointWireRecord> wireIncomingEndpoint(
 			Object processor, 
 			Map<Connection, CompletionStage<E>> incomingEndpoints,
 			boolean parallel,
@@ -518,8 +515,7 @@ public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflec
 				}
 				return null;
 			})
-			.filter(Objects::nonNull)
-			.collect(Collectors.toList());				
+			.filter(Objects::nonNull);
 	}
 	
 	protected void wireIncomingEndpoints(Object processor, Map<Connection, CompletionStage<E>> incomingEndpoints, boolean parallel) {
