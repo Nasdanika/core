@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,7 +33,7 @@ import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 
 /**
- * Creates processor and wires hanlders and endpoints using annotations. 
+ * {@link Supplier} of a {@link ProcessorFactory} which reflecitvely creates  processors and wires hanlders and endpoints using annotations. 
  * @author Pavel
  *
  * @param <P>
@@ -41,35 +42,39 @@ import org.nasdanika.graph.Element;
  * @param <U>
  * @param <S>
  */
-public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector implements ProcessorFactory<P, H, E, R> {
+public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 	
 	private List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
-
-	protected ReflectiveProcessorFactory(Object... targets) {
+		
+	protected ReflectiveProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
 	}
 	
-	public R createProcessors(Element element, boolean parallel, ProgressMonitor progressMonitor, Object... registryTargets) {
-		R registry = ProcessorFactory.super.createProcessors(progressMonitor, parallel, element);
-		for (Object registryTarget: registryTargets) {
-			// TODO  - progress moinitor			
-			wireRegistryEntry(registryTarget, parallel).accept(registry);
-			wireRegistry(registryTarget, parallel).accept(registry);
-		}
-		return registry;
-	}
-	
-	private <K,V> Map<K,V> synchroCopy(Map<K,V> map) {
-		synchronized (map) {
-			return Collections.synchronizedMap(new LinkedHashMap<>(map));
-		}
+	public ProcessorFactory<P> getFactory() {
+		return new ProcessorFactory<P>() {
+
+			@Override
+			protected P createProcessor(
+					ProcessorConfig config, 
+					boolean parallel,
+					Function<Element, CompletionStage<P>> processorProvider, Consumer<CompletionStage<?>> stageConsumer,
+					ProgressMonitor progressMonitor) {
+				
+				return ReflectiveProcessorFactoryProvider.this.createProcessor(config, parallel, processorProvider, stageConsumer, progressMonitor);
+			}
+		};
 	}
 	
 	@SuppressWarnings("unchecked")
-	@Override
-	public P createProcessor(ProcessorConfig<P,R> config, boolean parallel, Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
+	protected P createProcessor(
+			ProcessorConfig config, 
+			boolean parallel, 
+			Function<Element,CompletionStage<P>> processorProvider,
+			Consumer<CompletionStage<?>> stageConsumer,
+			ProgressMonitor progressMonitor) {
+		
 		// TODO - progress steps.
 		Optional<AnnotatedElementRecord> match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
 			.filter(r -> r.test(config.getElement()) && r.getAnnotatedElement() instanceof Method && matchFactoryMethod(config, (Method) r.getAnnotatedElement()))
@@ -77,36 +82,36 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 			.findFirst();
 		
 		if (match.isEmpty()) {
-			return ProcessorFactory.super.createProcessor(config, parallel, stageConsumer, progressMonitor);			
+			return null;			
 		}
 		
 		AnnotatedElementRecord matchedRecord = match.get();
 		Method method = (Method) matchedRecord.getAnnotatedElement();
-		Object processor;
+		P processor;
 		if (method.getParameterCount() == 0) {
-			processor = matchedRecord.invoke();
+			processor = (P) matchedRecord.invoke();
 		} else if (method.getParameterCount() == 1) {
-			processor = matchedRecord.invoke(config);
+			processor = (P) matchedRecord.invoke(config);
 		} else {
-			processor = matchedRecord.invoke(config, progressMonitor);			
+			processor = (P) matchedRecord.invoke(config, progressMonitor);			
 		}
 		if (processor == null) {
-			return ProcessorFactory.super.createProcessor(config, parallel, stageConsumer, progressMonitor);			
+			return processor;			
 		}
 		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
 		
 		boolean hideWired = elementProcessorAnnotation.hideWired();
-		LinkedHashMap<Element, ProcessorInfo<P,R>> childProcessorsInfoCopy = new LinkedHashMap<>(config.getChildProcessorsInfo());
-		wireChildProcessor(processor, config.getChildProcessorsInfo(), parallel).forEach(childWireRecord -> {
+		Map<Element, ProcessorConfig> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
+		wireChildProcessor(processor, config.getChildProcessorConfigs(), processorProvider, parallel).forEach(childWireRecord -> {
 			if (hideWired) {
-				childProcessorsInfoCopy.remove(childWireRecord.child());
+				childProcessorConfigsCopy.remove(childWireRecord.child());
 			}
 			CompletionStage<Void> cs = childWireRecord.result();
 			if (cs != null) {
 				stageConsumer.accept(cs);
 			}
 		});		
-		wireChildProcessors(processor, childProcessorsInfoCopy , parallel);
+		wireChildProcessors(processor, childProcessorConfigsCopy , processorProvider, parallel);
 		
 		Function<ProcessorInfo<P, R>, List<CompletionStage<Void>>> pc = wireParentProcessor(processor, parallel);
 		if (pc != null) {
@@ -277,20 +282,24 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	
 	private record ChildWireRecord(Element child, CompletionStage<Void> result) {};
 	
-	private List<ChildWireRecord> wireChildProcessor(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo, boolean parallel) {		
+	private List<ChildWireRecord> wireChildProcessor(
+			P processor, 
+			Map<Element, ProcessorConfig> childProcessorConfigs, 
+			Function<Element,CompletionStage<P>> processorProvider,
+			boolean parallel) {		
 		return getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(ChildProcessor.class) != null)
 			.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ChildProcessor must have (parameter) type assignable from the processor type or ProcessorConfig if config is set to true: " + ae))
 			.map(setter -> {
 				List<ChildWireRecord> wireRecords = new ArrayList<>();
-				for (Entry<Element, ProcessorInfo<P,R>> ce: childProcessorsInfo.entrySet()) {
+				for (Entry<Element, ProcessorConfig> ce: childProcessorConfigs.entrySet()) {
 					ChildProcessor childProcessorAnnotation = setter.getAnnotation(ChildProcessor.class);
 					if (matchPredicate(ce.getKey(), childProcessorAnnotation.value())) {
 						if (childProcessorAnnotation.config()) {
-							set(processor, setter, ce.getValue().getConfig()); 
+							set(processor, setter, ce.getValue()); 
 							wireRecords.add(new ChildWireRecord(ce.getKey(), null));
 						} else {						
-							CompletionStage<Void> cs = ((Helper<P,R>) ce.getValue()).getProcessorCompletionStage().thenAccept(childProcessor -> set(processor, setter, childProcessor));
+							CompletionStage<Void> cs = processorProvider.apply(ce.getKey()).thenAccept(childProcessor -> set(processor, setter, childProcessor));
 							wireRecords.add(new ChildWireRecord(ce.getKey(), cs));
 						}
 					};						
@@ -301,11 +310,15 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 			.collect(Collectors.toList());
 	}	
 
-	protected void wireChildProcessors(Object processor, Map<Element, ProcessorInfo<P,R>> childProcessorsInfo, boolean parallel) {		
+	protected void wireChildProcessors(
+			Object processor, 
+			Map<Element, ProcessorConfig> childProcessorConfigs,
+			Function<Element,CompletionStage<P>> processorProvider,
+			boolean parallel) {		
 		getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ChildProcessors.class) != null)
 				.filter(ae -> mustSet(ae, Map.class, "Fields/methods annotated with ChildProcessors must have (parameter) type assignable from Map: " + ae))
-				.forEach(setter -> set(processor, setter, childProcessorsInfo));
+				.forEach(setter -> set(processor, setter, childProcessorConfigs));
 	}
 	
 	/**
@@ -676,7 +689,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 
 	// Connection wiring
 	@SuppressWarnings("unchecked")
-	protected void wireTargetHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig, boolean parallel) {
+	protected void wireTargetHandler(Object processor, ConnectionProcessorConfig<H,E> connectionProcessorConfig, boolean parallel) {
 		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(TargetHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get target connection handler"))
@@ -707,7 +720,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void wireSourceHandler(Object processor, ConnectionProcessorConfig<P, H, E, R> connectionProcessorConfig, boolean parallel) {
+	protected void wireSourceHandler(Object processor, ConnectionProcessorConfig connectionProcessorConfig, boolean parallel) {
 		Optional<AccessibleObject> getter = getFieldsAndMethods(processor.getClass(), parallel)
 			.filter(ae -> ae.getAnnotation(SourceHandler.class) != null)
 			.filter(ae -> mustGet(ae, null, "Cannot use " + ae + " to get source connection handler"))
@@ -737,7 +750,7 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		return CompletableFuture.completedStage(null);
 	}
 	
-	protected boolean matchFactoryMethod(ProcessorConfig<P,R> elementProcessorConfig, Method method) {
+	protected boolean matchFactoryMethod(ProcessorConfig elementProcessorConfig, Method method) {
 		if (Modifier.isAbstract(method.getModifiers())) {
 			return false;
 		}
@@ -766,5 +779,23 @@ public abstract class ReflectiveProcessorFactory<P, H, E, R> extends Reflector i
 		
 		return matchPredicate(elementProcessorConfig.getElement(), elementProcessorAnnotation.value());
 	}
+	
+//	public R createProcessors(Element element, boolean parallel, ProgressMonitor progressMonitor, Object... registryTargets) {
+//		R registry = ProcessorFactory.super.createProcessors(progressMonitor, parallel, element);
+//		for (Object registryTarget: registryTargets) {
+//			// TODO  - progress moinitor			
+//			wireRegistryEntry(registryTarget, parallel).accept(registry);
+//			wireRegistry(registryTarget, parallel).accept(registry);
+//		}
+//		return registry;
+//	}
+//	
+//	private <K,V> Map<K,V> synchroCopy(Map<K,V> map) {
+//		synchronized (map) {
+//			return Collections.synchronizedMap(new LinkedHashMap<>(map));
+//		}
+//	}
+//	
+	
 	
 }

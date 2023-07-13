@@ -39,7 +39,7 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class TestGraph {
 	
-	private void testProcessorFactory(boolean parallel, int passes, boolean passThrough) throws IOException, DiagnosticException {
+	private void testProcessorFactory(boolean parallel, int passes, boolean passThrough) {
 		List<EPackage> ePackages = Arrays.asList(
 				EcorePackage.eINSTANCE, 
 				NcorePackage.eINSTANCE);
@@ -152,13 +152,13 @@ public class TestGraph {
 	}
 		
 	@Test
-	public void testProcessorFactoryParallel() throws IOException, DiagnosticException {
+	public void testProcessorFactoryParallel() {
 		testProcessorFactory(true, 10, true);
 		testProcessorFactory(true, 10, false);
 	}	
 	
 	@Test
-	public void testProcessorFactorySequential() throws IOException, DiagnosticException {
+	public void testProcessorFactorySequential() {
 		testProcessorFactory(false, 1, true);
 		testProcessorFactory(false, 1, false);
 	}	

@@ -165,7 +165,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 						}
 	
 						@Override
-						public Map<Element, ProcessorConfig> getChildProcessorsConfig() {
+						public Map<Element, ProcessorConfig> getChildProcessorConfigs() {
 							return childConfigs;
 						}
 	
@@ -202,7 +202,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 							}
 	
 							@Override
-							public Map<Element, ProcessorConfig> getChildProcessorsConfig() {
+							public Map<Element, ProcessorConfig> getChildProcessorConfigs() {
 								return childConfigs;
 							}
 	
@@ -250,7 +250,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 						}
 		
 						@Override
-						public Map<Element, ProcessorConfig> getChildProcessorsConfig() {
+						public Map<Element, ProcessorConfig> getChildProcessorConfigs() {
 							return childConfigs;
 						}
 	

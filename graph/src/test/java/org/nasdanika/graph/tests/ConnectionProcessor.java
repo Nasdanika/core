@@ -7,18 +7,16 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 
 public class ConnectionProcessor {
 	
-	private ConnectionProcessorConfig<Function<Element, Element>, Function<Element, Element>> config;
 	private Function<Element, Element> sourceEndpoint;
 	private Function<Element, Element> targetEndpoint;
 
 	public ConnectionProcessor(ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, Consumer<CompletionStage<?>> stageConsumer) {
-		this.config = config;
-		
 		config.setSourceHandler(e -> {
 			assertEquals(config.getElement().getSource() , e);
 			assertNotNull(targetEndpoint);
@@ -36,7 +34,10 @@ public class ConnectionProcessor {
 		});			
 		
 		stageConsumer.accept(config.getSourceEndpoint().thenAccept(se -> this.sourceEndpoint = se));
-		stageConsumer.accept(config.getTargetEndpoint().thenAccept(te -> this.targetEndpoint = te));		
+		stageConsumer.accept(config.getTargetEndpoint().thenAccept(te -> {
+			this.targetEndpoint = te;
+//			throw new NasdanikaException("Vsyo ploho!");
+		}));		
 	}
 
 }

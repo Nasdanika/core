@@ -8,7 +8,7 @@ public interface ProcessorConfig {
 	
 	Element getElement();
 	
-	Map<Element, ProcessorConfig> getChildProcessorsConfig();
+	Map<Element, ProcessorConfig> getChildProcessorConfigs();
 	
 	ProcessorConfig getParentProcessorConfig();
 	
