@@ -12,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.graph.Connection;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
@@ -30,7 +34,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
  * @param <W> Endpoint return type
  * @param <R> Registry type
  */
-public abstract class ReflectiveBiFunctionProcessorFactory<T,U,V,W,R> extends Reflector implements BiFunctionProcessorFactory<T,U,V,W,R> {
+public abstract class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Reflector  {
 	
 	@Retention(RUNTIME)
 	@Target({ METHOD, TYPE })
@@ -84,32 +88,82 @@ public abstract class ReflectiveBiFunctionProcessorFactory<T,U,V,W,R> extends Re
 	
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 
-	protected ReflectiveBiFunctionProcessorFactory(Object... targets) {
+	protected ReflectiveBiFunctionProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
 	}	
+	
+	
+	public BiFunctionProcessorFactory<T,U,V,W> getFactory() {
+		
+		return new BiFunctionProcessorFactory<T, U, V, W>() {
+			
+			@SuppressWarnings("unchecked")
+			@Override
+			protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
+					ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
+					boolean parallel,
+					Function<Element, CompletionStage<BiFunction<T, ProgressMonitor, U>>> processorProvider,
+					Consumer<CompletionStage<?>> stageConsumer, 
+					ProgressMonitor progressMonitor) {
+				
+				Connection connection = connectionProcessorConfig.getElement();
+				
+				Optional<AnnotatedElementRecord> factoryMethodEntryOptional = annotatedElementRecords
+						.stream()
+						.filter(aer -> aer.test(connectionProcessorConfig.getElement()) && aer.getAnnotatedElement() instanceof Method && isConnectionProcessorFactoryMethod(aer, connection))
+						.sorted((a,b) -> compareConnectionProcessorFactoryMethods(a.getAnnotatedElement(), b.getAnnotatedElement()))
+						.findFirst();
+				
+				if (factoryMethodEntryOptional.isEmpty()) {
+					return null;
+				}
+				
+				AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntryOptional.get();		
+				return (ConnectionProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(
+						connectionProcessorConfig,
+						parallel,
+						processorProvider,
+						stageConsumer,
+						progressMonitor); 						
+			}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public ConnectionProcessor<T,U,V,W> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>,R> connectionProcessorConfig,
-			ProgressMonitor progressMonitor) {
-		
-		Connection connection = connectionProcessorConfig.getElement();
-		
-		Optional<AnnotatedElementRecord> factoryMethodEntryOptional = annotatedElementRecords
-				.stream()
-				.filter(aer -> aer.test(connectionProcessorConfig.getElement()) && aer.getAnnotatedElement() instanceof Method && isConnectionProcessorFactoryMethod(aer, connection))
-				.sorted((a,b) -> compareConnectionProcessorFactoryMethods(a.getAnnotatedElement(), b.getAnnotatedElement()))
-				.findFirst();
-		
-		if (factoryMethodEntryOptional.isEmpty()) {
-			return null;
-		}
-		
-		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntryOptional.get();		
-		return (ConnectionProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(connectionProcessorConfig, progressMonitor); 		
+			@SuppressWarnings("unchecked")
+			@Override
+			protected NodeProcessor<T, U, V, W> createNodeProcessor(
+					NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
+					boolean parallel,
+					Function<Element, CompletionStage<BiFunction<T, ProgressMonitor, U>>> processorProvider,
+					Consumer<CompletionStage<?>> stageConsumer,
+					Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
+					Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
+					ProgressMonitor progressMonitor) {
+				
+				Node node = nodeProcessorConfig.getElement();
+				
+				Optional<AnnotatedElementRecord> factoryMethodEntryOptional = annotatedElementRecords
+						.stream()
+						.filter(aer -> aer.test(nodeProcessorConfig.getElement()) && aer.getAnnotatedElement() instanceof Method && isNodeProcessorFactoryMethod(aer, node))
+						.sorted((a,b) -> compareNodeProcessorFactoryMethods(a.getAnnotatedElement(), b.getAnnotatedElement()))
+						.findFirst();
+				
+				if (factoryMethodEntryOptional.isEmpty()) {
+					return null;
+				}
+				
+				AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntryOptional.get();		
+				return (NodeProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(
+						nodeProcessorConfig,
+						parallel,
+						processorProvider,
+						stageConsumer,
+						incomingEndpoints, 
+						outgoingEndpoints, 
+						progressMonitor); 		
+			}
+			
+		};				
 		
 	}
 	
@@ -146,30 +200,6 @@ public abstract class ReflectiveBiFunctionProcessorFactory<T,U,V,W,R> extends Re
 		}
 		return a.hashCode() - b.hashCode();
 	}			
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public NodeProcessor<T,U,V,W> createNodeProcessor(
-			 NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>, R> nodeProcessorConfig,
-			 Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
-			 Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints,			 
-			 ProgressMonitor progressMonitor) {
-		
-		Node node = nodeProcessorConfig.getElement();
-		
-		Optional<AnnotatedElementRecord> factoryMethodEntryOptional = annotatedElementRecords
-				.stream()
-				.filter(aer -> aer.test(nodeProcessorConfig.getElement()) && aer.getAnnotatedElement() instanceof Method && isNodeProcessorFactoryMethod(aer, node))
-				.sorted((a,b) -> compareNodeProcessorFactoryMethods(a.getAnnotatedElement(), b.getAnnotatedElement()))
-				.findFirst();
-		
-		if (factoryMethodEntryOptional.isEmpty()) {
-			return null;
-		}
-		
-		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntryOptional.get();		
-		return (NodeProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(nodeProcessorConfig, incomingEndpoints, outgoingEndpoints, progressMonitor); 		
-	}
 	
 	protected boolean isNodeProcessorFactoryMethod(AnnotatedElementRecord annotatedElementRecord, Node node) {
 		NodeProcessorFactory annotation = annotatedElementRecord.getAnnotation(NodeProcessorFactory.class);
