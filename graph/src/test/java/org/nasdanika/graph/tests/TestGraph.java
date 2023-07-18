@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,6 +31,7 @@ import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
+import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
 import org.nasdanika.ncore.NcorePackage;
 
 /**
@@ -150,17 +152,83 @@ public class TestGraph {
 		}
 	
 	}
+
+	
+	private void testBiFunctionProcessorFactory(boolean parallel, int passes, boolean passThrough) {
+		List<EPackage> ePackages = Arrays.asList(
+				EcorePackage.eINSTANCE, 
+				NcorePackage.eINSTANCE);
 		
+		for (int i = 0; i < passes; ++i) {
+			System.out.println("*** Pass " + i);
+			EObjectGraphFactory graphFactory = new EObjectGraphFactory(parallel);  
+			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
+			List<EObjectNode> nodes = graphFactory.createGraph(ePackages, progressMonitor);
+			System.out.println("Roots: " + nodes.size());
+			
+			AtomicInteger nodeCounter = new AtomicInteger();
+			AtomicInteger connectionCounter = new AtomicInteger();
+			for (EObjectNode node: nodes) {
+				node.accept(e -> {
+					(e instanceof Node ? nodeCounter : connectionCounter).incrementAndGet();
+				});				
+			}
+			System.out.println("Nodes: " + nodeCounter.get() + ", Connections: " + connectionCounter.get());
+			
+			ProcessorConfigFactory<Object, Object> processorConfigFactory = new NopEndpointProcessorConfigFactory<Object>() {
+				
+				@Override
+				protected boolean isPassThrough(Connection connection) {
+					return passThrough;
+				}
+				
+			};
+			Map<Element, ProcessorConfig> configs = processorConfigFactory.createConfigs(nodes, parallel, progressMonitor);
+			System.out.println("Configs: " + configs.size());
+			int expectedConfigSize = nodeCounter.get();
+			if (!passThrough) {
+				expectedConfigSize += connectionCounter.get();
+			}
+			assertEquals(expectedConfigSize, configs.size());
+			
+			BiFunctionProcessorFactoryImpl processorFactory = new BiFunctionProcessorFactoryImpl(passThrough);
+			
+			Map<Element, BiFunction<Object, ProgressMonitor, Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			assertEquals(configs.size(), processors.size());
+			
+			@SuppressWarnings("unchecked")
+			Stream<Function<Object,Object>> ps = processors
+					.values()
+					.stream()
+					.filter(Supplier.class::isInstance)
+					.map(s -> (Function<Object,Object>) s);
+			
+			if (parallel) {
+				ps = ps.parallel();
+			}
+			
+			int calls = ps.mapToInt(p -> (Integer) ((Function<Object,Object>) p).apply(33)).sum();
+			System.out.println("Calls: " + calls);
+			assertEquals(connectionCounter.get() * 2, calls);
+		}	
+	}
+			
 	@Test
 	public void testProcessorFactoryParallel() {
 		testProcessorFactory(true, 10, true);
 		testProcessorFactory(true, 10, false);
+
+		testBiFunctionProcessorFactory(true, 10, true);
+		testBiFunctionProcessorFactory(true, 10, false);
 	}	
 	
 	@Test
 	public void testProcessorFactorySequential() {
 		testProcessorFactory(false, 1, true);
 		testProcessorFactory(false, 1, false);
-	}	
+
+		testBiFunctionProcessorFactory(false, 1, true);
+		testBiFunctionProcessorFactory(false, 1, false);
+	}			
 	
 }

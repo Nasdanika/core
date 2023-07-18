@@ -27,7 +27,7 @@ import org.nasdanika.graph.processor.ProcessorFactory;
  */
 public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFactory<BiFunction<T,ProgressMonitor,U>> {
 	
-	interface NodeProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
+	public interface NodeProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
 		
 		U applyIncoming(Connection connection, T input, ProgressMonitor progressMonitor);
 		
@@ -35,7 +35,7 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 		
 	}
 	
-	interface ConnectionProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
+	public interface ConnectionProcessor<T,U,V,W> extends BiFunction<T,ProgressMonitor,U> {
 		
 		/**
 		 * Processes invocation from connection's target incoming endpoint. 

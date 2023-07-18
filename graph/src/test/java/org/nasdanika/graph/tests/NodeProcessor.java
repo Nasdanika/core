@@ -24,7 +24,10 @@ public class NodeProcessor implements Supplier<Integer> {
 	private Map<Connection, Function<Element, Element>> outgoingEndpoints = new ConcurrentHashMap<>();
 	private boolean passThrough;
 
-	public NodeProcessor(NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, Consumer<CompletionStage<?>> stageConsumer, boolean passThrough) {
+	public NodeProcessor(
+			NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, 
+			Consumer<CompletionStage<?>> stageConsumer, 
+			boolean passThrough) {
 		this.config = config;
 		this.passThrough = passThrough;
 		for (Entry<Connection, Consumer<Function<Element, Element>>> ihc: config.getIncomingHandlerConsumers().entrySet()) {
@@ -54,8 +57,8 @@ public class NodeProcessor implements Supplier<Integer> {
 	@Override
 	public Integer get() {
 		int counter = 0; 
-		assertEquals(incomingEndpoints.size(), config.getIncomingEndpoints().size());
-		assertEquals(outgoingEndpoints.size(), config.getOutgoingEndpoints().size());
+		assertEquals(config.getIncomingEndpoints().size(), incomingEndpoints.size());
+		assertEquals(config.getOutgoingEndpoints().size(), outgoingEndpoints.size());
 		
 		for (Entry<Connection, Function<Element, Element>> ie: incomingEndpoints.entrySet()) {			
 			Element ret = ie.getValue().apply(config.getElement());			
