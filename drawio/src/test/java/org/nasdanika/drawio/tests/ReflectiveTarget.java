@@ -11,22 +11,22 @@ import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.ConnectionProcessor;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodeProcessor;
-import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactory.ConnectionProcessorFactory;
-import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactory.NodeProcessorFactory;
+import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider.ConnectionProcessorFactory;
+import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider.NodeProcessorFactory;
 
 //@Factory("Some bred for testing")
 public class ReflectiveTarget {
 	
 	@ConnectionProcessorFactory
 	public ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
-			ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object> connectionProcessorConfig,
+			ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
 			ProgressMonitor progressMonitor) {
 		return new AsyncHistoryConnectionProcessor();
 	}
 
 	@NodeProcessorFactory
 	public NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
-			NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>, Object> nodeProcessorConfig,
+			NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> nodeProcessorConfig,
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {

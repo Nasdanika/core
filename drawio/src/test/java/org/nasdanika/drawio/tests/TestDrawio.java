@@ -47,7 +47,10 @@ import org.nasdanika.drawio.Rectangle;
 import org.nasdanika.drawio.Root;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorConfigFactory;
+import org.nasdanika.graph.processor.ProcessorFactory;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.CompletionStageNopEndpointBiFunctionProcessorFactory;
 import org.nasdanika.graph.processor.function.CompletionStageNopEndpointReflectiveBiFunctionProcessorFactory;
@@ -384,15 +387,67 @@ public class TestDrawio {
 	@Test 
 	public void testProcessor() throws Exception {
 		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
-		org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<Object, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> processorFactory = new org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory<>() {
+		Optional<Node> aliceOptional = document
+			.stream()
+			.filter(Node.class::isInstance)
+			.map(Node.class::cast)
+			.filter(n -> "Alice".equals(n.getLabel()))
+			.findAny();
+		
+		assertThat(aliceOptional.isPresent()).isTrue();		
+		Node aliceNode = aliceOptional.get();
+		
+		Optional<Node> bobOptional = document
+				.stream()
+				.filter(Node.class::isInstance)
+				.map(Node.class::cast)
+				.filter(n -> "Bob".equals(n.getLabel()))
+				.findAny();
+			
+			assertThat(bobOptional.isPresent()).isTrue();		
+			Node bobNode = bobOptional.get();		
+		
+		NopEndpointProcessorConfigFactory<Function<String,String>> processorConfigFactory = new NopEndpointProcessorConfigFactory<>();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
+		Map<org.nasdanika.graph.Element, ProcessorConfig> configs = processorConfigFactory.createConfigs(progressMonitor, false, document);
+		
+		@SuppressWarnings("unchecked")
+		NodeProcessorConfig<Function<String, String>, Function<String, String>> aliceProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>>) configs.get(aliceNode);
+		assertThat(aliceProcessorConfig.getChildProcessorConfigs() == null || aliceProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
+		assertThat(aliceProcessorConfig.getIncomingEndpoints()).isEmpty();
+		assertThat(aliceProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
+		assertThat(aliceProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
+		assertThat(aliceProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
+		
+		aliceProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
+			handlerConsumer.accept(request -> {
+				String myName = ((Node) connection.getSource()).getLabel();
+				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
+			});
+		});
+		
+		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
+			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
+				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
+				System.out.println(dialog);				
+			});
+		}
+		
+		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 			
 			@Override
-			public Object createProcessor(ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> config, boolean parallel, Consumer<CompletionStage<?>> stageCollector, ProgressMonitor progressMonitor) {
+			protected Object createProcessor(
+					ProcessorConfig config,
+					boolean parallel,
+					Function<org.nasdanika.graph.Element, CompletionStage<Object>> processorProvider,
+					Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
+				
 				if (config instanceof NodeProcessorConfig) {
-					NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> nodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) config;
+					@SuppressWarnings("unchecked")
+					NodeProcessorConfig<Function<String, String>, Function<String, String>> nodeProcessorConfig = (NodeProcessorConfig<Function<String, String>, Function<String, String>>) config;
 					if ("Bob".equals(((Node) nodeProcessorConfig.getElement()).getLabel())) {
 						// Wiring
-						assertThat(nodeProcessorConfig.getChildProcessorsInfo() == null || nodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
+						assertThat(nodeProcessorConfig.getChildProcessorConfigs() == null || nodeProcessorConfig.getChildProcessorConfigs().isEmpty()).isTrue();
 						assertThat(nodeProcessorConfig.getOutgoingEndpoints()).isEmpty();
 						assertThat(nodeProcessorConfig.getOutgoingHandlerConsumers()).isEmpty();
 						assertThat(nodeProcessorConfig.getIncomingEndpoints().size()).isEqualTo(1);
@@ -415,44 +470,14 @@ public class TestDrawio {
 						
 					}
 				}
-				
-				return org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory.super.createProcessor(config, parallel, stageCollector, progressMonitor);
-			}
 
-			@SuppressWarnings("unchecked")
-			@Override
-			public Map<Element, ProcessorInfo<Object, ?>> createRegistry(Map<org.nasdanika.graph.Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object, ?>>>> registry) {				
-				return (Map) registry;
+				return null;
 			}
-
-			
 		};
 		
-		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();
-		Map<Element, ProcessorInfo<Object, ?>> registry = processorFactory.createProcessors(progressMonitor, false, document);
-		Optional<?> aliceProcessorOptional = registry.entrySet().stream().filter(e -> e.getKey() instanceof Node && "Alice".equals(((Node) e.getKey()).getLabel())).map(Map.Entry::getValue).findAny();
-		assertThat(aliceProcessorOptional.isPresent()).isTrue();
-		ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>> aliceProcessor = (ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessorOptional.get();
-		NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>> aliceNodeProcessorConfig = (NodeProcessorConfig<Object, Function<String, String>, Function<String, String>, Map<Element, ProcessorInfo<Object,?>>>) aliceProcessor.getConfig();
-		assertThat(aliceNodeProcessorConfig.getChildProcessorsInfo() == null || aliceNodeProcessorConfig.getChildProcessorsInfo().isEmpty()).isTrue();
-		assertThat(aliceNodeProcessorConfig.getIncomingEndpoints()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getIncomingHandlerConsumers()).isEmpty();
-		assertThat(aliceNodeProcessorConfig.getOutgoingEndpoints().size()).isEqualTo(1);
-		assertThat(aliceNodeProcessorConfig.getOutgoingHandlerConsumers().size()).isEqualTo(1);
-		
-		aliceNodeProcessorConfig.getOutgoingHandlerConsumers().forEach((connection, handlerConsumer) -> {
-			handlerConsumer.accept(request -> {
-				String myName = ((Node) connection.getSource()).getLabel();
-				return request + System.lineSeparator() + "[" + myName + "] My name is " + myName + ".";
-			});
-		});
-
-		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceNodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
-				String dialog = outgoingEndpoint.apply("[" + ((Node) outgoingEndpointCompletionStageEntry.getKey().getSource()).getLabel() + "] Hello!");
-				System.out.println(dialog);				
-			});
-		}
+		Map<org.nasdanika.graph.Element, Object> processors = processorFactory.createProcessors(configs, false, progressMonitor);
+		Object bobProcessor = processors.get(bobNode);
+		((Runnable) bobProcessor).run();		
 	}
 		
 	@Test 

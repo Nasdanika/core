@@ -14,7 +14,6 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ParentProcessor;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorElement;
-import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.Registry;
 import org.nasdanika.graph.processor.RegistryEntry;
 
@@ -31,20 +30,20 @@ public class BobProcessor implements Runnable {
 	public Node bobNode;
 	
 	@ParentProcessor(true)
-	public ProcessorConfig<Object, Map<Element, ProcessorInfo<Object,?>>> parentConfig;
+	public ProcessorConfig parentConfig;
 	
 	@RegistryEntry("label == 'Library'")
 	public Function<String,String> library;
 	
-	private NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> libraryConfig;
+	private NodeProcessorConfig<Function<String,String>, Function<String,String>> libraryConfig;
 	
 	@RegistryEntry(value = "label == 'Library'", config = true)
-	public void setLibraryConfig(NodeProcessorConfig<Object, Function<String,String>,  Function<String,String>, Map<Element, ProcessorInfo<Object,?>>> libraryConfig) {
+	public void setLibraryConfig(NodeProcessorConfig<Function<String,String>, Function<String,String>> libraryConfig) {
 		this.libraryConfig = libraryConfig;
 	};
 	
 	@Registry
-	public Map<Element, ProcessorInfo<Object, Map<Element, ProcessorInfo<Object,?>>>> registry;
+	public Map<Element, ProcessorConfig> registry;
 	
 	@IncomingHandler("source.label == 'Alice'")
 	public Function<String,String> aliceIncomingHandler = request -> {

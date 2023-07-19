@@ -55,7 +55,7 @@ public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
 	}
 	
 	@Processor(type = EObjectNode.class)
-	public Object createEObjectNodeProcessor(NodeProcessorConfig<P,H,E,R> config, ProgressMonitor progressMonitor) {
+	public Object createEObjectNodeProcessor(NodeProcessorConfig<H,E> config, ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).getTarget();
 		
 		Optional<MethodEntry> factoryMethodEntryOptional = annotatedElementRecords

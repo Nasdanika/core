@@ -1,9 +1,10 @@
 package org.nasdanika.drawio.emf;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 import org.jsoup.Jsoup;
@@ -14,7 +15,6 @@ import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.ResourceSetPropertySourceEObjectFactory;
 import org.nasdanika.graph.processor.emf.SemanticProcessor;
 
@@ -22,52 +22,56 @@ import org.nasdanika.graph.processor.emf.SemanticProcessor;
  * @author Pavel
  *
  */
-public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> extends ResourceSetPropertySourceEObjectFactory<T,P,R> {
+public abstract class DrawioEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends ResourceSetPropertySourceEObjectFactory<T,P> {
 	
 	@Override
-	protected List<CompletionStage<ProcessorEntryRecord<P>>> setRegistry(ProcessorConfig<P, R> config, P processor,	R registry, ProgressMonitor progressMonitor) {
-		List<CompletionStage<ProcessorEntryRecord<P>>> ret = super.setRegistry(config, processor, registry, progressMonitor);
+	protected void setRegistry(
+			ProcessorConfig config, 
+			P processor,
+			Function<Element, CompletionStage<P>> processorProvider, 
+			Consumer<CompletionStage<?>> stageConsumer,
+			ProgressMonitor progressMonitor) {
+		super.setRegistry(config, processor, processorProvider, stageConsumer, progressMonitor);
 		Element element = config.getElement();
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
 			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
-				linkPage(config, processor, registry, getProcessorInfo(registry, linkedPage), progressMonitor);
+				linkPage(config, processor, linkedPage, processorProvider, stageConsumer, progressMonitor);
 			}
-		}						
-		return ret;
+		}				
 	}
-	
-	protected abstract ProcessorInfo<P, R> getProcessorInfo(R registry, Element element);
 
 	protected String getLinkPagePropertyName() {
 		return "link-page";
 	}	
 	
 	/**
-	 * Processes elements from the linked page. This implementation collects all page semantic elements without container and processes then as children of this element.
+	 * Processes elements from the linked page. This implementation collects all page semantic elements without container and processes them as children of this element.
 	 * @param config
 	 * @param semanticElement
 	 * @param registry
 	 * @param likedPageInfo
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void linkPage(
-			ProcessorConfig<P, R> config, 
+			ProcessorConfig config, 
 			P processor, 
-			R registry,
-			ProcessorInfo<P, ?> processorInfo,
+			Page linkedPage,
+			Function<Element, CompletionStage<P>> processorProvider, 
+			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
-		ProcessorInfo<P, R> thisInfo = ProcessorInfo.of(config, processor);
-		processorInfo.getConfig().getElement().accept(pe -> {
-			ProcessorInfo<P, ?> re = getProcessorInfo(registry, pe);
-			if (re.getProcessor() != null) {
-				throw new UnsupportedOperationException("TODO: Complete refactoring to completion stages");
-//				setParent((ProcessorConfig) re.getConfig(), re.getProcessor(), thisInfo, progressMonitor);
+		linkedPage.accept(pe -> {
+			CompletionStage<P> pecs = processorProvider.apply(pe);
+			if (pecs != null) {
+				stageConsumer.accept(pecs.thenAccept(prc -> {
+					setParent(config, processor, config.getRegistry().get(pe), prc, progressMonitor);
+				}));
 			}
 		});		
 	}
 	
 	@Override
-	protected Context createElementContext(ProcessorConfig<P, R> config) {
+	protected Context createElementContext(ProcessorConfig config) {
 		Context superContext = super.createElementContext(config);
 		
 		Context context = new Context() {
@@ -125,7 +129,7 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	}
 	
 	@Override
-	protected Object getElementQualifier(ProcessorConfig<P, R> config) {
+	protected Object getElementQualifier(ProcessorConfig config) {
 		Map<String,Object> qualifier = new LinkedHashMap<>();
 		Element element = config.getElement();
 		qualifier.put("type", element.getClass().getCanonicalName());

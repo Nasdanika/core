@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -30,7 +31,6 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
@@ -48,7 +48,7 @@ import org.yaml.snakeyaml.Yaml;
  * @author Pavel
  *
  */
-public abstract class PropertySourceEObjectFactory<T extends EObject, P extends SemanticProcessor<T>, R> extends AbstractEObjectFactory<T,P, R> {
+public abstract class PropertySourceEObjectFactory<T extends EObject, P extends SemanticProcessor<T>> extends AbstractEObjectFactory<T,P> {
 	
 	protected String getPropertyValue(org.nasdanika.graph.Element element, String propertyName) {
 		if (!org.nasdanika.common.Util.isBlank(propertyName) && element instanceof PropertySource) {
@@ -83,7 +83,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	protected abstract URI getBaseURI();
 	
 	@Override
-	protected Collection<T> createSemanticElements(ProcessorConfig<P, R> config, ProgressMonitor progressMonitor) {
+	protected Collection<T> createSemanticElements(ProcessorConfig config, ProgressMonitor progressMonitor) {
 		String spec = getPropertyValue(config.getElement(), getSpecPropertyName());
 		String specFormat = getPropertyValue(config.getElement(), getSpecFormatPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(spec)) {
@@ -125,7 +125,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected Context getLoadingContext(ProcessorConfig<P, R> config, ProgressMonitor progressMonitor) {
+	protected Context getLoadingContext(ProcessorConfig config, ProgressMonitor progressMonitor) {
 		return Context.EMPTY_CONTEXT;
 	}
 
@@ -133,7 +133,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * Loads semantic element from a URI
 	 * @return
 	 */
-	protected Collection<T> load(URI specURI, String specFormat, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) {
+	protected Collection<T> load(URI specURI, String specFormat, ProcessorConfig config, Context context, ProgressMonitor progressMonitor) {
 		try {
 			URL specUrl = new URL(specURI.toString());
 			return load(specUrl, specFormat, config, context, progressMonitor);				
@@ -146,7 +146,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * Loads semantic element from a URL
 	 * @return
 	 */
-	protected Collection<T> load(URL url, String specFormat, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) throws IOException {
+	protected Collection<T> load(URL url, String specFormat, ProcessorConfig config, Context context, ProgressMonitor progressMonitor) throws IOException {
 		return load(url.openStream(), specFormat, URI.createURI(url.toString()), config, context, progressMonitor);
 	}
 	
@@ -154,7 +154,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected Collection<T> load(InputStream inputStream, String specFormat, URI base, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) throws IOException {
+	protected Collection<T> load(InputStream inputStream, String specFormat, URI base, ProcessorConfig config, Context context, ProgressMonitor progressMonitor) throws IOException {
 		try (Reader reader = new InputStreamReader(inputStream, getCharset())) {
 			return load(DefaultConverter.INSTANCE.toString(reader), specFormat, base, config, context, progressMonitor);
 		}		
@@ -164,7 +164,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * Loads semantic element from an input stream.
 	 * @return
 	 */
-	protected Collection<T> load(Reader reader, String specFormat, URI base, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor) throws IOException {
+	protected Collection<T> load(Reader reader, String specFormat, URI base, ProcessorConfig config, Context context, ProgressMonitor progressMonitor) throws IOException {
 		return load(DefaultConverter.INSTANCE.toString(reader), specFormat, base, config, context, progressMonitor);
 	}	
 	
@@ -182,7 +182,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	 * @param specBase Base URI for resolving relative URI's.
 	 * @return
 	 */
-	protected abstract Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig<P, R> config, Context context, ProgressMonitor progressMonitor);
+	protected abstract Collection<T> load(String spec, String specFormat, URI specBase, ProcessorConfig config, Context context, ProgressMonitor progressMonitor);
 		
 	protected String getSpecPropertyName() {
 		return "spec";
@@ -213,7 +213,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		return "child-reference";
 	}
 	
-	protected Marked getMarked(ProcessorConfig<P, R> config) {
+	protected Marked getMarked(ProcessorConfig config) {
 		Element element = config.getElement();
 		if (element instanceof Marked) {
 			return (Marked) element;
@@ -227,9 +227,14 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			
 		};
 	}
-
+	
 	@Override
-	protected EReference getChildReference(ProcessorConfig<P, R> config, P processor, T semanticElement, ProcessorInfo<P, R> parentProcessorInfo, T parentSemanticElement) {
+	protected EReference getChildReference(
+			ProcessorConfig config, 
+			P processor, 
+			T semanticElement,
+			ProcessorConfig parentProcessorConfig, 
+			T parentSemanticElement) {
 		if (parentSemanticElement == null || config == null) {
 			return null;
 		}
@@ -243,307 +248,16 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			return (EReference) ref;
 		}
 		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
-	}
-	
-	// Parent
-	protected String getParentReferencePropertyName() {
-		return "parent-reference";
-	}
-
-	@Override
-	protected EReference getParentReference(ProcessorConfig<P, R> config, P processor, T semanticElement,	ProcessorInfo<P, R> parentProcessorInfo, T parentSemanticElement) {
-		if (config == null) {
-			return null;
-		}
-		String value = getPropertyValue(config.getElement(), getParentReferencePropertyName());
-		if (org.nasdanika.common.Util.isBlank(value)) {
-			return null;
-		}
-		
-		EClass eClass = semanticElement.eClass();
-		EStructuralFeature ref = eClass.getEStructuralFeature(value);
-		if (ref instanceof EReference) {
-			return (EReference) ref;
-		}
-		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
 	}	
 	
-	protected String getParentInjectorPropertyName() {
-		return "parent-injector";
-	}
-	
 	@Override
-	protected CompletionStage<P> setParent(
-			ProcessorConfig<P, R> config, 
-			P processor, 
-			ProcessorInfo<P, R> parentProcessorInfo, Consumer<CompletionStage<?>> stageCollector,
-			ProgressMonitor progressMonitor) {
-		return super.setParent(config, processor, parentProcessorInfo, stageCollector, progressMonitor).thenApply(parentProcessor -> {
-			if (config != null) {
-				String expr = getPropertyValue(config.getElement(), getParentInjectorPropertyName());
-				if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && parentProcessor != null) {
-					for (T semanticElement: processor.getSemanticElements()) {
-						for (T parentSemanticElement: parentProcessor.getSemanticElements()) {
-							ExpressionParser parser = new SpelExpressionParser();
-							Expression exp = parser.parseExpression(expr);
-							EvaluationContext evaluationContext = createEvaluationContext();
-							evaluationContext.setVariable("config", config);
-							evaluationContext.setVariable("element", config.getElement());
-							evaluationContext.setVariable("parentElement", parentProcessorInfo.getConfig().getElement());			
-							evaluationContext.setVariable("parentProcessor", parentProcessor);
-							evaluationContext.setVariable("parentSemanticElement", parentSemanticElement);
-							evaluationContext.setVariable("parentConfig", parentProcessorInfo.getConfig());			
-							exp.getValue(evaluationContext, semanticElement);					
-						}
-					}
-				}
-			}			
-			return parentProcessor;
-		});
-	}
-	
-	protected EvaluationContext createEvaluationContext() {
-		return new StandardEvaluationContext();
-	}	
-		
-	// Source
-	protected String getSourceReferencePropertyName() {
-		return "source-reference";
-	}
-	
-	@Override
-	protected EReference getSourceReference(
-			ConnectionProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			T semanticElement,
-			ProcessorInfo<P, R> sourceProcessorInfo,
-			T sourceSemanticElement) {
-		String value = getPropertyValue(config.getElement(), getSourceReferencePropertyName());
-		if (org.nasdanika.common.Util.isBlank(value)) {
-			return null;
-		}
-		EClass eClass = semanticElement.eClass();
-		EStructuralFeature ref = eClass.getEStructuralFeature(value);
-		if (ref instanceof EReference) {
-			return (EReference) ref;
-		}
-		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
-	}
-	
-	protected String getSourceInjectorPropertyName() {
-		return "source-injector";
-	}
-	
-	@Override
-	protected CompletionStage<P> setSource(
-			ConnectionProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			ProcessorInfo<P, R> sourceProcessorInfo,
-			ProgressMonitor progressMonitor) {
-		return super.setSource(config, processor, sourceProcessorInfo, progressMonitor).thenApply(sourceProcessor -> {
-			String expr = getPropertyValue(config.getElement(), getSourceInjectorPropertyName());
-			if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && sourceProcessor != null) {
-				for (T semanticElement: processor.getSemanticElements()) {
-					for (T sourceSemanticElement: sourceProcessor.getSemanticElements()) {
-						ExpressionParser parser = new SpelExpressionParser();
-						Expression exp = parser.parseExpression(expr);
-						EvaluationContext evaluationContext = createEvaluationContext();
-						evaluationContext.setVariable("config", config);
-						evaluationContext.setVariable("element", config.getElement());
-						evaluationContext.setVariable("sourceProcessor", sourceProcessor);
-						evaluationContext.setVariable("sourceSemanticElement", sourceSemanticElement);
-						evaluationContext.setVariable("sourceConfig", sourceProcessorInfo.getConfig());			
-						exp.getValue(evaluationContext, semanticElement);					
-					}
-				}
-			}
-			return sourceProcessor;
-		});
-	}
-	
-	// Target
-	protected String getTargetReferencePropertyName() {
-		return "target-reference";
-	}
-
-	@Override
-	protected EReference getTargetReference(
-			ConnectionProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			T semanticElement,
-			ProcessorInfo<P, R> targetProcessorInfo,
-			T targetSemanticElement) {
-		String value = getPropertyValue(config.getElement(), getTargetReferencePropertyName());
-		if (org.nasdanika.common.Util.isBlank(value)) {
-			return null;
-		}
-		EClass eClass = semanticElement.eClass();
-		EStructuralFeature ref = eClass.getEStructuralFeature(value);
-		if (ref instanceof EReference) {
-			return (EReference) ref;
-		}
-		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
-	}
-	
-	protected String getTargetInjectorPropertyName() {
-		return "target-injector";
-	}
-	
-	@Override
-	protected CompletionStage<P> setTarget(
-			ConnectionProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			ProcessorInfo<P, R> targetProcessorInfo,
-			ProgressMonitor progressMonitor) {
-		return super.setTarget(config, processor, targetProcessorInfo, progressMonitor).thenApply(targetProcessor -> {
-			String expr = getPropertyValue(config.getElement(), getTargetInjectorPropertyName());
-			if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && targetProcessor != null) {
-				for (T semanticElement: processor.getSemanticElements()) {
-					for (T targetSemanticElement: targetProcessor.getSemanticElements()) {
-						ExpressionParser parser = new SpelExpressionParser();
-						Expression exp = parser.parseExpression(expr);
-						EvaluationContext evaluationContext = createEvaluationContext();
-						evaluationContext.setVariable("config", config);
-						evaluationContext.setVariable("element", config.getElement());
-						evaluationContext.setVariable("targetProcessor", targetProcessor);
-						evaluationContext.setVariable("targetSemanticElement", targetSemanticElement);
-						evaluationContext.setVariable("targetConfig", targetProcessorInfo.getConfig());			
-						exp.getValue(evaluationContext, semanticElement);
-					}
-				}
-			}
-			return targetProcessor;
-		});		
-	}
-	
-	// Incoming
-	protected String getIncomingReferencePropertyName() {
-		return "incoming-reference";
-	}
-	
-	@Override
-	protected EReference getIncomingReference(
-			NodeProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			T semanticElement,
-			Connection connection,
-			ProcessorInfo<P, R> incomingProcessorInfo,
-			T incomingSemanticElement) {
-		String value = getPropertyValue(connection, getIncomingReferencePropertyName());
-		if (org.nasdanika.common.Util.isBlank(value)) {
-			return null;
-		}
-		EClass eClass = semanticElement.eClass();
-		EStructuralFeature ref = eClass.getEStructuralFeature(value);
-		if (ref instanceof EReference) {
-			return (EReference) ref;
-		}
-		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
-	}
-	
-	protected String getIncomingInjectorPropertyName() {
-		return "incoming-injector";
-	}
-	
-	@Override
-	protected CompletionStage<P> setIncoming(
-			NodeProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
-			Connection connection,
-			ProcessorInfo<P, R> incomingProcessorInfo,
-			ProgressMonitor progressMonitor) {
-		return super.setIncoming(config, processor, connection, incomingProcessorInfo, progressMonitor).thenApply(incomingProcessor -> {
-			String expr = getPropertyValue(connection, getIncomingInjectorPropertyName());
-			if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && incomingProcessor != null) {
-				for (T semanticElement: processor.getSemanticElements()) {
-					for (T incomingSemanticElement: incomingProcessor.getSemanticElements()) {
-						ExpressionParser parser = new SpelExpressionParser();
-						Expression exp = parser.parseExpression(expr);
-						EvaluationContext evaluationContext = createEvaluationContext();
-						evaluationContext.setVariable("config", config);
-						evaluationContext.setVariable("element", config.getElement());
-						evaluationContext.setVariable("connection", connection);
-						evaluationContext.setVariable("incomingProcessor", incomingProcessor);
-						evaluationContext.setVariable("incomingSemanticElement", incomingSemanticElement);
-						evaluationContext.setVariable("incomingConfig", incomingProcessorInfo.getConfig());			
-						exp.getValue(evaluationContext, semanticElement);
-					}
-				}
-			}
-			return incomingProcessor;
-		});
-	}
-	
-	// Outgoing
-	protected String getOutgoingReferencePropertyName() {
-		return "outgoing-reference";
-	}
-	
-	@Override
-	protected EReference getOutgoingReference(
-			NodeProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor,
+	protected EReference getChildReference(
+			ProcessorConfig config, 
 			T semanticElement, 
-			Connection connection,
-			ProcessorInfo<P, R> outgoingProcessorInfo,
-			T outgoingSemanticElement) {
-		String value = getPropertyValue(connection, getOutgoingReferencePropertyName());
-		if (org.nasdanika.common.Util.isBlank(value)) {
-			return null;
-		}
-		EClass eClass = semanticElement.eClass();
-		EStructuralFeature ref = eClass.getEStructuralFeature(value);
-		if (ref instanceof EReference) {
-			return (EReference) ref;
-		}
-		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
-	}
-	
-	protected String getOutgoingInjectorPropertyName() {
-		return "outgoing-injector";
-	}
-	
-	@Override
-	protected CompletionStage<P> setOutgoing(
-			NodeProcessorConfig<P, ProcessorInfo<P, R>, ProcessorInfo<P, R>, R> config,
-			P processor, 
-			Connection connection, 
-			ProcessorInfo<P, R> outgoingProcessorInfo, 
-			ProgressMonitor progressMonitor) {
-		return super.setOutgoing(config, processor, connection, outgoingProcessorInfo, progressMonitor).thenApply(outgoingProcessor -> {
-			String expr = getPropertyValue(connection, getOutgoingInjectorPropertyName());
-			if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && outgoingProcessor != null) {
-				for (T semanticElement: processor.getSemanticElements()) {
-					for (T outgoingSemanticElement: outgoingProcessor.getSemanticElements()) {
-						ExpressionParser parser = new SpelExpressionParser();
-						Expression exp = parser.parseExpression(expr);
-						EvaluationContext evaluationContext = createEvaluationContext();
-						evaluationContext.setVariable("config", config);
-						evaluationContext.setVariable("element", config.getElement());
-						evaluationContext.setVariable("connection", connection);
-						evaluationContext.setVariable("outgoingProcessor", outgoingProcessor);
-						evaluationContext.setVariable("outgoingSemanticElement", outgoingSemanticElement);
-						evaluationContext.setVariable("outgoingConfig", outgoingProcessorInfo.getConfig());			
-						exp.getValue(evaluationContext, semanticElement);
-					}
-				}
-			}
-			return outgoingProcessor;
-		});		
-	}
-		
-	// Children
-	
-	/**
-	 * Value of child references property shall be a YAML map with reference names as keys and boolean Spel expressions as values. 
-	 * @return
-	 */
-	protected String getChildReferencesPropertyName() {
-		return "child-references";
-	}
-	
-	@Override
-	protected EReference getChildReference(ProcessorConfig<P, R> config, T semanticElement, Element child,	ProcessorInfo<P, R> childProcessorInfo, T semanticChild) {
+			Element child,
+			ProcessorConfig childConfig, 
+			P childProcessor,
+			T semanticChild) {
 		if (config == null) {
 			return null;
 		}
@@ -567,9 +281,9 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 						evaluationContext.setVariable("parent", semanticElement);
 						evaluationContext.setVariable("parentElement", config.getElement());
 						evaluationContext.setVariable("element", child);
-						evaluationContext.setVariable("config", childProcessorInfo.getConfig());
+						evaluationContext.setVariable("config", childConfig);
 						try {
-							if (exp.getValue(evaluationContext, childProcessorInfo.getProcessor(), Boolean.class)) { // TODO - completion stage?
+							if (exp.getValue(evaluationContext, childProcessor, Boolean.class)) { 
 								EClass eClass = semanticElement.eClass();
 								EStructuralFeature ref = eClass.getEStructuralFeature((String) key);
 								if (ref instanceof EReference) {
@@ -591,13 +305,300 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 		throw new IllegalArgumentException(getChildReferencesPropertyName() + " value shall be a YAML map, got " + yamlValue);
 	}
 	
+	// Parent
+	protected String getParentReferencePropertyName() {
+		return "parent-reference";
+	}
+	
+	@Override
+	protected EReference getParentReference(ProcessorConfig config, P processor, T semanticElement,	ProcessorConfig parentConfig, T parentSemanticElement) {
+		if (config == null) {
+			return null;
+		}
+		String value = getPropertyValue(config.getElement(), getParentReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
+	}	
+	
+	protected String getParentInjectorPropertyName() {
+		return "parent-injector";
+	}
+	
+	@Override
+	protected void setParent(ProcessorConfig config, P processor, ProcessorConfig parentConfig, P parentProcessor, ProgressMonitor progressMonitor) {
+		super.setParent(config, processor, parentConfig, parentProcessor, progressMonitor);
+		if (config != null) {
+			String expr = getPropertyValue(config.getElement(), getParentInjectorPropertyName());
+			if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && parentProcessor != null) {
+				for (T semanticElement: processor.getSemanticElements()) {
+					for (T parentSemanticElement: parentProcessor.getSemanticElements()) {
+						ExpressionParser parser = new SpelExpressionParser();
+						Expression exp = parser.parseExpression(expr);
+						EvaluationContext evaluationContext = createEvaluationContext();
+						evaluationContext.setVariable("config", config);
+						evaluationContext.setVariable("element", config.getElement());
+						evaluationContext.setVariable("parentElement", parentConfig.getElement());			
+						evaluationContext.setVariable("parentProcessor", parentProcessor);
+						evaluationContext.setVariable("parentSemanticElement", parentSemanticElement);
+						evaluationContext.setVariable("parentConfig", parentConfig);			
+						exp.getValue(evaluationContext, semanticElement);					
+					}
+				}
+			}
+		}			
+	}
+	
+	protected EvaluationContext createEvaluationContext() {
+		return new StandardEvaluationContext();
+	}	
+		
+	// Source
+	protected String getSourceReferencePropertyName() {
+		return "source-reference";
+	}
+	
+	@Override
+	protected EReference getSourceReference(
+			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			P processor, 
+			T semanticElement, 
+			ProcessorRecord<P> sourceProcessorRecord, 
+			T sourceSemanticElement) {
+		String value = getPropertyValue(config.getElement(), getSourceReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
+	}
+	
+	protected String getSourceInjectorPropertyName() {
+		return "source-injector";
+	}
+	
+	@Override
+	protected void setSource(ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, P processor,	ProcessorRecord<P> sourceProcessorRecord, ProgressMonitor progressMonitor) {
+		super.setSource(config, processor, sourceProcessorRecord, progressMonitor);
+		String expr = getPropertyValue(config.getElement(), getSourceInjectorPropertyName());
+		P sourceProcessor = sourceProcessorRecord.processor(); 
+		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && sourceProcessor != null) {
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (T sourceSemanticElement: sourceProcessor.getSemanticElements()) {
+					ExpressionParser parser = new SpelExpressionParser();
+					Expression exp = parser.parseExpression(expr);
+					EvaluationContext evaluationContext = createEvaluationContext();
+					evaluationContext.setVariable("config", config);
+					evaluationContext.setVariable("element", config.getElement());
+					evaluationContext.setVariable("sourceProcessor", sourceProcessor);
+					evaluationContext.setVariable("sourceSemanticElement", sourceSemanticElement);
+					evaluationContext.setVariable("sourceConfig", sourceProcessorRecord.config());			
+					exp.getValue(evaluationContext, semanticElement);					
+				}
+			}
+		}
+	}
+	
+	// Target
+	protected String getTargetReferencePropertyName() {
+		return "target-reference";
+	}
+	
+	@Override
+	protected EReference getTargetReference(
+			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			P processor, 
+			T semanticElement, 
+			ProcessorRecord<P> targetProcessorRecord, 
+			T targetSemanticElement) {
+		String value = getPropertyValue(config.getElement(), getTargetReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
+	}
+	
+	protected String getTargetInjectorPropertyName() {
+		return "target-injector";
+	}
+	
+	@Override
+	protected void setTarget(
+			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			P processor,
+			ProcessorRecord<P> targetProcessorRecord, 
+			ProgressMonitor progressMonitor) {
+		super.setTarget(config, processor, targetProcessorRecord, progressMonitor);
+		String expr = getPropertyValue(config.getElement(), getTargetInjectorPropertyName());
+		P targetProcessor = targetProcessorRecord.processor();
+		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && targetProcessor != null) {
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (T targetSemanticElement: targetProcessor.getSemanticElements()) {
+					ExpressionParser parser = new SpelExpressionParser();
+					Expression exp = parser.parseExpression(expr);
+					EvaluationContext evaluationContext = createEvaluationContext();
+					evaluationContext.setVariable("config", config);
+					evaluationContext.setVariable("element", config.getElement());
+					evaluationContext.setVariable("targetProcessor", targetProcessor);
+					evaluationContext.setVariable("targetSemanticElement", targetSemanticElement);
+					evaluationContext.setVariable("targetConfig", targetProcessorRecord.config());			
+					exp.getValue(evaluationContext, semanticElement);
+				}
+			}
+		}
+	}
+	
+	// Incoming
+	protected String getIncomingReferencePropertyName() {
+		return "incoming-reference";
+	}
+	
+	@Override
+	protected EReference getIncomingReference(
+			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			P processor, T semanticElement, Connection connection, ProcessorRecord<P> incomingProcessorRecord,
+			T incomingSemanticElement) {
+		String value = getPropertyValue(connection, getIncomingReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
+	}
+	
+	protected String getIncomingInjectorPropertyName() {
+		return "incoming-injector";
+	}
+	
+	@Override
+	protected void setIncoming(
+			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			P processor,
+			Connection connection, 
+			ProcessorRecord<P> incomingProcessorRecord, 
+			ProgressMonitor progressMonitor) {
+		super.setIncoming(config, processor, connection, incomingProcessorRecord, progressMonitor);
+		String expr = getPropertyValue(connection, getIncomingInjectorPropertyName());
+		P incomingProcessor = incomingProcessorRecord.processor();
+		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && incomingProcessor != null) {
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (T incomingSemanticElement: incomingProcessor.getSemanticElements()) {
+					ExpressionParser parser = new SpelExpressionParser();
+					Expression exp = parser.parseExpression(expr);
+					EvaluationContext evaluationContext = createEvaluationContext();
+					evaluationContext.setVariable("config", config);
+					evaluationContext.setVariable("element", config.getElement());
+					evaluationContext.setVariable("connection", connection);
+					evaluationContext.setVariable("incomingProcessor", incomingProcessor);
+					evaluationContext.setVariable("incomingSemanticElement", incomingSemanticElement);
+					evaluationContext.setVariable("incomingConfig", incomingProcessorRecord.config());			
+					exp.getValue(evaluationContext, semanticElement);
+				}
+			}
+		}
+	}
+	
+	// Outgoing
+	protected String getOutgoingReferencePropertyName() {
+		return "outgoing-reference";
+	}
+	
+	@Override
+	protected EReference getOutgoingReference(
+			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			P processor, 
+			T semanticElement, 
+			Connection connection, 
+			ProcessorRecord<P> outgoingProcessorRecord,
+			T outgoingSemanticElement) {
+		String value = getPropertyValue(connection, getOutgoingReferencePropertyName());
+		if (org.nasdanika.common.Util.isBlank(value)) {
+			return null;
+		}
+		EClass eClass = semanticElement.eClass();
+		EStructuralFeature ref = eClass.getEStructuralFeature(value);
+		if (ref instanceof EReference) {
+			return (EReference) ref;
+		}
+		throw new ConfigurationException("Reference '" + value + "' not found in " + eClass.getName() + " " + eClass.getEPackage().getNsURI(), getMarked(config));
+	}
+	
+	protected String getOutgoingInjectorPropertyName() {
+		return "outgoing-injector";
+	}
+	
+	@Override
+	protected void setOutgoing(
+			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			P processor,
+			Connection connection, 
+			ProcessorRecord<P> outgoingProcessorRecord, 
+			ProgressMonitor progressMonitor) {
+		super.setOutgoing(config, processor, connection, outgoingProcessorRecord, progressMonitor);
+		P outgoingProcessor = outgoingProcessorRecord.processor();
+		String expr = getPropertyValue(connection, getOutgoingInjectorPropertyName());
+		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && outgoingProcessor != null) {
+			for (T semanticElement: processor.getSemanticElements()) {
+				for (T outgoingSemanticElement: outgoingProcessor.getSemanticElements()) {
+					ExpressionParser parser = new SpelExpressionParser();
+					Expression exp = parser.parseExpression(expr);
+					EvaluationContext evaluationContext = createEvaluationContext();
+					evaluationContext.setVariable("config", config);
+					evaluationContext.setVariable("element", config.getElement());
+					evaluationContext.setVariable("connection", connection);
+					evaluationContext.setVariable("outgoingProcessor", outgoingProcessor);
+					evaluationContext.setVariable("outgoingSemanticElement", outgoingSemanticElement);
+					evaluationContext.setVariable("outgoingConfig", outgoingProcessorRecord.config());			
+					exp.getValue(evaluationContext, semanticElement);
+				}
+			}
+		}
+	}
+		
+	// Children
+	
+	/**
+	 * Value of child references property shall be a YAML map with reference names as keys and boolean Spel expressions as values. 
+	 * @return
+	 */
+	protected String getChildReferencesPropertyName() {
+		return "child-references";
+	}
+	
 	protected String getChildInjectorsPropertyName() {
 		return "child-injectors";
 	}
 	
 	@Override
-	protected List<CompletionStage<ProcessorEntryRecord<P>>> setChildren(ProcessorConfig<P, R> config, P processor, Map<Element, ProcessorInfo<P, R>> children, ProgressMonitor progressMonitor) {
-		List<CompletionStage<ProcessorEntryRecord<P>>> ret = super.setChildren(config, processor, children, progressMonitor);
+	protected void setChildren(
+			ProcessorConfig config, 
+			P processor, 
+			Map<Element, ProcessorConfig> children,
+			Function<Element, CompletionStage<P>> processorProvider, 
+			Consumer<CompletionStage<?>> stageConsumer,
+			boolean parallel, 
+			ProgressMonitor progressMonitor) {
+		super.setChildren(config, processor, children, processorProvider, stageConsumer, parallel, progressMonitor);
 		if (config != null && processor != null) {
 			String expr = getPropertyValue(config.getElement(), getChildInjectorsPropertyName());
 			if (!org.nasdanika.common.Util.isBlank(expr)) {
@@ -612,20 +613,19 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 				}
 			}
 		}
-		return ret;
 	}
 	
 	// Registry
 	protected String getRegistryReferencesPropertyName() {
 		return "registry-references";
-	}	
+	}
 	
 	@Override
 	protected EReference getRegistryReference(
-			ProcessorConfig<P, R> config, P processor,
+			ProcessorConfig config, P processor,
 			T semanticElement, 
 			Element registryElement, 
-			ProcessorInfo<P, ?> registryElementProcessorInfo,
+			ProcessorConfig registryElementProcessorConfig,
 			T registrySemanticElement) {
 		if (registrySemanticElement == null) {
 			return null;
@@ -650,7 +650,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 						evaluationContext.setVariable("config", config);
 						evaluationContext.setVariable("element", config.getElement());
 						evaluationContext.setVariable("registryElement", registryElement);
-						evaluationContext.setVariable("registryConfig", registryElementProcessorInfo.getConfig());
+						evaluationContext.setVariable("registryConfig", registryElementProcessorConfig);
 						evaluationContext.setVariable("semanticElement", semanticElement);
 						try {
 							if (exp.getValue(evaluationContext, registrySemanticElement, Boolean.class)) {
@@ -680,8 +680,13 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	}
 	
 	@Override
-	protected List<CompletionStage<ProcessorEntryRecord<P>>> setRegistry(ProcessorConfig<P, R> config, P processor, R registry, ProgressMonitor progressMonitor) {
-		List<CompletionStage<ProcessorEntryRecord<P>>> ret = super.setRegistry(config, processor, registry, progressMonitor);
+	protected void setRegistry(
+			ProcessorConfig config,
+			P processor,
+			Function<Element, CompletionStage<P>> processorProvider,
+			Consumer<CompletionStage<?>> stageConsumer,
+			ProgressMonitor progressMonitor) {
+		super.setRegistry(config, processor, processorProvider, stageConsumer, progressMonitor);
 		String expr = getPropertyValue(config.getElement(), getRegistryInjectorsPropertyName());
 		if (processor != null && !org.nasdanika.common.Util.isBlank(expr)) {
 			for (T semanticElement: processor.getSemanticElements()) {
@@ -690,11 +695,10 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 				EvaluationContext evaluationContext = createEvaluationContext();
 				evaluationContext.setVariable("config", config);
 				evaluationContext.setVariable("element", config.getElement());
-				evaluationContext.setVariable("registry", registry);
+				evaluationContext.setVariable("registry", config.getRegistry());
 				exp.getValue(evaluationContext, semanticElement);
 			}
 		}								
-		return ret;
 	}	
 
 	protected String getLinkPagePropertyName() {
