@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * A processor which maps graph elements to elements of a semantic model. 
+ * A processor which operates on a collection of semantic elements crated from a graph element. 
  * @author Pavel
  *
  * @param <T>

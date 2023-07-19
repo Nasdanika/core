@@ -8,9 +8,9 @@ import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 
-public class NodeProcessorConfigAdapter<P, H, E, R> extends ProcessorConfigAdapter<P, R, NodeProcessorConfig<P, H, E, R>> implements NodeProcessorConfig<P, H, E, R> {
+public class NodeProcessorConfigAdapter<H, E> extends ProcessorConfigAdapter<NodeProcessorConfig<H, E>> implements NodeProcessorConfig<H, E> {
 
-	public NodeProcessorConfigAdapter(NodeProcessorConfig<P, H, E, R> delegate) {
+	public NodeProcessorConfigAdapter(NodeProcessorConfig<H, E> delegate) {
 		super(delegate);
 	}
 

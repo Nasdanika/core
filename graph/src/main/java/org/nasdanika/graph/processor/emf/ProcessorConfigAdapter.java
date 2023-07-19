@@ -1,14 +1,12 @@
 package org.nasdanika.graph.processor.emf;
 
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorInfo;
 
-public class ProcessorConfigAdapter<P, R, D extends ProcessorConfig<P, R>> extends AdapterImpl implements ProcessorConfig<P, R> {
+public class ProcessorConfigAdapter<D extends ProcessorConfig> extends AdapterImpl implements ProcessorConfig {
 
 	protected D delegate;
 
@@ -25,20 +23,20 @@ public class ProcessorConfigAdapter<P, R, D extends ProcessorConfig<P, R>> exten
 	public Element getElement() {
 		return delegate.getElement();
 	}
-
+	
 	@Override
-	public Map<Element, ProcessorInfo<P, R>> getChildProcessorsInfo() {
-		return delegate.getChildProcessorsInfo();
+	public Map<Element, ProcessorConfig> getChildProcessorConfigs() {
+		return delegate.getChildProcessorConfigs();
+	}
+	
+	@Override
+	public ProcessorConfig getParentProcessorConfig() {
+		return delegate.getParentProcessorConfig();
 	}
 
 	@Override
-	public CompletionStage<ProcessorInfo<P, R>> getParentProcessorInfo() {
-		return delegate.getParentProcessorInfo();
-	}
-
-	@Override
-	public CompletionStage<R> getRegistry() {
+	public Map<Element, ProcessorConfig> getRegistry() {
 		return delegate.getRegistry();
-	}	
+	}
 	
 }
