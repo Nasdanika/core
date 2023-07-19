@@ -34,7 +34,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
  * @param <W> Endpoint return type
  * @param <R> Registry type
  */
-public abstract class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Reflector  {
+public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Reflector  {
 	
 	@Retention(RUNTIME)
 	@Target({ METHOD, TYPE })
@@ -88,12 +88,11 @@ public abstract class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> exte
 	
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 
-	protected ReflectiveBiFunctionProcessorFactoryProvider(Object... targets) {
+	public ReflectiveBiFunctionProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
-	}	
-	
+	}		
 	
 	public BiFunctionProcessorFactory<T,U,V,W> getFactory() {
 		

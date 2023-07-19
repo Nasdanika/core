@@ -42,11 +42,11 @@ import org.nasdanika.graph.Element;
  * @param <U>
  * @param <S>
  */
-public abstract class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
+public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 	
 	private List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 		
-	protected ReflectiveProcessorFactoryProvider(Object... targets) {
+	public ReflectiveProcessorFactoryProvider(Object... targets) {
 		for (Object target: targets) {
 			getAnnotatedElementRecords(target).forEach(annotatedElementRecords::add);
 		}
