@@ -52,7 +52,6 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	 * @param registry
 	 * @param likedPageInfo
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void linkPage(
 			ProcessorConfig config, 
 			P processor, 

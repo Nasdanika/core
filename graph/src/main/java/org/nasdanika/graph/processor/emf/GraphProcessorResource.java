@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,8 +76,9 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	 * @param registry
 	 * @return
 	 */
-	protected abstract Stream<T> getRegistrySemanticElements(Map<Element, P> registry);
-//		return registry.values().stream().map(pi -> pi.getProcessor()).filter(Objects::nonNull).flatMap(this::getSemanticElements);
+	protected Stream<T> getRegistrySemanticElements(Map<Element, P> registry) {
+		return registry.values().stream().filter(Objects::nonNull).flatMap(this::getSemanticElements);		
+	}
 	
 	/**
 	 * @param semanticElement 

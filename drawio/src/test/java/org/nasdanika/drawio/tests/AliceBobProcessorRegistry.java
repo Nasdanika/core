@@ -1,5 +1,6 @@
 package org.nasdanika.drawio.tests;
 
+import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.graph.processor.RegistryEntry;
 
 public class AliceBobProcessorRegistry {
@@ -10,6 +11,7 @@ public class AliceBobProcessorRegistry {
 	@RegistryEntry("label == 'Bob''s House'")
 	public void setBobHouseProcessor(Runnable bobHouse) {
 		bobHouse.run();
+//		throw new NasdanikaException("Not so fast!");
 	}
 
 }

@@ -51,13 +51,13 @@ public abstract class ProcessorFactory<P> {
 		if (parallel) {
 			configEntryStream = configEntryStream.parallel();
 		}
-		List<CompletionStage<?>> toComplete = Collections.synchronizedList(new ArrayList<>());
+		List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
 		configEntryStream.forEach(ce -> {
-			processors.get(ce.getKey()).complete(createProcessor(ce.getValue(), parallel, processors::get, toComplete::add, progressMonitor));
+			processors.get(ce.getKey()).complete(createProcessor(ce.getValue(), parallel, processors::get, stages::add, progressMonitor));
 		});
 		
 		// Collecting exceptions
-		CompletableFuture<?>[] toCompleteArray = toComplete.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
+		CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
 		
 		CompletableFuture.allOf(toCompleteArray).handle((r, e) -> {
 			if (e == null) {

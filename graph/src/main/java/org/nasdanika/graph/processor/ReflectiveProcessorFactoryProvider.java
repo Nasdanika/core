@@ -52,7 +52,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		}
 	}
 	
-	public ProcessorFactory<P> getFactory() {
+	public ProcessorFactory<P> getFactory(Object... registryTargets) {
 		return new ProcessorFactory<P>() {
 
 			@Override
@@ -64,6 +64,37 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 				
 				return ReflectiveProcessorFactoryProvider.this.createProcessor(config, parallel, processorProvider, stageConsumer, progressMonitor);
 			}
+			
+			@Override
+			public Map<Element, P> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+				Map<Element, P> registry = super.createProcessors(configs, parallel, progressMonitor);
+				List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
+				
+				for (Object registryTarget: registryTargets) {					
+					Function<Element, CompletionStage<P>> processorProvider = e -> CompletableFuture.completedStage(registry.get(e));
+					wireRegistryEntry(registryTarget, configs, processorProvider, parallel).forEach(stages::add);
+					wireRegistry(registryTarget, configs, processorProvider, parallel).forEach(stages::add);
+				}				
+				
+				// Collecting exceptions
+				CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
+				
+				CompletableFuture.allOf(toCompleteArray).handle((r, e) -> {
+					if (e == null) {
+						return null;
+					}
+					NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
+					for (CompletableFuture<?> cf: toCompleteArray) {
+						if (cf.isCompletedExceptionally()) {
+							cf.whenComplete((rs, ex) -> ne.addSuppressed(ex));
+						}
+					}
+					throw ne;
+				}).join();
+				
+				return registry;
+			}
+			
 		};
 	}
 	
