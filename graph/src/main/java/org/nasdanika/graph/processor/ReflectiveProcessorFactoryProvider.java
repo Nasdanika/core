@@ -66,12 +66,15 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			}
 			
 			@Override
-			public Map<Element, P> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
-				Map<Element, P> registry = super.createProcessors(configs, parallel, progressMonitor);
+			public Map<Element, ProcessorRecord<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+				Map<Element, ProcessorRecord<P>> registry = super.createProcessors(configs, parallel, progressMonitor);
 				List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
 				
 				for (Object registryTarget: registryTargets) {					
-					Function<Element, CompletionStage<P>> processorProvider = e -> CompletableFuture.completedStage(registry.get(e));
+					Function<Element, CompletionStage<P>> processorProvider = e -> {
+						ProcessorRecord<P> r = registry.get(e);
+						return r == null ? null : CompletableFuture.completedStage(r.processor());
+					};
 					wireRegistryEntry(registryTarget, configs, processorProvider, parallel).forEach(stages::add);
 					wireRegistry(registryTarget, configs, processorProvider, parallel).forEach(stages::add);
 				}				

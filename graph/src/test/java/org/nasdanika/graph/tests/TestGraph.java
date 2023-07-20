@@ -31,6 +31,7 @@ import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
+import org.nasdanika.graph.processor.ProcessorRecord;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -113,13 +114,14 @@ public class TestGraph {
 				
 			};
 			
-			Map<Element, Object> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorRecord<Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
 			@SuppressWarnings("unchecked")
 			Stream<Supplier<Integer>> ps = processors
 					.values()
 					.stream()
+					.map(ProcessorRecord::processor)
 					.filter(Supplier.class::isInstance)
 					.map(s -> (Supplier<Integer>) s);
 			
@@ -159,16 +161,16 @@ public class TestGraph {
 			
 			BiFunctionProcessorFactoryImpl processorFactory = new BiFunctionProcessorFactoryImpl(passThrough);
 			
-			Map<Element, BiFunction<Object, ProgressMonitor, Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorRecord<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
 			Stream<BiFunction<Object,ProgressMonitor,Object>> ps = processors
 					.values()
 					.stream()
-					.filter(p -> {
-						return p instanceof BiFunctionNodeProcessor;
+					.filter(pr -> {
+						return pr.processor() instanceof BiFunctionNodeProcessor;
 					})
-					.map(p -> (BiFunction<Object,ProgressMonitor,Object>) p);
+					.map(pr -> (BiFunction<Object,ProgressMonitor,Object>) pr.processor());
 			
 			if (parallel) {
 				ps = ps.parallel();
@@ -208,10 +210,10 @@ public class TestGraph {
 			ReflectiveProcessorFactoryProvider<Supplier<Integer>, Function<Element, Element>, Function<Element, Element>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new ReflectiveProcessorFactory()); 			
 			ProcessorFactory<Supplier<Integer>> processorFactory = processorFactoryProvider.getFactory();
 			
-			Map<Element, Supplier<Integer>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorRecord<Supplier<Integer>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
-			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull);			
+			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull).map(ProcessorRecord::processor);			
 			if (parallel) {
 				ps = ps.parallel();
 			}

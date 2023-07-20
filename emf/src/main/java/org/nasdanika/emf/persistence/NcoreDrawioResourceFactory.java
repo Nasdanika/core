@@ -26,6 +26,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
+import org.nasdanika.graph.processor.ProcessorRecord;
 import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
 import org.nasdanika.graph.processor.emf.SemanticProcessor;
 import org.nasdanika.ncore.Documented;
@@ -126,13 +127,13 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 			
 			@Override
-			public Map<Element, SemanticProcessor<T>> createProcessors(
+			public Map<Element, ProcessorRecord<SemanticProcessor<T>>> createProcessors(
 					Map<Element, ProcessorConfig> configs,
 					boolean parallel, 
 					ProgressMonitor progressMonitor) {
-				Map<Element, SemanticProcessor<T>> registry = super.createProcessors(configs, parallel, progressMonitor);
+				Map<Element, ProcessorRecord<SemanticProcessor<T>>> registry = super.createProcessors(configs, parallel, progressMonitor);
 				String representationPropertyName = getRepresentationPropertyName(uri);
-				registry.entrySet().forEach(re -> configureRegistryEntry(re.getKey(), re.getValue(), getPropertyValue(re.getKey(), representationPropertyName)));
+				registry.entrySet().forEach(re -> configureRegistryEntry(re.getKey(), re.getValue().config(), re.getValue().processor(), getPropertyValue(re.getKey(), representationPropertyName)));
 				return registry;
 			}
 			
@@ -150,7 +151,7 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	 * @param element
 	 * @param info
 	 */
-	protected void configureRegistryEntry(Element element, SemanticProcessor<T> processor, String representationKey) {
+	protected void configureRegistryEntry(Element element, ProcessorConfig config, SemanticProcessor<T> processor, String representationKey) {
 		if (processor != null && !Util.isBlank(representationKey)) {
 			if (element instanceof ModelElement) {
 				Collection<T> semanticElements = processor.getSemanticElements();

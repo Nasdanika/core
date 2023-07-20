@@ -17,6 +17,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
+import org.nasdanika.graph.processor.ProcessorRecord;
 
 
 /**
@@ -51,12 +52,12 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		List<? extends Element> elements = loadElements(inputStream, options).collect(Collectors.toList());
 		Map<Element, ProcessorConfig> configs = getProcessorConfigFactory().createConfigs(elements, parallel, getProgressMonitor());		
-		Map<Element, P> registry = getProcessorFactory().createProcessors(configs, parallel, getProgressMonitor());
+		Map<Element, ProcessorRecord<P>> registry = getProcessorFactory().createProcessors(configs, parallel, getProgressMonitor());
 		List<T> roots = getRegistrySemanticElements(registry).filter(this::isRoot).collect(Collectors.toList()); // TODO .forEach(getContents()::add) - fails with concurrent modification exception
 		getContents().addAll(roots);
 		for (Element element: elements) {
 			ProcessorConfig config = configs.get(element);
-			P processor = registry.get(element);
+			P processor = registry.get(element).processor();
 			eAdapters().add(new ProcessorRecordAdapter<>(new ProcessorRecord<P>(config, processor)));
 		}
 	}
@@ -76,8 +77,8 @@ public abstract class GraphProcessorResource<P, T extends EObject> extends Resou
 	 * @param registry
 	 * @return
 	 */
-	protected Stream<T> getRegistrySemanticElements(Map<Element, P> registry) {
-		return registry.values().stream().filter(Objects::nonNull).flatMap(this::getSemanticElements);		
+	protected Stream<T> getRegistrySemanticElements(Map<Element, ProcessorRecord<P>> registry) {
+		return registry.values().stream().filter(Objects::nonNull).flatMap(re -> getSemanticElements(re.processor()));		
 	}
 	
 	/**

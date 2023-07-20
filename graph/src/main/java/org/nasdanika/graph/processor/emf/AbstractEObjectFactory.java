@@ -23,6 +23,7 @@ import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
+import org.nasdanika.graph.processor.ProcessorRecord;
 
 /**
  * Creates {@link EObject}s from graph elements and wires them together using properties.

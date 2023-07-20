@@ -31,6 +31,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorRecord;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;

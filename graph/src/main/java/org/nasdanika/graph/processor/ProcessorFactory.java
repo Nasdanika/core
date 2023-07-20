@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
@@ -44,17 +43,20 @@ public abstract class ProcessorFactory<P> {
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor);
 		
-	public Map<Element, P> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
-		Map<Element, CompletableFuture<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
-		configs.keySet().forEach(e -> processors.put(e, new CompletableFuture<P>()));
-		Stream<Entry<Element, ProcessorConfig>> configEntryStream = configs.entrySet().stream();
+	public Map<Element, ProcessorRecord<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+		record ProcessorCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<P> processorCompletableFuture) {}
+		Map<Element, ProcessorCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
+		configs.entrySet().forEach(e -> processors.put(e.getKey(), new ProcessorCompletableFutureRecord<P>(e.getValue(), new CompletableFuture<P>())));
+		Stream<ProcessorCompletableFutureRecord<P>> recordStream = processors.values().stream();
 		if (parallel) {
-			configEntryStream = configEntryStream.parallel();
+			recordStream = recordStream.parallel();
 		}
 		List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
-		configEntryStream.forEach(ce -> {
-			processors.get(ce.getKey()).complete(createProcessor(ce.getValue(), parallel, processors::get, stages::add, progressMonitor));
-		});
+		Function<Element, CompletionStage<P>> processorProvider = e -> {
+			ProcessorCompletableFutureRecord<P> rec = processors.get(e);
+			return rec == null ? null : rec.processorCompletableFuture();
+		};
+		recordStream.forEach(r -> r.processorCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
 		
 		// Collecting exceptions
 		CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
@@ -72,8 +74,8 @@ public abstract class ProcessorFactory<P> {
 			throw ne;
 		}).join();
 		
-		Map<Element, P> ret = new LinkedHashMap<>();
-		processors.forEach((e, pcf) -> ret.put(e, pcf.join()));
+		Map<Element, ProcessorRecord<P>> ret = new LinkedHashMap<>();
+		processors.forEach((e, r) -> ret.put(e, new ProcessorRecord<P>(r.config(), r.processorCompletableFuture().join())));
 		return ret;		
 	}
 
