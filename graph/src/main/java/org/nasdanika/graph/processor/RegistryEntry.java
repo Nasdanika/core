@@ -24,9 +24,9 @@ public @interface RegistryEntry {
 	String value() default "";
 	
 	/**
-	 * If <code>true</code> config is injected, processor otherwise.
+	 * If <code>true</code> {@link ProcessorInfo} is injected, processor otherwise.
 	 * @return   
 	 */
-	boolean config() default false;
+	boolean info() default false;
 			
 }

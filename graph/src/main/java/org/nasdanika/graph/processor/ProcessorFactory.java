@@ -31,32 +31,35 @@ public abstract class ProcessorFactory<P> {
 	 * Creates a processor
 	 * @param config Processor config
 	 * @param parallel If true, creation may be performed in parallel threads
-	 * @param processorProvider Provider of element processors
+	 * @param infoProvider Provider of element info
 	 * @param stageConsumer Consumer of stages which might be completed after this method returns, e.g. wiring of dependencies. 
 	 * @param progressMonitor
 	 * @return
 	 */
-	protected abstract P createProcessor(
+	protected ProcessorInfo<P> createProcessor(
 			ProcessorConfig config, 
 			boolean parallel, 
-			Function<Element,CompletionStage<P>> processorProvider,
+			Function<Element,CompletionStage<ProcessorInfo<P>>> inforProvider,
 			Consumer<CompletionStage<?>> stageConsumer,
-			ProgressMonitor progressMonitor);
+			ProgressMonitor progressMonitor) {
 		
-	public Map<Element, ProcessorRecord<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
-		record ProcessorCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<P> processorCompletableFuture) {}
-		Map<Element, ProcessorCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
-		configs.entrySet().forEach(e -> processors.put(e.getKey(), new ProcessorCompletableFutureRecord<P>(e.getValue(), new CompletableFuture<P>())));
-		Stream<ProcessorCompletableFutureRecord<P>> recordStream = processors.values().stream();
+		return ProcessorInfo.of(config, null);
+	};
+		
+	public Map<Element, ProcessorInfo<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+		record ProcessorInfoCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<ProcessorInfo<P>> processorInfoCompletableFuture) {}
+		Map<Element, ProcessorInfoCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
+		configs.entrySet().forEach(e -> processors.put(e.getKey(), new ProcessorInfoCompletableFutureRecord<P>(e.getValue(), new CompletableFuture<ProcessorInfo<P>>())));
+		Stream<ProcessorInfoCompletableFutureRecord<P>> recordStream = processors.values().stream();
 		if (parallel) {
 			recordStream = recordStream.parallel();
 		}
 		List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
-		Function<Element, CompletionStage<P>> processorProvider = e -> {
-			ProcessorCompletableFutureRecord<P> rec = processors.get(e);
-			return rec == null ? null : rec.processorCompletableFuture();
+		Function<Element, CompletionStage<ProcessorInfo<P>>> processorProvider = e -> {
+			ProcessorInfoCompletableFutureRecord<P> rec = processors.get(e);
+			return rec == null ? null : rec.processorInfoCompletableFuture();
 		};
-		recordStream.forEach(r -> r.processorCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
+		recordStream.forEach(r -> r.processorInfoCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
 		
 		// Collecting exceptions
 		CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
@@ -74,8 +77,8 @@ public abstract class ProcessorFactory<P> {
 			throw ne;
 		}).join();
 		
-		Map<Element, ProcessorRecord<P>> ret = new LinkedHashMap<>();
-		processors.forEach((e, r) -> ret.put(e, new ProcessorRecord<P>(r.config(), r.processorCompletableFuture().join())));
+		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>();
+		processors.forEach((e, r) -> ret.put(e, r.processorInfoCompletableFuture().join()));
 		return ret;		
 	}
 

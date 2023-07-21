@@ -24,9 +24,9 @@ public @interface ChildProcessor {
 	String value() default "";
 	
 	/**
-	 * If <code>true</code>, {@link ProcessorConfig} for the matching child will be injected. The child processor will be injected otherwise.
+	 * If <code>true</code>, {@link ProcessorInfo} for the matching child will be injected. The child processor will be injected otherwise.
 	 * @return   
 	 */
-	boolean config() default false;
+	boolean info() default false;
 
 }

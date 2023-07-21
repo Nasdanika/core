@@ -24,6 +24,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 
 /**
  * A processor factory with {@link BiFunction} handler and endpoint
@@ -103,7 +104,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 			protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
 					ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
 					boolean parallel,
-					Function<Element, CompletionStage<BiFunction<T, ProgressMonitor, U>>> processorProvider,
+					Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
 					Consumer<CompletionStage<?>> stageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
@@ -123,7 +124,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 				return (ConnectionProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(
 						connectionProcessorConfig,
 						parallel,
-						processorProvider,
+						infoProvider,
 						stageConsumer,
 						progressMonitor); 						
 			}
@@ -133,7 +134,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 			protected NodeProcessor<T, U, V, W> createNodeProcessor(
 					NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
 					boolean parallel,
-					Function<Element, CompletionStage<BiFunction<T, ProgressMonitor, U>>> processorProvider,
+					Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
 					Consumer<CompletionStage<?>> stageConsumer,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
@@ -155,7 +156,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 				return (NodeProcessor<T, U, V, W>) factoryAnnotatedElementRecord.invoke(
 						nodeProcessorConfig,
 						parallel,
-						processorProvider,
+						infoProvider,
 						stageConsumer,
 						incomingEndpoints, 
 						outgoingEndpoints, 

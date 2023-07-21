@@ -31,7 +31,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
-import org.nasdanika.graph.processor.ProcessorRecord;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.persistence.ConfigurationException;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
@@ -368,10 +368,10 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected EReference getSourceReference(
-			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			ConnectionProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config,
 			P processor, 
 			T semanticElement, 
-			ProcessorRecord<P> sourceProcessorRecord, 
+			ProcessorInfo<P> sourceProcessorInfo, 
 			T sourceSemanticElement) {
 		String value = getPropertyValue(config.getElement(), getSourceReferencePropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
@@ -390,10 +390,10 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	}
 	
 	@Override
-	protected void setSource(ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, P processor,	ProcessorRecord<P> sourceProcessorRecord, ProgressMonitor progressMonitor) {
-		super.setSource(config, processor, sourceProcessorRecord, progressMonitor);
+	protected void setSource(ConnectionProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config, P processor,	ProcessorInfo<P> sourceProcessorInfo, ProgressMonitor progressMonitor) {
+		super.setSource(config, processor, sourceProcessorInfo, progressMonitor);
 		String expr = getPropertyValue(config.getElement(), getSourceInjectorPropertyName());
-		P sourceProcessor = sourceProcessorRecord.processor(); 
+		P sourceProcessor = sourceProcessorInfo.processor(); 
 		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && sourceProcessor != null) {
 			for (T semanticElement: processor.getSemanticElements()) {
 				for (T sourceSemanticElement: sourceProcessor.getSemanticElements()) {
@@ -404,7 +404,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 					evaluationContext.setVariable("element", config.getElement());
 					evaluationContext.setVariable("sourceProcessor", sourceProcessor);
 					evaluationContext.setVariable("sourceSemanticElement", sourceSemanticElement);
-					evaluationContext.setVariable("sourceConfig", sourceProcessorRecord.config());			
+					evaluationContext.setVariable("sourceConfig", sourceProcessorInfo.config());			
 					exp.getValue(evaluationContext, semanticElement);					
 				}
 			}
@@ -418,10 +418,10 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected EReference getTargetReference(
-			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			ConnectionProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config,
 			P processor, 
 			T semanticElement, 
-			ProcessorRecord<P> targetProcessorRecord, 
+			ProcessorInfo<P> targetProcessorInfo, 
 			T targetSemanticElement) {
 		String value = getPropertyValue(config.getElement(), getTargetReferencePropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
@@ -441,13 +441,13 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected void setTarget(
-			ConnectionProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			ConnectionProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config, 
 			P processor,
-			ProcessorRecord<P> targetProcessorRecord, 
+			ProcessorInfo<P> targetProcessorInfo, 
 			ProgressMonitor progressMonitor) {
-		super.setTarget(config, processor, targetProcessorRecord, progressMonitor);
+		super.setTarget(config, processor, targetProcessorInfo, progressMonitor);
 		String expr = getPropertyValue(config.getElement(), getTargetInjectorPropertyName());
-		P targetProcessor = targetProcessorRecord.processor();
+		P targetProcessor = targetProcessorInfo.processor();
 		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && targetProcessor != null) {
 			for (T semanticElement: processor.getSemanticElements()) {
 				for (T targetSemanticElement: targetProcessor.getSemanticElements()) {
@@ -458,7 +458,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 					evaluationContext.setVariable("element", config.getElement());
 					evaluationContext.setVariable("targetProcessor", targetProcessor);
 					evaluationContext.setVariable("targetSemanticElement", targetSemanticElement);
-					evaluationContext.setVariable("targetConfig", targetProcessorRecord.config());			
+					evaluationContext.setVariable("targetConfig", targetProcessorInfo.config());			
 					exp.getValue(evaluationContext, semanticElement);
 				}
 			}
@@ -472,8 +472,8 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected EReference getIncomingReference(
-			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
-			P processor, T semanticElement, Connection connection, ProcessorRecord<P> incomingProcessorRecord,
+			NodeProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config,
+			P processor, T semanticElement, Connection connection, ProcessorInfo<P> incomingProcessorInfo,
 			T incomingSemanticElement) {
 		String value = getPropertyValue(connection, getIncomingReferencePropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
@@ -493,14 +493,14 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected void setIncoming(
-			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			NodeProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config, 
 			P processor,
 			Connection connection, 
-			ProcessorRecord<P> incomingProcessorRecord, 
+			ProcessorInfo<P> incomingProcessorInfo, 
 			ProgressMonitor progressMonitor) {
-		super.setIncoming(config, processor, connection, incomingProcessorRecord, progressMonitor);
+		super.setIncoming(config, processor, connection, incomingProcessorInfo, progressMonitor);
 		String expr = getPropertyValue(connection, getIncomingInjectorPropertyName());
-		P incomingProcessor = incomingProcessorRecord.processor();
+		P incomingProcessor = incomingProcessorInfo.processor();
 		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && incomingProcessor != null) {
 			for (T semanticElement: processor.getSemanticElements()) {
 				for (T incomingSemanticElement: incomingProcessor.getSemanticElements()) {
@@ -512,7 +512,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 					evaluationContext.setVariable("connection", connection);
 					evaluationContext.setVariable("incomingProcessor", incomingProcessor);
 					evaluationContext.setVariable("incomingSemanticElement", incomingSemanticElement);
-					evaluationContext.setVariable("incomingConfig", incomingProcessorRecord.config());			
+					evaluationContext.setVariable("incomingConfig", incomingProcessorInfo.config());			
 					exp.getValue(evaluationContext, semanticElement);
 				}
 			}
@@ -526,11 +526,11 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected EReference getOutgoingReference(
-			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config,
+			NodeProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config,
 			P processor, 
 			T semanticElement, 
 			Connection connection, 
-			ProcessorRecord<P> outgoingProcessorRecord,
+			ProcessorInfo<P> outgoingProcessorInfo,
 			T outgoingSemanticElement) {
 		String value = getPropertyValue(connection, getOutgoingReferencePropertyName());
 		if (org.nasdanika.common.Util.isBlank(value)) {
@@ -550,13 +550,13 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected void setOutgoing(
-			NodeProcessorConfig<ProcessorRecord<P>, ProcessorRecord<P>> config, 
+			NodeProcessorConfig<ProcessorInfo<P>, ProcessorInfo<P>> config, 
 			P processor,
 			Connection connection, 
-			ProcessorRecord<P> outgoingProcessorRecord, 
+			ProcessorInfo<P> outgoingProcessorInfo, 
 			ProgressMonitor progressMonitor) {
-		super.setOutgoing(config, processor, connection, outgoingProcessorRecord, progressMonitor);
-		P outgoingProcessor = outgoingProcessorRecord.processor();
+		super.setOutgoing(config, processor, connection, outgoingProcessorInfo, progressMonitor);
+		P outgoingProcessor = outgoingProcessorInfo.processor();
 		String expr = getPropertyValue(connection, getOutgoingInjectorPropertyName());
 		if (!org.nasdanika.common.Util.isBlank(expr) && processor != null && outgoingProcessor != null) {
 			for (T semanticElement: processor.getSemanticElements()) {
@@ -569,7 +569,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 					evaluationContext.setVariable("connection", connection);
 					evaluationContext.setVariable("outgoingProcessor", outgoingProcessor);
 					evaluationContext.setVariable("outgoingSemanticElement", outgoingSemanticElement);
-					evaluationContext.setVariable("outgoingConfig", outgoingProcessorRecord.config());			
+					evaluationContext.setVariable("outgoingConfig", outgoingProcessorInfo.config());			
 					exp.getValue(evaluationContext, semanticElement);
 				}
 			}
@@ -595,7 +595,7 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 			ProcessorConfig config, 
 			P processor, 
 			Map<Element, ProcessorConfig> children,
-			Function<Element, CompletionStage<P>> processorProvider, 
+			Function<Element, CompletionStage<ProcessorInfo<P>>> processorInfoProvider, 
 			Consumer<CompletionStage<?>> stageConsumer,
 			boolean parallel, 
 			ProgressMonitor progressMonitor) {
@@ -682,9 +682,8 @@ public abstract class PropertySourceEObjectFactory<T extends EObject, P extends 
 	
 	@Override
 	protected void setRegistry(
-			ProcessorConfig config,
-			P processor,
-			Function<Element, CompletionStage<P>> processorProvider,
+			ProcessorInfo<P> info,
+			Function<Element, CompletionStage<ProcessorInfo<P>>> processorInfoProvider,
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 		super.setRegistry(config, processor, processorProvider, stageConsumer, progressMonitor);

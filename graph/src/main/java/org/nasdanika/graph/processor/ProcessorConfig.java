@@ -14,4 +14,8 @@ public interface ProcessorConfig {
 	
 	Map<Element,ProcessorConfig> getRegistry();
 	
+	default <P> ProcessorInfo<P> toInfo(P processor) {
+		return ProcessorInfo.of(this, processor);
+	}
+	
 }

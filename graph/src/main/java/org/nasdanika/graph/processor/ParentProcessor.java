@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Field or method to inject parent processor or parent config.
+ * Field or method to inject parent processor or parent info.
  * @author Pavel
  *
  */
@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 public @interface ParentProcessor {
 	
 	/**
-	 * @return If true then {@link ProcessorConfig} is wired to the annotated field/method.
+	 * @return If true then {@link ProcessorInfo} is wired to the annotated field/method.
 	 */
 	boolean value() default false;
 		
