@@ -88,14 +88,44 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			featureMap.put(featureKey, feature);
 			addFeature(wrapFeature(featureKey, feature, loader, keyProvider));
 		}
+
+		Map<String, EOperation> opMap = new LinkedHashMap<>();
 		for (EOperation operation: eClass.getEAllOperations()) {
 			String operationKey = keyProvider.apply(eClass, operation);
 			if (operationKey == null) {
 				continue;
 			}
-			featureMap.put(operationKey, operation);
-			addFeature(wrapOperation(operationKey, operation, loader, keyProvider));
+						
+			EOperation prevOp = opMap.get(operationKey);
+			if (prevOp != null) {
+				if (prevOp.isOverrideOf(operation)) {
+					continue; // This operation is overridden, nothing to do
+				}
+				if (!operation.isOverrideOf(prevOp)) {
+					operationKey += "--" + operation.getOperationID(); // Overloading, using ID to dedup
+				}
+			}			
+			if (opMap.containsKey(operationKey)) {
+				throw new IllegalArgumentException("Duplicate operation key: " + operationKey);
+			}
+			opMap.put(operationKey, operation);
 		}
+		
+		for (Entry<String, EOperation> oe: opMap.entrySet()) {
+			String operationKey = oe.getKey();
+			EOperation operation = oe.getValue();
+			ETypedElement prevFeature = featureMap.get(operationKey);
+			if (prevFeature != null) {
+				operationKey = "--" + operation.getOperationID(); // Overlap with structural features, using ID to dedup
+			}
+			if (featureMap.containsKey(operationKey)) {
+				throw new IllegalArgumentException("Duplicate feature key: " + operationKey);
+			}
+			
+			featureMap.put(operationKey, operation);
+			addFeature(wrapOperation(operationKey, operation, loader, keyProvider));			
+		}
+		
 		if (constructor != null) {
 			this.constructor = constructor;
 		}
