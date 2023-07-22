@@ -31,7 +31,7 @@ import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorFactory;
-import org.nasdanika.graph.processor.ProcessorRecord;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -94,19 +94,18 @@ public class TestGraph {
 
 				@SuppressWarnings("unchecked")
 				@Override
-				protected Object createProcessor(
+				protected ProcessorInfo<Object> createProcessor(
 						ProcessorConfig config, 
 						boolean parallel,
-						Function<Element, CompletionStage<Object>> processorProvider,
-						Consumer<CompletionStage<?>> stageConsumer, 
-						ProgressMonitor progressMonitor) {
+						Function<Element, CompletionStage<ProcessorInfo<Object>>> processorInfoProvider,
+						Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
 					
 					if (config instanceof NodeProcessorConfig) {
-						return new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer, passThrough);
+						return config.toInfo(new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer, passThrough));
 					}
 					
 					if (config instanceof ConnectionProcessorConfig) {
-						return new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer);
+						return config.toInfo(new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer));
 					}
 					
 					throw new IllegalArgumentException("Neither node nor connection config: " + config);
@@ -114,14 +113,14 @@ public class TestGraph {
 				
 			};
 			
-			Map<Element, ProcessorRecord<Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
 			@SuppressWarnings("unchecked")
 			Stream<Supplier<Integer>> ps = processors
 					.values()
 					.stream()
-					.map(ProcessorRecord::processor)
+					.map(ProcessorInfo::getProcessor)
 					.filter(Supplier.class::isInstance)
 					.map(s -> (Supplier<Integer>) s);
 			
@@ -161,16 +160,16 @@ public class TestGraph {
 			
 			BiFunctionProcessorFactoryImpl processorFactory = new BiFunctionProcessorFactoryImpl(passThrough);
 			
-			Map<Element, ProcessorRecord<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
 			Stream<BiFunction<Object,ProgressMonitor,Object>> ps = processors
 					.values()
 					.stream()
 					.filter(pr -> {
-						return pr.processor() instanceof BiFunctionNodeProcessor;
+						return pr.getProcessor() instanceof BiFunctionNodeProcessor;
 					})
-					.map(pr -> (BiFunction<Object,ProgressMonitor,Object>) pr.processor());
+					.map(pr -> (BiFunction<Object,ProgressMonitor,Object>) pr.getProcessor());
 			
 			if (parallel) {
 				ps = ps.parallel();
@@ -210,10 +209,10 @@ public class TestGraph {
 			ReflectiveProcessorFactoryProvider<Supplier<Integer>, Function<Element, Element>, Function<Element, Element>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new ReflectiveProcessorFactory()); 			
 			ProcessorFactory<Supplier<Integer>> processorFactory = processorFactoryProvider.getFactory();
 			
-			Map<Element, ProcessorRecord<Supplier<Integer>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
+			Map<Element, ProcessorInfo<Supplier<Integer>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
 			assertEquals(configs.size(), processors.size());
 			
-			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull).map(ProcessorRecord::processor);			
+			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull).map(ProcessorInfo::getProcessor);			
 			if (parallel) {
 				ps = ps.parallel();
 			}

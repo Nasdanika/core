@@ -292,7 +292,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		return getFieldsAndMethods(processor.getClass(), parallel)
 				.filter(ae -> ae.getAnnotation(ParentProcessor.class) != null)
 				.filter(ae -> mustSet(ae, null, "Fields/methods annotated with ParentProcessor must have (parameter) type assignable from the processor type or ProcessorInfo if value is set to true: " + ae))
-				.map(setter -> parentProcessorInfoProvider.thenAccept(parentProcessorInfo -> set(processor, setter, setter.getAnnotation(ParentProcessor.class).value() ? parentProcessorInfo.getProcessor() : parentProcessorInfo)));
+				.map(setter -> parentProcessorInfoProvider.thenAccept(parentProcessorInfo -> set(processor, setter, setter.getAnnotation(ParentProcessor.class).value() ? parentProcessorInfo : parentProcessorInfo.getProcessor())));
 	}
 	
 	private record ChildWireRecord(Element child, CompletionStage<Void> result) {};

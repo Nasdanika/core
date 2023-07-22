@@ -39,7 +39,7 @@ public abstract class ProcessorFactory<P> {
 	protected ProcessorInfo<P> createProcessor(
 			ProcessorConfig config, 
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<P>>> inforProvider,
+			Function<Element,CompletionStage<ProcessorInfo<P>>> infoProvider,
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 		

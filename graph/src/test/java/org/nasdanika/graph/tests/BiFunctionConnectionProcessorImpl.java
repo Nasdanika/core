@@ -11,6 +11,7 @@ import java.util.function.Function;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.ConnectionProcessor;
 
 public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Object, Object, Object, Object> {
@@ -20,7 +21,7 @@ public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Ob
 	public BiFunctionConnectionProcessorImpl(
 			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<BiFunction<Object, ProgressMonitor, Object>>> processorProvider,
+			Function<Element, CompletionStage<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>>> infoProvider,
 			Consumer<CompletionStage<?>> stageConsumer) {
 		
 		this.config = connectionProcessorConfig;		

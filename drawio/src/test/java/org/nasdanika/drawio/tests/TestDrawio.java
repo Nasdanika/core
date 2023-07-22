@@ -49,7 +49,7 @@ import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorFactory;
-import org.nasdanika.graph.processor.ProcessorRecord;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.ReflectiveProcessorFactoryProvider;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory;
 import org.nasdanika.graph.processor.function.ReflectiveBiFunctionProcessorFactoryProvider;
@@ -438,12 +438,11 @@ public class TestDrawio {
 		
 		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 			
-			@Override
-			protected Object createProcessor(
-					ProcessorConfig config,
-					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<Object>> processorProvider,
-					Consumer<CompletionStage<?>> stageConsumer, 
+			protected ProcessorInfo<Object> createProcessor(
+					ProcessorConfig config, 
+					boolean parallel, 
+					Function<org.nasdanika.graph.Element,CompletionStage<ProcessorInfo<Object>>> inforProvider,
+					Consumer<java.util.concurrent.CompletionStage<?>> stageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
@@ -475,11 +474,11 @@ public class TestDrawio {
 					}
 				}
 
-				return null;
+				return super.createProcessor(config, parallel, inforProvider, stageConsumer, progressMonitor);
 			}
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorRecord<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
 		
 		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
 			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
@@ -546,12 +545,11 @@ public class TestDrawio {
 		
 		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 			
-			@Override
-			protected Object createProcessor(
-					ProcessorConfig config,
-					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<Object>> processorProvider,
-					Consumer<CompletionStage<?>> stageConsumer, 
+			protected ProcessorInfo<Object> createProcessor(
+					ProcessorConfig config, 
+					boolean parallel, 
+					Function<org.nasdanika.graph.Element,CompletionStage<ProcessorInfo<Object>>> inforProvider,
+					Consumer<java.util.concurrent.CompletionStage<?>> stageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
@@ -608,11 +606,11 @@ public class TestDrawio {
 					
 				}
 
-				return null;
+				return super.createProcessor(config, parallel, inforProvider, stageConsumer, progressMonitor);
 			}
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorRecord<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
 		
 		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
 			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
@@ -690,7 +688,7 @@ public class TestDrawio {
 					}
 					field.set(target, value);
 				} catch (IllegalArgumentException | IllegalAccessException e) {
-					throw new NasdanikaException("Cannot access field " + field + " of " + target + ": " + e, e);
+					throw new NasdanikaException("Cannot set field " + field + " of " + target + ": " + e, e);
 				} finally {
 					if (!canAccess) {
 						field.setAccessible(false);
@@ -702,7 +700,7 @@ public class TestDrawio {
 		
 		AliceBobProcessorRegistry registry = new AliceBobProcessorRegistry();
 		ProcessorFactory<Object> processorFactory = processorFactoryProvider.getFactory(registry);				
-		Map<org.nasdanika.graph.Element, ProcessorRecord<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs, false, progressMonitor);
 		
 		System.out.println(registry.aliceProcessor.talkToBob("Hi!"));
 	}	
@@ -752,7 +750,7 @@ public class TestDrawio {
 			protected ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
 					ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
 					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processorProvider,
+					Function<org.nasdanika.graph.Element, CompletionStage<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>>> infoProvider,
 					Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
 
 				return new AsyncHistoryConnectionProcessor();
@@ -762,7 +760,7 @@ public class TestDrawio {
 			protected NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
 					NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> nodeProcessorConfig,
 					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processorProvider,
+					Function<org.nasdanika.graph.Element, CompletionStage<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>>> processorInfo,
 					Consumer<CompletionStage<?>> stageConsumer,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
@@ -783,9 +781,9 @@ public class TestDrawio {
 			}
 		};
 				
-		Map<org.nasdanika.graph.Element, ProcessorRecord<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs, true, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs, true, progressMonitor);
 		
-		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).processor();
+		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).getProcessor();
 		processor.apply("First", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Second", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
@@ -824,9 +822,9 @@ public class TestDrawio {
 		ReflectiveTarget reflectiveTarget = new ReflectiveTarget();
 		ReflectiveBiFunctionProcessorFactoryProvider<String, CompletionStage<String>, String, CompletionStage<String>> processorFactoryProvider = new ReflectiveBiFunctionProcessorFactoryProvider<>(reflectiveTarget);
 		BiFunctionProcessorFactory<String, CompletionStage<String>, String, CompletionStage<String>> processorFactory = processorFactoryProvider.getFactory();
-		Map<org.nasdanika.graph.Element, ProcessorRecord<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs, true, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>> processors = processorFactory.createProcessors(configs, true, progressMonitor);
 		
-		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).processor();
+		BiFunction<String, ProgressMonitor, CompletionStage<String>> processor = processors.get(startNode).getProcessor();
 		processor.apply("First", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Second", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Third", progressMonitor).thenAccept(System.out::println);			

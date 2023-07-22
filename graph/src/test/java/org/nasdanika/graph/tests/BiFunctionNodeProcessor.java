@@ -13,6 +13,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.function.BiFunctionProcessorFactory.NodeProcessor;
 
 public class BiFunctionNodeProcessor implements NodeProcessor<Object, Object, Object, Object> {
@@ -25,7 +26,7 @@ public class BiFunctionNodeProcessor implements NodeProcessor<Object, Object, Ob
 	public BiFunctionNodeProcessor(
 			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<BiFunction<Object, ProgressMonitor, Object>>> processorProvider,
+			Function<Element, CompletionStage<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>>> infoProvider,
 			Consumer<CompletionStage<?>> stageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,

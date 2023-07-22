@@ -17,4 +17,8 @@ public interface ConnectionProcessorConfig<H,E> extends ProcessorConfig {
 	
 	void setTargetHandler(H targetHandler);
 	
+	default <P> ConnectionProcessorInfo<P,H,E> toInfo(P processor) {
+		return new ConnectionProcessorInfo<P,H,E>(this, processor);
+	}	
+	
 }

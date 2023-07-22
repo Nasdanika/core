@@ -26,7 +26,7 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.NopEndpointProcessorConfigFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfigFactory;
-import org.nasdanika.graph.processor.ProcessorRecord;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
 import org.nasdanika.graph.processor.emf.SemanticProcessor;
 import org.nasdanika.ncore.Documented;
@@ -127,13 +127,13 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 			}
 			
 			@Override
-			public Map<Element, ProcessorRecord<SemanticProcessor<T>>> createProcessors(
+			public Map<Element, ProcessorInfo<SemanticProcessor<T>>> createProcessors(
 					Map<Element, ProcessorConfig> configs,
 					boolean parallel, 
 					ProgressMonitor progressMonitor) {
-				Map<Element, ProcessorRecord<SemanticProcessor<T>>> registry = super.createProcessors(configs, parallel, progressMonitor);
+				Map<Element, ProcessorInfo<SemanticProcessor<T>>> registry = super.createProcessors(configs, parallel, progressMonitor);
 				String representationPropertyName = getRepresentationPropertyName(uri);
-				registry.entrySet().forEach(re -> configureRegistryEntry(re.getKey(), re.getValue().config(), re.getValue().processor(), getPropertyValue(re.getKey(), representationPropertyName)));
+				registry.values().forEach(info -> configureRegistryEntry(info, getPropertyValue(info.getElement(), representationPropertyName)));
 				return registry;
 			}
 			
@@ -151,14 +151,14 @@ public abstract class NcoreDrawioResourceFactory<T extends EObject> extends Reso
 	 * @param element
 	 * @param info
 	 */
-	protected void configureRegistryEntry(Element element, ProcessorConfig config, SemanticProcessor<T> processor, String representationKey) {
-		if (processor != null && !Util.isBlank(representationKey)) {
-			if (element instanceof ModelElement) {
-				Collection<T> semanticElements = processor.getSemanticElements();
+	protected void configureRegistryEntry(ProcessorInfo<SemanticProcessor<T>> info, String representationKey) {
+		if (info != null && info.getProcessor() != null && !Util.isBlank(representationKey)) {
+			if (info.getElement() instanceof ModelElement) {
+				Collection<T> semanticElements = info.getProcessor().getSemanticElements();
 				if (semanticElements != null && !semanticElements.isEmpty()) {
 					for (T semanticElement: semanticElements) {
 						if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-							Document document = ((ModelElement) element).getModel().getPage().getDocument();
+							Document document = ((ModelElement) info.getElement()).getModel().getPage().getDocument();
 							try {
 								((org.nasdanika.ncore.ModelElement) semanticElement).getRepresentations().put(representationKey, document.toDataURI(true).toString());
 							} catch (TransformerException | IOException e) {

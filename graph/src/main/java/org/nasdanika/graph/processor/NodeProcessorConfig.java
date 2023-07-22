@@ -9,6 +9,7 @@ import org.nasdanika.graph.Node;
 
 public interface NodeProcessorConfig<H,E> extends ProcessorConfig {
 	
+	
 	@Override
 	Node getElement();
 
@@ -19,5 +20,9 @@ public interface NodeProcessorConfig<H,E> extends ProcessorConfig {
 	Map<Connection, CompletionStage<E>> getOutgoingEndpoints();
 	
 	Map<Connection, Consumer<H>> getOutgoingHandlerConsumers();
+	
+	default <P> NodeProcessorInfo<P,H,E> toInfo(P processor) {
+		return new NodeProcessorInfo<P,H,E>(this, processor);
+	}	
 	
 }

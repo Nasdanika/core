@@ -15,6 +15,7 @@ import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ProcessorConfig;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.graph.processor.emf.ResourceSetPropertySourceEObjectFactory;
 import org.nasdanika.graph.processor.emf.SemanticProcessor;
 
@@ -26,17 +27,17 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	
 	@Override
 	protected void setRegistry(
-			ProcessorConfig config, 
-			P processor,
-			Function<Element, CompletionStage<P>> processorProvider, 
-			Consumer<CompletionStage<?>> stageConsumer,
+			ProcessorInfo<P> info,
+			Function<Element, CompletionStage<ProcessorInfo<P>>> processorInfoProvider,
+			Consumer<CompletionStage<?>> stageConsumer, 
 			ProgressMonitor progressMonitor) {
-		super.setRegistry(config, processor, processorProvider, stageConsumer, progressMonitor);
-		Element element = config.getElement();
+
+		super.setRegistry(info, processorInfoProvider, stageConsumer, progressMonitor);
+		Element element = info.getElement();
 		if (element instanceof ModelElement) {
 			Page linkedPage = ((ModelElement) element).getLinkedPage();
-			if (linkedPage != null && !"false".equals(getPropertyValue(config.getElement(), getLinkPagePropertyName()))) {
-				linkPage(config, processor, linkedPage, processorProvider, stageConsumer, progressMonitor);
+			if (linkedPage != null && !"false".equals(getPropertyValue(info.getElement(), getLinkPagePropertyName()))) {
+				linkPage(info, linkedPage, processorInfoProvider, stageConsumer, progressMonitor);
 			}
 		}				
 	}
@@ -53,17 +54,16 @@ public abstract class DrawioEObjectFactory<T extends EObject, P extends Semantic
 	 * @param likedPageInfo
 	 */
 	protected void linkPage(
-			ProcessorConfig config, 
-			P processor, 
+			ProcessorInfo<P> info, 
 			Page linkedPage,
-			Function<Element, CompletionStage<P>> processorProvider, 
+			Function<Element, CompletionStage<ProcessorInfo<P>>> processorInfoProvider, 
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 		linkedPage.accept(pe -> {
-			CompletionStage<P> pecs = processorProvider.apply(pe);
-			if (pecs != null) {
-				stageConsumer.accept(pecs.thenAccept(prc -> {
-					setParent(config, processor, config.getRegistry().get(pe), prc, progressMonitor);
+			CompletionStage<ProcessorInfo<P>> peics = processorInfoProvider.apply(pe);
+			if (peics != null) {
+				stageConsumer.accept(peics.thenAccept(peInfo -> {
+					setParent(info, peInfo, progressMonitor);
 				}));
 			}
 		});		
