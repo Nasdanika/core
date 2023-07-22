@@ -24,7 +24,7 @@ import org.nasdanika.ncore.util.NcoreUtil;
  *
  */
 @Factory(type = EObjectNode.class)
-public class EObjectNodeProcessorReflectiveFactory<P,H,E,R> extends Reflector {
+public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 	
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
 

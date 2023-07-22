@@ -99,11 +99,9 @@ public abstract class ProcessorConfigFactory<H,E> {
 							endpoint = targetEndpoints.computeIfAbsent(incomingConnection, ic -> new CompletableFuture<E>());
 						}
 						
-						incomingHandlerConsumers.put(incomingConnection, handler -> {
-							if (endpoint != null) {
-								endpoint.complete(ProcessorConfigFactory.this.createEndpoint(incomingConnection, handler, HandlerType.INCOMING));
-							}
-						});
+						if (endpoint != null) {
+							incomingHandlerConsumers.put(incomingConnection, handler -> endpoint.complete(ProcessorConfigFactory.this.createEndpoint(incomingConnection, handler, HandlerType.INCOMING)));
+						}
 					}
 					
 					Map<Connection, Consumer<H>> outgoingHandlerConsumers = new LinkedHashMap<>();
@@ -128,11 +126,9 @@ public abstract class ProcessorConfigFactory<H,E> {
 							endpoint = sourceEndpoints.computeIfAbsent(outgoingConnection, ic -> new CompletableFuture<E>());
 						}
 						
-						outgoingHandlerConsumers.put(outgoingConnection, handler -> {
-							if (endpoint != null) {
-								endpoint.complete(ProcessorConfigFactory.this.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING));
-							}
-						});
+						if (endpoint != null) {
+							outgoingHandlerConsumers.put(outgoingConnection, handler -> endpoint.complete(ProcessorConfigFactory.this.createEndpoint(outgoingConnection, handler, HandlerType.OUTGOING)));
+						}
 					}
 					
 					config = new NodeProcessorConfig<H,E>() {
