@@ -132,15 +132,6 @@ public interface ExecPackage extends EPackage {
 	int BLOCK__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BLOCK__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
-
-	/**
 	 * The feature id for the '<em><b>Try</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -258,15 +249,6 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int CALL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CALL__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -470,15 +452,6 @@ public interface ExecPackage extends EPackage {
 	int CONFIGURATOR__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONFIGURATOR__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
-
-	/**
 	 * The feature id for the '<em><b>Target</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -587,15 +560,6 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVAL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVAL__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Script</b></em>' containment reference.
@@ -708,15 +672,6 @@ public interface ExecPackage extends EPackage {
 	int FAIL__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FAIL__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
-
-	/**
 	 * The feature id for the '<em><b>Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -818,15 +773,6 @@ public interface ExecPackage extends EPackage {
 	int LIST__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
 
 	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
-
-	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -926,15 +872,6 @@ public interface ExecPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAP__ANNOTATIONS = NcorePackage.MODEL_ELEMENT__ANNOTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Aliases</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP__ALIASES = NcorePackage.MODEL_ELEMENT__ALIASES;
 
 	/**
 	 * The feature id for the '<em><b>Entries</b></em>' map.

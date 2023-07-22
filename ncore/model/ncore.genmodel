@@ -61,7 +61,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/labelPrototype"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/representations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/annotations"/>
-      <genFeatures property="Readonly" notify="false" createChild="false" ecoreFeature="ecore:EReference ncore.ecore#//ModelElement/aliases"/>
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//RepresentationEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//RepresentationEntry/key"/>

@@ -1,11 +1,9 @@
 package org.nasdanika.ncore.util;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.util.ECollections;
@@ -18,47 +16,40 @@ import org.nasdanika.ncore.ModelElement;
 
 public class NcoreResourceSet extends ResourceSetImpl {
 	
-	private Map<URI, Set<ModelElement>> uriToModelElementtMap;
-	private Map<ModelElement, List<URI>> modelElementToURIMap;
-	
-	
-	public EList<ModelElement> getAliases(ModelElement modelElement) {
-		if (uriToModelElementtMap == null) {
-			uriToModelElementtMap = new HashMap<>();
-			modelElementToURIMap = new HashMap<>();
-			TreeIterator<Notifier> cit = getAllContents();
-			while (cit.hasNext()) {
-				Notifier next = cit.next();				
-				if (next instanceof ModelElement) {
-					ModelElement nextModelElement = (ModelElement) next;
-					List<URI> identifiers = NcoreUtil.getIdentifiers(nextModelElement);
-					modelElementToURIMap.put(nextModelElement, identifiers);
-					for (URI identifier: identifiers) {
-						uriToModelElementtMap.computeIfAbsent(identifier, uri -> new HashSet<>()).add(nextModelElement);
-					}
-				}
-			}	
-									
-			// Removing single (no alias) uri -> Model Element mappings
-			uriToModelElementtMap.entrySet().removeIf(e -> e.getValue().size() == 1);
+	/**
+	 * 
+	 * @param modelElement
+	 * @param cache cache with fall-back. E.g.Map.computeIfAbsent
+	 * @return
+	 */
+	public EList<ModelElement> getAliases(
+			ModelElement modelElement, 
+			BiFunction<ModelElement,Function<? super ModelElement,? extends Collection<URI>>,Collection<URI>> cache) {
+		
+		if (cache == null) {
+			cache = (m,f) -> f.apply(m);
 		}
-		Set<ModelElement> collector = new HashSet<>();
-		collectAliases(modelElement, collector);
-		collector.remove(modelElement);
-		return ECollections.unmodifiableEList(ECollections.toEList(collector));
-	}
-	
-	private void collectAliases(ModelElement modelElement, Set<ModelElement> collector) {
-		if (modelElement != null && collector.add(modelElement)) {
-			for (URI identifier: modelElementToURIMap.get(modelElement)) {				
-				Set<ModelElement> modelElements = uriToModelElementtMap.get(identifier);
-				if (modelElements != null) {
-					for (ModelElement me: modelElements) {
-						collectAliases(me, collector);
+		
+		Collection<URI> modelElementIdentifiers = cache.apply(modelElement, NcoreUtil::getIdentifiers);
+		if (modelElementIdentifiers.isEmpty()) {
+			return ECollections.emptyEList();
+		}
+
+		EList<ModelElement> aliases = ECollections.newBasicEList();		
+		TreeIterator<Notifier> cit = getAllContents();
+		while (cit.hasNext()) {
+			Notifier next = cit.next();				
+			if (next != modelElement && next instanceof ModelElement) {
+				ModelElement nextModelElement = (ModelElement) next;
+				for (URI nextModelElementidentifier: cache.apply(nextModelElement, NcoreUtil::getIdentifiers)) {
+					if (modelElementIdentifiers.contains(nextModelElementidentifier)) {
+						aliases.add(nextModelElement);
+						break;
 					}
 				}
 			}
-		}
+		}	
+		return aliases;
 	}
 
 	@Override

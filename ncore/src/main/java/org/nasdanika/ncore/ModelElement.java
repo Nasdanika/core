@@ -30,7 +30,6 @@ import org.nasdanika.common.Adaptable;
  *   <li>{@link org.nasdanika.ncore.ModelElement#getLabelPrototype <em>Label Prototype</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getRepresentations <em>Representations</em>}</li>
  *   <li>{@link org.nasdanika.ncore.ModelElement#getAnnotations <em>Annotations</em>}</li>
- *   <li>{@link org.nasdanika.ncore.ModelElement#getAliases <em>Aliases</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getModelElement()
@@ -172,22 +171,6 @@ public interface ModelElement extends Marked, Adaptable {
 	 */
 	EList<Property> getAnnotations();
 	
-	/**
-	 * Returns the value of the '<em><b>Aliases</b></em>' reference list.
-	 * The list contents are of type {@link org.nasdanika.ncore.ModelElement}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * <!-- begin-model-doc -->
-	 * Two model elements are aliases if they have overlapping URI's.
-	 * <!-- end-model-doc -->
-	 * @return the value of the '<em>Aliases</em>' reference list.
-	 * @see org.nasdanika.ncore.NcorePackage#getModelElement_Aliases()
-	 * @model changeable="false" derived="true"
-	 *        annotation="urn:org.nasdanika opposite='aliases'"
-	 * @generated
-	 */
-	EList<ModelElement> getAliases();
-
 	// Annotation convenience methods
 	
 	default Property getAnnotation(java.lang.String key) {
