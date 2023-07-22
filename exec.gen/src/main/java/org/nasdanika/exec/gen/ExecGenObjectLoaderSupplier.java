@@ -18,8 +18,8 @@ public class ExecGenObjectLoaderSupplier extends ExecGenObjectLoaderExecutionPar
 
 	private URI uri;
 	
-	public ExecGenObjectLoaderSupplier(URI uri, Context context, boolean parallel) {
-		super(context, parallel);
+	public ExecGenObjectLoaderSupplier(URI uri, Context context) {
+		super(context);
 		this.uri = uri;
 	}
 

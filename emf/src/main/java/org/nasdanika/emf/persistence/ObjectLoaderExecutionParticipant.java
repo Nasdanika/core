@@ -2,13 +2,12 @@ package org.nasdanika.emf.persistence;
 
 import java.util.Map;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.drawio.Document;
 import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.ObjectLoaderResourceFactory;
 
@@ -20,11 +19,8 @@ import org.nasdanika.persistence.ObjectLoaderResourceFactory;
  */
 public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionParticipant {
 
-	private boolean parallel;
-
-	public ObjectLoaderExecutionParticipant(Context context, boolean parallel) {
+	public ObjectLoaderExecutionParticipant(Context context) {
 		super(context);
-		this.parallel = parallel;
 	}
 
 	@Override
@@ -40,22 +36,17 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);
 		GitMarkerFactory markerFactory = new GitMarkerFactory();
 		
-		NcoreDrawioResourceFactory<EObject> ncoreDrawioResourceFactory = new NcoreDrawioResourceFactory<EObject>(parallel) {
-			
+		NcoreDrawioResourceFactory ncoreDrawioResourceFactory = new NcoreDrawioResourceFactory() {
+
 			@Override
-			protected ResourceSet getResourceSet() {
-				return resourceSet;
+			protected void loadDocumentContent(Document document, Resource resource) {
+				ObjectLoaderExecutionParticipant.this.loadDocumentContent(document, resource, ret, markerFactory, progressMonitor);				
 			}
 			
 			@Override
-			protected ProgressMonitor getProgressMonitor(URI uri) {
-				return progressMonitor;
-			}
-			
-			@Override
-			protected MarkerFactory getMarkerFactory() {
-				return markerFactory;
-			}
+			protected void updateDocumentContent(Document document, Resource resource) {
+				ObjectLoaderExecutionParticipant.this.updateDocumentContent(document, resource, ret, markerFactory, progressMonitor);				
+			}			
 
 		};
 		
@@ -96,5 +87,23 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		eObjectLoader.setMarkerFactory(new GitMarkerFactory());
 		return eObjectLoader;
 	}
+	
+	protected void loadDocumentContent(
+			Document document, 
+			Resource resource, 
+			ResourceSet resourceSet, 
+			MarkerFactory markerFactory,
+			ProgressMonitor progressMonitor) {
+		throw new UnsupportedOperationException();		
+	}
+	
+	protected void updateDocumentContent(
+			Document document, 
+			Resource resource, 
+			ResourceSet resourceSet, 
+			MarkerFactory markerFactory,
+			ProgressMonitor progressMonitor) {
+		throw new UnsupportedOperationException();		
+	}	
 
 }

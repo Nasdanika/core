@@ -1,0 +1,1 @@
+Mapping of a graph to an EMF model using properties

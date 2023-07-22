@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,12 +24,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
@@ -38,8 +35,6 @@ import org.nasdanika.common.Supplier;
 import org.nasdanika.common.SupplierFactory;
 import org.nasdanika.common.URIEncodable;
 import org.nasdanika.common.Util;
-import org.nasdanika.graph.processor.emf.AbstractEObjectFactoryProcessorResource;
-import org.nasdanika.graph.processor.emf.LinkedResourcesAdapter;
 import org.nasdanika.ncore.Marked;
 import org.nasdanika.ncore.util.NcoreUtil;
 import org.nasdanika.persistence.ContextLoadable;
@@ -506,7 +501,7 @@ public class EObjectLoader extends DispatchingLoader {
 	 * @param progressMonitor Progress monitor.
 	 * @return Configured object. This implementation loads linked resources.
 	 */
-	@SuppressWarnings("unchecked")
+//	@SuppressWarnings("unchecked")
 	protected <T> T configure(
 			T obj,
 			ObjectLoader loader, 
@@ -516,112 +511,112 @@ public class EObjectLoader extends DispatchingLoader {
 			ProgressMonitor progressMonitor) {
 		
 		// Loading linked resources if resourceSet is not null.
-		if (resourceSet != null) {
-			if (obj instanceof EObject) {
-				EObject eObj = (EObject) obj;
-				EClass eClass = eObj.eClass();
-				for (EAttribute eAttr: eClass.getEAllAttributes()) {
-					if (isLinkedResourceAttribute(eAttr)) {
-						linkResources(eObj, eObj, eAttr, loader, config, base, context, progressMonitor);
-					}
-				}
-				
-				// EMaps with EString value attributes annotated with content-type = resource-uri.
-				for (EReference eRef: eClass.getEAllReferences()) {
-					EClassifier refType = eRef.getEType();
-					Class<?> refClass = refType.getInstanceClass();
-					if (eRef.isMany() && refType instanceof EClass && refClass != null && Map.Entry.class.isAssignableFrom(refClass)) {
-						EStructuralFeature valueFeature = ((EClass) refType).getEStructuralFeature("value");
-						if (valueFeature instanceof EAttribute && isLinkedResourceAttribute((EAttribute) valueFeature)) {
-							for (EObject entry: (Collection<EObject>) eObj.eGet(eRef)) {
-								linkResources(eObj, entry, (EAttribute) valueFeature, loader, config, base, context, progressMonitor);							
-							}
-						}
-					}
-				}
-			}
-		}
+//		if (resourceSet != null) {
+//			if (obj instanceof EObject) {
+//				EObject eObj = (EObject) obj;
+//				EClass eClass = eObj.eClass();
+//				for (EAttribute eAttr: eClass.getEAllAttributes()) {
+//					if (isLinkedResourceAttribute(eAttr)) {
+//						linkResources(eObj, eObj, eAttr, loader, config, base, context, progressMonitor);
+//					}
+//				}
+//				
+//				// EMaps with EString value attributes annotated with content-type = resource-uri.
+//				for (EReference eRef: eClass.getEAllReferences()) {
+//					EClassifier refType = eRef.getEType();
+//					Class<?> refClass = refType.getInstanceClass();
+//					if (eRef.isMany() && refType instanceof EClass && refClass != null && Map.Entry.class.isAssignableFrom(refClass)) {
+//						EStructuralFeature valueFeature = ((EClass) refType).getEStructuralFeature("value");
+//						if (valueFeature instanceof EAttribute && isLinkedResourceAttribute((EAttribute) valueFeature)) {
+//							for (EObject entry: (Collection<EObject>) eObj.eGet(eRef)) {
+//								linkResources(eObj, entry, (EAttribute) valueFeature, loader, config, base, context, progressMonitor);							
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 		
 		return obj;
 	}
 	
-	protected boolean isLinkedResourceAttribute(EAttribute eAttribute) {
-		return eAttribute != null && eAttribute.getEType() == EcorePackage.Literals.ESTRING && "resource-uri".equals(NcoreUtil.getNasdanikaAnnotationDetail(eAttribute, "content-type")); 
-	}
+//	protected boolean isLinkedResourceAttribute(EAttribute eAttribute) {
+//		return eAttribute != null && eAttribute.getEType() == EcorePackage.Literals.ESTRING && "resource-uri".equals(NcoreUtil.getNasdanikaAnnotationDetail(eAttribute, "content-type")); 
+//	}
 	
-	/**
-	 * Loads and links resources specified in the valueObject's linkedResourceAttribute to the semanticElement.
-	 * @param semanticElement Loaded object to link the resource to.
-	 * @param valueObject Value object containing linked resource attribute, can be different from the semanticElement in case of EMap's.
-	 * @param linkedResourceAttribute Attribute containing resource URI.
-	 * @param loader 
-	 * @param config
-	 * @param base
-	 * @param context
-	 * @param progressMonitor
-	 */
-	@SuppressWarnings("unchecked")
-	protected void linkResources(
-			EObject semanticElement, 
-			EObject valueObject, 
-			EAttribute linkedResourceAttribute,
-			ObjectLoader loader, 
-			Object config, 
-			URI base, 
-			Context context,
-			ProgressMonitor progressMonitor) {
-		
-		if (linkedResourceAttribute.isMany()) {
-			ListIterator<String> it = ((List<String>) valueObject.eGet(linkedResourceAttribute)).listIterator();
-			while (it.hasNext()) {
-				it.set(linkResource(semanticElement, it.next(), loader, config, base, context, progressMonitor));
-			}
-		} else {
-			valueObject.eSet(linkedResourceAttribute, linkResource(semanticElement, (String) valueObject.eGet(linkedResourceAttribute), loader, config, base, context, progressMonitor));
-		}		
-	}
+//	/**
+//	 * Loads and links resources specified in the valueObject's linkedResourceAttribute to the semanticElement.
+//	 * @param semanticElement Loaded object to link the resource to.
+//	 * @param valueObject Value object containing linked resource attribute, can be different from the semanticElement in case of EMap's.
+//	 * @param linkedResourceAttribute Attribute containing resource URI.
+//	 * @param loader 
+//	 * @param config
+//	 * @param base
+//	 * @param context
+//	 * @param progressMonitor
+//	 */
+//	@SuppressWarnings("unchecked")
+//	protected void linkResources(
+//			EObject semanticElement, 
+//			EObject valueObject, 
+//			EAttribute linkedResourceAttribute,
+//			ObjectLoader loader, 
+//			Object config, 
+//			URI base, 
+//			Context context,
+//			ProgressMonitor progressMonitor) {
+//		
+//		if (linkedResourceAttribute.isMany()) {
+//			ListIterator<String> it = ((List<String>) valueObject.eGet(linkedResourceAttribute)).listIterator();
+//			while (it.hasNext()) {
+//				it.set(linkResource(semanticElement, it.next(), loader, config, base, context, progressMonitor));
+//			}
+//		} else {
+//			valueObject.eSet(linkedResourceAttribute, linkResource(semanticElement, (String) valueObject.eGet(linkedResourceAttribute), loader, config, base, context, progressMonitor));
+//		}		
+//	}
 	
-	/**
-	 * Loads and links resources specified in the valueObject's linkedResourceAttribute to the semanticElement.
-	 * @param semanticElement Loaded object to link the resource to.
-	 * @param resourceUriStr
-	 * @param loader
-	 * @param config
-	 * @param base
-	 * @param context
-	 * @param progressMonitor
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	protected String linkResource(
-			EObject semanticElement,
-			String resourceUriStr,
-			ObjectLoader loader, 
-			Object config, 
-			URI base, 
-			Context context,
-			ProgressMonitor progressMonitor) {
-		
-		URI resourceURI = URI.createURI(resourceUriStr);
-		if (resourceURI.isRelative() && base != null && !base.isRelative() && base.isHierarchical()) {
-			resourceURI = resourceURI.resolve(base);
-		}
-		Resource linkedResource = resourceSet.getResource(resourceURI, true);
-		
-		// Adding to linked resources adapter for setting children in createSemanticElement				
-		LinkedResourcesAdapter linkedResourcesAdapter = (LinkedResourcesAdapter) EcoreUtil.getRegisteredAdapter(semanticElement, LinkedResourcesAdapter.class);
-		if (linkedResourcesAdapter == null) {
-			linkedResourcesAdapter = new LinkedResourcesAdapter();
-			semanticElement.eAdapters().add(linkedResourcesAdapter);
-		}
-		linkedResourcesAdapter.getLinkedResources().add(linkedResource);
-		
-		if (linkedResource instanceof AbstractEObjectFactoryProcessorResource) {
-			((AbstractEObjectFactoryProcessorResource<EObject>) linkedResource).setParent(semanticElement);
-		}
-		
-		return encodeLinkedResource(semanticElement, resourceUriStr, linkedResource, loader, config, base, context, progressMonitor);
-	}
+//	/**
+//	 * Loads and links resources specified in the valueObject's linkedResourceAttribute to the semanticElement.
+//	 * @param semanticElement Loaded object to link the resource to.
+//	 * @param resourceUriStr
+//	 * @param loader
+//	 * @param config
+//	 * @param base
+//	 * @param context
+//	 * @param progressMonitor
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	protected String linkResource(
+//			EObject semanticElement,
+//			String resourceUriStr,
+//			ObjectLoader loader, 
+//			Object config, 
+//			URI base, 
+//			Context context,
+//			ProgressMonitor progressMonitor) {
+//		
+//		URI resourceURI = URI.createURI(resourceUriStr);
+//		if (resourceURI.isRelative() && base != null && !base.isRelative() && base.isHierarchical()) {
+//			resourceURI = resourceURI.resolve(base);
+//		}
+//		Resource linkedResource = resourceSet.getResource(resourceURI, true);
+//		
+//		// Adding to linked resources adapter for setting children in createSemanticElement				
+//		LinkedResourcesAdapter linkedResourcesAdapter = (LinkedResourcesAdapter) EcoreUtil.getRegisteredAdapter(semanticElement, LinkedResourcesAdapter.class);
+//		if (linkedResourcesAdapter == null) {
+//			linkedResourcesAdapter = new LinkedResourcesAdapter();
+//			semanticElement.eAdapters().add(linkedResourcesAdapter);
+//		}
+//		linkedResourcesAdapter.getLinkedResources().add(linkedResource);
+//		
+//		if (linkedResource instanceof AbstractEObjectFactoryProcessorResource) {
+//			((AbstractEObjectFactoryProcessorResource<EObject>) linkedResource).setParent(semanticElement);
+//		}
+//		
+//		return encodeLinkedResource(semanticElement, resourceUriStr, linkedResource, loader, config, base, context, progressMonitor);
+//	}
 	
 	/**
 	 * Optionally changes the value of the resourceUriStr by encoding the resource.

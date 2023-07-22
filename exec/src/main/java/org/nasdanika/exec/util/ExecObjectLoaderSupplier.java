@@ -18,8 +18,8 @@ public class ExecObjectLoaderSupplier extends ExecObjectLoaderExecutionParticipa
 
 	private URI uri;
 	
-	public ExecObjectLoaderSupplier(URI uri, Context context, boolean parallel) {
-		super(context, parallel);
+	public ExecObjectLoaderSupplier(URI uri, Context context) {
+		super(context);
 		this.uri = uri;
 	}
 

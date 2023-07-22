@@ -15,8 +15,8 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public abstract class NcoreObjectLoaderExecutionParticipant extends ObjectLoaderExecutionParticipant {
 
-	public NcoreObjectLoaderExecutionParticipant(Context context, boolean parallel) {
-		super(context, parallel);
+	public NcoreObjectLoaderExecutionParticipant(Context context) {
+		super(context);
 	}
 
 	@Override

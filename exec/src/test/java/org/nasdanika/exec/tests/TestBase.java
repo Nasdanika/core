@@ -109,7 +109,7 @@ public class TestBase {
 		class TestCommand extends ExecObjectLoaderExecutionParticipant implements Command {
 
 			public TestCommand(Context context) {
-				super(context, false);
+				super(context);
 			}
 
 			@Override

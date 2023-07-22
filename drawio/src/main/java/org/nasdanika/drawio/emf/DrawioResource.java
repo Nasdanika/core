@@ -7,17 +7,16 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.URIEncodable;
 import org.nasdanika.drawio.Document;
-import org.nasdanika.graph.processor.emf.GraphProcessorResource;
 import org.xml.sax.SAXException;
 
 /**
@@ -25,26 +24,18 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource<P, T extends EObject> extends GraphProcessorResource<P, T> implements URIEncodable {
+public abstract class DrawioResource extends ResourceImpl implements URIEncodable {
 	
 	protected Document document;
 	
-	protected DrawioResource(URI uri, boolean parallel) {
-		super(uri, parallel);
+	protected DrawioResource(URI uri) {
+		super(uri);
 	}
-	
+		
 	@Override
-	protected Stream<? extends org.nasdanika.graph.Element> loadElements(InputStream inputStream, Map<?, ?> options) throws IOException {
+	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
 			document = loadDocument(inputStream);
-			URI resourceURI = getURI();
-			return document.stream()
-				.filter(org.nasdanika.drawio.Element.class::isInstance)
-				.map(org.nasdanika.drawio.Element.class::cast)
-				.filter(e -> {
-					URI elementURI = e.getURI();
-					return elementURI != null && resourceURI.equals(elementURI);
-				});
 		} catch (ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException(e);
 		}
@@ -62,7 +53,12 @@ public abstract class DrawioResource<P, T extends EObject> extends GraphProcesso
 	protected Document loadDocument(InputStream inputStream) throws IOException, ParserConfigurationException, SAXException {
 		return Document.load(inputStream, getURI().trimFragment());
 	}
-
+	
+	/**
+	 * Loads resource content from the document.
+	 */
+	protected abstract void loadDocumentContent();
+	
 	@Override
 	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
 		if (document == null) {
@@ -72,7 +68,7 @@ public abstract class DrawioResource<P, T extends EObject> extends GraphProcesso
 				throw new NasdanikaException(e);
 			}
 		}
-		update(document);
+		updateDocument();
 		try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
 			try {
 				writer.write(document.save(null));
@@ -86,7 +82,7 @@ public abstract class DrawioResource<P, T extends EObject> extends GraphProcesso
 	 * Override to update document with model data.
 	 * @param document Document to update. It may be a previously loaded document or a new empty document for new resources.
 	 */
-	protected void update(Document document) {}
+	protected void updateDocument() {}
 	
 	@Override
 	public URI encode() {
