@@ -10,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -291,8 +290,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 			} 
 		}
 	
-	}
-	
+	}	
 	
 	/**
 	 * If a connection is pass-through its source endpoint is connected directly to the target node handler and vice versa.

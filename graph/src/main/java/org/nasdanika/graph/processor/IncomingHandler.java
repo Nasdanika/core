@@ -20,7 +20,7 @@ import org.nasdanika.graph.Node;
 public @interface IncomingHandler {
 	
 	/**
-	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions">Spring boolean expression</a>
+	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 	 * which is evaluated in the context of the incoming connection. 
 	 * @return
 	 */

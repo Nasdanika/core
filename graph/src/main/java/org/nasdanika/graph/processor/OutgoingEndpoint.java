@@ -21,7 +21,7 @@ import org.nasdanika.common.ProgressMonitor;
 public @interface OutgoingEndpoint {
 	
 	/**
-	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/docs/5.3.22/reference/html/core.html#expressions">Spring boolean expression</a>
+	 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
 	 * which is evaluated in the context of the outgoing connection. 
 	 * @return
 	 */

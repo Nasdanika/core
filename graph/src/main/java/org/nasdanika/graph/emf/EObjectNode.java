@@ -29,13 +29,6 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	
 	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>();
 	
-	/**
-	 * isNew is true if a new node was crated, false if it was retrieved from a registry of existing nodes
-	 * @author Pavel
-	 *
-	 */
-	public static record ResultRecord(EObjectNode node, boolean isNew) {}	
-
 	private List<EObject> targets;
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());

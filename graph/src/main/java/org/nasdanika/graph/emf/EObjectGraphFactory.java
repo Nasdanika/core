@@ -23,6 +23,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
+import org.nasdanika.graph.NodeFactory;
 import org.nasdanika.graph.emf.EObjectNode.ResultRecord;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.EvaluationException;
