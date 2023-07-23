@@ -458,7 +458,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<SupplierFactory<T>> adaptToSupplierFactory(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e ->adaptToSupplierFactory(e, type)).collect(Collectors.toList());
+		return targets.stream().map(e ->adaptToSupplierFactory(e, type)).toList();
 	}
 	
 	/**
@@ -470,7 +470,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<SupplierFactory<T>> adaptToSupplierFactoryNonNull(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e ->adaptToSupplierFactoryNonNull(e, type)).collect(Collectors.toList());
+		return targets.stream().map(e ->adaptToSupplierFactoryNonNull(e, type)).toList();
 	}
 
 	/**
@@ -545,7 +545,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T,R> List<FunctionFactory<T,R>> adaptToFunctionFactory(Collection<? extends EObject> targets, Class<T> parameterType, Class<R> resultType) {
-		return targets.stream().map(e -> adaptToFunctionFactory(e, parameterType, resultType)).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToFunctionFactory(e, parameterType, resultType)).toList();
 	}
 	
 	/**
@@ -554,7 +554,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T,R> List<FunctionFactory<T,R>> adaptToFunctionFactoryNonNull(Collection<? extends EObject> targets, Class<T> parameterType, Class<R> resultType) {
-		return targets.stream().map(e -> adaptToFunctionFactoryNonNull(e, parameterType, resultType)).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToFunctionFactoryNonNull(e, parameterType, resultType)).toList();
 	}
 	
 	/**
@@ -595,7 +595,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<ConsumerFactory<T>> adaptToConsumerFactory(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e -> adaptToConsumerFactory(e, type)).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToConsumerFactory(e, type)).toList();
 	}
 	
 	/**
@@ -607,7 +607,7 @@ public class EObjectAdaptable<T extends EObject> implements Adaptable {
 	 * @return
 	 */
 	public static <T> List<ConsumerFactory<T>> adaptToConsumerFactoryNonNull(Collection<? extends EObject> targets, Class<T> type) {
-		return targets.stream().map(e -> adaptToConsumerFactoryNonNull(e, type)).collect(Collectors.toList());
+		return targets.stream().map(e -> adaptToConsumerFactoryNonNull(e, type)).toList();
 	}
 
 }

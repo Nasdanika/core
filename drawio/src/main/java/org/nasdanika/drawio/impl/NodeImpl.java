@@ -23,7 +23,7 @@ class NodeImpl extends LayerImpl implements Node {
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_TARGET) 
 				&& getCellElement(me).getAttribute(ATTRIBUTE_TARGET).equals(element.getAttribute(ATTRIBUTE_ID));
 		
-		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).collect(Collectors.toList());
+		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).toList();
 	}
 
 	@Override
@@ -33,7 +33,7 @@ class NodeImpl extends LayerImpl implements Node {
 				&& getCellElement(me).hasAttribute(ATTRIBUTE_SOURCE) 
 				&& getCellElement(me).getAttribute(ATTRIBUTE_SOURCE).equals(element.getAttribute(ATTRIBUTE_ID));
 				
-		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).collect(Collectors.toList());
+		return model.collect(predicate).stream().filter(Connection.class::isInstance).map(Connection.class::cast).toList();
 	}
 	
 	private Element getGeometryElement(boolean create) {

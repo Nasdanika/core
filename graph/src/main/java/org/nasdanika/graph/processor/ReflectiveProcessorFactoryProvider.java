@@ -81,7 +81,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 				}				
 				
 				// Collecting exceptions
-				CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
+				CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).toList().toArray(new CompletableFuture[0]);
 				
 				CompletableFuture.allOf(toCompleteArray).handle((r, e) -> {
 					if (e == null) {
@@ -134,6 +134,8 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			return processor;			
 		}
 		Processor elementProcessorAnnotation = method.getAnnotation(Processor.class);
+		
+		List<AnnotatedElementRecord> processorAnnotatedElementRecords = getAnnotatedElementRecords(processor).toList();
 		
 		boolean hideWired = elementProcessorAnnotation.hideWired();
 		Map<Element, ProcessorConfig> childProcessorConfigsCopy = new LinkedHashMap<>(config.getChildProcessorConfigs());
@@ -317,7 +319,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 				return wireRecords;
 			})
 			.flatMap(wr -> wr.stream())
-			.collect(Collectors.toList());
+			.toList();
 	}	
 
 	protected void wireChildProcessors(

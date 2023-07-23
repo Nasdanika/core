@@ -147,7 +147,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		record Result<R>(org.nasdanika.graph.Connection connection, R result) {}
 		ocStream
 			.map(connection -> new Result<T>(connection, connection.accept(visitor)))
-			.collect(Collectors.toList())			
+			.toList()			
 			.forEach(result -> results.put(result.connection(), result.result()));
 		return visitor.apply(this, results);
 	}

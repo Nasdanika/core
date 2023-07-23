@@ -392,7 +392,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				pMarkers = pMarked.getMarkers();
 			}
 		} else {
-			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getPosition())).collect(Collectors.toList());
+			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getPosition())).toList();
 		}		
 		throw new ConfigurationException("Could not find " + type.getName() + " with uri " + uri, pMarkers);
 	}
@@ -460,7 +460,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	}
 	
 	protected <E extends EObject> List<E> resolveProxies(Collection<E> objects) {
-		return objects.stream().map(this::resolveProxy).collect(Collectors.toList());
+		return objects.stream().map(this::resolveProxy).toList();
 	}
 
 	/**

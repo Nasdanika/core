@@ -141,7 +141,7 @@ public class SimpleMutableContext implements MutableContext {
 	@Override
 	public <T> T get(Class<T> type, Predicate<? super T> predicate) {
 		if (type.isArray()) {
-			List<Object> svcs = new ArrayList<Object>((List<Object>) getServices(type.getComponentType()).stream().filter((Predicate<Object>) predicate).collect(Collectors.toList()));
+			List<Object> svcs = new ArrayList<Object>((List<Object>) getServices(type.getComponentType()).stream().filter((Predicate<Object>) predicate).toList());
 			Object chained = chain.get(type, predicate); 
 			if (chained!=null) {
 				for (int i = 0; i < Array.getLength(chained); ++i) {
@@ -152,7 +152,7 @@ public class SimpleMutableContext implements MutableContext {
 		}
 				
 		if (Composeable.class.isAssignableFrom(type)) {
-			List<T> svcs = new ArrayList<>(getServices(type).stream().filter(predicate).collect(Collectors.toList()));
+			List<T> svcs = new ArrayList<>(getServices(type).stream().filter(predicate).toList());
 			T chained = chain.get(type, predicate); 
 			if (chained!=null) {
 				svcs.add(chained);

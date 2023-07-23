@@ -248,7 +248,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 		if (baseDir.isFile()) {
 			baseDir = baseDir.getParentFile();
 		}
-		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, markers, progressMonitor)).flatMap(objs -> objs.stream()).collect(Collectors.toList());		
+		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, markers, progressMonitor)).flatMap(objs -> objs.stream()).toList();		
 	}
 	
 	private static Collection<File> match(File baseDir, Collection<String> includes, Collection<String> excludes) {

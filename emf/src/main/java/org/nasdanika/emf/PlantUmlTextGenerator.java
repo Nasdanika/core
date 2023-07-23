@@ -82,7 +82,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 	 * @return
 	 */
 	protected <T extends EModelElement> List<T> retainDocumentable(Collection<T> elements) {
-		return elements.stream().filter(elementPredicate).collect(Collectors.toList());
+		return elements.stream().filter(elementPredicate).toList();
 	}	
 	
 	private static final String EXTENDS_RELATION = "<|--"; 
@@ -388,7 +388,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 		EList<EAttribute> eKeys = ref.getEKeys();
 		if (!eKeys.isEmpty()) {
 			ret.append("(");		
-			ret.append(String.join(",", eKeys.stream().map(this::getLabel).collect(Collectors.toList())));
+			ret.append(String.join(",", eKeys.stream().map(this::getLabel).toList()));
 			ret.append(")");
 		}
 		
@@ -712,7 +712,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
 		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), style);
 		if (isAppendAttributes(eClass)) {
-			for (EAttribute attribute: eClass.getEAttributes().stream().filter(elementPredicate).sorted(eNamedElementComparator).collect(Collectors.toList())) {			
+			for (EAttribute attribute: eClass.getEAttributes().stream().filter(elementPredicate).sorted(eNamedElementComparator).toList()) {			
 				EGenericType eGenericType = attribute.getEGenericType();
 				if (eGenericType != null) {
 					appendAttribute(null, null, genericName(eGenericType) + (attribute.isMany() ? "[]" : ""), getLabel(attribute));
@@ -720,7 +720,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 			}
 		}
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
-		for (EReference reference: eClass.getEReferences().stream().filter(elementPredicate).sorted(eNamedElementComparator).collect(Collectors.toList())) {
+		for (EReference reference: eClass.getEReferences().stream().filter(elementPredicate).sorted(eNamedElementComparator).toList()) {
 			EGenericType eGenericType = reference.getEGenericType();			
 			if (eGenericType == null || !allClassifiers.contains(reference.getEReferenceType())) {
 				appendAttribute(null, null, genericName(eGenericType) + (reference.isMany() ? "[]" : ""), getLabel(reference));
@@ -729,7 +729,7 @@ public class PlantUmlTextGenerator implements DiagramTextGenerator {
 		
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
 		if (isAppendOperations(eClass)) {
-			for (EOperation op : eClass.getEOperations().stream().filter(elementPredicate).sorted(eNamedElementComparator).collect(Collectors.toList())) {
+			for (EOperation op : eClass.getEOperations().stream().filter(elementPredicate).sorted(eNamedElementComparator).toList()) {
 				Collection<String> parameters = new ArrayList<String>();
 				for (EParameter parameter : op.getEParameters()) {
 					String paramString = getLabel(parameter);

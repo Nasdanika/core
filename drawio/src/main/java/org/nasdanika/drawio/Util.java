@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class Util {
@@ -31,7 +30,7 @@ public final class Util {
 	 * @param gridSize
 	 */
 	public static void layout(Root root, int gridSize) {
-		List<Node> topLevelNodes = root.getLayers().stream().flatMap(layer -> layer.getElements().stream()).filter(Node.class::isInstance).map(Node.class::cast).collect(Collectors.toList());
+		List<Node> topLevelNodes = root.getLayers().stream().flatMap(layer -> layer.getElements().stream()).filter(Node.class::isInstance).map(Node.class::cast).toList();
 		layout(topLevelNodes, new Point(gridSize, gridSize), down -> createOffsetGenerator(gridSize, down));
 	}		
 	
@@ -67,7 +66,7 @@ public final class Util {
 				} else {
 					els = sorted;
 				}
-				int[] eAffinity = affinity(e.getKey(), els.stream().map(Map.Entry::getKey).collect(Collectors.toList()));
+				int[] eAffinity = affinity(e.getKey(), els.stream().map(Map.Entry::getKey).toList());
 				int teAffinity = eAffinity[0] + eAffinity[1];
 				if (candidate == null || (candidateAffinity < teAffinity)) {
 					candidate = e;
@@ -121,7 +120,7 @@ public final class Util {
 	 * @param elements
 	 * @return
 	 */
-	private static int[] affinity(ModelElement element, Collection<ModelElement> elements) {
+	private static int[] affinity(ModelElement element, Collection<? extends ModelElement> elements) {
 		int[] outgoing = { 0 };
 		element.accept(e -> {
 			if (e instanceof Connection) {
@@ -276,7 +275,7 @@ public final class Util {
 		
 		org.nasdanika.drawio.Rectangle nodeGeometry = node.getGeometry();
 		Rectangle rectangle = new Rectangle(0, 0, (int) nodeGeometry.getWidth(), (int) nodeGeometry.getHeight());
-		List<Node> children = node.getElements().stream().filter(Node.class::isInstance).map(Node.class::cast).collect(Collectors.toList());
+		List<Node> children = node.getElements().stream().filter(Node.class::isInstance).map(Node.class::cast).toList();
 		if (!children.isEmpty()) {
 			Point childOffset = new Point((int) offset.getX(), (int) offset.getY() + 30);
 			Map<Node, Rectangle> childGeometry = layout(children, childOffset, offsetGeneratorProvider);

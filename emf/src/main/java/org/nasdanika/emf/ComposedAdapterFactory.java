@@ -99,7 +99,7 @@ public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 			.filter(ae -> ae.match(obj) && (type == null || ae.adapterFactory.isFactoryForType(type)))
 			.sorted((a,b) -> cmpDistance((EObject) obj, a.eClass, b.eClass))
 			.map(ae -> ae.adapterFactory)
-			.collect(Collectors.toList());
+			.toList();
 	}
 	
 	protected int cmpDistance(EObject obj, EClass a, EClass b) {

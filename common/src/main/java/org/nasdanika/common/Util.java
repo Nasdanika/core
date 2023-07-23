@@ -1285,7 +1285,7 @@ public class Util {
 		for (Class<?> i: clazz.getInterfaces()) {
 			ret.addAll(lineage(i));
 		}
-		return ret.stream().distinct().collect(Collectors.toList());
+		return ret.stream().distinct().toList();
 	}
 	
 	// --- For reflection ---
@@ -1336,7 +1336,7 @@ public class Util {
 	public static <T> T createListeningProxy(T target, InvocationListener<T> listener) {
 		Class<? extends Object> targetClass = target.getClass();
 		@SuppressWarnings("rawtypes")
-		Class[] interfaces = lineage(targetClass).stream().filter(Class::isInterface).collect(Collectors.toList()).toArray(new Class[0]);
+		Class[] interfaces = lineage(targetClass).stream().filter(Class::isInterface).toList().toArray(new Class[0]);
 		InvocationHandler invocationHandler = (proxy, method, args) -> {
 			listener.before(target, (T) proxy, method, args);
 			try {

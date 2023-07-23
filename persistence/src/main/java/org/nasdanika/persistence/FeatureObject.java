@@ -61,7 +61,7 @@ public class FeatureObject implements Marked, Loadable {
 			constructorFeature.load(loader, Collections.singletonMap(constructorFeature.getKey(), config), base, progressMonitor, markers);			
 		} else if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;
-			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).collect(Collectors.toList()));
+			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).toList());
 			for (Feature<?> feature: features) {
 				feature.load(loader, configMap, base, progressMonitor, markers);
 			}

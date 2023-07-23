@@ -69,11 +69,11 @@ public class ProgressRecorder implements ProgressMonitor {
 	 * @return Child entries created by split().
 	 */
 	public List<ProgressEntry> getChildren() {
-		return entries.stream().filter(e -> e instanceof ProgressEntry).map(e -> (ProgressEntry) e).collect(Collectors.toList());
+		return entries.stream().filter(e -> e instanceof ProgressEntry).map(e -> (ProgressEntry) e).toList();
 	}	
 	
 	public List<Step> getSteps() {
-		return entries.stream().filter(e -> e instanceof Step).map(e -> (Step) e).collect(Collectors.toList());
+		return entries.stream().filter(e -> e instanceof Step).map(e -> (Step) e).toList();
 	}
 	
 	@Override

@@ -346,7 +346,7 @@ public final class NcoreUtil {
 				}
 			}
 			
-			return ret.stream().distinct().collect(Collectors.toList());
+			return ret.stream().distinct().toList();
 		}
 		
 		private static URI resolve(URI uri, URI base) {		

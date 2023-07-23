@@ -343,7 +343,7 @@ public class MermaidTextGenerator implements DiagramTextGenerator {
 		EList<EAttribute> eKeys = ref.getEKeys();
 		if (!eKeys.isEmpty()) {
 			ret.append("(");		
-			ret.append(String.join(",", eKeys.stream().map(this::getLocalizedName).collect(Collectors.toList())));
+			ret.append(String.join(",", eKeys.stream().map(this::getLocalizedName).toList()));
 			ret.append(")");
 		}
 		
@@ -590,7 +590,7 @@ public class MermaidTextGenerator implements DiagramTextGenerator {
 		String modifiers = eClass.isAbstract() && !eClass.isInterface() ? "abstract" : null;
 		appendClassStart(modifiers, eClass.isInterface() ? "interface" : "class", qualifiedName(eClass) + typeParameters(eClass), getEClassifierLink(eClass), style);
 		if (isAppendAttributes(eClass)) {
-			for (EAttribute attribute: eClass.getEAttributes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {			
+			for (EAttribute attribute: eClass.getEAttributes().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).toList()) {			
 				EGenericType eGenericType = attribute.getEGenericType();
 				if (eGenericType != null) {
 					appendAttribute(null, null, genericName(eGenericType) + (attribute.isMany() ? "[]" : ""), getLocalizedName(attribute));
@@ -598,7 +598,7 @@ public class MermaidTextGenerator implements DiagramTextGenerator {
 			}
 		}
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
-		for (EReference reference: eClass.getEReferences().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
+		for (EReference reference: eClass.getEReferences().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).toList()) {
 			EGenericType eGenericType = reference.getEGenericType();			
 			if (eGenericType == null || !allClassifiers.contains(reference.getEReferenceType())) {
 				appendAttribute(null, null, genericName(eGenericType) + (reference.isMany() ? "[]" : ""), getLocalizedName(reference));
@@ -607,7 +607,7 @@ public class MermaidTextGenerator implements DiagramTextGenerator {
 		
 		collector.append(CLASS_COMPARTMENT_SEPARATOR_LINE);
 		if (isAppendOperations(eClass)) {
-			for (EOperation op : eClass.getEOperations().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).collect(Collectors.toList())) {
+			for (EOperation op : eClass.getEOperations().stream().sorted((a,b) -> a.getName().compareTo(b.getName())).toList()) {
 				Collection<String> parameters = new ArrayList<String>();
 				for (EParameter parameter : op.getEParameters()) {
 					String paramString = getLocalizedName(parameter);

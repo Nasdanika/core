@@ -42,7 +42,7 @@ public class InterpolatingSource implements Function<String,Object> {
 			return Context.wrap(new InterpolatingSource(((Map<String,Object>) value)::get));
 		}
 		if (value instanceof List) {
-			return ((List<Object>) value).stream().map(this::convert).collect(Collectors.toList());
+			return ((List<Object>) value).stream().map(this::convert).toList();
 		}
 		if (value instanceof String) {
 			return new PropertyComputer() {

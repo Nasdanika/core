@@ -299,7 +299,7 @@ public class EObjectLoader extends DispatchingLoader {
 		this.resourceSet = resourceSet;
 		
 		if (resourceSet != null) {
-			registrySupplier = () -> resourceSet.getPackageRegistry().values().stream().map(EPackage.class::cast).map(this::createRegistryEntry).collect(Collectors.toList());
+			registrySupplier = () -> resourceSet.getPackageRegistry().values().stream().map(EPackage.class::cast).map(this::createRegistryEntry).toList();
 		}		
 	}
 	

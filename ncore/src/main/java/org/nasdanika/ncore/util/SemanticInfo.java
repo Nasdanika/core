@@ -147,7 +147,7 @@ public class SemanticInfo extends SemanticIdentityImpl {
 					.map(org.nasdanika.ncore.String.class::cast)
 					.map(org.nasdanika.ncore.String::getValue)
 					.map(URI::createURI)
-					.collect(Collectors.toList());
+					.toList();
 				
 				Property nameProperty = semanticElementAnnotation.get(ContainerInfo.NAME_KEY);		
 				Property descriptionProperty = semanticElementAnnotation.get(DESCRIPTION_KEY);		
@@ -167,7 +167,7 @@ public class SemanticInfo extends SemanticIdentityImpl {
 						.map(org.nasdanika.ncore.String.class::cast)
 						.map(org.nasdanika.ncore.String::getValue)
 						.map(URI::createURI)
-						.collect(Collectors.toList());
+						.toList();
 					
 					Property referenceProperty = containerMap == null ? null : containerMap.get(ContainerInfo.REFERENCE_KEY);						
 					Property containerNameProperty = containerMap == null ? null : containerMap.get(ContainerInfo.NAME_KEY);

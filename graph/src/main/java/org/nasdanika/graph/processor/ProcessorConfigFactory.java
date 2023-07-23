@@ -324,7 +324,7 @@ public abstract class ProcessorConfigFactory<H,E> {
 	public Map<Element, ProcessorConfig> createProcessors(Stream<? extends Element> elements, boolean parallel, ProgressMonitor progressMonitor) {
 		Visitor visitor = new Visitor();				
 		BiFunction<Element, Map<? extends Element, Registration>, Registration> createElementProcessorConfig = (element, childProcessors) -> visitor.createElementProcessorHelper(element, childProcessors, progressMonitor);
-		Stream<Registration> registrations = elements.map(element -> element.accept(createElementProcessorConfig)).collect(Collectors.toList()).stream();
+		Stream<Registration> registrations = elements.map(element -> element.accept(createElementProcessorConfig)).toList().stream();
 		if (parallel) {
 			registrations = registrations.parallel();
 		}

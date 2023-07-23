@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.emf.EObjectNode.ResultRecord;
@@ -30,11 +31,16 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
 /**
- * Creates a graph of {@link EObjectNode}'s from a set of root objects. 
+ * Creates a graph of {@link EObjectNode}'s from a set of root objects.
+ * Delegates to matching methods of reflective targets. 
  * @author Pavel
  *
  */
-public class EObjectGraphFactory {
+public class EObjectGraphFactory extends Reflector {
+	
+	public EObjectGraphFactory(Object... factories) {
+		// TODO Auto-generated constructor stub
+	}
 	
 	protected boolean parallelAccept;
 

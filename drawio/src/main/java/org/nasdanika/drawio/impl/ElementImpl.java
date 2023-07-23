@@ -50,7 +50,7 @@ abstract class ElementImpl implements Element {
 		}
 		
 		Predicate<Element> isConnection = Connection.class::isInstance;
-		return getChildren().stream().filter(isConnection.negate()).collect(Collectors.toList());
+		return getChildren().stream().filter(isConnection.negate()).toList();
 	}
 	
 	@Override

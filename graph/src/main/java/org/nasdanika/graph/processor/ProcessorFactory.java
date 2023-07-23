@@ -86,7 +86,6 @@ public abstract class ProcessorFactory<P> {
 			return rec == null ? null : rec.processorInfoCompletableFuture();
 		};
 		recordStream.forEach(r -> r.processorInfoCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
-		
 		join(stages.stream().map(CompletionStage::toCompletableFuture).filter(cf -> !cf.isDone()).collect(Collectors.toList()));
 		
 		// Collecting exceptions
