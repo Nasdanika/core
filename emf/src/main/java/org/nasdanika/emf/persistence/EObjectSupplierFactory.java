@@ -101,7 +101,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				if (prevOp.isOverrideOf(operation)) {
 					continue; // This operation is overridden, nothing to do
 				}
-				if (!operation.isOverrideOf(prevOp)) {
+				if (operation.isOverrideOf(prevOp)) {
+					opMap.remove(operationKey); // Removing overridden operation, will add a new one
+				} else {
 					operationKey += "--" + operation.getOperationID(); // Overloading, using ID to dedup
 				}
 			}			
