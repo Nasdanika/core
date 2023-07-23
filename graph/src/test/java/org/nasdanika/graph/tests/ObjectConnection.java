@@ -19,7 +19,7 @@ public class ObjectConnection<T> implements org.nasdanika.graph.Connection {
 		this.value = value;
 		source.getOutgoingConnections().add(this);
 		target.getIncomingConnections().add(this);
-		System.out.println("Connection[" + value + "] " + source + " -> " + target);
+//		System.out.println("Connection[" + value + "] " + source + " -> " + target);
 	}
 
 	@Override

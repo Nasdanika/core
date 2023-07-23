@@ -14,22 +14,34 @@ import org.nasdanika.graph.Node;
 
 public class ObjectNode<T> implements Node {
 	
-	private static Map<Object, Node> instances = new ConcurrentHashMap<>();
+//	private static Map<Object, Node> instances = new ConcurrentHashMap<>();
 	
 	private T value;
 	private Collection<Connection> incomingConnections = Collections.synchronizedCollection(new ArrayList<>());
 	private Collection<Connection> outgoingConnections = Collections.synchronizedCollection(new ArrayList<>());
 	private RuntimeException onCreation;
+	private String threadName;
 
 	public ObjectNode(T value) {
 		this.value = value;
 		this.onCreation = new RuntimeException();
-		System.out.println("Node[" + value + "] " + Thread.currentThread().getName());
-		Node prev = instances.put(value, this);
-		if (prev != null) {
-			IllegalStateException illegalStateException = new IllegalStateException("Duplicate for " + value + " " + Integer.toString(System.identityHashCode(prev), Character.MAX_RADIX) + " " + Integer.toString(System.identityHashCode(this), Character.MAX_RADIX), ((ObjectNode) prev).onCreation);
-			throw illegalStateException;
-		}
+		threadName = Thread.currentThread().getName();
+//		System.out.println("Node[" + value + "] " + threadName);
+//		Node prev = instances.put(value, this);
+//		if (prev != null) {
+//			IllegalStateException illegalStateException = new IllegalStateException(
+//					"Duplicate for " + 
+//					value + " " + 
+//					Integer.toString(System.identityHashCode(prev), Character.MAX_RADIX) +
+//					" " +
+//					((ObjectNode<?>) prev).threadName +
+//					" " + 
+//					Integer.toString(System.identityHashCode(this), Character.MAX_RADIX) +
+//					" " +
+//					threadName, 					
+//					((ObjectNode<?>) prev).onCreation);
+//			throw illegalStateException;
+//		}
 	}
 	
 	public T getValue() {
@@ -38,7 +50,7 @@ public class ObjectNode<T> implements Node {
 	
 	@Override
 	public String toString() {
-		return super.toString() + " [" + value + "]";
+		return super.toString() + " [" + value + "] " + threadName;
 	}
 	
 	@Override

@@ -16,9 +16,11 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.CommonPlugin.ElementRecord;
 import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
@@ -72,79 +74,58 @@ public class GraphFactory<T> extends Reflector {
 	 * @return
 	 */
 	public Map<T, Element> createGraph(Collection<T> elements, boolean parallel, ProgressMonitor progressMonitor) {
-		record ElementRecord<T>(T element, CompletableFuture<Element> elementCompletableFuture) {}		
-		Queue<ElementRecord<T>> constructionQueue = new ConcurrentLinkedQueue<>();
-		Map<T,CompletableFuture<Element>> registry = Collections.synchronizedMap(new LinkedHashMap<>());		
+		Map<T,CompletableFuture<Element>> registry = Collections.synchronizedMap(new LinkedHashMap<>()); // Registry is used to prevent duplication of creation				
+		Queue<Runnable> constructionQueue = new ConcurrentLinkedQueue<>(); // 
 		Queue<CompletionStage<?>> stages = new ConcurrentLinkedQueue<>();
 		
-		Function<T, CompletionStage<Element>> elementProvider = new Function<T,CompletionStage<Element>>() {
+		// Constructs a new graph element 
+		Function<T, CompletableFuture<Element>> constructor = new Function<T,CompletableFuture<Element>>() {
 
 			@Override
-			public CompletionStage<Element> apply(T element) {
-				CompletableFuture<Element> toComplete;
-				// Creating elements
-				synchronized (registry) {
-					CompletableFuture<Element> ret = registry.get(element);
-					if (ret != null) {
-						return ret;
-					}
-					toComplete = new CompletableFuture<>();
-					registry.put(element, toComplete);
+			public CompletableFuture<Element> apply(T element) {
+				// A closure to supply a new element. 
+				Supplier<Element> elementSupplier = () -> createElement(
+						element, 
+						parallel, 
+						e -> registry.computeIfAbsent(e, this), 
+						stages::add, 
+						progressMonitor);
+				
+				if (parallel) {
+					return CompletableFuture.supplyAsync(elementSupplier);
 				}
-				if (toComplete != null) {
+				
+				CompletableFuture<Element> ret = new CompletableFuture<>();
+				constructionQueue.add(() -> { // A runnable which completes the future
 					if (parallel) {
-						stages.add(CompletableFuture.supplyAsync(() -> createElement(element, parallel, this, stages::add, progressMonitor)).thenAccept(toComplete::complete));						
+						throw new IllegalStateException("Should never get here");
 					}
-					
-					// Adding a work item to the queue
-					constructionQueue.add(new ElementRecord<T>(element,toComplete));
-				}
-				return toComplete;
+					ret.complete(elementSupplier.get());
+				}); 
+				return ret;
 			}
 			
 		};
 		
 		Stream<T> elementsStream = parallel ? elements.parallelStream() : elements.stream();
-		elementsStream.forEach(e -> {
-			CompletableFuture<Element> toComplete;
-			// Creating elements
-			synchronized (registry) {
-				if (registry.containsKey(e)) {
-					toComplete = null;
-				} else {
-					toComplete = new CompletableFuture<>();
-					registry.put(e, toComplete);
-				}
-			}
-			if (toComplete != null) {
-				toComplete.complete(createElement(e, parallel, elementProvider, stages::add, progressMonitor));
-			}
-		});
+		record ElementRecord<T>(T element, CompletableFuture<Element> elementCompletableFuture) {}		
+		List<ElementRecord<T>> ercfl = elementsStream.map(e -> new ElementRecord<T>(e,registry.computeIfAbsent(e, constructor))).toList();
 		
 		// Processing the queue
-		ElementRecord<T> workItem;
+		Runnable workItem;
 		while ((workItem = constructionQueue.poll()) != null) {
-			if (!workItem.elementCompletableFuture().isDone()) { 
-				if (parallel) {
-					T workItemElement = workItem.element(); 
-					stages.add(CompletableFuture.supplyAsync(() -> createElement(workItemElement, parallel, elementProvider, stages::add, progressMonitor)).thenAccept(workItem.elementCompletableFuture::complete));
-				} else {
-					Element element = createElement(workItem.element(), parallel, elementProvider, stages::add, progressMonitor);
-					workItem.elementCompletableFuture.complete(element);
-				}
-			}
+			workItem.run();
 		}								
 		
 		join(stages);
 
 		// Post-processing the queue in this thread in case some stages created new work items. Joining the stages every time to drain
 		while ((workItem = constructionQueue.poll()) != null) {
-			if (!workItem.elementCompletableFuture().isDone()) { 
-				Element element = createElement(workItem.element(), parallel, elementProvider, stages::add, progressMonitor);
-				workItem.elementCompletableFuture.complete(element);
-				join(stages);
-			}
-		}								
+			workItem.run();
+			join(stages);
+		}
+		
+		Map<T, Element> ret = ercfl.stream().collect(Collectors.toMap(ElementRecord::element, er -> er.elementCompletableFuture().join()));
 		
 		// Collecting exceptions
 		List<Throwable> throwed = new ArrayList<>();		
@@ -161,9 +142,6 @@ public class GraphFactory<T> extends Reflector {
 			}));
 		
 		onExceptionalCompletions(throwed);		
-
-		Map<T, Element> ret = new LinkedHashMap<>();
-		registry.forEach((e, cf) -> ret.put(e, cf.join()));
 		return ret;		
 	}
 	
