@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public interface Node extends Element {
 	
-	Collection<? extends Connection> getIncomingConnections();
+	Collection<Connection> getIncomingConnections();
 	
-	Collection<? extends Connection> getOutgoingConnections();	
+	Collection<Connection> getOutgoingConnections();	
 
 }
