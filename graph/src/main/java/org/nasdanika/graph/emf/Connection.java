@@ -65,7 +65,13 @@ public abstract class Connection implements org.nasdanika.graph.Connection {
 		if (getClass() != obj.getClass())
 			return false;
 		Connection other = (Connection) obj;
-		return getIndex() == other.getIndex() && Objects.equals(getSource(), other.getSource()) && Objects.equals(getTarget(), other.getTarget());
+		if (getIndex() != other.getIndex()) {
+			return false;
+		}		
+		if (!Objects.equals(getSource(), other.getSource())) {
+			return false;
+		}
+		return Objects.equals(getTarget(), other.getTarget());
 	}	
 	
 }

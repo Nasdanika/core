@@ -1,6 +1,8 @@
 package org.nasdanika.graph.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -71,11 +74,27 @@ public class TestGraph {
 		};
 		Map<Element, ProcessorConfig> configs = processorConfigFactory.createConfigs(nodes, parallel, progressMonitor);
 		System.out.println("Configs: " + configs.size());
+				
+		AtomicLong elementCounter = new AtomicLong();		
+		for (EObjectNode node: nodes) {
+			node.accept(e -> {
+				if (e instanceof Node || !passThrough) {
+					elementCounter.incrementAndGet();
+					ProcessorConfig config = configs.get(e);
+					assertNotNull(config);
+					Element configElement = config.getElement();
+					assertEquals(e, configElement);
+					assertTrue(configElement == e);
+				}
+			});				
+		}		
+		
 		int expectedConfigSize = nodeCounter.get();
 		if (!passThrough) {
 			expectedConfigSize += connectionCounter.get();
 		}
 		assertEquals(expectedConfigSize, configs.size());
+		assertEquals(expectedConfigSize, elementCounter.get());
 		return configs;
 	}
 	

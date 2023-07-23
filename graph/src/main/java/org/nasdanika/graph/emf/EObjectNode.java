@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -25,6 +26,8 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 
 public class EObjectNode implements Node, PropertySource<String, Object> {
+	
+	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>();
 	
 	/**
 	 * isNew is true if a new node was crated, false if it was retrieved from a registry of existing nodes
@@ -47,6 +50,12 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			EOperationConnection.Factory operationConnectionFactory, 
 			boolean parallelAccept,
 			ProgressMonitor progressMonitor) {
+		
+		EObjectNode prev = instances.put(target, this);
+		if (prev != null) {
+			throw new IllegalStateException("Already there: " + prev);
+		}
+		
 		targets = Collections.unmodifiableList(Collections.singletonList(target));
 		hashCode = Objects.hash(targets);
 		

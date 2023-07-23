@@ -45,6 +45,32 @@ public abstract class ProcessorFactory<P> {
 		
 		return ProcessorInfo.of(config, null);
 	};
+	
+	/**
+	 * Handles exceptionally completed stages
+	 * @param throwed
+	 */
+	protected void onExceptionalCompletions(List<Throwable> throwed) {
+		if (!throwed.isEmpty()) {
+			NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
+			for (Throwable th: throwed) {
+				ne.addSuppressed(th);
+			}
+			throw ne;
+		}
+	}
+
+	/**
+	 * By default stages are not joined because some of them might be not completed by design. 
+	 * For example, a processor never wires a handler and as such an endpoint is never wired either. 
+	 * @param stages
+	 */
+	protected void join(List<CompletableFuture<?>> stages) {
+//		stages
+//			.stream()
+//			.map(CompletionStage::toCompletableFuture)
+//			.map(CompletableFuture::join);
+	}
 		
 	public Map<Element, ProcessorInfo<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
 		record ProcessorInfoCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<ProcessorInfo<P>> processorInfoCompletableFuture) {}
@@ -61,21 +87,23 @@ public abstract class ProcessorFactory<P> {
 		};
 		recordStream.forEach(r -> r.processorInfoCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
 		
-		// Collecting exceptions
-		CompletableFuture<?>[] toCompleteArray = stages.stream().map(CompletionStage::toCompletableFuture).filter(CompletableFuture::isCompletedExceptionally).collect(Collectors.toList()).toArray(new CompletableFuture[0]);
+		join(stages.stream().map(CompletionStage::toCompletableFuture).filter(cf -> !cf.isDone()).collect(Collectors.toList()));
 		
-		CompletableFuture.allOf(toCompleteArray).handle((r, e) -> {
-			if (e == null) {
-				return null;
-			}
-			NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
-			for (CompletableFuture<?> cf: toCompleteArray) {
-				if (cf.isCompletedExceptionally()) {
-					cf.whenComplete((rs, ex) -> ne.addSuppressed(ex));
+		// Collecting exceptions
+		List<Throwable> throwed = new ArrayList<>();		
+		stages
+			.stream()
+			.map(CompletionStage::toCompletableFuture)
+			.filter(CompletableFuture::isCompletedExceptionally)
+			.forEach(cf -> cf.handle((r,e) -> {
+				if (e == null) {
+					throw new IllegalArgumentException("Error shall not be null");
 				}
-			}
-			throw ne;
-		}).join();
+				throwed.add(e);
+				return null;
+			}));
+		
+		onExceptionalCompletions(throwed);
 		
 		Map<Element, ProcessorInfo<P>> ret = new LinkedHashMap<>();
 		processors.forEach((e, r) -> ret.put(e, r.processorInfoCompletableFuture().join()));
