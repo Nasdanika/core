@@ -262,6 +262,17 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			}
 		}
 		
+		// Method in a sub-class is more specific
+		Class<?> adc = a.getDeclaringClass();
+		Class<?> bdc = b.getDeclaringClass();
+		if (adc.isAssignableFrom(bdc)) {
+			return adc == bdc ? 0 : 1;
+		} 
+		
+		if (bdc.isAssignableFrom(adc)) {
+			return -1;
+		}
+		
 		// Taking config is more specific 
 		int paramCountCmp = b.getParameterCount() - a.getParameterCount();
 		if (paramCountCmp != 0) {

@@ -8,8 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,7 +29,7 @@ import org.nasdanika.graph.Node;
 
 public class EObjectNode implements Node, PropertySource<String, Object> {
 	
-	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>();
+	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>(); // TODO - remove after testing
 	
 	private List<EObject> targets;
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
@@ -37,14 +39,13 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
-			EObject target, 
-			BiFunction<EObject, ProgressMonitor,ResultRecord> nodeFactory, 
-			EReferenceConnection.Factory referenceConnectionFactory, 
-			EOperationConnection.Factory operationConnectionFactory, 
-			boolean parallelAccept,
+			EObject element,
+			boolean parallel,
+			Function<EObject, CompletionStage<Element>> elementProvider, 
+			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 		
-		EObjectNode prev = instances.put(target, this);
+		EObjectNode prev = instances.put(element, this);
 		if (prev != null) {
 			throw new IllegalStateException("Already there: " + prev);
 		}

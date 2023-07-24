@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,15 +12,13 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.eclipse.emf.common.CommonPlugin.ElementRecord;
-import org.nasdanika.common.NasdanikaException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
 
@@ -53,20 +50,6 @@ public class GraphFactory<T> extends Reflector {
 	}
 	
 	/**
-	 * Handles exceptionally completed stages
-	 * @param throwed
-	 */
-	protected void onExceptionalCompletions(List<Throwable> throwed) {
-		if (!throwed.isEmpty()) {
-			NasdanikaException ne = new NasdanikaException("Theres's been errors during processor creation");
-			for (Throwable th: throwed) {
-				ne.addSuppressed(th);
-			}
-			throw ne;
-		}
-	}
-	
-	/**
 	 * Creates a graph and returns a map of source elements to nodes created from them and their related elements.
 	 * @param elements
 	 * @param parallel If false all processing is performed in the caller thread. Otherwise, processing might be performed in multiple threads.
@@ -74,7 +57,41 @@ public class GraphFactory<T> extends Reflector {
 	 * @return
 	 */
 	public Map<T, Element> createGraph(Collection<T> elements, boolean parallel, ProgressMonitor progressMonitor) {
-		Map<T,CompletableFuture<Element>> registry = Collections.synchronizedMap(new LinkedHashMap<>()); // Registry is used to prevent duplication of creation				
+		record ElementRecord<T>(T element, CompletableFuture<Element> elementCompletableFuture) {}
+		
+		// Parallel/asynchronous processing
+		if (parallel) {
+			Map<T,CompletableFuture<Element>> registry = new ConcurrentHashMap<>(); // Registry is used to prevent duplication of creation				
+			Queue<CompletionStage<?>> stages = new ConcurrentLinkedQueue<>();
+			
+			// Constructs a new graph element asynchronously
+			Function<T, CompletableFuture<Element>> constructor = new Function<T,CompletableFuture<Element>>() {
+
+				@Override
+				public CompletableFuture<Element> apply(T element) {
+					// A closure to supply a new element. 
+					Supplier<Element> elementSupplier = () -> createElement(
+							element, 
+							parallel, 
+							e -> registry.computeIfAbsent(e, this), 
+							stages::add, 
+							progressMonitor);
+					
+						return CompletableFuture.supplyAsync(elementSupplier);
+				}
+				
+			};
+			
+			List<ElementRecord<T>> ercfl = elements
+					.parallelStream()
+					.map(e -> new ElementRecord<T>(e,registry.computeIfAbsent(e, constructor)))
+					.toList();
+			join(stages);
+			return ercfl.stream().collect(Collectors.toMap(ElementRecord::element, er -> er.elementCompletableFuture().join()));
+		}
+		
+		// Sequential processing
+		Map<T,CompletableFuture<Element>> registry = new LinkedHashMap<>(); // Registry is used to prevent duplication of creation				
 		Queue<Runnable> constructionQueue = new ConcurrentLinkedQueue<>(); // 
 		Queue<CompletionStage<?>> stages = new ConcurrentLinkedQueue<>();
 		
@@ -91,15 +108,8 @@ public class GraphFactory<T> extends Reflector {
 						stages::add, 
 						progressMonitor);
 				
-				if (parallel) {
-					return CompletableFuture.supplyAsync(elementSupplier);
-				}
-				
 				CompletableFuture<Element> ret = new CompletableFuture<>();
 				constructionQueue.add(() -> { // A runnable which completes the future
-					if (parallel) {
-						throw new IllegalStateException("Should never get here");
-					}
 					ret.complete(elementSupplier.get());
 				}); 
 				return ret;
@@ -107,42 +117,19 @@ public class GraphFactory<T> extends Reflector {
 			
 		};
 		
-		Stream<T> elementsStream = parallel ? elements.parallelStream() : elements.stream();
-		record ElementRecord<T>(T element, CompletableFuture<Element> elementCompletableFuture) {}		
-		List<ElementRecord<T>> ercfl = elementsStream.map(e -> new ElementRecord<T>(e,registry.computeIfAbsent(e, constructor))).toList();
+		List<ElementRecord<T>> ercfl = elements
+				.stream()
+				.map(e -> new ElementRecord<T>(e,registry.computeIfAbsent(e, constructor)))
+				.toList();
 		
-		// Processing the queue
+		// Processing the queue. Executing a work item may create more work items. Processing until there are not more items
 		Runnable workItem;
 		while ((workItem = constructionQueue.poll()) != null) {
 			workItem.run();
-		}								
-		
+		}										
 		join(stages);
-
-		// Post-processing the queue in this thread in case some stages created new work items. Joining the stages every time to drain
-		while ((workItem = constructionQueue.poll()) != null) {
-			workItem.run();
-			join(stages);
-		}
 		
-		Map<T, Element> ret = ercfl.stream().collect(Collectors.toMap(ElementRecord::element, er -> er.elementCompletableFuture().join()));
-		
-		// Collecting exceptions
-		List<Throwable> throwed = new ArrayList<>();		
-		stages
-			.stream()
-			.map(CompletionStage::toCompletableFuture)
-			.filter(CompletableFuture::isCompletedExceptionally)
-			.forEach(cf -> cf.handle((r,e) -> {
-				if (e == null) {
-					throw new IllegalArgumentException("Error shall not be null");
-				}
-				throwed.add(e);
-				return null;
-			}));
-		
-		onExceptionalCompletions(throwed);		
-		return ret;		
+		return ercfl.stream().collect(Collectors.toMap(ElementRecord::element, er -> er.elementCompletableFuture().join()));
 	}
 	
 	/**
@@ -210,6 +197,17 @@ public class GraphFactory<T> extends Reflector {
 				return -1;
 			}
 		}
+		
+		// Method in a sub-class is more specific
+		Class<?> adc = a.getDeclaringClass();
+		Class<?> bdc = b.getDeclaringClass();
+		if (adc.isAssignableFrom(bdc)) {
+			return adc == bdc ? 0 : 1;
+		} 
+		
+		if (bdc.isAssignableFrom(adc)) {
+			return -1;
+		}		
 		
 		return a.getName().compareTo(b.getName());
 	}	

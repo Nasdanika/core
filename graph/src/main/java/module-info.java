@@ -11,4 +11,7 @@ module org.nasdanika.graph {
 	exports org.nasdanika.graph.processor.emf;
 	exports org.nasdanika.graph.processor.function;
 	
+	opens org.nasdanika.graph.emf;
+	opens org.nasdanika.graph.processor.emf;
+	
 }

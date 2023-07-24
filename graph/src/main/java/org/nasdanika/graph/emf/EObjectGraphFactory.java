@@ -1,15 +1,11 @@
 package org.nasdanika.graph.emf;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.EList;
@@ -20,80 +16,56 @@ import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.common.Reflector;
-import org.nasdanika.common.Util;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.NodeFactory;
-import org.nasdanika.graph.emf.EObjectNode.ResultRecord;
-import org.springframework.expression.EvaluationContext;
-import org.springframework.expression.EvaluationException;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.nasdanika.graph.ElementFactory;
+import org.nasdanika.graph.GraphFactory;
 
 /**
+ * Reflective delegation target of {@link GraphFactory}.
  * Creates a graph of {@link EObjectNode}'s from a set of root objects.
- * Delegates to matching methods of reflective targets. 
+ * Subclass to specialize. 
  * @author Pavel
  *
  */
-public class EObjectGraphFactory extends Reflector {
+public class EObjectGraphFactory {
 	
-	public EObjectGraphFactory(Object... factories) {
-		// TODO Auto-generated constructor stub
-	}
-	
-	protected boolean parallelAccept;
+	@ElementFactory(type=EObject.class)
+	public EObjectNode createEObjectNode(
+			EObject element,
+			boolean parallel,
+			Function<EObject, CompletionStage<Element>> elementProvider, 
+			Consumer<CompletionStage<?>> stageConsumer,
+			ProgressMonitor progressMonitor) {
 
-	public EObjectGraphFactory(boolean parallelAccept) {
-		this.parallelAccept = parallelAccept;
+		return new EObjectNode(element, parallel, elementProvider, stageConsumer, progressMonitor);
 	}
-	
-	protected ResultRecord createNodeResultRecord(EObject eObject, Function<EObject, EObjectNode> existingNodeResolver, ProgressMonitor progressMonitor) {
-		if (existingNodeResolver != null) {
-			EObjectNode node = existingNodeResolver.apply(eObject);
-			if (node != null) {
-				return new ResultRecord(node, false);
-			}
-		}
-		
-		BiFunction<EObject, ProgressMonitor, ResultRecord> nodeFactory = (eObj, pMonitor) -> createNodeResultRecord(eObj, existingNodeResolver, pMonitor);
-		EObjectNode node = createNode(eObject, nodeFactory, progressMonitor);
-		
-		return new ResultRecord(node, true);		
-	}
-
-	protected EObjectNode createNode(EObject eObject, BiFunction<EObject, ProgressMonitor, ResultRecord> nodeFactory, ProgressMonitor progressMonitor) {
-		for (Method method: getClass().getMethods()) { // TODO - targets?
-			if (matchNodeFactoryMethod(eObject, method)) {
-				try {
-					return (EObjectNode) method.invoke(this, eObject, nodeFactory, progressMonitor);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new ExecutionException(e);
-				}
-			}
-		}
-				
-		return new EObjectNode(
-				eObject, 
-				nodeFactory,
-				this::createReferenceConnection, 
-				this::createOperationConnections,
-				parallelAccept,
-				progressMonitor);
-	}	
 	
 	protected void createReferenceConnection(EObjectNode source, EObjectNode target, int index, EReference reference, ProgressMonitor progressMonitor) {
 		new EReferenceConnection(source, target, index, referencePath(source, target, reference, index), reference);
 	}
 	
-	protected void createOperationConnection(EObjectNode source, EObjectNode target, int index, EOperation operation, List<Object> arguments, boolean visitTarget, ProgressMonitor progressMonitor) {
-		new EOperationConnection(source, target, index, operationPath(source, target, operation, arguments, index), operation, arguments, visitTarget);
+	protected void createOperationConnection(
+			EObjectNode source, 
+			EObjectNode target, 
+			int index, 
+			EOperation operation, 
+			List<Object> arguments, 
+			boolean visitTarget, 
+			ProgressMonitor progressMonitor) {
+		
+		new EOperationConnection(
+				source, 
+				target, 
+				index, 
+				operationPath(source, target, operation, arguments, index), 
+				operation, 
+				arguments, 
+				visitTarget);
 	}
 	
-	protected void createOperationConnections(EObjectNode source, EOperation operation, BiFunction<EObject, ProgressMonitor, EObjectNode.ResultRecord> nodeFactory, ProgressMonitor progressMonitor) {
+	protected void createOperationConnections(EObjectNode source, EOperation operation, ProgressMonitor progressMonitor) {
 		for (EList<Object> arguments: createBindings(source, operation)) {
-			createOperationConnections(source, operation, arguments, nodeFactory, progressMonitor);
+			createOperationConnections(source, operation, arguments, progressMonitor);
 		}
 	}	
 	
@@ -104,7 +76,10 @@ public class EObjectGraphFactory extends Reflector {
 	 * @param arguments
 	 * @return
 	 */
-	protected void createOperationConnections(EObjectNode source, EOperation operation, EList<Object> arguments, BiFunction<EObject,ProgressMonitor,EObjectNode.ResultRecord> nodeFactory, ProgressMonitor progressMonitor) {
+	protected void createOperationConnections(
+			EObjectNode source, 
+			EOperation operation, 
+			EList<Object> arguments, ProgressMonitor progressMonitor) {
 		try {
 			Object result = source.getTarget().eInvoke(operation, arguments);
 			
@@ -128,44 +103,7 @@ public class EObjectGraphFactory extends Reflector {
 			throw new ExecutionException(e);
 		}
 	}
-	
-	public List<EObjectNode> createGraph(Iterable<? extends EObject> elements, ProgressMonitor progressMonitor) {
-		List<EObjectNode> contents = new ArrayList<>();
-		Map<EObject, EObjectNode> registry = new HashMap<>();
-		for (EObject element: elements) {
-			EObjectNode node = createNodeResultRecord(element, registry::get, progressMonitor).node();
-			contents.add(node);
-			registry.putAll(node.accept(this::buildRegistry));					
-		}
 		
-		for (EObjectNode node: contents) {
-			node.accept(e -> {
-				if (e instanceof EObjectNode) {
-					((EObjectNode) e).resolve(registry::get, this::createReferenceConnection, progressMonitor);
-				}
-			});
-		}
-		
-		return contents;
-	}
-
-	/**
-	 * Traverses elements and collects mapping from {@link EObject}s to {@link EObjectNode}s. 
-	 * @param element
-	 * @param childRegistries
-	 * @return
-	 */
-	protected Map<EObject, EObjectNode> buildRegistry(Element element, Map<? extends Element, Map<EObject, EObjectNode>> childRegistries) {
-		Map<EObject, EObjectNode> result = new HashMap<>();
-		if (element instanceof EObjectNode) {
-			result.put(((EObjectNode) element).getTarget(), (EObjectNode) element);
-		}
-		for (Map<EObject, EObjectNode> cr: childRegistries.values()) {
-			result.putAll(cr);
-		}
-		return result;
-	}	
-	
 	protected String referencePath(EObjectNode source, EObjectNode target, EReference reference, int index) {
 		String position = String.valueOf(index);
 		if (reference.isMany()) {
@@ -221,73 +159,5 @@ public class EObjectGraphFactory extends Reflector {
 	protected Collection<EList<Object>> createBindings(EObjectNode node, EOperation eOperation) {
 		return Collections.emptyList();
 	}
-	
-	// --- Reflective annotations wirinig ---
-	
-	protected boolean matchNodeFactoryMethod(EObject eObj, Method method) {
-		if (Modifier.isAbstract(method.getModifiers())) {
-			return false;
-		}
 		
-		NodeFactory nodeFactoryAnnotation = method.getAnnotation(NodeFactory.class);
-		if (nodeFactoryAnnotation == null) {
-			return false;
-		}
-		
-		if (!nodeFactoryAnnotation.type().isInstance(eObj)) {
-			return false;
-		}
-		
-		return matchPredicate(eObj, nodeFactoryAnnotation.value());
-	}
-
-	/**
-	 * Parses and evaluates expression using <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#expressions">Spring Expression Language</a> 
-	 * @param obj
-	 * @param expr 
-	 * @return true if expression is blank or evaluates to true, false if the expression evaluates to false or throws EvaluationException.
-	 */
-	protected boolean matchPredicate(Object obj, String expr) {
-		if (Util.isBlank(expr)) {
-			return true;
-		}
-		
-		ExpressionParser parser = getExpressionParser();
-		Expression exp = parser.parseExpression(expr);
-		EvaluationContext evaluationContext = getEvaluationContext();
-		try {			
-			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
-		} catch (EvaluationException e) {
-			onEvaluationException(obj, expr, evaluationContext, e);
-			return false;
-		}
-	}
-	
-	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {
-		
-		@Override
-		protected SpelExpressionParser initialValue() {
-			return new SpelExpressionParser();			
-		}
-		
-	};
-
-	protected SpelExpressionParser getExpressionParser() {
-		return expressionParserThreadLocal.get();
-	}
-	
-	/**
-	 * Override to troubleshoot SPEL predicates.
-	 * @param obj
-	 * @param expr
-	 * @param evaluationContext
-	 */
-	protected void onEvaluationException(Object obj, String expr, EvaluationContext evaluationContext, EvaluationException exception) {
-		
-	}
-		
-	protected EvaluationContext getEvaluationContext() {
-		return null;
-	}	
-	
 }
