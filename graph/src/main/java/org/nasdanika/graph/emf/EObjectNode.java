@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -31,102 +30,69 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	
 	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>(); // TODO - remove after testing
 	
-	private List<EObject> targets;
+	private EObject target;
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
 	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
-	private boolean parallelAccept;
+	private boolean parallel;
 	private int hashCode;
 
+	/**
+	 * 
+	 * @param element
+	 * @param parallel
+	 * @param elementProvider
+	 * @param stageConsumer
+	 * @param factory To delegate creation of connections
+	 * @param parallelAccept If true, created node uses parallel stream in accept()
+	 * @param progressMonitor
+	 */
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
-			EObject element,
+			EObject target,
 			boolean parallel,
 			Function<EObject, CompletionStage<Element>> elementProvider, 
 			Consumer<CompletionStage<?>> stageConsumer,
+			EObjectGraphFactory factory,
 			ProgressMonitor progressMonitor) {
 		
-		EObjectNode prev = instances.put(element, this);
+		EObjectNode prev = instances.put(target, this);
 		if (prev != null) {
 			throw new IllegalStateException("Already there: " + prev);
 		}
 		
-		targets = Collections.unmodifiableList(Collections.singletonList(target));
-		hashCode = Objects.hash(targets);
+		this.target = target;
+		hashCode = Objects.hash(target);
 		
-		this.parallelAccept = parallelAccept;
+		this.parallel = parallel;
 		
 		for (EReference eReference: target.eClass().getEAllReferences()) {
-			if (eReference.isContainment()) {
-				Object val = target.eGet(eReference);
-				if (val != null) {
-					if (eReference.isMany()) {
-						int idx = 0;
-						for (EObject element: (Collection<EObject>) val) {
-							EObjectNode targetNode = nodeFactory.apply(element, progressMonitor).node();
-							referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);							
-						}
-					} else {
-						EObjectNode targetNode = nodeFactory.apply((EObject) val, progressMonitor).node();
-						referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
+			Object val = target.eGet(eReference);
+			if (val != null) {
+				if (eReference.isMany()) {
+					int counter = 0;
+					for (EObject element: (Collection<EObject>) val) {
+						int idx = counter++;
+						stageConsumer.accept(elementProvider.apply(element).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, idx, eReference, progressMonitor)));
 					}
+				} else {
+					stageConsumer.accept(elementProvider.apply((EObject) val).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, -1, eReference, progressMonitor)));
 				}
 			}
 		}
 	
-		if (operationConnectionFactory != null) {
-			for (EOperation eOperation: target.eClass().getEAllOperations()) {
-				operationConnectionFactory.create(this, eOperation, nodeFactory, progressMonitor);
-			}		
-		}				
-	}
-	
-	/**
-	 * Creates connections for non-containment references.
-	 * @param registry
-	 */
-	@SuppressWarnings("unchecked")
-	protected void resolve(Function<EObject,EObjectNode> registry, EReferenceConnection.Factory referenceConnectionFactory, ProgressMonitor progressMonitor) {		
-		synchronized (targets) {
-			for (EObject target: targets) {
-				for (EReference eReference: target.eClass().getEAllReferences()) {
-					if (!eReference.isContainment()) {
-						Object val = target.eGet(eReference);
-						if (val != null) {
-							if (eReference.isMany()) {
-								int idx = 0;
-								for (EObject element: (Collection<EObject>) val) {
-									EObjectNode targetNode = registry.apply(element);
-									if (targetNode != null) {
-										referenceConnectionFactory.create(this, targetNode, idx++, eReference, progressMonitor);
-									}
-								}
-							} else {
-								EObjectNode targetNode = registry.apply((EObject) val);
-								if (targetNode != null) {
-									referenceConnectionFactory.create(this, targetNode, -1, eReference, progressMonitor);
-								}
-							}
-						}
-					}
-				}	
-				
-				EClass eClass = target.eClass();
-				if (eClass != target) {
-					EObjectNode eClassNode = registry.apply(eClass);
-					if (eClassNode != null) {
-						new EClassConnection(this, eClassNode);
-					}			
-				}
-			}
+		for (EOperation eOperation: target.eClass().getEAllOperations()) {
+			factory.createEOperationConnections(this, eOperation, parallel, elementProvider, stageConsumer, progressMonitor);
+		}		
+		
+		EClass eClass = target.eClass();
+		if (eClass != target) {
+			stageConsumer.accept(elementProvider.apply(eClass).thenAccept(targetNode -> factory.createEClassConnection(this, (EObjectNode) targetNode, progressMonitor)));
 		}
+
 	}
 	
 	public EObject getTarget() {
-		return targets.get(0);
-	}
-	
-	public List<EObject> getTargets() {
-		return targets;
+		return target;
 	}
 
 	@Override
@@ -137,7 +103,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		synchronized (outgoingConnections) {
 			occ = new ArrayList<>(outgoingConnections);
 		}
-		Stream<org.nasdanika.graph.Connection> ocStream = parallelAccept ? occ.parallelStream() : occ.stream();
+		Stream<org.nasdanika.graph.Connection> ocStream = parallel ? occ.parallelStream() : occ.stream();
 		record Result<R>(org.nasdanika.graph.Connection connection, R result) {}
 		ocStream
 			.map(connection -> new Result<T>(connection, connection.accept(visitor)))
@@ -170,18 +136,16 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 
 	@Override
 	public Object getProperty(String name) {
-		for (EObject target: targets) {
-			EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
-			if (sf instanceof EAttribute) {
-				return getTarget().eGet(sf);
-			}				
-		}
+		EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
+		if (sf instanceof EAttribute) {
+			return getTarget().eGet(sf);
+		}				
 		return null;
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + " " + getTargets() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
+		return super.toString() + " " + getTarget() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
 	}
 	
 	@Override
@@ -198,7 +162,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		if (getClass() != obj.getClass())
 			return false;
 		EObjectNode other = (EObjectNode) obj;
-		return Objects.equals(targets, other.getTargets());
+		return Objects.equals(target, other.getTarget());
 	}
 
 }

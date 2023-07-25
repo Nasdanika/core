@@ -6,9 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
-import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
 /**
@@ -17,12 +15,6 @@ import org.nasdanika.graph.Element;
  *
  */
 public class EOperationConnection extends Connection {
-		
-	public interface Factory {
-		
-		void create(EObjectNode source, EOperation operation, BiFunction<EObject, ProgressMonitor, EObjectNode.ResultRecord> nodeFactory, ProgressMonitor progressMonitor);
-		
-	}
 	
 	private EOperation operation;
 	private List<Object> arguments;
@@ -41,8 +33,7 @@ public class EOperationConnection extends Connection {
 			int index, 
 			String path, 
 			EOperation operation, 
-			List<Object> 
-			arguments, 
+			List<Object> arguments, 
 			boolean visitTargetNode) {
 		
 		super(source, target, index, path);

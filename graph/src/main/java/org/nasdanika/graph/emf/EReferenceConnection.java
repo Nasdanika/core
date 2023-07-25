@@ -6,16 +6,9 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.EReference;
-import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
 
 public class EReferenceConnection extends Connection {
-	
-	public interface Factory {
-		
-		void create(EObjectNode source, EObjectNode target, int index, EReference reference, ProgressMonitor progressMonitor);
-		
-	}
 	
 	private EReference reference;
 
