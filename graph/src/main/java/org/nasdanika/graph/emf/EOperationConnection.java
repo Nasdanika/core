@@ -14,7 +14,7 @@ import org.nasdanika.graph.Element;
  * @author Pavel
  *
  */
-public class EOperationConnection extends Connection {
+public class EOperationConnection extends QualifiedConnection {
 	
 	private EOperation operation;
 	private List<Object> arguments;
@@ -60,18 +60,18 @@ public class EOperationConnection extends Connection {
 		return super.toString() + " " + operation.getName() + " " + arguments;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), arguments, operation);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (super.equals(obj)) {
-			EOperationConnection other = (EOperationConnection) obj;
-			return Objects.equals(arguments,  other.getArguments()) && Objects.equals(operation, other.getOperation());			
-		}
-		return false;
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(super.hashCode(), arguments, operation);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (super.equals(obj)) {
+//			EOperationConnection other = (EOperationConnection) obj;
+//			return Objects.equals(arguments,  other.getArguments()) && Objects.equals(operation, other.getOperation());			
+//		}
+//		return false;
+//	}
 
 }

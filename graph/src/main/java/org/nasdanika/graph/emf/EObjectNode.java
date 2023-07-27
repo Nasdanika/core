@@ -31,8 +31,8 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>(); // TODO - remove after testing
 	
 	private EObject target;
-	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new HashSet<>());
-	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new HashSet<>());
+	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new ArrayList<>());
+	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new ArrayList<>());
 	private boolean parallel;
 	private int hashCode;
 
@@ -72,7 +72,9 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 					int counter = 0;
 					for (EObject element: (Collection<EObject>) val) {
 						int idx = counter++;
-						stageConsumer.accept(elementProvider.apply(element).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, idx, eReference, progressMonitor)));
+						if (element != null) {
+							stageConsumer.accept(elementProvider.apply(element).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, idx, eReference, progressMonitor)));
+						}
 					}
 				} else {
 					stageConsumer.accept(elementProvider.apply((EObject) val).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, -1, eReference, progressMonitor)));
@@ -87,6 +89,11 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		EClass eClass = target.eClass();
 		if (eClass != target) {
 			stageConsumer.accept(elementProvider.apply(eClass).thenAccept(targetNode -> factory.createEClassConnection(this, (EObjectNode) targetNode, progressMonitor)));
+		}
+		
+		EObject eContainer = target.eContainer();
+		if (eContainer != null) {
+			stageConsumer.accept(elementProvider.apply(eContainer).thenAccept(targetNode -> factory.createEContainerConnection(this, (EObjectNode) targetNode, progressMonitor)));
 		}
 
 	}

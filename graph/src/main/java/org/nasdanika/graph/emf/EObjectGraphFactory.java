@@ -1,24 +1,26 @@
 package org.nasdanika.graph.emf;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.ElementFactory;
-import org.nasdanika.graph.GraphFactory;
 
 /**
  * Reflective delegation target of {@link GraphFactory}.
@@ -29,7 +31,7 @@ import org.nasdanika.graph.GraphFactory;
  */
 public class EObjectGraphFactory {
 	
-	@ElementFactory(type=EObject.class)
+	@org.nasdanika.common.Transformer.Factory(type=EObject.class)
 	public EObjectNode createEObjectNode(
 			EObject element,
 			boolean parallel,
@@ -92,6 +94,14 @@ public class EObjectGraphFactory {
 		new EClassConnection(source, target);
 	}	
 	
+	public void createEContainerConnection(
+			EObjectNode source, 
+			EObjectNode target, 
+			ProgressMonitor progressMonitor) {
+		
+		new EContainerConnection(source, target);
+	}	
+	
 	/**
 	 * Binds arguments. If bindings is not null, invokes the operation. For each result of the operation creates a connection. 
 	 * @param source
@@ -112,7 +122,7 @@ public class EObjectGraphFactory {
 		Stream<EList<Object>> bindingsStream = parallel ? createBindings(source, eOperation).parallelStream() : createBindings(source, eOperation).stream();
 	
 		bindingsStream.forEach(arguments -> 
-			createOperationConnections(
+			createEOperationConnections(
 					source, 
 					eOperation, 
 					arguments, 
@@ -121,6 +131,16 @@ public class EObjectGraphFactory {
 					stageConsumer,
 					progressMonitor));
 	}	
+	
+	/**
+	 * 
+	 * @param source
+	 * @param eOperation
+	 * @return A list of bindings to invoke the target operation zero or more times.
+	 */
+	protected Collection<EList<Object>> createBindings(EObjectNode source, EOperation eOperation) {
+		return Collections.emptyList();
+	}
 	
 	/**
 	 * 
@@ -138,7 +158,7 @@ public class EObjectGraphFactory {
 	 * @param arguments
 	 * @return
 	 */
-	protected void createOperationConnections(
+	protected void createEOperationConnections(
 			EObjectNode source, 
 			EOperation operation, 
 			EList<Object> arguments, 
@@ -147,38 +167,46 @@ public class EObjectGraphFactory {
 			Consumer<CompletionStage<?>> stageConsumer,			
 			ProgressMonitor progressMonitor) {
 		try {
-			Object result = source.getTarget().eInvoke(operation, arguments);
-			
+			Object result = source.getTarget().eInvoke(operation, arguments);			
+			boolean visitResults = isVisitOperationResults(operation);
+			record ResultRecord(int index, EObject value) {};
+			List<ResultRecord> resultRecords = new ArrayList<>();
 			if (operation.isMany()) {
-				int counter = 0;
+				int index = 0;
 				for (Object e: ((Iterable<?>) result)) {
 					if (e instanceof EObject) {
-						int index = counter++;
-						stageConsumer.accept(elementProvider.apply((EObject) e).thenAccept(resultElement -> {
-							createOperationConnection(
-									source, 
-									resultElement, 
-									index, 
-									operation, 
-									arguments, 
-									progressMonitor);							
-						}));
+						resultRecords.add(new ResultRecord(index++, (EObject) e));
 					} else if (e != null) {
 						throw new ExecutionException("Cannot create an operation connection for non-EObject result: " + operation + " " + arguments + " -> " + e);
 					}
 				}
 			} else if (result instanceof EObject) {
-				EObjectNode.ResultRecord resultRecord = nodeFactory.apply((EObject) result, progressMonitor);
-				createOperationConnection(source, resultRecord.node(), -1, operation, arguments, resultRecord.isNew(), progressMonitor);
+				resultRecords.add(new ResultRecord(-1, (EObject) result));
 			} else {			
 				throw new ExecutionException("Cannot create an operation connection for non-EObject result: " + operation + " " + arguments + " -> " + result);
 			}
+			
+			(parallel ? resultRecords.parallelStream() : resultRecords.stream())
+				.map(resultRecord -> {
+					return elementProvider.apply(resultRecord.value()).thenAccept(resultElement -> {
+						createEOperationConnection(
+								source, 
+								(EObjectNode) resultElement, 
+								resultRecord.index(), 
+								operation, 
+								arguments, 
+								visitResults,
+								progressMonitor);													
+					});
+				})
+				.forEach(stageConsumer);;
+			
 		} catch (InvocationTargetException e) {
 			throw new ExecutionException(e);
 		}
 	}
 	
-	protected void createOperationConnection(
+	protected void createEOperationConnection(
 			EObjectNode source, 
 			EObjectNode target, 
 			int index, 
@@ -220,15 +248,5 @@ public class EObjectGraphFactory {
 	protected Object argumentToPathSegment(EParameter parameter, Object argument) {
 		return argument;
 	}		
-	
-	/**
-	 * 
-	 * @param source
-	 * @param eOperation
-	 * @return A list of bindings to invoke the target operation zero or more times.
-	 */
-	protected Collection<EList<Object>> createBindings(EObjectNode source, EOperation eOperation) {
-		return null;
-	}
 		
 }

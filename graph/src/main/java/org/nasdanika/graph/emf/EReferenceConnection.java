@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import org.eclipse.emf.ecore.EReference;
 import org.nasdanika.graph.Element;
 
-public class EReferenceConnection extends Connection {
+public class EReferenceConnection extends QualifiedConnection {
 	
 	private EReference reference;
 
@@ -44,18 +44,18 @@ public class EReferenceConnection extends Connection {
 		return super.toString() + " " + reference.getName();
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), reference);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (super.equals(obj)) {
-			EReferenceConnection other = (EReferenceConnection) obj;
-			return Objects.equals(reference, other.reference);			
-		}
-		return false;
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hash(super.hashCode(), reference);
+//	}
+//
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (super.equals(obj)) {
+//			EReferenceConnection other = (EReferenceConnection) obj;
+//			return Objects.equals(reference, other.reference);			
+//		}
+//		return false;
+//	}
 
 }

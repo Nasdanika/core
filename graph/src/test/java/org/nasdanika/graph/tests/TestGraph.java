@@ -14,9 +14,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.graph.Connection;
-import org.nasdanika.graph.Element;
-import org.nasdanika.graph.GraphFactory;
+import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Node;
 
 /**
@@ -35,13 +33,13 @@ public class TestGraph {
 				elements.add(elements.size());
 			}
 			
-			GraphFactory<Integer> graphFactory = new GraphFactory<>() {
+			Transformer<Integer,ObjectNode<Integer>> graphFactory = new Transformer<>() {
 				
 				@Override
-				protected Element createElement(
+				protected ObjectNode<Integer> createElement(
 						Integer element, 
 						boolean parallel, 
-						Function<Integer,CompletionStage<Element>> elementProvider, 
+						Function<Integer,CompletionStage<ObjectNode<Integer>>> elementProvider, 
 						Consumer<CompletionStage<?>> stageConsumer, 
 						ProgressMonitor progressMonitor) {
 					
@@ -71,7 +69,7 @@ public class TestGraph {
 			};
 			
 			ProgressMonitor progressMonitor = new NullProgressMonitor();		
-			Map<Integer, Element> graph = graphFactory.createGraph(elements, parallel, progressMonitor);
+			Map<Integer, ObjectNode<Integer>> graph = graphFactory.transform(elements, parallel, progressMonitor);
 			assertEquals(size, graph.size());
 //			System.out.println("===");
 //			for (Entry<Integer, Element> ge: graph.entrySet()) {
@@ -87,11 +85,10 @@ public class TestGraph {
 //				}			
 //			}
 			// Assertions
-			for (Entry<Integer, Element> ge: graph.entrySet()) {
+			for (Entry<Integer, ObjectNode<Integer>> ge: graph.entrySet()) {
 				assertTrue(ge.getValue() instanceof Node);
-				Node node = (Node) ge.getValue();		
-				assertEquals(size - 1, node.getIncomingConnections().size());
-				assertEquals(size - 1, node.getOutgoingConnections().size());
+				assertEquals(size - 1, ge.getValue().getIncomingConnections().size());
+				assertEquals(size - 1, ge.getValue().getOutgoingConnections().size());
 			}		
 		}		
 	}
