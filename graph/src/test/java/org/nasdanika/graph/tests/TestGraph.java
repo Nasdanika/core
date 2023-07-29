@@ -15,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
+import org.nasdanika.graph.processor.ProcessorConfig;
 
 /**
  * Tests Integer -> Graph
@@ -40,13 +42,14 @@ public class TestGraph {
 						Integer element, 
 						boolean parallel, 
 						Function<Integer,CompletionStage<ObjectNode<Integer>>> elementProvider, 
+						CompletionStage<Map<Integer, ObjectNode<Integer>>> registry,
 						Consumer<CompletionStage<?>> stageConsumer, 
 						ProgressMonitor progressMonitor) {
 					
 					ObjectNode<Integer> node = new ObjectNode<>(element);
 //					System.out.println("Created " + element + " node: " + node);
 					for (int i = 0; i < size; ++i) {
-						int targetElement = i;
+//						int targetElement = i;
 						if (i < element) {
 //							System.out.println("\tCreating a > connection to " + i);
 							stageConsumer.accept(elementProvider.apply(i).thenAccept(target -> {							

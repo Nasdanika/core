@@ -1,5 +1,7 @@
 package org.nasdanika.drawio;
 
+import java.util.List;
+
 public interface Page extends Element {
 
 	Model getModel();
@@ -11,5 +13,8 @@ public interface Page extends Element {
 	String getId();	
 	
 	Document getDocument();
+	
+	@Override
+	List<Model> getChildren();
 
 }

@@ -7,5 +7,8 @@ public interface Root extends ModelElement {
 	List<Layer> getLayers();
 	
 	Layer createLayer();
+	
+	@Override
+	List<Layer> getChildren();
 
 }

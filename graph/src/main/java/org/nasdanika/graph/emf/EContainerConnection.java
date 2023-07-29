@@ -1,6 +1,5 @@
 package org.nasdanika.graph.emf;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 /**

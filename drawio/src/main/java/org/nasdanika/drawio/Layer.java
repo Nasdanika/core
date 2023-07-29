@@ -13,7 +13,12 @@ public interface Layer extends ModelElement {
 	 * Layer elements
 	 * @return
 	 */
-	List<LayerElement> getElements();
+	default List<LayerElement> getElements() {
+		return getChildren();
+	}
+	
+	@Override
+	List<LayerElement> getChildren();
 	
 	/**
 	 * Creates a new node

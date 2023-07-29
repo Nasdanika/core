@@ -15,8 +15,13 @@ class RootImpl extends ModelElementImpl implements Root {
 	RootImpl(Element element, ModelImpl model) {
 		super(element, model);
 	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<Layer> getChildren() {
+		return (List) super.getChildren();
+	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Layer> getLayers() {
 		return (List<Layer>) getChildren();

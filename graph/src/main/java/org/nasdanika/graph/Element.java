@@ -3,8 +3,11 @@ package org.nasdanika.graph;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -25,12 +28,19 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  */
 public interface Element {
 	
+	default Collection<? extends Element> getChildren() {
+		return Collections.emptyList();
+	}
+	
 	/**
 	 * Accepts the visitor in children first way.
 	 * @param visitor
 	 */
 	default void accept(Consumer<? super Element> visitor) {
-		accept((e, cr) -> { visitor.accept(e); return null; });
+		accept((e, cr) -> { 
+			visitor.accept(e); 
+			return null; 
+		});
 	}
 	
 	/**
@@ -39,7 +49,15 @@ public interface Element {
 	 * @param visitor
 	 * @return result returned by the visitor.
 	 */
-	<T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor);
+	default <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
+		Map<Element, T> childResults = new LinkedHashMap<>(); 
+		getChildren()
+			.stream()
+			.map(child -> new AbstractMap.SimpleEntry<>(child, child.accept(visitor)))
+			.forEach(e -> childResults.put(e.getKey(), e.getValue()));
+		
+		return visitor.apply(this, childResults);
+	}
 	
 	/**
 	 * Creates a visitor dispatching elements to methods annotated with {@link Handler}.

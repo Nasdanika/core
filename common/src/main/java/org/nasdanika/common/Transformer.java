@@ -18,6 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -76,14 +77,24 @@ public class Transformer<S,T> extends Reflector {
 		}
 	}
 	
+	// For troubleshooting
+	private record StageRecord(/*StackTraceElement[] stack, */ CompletionStage<?> stage) {
+		
+		static StageRecord create(CompletionStage<?> stage) {
+			return new StageRecord(/* new RuntimeException().getStackTrace(), */ stage);
+		}
+		
+	};
+	
 	/**
 	 * Joins not yet completed stages. 
 	 * @param stages
 	 */
-	protected void join(Queue<CompletionStage<?>> stages) {
-		CompletionStage<?> stage;
-		while ((stage = stages.poll()) != null) {
-			stage.toCompletableFuture().join();
+	protected void join(Queue<StageRecord> stageRecords) {
+		
+		StageRecord stageRecord;
+		while ((stageRecord = stageRecords.poll()) != null) {
+			stageRecord.stage().toCompletableFuture().join();
 		}
 	}
 	
@@ -96,7 +107,10 @@ public class Transformer<S,T> extends Reflector {
 	 */
 	public Map<S, T> transform(Collection<? extends S> source, boolean parallel, ProgressMonitor progressMonitor) {
 		Map<S,CompletableFuture<T>> registry = new ConcurrentHashMap<>(); // Registry is used to prevent duplication of creation				
-		Queue<CompletionStage<?>> stages = new ConcurrentLinkedQueue<>();
+		CompletableFuture<Map<S,T>> registryCompletableFuture = new CompletableFuture<>(); // Allows to inject registry into created elements.
+		Queue<StageRecord> stages = new ConcurrentLinkedQueue<>();
+		Consumer<CompletionStage<?>> stageConsumer = stage -> stages.add(StageRecord.create(stage));
+		AtomicBoolean registryFrozen = new AtomicBoolean(); // Registry is frozen before the registryCompletableFuture is completed. Registry provider must not be used in registryCompletionStage then handlers
 		
 		// Parallel/asynchronous processing
 		if (parallel) {
@@ -110,8 +124,14 @@ public class Transformer<S,T> extends Reflector {
 					Supplier<T> elementSupplier = () -> createElement(
 							element, 
 							parallel, 
-							e -> registry.computeIfAbsent(e, this), 
-							stages::add, 
+							e -> {
+								if (registryFrozen.get()) {
+									throw new IllegalStateException("Registry is frozen, use registry to get elements");
+								}
+								return registry.computeIfAbsent(e, this); 
+							},
+							registryCompletableFuture,
+							stageConsumer, 
 							progressMonitor);
 					
 						return CompletableFuture.supplyAsync(elementSupplier);
@@ -122,7 +142,7 @@ public class Transformer<S,T> extends Reflector {
 			source
 				.parallelStream()
 				.map(e -> registry.computeIfAbsent(e, constructor))
-				.forEach(stages::add);			
+				.forEach(stageConsumer);			
 		} else {
 			// Sequential processing
 			Queue<Runnable> constructionQueue = new ConcurrentLinkedQueue<>(); // 
@@ -136,8 +156,14 @@ public class Transformer<S,T> extends Reflector {
 					Supplier<T> elementSupplier = () -> createElement(
 							element, 
 							parallel, 
-							e -> registry.computeIfAbsent(e, this), 
-							stages::add, 
+							e -> {
+								if (registryFrozen.get()) {
+									throw new IllegalStateException("Registry is frozen, use registry to get elements");
+								}
+								return registry.computeIfAbsent(e, this); 
+							},
+							registryCompletableFuture,
+							stageConsumer, 
 							progressMonitor);
 					
 					CompletableFuture<T> ret = new CompletableFuture<>();
@@ -152,7 +178,7 @@ public class Transformer<S,T> extends Reflector {
 			source
 					.stream()
 					.map(e -> registry.computeIfAbsent(e, constructor))
-					.forEach(stages::add);
+					.forEach(stageConsumer);
 			
 			// Processing the queue. Executing a work item may create more work items. Processing until there are not more items
 			Runnable workItem;
@@ -163,7 +189,7 @@ public class Transformer<S,T> extends Reflector {
 		
 		join(stages);
 		
-		return registry
+		Map<S, T> reg = registry
 				.entrySet()
 				.stream()
 				.map(re -> {
@@ -172,6 +198,11 @@ public class Transformer<S,T> extends Reflector {
 				})
 				.filter(Objects::nonNull)
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		
+		registryFrozen.set(true);
+		registryCompletableFuture.complete(reg);
+		join(stages);
+		return reg;
 	}
 	
 	/**
@@ -188,6 +219,7 @@ public class Transformer<S,T> extends Reflector {
 			S element,
 			boolean parallel,
 			Function<S, CompletionStage<T>> elementProvider, 
+			CompletionStage<Map<S,T>> registry,
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 		
@@ -202,7 +234,7 @@ public class Transformer<S,T> extends Reflector {
 		}
 		
 		AnnotatedElementRecord matchedRecord = match.get();
-		return (T) matchedRecord.invoke(element, parallel, elementProvider, stageConsumer, progressMonitor);
+		return (T) matchedRecord.invoke(element, parallel, elementProvider, registry, stageConsumer, progressMonitor);
 	}
 	
 	protected boolean matchFactoryMethod(S element, Method method) {

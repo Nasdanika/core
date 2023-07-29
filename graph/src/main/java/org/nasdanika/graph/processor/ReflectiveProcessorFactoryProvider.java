@@ -65,7 +65,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			}
 			
 			@Override
-			public Map<Element, ProcessorInfo<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+			public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
 				Map<Element, ProcessorInfo<P>> registry = super.createProcessors(configs, parallel, progressMonitor);
 				List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
 				
@@ -75,7 +75,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 					};
 					
 					List<AnnotatedElementRecord> registryTargetAnnotatedElementRecords = getAnnotatedElementRecords(registryTarget).toList();
-					wireRegistry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider).forEach(stages::add);
+					wireRegistryEntry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider).forEach(stages::add);
 					wireRegistry(parallel ? registryTargetAnnotatedElementRecords.parallelStream() : registryTargetAnnotatedElementRecords.stream(), configs, infoProvider).forEach(stages::add);
 				}				
 				
@@ -171,13 +171,13 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		
 		wireRegistryEntry(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
-				config.getRegistry(), 
+				config.getRegistry().values(), 
 				infoProvider)
 		.forEach(stageConsumer);
 		
 		wireRegistry(
 				processorAnnotatedElementRecordsStreamSupplier.get(), 
-				config.getRegistry(), 
+				config.getRegistry().values(), 
 				infoProvider)
 		.forEach(stageConsumer);
 		
@@ -288,18 +288,15 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 	protected class RegistryMatch {
 		RegistryEntry annotation; 
 		AnnotatedElementRecord setterRecord;
-		Element element;
 		ProcessorConfig config;
 		
 		public RegistryMatch(
 				RegistryEntry annotation, 
 				AnnotatedElementRecord setterRecord, 
-				Element element,
 				ProcessorConfig config) {
 			super();
 			this.annotation = annotation;
 			this.setterRecord = setterRecord;
-			this.element = element;
 			this.config = config;
 		}		
 		
@@ -307,20 +304,20 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		
 	protected Stream<CompletionStage<Void>> wireRegistryEntry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig> registry,
+			Collection<ProcessorConfig> registry,
 			Function<Element,CompletionStage<ProcessorInfo<P>>> infoProvider) {
 		
 		return processorAnnotatedElementRecords
 			.filter(ae -> ae.getAnnotation(RegistryEntry.class) != null)
 			.filter(ae -> ae.mustSet(null, "Fields/methods annotated with RegistryEntry must have (parameter) type assignable from the processor type or ProcessorInfo if info is set to true: " + ae.getAnnotatedElement()))
-			.flatMap(setterRecord -> registry.entrySet().stream().map(re -> new RegistryMatch(setterRecord.getAnnotation(RegistryEntry.class), setterRecord, re.getKey(), re.getValue())))
-			.filter(rm -> matchPredicate(rm.element, rm.annotation.value()))
-			.map(rm -> infoProvider.apply(rm.element).thenAccept(rpi -> rm.setterRecord.set(rm.annotation.info() ? rpi : rpi.getProcessor())));
+			.flatMap(setterRecord -> registry.stream().map(re -> new RegistryMatch(setterRecord.getAnnotation(RegistryEntry.class), setterRecord, re)))
+			.filter(rm -> matchPredicate(rm.config.getElement(), rm.annotation.value()))
+			.map(rm -> infoProvider.apply(rm.config.getElement()).thenAccept(rpi -> rm.setterRecord.set(rm.annotation.info() ? rpi : rpi.getProcessor())));
 	}
 
 	protected Stream<CompletionStage<Void>> wireRegistry(
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
-			Map<Element, ProcessorConfig> registry, 
+			Collection<ProcessorConfig> registry, 
 			Function<Element,CompletionStage<ProcessorInfo<P>>> infoProvider) {
 
 		return processorAnnotatedElementRecords
@@ -330,7 +327,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 					// Sets a map which is populated as processors get created
 					Map<Element,ProcessorInfo<P>> r = Collections.synchronizedMap(new LinkedHashMap<>());
 					setterRecord.set(r);
-					return registry.entrySet().stream().map(re -> infoProvider.apply(re.getKey()).thenAccept(rp -> r.put(re.getKey(), rp)));
+					return registry.stream().map(re -> infoProvider.apply(re.getElement()).thenAccept(rp -> r.put(re.getElement(), rp)));
 				});
 	}
 

@@ -5,19 +5,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.nasdanika.common.ExecutionException;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
@@ -36,6 +35,7 @@ public class EObjectGraphFactory {
 			EObject element,
 			boolean parallel,
 			Function<EObject, CompletionStage<Element>> elementProvider, 
+			CompletionStage<Map<EObject, Element>> registry,
 			Consumer<CompletionStage<?>> stageConsumer,
 			ProgressMonitor progressMonitor) {
 
@@ -44,6 +44,7 @@ public class EObjectGraphFactory {
 				parallel, 
 				elementProvider, 
 				stageConsumer,
+				registry,
 				this,
 				progressMonitor);
 	}

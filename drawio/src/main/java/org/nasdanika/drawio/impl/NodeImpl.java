@@ -3,10 +3,10 @@ package org.nasdanika.drawio.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
+import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
 import org.w3c.dom.Element;
@@ -15,6 +15,12 @@ class NodeImpl extends LayerImpl implements Node {
 	
 	NodeImpl(Element element, ModelImpl model) {
 		super(element, model);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<LayerElement> getChildren() {
+		return (List) super.getChildren();
 	}
 
 	@Override

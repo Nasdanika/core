@@ -17,8 +17,8 @@ public class ObjectConnection<T> implements org.nasdanika.graph.Connection {
 		this.source = source;
 		this.target = target;
 		this.value = value;
-		source.getOutgoingConnections().add(this);
-		target.getIncomingConnections().add(this);
+		((ObjectNode<?>) source).getOutgoingConnections().add(this);
+		((ObjectNode<?>) target).getIncomingConnections().add(this);
 //		System.out.println("Connection[" + value + "] " + source + " -> " + target);
 //		throw new RuntimeException("Failure test");
 	}

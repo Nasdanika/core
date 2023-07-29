@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
@@ -24,13 +23,6 @@ abstract class ElementImpl implements Element {
 	@Override
 	public org.w3c.dom.Element getElement() {
 		return element;
-	}
-	
-	/**
-	 * @return Child elements to pass to the visitor. This implementation returns empty list.
-	 */
-	protected List<? extends Element> getChildren() {
-		return Collections.emptyList();
 	}
 
 	@Override

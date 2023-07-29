@@ -69,7 +69,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 	
 	@Override
-	protected List<? extends Element> getChildren() {
+	public List<? extends Element> getChildren() {
 		if (element.hasAttribute(ATTRIBUTE_ID)) {
 			return model.collect(e -> ModelElementImpl.getCellElement(e).hasAttribute(ATTRIBUTE_PARENT) && ModelElementImpl.getCellElement(e).getAttribute(ATTRIBUTE_PARENT).equals(element.getAttribute(ATTRIBUTE_ID)));
 		}

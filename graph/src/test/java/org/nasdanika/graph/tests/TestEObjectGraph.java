@@ -1,8 +1,6 @@
 package org.nasdanika.graph.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -13,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -34,7 +30,6 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.Node;
 import org.nasdanika.graph.emf.EClassConnection;
 import org.nasdanika.graph.emf.EContainerConnection;
 import org.nasdanika.graph.emf.EObjectGraphFactory;
@@ -100,9 +95,9 @@ public class TestEObjectGraph {
 			countConnections(ep, connectionRecords);
 		}
 		
-		int expectedObjects = connectionRecords.size();
+		int expectedNodes = connectionRecords.size();
 		int expectedConnections = connectionRecords.values().stream().mapToInt(Collection::size).sum();
-		System.out.println("Objects: " + expectedObjects + ", connections: " + expectedConnections);
+		System.out.println("Objects: " + expectedNodes + ", connections: " + expectedConnections);
 				
 		EObjectGraphFactory eObjectGraphFactory = new EObjectGraphFactory();  
 		Transformer<EObject,EObjectNode> graphFactory = new Transformer<>(eObjectGraphFactory); // Reflective node creation using @ElementFactory annotation
@@ -112,8 +107,8 @@ public class TestEObjectGraph {
 		Map<EObjectNode, TraverseRecord> traverseRecords = new HashMap<>();
 		registry.values().forEach(e -> traverse(e, traverseRecords));
 		
-		assertEquals(expectedObjects, registry.size());
-		assertEquals(expectedObjects, traverseRecords.size());
+		assertEquals(expectedNodes, registry.size());
+		assertEquals(expectedNodes, traverseRecords.size());
 		int outgoingConnections = traverseRecords.values().stream().mapToInt(tr -> tr.outgoingConnections().size()).sum();
 		int incomingConnections = traverseRecords.values().stream().mapToInt(tr -> tr.incomingConnections().size()).sum();
 		assertEquals(outgoingConnections, incomingConnections);
@@ -159,25 +154,7 @@ public class TestEObjectGraph {
 		assertEquals(0, unmatchedConnections.size());						
 		assertEquals(expectedConnections, outgoingConnections);
 		
-		
-//		AtomicInteger nodeCounter = new AtomicInteger();
-//		AtomicInteger connectionCounter = new AtomicInteger(),
-//		
-//		Collection<EObjectNode> rootNodes = roots.values();
-//		for (EObjectNode node: rootNodes) {
-//			node.accept(e -> {
-//				(e instanceof Node ? nodeCounter : connectionCounter).incrementAndGet();
-//			});				
-//		}
-//		System.out.println("Nodes: " + nodeCounter.get() + ", Connections: " + connectionCounter.get());
-//		
-//		
-//		System.out.println("Total references: " + totalRefs);
-//		
-//		assertEquals(referenceCount.size(), nodeCounter.get());
-//		assertEquals(totalRefs + referenceCount.size(), connectionCounter.get());
-		
-		return null; //new GraphResult(registry, );
+		return new GraphResult(registry, expectedNodes, expectedConnections);
 	}
 	
 	/**
@@ -255,22 +232,19 @@ public class TestEObjectGraph {
 				NcorePackage.eINSTANCE);
 
 		createGraph(true, ePackages, new PrintStreamProgressMonitor());
-	}		
+	}	
 	
-	protected Map<Element, ProcessorConfig> createConfigs(
+	private record ConfigResult(GraphResult graphResult, Collection<ProcessorConfig> configs) {}	
+	
+	protected ConfigResult createConfigs(
 			boolean parallel, 
 			boolean passThrough,
 			List<EPackage> ePackages, 
-			AtomicInteger connectionCounter, 
 			ProgressMonitor progressMonitor) {
-						
-		AtomicInteger nodeCounter = new AtomicInteger();
 		
-		Collection<EObjectNode> rootNodes = createGraph(
+		GraphResult graphResult = createGraph(
 				parallel, 
 				ePackages,
-				nodeCounter,
-				connectionCounter,
 				progressMonitor);
 		
 		ProcessorConfigFactory<Object, Object> processorConfigFactory = new NopEndpointProcessorConfigFactory<Object>() {
@@ -281,31 +255,34 @@ public class TestEObjectGraph {
 			}
 			
 		};
-		Map<Element, ProcessorConfig> configs = processorConfigFactory.createConfigs(rootNodes, parallel, progressMonitor);
-		System.out.println("Configs: " + configs.size());
-				
-		AtomicLong elementCounter = new AtomicLong();		
-		for (EObjectNode node: rootNodes) {
-			node.accept(e -> {
-				if (e instanceof Node || !passThrough) {
-					elementCounter.incrementAndGet();
-					ProcessorConfig config = configs.get(e);
-					assertNotNull(config);
-					Element configElement = config.getElement();
-					assertEquals(e, configElement);
-					assertTrue(configElement == e);
-				}
-			});				
-		}		
 		
-		int expectedConfigSize = nodeCounter.get();
-		if (!passThrough) {
-			expectedConfigSize += connectionCounter.get();
-		}
-		assertEquals(expectedConfigSize, configs.size());
-		assertEquals(expectedConfigSize, elementCounter.get());
-		return configs;
+		Transformer<Element,ProcessorConfig> processorConfigTransformer = new Transformer<>(processorConfigFactory);				
+		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
+		System.out.println("Configs: " + configs.size());
+			
+		assertEquals(configs.size(), passThrough ? graphResult.nodes() : graphResult.nodes() + graphResult.connections());
+		return new ConfigResult(graphResult, configs.values());
 	}
+		
+	@Test
+	public void testConfigsSequential() {
+		List<EPackage> ePackages = Arrays.asList(
+				EcorePackage.eINSTANCE, 
+				NcorePackage.eINSTANCE);
+
+		createConfigs(false, false, ePackages, new PrintStreamProgressMonitor());
+		createConfigs(false, true, ePackages, new PrintStreamProgressMonitor());
+	}			
+	
+	@Test
+	public void testConfigsParallel() {
+		List<EPackage> ePackages = Arrays.asList(
+				EcorePackage.eINSTANCE, 
+				NcorePackage.eINSTANCE);
+
+		createConfigs(true, false, ePackages, new PrintStreamProgressMonitor());
+		createConfigs(true, true, ePackages, new PrintStreamProgressMonitor());
+	}		
 	
 	private void testProcessorFactory(boolean parallel, int passes, boolean passThrough) {
 		List<EPackage> ePackages = Arrays.asList(
@@ -314,9 +291,8 @@ public class TestEObjectGraph {
 		
 		for (int i = 0; i < passes; ++i) {
 			System.out.println("*** Pass " + i);
-			AtomicInteger connectionCounter = new AtomicInteger();
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
-			Map<Element, ProcessorConfig> configs = createConfigs(parallel, passThrough, ePackages, connectionCounter, progressMonitor);
+			ConfigResult configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
 			
 			ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 
@@ -341,8 +317,8 @@ public class TestEObjectGraph {
 				
 			};
 			
-			Map<Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
-			assertEquals(configs.size(), processors.size());
+			Map<Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			assertEquals(configs.configs().size(), processors.size());
 			
 			@SuppressWarnings("unchecked")
 			Stream<Supplier<Integer>> ps = processors
@@ -358,7 +334,7 @@ public class TestEObjectGraph {
 			
 			int calls = ps.mapToInt(Supplier<Integer>::get).sum();
 			System.out.println("Calls: " + calls);
-			assertEquals(connectionCounter.get() * 2, calls);
+			assertEquals(configs.graphResult().connections() * 2, calls);
 		}
 	
 	}
@@ -382,14 +358,13 @@ public class TestEObjectGraph {
 		
 		for (int i = 0; i < passes; ++i) {
 			System.out.println("*** Pass " + i);
-			AtomicInteger connectionCounter = new AtomicInteger();
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
-			Map<Element, ProcessorConfig> configs = createConfigs(parallel, passThrough, ePackages, connectionCounter, progressMonitor);
+			ConfigResult configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
 			
 			BiFunctionProcessorFactoryImpl processorFactory = new BiFunctionProcessorFactoryImpl(passThrough);
 			
-			Map<Element, ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
-			assertEquals(configs.size(), processors.size());
+			Map<Element, ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			assertEquals(configs.configs().size(), processors.size());
 			
 			Stream<BiFunction<Object,ProgressMonitor,Object>> ps = processors
 					.values()
@@ -407,7 +382,7 @@ public class TestEObjectGraph {
 				return (Integer) ((BiFunction<Object,ProgressMonitor,Object>) p).apply(33, progressMonitor);
 			}).sum();
 			System.out.println("Calls: " + calls);
-			assertEquals(connectionCounter.get() * 2, calls);
+			assertEquals(configs.graphResult().connections() * 2, calls);
 		}	
 	}
 	
@@ -430,15 +405,14 @@ public class TestEObjectGraph {
 		
 		for (int i = 0; i < passes; ++i) {
 			System.out.println("*** Pass " + i);
-			AtomicInteger connectionCounter = new AtomicInteger();
 			ProgressMonitor progressMonitor = new NullProgressMonitor(); // new PrintStreamProgressMonitor();
-			Map<Element, ProcessorConfig> configs = createConfigs(parallel, passThrough, ePackages, connectionCounter, progressMonitor);
+			ConfigResult configs = createConfigs(parallel, passThrough, ePackages, progressMonitor);
 									
 			ReflectiveProcessorFactoryProvider<Supplier<Integer>, Function<Element, Element>, Function<Element, Element>> processorFactoryProvider = new ReflectiveProcessorFactoryProvider<>(new ReflectiveProcessorFactory()); 			
 			ProcessorFactory<Supplier<Integer>> processorFactory = processorFactoryProvider.getFactory();
 			
-			Map<Element, ProcessorInfo<Supplier<Integer>>> processors = processorFactory.createProcessors(configs, parallel, progressMonitor);
-			assertEquals(configs.size(), processors.size());
+			Map<Element, ProcessorInfo<Supplier<Integer>>> processors = processorFactory.createProcessors(configs.configs(), parallel, progressMonitor);
+			assertEquals(configs.configs().size(), processors.size());
 			
 			Stream<Supplier<Integer>> ps = processors.values().stream().filter(Objects::nonNull).map(ProcessorInfo::getProcessor);			
 			if (parallel) {
@@ -447,7 +421,7 @@ public class TestEObjectGraph {
 			
 			int calls = ps.mapToInt(Supplier<Integer>::get).sum();
 			System.out.println("Calls: " + calls);
-			assertEquals(connectionCounter.get() * 2, calls);
+			assertEquals(configs.graphResult().connections() * 2, calls);
 		}
 	
 	}

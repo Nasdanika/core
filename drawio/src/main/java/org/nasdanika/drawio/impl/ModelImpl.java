@@ -33,7 +33,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
-import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
@@ -92,7 +91,7 @@ class ModelImpl extends ElementImpl implements Model {
 	}
 	
 	@Override
-	protected List<? extends Element> getChildren() {
+	public List<Root> getChildren() {
 		return Collections.singletonList(getRoot());
 	}
 

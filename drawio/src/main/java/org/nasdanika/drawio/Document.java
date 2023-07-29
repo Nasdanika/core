@@ -37,6 +37,11 @@ public interface Document extends Element {
 	 */
 	List<Page> getPages();
 	
+	@Override
+	default List<Page> getChildren() {
+		return getPages();
+	}
+	
 	/**
 	 * @return Creates a new page and adds it to the list of pages.
 	 */

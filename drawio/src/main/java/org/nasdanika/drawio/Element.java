@@ -1,5 +1,6 @@
 package org.nasdanika.drawio;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -19,6 +20,9 @@ public interface Element extends org.nasdanika.graph.Element, Marked {
 	 * @return The underlying XML element.
 	 */
 	org.w3c.dom.Element getElement();
+	
+	@Override
+	List<? extends Element> getChildren() ;
 	
 	/**
 	 * Accepts the visitor in children first (bottom-up) way.

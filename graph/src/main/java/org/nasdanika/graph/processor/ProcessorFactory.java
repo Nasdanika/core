@@ -1,6 +1,7 @@
 package org.nasdanika.graph.processor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -72,10 +73,10 @@ public abstract class ProcessorFactory<P> {
 //			.map(CompletableFuture::join);
 	}
 		
-	public Map<Element, ProcessorInfo<P>> createProcessors(Map<Element, ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
+	public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
 		record ProcessorInfoCompletableFutureRecord<P>(ProcessorConfig config, CompletableFuture<ProcessorInfo<P>> processorInfoCompletableFuture) {}
 		Map<Element, ProcessorInfoCompletableFutureRecord<P>> processors = Collections.synchronizedMap(new LinkedHashMap<>());
-		configs.entrySet().forEach(e -> processors.put(e.getKey(), new ProcessorInfoCompletableFutureRecord<P>(e.getValue(), new CompletableFuture<ProcessorInfo<P>>())));
+		configs.forEach(c -> processors.put(c.getElement(), new ProcessorInfoCompletableFutureRecord<P>(c, new CompletableFuture<ProcessorInfo<P>>())));
 		Stream<ProcessorInfoCompletableFutureRecord<P>> recordStream = processors.values().stream();
 		if (parallel) {
 			recordStream = recordStream.parallel();

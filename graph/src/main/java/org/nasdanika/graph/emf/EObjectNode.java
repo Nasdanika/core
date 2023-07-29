@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -27,8 +28,6 @@ import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 
 public class EObjectNode implements Node, PropertySource<String, Object> {
-	
-	static Map<EObject, EObjectNode> instances = new ConcurrentHashMap<>(); // TODO - remove after testing
 	
 	private EObject target;
 	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new ArrayList<>());
@@ -52,13 +51,9 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			boolean parallel,
 			Function<EObject, CompletionStage<Element>> elementProvider, 
 			Consumer<CompletionStage<?>> stageConsumer,
+			CompletionStage<Map<EObject, Element>> registry,
 			EObjectGraphFactory factory,
 			ProgressMonitor progressMonitor) {
-		
-		EObjectNode prev = instances.put(target, this);
-		if (prev != null) {
-			throw new IllegalStateException("Already there: " + prev);
-		}
 		
 		this.target = target;
 		hashCode = Objects.hash(target);
@@ -114,7 +109,6 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 		record Result<R>(org.nasdanika.graph.Connection connection, R result) {}
 		ocStream
 			.map(connection -> new Result<T>(connection, connection.accept(visitor)))
-			.toList()			
 			.forEach(result -> results.put(result.connection(), result.result()));
 		return visitor.apply(this, results);
 	}
@@ -170,6 +164,11 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			return false;
 		EObjectNode other = (EObjectNode) obj;
 		return Objects.equals(target, other.getTarget());
+	}
+	
+	@Override
+	public Collection<org.nasdanika.graph.Connection> getChildren() {
+		return getOutgoingConnections();
 	}
 
 }

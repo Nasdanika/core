@@ -153,6 +153,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			}
 		};
 	}
+	
 
 	@Override
 	public String toHtml(Boolean compress, String viewer) throws JSONException, TransformerException, IOException {

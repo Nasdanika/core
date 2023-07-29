@@ -1,5 +1,7 @@
 package org.nasdanika.drawio;
 
+import java.util.List;
+
 /**
  * Represents mxGraphModel element
  * @author Pavel
@@ -17,5 +19,8 @@ public interface Model extends Element {
 	 * @return
 	 */
 	Page getPage();
+	
+	@Override
+	List<Root> getChildren();
 
 }

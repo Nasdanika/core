@@ -11,7 +11,6 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.drawio.Document;
-import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.Page;
 import org.xml.sax.SAXException;
@@ -42,7 +41,7 @@ class PageImpl extends ElementImpl implements Page {
 	}
 	
 	@Override
-	protected List<? extends Element> getChildren() {
+	public List<Model> getChildren() {
 		return Collections.singletonList(getModel());
 	}
 

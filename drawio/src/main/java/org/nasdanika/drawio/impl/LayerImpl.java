@@ -14,11 +14,11 @@ class LayerImpl extends ModelElementImpl implements Layer {
 	LayerImpl(Element element, ModelImpl model) {
 		super(element, model);
 	}
-
-	@SuppressWarnings("unchecked")
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public List<LayerElement> getElements() {
-		return (List<LayerElement>) getChildren();
+	public List<LayerElement> getChildren() {
+		return (List) super.getChildren();
 	}
 
 	@Override
