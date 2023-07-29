@@ -21,7 +21,7 @@ public class ReflectiveTarget {
 	public ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
 			ProgressMonitor progressMonitor) {
-		return new AsyncHistoryConnectionProcessor();
+		return new AsyncStatefulConnectionProcessor();
 	}
 
 	@NodeProcessorFactory
@@ -30,13 +30,8 @@ public class ReflectiveTarget {
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 			Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {
-		return new AsyncHistoryNodeProcessor() {
-			
-			@Override
-			public org.nasdanika.graph.Node getNode() {
-				return nodeProcessorConfig.getElement();
-			}
-			
+		return new AsyncStatefulNodeProcessor() {
+						
 			@Override
 			protected Collection<BiFunction<String, ProgressMonitor, CompletionStage<String>>> getOutgoingEndpoints() {
 				return outgoingEndpoints.values();

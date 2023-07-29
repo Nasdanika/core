@@ -767,7 +767,7 @@ public class TestDrawio {
 					Function<org.nasdanika.graph.Element, CompletionStage<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>>> infoProvider,
 					Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
 
-				return new AsyncHistoryConnectionProcessor();
+				return new AsyncStatefulConnectionProcessor();
 			}
 
 			@Override
@@ -780,13 +780,8 @@ public class TestDrawio {
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
 					ProgressMonitor progressMonitor) {
 
-				return new AsyncHistoryNodeProcessor() {
-					
-					@Override
-					public org.nasdanika.graph.Node getNode() {
-						return nodeProcessorConfig.getElement();
-					}
-					
+				return new AsyncStatefulNodeProcessor() {
+										
 					@Override
 					protected Collection<BiFunction<String, ProgressMonitor, CompletionStage<String>>> getOutgoingEndpoints() {
 						return outgoingEndpoints.values();
