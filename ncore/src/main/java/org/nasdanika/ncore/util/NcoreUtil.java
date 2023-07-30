@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -457,14 +456,24 @@ public final class NcoreUtil {
 			return featureKey;
 		}
 		
-		for (EClass ec: NcoreUtil.lineage(eClass)) {
-			String featureKeys = NcoreUtil.getNasdanikaAnnotationDetail(ec, FEATURE_KEYS);
-			if (!Util.isBlank(featureKeys)) {
-				Yaml yaml = new Yaml();
-				Map<String,Object> featureKeyMap = yaml.load(featureKeys);
-				Object fKey = featureKeyMap.get(feature.getName());
-				if (fKey instanceof String) {
-					return (String) fKey;
+		if (eClass == null) {
+			if (feature instanceof EStructuralFeature) {
+				eClass = ((EStructuralFeature) feature).getEContainingClass();
+			} else if (feature instanceof EOperation) {
+				eClass = ((EOperation) feature).getEContainingClass();
+			}
+		}
+		
+		if (eClass != null) {
+			for (EClass ec: NcoreUtil.lineage(eClass)) {
+				String featureKeys = NcoreUtil.getNasdanikaAnnotationDetail(ec, FEATURE_KEYS);
+				if (!Util.isBlank(featureKeys)) {
+					Yaml yaml = new Yaml();
+					Map<String,Object> featureKeyMap = yaml.load(featureKeys);
+					Object fKey = featureKeyMap.get(feature.getName());
+					if (fKey instanceof String) {
+						return (String) fKey;
+					}
 				}
 			}
 		}

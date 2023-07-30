@@ -560,7 +560,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			ProgressMonitor progressMonitor) {
 						
 		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
-		Set<Connection> wiredConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+		Set<Connection> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 				
 		// Streaming fields and methods and then flat mapping them to all permutations with incoming endpoints.
 		// then filtering using matchIncomingEndpoint, sorting by priority, wiring all matching and removing from ret.
@@ -577,7 +577,10 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			.map(mr -> {
 				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
 				Connection incomingConnection = mr.connection;
-				if (wiredConnections.add(incomingConnection) && (!(endpointMember instanceof Field) || wiredFields.add((Field)endpointMember))) { // Wiring an endpoint once and setting a field once
+				IncomingEndpoint incomingEndpointAnnotation = endpointMember.getAnnotation(IncomingEndpoint.class);
+				boolean consumed = incomingEndpointAnnotation.consume() && !consumedConnections.add(incomingConnection);
+				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
+				if (!consumed && !fieldWired) { // Wiring an endpoint once is consumed and setting a field once
 					CompletionStage<Void> result = mr.value.thenAccept(incomingEndpoint -> {
 						if (endpointMember instanceof Field) {
 							mr.annotatedElementRecord.set(incomingEndpoint);
@@ -598,7 +601,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 							}							
 						}
 					});
-					return new EndpointWireRecord(incomingConnection, result, endpointMember.getAnnotation(IncomingEndpoint.class).consume());
+					return new EndpointWireRecord(incomingConnection, result, incomingEndpointAnnotation.consume());
 				}
 				return null;
 			})
@@ -716,9 +719,9 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			Stream<AnnotatedElementRecord> processorAnnotatedElementRecords,
 			Map<Connection, CompletionStage<E>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {
-						
+		
 		Set<Field> wiredFields = Collections.synchronizedSet(new HashSet<>()); // For setting a field once, setter methods may be invoked multiple times.
-		Set<Connection> wiredConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
+		Set<Connection> consumedConnections = Collections.synchronizedSet(new HashSet<>()); // For wiring a connection once.
 
 		// Streaming fields and methods and then flat mapping them to all permutations with outgoing endpoints.
 		// then filtering using matchOutgoingEndpoint, sorting by priority, wiring all matching and removing from ret.
@@ -732,10 +735,13 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 					ao -> ao.getAnnotation(OutgoingEndpoint.class).value())))
 			.filter(mr -> matchOutgoingEndpoint(mr.annotatedElementRecord.getAnnotatedElement(), mr.connection))
 			.sorted()
-			.map(mr -> {
+			.map(mr -> {				
 				AnnotatedElement endpointMember = mr.annotatedElementRecord.getAnnotatedElement();
 				Connection outgoingConnection = mr.connection;
-				if (wiredConnections.add(outgoingConnection) && (!(endpointMember instanceof Field) || wiredFields.add((Field) endpointMember))) { // Wiring once and setting a field once
+				OutgoingEndpoint outgoingEndpointAnnotation = endpointMember.getAnnotation(OutgoingEndpoint.class);
+				boolean consumed = outgoingEndpointAnnotation.consume() && !consumedConnections.add(outgoingConnection);
+				boolean fieldWired = endpointMember instanceof Field && !wiredFields.add((Field) endpointMember);
+				if (!consumed && !fieldWired) { // Setting a field once
 					CompletionStage<Void> result = mr.value.thenAccept(outgoingEndpoint -> {
 						if (endpointMember instanceof Field) {
 							mr.annotatedElementRecord.set(outgoingEndpoint);
@@ -756,7 +762,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 							}
 						}					
 					});
-					return new EndpointWireRecord(outgoingConnection, result, endpointMember.getAnnotation(OutgoingEndpoint.class).consume());
+					return new EndpointWireRecord(outgoingConnection, result, outgoingEndpointAnnotation.consume());
 				}
 				return null;
 			})

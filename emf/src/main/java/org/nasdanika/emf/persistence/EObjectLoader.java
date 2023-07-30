@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
@@ -167,15 +166,25 @@ public class EObjectLoader extends DispatchingLoader {
 		if ("true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, IS_DEFAULT_FEATURE))) {
 			return true;
 		}
-		String dfName = NcoreUtil.getNasdanikaAnnotationDetail(eClass, IS_DEFAULT_FEATURE);
-		if (!Util.isBlank(dfName)) {
-			return feature.getName().equals(dfName);
+		if (eClass == null) {
+			if (feature instanceof EStructuralFeature) {
+				eClass = ((EStructuralFeature) feature).getEContainingClass();
+			} else if (feature instanceof EOperation) {
+				eClass = ((EOperation) feature).getEContainingClass();
+			}
 		}
-		for (EClass st: eClass.getEAllSuperTypes()) {
-			dfName = NcoreUtil.getNasdanikaAnnotationDetail(st, IS_DEFAULT_FEATURE);
+		
+		if (eClass != null) {
+			String dfName = NcoreUtil.getNasdanikaAnnotationDetail(eClass, IS_DEFAULT_FEATURE);
 			if (!Util.isBlank(dfName)) {
 				return feature.getName().equals(dfName);
-			}			
+			}
+			for (EClass st: eClass.getEAllSuperTypes()) {
+				dfName = NcoreUtil.getNasdanikaAnnotationDetail(st, IS_DEFAULT_FEATURE);
+				if (!Util.isBlank(dfName)) {
+					return feature.getName().equals(dfName);
+				}			
+			}
 		}
 		return false;
 	}

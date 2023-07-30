@@ -67,6 +67,7 @@ public abstract class ProcessorFactory<P> {
 	 * @param stages
 	 */
 	protected void join(List<CompletableFuture<?>> stages) {
+//		System.out.println(stages.size());
 //		stages
 //			.stream()
 //			.map(CompletionStage::toCompletableFuture)
