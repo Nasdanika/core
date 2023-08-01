@@ -9,12 +9,18 @@ import java.lang.annotation.Target;
 
 import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.graph.emf.EObjectNode;
-import org.nasdanika.graph.processor.NodeProcessorConfig;
 
 /**
  * Annotation for a method creating an {@link EObjectNode} processor for {@link EObject}'s with matching URI.
- * The method shall have zero or one parameter. In the second case the parameter type shall be assignable from {@link NodeProcessorConfig}.
- * An annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 
+ * The method shall have 5 parameters:
+ * <pre>
+NodeProcessorConfig&lt;H,E&gt; config, 
+boolean parallel, 
+Function&lt;Element,CompletionStage&lt;ProcessorInfo&lt;Object&gt;&gt;&gt; infoProvider,
+Consumer&lt;CompletionStage&lt;?&gt;&gt; stageConsumer,
+ProgressMonitor progressMonitor
+</pre>
+ * The annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 
  * to methods and fields with annotations.
  * 
  * When applied to a type (class) identifier is used as a base URI to resolve URI of method annotations, type and value are used for filtering in addition to method annotation and priority is ignored.

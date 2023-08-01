@@ -82,8 +82,28 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 		}
 		
 		MethodEntry factoryMethodEntry = factoryMethodEntryOptional.get();		
-		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntry.getAnnotatedElementRecord();		
-		return ((Method) factoryAnnotatedElementRecord.getAnnotatedElement()).getParameterCount() == 2 ? factoryAnnotatedElementRecord.invoke(config, progressMonitor) : factoryAnnotatedElementRecord.invoke(config); 
+		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntry.getAnnotatedElementRecord();			
+		Method method = (Method) factoryAnnotatedElementRecord.getAnnotatedElement();
+		
+		if (method.getParameterCount() != 5 ||
+				!method.getParameterTypes()[0].isInstance(config) ||
+				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
+				!method.getParameterTypes()[2].isAssignableFrom(Function.class) ||
+				!method.getParameterTypes()[3].isAssignableFrom(Consumer.class) ||
+				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
+			throw new IllegalArgumentException("Factory method shall have 5 parameters compatible with: "
+					+ "NodeProcessorConfig config, "
+					+ "boolean parallel, "
+					+ "Function<Element, CompletionStage<ProcessorInfo<P>>> infoProvider, "
+					+ "Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor: " + method);
+		}
+		
+		return factoryAnnotatedElementRecord.invoke(
+				config,
+				parallel,
+				infoProvider,
+				stageConsumer,
+				progressMonitor); 
 	}
 	
 	protected MethodEntry createMethodEntry(AnnotatedElementRecord aer, EObject eObj) {		

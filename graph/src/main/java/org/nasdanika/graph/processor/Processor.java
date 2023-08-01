@@ -11,7 +11,15 @@ import org.nasdanika.graph.Element;
 
 /**
  * Annotation for a method creating an {@link Element} processor.
- * The method shall have zero to two parameters. The first parameter type shall be assignable from 
+ * The method shall have 5 parameters compatible with:
+ * <pre>
+NodeProcessorConfig&lt;H,E&gt; config, 
+boolean parallel, 
+Function&lt;Element,CompletionStage&lt;ProcessorInfo&lt;Object&gt;&gt;&gt; infoProvider,
+Consumer&lt;CompletionStage&lt;?&gt;&gt; stageConsumer,
+ProgressMonitor progressMonitor
+</pre>
+ *  The first parameter type shall be assignable from 
  * {@link ProcessorConfig} or its subclasses - {@link NodeProcessorConfig} or {@link ConnectionProcessorConfig}, the second - from {@link ProgressMonitor}.
  * An annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 
  * to methods and fields with annotations.
