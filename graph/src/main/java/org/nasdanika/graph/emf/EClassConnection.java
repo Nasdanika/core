@@ -15,7 +15,7 @@ public class EClassConnection extends Connection {
 	 * @param target
 	 */
 	protected EClassConnection(EObjectNode source, EObjectNode target) {
-		super(source, target);
+		super(source, target, false);
 	}
 	
 }

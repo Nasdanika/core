@@ -32,6 +32,7 @@ import org.nasdanika.graph.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.emf.EClassConnection;
 import org.nasdanika.graph.emf.EContainerConnection;
+import org.nasdanika.graph.emf.EObjectConnection;
 import org.nasdanika.graph.emf.EObjectGraphFactory;
 import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.emf.EOperationConnection;
@@ -59,14 +60,14 @@ public class TestEObjectGraph {
 	record ConnectionRecord(EObject source, EObject target, int index, Object type) {
 		
 		boolean match(Connection connection) {
-			if (((EObjectNode) connection.getSource()).getTarget() == source() && ((EObjectNode) connection.getTarget()).getTarget() == target()) {
+			if (((EObjectNode) connection.getSource()).get() == source() && ((EObjectNode) connection.getTarget()).get() == target()) {
 				if (connection instanceof EReferenceConnection) {
 					EReferenceConnection eRefCon = (EReferenceConnection) connection;
-					return eRefCon.getReference() == type() && eRefCon.getIndex() == index();
+					return eRefCon.get().reference() == type() && eRefCon.get().index() == index();
 				}
 				if (connection instanceof EOperationConnection) {
 					EOperationConnection eOpCon = (EOperationConnection) connection;
-					return eOpCon.getOperation() == type() && eOpCon.getIndex() == index();
+					return eOpCon.get().operation() == type() && eOpCon.get().index() == index();
 				}
 				if (connection instanceof EClassConnection) {
 					return type() == EcorePackage.Literals.ECLASS;
@@ -81,7 +82,7 @@ public class TestEObjectGraph {
 		
 	}
 
-	private record TraverseRecord(Collection<Connection> outgoingConnections, Collection<Connection> incomingConnections) {}	
+	private record TraverseRecord(Collection<EObjectConnection> outgoingConnections, Collection<EObjectConnection> incomingConnections) {}	
 	
 	protected GraphResult createGraph(
 			boolean parallel, 
@@ -118,7 +119,7 @@ public class TestEObjectGraph {
 			.stream()
 			.flatMap(Collection::stream)
 			.filter(cr -> {
-				List<Connection> matched = traverseRecords
+				List<EObjectConnection> matched = traverseRecords
 					.values()
 					.stream()
 					.flatMap(tr -> tr.outgoingConnections().stream())
@@ -133,7 +134,7 @@ public class TestEObjectGraph {
 		
 		assertEquals(0, unmatchedConnectionRecords.size());
 		
-		List<Connection> unmatchedConnections = traverseRecords
+		List<EObjectConnection> unmatchedConnections = traverseRecords
 				.values()
 				.stream()
 				.flatMap(tr -> tr.outgoingConnections().stream())

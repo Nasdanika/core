@@ -56,7 +56,7 @@ public class EObjectGraphFactory {
 			EReference reference, 
 			ProgressMonitor progressMonitor) {
 		
-		new EReferenceConnection(source, target, index, referencePath(source, target, reference, index), reference);
+		new EReferenceConnection(source, target, reference, index, referencePath(source, target, reference, index));
 	}
 	
 	protected String referencePath(EObjectNode source, EObjectNode target, EReference reference, int index) {
@@ -68,7 +68,7 @@ public class EObjectGraphFactory {
 			} else {
 				StringBuilder pathBuilder = new StringBuilder();
 				for (EAttribute eKey: eKeys) {
-					Object value = eKeyToPathSegment(eKey, target.getTarget().eGet(eKey));
+					Object value = eKeyToPathSegment(eKey, target.get().eGet(eKey));
 					if (value == null || (value instanceof String && org.nasdanika.common.Util.isBlank((String) value))) {
 						return pathBuilder.length() == 0 ? position : pathBuilder.toString();
 					}
@@ -168,7 +168,7 @@ public class EObjectGraphFactory {
 			Consumer<CompletionStage<?>> stageConsumer,			
 			ProgressMonitor progressMonitor) {
 		try {
-			Object result = source.getTarget().eInvoke(operation, arguments);			
+			Object result = source.get().eInvoke(operation, arguments);			
 			boolean visitResults = isVisitOperationResults(operation);
 			record ResultRecord(int index, EObject value) {};
 			List<ResultRecord> resultRecords = new ArrayList<>();
@@ -193,10 +193,10 @@ public class EObjectGraphFactory {
 						createEOperationConnection(
 								source, 
 								(EObjectNode) resultElement, 
-								resultRecord.index(), 
+								visitResults,
 								operation, 
 								arguments, 
-								visitResults,
+								resultRecord.index(), 
 								progressMonitor);													
 					});
 				})
@@ -210,20 +210,20 @@ public class EObjectGraphFactory {
 	protected void createEOperationConnection(
 			EObjectNode source, 
 			EObjectNode target, 
-			int index, 
+			boolean visitTarget, 
 			EOperation operation, 
 			List<Object> arguments, 
-			boolean visitTarget, 
+			int index, 
 			ProgressMonitor progressMonitor) {
 		
 		new EOperationConnection(
 				source, 
 				target, 
-				index, 
-				operationPath(source, target, operation, arguments, index), 
+				visitTarget,
 				operation, 
 				arguments, 
-				visitTarget);
+				index, 
+				operationPath(source, target, operation, arguments, index));
 	}
 			
 	protected String operationPath(EObjectNode source, EObjectNode target, EOperation operation, List<Object> arguments, int index) {

@@ -1,17 +1,9 @@
 package org.nasdanika.graph.emf;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
-
 import org.eclipse.emf.ecore.EReference;
-import org.nasdanika.graph.Element;
 
-public class EReferenceConnection extends QualifiedConnection {
+public class EReferenceConnection extends QualifiedConnection<EReferenceConnectionQualifier> {
 	
-	private EReference reference;
-
 	/**
 	 * 
 	 * @param source
@@ -22,40 +14,27 @@ public class EReferenceConnection extends QualifiedConnection {
 	EReferenceConnection(
 			EObjectNode source,
 			EObjectNode target,
+			EReference reference,
 			int index,
-			String path,
-			EReference reference) {
+			String path) {
 		
-		super(source, target, index, path);
-		this.reference = reference;
-	}
-
-	@Override
-	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {		
-		return visitor.apply(this, reference.isContainment() ? Collections.singletonMap(getTarget(), getTarget().accept(visitor)) : Collections.emptyMap());
+		super(source, target, reference.isContainment(), new EReferenceConnectionQualifier(reference, index), path);
 	}
 	
+	/**
+	 * Convenience accessor
+	 * @return
+	 */
 	public EReference getReference() {
-		return reference;
+		return get().reference();
 	}
 	
-	@Override
-	public String toString() {
-		return super.toString() + " " + reference.getName();
+	/**
+	 * Convenience accessor
+	 * @return
+	 */
+	public int getIndex() {
+		return get().index();
 	}
-
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(super.hashCode(), reference);
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (super.equals(obj)) {
-//			EReferenceConnection other = (EReferenceConnection) obj;
-//			return Objects.equals(reference, other.reference);			
-//		}
-//		return false;
-//	}
 
 }

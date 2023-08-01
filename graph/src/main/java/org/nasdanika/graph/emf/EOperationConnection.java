@@ -1,24 +1,15 @@
 package org.nasdanika.graph.emf;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.BiFunction;
 
 import org.eclipse.emf.ecore.EOperation;
-import org.nasdanika.graph.Element;
 
 /**
  * Connection representing a result or invocation of {@link EOperation}
  * @author Pavel
  *
  */
-public class EOperationConnection extends QualifiedConnection {
-	
-	private EOperation operation;
-	private List<Object> arguments;
-	private boolean visitTargetNode;
+public class EOperationConnection extends QualifiedConnection<EOperationConnectionQualifier> {
 
 	/**
 	 * 
@@ -30,48 +21,37 @@ public class EOperationConnection extends QualifiedConnection {
 	EOperationConnection(
 			EObjectNode source, 
 			EObjectNode target, 
-			int index, 
-			String path, 
+			boolean visitTargetNode,
 			EOperation operation, 
 			List<Object> arguments, 
-			boolean visitTargetNode) {
+			int index, 
+			String path) {
 		
-		super(source, target, index, path);
-		this.operation = operation;
-		this.arguments = arguments;
-		this.visitTargetNode = visitTargetNode;
-	}
-
-	@Override
-	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		return visitor.apply(this, visitTargetNode ? Collections.singletonMap(getTarget(), getTarget().accept(visitor)) : Collections.emptyMap());
-	}
-
-	public EOperation getOperation() {
-		return operation;
-	}
-
-	public List<Object> getArguments() {
-		return arguments;
+		super(source, target, visitTargetNode, new EOperationConnectionQualifier(operation, arguments, index), path);
 	}
 	
-	@Override
-	public String toString() {
-		return super.toString() + " " + operation.getName() + " " + arguments;
+	/**
+	 * Convenience accessor
+	 * @return
+	 */
+	public EOperation getOperation() {
+		return get().operation();
+	}
+	
+	/**
+	 * Convenience accessor
+	 * @return
+	 */
+	public int getIndex() {
+		return get().index();
 	}
 
-//	@Override
-//	public int hashCode() {
-//		return Objects.hash(super.hashCode(), arguments, operation);
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (super.equals(obj)) {
-//			EOperationConnection other = (EOperationConnection) obj;
-//			return Objects.equals(arguments,  other.getArguments()) && Objects.equals(operation, other.getOperation());			
-//		}
-//		return false;
-//	}
+	/**
+	 * Convenience accessor
+	 * @return
+	 */
+	public List<Object> getArguments() {
+		return get().arguments();
+	}
 
 }

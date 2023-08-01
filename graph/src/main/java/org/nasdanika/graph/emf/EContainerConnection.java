@@ -14,7 +14,7 @@ public class EContainerConnection extends Connection {
 	 * @param target
 	 */
 	protected EContainerConnection(EObjectNode source, EObjectNode target) {
-		super(source, target);
+		super(source, target, false);
 	}
 	
 }

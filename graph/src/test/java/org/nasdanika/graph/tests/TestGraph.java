@@ -17,6 +17,8 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
+import org.nasdanika.graph.ObjectConnection;
+import org.nasdanika.graph.ObjectNode;
 import org.nasdanika.graph.processor.ProcessorConfig;
 
 /**
@@ -53,13 +55,13 @@ public class TestGraph {
 						if (i < element) {
 //							System.out.println("\tCreating a > connection to " + i);
 							stageConsumer.accept(elementProvider.apply(i).thenAccept(target -> {							
-								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, ">");
+								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, false, ">");
 //								System.out.println("Created > connection from " + element + " to " + targetElement + ": " + connection);							
 							}));
 						} else if (i > element) {
 //							System.out.println("\tCreating a < connection to " + i);
 							stageConsumer.accept(elementProvider.apply(i).thenAccept(target -> {
-								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, "<");
+								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, false,  "<");
 //								System.out.println("Created < connection from " + element + " to " + targetElement + ": " + connection);														
 							}));						
 						}

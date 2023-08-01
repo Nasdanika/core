@@ -121,14 +121,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		
 		AnnotatedElementRecord matchedRecord = match.get();
 		Method method = (Method) matchedRecord.getAnnotatedElement();
-		P processor;
-		if (method.getParameterCount() == 0) {
-			processor = (P) matchedRecord.invoke();
-		} else if (method.getParameterCount() == 1) {
-			processor = (P) matchedRecord.invoke(config);
-		} else {
-			processor = (P) matchedRecord.invoke(config, progressMonitor);			
-		}
+		P processor = (P) matchedRecord.invoke(config, parallel, infoProvider, stageConsumer, progressMonitor);
 		if (processor == null) {
 			return processor;			
 		}
@@ -854,15 +847,19 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 			return false;
 		}
 		
-		if (method.getParameterCount() > 2) {
-			return false;
+		if (method.getParameterCount() != 5 ||
+				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
+				!method.getParameterTypes()[2].isAssignableFrom(Function.class) ||
+				!method.getParameterTypes()[3].isAssignableFrom(Consumer.class) ||
+				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
+			throw new IllegalArgumentException("Factory method shall have 5 parameters compatible with: "
+					+ "ProcessorConfig config, "
+					+ "boolean parallel, "
+					+ "Function<Element, CompletionStage<ProcessorInfo<P>>> infoProvider, "
+					+ "Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor: " + method);
 		}
 		
-		if (method.getParameterCount() > 0 && !method.getParameterTypes()[0].isInstance(elementProcessorConfig)) {
-			return false;
-		}
-
-		if (method.getParameterCount() == 2 && !method.getParameterTypes()[1].isAssignableFrom(ProgressMonitor.class)) {
+		if (!method.getParameterTypes()[0].isInstance(elementProcessorConfig)) {
 			return false;
 		}
 		

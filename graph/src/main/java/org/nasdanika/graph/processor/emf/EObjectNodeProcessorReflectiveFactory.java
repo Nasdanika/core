@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -13,9 +16,11 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
 import org.nasdanika.common.Reflector.Factory;
 import org.nasdanika.common.Util;
+import org.nasdanika.graph.Element;
 import org.nasdanika.graph.emf.EObjectNode;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.Processor;
+import org.nasdanika.graph.processor.ProcessorInfo;
 import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
@@ -55,8 +60,13 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 	}
 	
 	@Processor(type = EObjectNode.class)
-	public Object createEObjectNodeProcessor(NodeProcessorConfig<H,E> config, ProgressMonitor progressMonitor) {
-		EObject eObj = ((EObjectNode) config.getElement()).getTarget();
+	public Object createEObjectNodeProcessor(
+			NodeProcessorConfig<H,E> config, 
+			boolean parallel, 
+			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
+			Consumer<CompletionStage<?>> stageConsumer,
+			ProgressMonitor progressMonitor) {
+		EObject eObj = ((EObjectNode) config.getElement()).get();
 		
 		Optional<MethodEntry> factoryMethodEntryOptional = annotatedElementRecords
 				.stream()

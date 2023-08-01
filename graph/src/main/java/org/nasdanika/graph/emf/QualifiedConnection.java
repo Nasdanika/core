@@ -1,11 +1,15 @@
 package org.nasdanika.graph.emf;
 
-import java.util.Objects;
+import org.nasdanika.graph.Node;
+import org.nasdanika.graph.ObjectConnection;
 
-public class QualifiedConnection extends Connection {
+/**
+ * A binding of {@link ObjectConnection} source and target to {@link EObjectNode}. Path for computing URI's.
+ * @param <T>
+ */
+public class QualifiedConnection<T> extends ObjectConnection<T> implements EObjectConnection {
 	
 	private String path;
-	private int index;
 
 	/**
 	 * @param source
@@ -13,9 +17,8 @@ public class QualifiedConnection extends Connection {
 	 * @param eReference
 	 * @param index -1 for single references.
 	 */
-	public QualifiedConnection(EObjectNode source, EObjectNode target, int index, String path) {
-		super(source, target);
-		this.index = index;
+	public QualifiedConnection(EObjectNode source, EObjectNode target, boolean visitTargetNode, T qualifier, String path) {
+		super(source, target, visitTargetNode, qualifier);
 		this.path = path;
 	}
 	
@@ -27,13 +30,14 @@ public class QualifiedConnection extends Connection {
 		return path;
 	}
 	
-	public int getIndex() {
-		return index;
-	}
-
 	@Override
-	public String toString() {
-		return super.toString() + " " + getIndex();
+	public EObjectNode getTarget() {
+		return (EObjectNode) super.getTarget();
+	}
+	
+	@Override
+	public EObjectNode getSource() {
+		return (EObjectNode) super.getSource();
 	}
 	
 }

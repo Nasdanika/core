@@ -1,20 +1,10 @@
 package org.nasdanika.graph.emf;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -25,16 +15,10 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.PropertySource;
 import org.nasdanika.graph.Element;
-import org.nasdanika.graph.Node;
+import org.nasdanika.graph.ObjectNode;
 
-public class EObjectNode implements Node, PropertySource<String, Object> {
+public class EObjectNode extends ObjectNode<EObject> implements PropertySource<String, Object> {
 	
-	private EObject target;
-	private Collection<org.nasdanika.graph.Connection> incomingConnections = Collections.synchronizedCollection(new ArrayList<>());
-	private Collection<org.nasdanika.graph.Connection> outgoingConnections = Collections.synchronizedCollection(new ArrayList<>());
-	private boolean parallel;
-	private int hashCode;
-
 	/**
 	 * 
 	 * @param element
@@ -47,7 +31,7 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 	 */
 	@SuppressWarnings("unchecked")
 	public EObjectNode(
-			EObject target,
+			EObject value,
 			boolean parallel,
 			Function<EObject, CompletionStage<Element>> elementProvider, 
 			Consumer<CompletionStage<?>> stageConsumer,
@@ -55,13 +39,10 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			EObjectGraphFactory factory,
 			ProgressMonitor progressMonitor) {
 		
-		this.target = target;
-		hashCode = Objects.hash(target);
+		super(value);
 		
-		this.parallel = parallel;
-		
-		for (EReference eReference: target.eClass().getEAllReferences()) {
-			Object val = target.eGet(eReference);
+		for (EReference eReference: value.eClass().getEAllReferences()) {
+			Object val = value.eGet(eReference);
 			if (val != null) {
 				if (eReference.isMany()) {
 					int counter = 0;
@@ -77,98 +58,46 @@ public class EObjectNode implements Node, PropertySource<String, Object> {
 			}
 		}
 	
-		for (EOperation eOperation: target.eClass().getEAllOperations()) {
+		for (EOperation eOperation: get().eClass().getEAllOperations()) {
 			factory.createEOperationConnections(this, eOperation, parallel, elementProvider, stageConsumer, progressMonitor);
 		}		
 		
-		EClass eClass = target.eClass();
-		if (eClass != target) {
+		EClass eClass = value.eClass();
+		if (eClass != value) {
 			stageConsumer.accept(elementProvider.apply(eClass).thenAccept(targetNode -> factory.createEClassConnection(this, (EObjectNode) targetNode, progressMonitor)));
 		}
 		
-		EObject eContainer = target.eContainer();
+		EObject eContainer = value.eContainer();
 		if (eContainer != null) {
 			stageConsumer.accept(elementProvider.apply(eContainer).thenAccept(targetNode -> factory.createEContainerConnection(this, (EObjectNode) targetNode, progressMonitor)));
 		}
 
 	}
-	
-	public EObject getTarget() {
-		return target;
-	}
-
-	@Override
-	public <T> T accept(BiFunction<? super Element, Map<? extends Element, T>, T> visitor) {
-		Map<org.nasdanika.graph.Connection, T> results = new LinkedHashMap<>();
-		
-		List<org.nasdanika.graph.Connection> occ; // snapshot
-		synchronized (outgoingConnections) {
-			occ = new ArrayList<>(outgoingConnections);
-		}
-		Stream<org.nasdanika.graph.Connection> ocStream = parallel ? occ.parallelStream() : occ.stream();
-		record Result<R>(org.nasdanika.graph.Connection connection, R result) {}
-		ocStream
-			.map(connection -> new Result<T>(connection, connection.accept(visitor)))
-			.forEach(result -> results.put(result.connection(), result.result()));
-		return visitor.apply(this, results);
-	}
-
-	@Override
-	public Collection<org.nasdanika.graph.Connection> getIncomingConnections() {
-		return incomingConnections;
-	}
-
-	@Override
-	public Collection<org.nasdanika.graph.Connection> getOutgoingConnections() {
-		return outgoingConnections;
-	}
-		
-	public void addIncomingConnection(org.nasdanika.graph.Connection connection) {
-		synchronized (incomingConnections) {
-			incomingConnections.add(connection);
-		}
-	}
-
-	public void addOutgoingConnection(org.nasdanika.graph.Connection connection) {
-		synchronized (outgoingConnections) {
-			outgoingConnections.add(connection);
-		}
-	}	
 
 	@Override
 	public Object getProperty(String name) {
-		EStructuralFeature sf = target.eClass().getEStructuralFeature(name);
+		EStructuralFeature sf = get().eClass().getEStructuralFeature(name);
 		if (sf instanceof EAttribute) {
-			return getTarget().eGet(sf);
+			return get().eGet(sf);
 		}				
 		return null;
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + " " + getTarget() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
+		return super.toString() + " " + get() + " incomingConnections: " + getIncomingConnections().size() + ", outgoingConnections: " + getOutgoingConnections().size();
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		EObjectNode other = (EObjectNode) obj;
-		return Objects.equals(target, other.getTarget());
+	public Collection<EObjectConnection> getIncomingConnections() {
+		return (Collection) super.getIncomingConnections();
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Collection<org.nasdanika.graph.Connection> getChildren() {
-		return getOutgoingConnections();
+	public Collection<EObjectConnection> getOutgoingConnections() {
+		return (Collection) super.getOutgoingConnections();
 	}
 
 }
