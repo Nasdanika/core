@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>org.nasdanika.drawio</name>
-	<comment>The Java API for working with Drawio diagrams</comment>
+	<comment>Java API for working with Drawio diagrams</comment>
 	<projects>
 	</projects>
 	<buildSpec>

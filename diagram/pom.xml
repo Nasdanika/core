@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	  <parent>
+	    <artifactId>parent</artifactId>
+	    <groupId>org.nasdanika.core</groupId>
+	    <version>2023.4.1</version>
+	    <relativePath>..</relativePath>
+	  </parent>
+	<artifactId>diagram</artifactId>
+	<packaging>jar</packaging>
+	<name>Diagram API</name>
+	<description>An API for defining diagram in rendering engine independent way and then generating diagram specs for different targets, e.g. PlantUML</description>
+	<build>
+	    <plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+	    </plugins>
+	</build>
+
+	<dependencies>		
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
+			<artifactId>graph</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -181,6 +181,7 @@
 	
 	<modules>
 		<module>drawio</module>
+		<module>diagram</module>
 		<module>common</module>
 		<module>persistence</module>
 		<module>resources</module>
