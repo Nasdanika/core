@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
-import org.nasdanika.graph.Node;
 import org.nasdanika.graph.SimpleConnection;
 
-public class Relation extends SimpleConnection {
+public abstract class Relation extends SimpleConnection {
 	
 	public Relation(DiagramElement source, DiagramElement target) {
 		super(source, target, false);
@@ -55,5 +54,7 @@ public class Relation extends SimpleConnection {
 	public void setTargetDecoration(String targetDecoration) {
 		this.targetDecoration = targetDecoration;
 	}
+	
+	protected abstract String getType();
 
 }

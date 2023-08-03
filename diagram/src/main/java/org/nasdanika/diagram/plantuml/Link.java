@@ -42,17 +42,13 @@ public class Link {
 		this.location = location;
 	}
 	
-	public String toString(URI base) {
+	public String toString() {
 		if (location == null && Util.isBlank(tooltip)) {
 			return label;
 		}
 		StringBuilder ret = new StringBuilder("[[");
-		URI uri = location;
-		if (uri != null) {
-			if (base != null && !uri.isRelative() && !base.isRelative()) {
-				uri = uri.deresolve(base, true, true, true);
-			}
-			ret.append(uri);
+		if (location != null) {
+			ret.append(location);
 		}
 		if (!Util.isBlank(tooltip)) {
 			ret.append("{").append(tooltip).append("}");

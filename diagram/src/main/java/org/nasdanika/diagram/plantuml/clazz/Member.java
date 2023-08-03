@@ -1,6 +1,6 @@
 package org.nasdanika.diagram.plantuml.clazz;
 
-public class Member extends NamedElement {
+public abstract class Member extends NamedElement {
 	
 	private Classifier type;
 
@@ -11,5 +11,7 @@ public class Member extends NamedElement {
 	public void setType(Classifier type) {
 		this.type = type;
 	}
+	
+	public abstract String generate();
 		
 }

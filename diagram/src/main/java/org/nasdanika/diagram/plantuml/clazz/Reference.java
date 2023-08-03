@@ -1,10 +1,10 @@
 package org.nasdanika.diagram.plantuml.clazz;
 
-public class Attribute extends Member {
+public class Reference extends Member {
 
 	@Override
 	public String generate() {
 		return getText();
-	}
-
+	}	
+	
 }

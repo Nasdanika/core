@@ -11,5 +11,9 @@ public class Operation extends Member {
 		return parameters;
 	}
 	
+	@Override
+	public String generate() {
+		return getText() + "()";
+	}
 
 }

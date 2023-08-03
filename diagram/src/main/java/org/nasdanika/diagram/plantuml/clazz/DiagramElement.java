@@ -1,6 +1,7 @@
 package org.nasdanika.diagram.plantuml.clazz;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -8,6 +9,9 @@ import org.nasdanika.diagram.plantuml.Link;
 import org.nasdanika.graph.SimpleNode;
 
 public class DiagramElement extends SimpleNode {
+	
+	public static final String INDENT = "  ";
+	
 	
 //	public record Result(List<String> lines, List<String> relations) {};
 	
@@ -45,6 +49,11 @@ public class DiagramElement extends SimpleNode {
 		this.style = style;
 	}
 	
-//	public abstract Result generate(URI base);  
+	/**
+	 * @return A list of spec lines.
+	 */
+	public List<String> generate() {
+		return Collections.emptyList();
+	}
 
 }
