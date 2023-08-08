@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import javax.xml.transform.TransformerException;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -838,6 +839,20 @@ public class TestDrawio {
 		processor.apply("First", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Second", progressMonitor).thenAccept(System.out::println);
 		processor.apply("Third", progressMonitor).thenAccept(System.out::println);			
-	}		
+	}
 	
+	
+	/**
+	 * Drawio document -> Ecore model
+	 * @throws Exception
+	 */
+	@Test 
+	public void testModel() throws Exception {
+		Document document = Document.load(getClass().getResource("alice-bob.drawio"));
+		org.nasdanika.drawio.model.Document modelDocument = document.toModelDocument();
+		EList<org.nasdanika.drawio.model.LayerElement> elements = modelDocument.getPages().get(0).getModel().getRoot().getLayers().get(0).getElements();
+		for (org.nasdanika.drawio.model.LayerElement el: elements) {
+			System.out.println(el);			
+		}
+	}
 }

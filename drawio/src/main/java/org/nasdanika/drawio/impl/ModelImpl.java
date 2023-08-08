@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
@@ -33,10 +35,14 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -220,6 +226,21 @@ class ModelImpl extends ElementImpl implements Model {
 	@Override
 	public int hashCode() {
 		return getPage().hashCode() ^ getClass().hashCode();
+	}
+
+	org.nasdanika.drawio.model.Model toModelModel(
+			ModelFactory factory, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+		org.nasdanika.drawio.model.Model mModel = factory.createModel();		
+		modelElementProvider.apply(this).complete(mModel);
+		
+		mModel.setRoot(((RootImpl) getRoot()).toModelRoot(factory, markerFactory, modelElementProvider));
+		
+		for (Marker marker: getMarkers()) {
+			mModel.getMarkers().add(markerFactory.apply(marker));
+		}
+		return mModel;
 	}
 	
 }

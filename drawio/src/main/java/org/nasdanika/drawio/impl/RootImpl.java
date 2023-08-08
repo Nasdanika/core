@@ -4,10 +4,14 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.Root;
+import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
 class RootImpl extends ModelElementImpl implements Root {
@@ -42,5 +46,17 @@ class RootImpl extends ModelElementImpl implements Root {
 		URI modelURI = getModel().getURI();
 		return modelURI == null ? URI.createURI(getId()) : modelURI.appendSegment(URLEncoder.encode(getId(), StandardCharsets.UTF_8));
 	}
+	
+	org.nasdanika.drawio.model.Root toModelRoot(
+			ModelFactory factory, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
+		org.nasdanika.drawio.model.Root mRoot = toModelElement(factory.createRoot(), markerFactory, modelElementProvider);
+		modelElementProvider.apply(this).complete(mRoot);
+		for (Layer layer: getLayers()) {
+			mRoot.getLayers().add(((LayerImpl) layer).toModelLayer(factory, markerFactory, modelElementProvider));
+		}
+		return mRoot;
+	}	
 
 }

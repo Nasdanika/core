@@ -181,6 +181,7 @@
 	
 	<modules>
 		<module>drawio</module>
+		<module>drawio.model</module>
 		<module>diagram</module>
 		<module>common</module>
 		<module>persistence</module>

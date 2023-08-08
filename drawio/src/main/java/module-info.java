@@ -6,6 +6,7 @@ module org.nasdanika.drawio {
 	
 	requires transitive java.desktop;
 	requires transitive org.nasdanika.graph;
+	requires transitive org.nasdanika.drawio.model;
 	requires org.jsoup;
 	requires org.apache.commons.text;
 	requires org.apache.commons.lang3;

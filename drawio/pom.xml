@@ -44,6 +44,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.nasdanika.core</groupId>
+			<artifactId>drawio-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.nasdanika.core</groupId>
 			<artifactId>graph</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>parent</artifactId>
+		<groupId>org.nasdanika.core</groupId>
+		<version>2023.4.1</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>drawio-model</artifactId>
+	<packaging>jar</packaging>
+	<name>Ecore Model of Drawio diagrams</name>
+	<description>Bi-directional data exchange with Drawio diagrams.</description>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<classifier>model</classifier>
+							<includes>
+								<include>model/**</include>
+							</includes>
+							<classesDirectory>${project.basedir}</classesDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>		
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>	
+		<dependency>
+		    <groupId>org.nasdanika.core</groupId>
+		    <artifactId>ncore</artifactId>
+		    <version>${project.version}</version>
+		</dependency> 		
+	</dependencies>
+</project>

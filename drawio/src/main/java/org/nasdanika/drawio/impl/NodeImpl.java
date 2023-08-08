@@ -2,13 +2,17 @@ package org.nasdanika.drawio.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.ConnectionBase;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
 import org.nasdanika.drawio.Rectangle;
+import org.nasdanika.drawio.model.ModelFactory;
 import org.w3c.dom.Element;
 
 class NodeImpl extends LayerImpl implements Node {
@@ -75,6 +79,13 @@ class NodeImpl extends LayerImpl implements Node {
 			logicalChildren.addAll(getIncomingConnections());			
 		}
 		return logicalChildren;
+	}
+	
+	org.nasdanika.drawio.model.Node toModelNode(
+			ModelFactory factory, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
+		return toModelLayer(factory, factory.createNode(), markerFactory, modelElementProvider);
 	}
 
 }

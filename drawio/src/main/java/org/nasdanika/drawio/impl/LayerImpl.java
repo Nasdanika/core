@@ -2,11 +2,18 @@ package org.nasdanika.drawio.impl;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Connection;
 import org.nasdanika.drawio.Layer;
 import org.nasdanika.drawio.LayerElement;
 import org.nasdanika.drawio.Node;
+import org.nasdanika.drawio.model.ModelElement;
+import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.persistence.Marker;
 import org.w3c.dom.Element;
 
 class LayerImpl extends ModelElementImpl implements Layer {
@@ -53,6 +60,33 @@ class LayerImpl extends ModelElementImpl implements Layer {
 		element.getParentNode().appendChild(connectionElement);
 		List<LayerElement> elements = getElements();
 		return (Connection) elements.get(elements.size() - 1);
+	}
+	
+	org.nasdanika.drawio.model.Layer toModelLayer(
+			ModelFactory factory, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
+		return toModelLayer(factory, factory.createLayer(), markerFactory, modelElementProvider);
+	}
+	
+	protected <T extends org.nasdanika.drawio.model.Layer> T toModelLayer(
+			ModelFactory factory,			
+			T mElement,
+			Function<Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<org.nasdanika.drawio.Element, CompletableFuture<EObject>> modelElementProvider) {
+		
+		toModelElement(mElement, markerFactory, modelElementProvider);
+
+		EList<org.nasdanika.drawio.model.LayerElement> layerElements = ((org.nasdanika.drawio.model.Layer) mElement).getElements();
+		for (LayerElement layerElement: getElements()) {
+			if (layerElement instanceof NodeImpl) {
+				layerElements.add(((NodeImpl) layerElement).toModelNode(factory, markerFactory, modelElementProvider));
+			} else {
+				layerElements.add(((ConnectionImpl) layerElement).toModelConnection(factory, markerFactory, modelElementProvider));				
+			}
+		}		
+		
+		return mElement;
 	}
 
 }

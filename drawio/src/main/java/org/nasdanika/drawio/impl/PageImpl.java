@@ -5,14 +5,20 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
 
 
@@ -123,6 +129,23 @@ class PageImpl extends ElementImpl implements Page {
 	@Override
 	protected String getMarkerLocation() {
 		return ((DocumentImpl) getDocument()).getMarkerLocation();
+	}
+
+	org.nasdanika.drawio.model.Page toModelPage(
+			ModelFactory factory, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory, 
+			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+		org.nasdanika.drawio.model.Page mPage = factory.createPage();
+		modelElementProvider.apply(this).complete(mPage);
+		mPage.setName(getName());
+		mPage.setId(getId());
+		
+		mPage.setModel(((ModelImpl) getModel()).toModelModel(factory, markerFactory, modelElementProvider));
+		
+		for (Marker marker: getMarkers()) {
+			mPage.getMarkers().add(markerFactory.apply(marker));
+		}
+		return mPage;
 	}
 
 }

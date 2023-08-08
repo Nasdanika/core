@@ -8,6 +8,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -95,6 +96,31 @@ public interface Document extends Element {
 	 */
 	static Document load(InputStream in, URI uri) throws IOException, ParserConfigurationException, SAXException {
 		return new DocumentImpl(in, uri);
+	}
+	
+	/**
+	 * Creates a model document from this document using the default factory.
+	 * @return
+	 */
+	default org.nasdanika.drawio.model.Document toModelDocument() {
+		return toModelDocument(org.nasdanika.drawio.model.ModelFactory.eINSTANCE, null);
+	}
+
+	/**
+	 * Creates a model document from this document using the provided factory to instantiate elements. 
+	 * @param factory
+	 * @param markerFactory Can be null
+	 * @return
+	 */
+	org.nasdanika.drawio.model.Document toModelDocument(org.nasdanika.drawio.model.ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory);
+	
+	/**
+	 * Loads a document from a model document.
+	 * @param document
+	 * @return
+	 */
+	static Document load(org.nasdanika.drawio.model.Document document) {
+		throw new UnsupportedOperationException();
 	}
 	
 	/**

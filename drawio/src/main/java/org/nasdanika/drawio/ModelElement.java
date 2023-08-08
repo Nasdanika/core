@@ -46,6 +46,8 @@ public interface ModelElement extends Element, PropertySource<String, String> {
 	
 	void setProperty(String name, String value);
 	
+	Set<String> getPropertyNames();
+	
 	Set<String> getTags();
 	
 	boolean isVisible();

@@ -10,13 +10,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.AbstractSplitJoinSet;
 import org.nasdanika.common.DelimitedStringMap;
 import org.nasdanika.common.NasdanikaException;
@@ -27,10 +31,14 @@ import org.nasdanika.drawio.Element;
 import org.nasdanika.drawio.Model;
 import org.nasdanika.drawio.ModelElement;
 import org.nasdanika.drawio.Page;
+import org.nasdanika.persistence.Marker;
+import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.SAXException;
 
 class ModelElementImpl extends ElementImpl implements ModelElement {
 	
+	private static final String MX_CELL_TAG_NAME = "mxCell";
 	private static final String PAGE_LINK_PREFIX = "data:page";
 	private static final String ID_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/id,"; // Page identified by id - internal references
 	private static final String NAME_DATA_PAGE_PREFIX = PAGE_LINK_PREFIX + "/name,"; // Page identified by name - external references
@@ -86,7 +94,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	}
 	
 	static org.w3c.dom.Element getCellElement(org.w3c.dom.Element element) {
-		return "mxCell".equals(element.getTagName()) ? element : DocumentImpl.getChildrenElements(element, "mxCell").get(0);
+		return MX_CELL_TAG_NAME.equals(element.getTagName()) ? element : DocumentImpl.getChildrenElements(element, MX_CELL_TAG_NAME).get(0);
 	}
 	
 	/**
@@ -94,7 +102,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	 * @return
 	 */
 	protected org.w3c.dom.Element asObjectElement() {
-		if ("mxCell".equals(element.getTagName())) {
+		if (isMxCell()) {
 			org.w3c.dom.Element objectElement = element.getOwnerDocument().createElement("object");
 			element.getParentNode().replaceChild(objectElement, element);
 			org.w3c.dom.Element cellElement = element;
@@ -114,7 +122,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 
 	@Override
 	public void setLabel(String label) {
-		element.setAttribute("mxCell".equals(element.getTagName()) ? ATTRIBUTE_VALUE : ATTRIBUTE_LABEL, label);
+		element.setAttribute(isMxCell() ? ATTRIBUTE_VALUE : ATTRIBUTE_LABEL, label);
 	}
 
 	@Override
@@ -156,7 +164,7 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	
 	@Override
 	public String getLabel() {
-		return interpolate("mxCell".equals(element.getTagName()) ? element.getAttribute(ATTRIBUTE_VALUE) : element.getAttribute(ATTRIBUTE_LABEL), new HashSet<>());
+		return interpolate(isMxCell() ? element.getAttribute(ATTRIBUTE_VALUE) : element.getAttribute(ATTRIBUTE_LABEL), new HashSet<>());
 	}
 
 	/**
@@ -165,7 +173,11 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 	 * @return
 	 */
 	private String getRawProperty(String name) {
-		return "mxCell".equals(element.getTagName()) ? null : element.getAttribute(name);
+		return isMxCell() ? null : element.getAttribute(name);
+	}
+
+	protected boolean isMxCell() {
+		return MX_CELL_TAG_NAME.equals(element.getTagName());
 	}
 	
 	private String interpolate(String str, Set<String> expanded) {		
@@ -404,5 +416,59 @@ class ModelElementImpl extends ElementImpl implements ModelElement {
 		return ((ElementImpl) getModel().getPage()).getMarkerLocation();
 	}
 	
+	public Set<String> getPropertyNames() {
+		if (isMxCell()) {
+			return Collections.emptySet();
+		}
+		
+		Set<String> pNames = new HashSet<>();
+		NamedNodeMap attrs = element.getAttributes();
+		for (int i = 0; i < attrs.getLength(); ++i) {
+			String aName = ((Attr) attrs.item(i)).getName();
+			switch (aName) {
+			case "style":
+			case "tags":
+			case "link":
+			case "label":
+			case "tooltip":
+			case "visible":
+				continue;
+			default:
+				pNames.add(aName);
+			}			
+		}
+		return pNames;
+	}
+	
+	protected <T extends org.nasdanika.drawio.model.ModelElement> T toModelElement(
+			T mElement, 
+			Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory,
+			Function<Element, CompletableFuture<EObject>> modelElementProvider) {
+		modelElementProvider.apply(this).complete(mElement);
+		mElement.setId(getId());
+		mElement.setLabel(getLabel());
+		mElement.setLink(getLink());
+		Page linkedPage = getLinkedPage();
+		if (linkedPage != null) {
+			modelElementProvider.apply(linkedPage).thenAccept(mlp -> mElement.setLinkedPage((org.nasdanika.drawio.model.Page) mlp));
+		}
+		for (String pName: getPropertyNames()) {
+			mElement.getProperties().put(pName, getProperty(pName));
+		}		
+		for (Entry<String, String> se: getStyle().entrySet()) {
+			mElement.getStyle().put(se.getKey(), se.getValue());			
+		}
+		mElement.getTags().addAll(getTags());
+		mElement.setTooltip(getTooltip());
+		mElement.setVisible(isVisible());
+		
+		for (Marker marker: getMarkers()) {
+			mElement.getMarkers().add(markerFactory.apply(marker));
+		}
+		
+		// TODO - geometry for nodes and connections. Refactor Rectangle to Geometry?
+		
+		return mElement;
+	}
 	
 }
