@@ -13,37 +13,25 @@ import org.nasdanika.graph.processor.function.StatefulBiFunctionConnectionProces
 public class AsyncStatefulConnectionProcessor implements StatefulBiFunctionConnectionProcessor<String,CompletionStage<String>,String,CompletionStage<String>,ConnectionStateRecord> {
 	
 	private List<ConnectionStateRecord> history = Collections.synchronizedList(new ArrayList<>());
-	private List<ConnectionStateRecord> sourceHistory = Collections.synchronizedList(new ArrayList<>());
-	private List<ConnectionStateRecord> targetHistory = Collections.synchronizedList(new ArrayList<>());
 	
 	@Override
 	public void recordSourceState(String input, CompletionStage<String> result, ProgressMonitor progressMonitor) {
-		result.thenAccept(r -> sourceHistory.add(new ConnectionStateRecord(input, r)));
+		result.thenAccept(r -> history.add(new ConnectionStateRecord("source", input, r)));
 	}
 	
 	@Override
 	public void recordTargetState(String input, CompletionStage<String> result, ProgressMonitor progressMonitor) {
-		result.thenAccept(r -> targetHistory.add(new ConnectionStateRecord(input, r)));
+		result.thenAccept(r -> history.add(new ConnectionStateRecord("target", input, r)));
 	}
 	
 	@Override
 	public void recordState(String input, CompletionStage<String> result, ProgressMonitor progressMonitor) {
-		result.thenAccept(r -> history.add(new ConnectionStateRecord(input, r)));
+		result.thenAccept(r -> history.add(new ConnectionStateRecord("processor", input, r)));
 	}
 
 	@Override
 	public List<ConnectionStateRecord> getHistory(ProgressMonitor progressMonitor) {
 		return history;
-	}
-		
-	@Override
-	public List<ConnectionStateRecord> getSourceHistory(ProgressMonitor progressMonitor) {
-		return sourceHistory;
-	}
-
-	@Override
-	public List<ConnectionStateRecord> getTargetHistory(ProgressMonitor progressMonitor) {
-		return targetHistory;
 	}
 
 	@Override
@@ -64,7 +52,7 @@ public class AsyncStatefulConnectionProcessor implements StatefulBiFunctionConne
 
 	@Override
 	public CompletionStage<String> apply(String input, List<ConnectionStateRecord> history,	ProgressMonitor progressMonitor) {
-		progressMonitor.worked(1, "Apply", input, history, sourceHistory, targetHistory);
+		progressMonitor.worked(1, "Apply", input, history);
 		return CompletableFuture.completedStage(history.toString());
 	}
 	

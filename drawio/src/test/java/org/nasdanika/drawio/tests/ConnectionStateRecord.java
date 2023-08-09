@@ -1,3 +1,3 @@
 package org.nasdanika.drawio.tests;
 
-record ConnectionStateRecord(String input, String result) {}
+record ConnectionStateRecord(String type, String input, String result) {}
