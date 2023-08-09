@@ -17,21 +17,7 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	void recordSourceState(T input, U result, ProgressMonitor progressMonitor);
 	void recordTargetState(T input, U result, ProgressMonitor progressMonitor);
 	void recordState(T input, U result, ProgressMonitor progressMonitor);
-	
-	/**
-	 * History of source invocations
-	 * @param progressMonitor
-	 * @return
-	 */
-	List<S> getSourceHistory(ProgressMonitor progressMonitor);
-	
-	/**
-	 * History of target invocations
-	 * @param progressMonitor
-	 * @return
-	 */
-	List<S> getTargetHistory(ProgressMonitor progressMonitor);
-	
+		
 	/**
 	 * History of processor invocations
 	 * @param progressMonitor
@@ -41,7 +27,7 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	
 	@Override
 	default U sourceApply(T input, ProgressMonitor progressMonitor, BiFunction<V, ProgressMonitor, W> targetEndpoint) {
-		U result = sourceApply(input, targetEndpoint, getSourceHistory(progressMonitor), progressMonitor);
+		U result = sourceApply(input, targetEndpoint, getHistory(progressMonitor), progressMonitor);
 		recordSourceState(input, result, progressMonitor);		
 		return result;
 	}
@@ -53,7 +39,7 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	U sourceApply(
 			T input, 
 			BiFunction<V, ProgressMonitor, W> targetEndpoint,
-			List<S> sourceHistory,			
+			List<S> history,			
 			ProgressMonitor progressMonitor);	
 	
 	@Override
@@ -61,7 +47,7 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 			T input, 
 			ProgressMonitor progressMonitor, 
 			BiFunction<V, ProgressMonitor, W> sourceEndpoint) {
-		U result = targetApply(input, sourceEndpoint, getTargetHistory(progressMonitor), progressMonitor);
+		U result = targetApply(input, sourceEndpoint, getHistory(progressMonitor), progressMonitor);
 		recordTargetState(input, result, progressMonitor);		
 		return result;
 	}
@@ -69,7 +55,7 @@ public interface StatefulBiFunctionConnectionProcessor<T,U,V,W,S> extends BiFunc
 	U targetApply(
 			T input, 
 			BiFunction<V, ProgressMonitor, W> sourceEndpoint,
-			List<S> targetHistory,			
+			List<S> history,			
 			ProgressMonitor progressMonitor); 
 	
 	@Override

@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -390,6 +391,95 @@ public class Reflector {
 
 	protected boolean isValueSupplier(AnnotatedElement element) {
 		return element instanceof Field || (element instanceof Method && ((Method) element).getParameterCount() == 0);
+	}
+	
+	/**
+	 * Finds methods matching the name and arguments, selects the most specific and invokes it.
+	 * Throws an exception if doesn't find a matching method.
+	 * @param name
+	 * @param arguments
+	 * @return
+	 */
+	protected static Object invoke(
+			Stream<AnnotatedElementRecord> annotatedElementRecords,
+			String methodName, 
+			Object... arguments) {
+		
+		Optional<AnnotatedElementRecord> toInvokeOptional = annotatedElementRecords
+			.filter(ar -> {
+				if (ar.getAnnotatedElement() instanceof Method) {
+					Method method = (Method) ar.getAnnotatedElement();
+					if (methodName.equals(method.getName())) {
+						Class<?>[] parameterTypes = method.getParameterTypes();
+						if (parameterTypes.length == arguments.length) {
+							for (int i = 0; i < parameterTypes.length; ++i) {
+								if (arguments[i] != null && !parameterTypes[i].isInstance(arguments[i])) {
+									return false;
+								}
+							}
+							return true;
+						}
+					}
+				}
+				return false;
+			})
+			.sorted((a,b) -> compareMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
+			.findFirst();
+		
+		if (toInvokeOptional.isEmpty()) {
+			throw new NasdanikaException("No matching method is found for the method name '" + methodName + "' with " + arguments.length + " parameters compatible with arguments");
+		}
+		
+		return toInvokeOptional.get().invoke(arguments);
+	}		
+	
+	protected static int compareMethods(Method a, Method b) {
+		// Looking for more specific parameters
+		boolean aIsMoreSpecific = true;
+		boolean bIsMoreSpecific = true;
+		Class<?>[] apt = a.getParameterTypes();
+		Class<?>[] bpt = b.getParameterTypes();
+		for (int i = 0; i < apt.length; ++i) {
+			if (apt[i].equals(bpt[i])) {
+				continue;
+			}
+			if (apt[i].isAssignableFrom(bpt[i])) {
+				// b parameter is more specific
+				aIsMoreSpecific = false;
+			} else if (bpt[i].isAssignableFrom(apt[i])) {
+				// a parameter is more specific
+				bIsMoreSpecific = false;
+			} else {
+				// No inheritance relationship, none is more specific
+				aIsMoreSpecific = false;
+				bIsMoreSpecific = false;
+			}
+			if (!aIsMoreSpecific && !bIsMoreSpecific) {
+				break; // No need to analyze further
+			}
+		}
+		
+		if (aIsMoreSpecific) {
+			return -1;
+		}
+		
+		if (bIsMoreSpecific) {
+			return 1;
+		}
+		
+		// Comparing declaring classes
+		Class<?> adc = a.getDeclaringClass();
+		Class<?> bdc = b.getDeclaringClass();
+		if (!adc.equals(bdc)) {
+			if (adc.isAssignableFrom(bdc)) {
+				return 1; // b declaring class is a subclass of a declaring class
+			}
+			if (bdc.isAssignableFrom(adc)) {
+				return -1; // a declaring class is a subclass of b declaring class
+			}
+		}
+				
+		return a.hashCode() - b.hashCode();
 	}
 
 }

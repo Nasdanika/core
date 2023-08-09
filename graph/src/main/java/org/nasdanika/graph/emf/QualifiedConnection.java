@@ -1,6 +1,5 @@
 package org.nasdanika.graph.emf;
 
-import org.nasdanika.graph.Node;
 import org.nasdanika.graph.ObjectConnection;
 
 /**
