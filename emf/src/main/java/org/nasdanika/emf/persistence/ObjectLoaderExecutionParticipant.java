@@ -1,13 +1,16 @@
 package org.nasdanika.emf.persistence;
 
 import java.util.Map;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.emf.DrawioResourceFactory;
+import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectLoader;
 import org.nasdanika.persistence.ObjectLoaderResourceFactory;
 
@@ -36,17 +39,21 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		ret.getResourceFactoryRegistry().getProtocolToFactoryMap().put("data", objectLoaderResourceFactory);
 		GitMarkerFactory markerFactory = new GitMarkerFactory();
 		
-		NcoreDrawioResourceFactory ncoreDrawioResourceFactory = new NcoreDrawioResourceFactory() {
-
-			@Override
-			protected void loadDocumentContent(Document document, Resource resource) {
-				ObjectLoaderExecutionParticipant.this.loadDocumentContent(document, resource, ret, markerFactory, progressMonitor);				
-			}
+		DrawioResourceFactory ncoreDrawioResourceFactory = new DrawioResourceFactory() {
 			
 			@Override
-			protected void updateDocumentContent(Document document, Resource resource) {
-				ObjectLoaderExecutionParticipant.this.updateDocumentContent(document, resource, ret, markerFactory, progressMonitor);				
-			}			
+			protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
+				return m -> {
+					org.nasdanika.ncore.Marker mm = markerFactory.createMarker(m.getLocation(), progressMonitor);
+					mm.setPosition(m.getPosition());
+					return mm;
+				};
+			}
+
+			@Override
+			protected ModelFactory getFactory() {
+				return ObjectLoaderExecutionParticipant.this.getDrawioModelFactory();
+			}
 
 		};
 		
@@ -59,6 +66,10 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		extensionToFactoryMap.put("mermaid", textResourceFactory);				
 		
 		return ret;
+	}
+	
+	protected ModelFactory getDrawioModelFactory() {
+		return org.nasdanika.drawio.model.ModelFactory.eINSTANCE;
 	}
 
 	protected ObjectLoaderResourceFactory createObjectLoaderResorceFactory(ResourceSet resourceSet, ProgressMonitor progressMonitor) {		
@@ -87,23 +98,5 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		eObjectLoader.setMarkerFactory(new GitMarkerFactory());
 		return eObjectLoader;
 	}
-	
-	protected void loadDocumentContent(
-			Document document, 
-			Resource resource, 
-			ResourceSet resourceSet, 
-			MarkerFactory markerFactory,
-			ProgressMonitor progressMonitor) {
-		throw new UnsupportedOperationException();		
-	}
-	
-	protected void updateDocumentContent(
-			Document document, 
-			Resource resource, 
-			ResourceSet resourceSet, 
-			MarkerFactory markerFactory,
-			ProgressMonitor progressMonitor) {
-		throw new UnsupportedOperationException();		
-	}	
 
 }

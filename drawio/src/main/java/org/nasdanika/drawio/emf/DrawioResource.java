@@ -7,6 +7,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -15,8 +16,9 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.nasdanika.common.NasdanikaException;
-import org.nasdanika.common.URIEncodable;
 import org.nasdanika.drawio.Document;
+import org.nasdanika.drawio.model.ModelFactory;
+import org.nasdanika.persistence.Marker;
 import org.xml.sax.SAXException;
 
 /**
@@ -24,9 +26,7 @@ import org.xml.sax.SAXException;
  * @author Pavel
  *
  */
-public abstract class DrawioResource extends ResourceImpl implements URIEncodable {
-	
-	protected Document document;
+public class DrawioResource extends ResourceImpl {
 	
 	protected DrawioResource(URI uri) {
 		super(uri);
@@ -35,10 +35,19 @@ public abstract class DrawioResource extends ResourceImpl implements URIEncodabl
 	@Override
 	protected void doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		try {
-			document = loadDocument(inputStream);
+			Document document = loadDocument(inputStream);
+			getContents().add(document.toModelDocument(getFactory(), getMarkerFactory()));
 		} catch (ParserConfigurationException | SAXException e) {
 			throw new NasdanikaException(e);
 		}
+	}
+
+	protected Function<Marker, org.nasdanika.ncore.Marker> getMarkerFactory() {
+		return null;
+	}
+
+	protected ModelFactory getFactory() {
+		return org.nasdanika.drawio.model.ModelFactory.eINSTANCE;
 	}
 
 	/**
@@ -54,42 +63,28 @@ public abstract class DrawioResource extends ResourceImpl implements URIEncodabl
 		return Document.load(inputStream, getURI().trimFragment());
 	}
 	
-	/**
-	 * Loads resource content from the document.
-	 */
-	protected abstract void loadDocumentContent();
-	
 	@Override
 	protected void doSave(OutputStream outputStream, Map<?, ?> options) throws IOException {
-		if (document == null) {
-			try {
-				document = Document.create(false, getURI());
-			} catch (ParserConfigurationException e) {
-				throw new NasdanikaException(e);
-			}
+		if (getContents().size() == 0) {
+			return;
 		}
-		updateDocument();
-		try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
-			try {
-				writer.write(document.save(null));
-			} catch (TransformerException e) {
-				throw new NasdanikaException(e);
-			}
+		if (getContents().size() > 1) {
+			throw new IllegalStateException("More than one root element");
 		}
-	}
-
-	/**
-	 * Override to update document with model data.
-	 * @param document Document to update. It may be a previously loaded document or a new empty document for new resources.
-	 */
-	protected void updateDocument() {}
-	
-	@Override
-	public URI encode() {
-		try {
-			return document.toDataURI(true);
-		} catch (TransformerException | IOException e) {
-			throw new NasdanikaException("Error encoding document to URI: " + e, e);
+		
+		for (EObject root: getContents()) {
+			if (root instanceof org.nasdanika.drawio.model.Document) {
+				Document document = Document.load((org.nasdanika.drawio.model.Document) root);
+				try (Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
+					try {
+						writer.write(document.save(null));
+					} catch (TransformerException e) {
+						throw new NasdanikaException(e);
+					}
+				}
+			} else {
+				throw new IllegalStateException("Root element shall be an instance of org.nasdanika.drawio.model.Document, found: " + root);
+			}
 		}
 	}
 			
