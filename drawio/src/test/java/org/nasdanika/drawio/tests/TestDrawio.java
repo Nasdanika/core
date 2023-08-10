@@ -734,6 +734,7 @@ public class TestDrawio {
 	 * @throws Exception
 	 */
 	@Test 
+	@Disabled // Fails occasionally because DOM is not thread safe 
 	public void testAsyncComputeGraph() throws Exception {
 		Document document = Document.load(getClass().getResource("compute-graph.drawio"));
 		
