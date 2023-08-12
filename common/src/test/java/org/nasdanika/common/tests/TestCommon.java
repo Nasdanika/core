@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.nasdanika.common.Context;
@@ -397,6 +398,14 @@ public class TestCommon {
 		assertTrue(pattern.matcher("More\n     \nHello").find());
 		assertFalse(pattern.matcher("More\nHello").find());
 		assertTrue(pattern.matcher("\nHello").find());
+	}
+
+	@Test
+	public void testJSONString() {
+		JSONObject jo = new JSONObject();
+		JSONString js = () -> "function() { console.log('aaa'); }";
+		jo.put("myFunction", js);
+		System.out.println(jo);
 	}
 	
 }
