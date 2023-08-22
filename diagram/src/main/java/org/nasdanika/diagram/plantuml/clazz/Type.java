@@ -32,15 +32,15 @@ public abstract class Type extends Classifier {
 		List<String> ret = new ArrayList<>();
 		ret.add(generateDeclaration());
 		for (Attribute attribute: getAttributes()) {
-			ret.add(INDENT + attribute.generate());
+			ret.add(INDENT + attribute.toString());
 		}
 		for (Operation operation: getOperations()) {
-			ret.add(INDENT + operation.generate());
+			ret.add(INDENT + operation.toString());
 		}
 		if (!getReferences().isEmpty()) {
 			ret.add(INDENT + "--");
 			for (Reference reference: getReferences()) {
-				ret.add(INDENT + reference.generate());
+				ret.add(INDENT + reference.toString());
 			}
 		}
 		ret.add("}");

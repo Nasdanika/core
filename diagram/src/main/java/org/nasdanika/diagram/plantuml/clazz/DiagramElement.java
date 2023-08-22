@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Util;
 import org.nasdanika.diagram.plantuml.Link;
 import org.nasdanika.graph.SimpleNode;
 
@@ -24,6 +25,11 @@ public class DiagramElement extends SimpleNode {
 	public List<Link> getName() {
 		return name;
 	}
+
+	public String getNameString() {
+		return getName().stream().map(Link::toString).reduce("", (a,b) -> a + b);
+	}
+	
 	public String getTooltip() {
 		return tooltip;
 	}
@@ -55,5 +61,22 @@ public class DiagramElement extends SimpleNode {
 	public List<String> generate() {
 		return Collections.emptyList();
 	}
+	
+	protected String getLinkString() {
+		if (location == null && Util.isBlank(tooltip)) {
+			return ""; 
+		}
+		
+		StringBuilder sb = new StringBuilder(" [[");
+		if (location != null) {
+			sb.append(location);
+		}
+		if (!Util.isBlank(tooltip)) {
+			sb.append("{").append(tooltip).append("}");
+		}
+		sb.append("]]");
+		return sb.toString();
+	}
+	
 
 }

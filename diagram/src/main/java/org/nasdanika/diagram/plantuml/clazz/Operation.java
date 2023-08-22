@@ -12,8 +12,25 @@ public class Operation extends Member {
 	}
 	
 	@Override
-	public String generate() {
-		return getText() + "()";
+	public String toString() {
+		StringBuilder sb = new StringBuilder(getNameString()).append("(");
+		boolean isFirst = true;
+		for (Parameter parameter: getParameters()) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				sb.append(", ");
+			}
+			sb.append(parameter);
+		}
+		
+		sb.append(")");
+		
+		if (!getType().isEmpty()) {
+			sb.append(" : ").append(getTypeString());
+		}
+		
+		return sb.append(getLinkString()).toString();
 	}
 
 }

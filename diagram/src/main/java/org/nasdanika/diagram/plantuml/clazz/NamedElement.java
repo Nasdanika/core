@@ -4,21 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Util;
 import org.nasdanika.diagram.plantuml.Link;
 
 public class NamedElement {
 	
-	private String text;
 	private String tooltip;
 	private URI location;	
 	private List<Link> name = new ArrayList<>();
 	
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
 	public String getTooltip() {
 		return tooltip;
 	}
@@ -35,4 +29,24 @@ public class NamedElement {
 		return name;
 	}	
 
+	protected String getNameString() {
+		return getName().stream().map(Link::toString).reduce("", (a,b) -> a + b);
+	}
+	
+	protected String getLinkString() {
+		if (location == null && Util.isBlank(tooltip)) {
+			return ""; 
+		}
+		
+		StringBuilder sb = new StringBuilder(" [[");
+		if (location != null) {
+			sb.append(location);
+		}
+		if (!Util.isBlank(tooltip)) {
+			sb.append("{").append(tooltip).append("}");
+		}
+		sb.append("]]");
+		return sb.toString();
+	}
+	
 }

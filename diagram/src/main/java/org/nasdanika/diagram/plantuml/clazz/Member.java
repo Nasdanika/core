@@ -1,17 +1,20 @@
 package org.nasdanika.diagram.plantuml.clazz;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.nasdanika.diagram.plantuml.Link;
+
 public abstract class Member extends NamedElement {
 	
-	private Classifier type;
+	private List<Link> type = new ArrayList<>();
 
-	public Classifier getType() {
+	public List<Link> getType() {
 		return type;
 	}
 
-	public void setType(Classifier type) {
-		this.type = type;
+	protected String getTypeString() {
+		return getType().stream().map(Link::toString).reduce("", (a,b) -> a + b);
 	}
-	
-	public abstract String generate();
 		
 }

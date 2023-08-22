@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.nasdanika.common.Util;
+import org.nasdanika.diagram.plantuml.Link;
 import org.nasdanika.graph.SimpleConnection;
 
 public abstract class Relation extends SimpleConnection {
@@ -12,17 +14,9 @@ public abstract class Relation extends SimpleConnection {
 		super(source, target, false);
 	}
 
-	private String text;
 	private String tooltip;
 	private URI location;	
-	private List<Object> name = new ArrayList<>();
-	
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
+	private List<Link> name = new ArrayList<>();
 	public String getTooltip() {
 		return tooltip;
 	}
@@ -35,7 +29,8 @@ public abstract class Relation extends SimpleConnection {
 	public void setLocation(URI location) {
 		this.location = location;
 	}	
-	public List<Object> getName() {
+	
+	public List<Link> getName() {
 		return name;
 	}
 	
@@ -56,5 +51,56 @@ public abstract class Relation extends SimpleConnection {
 	}
 	
 	protected abstract String getType();
+	
+	@Override
+	public String toString() {
+		StringBuilder ret = new StringBuilder();
+		DiagramElement sourceDiagramElement = (DiagramElement) getSource();
+		String sid = sourceDiagramElement.getId();
+		if (Util.isBlank(sid)) {
+			ret.append(sourceDiagramElement.getNameString());
+		} else {
+			ret.append(sourceDiagramElement.getId());
+		}
+		
+		if (!Util.isBlank(sourceDecoration)) {
+			ret.append(" ").append(sourceDecoration);
+		}
+			
+		ret.append(" ");			
+		ret.append(getType());
+
+		if (!Util.isBlank(targetDecoration)) {
+			ret.append(" ").append(targetDecoration);
+		}
+		
+		ret.append(" ");
+		
+		DiagramElement targetDiagramElement = (DiagramElement) getSource();
+		String tid = targetDiagramElement.getId();
+		if (Util.isBlank(tid)) {
+			ret.append(targetDiagramElement.getNameString());
+		} else {
+			ret.append(targetDiagramElement.getId());
+		}		
+		
+		if (location != null || !Util.isBlank(tooltip)) {
+			ret.append(" [[");
+			if (location != null) {
+				ret.append(location);
+			}
+			if (!Util.isBlank(tooltip)) {
+				ret.append("{").append(tooltip).append("}");
+			}
+			ret.append("]]");
+		}		
+		
+		if (!name.isEmpty()) {
+			ret.append(" : ");
+			name.forEach(ret::append);
+		}
+		
+		return super.toString();
+	}	
 
 }

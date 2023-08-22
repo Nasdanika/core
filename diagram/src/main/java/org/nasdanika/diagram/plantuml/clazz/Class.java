@@ -4,7 +4,6 @@ public class Class extends Type {
 	
 	public Class(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
 	private boolean isAbstract;

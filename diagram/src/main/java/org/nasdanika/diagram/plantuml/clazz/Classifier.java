@@ -46,7 +46,7 @@ public abstract class Classifier extends DiagramElement {
 		
 		// TODO - generic parameters and styling
 		
-		return ret.append(" {").toString();
+		return ret.append(getLinkString()).append(" {").toString();
 	}
 
 }
