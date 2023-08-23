@@ -3,7 +3,7 @@ package org.nasdanika.diagram.plantuml.clazz;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Enum extends Classifier {
+public class Enum extends DataType {
 	
 	public Enum(String name) {
 		super(name);

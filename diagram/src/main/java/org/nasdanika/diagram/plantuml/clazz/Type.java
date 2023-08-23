@@ -9,6 +9,12 @@ public abstract class Type extends Classifier {
 		super(name);
 	}
 	
+	private List<Supertype> supertypes = new ArrayList<>();
+	
+	public List<Supertype> getSupertypes() {
+		return supertypes;
+	}
+	
 	private List<Attribute> attributes = new ArrayList<>();
 	
 	public List<Attribute> getAttributes() {
@@ -31,8 +37,18 @@ public abstract class Type extends Classifier {
 	public List<String> generate() {
 		List<String> ret = new ArrayList<>();
 		ret.add(generateDeclaration());
+		if (!getSupertypes().isEmpty()) {
+			for (Supertype supertype: getSupertypes()) {
+				ret.add(INDENT + supertype.toString());
+			}
+			ret.add("==");
+		}
 		for (Attribute attribute: getAttributes()) {
 			ret.add(INDENT + attribute.toString());
+		}
+		
+		if (!getAttributes().isEmpty() && !getOperations().isEmpty() && !getSupertypes().isEmpty()) {
+			ret.add("--");
 		}
 		for (Operation operation: getOperations()) {
 			ret.add(INDENT + operation.toString());
