@@ -1,13 +1,12 @@
 package org.nasdanika.diagram.plantuml;
 
-import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Util;
 
 public class Link {
 	
 	private String label;
 	private String tooltip;
-	private URI location;
+	private String location;
 	
 	public Link(String label) {
 		this.label = label;
@@ -16,7 +15,7 @@ public class Link {
 	public Link() {
 	}
 
-	public Link(String label, URI location, String tooltip) {
+	public Link(String label, String location, String tooltip) {
 		super();
 		this.label = label;
 		this.location = location;
@@ -35,10 +34,10 @@ public class Link {
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-	public URI getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(URI location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}
 	

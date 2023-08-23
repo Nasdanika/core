@@ -19,7 +19,9 @@ public class ClassDiagram {
 		StringBuilder sb = new StringBuilder();
 		List<Relation> relations = new ArrayList<>();
 		for (DiagramElement de: diagramElements) {
-			sb.append(de.generate()).append(System.lineSeparator());
+			for (String line: de.generate()) {
+				sb.append(line).append(System.lineSeparator());
+			}
 			de.accept(e -> {
 				if (e instanceof DiagramElement) {
 					for (Connection oc: ((DiagramElement) e).getOutgoingConnections()) {

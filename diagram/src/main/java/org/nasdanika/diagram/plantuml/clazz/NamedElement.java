@@ -3,14 +3,13 @@ package org.nasdanika.diagram.plantuml.clazz;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.plantuml.Link;
 
 public class NamedElement {
 	
 	private String tooltip;
-	private URI location;	
+	private String location;	
 	private List<Link> name = new ArrayList<>();
 	
 	public String getTooltip() {
@@ -19,10 +18,10 @@ public class NamedElement {
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-	public URI getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(URI location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}	
 	public List<Link> getName() {
@@ -38,15 +37,21 @@ public class NamedElement {
 			return ""; 
 		}
 		
-		StringBuilder sb = new StringBuilder(" [[");
+		StringBuilder sb = new StringBuilder(getLinkStringPrefix());
 		if (location != null) {
 			sb.append(location);
 		}
 		if (!Util.isBlank(tooltip)) {
 			sb.append("{").append(tooltip).append("}");
 		}
-		sb.append("]]");
+		sb.append(getLinkStringSuffix());
 		return sb.toString();
+	}
+	protected String getLinkStringSuffix() {
+		return "]]";
+	}
+	protected String getLinkStringPrefix() {
+		return " [[";
 	}
 	
 }

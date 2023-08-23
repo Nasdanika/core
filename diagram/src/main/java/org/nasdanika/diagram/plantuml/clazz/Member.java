@@ -15,6 +15,12 @@ public abstract class Member extends NamedElement {
 
 	protected String getTypeString() {
 		return getType().stream().map(Link::toString).reduce("", (a,b) -> a + b);
+	}	
+	protected String getLinkStringSuffix() {
+		return "]]]";
+	}
+	protected String getLinkStringPrefix() {
+		return " [[[";
 	}
 		
 }
