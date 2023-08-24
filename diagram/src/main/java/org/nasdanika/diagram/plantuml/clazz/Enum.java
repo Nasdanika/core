@@ -20,4 +20,16 @@ public class Enum extends DataType {
 		return "enum";
 	}	
 	
+	@Override
+	public List<String> generate() {
+		List<String> ret = new ArrayList<>();
+		ret.add(generateDeclaration());
+		for (EnumLiteral literal: getLiterals()) {
+			ret.add(INDENT + literal.toString());
+		}		
+		ret.add("}");
+		return ret;
+	}	
+	
+	
 }

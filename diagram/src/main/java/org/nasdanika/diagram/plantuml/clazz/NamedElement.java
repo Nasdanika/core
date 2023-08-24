@@ -54,4 +54,9 @@ public class NamedElement {
 		return " [[";
 	}
 	
+	@Override
+	public String toString() {
+		return getNameString() + getLinkString();
+	}
+	
 }
