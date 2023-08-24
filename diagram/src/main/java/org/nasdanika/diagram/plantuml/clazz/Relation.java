@@ -3,7 +3,6 @@ package org.nasdanika.diagram.plantuml.clazz;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.plantuml.Link;
 import org.nasdanika.graph.SimpleConnection;
@@ -15,7 +14,7 @@ public abstract class Relation extends SimpleConnection {
 	}
 
 	private String tooltip;
-	private URI location;	
+	private String location;	
 	private List<Link> name = new ArrayList<>();
 	public String getTooltip() {
 		return tooltip;
@@ -23,10 +22,10 @@ public abstract class Relation extends SimpleConnection {
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-	public URI getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(URI location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}	
 	
@@ -64,19 +63,19 @@ public abstract class Relation extends SimpleConnection {
 		}
 		
 		if (!Util.isBlank(sourceDecoration)) {
-			ret.append(" ").append(sourceDecoration);
+			ret.append(" \"").append(sourceDecoration).append("\"");
 		}
 			
 		ret.append(" ");			
 		ret.append(getType());
 
 		if (!Util.isBlank(targetDecoration)) {
-			ret.append(" ").append(targetDecoration);
+			ret.append(" \"").append(targetDecoration).append("\"");
 		}
 		
 		ret.append(" ");
 		
-		DiagramElement targetDiagramElement = (DiagramElement) getSource();
+		DiagramElement targetDiagramElement = (DiagramElement) getTarget();
 		String tid = targetDiagramElement.getId();
 		if (Util.isBlank(tid)) {
 			ret.append(targetDiagramElement.getNameString());
@@ -100,7 +99,7 @@ public abstract class Relation extends SimpleConnection {
 			name.forEach(ret::append);
 		}
 		
-		return super.toString();
+		return ret.toString();
 	}	
 
 }

@@ -3,8 +3,8 @@ package org.nasdanika.diagram.plantuml.clazz;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.Util;
 import org.nasdanika.diagram.plantuml.Link;
 import org.nasdanika.graph.SimpleNode;
@@ -16,9 +16,11 @@ public class DiagramElement extends SimpleNode {
 	
 //	public record Result(List<String> lines, List<String> relations) {};
 	
-	private String id;
+	private static AtomicInteger counter = new AtomicInteger();
+	
+	private String id = "DE_" + Integer.toString(counter.incrementAndGet(), Character.MAX_RADIX);
 	private String tooltip;
-	private URI location;
+	private String location;
 	private List<Link> name = new ArrayList<>();
 	private String style;
 	
@@ -36,10 +38,10 @@ public class DiagramElement extends SimpleNode {
 	public void setTooltip(String tooltip) {
 		this.tooltip = tooltip;
 	}
-	public URI getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(URI location) {
+	public void setLocation(String location) {
 		this.location = location;
 	}	
 	public String getId() {
@@ -63,7 +65,7 @@ public class DiagramElement extends SimpleNode {
 	}
 	
 	protected String getLinkString() {
-		if (location == null && Util.isBlank(tooltip)) {
+		if (Util.isBlank(location) && Util.isBlank(tooltip)) {
 			return ""; 
 		}
 		

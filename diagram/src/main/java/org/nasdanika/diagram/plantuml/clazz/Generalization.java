@@ -8,7 +8,7 @@ public class Generalization extends Relation {
 
 	@Override
 	protected String getType() {
-		return "--|>";
+		return "-u-|>";
 	}
 
 }

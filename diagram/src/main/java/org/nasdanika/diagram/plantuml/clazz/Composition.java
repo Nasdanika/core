@@ -8,7 +8,7 @@ public class Composition extends Relation {
 
 	@Override
 	protected String getType() {
-		return "*--";
+		return "*-->";
 	}
 
 }

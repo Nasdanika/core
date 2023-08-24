@@ -8,7 +8,7 @@ public class Aggregation extends Relation {
 
 	@Override
 	protected String getType() {
-		return "o--";
+		return "o-->";
 	}
 
 }
