@@ -17,4 +17,9 @@ public class Parameter extends NamedElement {
 		return getType().stream().map(Link::toString).reduce("", (a,b) -> a + b);
 	}
 	
+	@Override
+	public String toString() {
+		return (getType().isEmpty() ? getNameString() : getNameString() + " : " + getTypeString()) + getLinkString();
+	}	
+	
 }

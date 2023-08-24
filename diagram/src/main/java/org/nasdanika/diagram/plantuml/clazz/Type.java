@@ -9,10 +9,10 @@ public abstract class Type extends Classifier {
 		super(name);
 	}
 	
-	private List<Supertype> supertypes = new ArrayList<>();
+	private List<SuperType> superTypes = new ArrayList<>();
 	
-	public List<Supertype> getSupertypes() {
-		return supertypes;
+	public List<SuperType> getSuperTypes() {
+		return superTypes;
 	}
 	
 	private List<Attribute> attributes = new ArrayList<>();
@@ -27,9 +27,13 @@ public abstract class Type extends Classifier {
 		return operations;
 	}
 	
-	private List<Reference> references = new ArrayList<>();
+	private List<Attribute> references = new ArrayList<>();
 	
-	public List<Reference> getReferences() {
+	/**
+	 * References to elements not present on the diagram are shown as attributes in their own section below attributes and above operations. 
+	 * @return
+	 */
+	public List<Attribute> getReferences() {
 		return references;
 	}	
 	
@@ -37,8 +41,8 @@ public abstract class Type extends Classifier {
 	public List<String> generate() {
 		List<String> ret = new ArrayList<>();
 		ret.add(generateDeclaration());
-		if (!getSupertypes().isEmpty()) {
-			for (Supertype supertype: getSupertypes()) {
+		if (!getSuperTypes().isEmpty()) {
+			for (SuperType supertype: getSuperTypes()) {
 				ret.add(INDENT + supertype.toString());
 			}
 			ret.add("==");
@@ -46,19 +50,20 @@ public abstract class Type extends Classifier {
 		for (Attribute attribute: getAttributes()) {
 			ret.add(INDENT + attribute.toString());
 		}
-		
-		if (!getAttributes().isEmpty() && !getOperations().isEmpty() && !getSupertypes().isEmpty()) {
-			ret.add("--");
-		}
-		for (Operation operation: getOperations()) {
-			ret.add(INDENT + operation.toString());
-		}
+
 		if (!getReferences().isEmpty()) {
 			ret.add(INDENT + "--");
-			for (Reference reference: getReferences()) {
+			for (Attribute reference: getReferences()) {
 				ret.add(INDENT + reference.toString());
 			}
 		}
+		
+		ret.add("--");
+		
+		for (Operation operation: getOperations()) {
+			ret.add(INDENT + operation.toString());
+		}
+		
 		ret.add("}");
 		return ret;
 	}	

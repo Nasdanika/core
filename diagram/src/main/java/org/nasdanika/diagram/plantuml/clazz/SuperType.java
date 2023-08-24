@@ -3,7 +3,7 @@ package org.nasdanika.diagram.plantuml.clazz;
 /**
  * Supertype element for a class if a supertype is not present as a diagram element.
  */
-public class Supertype extends Member {
+public class SuperType extends Member {
 
 	@Override
 	public String toString() {
