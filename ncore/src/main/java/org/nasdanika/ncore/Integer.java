@@ -50,4 +50,10 @@ public interface Integer extends EObject {
 	 */
 	void setValue(int value);
 
+	static Integer wrap(java.lang.Integer val) {
+		Integer ret = NcoreFactory.eINSTANCE.createInteger();
+		ret.setValue(val);
+		return ret;
+	}	
+	
 } // Integer

@@ -50,5 +50,12 @@ public interface EObjectProperty extends Property {
 	 * @generated
 	 */
 	void setValue(EObject value);
+	
+	static EObjectProperty wrap(java.lang.String name, EObject val) {
+		EObjectProperty ret = NcoreFactory.eINSTANCE.createEObjectProperty();
+		ret.setName(name);
+		ret.setValue(val);
+		return ret;
+	}		
 
 } // EObjectProperty

@@ -85,6 +85,15 @@
     <genClasses ecoreClass="ncore.ecore#//Integer">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Integer/value"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Double">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Double/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Date">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Date/value"/>
+    </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//Long">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Long/value"/>
+    </genClasses>
     <genClasses ecoreClass="ncore.ecore#//Boolean">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Boolean/value"/>
     </genClasses>
@@ -93,6 +102,9 @@
     </genClasses>
     <genClasses ecoreClass="ncore.ecore#//StringProperty"/>
     <genClasses ecoreClass="ncore.ecore#//IntegerProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//DoubleProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//LongProperty"/>
+    <genClasses ecoreClass="ncore.ecore#//DateProperty"/>
     <genClasses ecoreClass="ncore.ecore#//MapProperty"/>
     <genClasses ecoreClass="ncore.ecore#//ListProperty"/>
     <genClasses ecoreClass="ncore.ecore#//BooleanProperty"/>

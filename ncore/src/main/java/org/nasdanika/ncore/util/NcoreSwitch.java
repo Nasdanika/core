@@ -9,12 +9,16 @@ import org.eclipse.emf.ecore.util.Switch;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Date;
+import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.LongProperty;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.ModelElement;
@@ -192,6 +196,24 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.DOUBLE: {
+				org.nasdanika.ncore.Double double_ = (org.nasdanika.ncore.Double)theEObject;
+				T1 result = caseDouble(double_);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DATE: {
+				Date date = (Date)theEObject;
+				T1 result = caseDate(date);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.LONG: {
+				org.nasdanika.ncore.Long long_ = (org.nasdanika.ncore.Long)theEObject;
+				T1 result = caseLong(long_);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.BOOLEAN: {
 				org.nasdanika.ncore.Boolean boolean_ = (org.nasdanika.ncore.Boolean)theEObject;
 				T1 result = caseBoolean(boolean_);
@@ -217,6 +239,30 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				T1 result = caseIntegerProperty(integerProperty);
 				if (result == null) result = caseProperty(integerProperty);
 				if (result == null) result = caseInteger(integerProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DOUBLE_PROPERTY: {
+				DoubleProperty doubleProperty = (DoubleProperty)theEObject;
+				T1 result = caseDoubleProperty(doubleProperty);
+				if (result == null) result = caseProperty(doubleProperty);
+				if (result == null) result = caseDouble(doubleProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.LONG_PROPERTY: {
+				LongProperty longProperty = (LongProperty)theEObject;
+				T1 result = caseLongProperty(longProperty);
+				if (result == null) result = caseProperty(longProperty);
+				if (result == null) result = caseLong(longProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DATE_PROPERTY: {
+				DateProperty dateProperty = (DateProperty)theEObject;
+				T1 result = caseDateProperty(dateProperty);
+				if (result == null) result = caseProperty(dateProperty);
+				if (result == null) result = caseDate(dateProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -525,6 +571,51 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Double</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Double</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDouble(org.nasdanika.ncore.Double object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Date</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDate(Date object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Long</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Long</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseLong(org.nasdanika.ncore.Long object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Boolean</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -581,6 +672,51 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseIntegerProperty(IntegerProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Double Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Double Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDoubleProperty(DoubleProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Long Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Long Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseLongProperty(LongProperty object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Date Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Date Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDateProperty(DateProperty object) {
 		return null;
 	}
 

@@ -103,6 +103,33 @@ public interface NcoreFactory extends EFactory {
 	Integer createInteger();
 
 	/**
+	 * Returns a new object of class '<em>Double</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Double</em>'.
+	 * @generated
+	 */
+	Double createDouble();
+
+	/**
+	 * Returns a new object of class '<em>Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Date</em>'.
+	 * @generated
+	 */
+	Date createDate();
+
+	/**
+	 * Returns a new object of class '<em>Long</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Long</em>'.
+	 * @generated
+	 */
+	Long createLong();
+
+	/**
 	 * Returns a new object of class '<em>Boolean</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -128,6 +155,33 @@ public interface NcoreFactory extends EFactory {
 	 * @generated
 	 */
 	IntegerProperty createIntegerProperty();
+
+	/**
+	 * Returns a new object of class '<em>Double Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Double Property</em>'.
+	 * @generated
+	 */
+	DoubleProperty createDoubleProperty();
+
+	/**
+	 * Returns a new object of class '<em>Long Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Long Property</em>'.
+	 * @generated
+	 */
+	LongProperty createLongProperty();
+
+	/**
+	 * Returns a new object of class '<em>Date Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Date Property</em>'.
+	 * @generated
+	 */
+	DateProperty createDateProperty();
 
 	/**
 	 * Returns a new object of class '<em>Map Property</em>'.

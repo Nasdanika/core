@@ -11,12 +11,16 @@ import org.eclipse.emf.ecore.EObject;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Date;
+import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.LongProperty;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.ModelElement;
@@ -147,6 +151,18 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createIntegerAdapter();
 			}
 			@Override
+			public Adapter caseDouble(org.nasdanika.ncore.Double object) {
+				return createDoubleAdapter();
+			}
+			@Override
+			public Adapter caseDate(Date object) {
+				return createDateAdapter();
+			}
+			@Override
+			public Adapter caseLong(org.nasdanika.ncore.Long object) {
+				return createLongAdapter();
+			}
+			@Override
 			public Adapter caseBoolean(org.nasdanika.ncore.Boolean object) {
 				return createBooleanAdapter();
 			}
@@ -161,6 +177,18 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseIntegerProperty(IntegerProperty object) {
 				return createIntegerPropertyAdapter();
+			}
+			@Override
+			public Adapter caseDoubleProperty(DoubleProperty object) {
+				return createDoublePropertyAdapter();
+			}
+			@Override
+			public Adapter caseLongProperty(LongProperty object) {
+				return createLongPropertyAdapter();
+			}
+			@Override
+			public Adapter caseDateProperty(DateProperty object) {
+				return createDatePropertyAdapter();
 			}
 			@Override
 			public Adapter caseMapProperty(MapProperty object) {
@@ -433,6 +461,48 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Double <em>Double</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Double
+	 * @generated
+	 */
+	public Adapter createDoubleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Date <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Date
+	 * @generated
+	 */
+	public Adapter createDateAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Long <em>Long</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.Long
+	 * @generated
+	 */
+	public Adapter createLongAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.Boolean <em>Boolean</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -485,6 +555,48 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIntegerPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.DoubleProperty <em>Double Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.DoubleProperty
+	 * @generated
+	 */
+	public Adapter createDoublePropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.LongProperty <em>Long Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.LongProperty
+	 * @generated
+	 */
+	public Adapter createLongPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.DateProperty <em>Date Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.DateProperty
+	 * @generated
+	 */
+	public Adapter createDatePropertyAdapter() {
 		return null;
 	}
 

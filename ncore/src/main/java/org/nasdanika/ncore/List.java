@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.util.ArrayList;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -43,21 +45,27 @@ public interface List extends EObject {
 	EList<EObject> getValue();
 	
 	default void add(boolean value) {
-		org.nasdanika.ncore.Boolean valueObject = NcoreFactory.eINSTANCE.createBoolean();
-		valueObject.setValue(value);
-		getValue().add(valueObject);
+		getValue().add(Boolean.wrap(value));
 	}
 	
 	default void add(int value) {
-		org.nasdanika.ncore.Integer valueObject = NcoreFactory.eINSTANCE.createInteger();
-		valueObject.setValue(value);
-		getValue().add(valueObject);
+		getValue().add(Integer.wrap(value));
 	}
 	
 	default void add(java.lang.String value) {
-		org.nasdanika.ncore.String valueObject = NcoreFactory.eINSTANCE.createString();
-		valueObject.setValue(value);
-		getValue().add(valueObject);
+		getValue().add(String.wrap(value));
+	}
+	
+	default void add(java.lang.Double value) {
+		getValue().add(Double.wrap(value));
+	}
+	
+	default void add(java.lang.Long value) {
+		getValue().add(Long.wrap(value));
+	}
+	
+	default void add(java.util.Date value) {
+		getValue().add(Date.wrap(value));
 	}
 	
 	default void add(EObject value) {
@@ -65,34 +73,64 @@ public interface List extends EObject {
 	}
 	
 	default void add(java.util.Map<java.lang.String,Object> map) {
-		getValue().add(Map.from(map));
+		getValue().add(Map.wrap(map));
 	}
 	
 	default void add(Iterable<?> iterable) {
-		getValue().add(List.from(iterable));
+		getValue().add(List.wrap(iterable));
 	}
 	
 	@SuppressWarnings("unchecked")
-	static List from(Iterable<?> iterable) {
+	static List wrap(Iterable<?> iterable) {
 		List ret = NcoreFactory.eINSTANCE.createList();
 		for (Object element: iterable) {
-			if (element instanceof Boolean) {
-				ret.add((boolean) element);
-			} else if (element instanceof EObject) {
+			if (element instanceof EObject) {
 				ret.add((EObject) element);
-			} else if (element instanceof Integer) {
-				ret.add((int) element);
 			} else if (element instanceof Iterable) {
-				ret.add((Iterable<?>) element);
-			} else if (element instanceof java.lang.String) {
-				ret.add((java.lang.String) element);
+				ret.add(wrap((Iterable<?>) element));
 			} else if (element instanceof java.util.Map) {
-				ret.add((java.util.Map<java.lang.String,Object>) element);
+				ret.add(Map.wrap((java.util.Map<java.lang.String,Object>) element));
+			} else if (element instanceof java.lang.Boolean) {
+				ret.add(Boolean.wrap((java.lang.Boolean) element));
+			} else if (element instanceof java.lang.Integer) {
+				ret.add(Integer.wrap((java.lang.Integer) element));
+			} else if (element instanceof java.lang.Double) {
+				ret.add(Double.wrap((java.lang.Double) element));
+			} else if (element instanceof java.lang.Long) {
+				ret.add(Long.wrap((java.lang.Long) element));
+			} else if (element instanceof java.util.Date) {
+				ret.add(Date.wrap((java.util.Date) element));
+			} else if (element instanceof java.lang.String) {
+				ret.add(String.wrap((java.lang.String) element));
 			} else if (element != null) {
 				throw new IllegalArgumentException("Cannot add " + element.getClass() + " to List. Value: " + element);
 			}
 		}
 		return ret;
-	}		
+	}	
+		
+	default java.util.List<Object> toList() {
+		java.util.List<Object> ret = new ArrayList<>();
+		for (EObject e: getValue()) {
+			if (e instanceof List) {
+				ret.add(((List) e).toList());
+			} else if (e instanceof Map) {
+				ret.add(((Map) e).toMap());
+			} else if (e instanceof Boolean) {
+				ret.add(((Boolean) e).isValue());
+			} else if (e instanceof Date) {
+				ret.add(((Date) e).getValue());
+			} else if (e instanceof Double) {
+				ret.add(((Double) e).getValue());
+			} else if (e instanceof Integer) {
+				ret.add(((Integer) e).getValue());
+			} else if (e instanceof Long) {
+				ret.add(((Long) e).getValue());
+			} else if (e instanceof String) {
+				ret.add(((String) e).getValue());
+			}
+		}
+		return ret;
+	}	
 
 } // List

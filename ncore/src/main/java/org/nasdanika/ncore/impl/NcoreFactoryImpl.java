@@ -15,11 +15,15 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Date;
+import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.LongProperty;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.Marker;
@@ -85,9 +89,15 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.LIST: return createList();
 			case NcorePackage.MAP: return createMap();
 			case NcorePackage.INTEGER: return createInteger();
+			case NcorePackage.DOUBLE: return createDouble();
+			case NcorePackage.DATE: return createDate();
+			case NcorePackage.LONG: return createLong();
 			case NcorePackage.BOOLEAN: return createBoolean();
 			case NcorePackage.STRING_PROPERTY: return createStringProperty();
 			case NcorePackage.INTEGER_PROPERTY: return createIntegerProperty();
+			case NcorePackage.DOUBLE_PROPERTY: return createDoubleProperty();
+			case NcorePackage.LONG_PROPERTY: return createLongProperty();
+			case NcorePackage.DATE_PROPERTY: return createDateProperty();
 			case NcorePackage.MAP_PROPERTY: return createMapProperty();
 			case NcorePackage.LIST_PROPERTY: return createListProperty();
 			case NcorePackage.BOOLEAN_PROPERTY: return createBooleanProperty();
@@ -251,6 +261,39 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
+	public org.nasdanika.ncore.Double createDouble() {
+		DoubleImpl double_ = new DoubleImpl();
+		return double_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Date createDate() {
+		DateImpl date = new DateImpl();
+		return date;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public org.nasdanika.ncore.Long createLong() {
+		LongImpl long_ = new LongImpl();
+		return long_;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public org.nasdanika.ncore.Boolean createBoolean() {
 		BooleanImpl boolean_ = new BooleanImpl();
 		return boolean_;
@@ -276,6 +319,39 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public IntegerProperty createIntegerProperty() {
 		IntegerPropertyImpl integerProperty = new IntegerPropertyImpl();
 		return integerProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DoubleProperty createDoubleProperty() {
+		DoublePropertyImpl doubleProperty = new DoublePropertyImpl();
+		return doubleProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LongProperty createLongProperty() {
+		LongPropertyImpl longProperty = new LongPropertyImpl();
+		return longProperty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DateProperty createDateProperty() {
+		DatePropertyImpl dateProperty = new DatePropertyImpl();
+		return dateProperty;
 	}
 
 	/**

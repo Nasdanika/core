@@ -18,4 +18,12 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface BooleanProperty extends Property, org.nasdanika.ncore.Boolean {
+		
+	static BooleanProperty wrap(java.lang.String name, java.lang.Boolean val) {
+		BooleanProperty ret = NcoreFactory.eINSTANCE.createBooleanProperty();
+		ret.setName(name);
+		ret.setValue(val);
+		return ret;
+	}
+	
 } // BooleanProperty

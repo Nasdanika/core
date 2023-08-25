@@ -18,4 +18,12 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface StringProperty extends Property, org.nasdanika.ncore.String {
+
+	static StringProperty wrap(java.lang.String name, java.lang.String val) {
+		StringProperty ret = NcoreFactory.eINSTANCE.createStringProperty();
+		ret.setName(name);
+		ret.setValue(val);
+		return ret;
+	}	
+
 } // StringProperty

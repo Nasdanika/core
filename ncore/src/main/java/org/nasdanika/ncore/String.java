@@ -50,4 +50,10 @@ public interface String extends EObject {
 	 */
 	void setValue(java.lang.String value);
 
+	static String wrap(java.lang.String val) {
+		String ret = NcoreFactory.eINSTANCE.createString();
+		ret.setValue(val);
+		return ret;
+	}		
+	
 } // String

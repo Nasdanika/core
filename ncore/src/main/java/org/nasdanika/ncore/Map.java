@@ -3,6 +3,7 @@
 package org.nasdanika.ncore;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.eclipse.emf.common.util.EList;
@@ -56,6 +57,60 @@ public interface Map extends EObject {
 		}
 		
 		return null;
+	}
+	
+	default Property put(java.lang.String key, long value) {
+		LongProperty property = NcoreFactory.eINSTANCE.createLongProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, double value) {
+		DoubleProperty property = NcoreFactory.eINSTANCE.createDoubleProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
+	}
+	
+	default Property put(java.lang.String key, java.util.Date value) {
+		DateProperty property = NcoreFactory.eINSTANCE.createDateProperty();
+		property.setName(key);
+		property.setValue(value);
+		Property ret = null;
+		Iterator<Property> pit = getValue().iterator();
+		while (pit.hasNext()) {
+			Property next = pit.next();			
+			if (key.equals(next.getName())) {
+				pit.remove();
+				ret = next;
+				break;
+			}
+		}
+		getValue().add(property);
+		return ret;
 	}
 	
 	default Property put(java.lang.String key, boolean value) {
@@ -144,7 +199,7 @@ public interface Map extends EObject {
 			}
 		}
 		if (value != null) {
-			MapProperty property = MapProperty.from(value);
+			MapProperty property = MapProperty.wrap(key, value);
 			property.setName(key);
 			getValue().add(property);
 		}
@@ -163,7 +218,7 @@ public interface Map extends EObject {
 			}
 		}
 		if (value != null) {
-			ListProperty property = ListProperty.from(value);;
+			ListProperty property = ListProperty.wrap(key, value);;
 			property.setName(key);
 			getValue().add(property);
 		}
@@ -171,17 +226,23 @@ public interface Map extends EObject {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static Map from(java.util.Map<java.lang.String, ?> map) {
+	static Map wrap(java.util.Map<java.lang.String, ?> map) {
 		Map ret = NcoreFactory.eINSTANCE.createMap();
 		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
 			java.lang.String key = entry.getKey();
 			Object value = entry.getValue();
-			if (value instanceof Boolean) {
-				ret.put(key, (Boolean) value);
+			if (value instanceof java.lang.Boolean) {
+				ret.put(key, (java.lang.Boolean) value);
 			} else if (value instanceof EObject) {
 				ret.put(key, (EObject) value);
-			} else if (value instanceof Integer) {
-				ret.put(key, (Integer) value);
+			} else if (value instanceof java.lang.Integer) {
+				ret.put(key, (java.lang.Integer) value);
+			} else if (value instanceof java.lang.Long) {
+				ret.put(key, (java.lang.Long) value);
+			} else if (value instanceof java.lang.Double) {
+				ret.put(key, (java.lang.Double) value);
+			} else if (value instanceof java.util.Date) {
+				ret.put(key, (java.util.Date) value);
 			} else if (value instanceof Iterable) {
 				ret.put(key, (Iterable<?>) value);
 			} else if (value instanceof java.lang.String) {
@@ -194,5 +255,30 @@ public interface Map extends EObject {
 		}
 		return ret;
 	}	
+	
+	default java.util.Map<java.lang.String, ?> toMap() {
+		java.util.Map<java.lang.String, Object> ret = new LinkedHashMap<>();
+		for (EObject e: getValue()) {
+			if (e instanceof ListProperty) {
+				ret.add(((ListProperty) e).toList());
+			} else if (e instanceof MapProperty) {
+				ret.add(((MapProperty) e).toMap());
+			} else if (e instanceof BooleanProperty) {
+				ret.add(((Boolean) e).isValue());
+			} else if (e instanceof DateProperty) {
+				ret.add(((DateProperty) e).getValue());
+			} else if (e instanceof DoubleProperty) {
+				ret.add(((DoubleProperty) e).getValue());
+			} else if (e instanceof IntegerProperty) {
+				ret.add(((IntegerProperty) e).getValue());
+			} else if (e instanceof LongProperty) {
+				ret.add(((LongProperty) e).getValue());
+			} else if (e instanceof StringProperty) {
+				ret.add(((StringProperty) e).getValue());
+			}
+		}
+		return ret;
+		
+	}
 
 } // Map

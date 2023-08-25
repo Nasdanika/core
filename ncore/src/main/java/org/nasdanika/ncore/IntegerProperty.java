@@ -18,4 +18,12 @@ package org.nasdanika.ncore;
  * @generated
  */
 public interface IntegerProperty extends Property, org.nasdanika.ncore.Integer {
+
+	static IntegerProperty wrap(java.lang.String name, java.lang.Integer val) {
+		IntegerProperty ret = NcoreFactory.eINSTANCE.createIntegerProperty();
+		ret.setName(name);
+		ret.setValue(val);
+		return ret;
+	}	
+	
 } // IntegerProperty

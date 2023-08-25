@@ -17,12 +17,16 @@ import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.nasdanika.common.Adaptable;
 import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
+import org.nasdanika.ncore.Date;
+import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
+import org.nasdanika.ncore.LongProperty;
 import org.nasdanika.ncore.MapProperty;
 import org.nasdanika.ncore.ModelElement;
 import org.nasdanika.ncore.NamedElement;
@@ -137,6 +141,12 @@ public class NcoreValidator extends EObjectValidator {
 				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
 			case NcorePackage.INTEGER:
 				return validateInteger((org.nasdanika.ncore.Integer)value, diagnostics, context);
+			case NcorePackage.DOUBLE:
+				return validateDouble((org.nasdanika.ncore.Double)value, diagnostics, context);
+			case NcorePackage.DATE:
+				return validateDate((Date)value, diagnostics, context);
+			case NcorePackage.LONG:
+				return validateLong((org.nasdanika.ncore.Long)value, diagnostics, context);
 			case NcorePackage.BOOLEAN:
 				return validateBoolean((org.nasdanika.ncore.Boolean)value, diagnostics, context);
 			case NcorePackage.PROPERTY:
@@ -145,6 +155,12 @@ public class NcoreValidator extends EObjectValidator {
 				return validateStringProperty((StringProperty)value, diagnostics, context);
 			case NcorePackage.INTEGER_PROPERTY:
 				return validateIntegerProperty((IntegerProperty)value, diagnostics, context);
+			case NcorePackage.DOUBLE_PROPERTY:
+				return validateDoubleProperty((DoubleProperty)value, diagnostics, context);
+			case NcorePackage.LONG_PROPERTY:
+				return validateLongProperty((LongProperty)value, diagnostics, context);
+			case NcorePackage.DATE_PROPERTY:
+				return validateDateProperty((DateProperty)value, diagnostics, context);
 			case NcorePackage.MAP_PROPERTY:
 				return validateMapProperty((MapProperty)value, diagnostics, context);
 			case NcorePackage.LIST_PROPERTY:
@@ -419,6 +435,33 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateDouble(org.nasdanika.ncore.Double double_, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(double_, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDate(Date date, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(date, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateLong(org.nasdanika.ncore.Long long_, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(long_, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateBoolean(org.nasdanika.ncore.Boolean boolean_, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(boolean_, diagnostics, context);
 	}
@@ -448,6 +491,33 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateIntegerProperty(IntegerProperty integerProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(integerProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDoubleProperty(DoubleProperty doubleProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(doubleProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateLongProperty(LongProperty longProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(longProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDateProperty(DateProperty dateProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(dateProperty, diagnostics, context);
 	}
 
 	/**

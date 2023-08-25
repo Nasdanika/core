@@ -49,5 +49,11 @@ public interface Boolean extends EObject {
 	 * @generated
 	 */
 	void setValue(boolean value);
+	
+	static Boolean wrap(java.lang.Boolean val) {
+		Boolean ret = NcoreFactory.eINSTANCE.createBoolean();
+		ret.setValue(val);
+		return ret;
+	}
 
 } // Boolean

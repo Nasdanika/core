@@ -21,8 +21,9 @@ import org.eclipse.emf.ecore.EObject;
 public interface ListProperty extends Property, List {
 		
 	@SuppressWarnings("unchecked")
-	static ListProperty from(Iterable<?> iterable) {
+	static ListProperty wrap(java.lang.String name, Iterable<?> iterable) {
 		ListProperty ret = NcoreFactory.eINSTANCE.createListProperty();
+		ret.setName(name);
 		for (Object element: iterable) {
 			if (element instanceof Boolean) {
 				ret.add((boolean) element);
