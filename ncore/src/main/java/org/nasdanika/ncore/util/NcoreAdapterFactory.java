@@ -221,14 +221,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createStringEntryAdapter();
 			}
 			@Override
-			public Adapter caseIntegerEntry(java.util.Map.Entry<String, Integer> object) {
-				return createIntegerEntryAdapter();
-			}
-			@Override
-			public Adapter caseBooleanEntry(java.util.Map.Entry<String, Boolean> object) {
-				return createBooleanEntryAdapter();
-			}
-			@Override
 			public Adapter caseGitMarker(GitMarker object) {
 				return createGitMarkerAdapter();
 			}
@@ -705,34 +697,6 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStringEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Integer Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createIntegerEntryAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>Boolean Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createBooleanEntryAdapter() {
 		return null;
 	}
 

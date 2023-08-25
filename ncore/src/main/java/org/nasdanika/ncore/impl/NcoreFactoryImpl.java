@@ -105,8 +105,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.MAP_PROPERTY: return createMapProperty();
 			case NcorePackage.STRING_PROPERTY: return createStringProperty();
 			case NcorePackage.STRING_ENTRY: return (EObject)createStringEntry();
-			case NcorePackage.INTEGER_ENTRY: return (EObject)createIntegerEntry();
-			case NcorePackage.BOOLEAN_ENTRY: return (EObject)createBooleanEntry();
 			case NcorePackage.GIT_MARKER: return createGitMarker();
 			case NcorePackage.COMPOSITE: return createComposite();
 			default:
@@ -419,26 +417,6 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public java.util.Map.Entry<String, String> createStringEntry() {
 		StringEntryImpl stringEntry = new StringEntryImpl();
 		return stringEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public java.util.Map.Entry<String, Integer> createIntegerEntry() {
-		IntegerEntryImpl integerEntry = new IntegerEntryImpl();
-		return integerEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public java.util.Map.Entry<String, Boolean> createBooleanEntry() {
-		BooleanEntryImpl booleanEntry = new BooleanEntryImpl();
-		return booleanEntry;
 	}
 
 	/**

@@ -337,18 +337,6 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.INTEGER_ENTRY: {
-				@SuppressWarnings("unchecked") java.util.Map.Entry<String, Integer> integerEntry = (java.util.Map.Entry<String, Integer>)theEObject;
-				T1 result = caseIntegerEntry(integerEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.BOOLEAN_ENTRY: {
-				@SuppressWarnings("unchecked") java.util.Map.Entry<String, Boolean> booleanEntry = (java.util.Map.Entry<String, Boolean>)theEObject;
-				T1 result = caseBooleanEntry(booleanEntry);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case NcorePackage.GIT_MARKER: {
 				GitMarker gitMarker = (GitMarker)theEObject;
 				T1 result = caseGitMarker(gitMarker);
@@ -856,36 +844,6 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseStringEntry(java.util.Map.Entry<String, String> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Integer Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Integer Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseIntegerEntry(java.util.Map.Entry<String, Integer> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Boolean Entry</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Boolean Entry</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseBooleanEntry(java.util.Map.Entry<String, Boolean> object) {
 		return null;
 	}
 

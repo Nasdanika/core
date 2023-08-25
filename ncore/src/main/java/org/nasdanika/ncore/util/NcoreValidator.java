@@ -177,10 +177,6 @@ public class NcoreValidator extends EObjectValidator {
 				return validateStringProperty((StringProperty)value, diagnostics, context);
 			case NcorePackage.STRING_ENTRY:
 				return validateStringEntry((Map.Entry<?, ?>)value, diagnostics, context);
-			case NcorePackage.INTEGER_ENTRY:
-				return validateIntegerEntry((Map.Entry<?, ?>)value, diagnostics, context);
-			case NcorePackage.BOOLEAN_ENTRY:
-				return validateBooleanEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case NcorePackage.GIT_MARKER:
 				return validateGitMarker((GitMarker)value, diagnostics, context);
 			case NcorePackage.DOCUMENTED:
@@ -587,24 +583,6 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateStringEntry(Map.Entry<?, ?> stringEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint((EObject)stringEntry, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateIntegerEntry(Map.Entry<?, ?> integerEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)integerEntry, diagnostics, context);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean validateBooleanEntry(Map.Entry<?, ?> booleanEntry, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint((EObject)booleanEntry, diagnostics, context);
 	}
 
 	/**

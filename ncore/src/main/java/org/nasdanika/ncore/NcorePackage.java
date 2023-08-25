@@ -1723,98 +1723,6 @@ public interface NcorePackage extends EPackage {
 	int STRING_ENTRY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerEntryImpl <em>Integer Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.IntegerEntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerEntry()
-	 * @generated
-	 */
-	int INTEGER_ENTRY = 32;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_ENTRY__KEY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_ENTRY__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Integer Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_ENTRY_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Integer Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_ENTRY_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.BooleanEntryImpl <em>Boolean Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.BooleanEntryImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanEntry()
-	 * @generated
-	 */
-	int BOOLEAN_ENTRY = 33;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_ENTRY__KEY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_ENTRY__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Boolean Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_ENTRY_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>Boolean Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_ENTRY_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.GitMarkerImpl <em>Git Marker</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1822,7 +1730,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getGitMarker()
 	 * @generated
 	 */
-	int GIT_MARKER = 34;
+	int GIT_MARKER = 32;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -1922,7 +1830,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumented()
 	 * @generated
 	 */
-	int DOCUMENTED = 35;
+	int DOCUMENTED = 33;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -1959,7 +1867,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getComposite()
 	 * @generated
 	 */
-	int COMPOSITE = 36;
+	int COMPOSITE = 34;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -2086,7 +1994,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 37;
+	int INSTANT = 35;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2096,7 +2004,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 38;
+	int DURATION = 36;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -2835,74 +2743,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getStringEntry_Value();
-
-	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Integer Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Integer Entry</em>'.
-	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
-	 *        valueDataType="org.eclipse.emf.ecore.EInt"
-	 * @generated
-	 */
-	EClass getIntegerEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getIntegerEntry()
-	 * @generated
-	 */
-	EAttribute getIntegerEntry_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getIntegerEntry()
-	 * @generated
-	 */
-	EAttribute getIntegerEntry_Value();
-
-	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Boolean Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Boolean Entry</em>'.
-	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString" keyRequired="true"
-	 *        valueDataType="org.eclipse.emf.ecore.EBoolean"
-	 * @generated
-	 */
-	EClass getBooleanEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getBooleanEntry()
-	 * @generated
-	 */
-	EAttribute getBooleanEntry_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getBooleanEntry()
-	 * @generated
-	 */
-	EAttribute getBooleanEntry_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.GitMarker <em>Git Marker</em>}'.
@@ -3705,58 +3545,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STRING_ENTRY__VALUE = eINSTANCE.getStringEntry_Value();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.IntegerEntryImpl <em>Integer Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.IntegerEntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerEntry()
-		 * @generated
-		 */
-		EClass INTEGER_ENTRY = eINSTANCE.getIntegerEntry();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INTEGER_ENTRY__KEY = eINSTANCE.getIntegerEntry_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INTEGER_ENTRY__VALUE = eINSTANCE.getIntegerEntry_Value();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.BooleanEntryImpl <em>Boolean Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.BooleanEntryImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanEntry()
-		 * @generated
-		 */
-		EClass BOOLEAN_ENTRY = eINSTANCE.getBooleanEntry();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BOOLEAN_ENTRY__KEY = eINSTANCE.getBooleanEntry_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BOOLEAN_ENTRY__VALUE = eINSTANCE.getBooleanEntry_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.GitMarkerImpl <em>Git Marker</em>}' class.

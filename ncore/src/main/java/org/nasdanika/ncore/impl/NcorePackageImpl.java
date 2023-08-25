@@ -281,20 +281,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass integerEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass booleanEntryEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass gitMarkerEClass = null;
 
 	/**
@@ -1102,66 +1088,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getIntegerEntry() {
-		return integerEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getIntegerEntry_Key() {
-		return (EAttribute)integerEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getIntegerEntry_Value() {
-		return (EAttribute)integerEntryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getBooleanEntry() {
-		return booleanEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBooleanEntry_Key() {
-		return (EAttribute)booleanEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBooleanEntry_Value() {
-		return (EAttribute)booleanEntryEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getGitMarker() {
 		return gitMarkerEClass;
 	}
@@ -1417,14 +1343,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(stringEntryEClass, STRING_ENTRY__KEY);
 		createEAttribute(stringEntryEClass, STRING_ENTRY__VALUE);
 
-		integerEntryEClass = createEClass(INTEGER_ENTRY);
-		createEAttribute(integerEntryEClass, INTEGER_ENTRY__KEY);
-		createEAttribute(integerEntryEClass, INTEGER_ENTRY__VALUE);
-
-		booleanEntryEClass = createEClass(BOOLEAN_ENTRY);
-		createEAttribute(booleanEntryEClass, BOOLEAN_ENTRY__KEY);
-		createEAttribute(booleanEntryEClass, BOOLEAN_ENTRY__VALUE);
-
 		gitMarkerEClass = createEClass(GIT_MARKER);
 		createEAttribute(gitMarkerEClass, GIT_MARKER__PATH);
 		createEReference(gitMarkerEClass, GIT_MARKER__REMOTES);
@@ -1677,14 +1595,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEClass(stringEntryEClass, java.util.Map.Entry.class, "StringEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStringEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStringEntry_Value(), ecorePackage.getEString(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(integerEntryEClass, java.util.Map.Entry.class, "IntegerEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getIntegerEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getIntegerEntry_Value(), ecorePackage.getEInt(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(booleanEntryEClass, java.util.Map.Entry.class, "BooleanEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getBooleanEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getBooleanEntry_Value(), ecorePackage.getEBoolean(), "value", null, 0, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(gitMarkerEClass, GitMarker.class, "GitMarker", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGitMarker_Path(), ecorePackage.getEString(), "path", null, 0, 1, GitMarker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2243,42 +2153,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   });
 		addAnnotation
 		  (getStringEntry_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Entry value."
-		   });
-		addAnnotation
-		  (integerEntryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "EMap entry with int value"
-		   });
-		addAnnotation
-		  (getIntegerEntry_Key(),
-		   source,
-		   new String[] {
-			   "documentation", "Entry key."
-		   });
-		addAnnotation
-		  (getIntegerEntry_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Entry value."
-		   });
-		addAnnotation
-		  (booleanEntryEClass,
-		   source,
-		   new String[] {
-			   "documentation", "EMap entry with boolean value"
-		   });
-		addAnnotation
-		  (getBooleanEntry_Key(),
-		   source,
-		   new String[] {
-			   "documentation", "Entry key."
-		   });
-		addAnnotation
-		  (getBooleanEntry_Value(),
 		   source,
 		   new String[] {
 			   "documentation", "Entry value."
