@@ -25,16 +25,6 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class StringImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.String {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String VALUE_EDEFAULT = null;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -70,7 +60,7 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 */
 	@Override
 	public String getValue() {
-		return (String)eDynamicGet(NcorePackage.STRING__VALUE, NcorePackage.Literals.STRING__VALUE, true, true);
+		return (String)eDynamicGet(NcorePackage.STRING__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -80,7 +70,7 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 */
 	@Override
 	public void setValue(String newValue) {
-		eDynamicSet(NcorePackage.STRING__VALUE, NcorePackage.Literals.STRING__VALUE, newValue);
+		eDynamicSet(NcorePackage.STRING__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -121,7 +111,7 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.STRING__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((String)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,7 +126,7 @@ public class StringImpl extends MinimalEObjectImpl.Container implements org.nasd
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.STRING__VALUE:
-				return VALUE_EDEFAULT == null ? getValue() != null : !VALUE_EDEFAULT.equals(getValue());
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

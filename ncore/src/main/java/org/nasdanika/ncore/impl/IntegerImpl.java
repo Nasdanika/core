@@ -25,16 +25,6 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class IntegerImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.Integer {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VALUE_EDEFAULT = 0;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -69,8 +59,8 @@ public class IntegerImpl extends MinimalEObjectImpl.Container implements org.nas
 	 * @generated
 	 */
 	@Override
-	public int getValue() {
-		return (Integer)eDynamicGet(NcorePackage.INTEGER__VALUE, NcorePackage.Literals.INTEGER__VALUE, true, true);
+	public Integer getValue() {
+		return (Integer)eDynamicGet(NcorePackage.INTEGER__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -79,8 +69,8 @@ public class IntegerImpl extends MinimalEObjectImpl.Container implements org.nas
 	 * @generated
 	 */
 	@Override
-	public void setValue(int newValue) {
-		eDynamicSet(NcorePackage.INTEGER__VALUE, NcorePackage.Literals.INTEGER__VALUE, newValue);
+	public void setValue(Integer newValue) {
+		eDynamicSet(NcorePackage.INTEGER__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -121,7 +111,7 @@ public class IntegerImpl extends MinimalEObjectImpl.Container implements org.nas
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.INTEGER__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((Integer)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,7 +126,7 @@ public class IntegerImpl extends MinimalEObjectImpl.Container implements org.nas
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.INTEGER__VALUE:
-				return getValue() != VALUE_EDEFAULT;
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

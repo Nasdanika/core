@@ -14,10 +14,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getDateProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.Date org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.EDate&gt;"
  * @generated
  */
-public interface DateProperty extends Property, Date {
+public interface DateProperty extends Date, ValueObjectProperty<java.util.Date> {
 	
 	static DateProperty wrap(java.lang.String name, java.util.Date val) {
 		DateProperty ret = NcoreFactory.eINSTANCE.createDateProperty();

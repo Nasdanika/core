@@ -18,22 +18,12 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.BooleanImpl#isValue <em>Value</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.BooleanImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.Boolean {
-	/**
-	 * The default value of the '{@link #isValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean VALUE_EDEFAULT = false;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -69,8 +59,8 @@ public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nas
 	 * @generated
 	 */
 	@Override
-	public boolean isValue() {
-		return (Boolean)eDynamicGet(NcorePackage.BOOLEAN__VALUE, NcorePackage.Literals.BOOLEAN__VALUE, true, true);
+	public Boolean getValue() {
+		return (Boolean)eDynamicGet(NcorePackage.BOOLEAN__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -79,8 +69,8 @@ public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nas
 	 * @generated
 	 */
 	@Override
-	public void setValue(boolean newValue) {
-		eDynamicSet(NcorePackage.BOOLEAN__VALUE, NcorePackage.Literals.BOOLEAN__VALUE, newValue);
+	public void setValue(Boolean newValue) {
+		eDynamicSet(NcorePackage.BOOLEAN__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -92,7 +82,7 @@ public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nas
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NcorePackage.BOOLEAN__VALUE:
-				return isValue();
+				return getValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -121,7 +111,7 @@ public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nas
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.BOOLEAN__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((Boolean)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,7 +126,7 @@ public class BooleanImpl extends MinimalEObjectImpl.Container implements org.nas
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.BOOLEAN__VALUE:
-				return isValue() != VALUE_EDEFAULT;
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

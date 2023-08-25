@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.String;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -11,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.List;
 import org.nasdanika.ncore.ListProperty;
@@ -24,12 +26,23 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.ListPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.ListPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ListPropertyImpl extends PropertyImpl implements ListProperty {
+public class ListPropertyImpl extends MinimalEObjectImpl.Container implements ListProperty {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -47,6 +60,36 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	protected EClass eStaticClass() {
 		return NcorePackage.Literals.LIST_PROPERTY;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.LIST_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.LIST_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, newName);
 	}
 
 	/**
@@ -82,6 +125,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.LIST_PROPERTY__NAME:
+				return getName();
 			case NcorePackage.LIST_PROPERTY__VALUE:
 				return getValue();
 		}
@@ -97,6 +142,9 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.LIST_PROPERTY__NAME:
+				setName((String)newValue);
+				return;
 			case NcorePackage.LIST_PROPERTY__VALUE:
 				getValue().clear();
 				getValue().addAll((Collection<? extends EObject>)newValue);
@@ -113,6 +161,9 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LIST_PROPERTY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case NcorePackage.LIST_PROPERTY__VALUE:
 				getValue().clear();
 				return;
@@ -128,6 +179,8 @@ public class ListPropertyImpl extends PropertyImpl implements ListProperty {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.LIST_PROPERTY__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case NcorePackage.LIST_PROPERTY__VALUE:
 				return !getValue().isEmpty();
 		}

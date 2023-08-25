@@ -34,6 +34,7 @@ import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.ValueObjectProperty;
 
 /**
  * <!-- begin-user-doc -->
@@ -86,22 +87,23 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.NAMED_ELEMENT: return createNamedElement();
 			case NcorePackage.REFERENCE: return createReference();
 			case NcorePackage.STRING: return createString();
-			case NcorePackage.LIST: return createList();
-			case NcorePackage.MAP: return createMap();
-			case NcorePackage.INTEGER: return createInteger();
+			case NcorePackage.BOOLEAN: return createBoolean();
 			case NcorePackage.DOUBLE: return createDouble();
 			case NcorePackage.DATE: return createDate();
+			case NcorePackage.INTEGER: return createInteger();
+			case NcorePackage.LIST: return createList();
 			case NcorePackage.LONG: return createLong();
-			case NcorePackage.BOOLEAN: return createBoolean();
-			case NcorePackage.STRING_PROPERTY: return createStringProperty();
-			case NcorePackage.INTEGER_PROPERTY: return createIntegerProperty();
-			case NcorePackage.DOUBLE_PROPERTY: return createDoubleProperty();
-			case NcorePackage.LONG_PROPERTY: return createLongProperty();
-			case NcorePackage.DATE_PROPERTY: return createDateProperty();
-			case NcorePackage.MAP_PROPERTY: return createMapProperty();
-			case NcorePackage.LIST_PROPERTY: return createListProperty();
+			case NcorePackage.MAP: return createMap();
+			case NcorePackage.VALUE_OBJECT_PROPERTY: return createValueObjectProperty();
 			case NcorePackage.BOOLEAN_PROPERTY: return createBooleanProperty();
+			case NcorePackage.DATE_PROPERTY: return createDateProperty();
+			case NcorePackage.DOUBLE_PROPERTY: return createDoubleProperty();
 			case NcorePackage.EOBJECT_PROPERTY: return createEObjectProperty();
+			case NcorePackage.INTEGER_PROPERTY: return createIntegerProperty();
+			case NcorePackage.LIST_PROPERTY: return createListProperty();
+			case NcorePackage.LONG_PROPERTY: return createLongProperty();
+			case NcorePackage.MAP_PROPERTY: return createMapProperty();
+			case NcorePackage.STRING_PROPERTY: return createStringProperty();
 			case NcorePackage.STRING_ENTRY: return (EObject)createStringEntry();
 			case NcorePackage.INTEGER_ENTRY: return (EObject)createIntegerEntry();
 			case NcorePackage.BOOLEAN_ENTRY: return (EObject)createBooleanEntry();
@@ -242,6 +244,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public Map createMap() {
 		MapImpl map = new MapImpl();
 		return map;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public <T> ValueObjectProperty<T> createValueObjectProperty() {
+		ValueObjectPropertyImpl<T> valueObjectProperty = new ValueObjectPropertyImpl<T>();
+		return valueObjectProperty;
 	}
 
 	/**

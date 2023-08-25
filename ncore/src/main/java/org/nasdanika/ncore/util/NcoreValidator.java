@@ -36,6 +36,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.ValueObject;
+import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
 
@@ -133,42 +135,46 @@ public class NcoreValidator extends EObjectValidator {
 				return validateNamedElement((NamedElement)value, diagnostics, context);
 			case NcorePackage.REFERENCE:
 				return validateReference((Reference<?>)value, diagnostics, context);
+			case NcorePackage.VALUE_OBJECT:
+				return validateValueObject((ValueObject<?>)value, diagnostics, context);
 			case NcorePackage.STRING:
 				return validateString((org.nasdanika.ncore.String)value, diagnostics, context);
-			case NcorePackage.LIST:
-				return validateList((List)value, diagnostics, context);
-			case NcorePackage.MAP:
-				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
-			case NcorePackage.INTEGER:
-				return validateInteger((org.nasdanika.ncore.Integer)value, diagnostics, context);
+			case NcorePackage.BOOLEAN:
+				return validateBoolean((org.nasdanika.ncore.Boolean)value, diagnostics, context);
 			case NcorePackage.DOUBLE:
 				return validateDouble((org.nasdanika.ncore.Double)value, diagnostics, context);
 			case NcorePackage.DATE:
 				return validateDate((Date)value, diagnostics, context);
+			case NcorePackage.INTEGER:
+				return validateInteger((org.nasdanika.ncore.Integer)value, diagnostics, context);
+			case NcorePackage.LIST:
+				return validateList((List)value, diagnostics, context);
 			case NcorePackage.LONG:
 				return validateLong((org.nasdanika.ncore.Long)value, diagnostics, context);
-			case NcorePackage.BOOLEAN:
-				return validateBoolean((org.nasdanika.ncore.Boolean)value, diagnostics, context);
+			case NcorePackage.MAP:
+				return validateMap((org.nasdanika.ncore.Map)value, diagnostics, context);
 			case NcorePackage.PROPERTY:
 				return validateProperty((Property)value, diagnostics, context);
-			case NcorePackage.STRING_PROPERTY:
-				return validateStringProperty((StringProperty)value, diagnostics, context);
-			case NcorePackage.INTEGER_PROPERTY:
-				return validateIntegerProperty((IntegerProperty)value, diagnostics, context);
-			case NcorePackage.DOUBLE_PROPERTY:
-				return validateDoubleProperty((DoubleProperty)value, diagnostics, context);
-			case NcorePackage.LONG_PROPERTY:
-				return validateLongProperty((LongProperty)value, diagnostics, context);
-			case NcorePackage.DATE_PROPERTY:
-				return validateDateProperty((DateProperty)value, diagnostics, context);
-			case NcorePackage.MAP_PROPERTY:
-				return validateMapProperty((MapProperty)value, diagnostics, context);
-			case NcorePackage.LIST_PROPERTY:
-				return validateListProperty((ListProperty)value, diagnostics, context);
+			case NcorePackage.VALUE_OBJECT_PROPERTY:
+				return validateValueObjectProperty((ValueObjectProperty<?>)value, diagnostics, context);
 			case NcorePackage.BOOLEAN_PROPERTY:
 				return validateBooleanProperty((BooleanProperty)value, diagnostics, context);
+			case NcorePackage.DATE_PROPERTY:
+				return validateDateProperty((DateProperty)value, diagnostics, context);
+			case NcorePackage.DOUBLE_PROPERTY:
+				return validateDoubleProperty((DoubleProperty)value, diagnostics, context);
 			case NcorePackage.EOBJECT_PROPERTY:
 				return validateEObjectProperty((EObjectProperty)value, diagnostics, context);
+			case NcorePackage.INTEGER_PROPERTY:
+				return validateIntegerProperty((IntegerProperty)value, diagnostics, context);
+			case NcorePackage.LIST_PROPERTY:
+				return validateListProperty((ListProperty)value, diagnostics, context);
+			case NcorePackage.LONG_PROPERTY:
+				return validateLongProperty((LongProperty)value, diagnostics, context);
+			case NcorePackage.MAP_PROPERTY:
+				return validateMapProperty((MapProperty)value, diagnostics, context);
+			case NcorePackage.STRING_PROPERTY:
+				return validateStringProperty((StringProperty)value, diagnostics, context);
 			case NcorePackage.STRING_ENTRY:
 				return validateStringEntry((Map.Entry<?, ?>)value, diagnostics, context);
 			case NcorePackage.INTEGER_ENTRY:
@@ -399,6 +405,15 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean validateValueObject(ValueObject<?> valueObject, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(valueObject, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean validateString(org.nasdanika.ncore.String string, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(string, diagnostics, context);
 	}
@@ -473,6 +488,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateProperty(Property property, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(property, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateValueObjectProperty(ValueObjectProperty<?> valueObjectProperty, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(valueObjectProperty, diagnostics, context);
 	}
 
 	/**

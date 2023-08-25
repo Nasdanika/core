@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.String;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,10 +16,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getStringProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.String org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.EString&gt;"
  * @generated
  */
-public interface StringProperty extends Property, org.nasdanika.ncore.String {
+public interface StringProperty extends org.nasdanika.ncore.String, ValueObjectProperty<String> {
 
 	static StringProperty wrap(java.lang.String name, java.lang.String val) {
 		StringProperty ret = NcoreFactory.eINSTANCE.createStringProperty();

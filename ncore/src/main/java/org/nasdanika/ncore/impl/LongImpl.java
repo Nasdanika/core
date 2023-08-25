@@ -25,16 +25,6 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.Long {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long VALUE_EDEFAULT = 0L;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -69,8 +59,8 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	 * @generated
 	 */
 	@Override
-	public long getValue() {
-		return (Long)eDynamicGet(NcorePackage.LONG__VALUE, NcorePackage.Literals.LONG__VALUE, true, true);
+	public Long getValue() {
+		return (Long)eDynamicGet(NcorePackage.LONG__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -79,8 +69,8 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	 * @generated
 	 */
 	@Override
-	public void setValue(long newValue) {
-		eDynamicSet(NcorePackage.LONG__VALUE, NcorePackage.Literals.LONG__VALUE, newValue);
+	public void setValue(Long newValue) {
+		eDynamicSet(NcorePackage.LONG__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -121,7 +111,7 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.LONG__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((Long)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,7 +126,7 @@ public class LongImpl extends MinimalEObjectImpl.Container implements org.nasdan
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.LONG__VALUE:
-				return getValue() != VALUE_EDEFAULT;
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

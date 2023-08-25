@@ -277,8 +277,7 @@ public interface ModelElement extends Marked, Adaptable {
 			}
 		}
 		if (value != null) {
-			MapProperty property = MapProperty.from(value);
-			property.setName(key);
+			MapProperty property = MapProperty.wrap(key, value);
 			annotations.add(property);
 		}
 		return ret;
@@ -297,8 +296,7 @@ public interface ModelElement extends Marked, Adaptable {
 			}
 		}
 		if (value != null) {
-			ListProperty property = ListProperty.from(value);;
-			property.setName(key);
+			ListProperty property = ListProperty.wrap(key, value);;
 			annotations.add(property);
 		}
 		return ret;

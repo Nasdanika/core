@@ -7,7 +7,9 @@ import java.lang.String;
 import org.eclipse.emf.ecore.EClass;
 
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.StringProperty;
+import org.nasdanika.ncore.ValueObjectProperty;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,21 +19,21 @@ import org.nasdanika.ncore.StringProperty;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.StringPropertyImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.StringPropertyImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class StringPropertyImpl extends PropertyImpl implements StringProperty {
+public class StringPropertyImpl extends StringImpl implements StringProperty {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getValue()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String VALUE_EDEFAULT = null;
+	protected static final String NAME_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -58,8 +60,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	 * @generated
 	 */
 	@Override
-	public String getValue() {
-		return (String)eDynamicGet(NcorePackage.STRING_PROPERTY__VALUE, NcorePackage.Literals.STRING__VALUE, true, true);
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.STRING_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, true, true);
 	}
 
 	/**
@@ -68,8 +70,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	 * @generated
 	 */
 	@Override
-	public void setValue(String newValue) {
-		eDynamicSet(NcorePackage.STRING_PROPERTY__VALUE, NcorePackage.Literals.STRING__VALUE, newValue);
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.STRING_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, newName);
 	}
 
 	/**
@@ -80,8 +82,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.STRING_PROPERTY__VALUE:
-				return getValue();
+			case NcorePackage.STRING_PROPERTY__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -94,8 +96,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.STRING_PROPERTY__VALUE:
-				setValue((String)newValue);
+			case NcorePackage.STRING_PROPERTY__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -109,8 +111,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.STRING_PROPERTY__VALUE:
-				setValue(VALUE_EDEFAULT);
+			case NcorePackage.STRING_PROPERTY__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -124,8 +126,8 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.STRING_PROPERTY__VALUE:
-				return VALUE_EDEFAULT == null ? getValue() != null : !VALUE_EDEFAULT.equals(getValue());
+			case NcorePackage.STRING_PROPERTY__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 		}
 		return super.eIsSet(featureID);
 	}
@@ -137,9 +139,14 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == org.nasdanika.ncore.String.class) {
+		if (baseClass == Property.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.STRING_PROPERTY__VALUE: return NcorePackage.STRING__VALUE;
+				case NcorePackage.STRING_PROPERTY__NAME: return NcorePackage.PROPERTY__NAME;
+				default: return -1;
+			}
+		}
+		if (baseClass == ValueObjectProperty.class) {
+			switch (derivedFeatureID) {
 				default: return -1;
 			}
 		}
@@ -153,9 +160,14 @@ public class StringPropertyImpl extends PropertyImpl implements StringProperty {
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == org.nasdanika.ncore.String.class) {
+		if (baseClass == Property.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.STRING__VALUE: return NcorePackage.STRING_PROPERTY__VALUE;
+				case NcorePackage.PROPERTY__NAME: return NcorePackage.STRING_PROPERTY__NAME;
+				default: return -1;
+			}
+		}
+		if (baseClass == ValueObjectProperty.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

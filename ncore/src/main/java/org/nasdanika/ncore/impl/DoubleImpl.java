@@ -25,16 +25,6 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class DoubleImpl extends MinimalEObjectImpl.Container implements org.nasdanika.ncore.Double {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double VALUE_EDEFAULT = 0.0;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -69,8 +59,8 @@ public class DoubleImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 * @generated
 	 */
 	@Override
-	public double getValue() {
-		return (Double)eDynamicGet(NcorePackage.DOUBLE__VALUE, NcorePackage.Literals.DOUBLE__VALUE, true, true);
+	public Double getValue() {
+		return (Double)eDynamicGet(NcorePackage.DOUBLE__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -79,8 +69,8 @@ public class DoubleImpl extends MinimalEObjectImpl.Container implements org.nasd
 	 * @generated
 	 */
 	@Override
-	public void setValue(double newValue) {
-		eDynamicSet(NcorePackage.DOUBLE__VALUE, NcorePackage.Literals.DOUBLE__VALUE, newValue);
+	public void setValue(Double newValue) {
+		eDynamicSet(NcorePackage.DOUBLE__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -121,7 +111,7 @@ public class DoubleImpl extends MinimalEObjectImpl.Container implements org.nasd
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.DOUBLE__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((Double)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -136,7 +126,7 @@ public class DoubleImpl extends MinimalEObjectImpl.Container implements org.nasd
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.DOUBLE__VALUE:
-				return getValue() != VALUE_EDEFAULT;
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

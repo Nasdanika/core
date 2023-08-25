@@ -2,12 +2,13 @@
  */
 package org.nasdanika.ncore.impl;
 
-import java.lang.Integer;
-
+import java.lang.String;
 import org.eclipse.emf.ecore.EClass;
 
 import org.nasdanika.ncore.IntegerProperty;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.Property;
+import org.nasdanika.ncore.ValueObjectProperty;
 
 /**
  * <!-- begin-user-doc -->
@@ -17,21 +18,21 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.IntegerPropertyImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.IntegerPropertyImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty {
+public class IntegerPropertyImpl extends IntegerImpl implements IntegerProperty {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getValue()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int VALUE_EDEFAULT = 0;
+	protected static final String NAME_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -58,8 +59,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	 * @generated
 	 */
 	@Override
-	public int getValue() {
-		return (Integer)eDynamicGet(NcorePackage.INTEGER_PROPERTY__VALUE, NcorePackage.Literals.INTEGER__VALUE, true, true);
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.INTEGER_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, true, true);
 	}
 
 	/**
@@ -68,8 +69,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	 * @generated
 	 */
 	@Override
-	public void setValue(int newValue) {
-		eDynamicSet(NcorePackage.INTEGER_PROPERTY__VALUE, NcorePackage.Literals.INTEGER__VALUE, newValue);
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.INTEGER_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, newName);
 	}
 
 	/**
@@ -80,8 +81,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.INTEGER_PROPERTY__VALUE:
-				return getValue();
+			case NcorePackage.INTEGER_PROPERTY__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -94,8 +95,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.INTEGER_PROPERTY__VALUE:
-				setValue((Integer)newValue);
+			case NcorePackage.INTEGER_PROPERTY__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -109,8 +110,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.INTEGER_PROPERTY__VALUE:
-				setValue(VALUE_EDEFAULT);
+			case NcorePackage.INTEGER_PROPERTY__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -124,8 +125,8 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.INTEGER_PROPERTY__VALUE:
-				return getValue() != VALUE_EDEFAULT;
+			case NcorePackage.INTEGER_PROPERTY__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 		}
 		return super.eIsSet(featureID);
 	}
@@ -137,9 +138,14 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == org.nasdanika.ncore.Integer.class) {
+		if (baseClass == Property.class) {
 			switch (derivedFeatureID) {
-				case NcorePackage.INTEGER_PROPERTY__VALUE: return NcorePackage.INTEGER__VALUE;
+				case NcorePackage.INTEGER_PROPERTY__NAME: return NcorePackage.PROPERTY__NAME;
+				default: return -1;
+			}
+		}
+		if (baseClass == ValueObjectProperty.class) {
+			switch (derivedFeatureID) {
 				default: return -1;
 			}
 		}
@@ -153,9 +159,14 @@ public class IntegerPropertyImpl extends PropertyImpl implements IntegerProperty
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == org.nasdanika.ncore.Integer.class) {
+		if (baseClass == Property.class) {
 			switch (baseFeatureID) {
-				case NcorePackage.INTEGER__VALUE: return NcorePackage.INTEGER_PROPERTY__VALUE;
+				case NcorePackage.PROPERTY__NAME: return NcorePackage.INTEGER_PROPERTY__NAME;
+				default: return -1;
+			}
+		}
+		if (baseClass == ValueObjectProperty.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

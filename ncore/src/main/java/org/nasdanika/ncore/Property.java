@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getProperty()
- * @model abstract="true"
+ * @model interface="true" abstract="true"
  * @generated
  */
 public interface Property extends EObject {

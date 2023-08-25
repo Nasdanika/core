@@ -2,12 +2,14 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.String;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.NcorePackage;
 
@@ -19,12 +21,23 @@ import org.nasdanika.ncore.NcorePackage;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.EObjectPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.EObjectPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty {
+public class EObjectPropertyImpl extends MinimalEObjectImpl.Container implements EObjectProperty {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -42,6 +55,36 @@ public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty
 	@Override
 	protected EClass eStaticClass() {
 		return NcorePackage.Literals.EOBJECT_PROPERTY;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.EOBJECT_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.EOBJECT_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, newName);
 	}
 
 	/**
@@ -96,6 +139,8 @@ public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__NAME:
+				return getName();
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
 				return getValue();
 		}
@@ -110,6 +155,9 @@ public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__NAME:
+				setName((String)newValue);
+				return;
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
 				setValue((EObject)newValue);
 				return;
@@ -125,6 +173,9 @@ public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
 				setValue((EObject)null);
 				return;
@@ -140,6 +191,8 @@ public class EObjectPropertyImpl extends PropertyImpl implements EObjectProperty
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.EOBJECT_PROPERTY__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case NcorePackage.EOBJECT_PROPERTY__VALUE:
 				return getValue() != null;
 		}

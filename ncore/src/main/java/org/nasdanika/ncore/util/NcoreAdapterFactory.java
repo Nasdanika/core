@@ -31,6 +31,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.ValueObject;
+import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
 
@@ -135,20 +137,16 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createReferenceAdapter();
 			}
 			@Override
+			public <T> Adapter caseValueObject(ValueObject<T> object) {
+				return createValueObjectAdapter();
+			}
+			@Override
 			public Adapter caseString(org.nasdanika.ncore.String object) {
 				return createStringAdapter();
 			}
 			@Override
-			public Adapter caseList(List object) {
-				return createListAdapter();
-			}
-			@Override
-			public Adapter caseMap(Map object) {
-				return createMapAdapter();
-			}
-			@Override
-			public Adapter caseInteger(org.nasdanika.ncore.Integer object) {
-				return createIntegerAdapter();
+			public Adapter caseBoolean(org.nasdanika.ncore.Boolean object) {
+				return createBooleanAdapter();
 			}
 			@Override
 			public Adapter caseDouble(org.nasdanika.ncore.Double object) {
@@ -159,52 +157,64 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 				return createDateAdapter();
 			}
 			@Override
+			public Adapter caseInteger(org.nasdanika.ncore.Integer object) {
+				return createIntegerAdapter();
+			}
+			@Override
+			public Adapter caseList(List object) {
+				return createListAdapter();
+			}
+			@Override
 			public Adapter caseLong(org.nasdanika.ncore.Long object) {
 				return createLongAdapter();
 			}
 			@Override
-			public Adapter caseBoolean(org.nasdanika.ncore.Boolean object) {
-				return createBooleanAdapter();
+			public Adapter caseMap(Map object) {
+				return createMapAdapter();
 			}
 			@Override
 			public Adapter caseProperty(Property object) {
 				return createPropertyAdapter();
 			}
 			@Override
-			public Adapter caseStringProperty(StringProperty object) {
-				return createStringPropertyAdapter();
-			}
-			@Override
-			public Adapter caseIntegerProperty(IntegerProperty object) {
-				return createIntegerPropertyAdapter();
-			}
-			@Override
-			public Adapter caseDoubleProperty(DoubleProperty object) {
-				return createDoublePropertyAdapter();
-			}
-			@Override
-			public Adapter caseLongProperty(LongProperty object) {
-				return createLongPropertyAdapter();
-			}
-			@Override
-			public Adapter caseDateProperty(DateProperty object) {
-				return createDatePropertyAdapter();
-			}
-			@Override
-			public Adapter caseMapProperty(MapProperty object) {
-				return createMapPropertyAdapter();
-			}
-			@Override
-			public Adapter caseListProperty(ListProperty object) {
-				return createListPropertyAdapter();
+			public <T> Adapter caseValueObjectProperty(ValueObjectProperty<T> object) {
+				return createValueObjectPropertyAdapter();
 			}
 			@Override
 			public Adapter caseBooleanProperty(BooleanProperty object) {
 				return createBooleanPropertyAdapter();
 			}
 			@Override
+			public Adapter caseDateProperty(DateProperty object) {
+				return createDatePropertyAdapter();
+			}
+			@Override
+			public Adapter caseDoubleProperty(DoubleProperty object) {
+				return createDoublePropertyAdapter();
+			}
+			@Override
 			public Adapter caseEObjectProperty(EObjectProperty object) {
 				return createEObjectPropertyAdapter();
+			}
+			@Override
+			public Adapter caseIntegerProperty(IntegerProperty object) {
+				return createIntegerPropertyAdapter();
+			}
+			@Override
+			public Adapter caseListProperty(ListProperty object) {
+				return createListPropertyAdapter();
+			}
+			@Override
+			public Adapter caseLongProperty(LongProperty object) {
+				return createLongPropertyAdapter();
+			}
+			@Override
+			public Adapter caseMapProperty(MapProperty object) {
+				return createMapPropertyAdapter();
+			}
+			@Override
+			public Adapter caseStringProperty(StringProperty object) {
+				return createStringPropertyAdapter();
 			}
 			@Override
 			public Adapter caseStringEntry(java.util.Map.Entry<String, String> object) {
@@ -405,6 +415,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ValueObject <em>Value Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.ValueObject
+	 * @generated
+	 */
+	public Adapter createValueObjectAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.String <em>String</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -527,6 +551,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.ValueObjectProperty <em>Value Object Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.ValueObjectProperty
+	 * @generated
+	 */
+	public Adapter createValueObjectPropertyAdapter() {
 		return null;
 	}
 

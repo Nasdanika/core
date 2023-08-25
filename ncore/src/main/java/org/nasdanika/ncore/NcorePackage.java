@@ -847,14 +847,14 @@ public interface NcorePackage extends EPackage {
 	int REFERENCE_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.ValueObject <em>Value Object</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.StringImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getString()
+	 * @see org.nasdanika.ncore.ValueObject
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValueObject()
 	 * @generated
 	 */
-	int STRING = 11;
+	int VALUE_OBJECT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -863,7 +863,44 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING__VALUE = 0;
+	int VALUE_OBJECT__VALUE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Value Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_OBJECT_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Value Object</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_OBJECT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.StringImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getString()
+	 * @generated
+	 */
+	int STRING = 12;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING__VALUE = VALUE_OBJECT__VALUE;
 
 	/**
 	 * The number of structural features of the '<em>String</em>' class.
@@ -872,7 +909,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_FEATURE_COUNT = 1;
+	int STRING_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>String</em>' class.
@@ -881,7 +918,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_OPERATION_COUNT = 0;
+	int STRING_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -891,7 +928,175 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getList()
 	 * @generated
 	 */
-	int LIST = 12;
+	int LIST = 17;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.MapImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
+	 * @generated
+	 */
+	int MAP = 19;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerImpl <em>Integer</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.IntegerImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInteger()
+	 * @generated
+	 */
+	int INTEGER = 16;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DoubleImpl <em>Double</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.DoubleImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDouble()
+	 * @generated
+	 */
+	int DOUBLE = 14;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DateImpl <em>Date</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.DateImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDate()
+	 * @generated
+	 */
+	int DATE = 15;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.LongImpl <em>Long</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.LongImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getLong()
+	 * @generated
+	 */
+	int LONG = 18;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.BooleanImpl <em>Boolean</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.BooleanImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBoolean()
+	 * @generated
+	 */
+	int BOOLEAN = 13;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN__VALUE = VALUE_OBJECT__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Boolean</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Boolean</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE__VALUE = VALUE_OBJECT__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Double</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Double</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE__VALUE = VALUE_OBJECT__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Date</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Date</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER__VALUE = VALUE_OBJECT__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Integer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Integer</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
@@ -921,14 +1126,31 @@ public interface NcorePackage extends EPackage {
 	int LIST_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapImpl <em>Map</em>}' class.
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.MapImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMap()
 	 * @generated
+	 * @ordered
 	 */
-	int MAP = 13;
+	int LONG__VALUE = VALUE_OBJECT__VALUE;
+
+	/**
+	 * The number of structural features of the '<em>Long</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Long</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
@@ -958,199 +1180,14 @@ public interface NcorePackage extends EPackage {
 	int MAP_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerImpl <em>Integer</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.Property <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.IntegerImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInteger()
-	 * @generated
-	 */
-	int INTEGER = 14;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER__VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Integer</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Integer</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DoubleImpl <em>Double</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.DoubleImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDouble()
-	 * @generated
-	 */
-	int DOUBLE = 15;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE__VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Double</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Double</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DateImpl <em>Date</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.DateImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDate()
-	 * @generated
-	 */
-	int DATE = 16;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE__VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Date</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Date</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.LongImpl <em>Long</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.LongImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getLong()
-	 * @generated
-	 */
-	int LONG = 17;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG__VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Long</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Long</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.BooleanImpl <em>Boolean</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.BooleanImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBoolean()
-	 * @generated
-	 */
-	int BOOLEAN = 18;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN__VALUE = 0;
-
-	/**
-	 * The number of structural features of the '<em>Boolean</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_FEATURE_COUNT = 1;
-
-	/**
-	 * The number of operations of the '<em>Boolean</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_OPERATION_COUNT = 0;
-
-	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.PropertyImpl
+	 * @see org.nasdanika.ncore.Property
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 19;
+	int PROPERTY = 20;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1180,23 +1217,14 @@ public interface NcorePackage extends EPackage {
 	int PROPERTY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringPropertyImpl <em>String Property</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ValueObjectPropertyImpl <em>Value Object Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.StringPropertyImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
+	 * @see org.nasdanika.ncore.impl.ValueObjectPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValueObjectProperty()
 	 * @generated
 	 */
-	int STRING_PROPERTY = 20;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int STRING_PROPERTY__NAME = PROPERTY__NAME;
+	int VALUE_OBJECT_PROPERTY = 21;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1205,25 +1233,44 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+	int VALUE_OBJECT_PROPERTY__VALUE = VALUE_OBJECT__VALUE;
 
 	/**
-	 * The number of structural features of the '<em>String Property</em>' class.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+	int VALUE_OBJECT_PROPERTY__NAME = VALUE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The number of operations of the '<em>String Property</em>' class.
+	 * The number of structural features of the '<em>Value Object Property</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int VALUE_OBJECT_PROPERTY_FEATURE_COUNT = VALUE_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Value Object Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VALUE_OBJECT_PROPERTY_OPERATION_COUNT = VALUE_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringPropertyImpl <em>String Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.StringPropertyImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringProperty()
+	 * @generated
+	 */
+	int STRING_PROPERTY = 30;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.IntegerPropertyImpl <em>Integer Property</em>}' class.
@@ -1233,43 +1280,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerProperty()
 	 * @generated
 	 */
-	int INTEGER_PROPERTY = 21;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Integer Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Integer Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INTEGER_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int INTEGER_PROPERTY = 26;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DoublePropertyImpl <em>Double Property</em>}' class.
@@ -1279,43 +1290,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDoubleProperty()
 	 * @generated
 	 */
-	int DOUBLE_PROPERTY = 22;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Double Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Double Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOUBLE_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int DOUBLE_PROPERTY = 24;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.LongPropertyImpl <em>Long Property</em>}' class.
@@ -1325,43 +1300,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getLongProperty()
 	 * @generated
 	 */
-	int LONG_PROPERTY = 23;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Long Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Long Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LONG_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int LONG_PROPERTY = 28;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DatePropertyImpl <em>Date Property</em>}' class.
@@ -1371,43 +1310,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDateProperty()
 	 * @generated
 	 */
-	int DATE_PROPERTY = 24;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Date Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Date Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATE_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int DATE_PROPERTY = 23;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.MapPropertyImpl <em>Map Property</em>}' class.
@@ -1417,43 +1320,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getMapProperty()
 	 * @generated
 	 */
-	int MAP_PROPERTY = 25;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Map Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Map Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MAP_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int MAP_PROPERTY = 29;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.ListPropertyImpl <em>List Property</em>}' class.
@@ -1463,43 +1330,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getListProperty()
 	 * @generated
 	 */
-	int LIST_PROPERTY = 26;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST_PROPERTY__NAME = PROPERTY__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>List Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>List Property</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LIST_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int LIST_PROPERTY = 27;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.BooleanPropertyImpl <em>Boolean Property</em>}' class.
@@ -1509,16 +1340,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanProperty()
 	 * @generated
 	 */
-	int BOOLEAN_PROPERTY = 27;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BOOLEAN_PROPERTY__NAME = PROPERTY__NAME;
+	int BOOLEAN_PROPERTY = 22;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
@@ -1527,7 +1349,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOLEAN_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+	int BOOLEAN_PROPERTY__VALUE = BOOLEAN__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BOOLEAN_PROPERTY__NAME = BOOLEAN_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Boolean Property</em>' class.
@@ -1536,7 +1367,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOLEAN_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+	int BOOLEAN_PROPERTY_FEATURE_COUNT = BOOLEAN_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Boolean Property</em>' class.
@@ -1545,7 +1376,79 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BOOLEAN_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+	int BOOLEAN_PROPERTY_OPERATION_COUNT = BOOLEAN_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_PROPERTY__VALUE = DATE__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_PROPERTY__NAME = DATE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Date Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_PROPERTY_FEATURE_COUNT = DATE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Date Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATE_PROPERTY_OPERATION_COUNT = DATE_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_PROPERTY__VALUE = DOUBLE__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_PROPERTY__NAME = DOUBLE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Double Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_PROPERTY_FEATURE_COUNT = DOUBLE_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Double Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOUBLE_PROPERTY_OPERATION_COUNT = DOUBLE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.EObjectPropertyImpl <em>EObject Property</em>}' class.
@@ -1555,7 +1458,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getEObjectProperty()
 	 * @generated
 	 */
-	int EOBJECT_PROPERTY = 28;
+	int EOBJECT_PROPERTY = 25;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1594,6 +1497,186 @@ public interface NcorePackage extends EPackage {
 	int EOBJECT_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY__VALUE = INTEGER__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY__NAME = INTEGER_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Integer Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY_FEATURE_COUNT = INTEGER_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Integer Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INTEGER_PROPERTY_OPERATION_COUNT = INTEGER_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>List Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>List Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LIST_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_PROPERTY__VALUE = LONG__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_PROPERTY__NAME = LONG_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Long Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_PROPERTY_FEATURE_COUNT = LONG_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Long Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LONG_PROPERTY_OPERATION_COUNT = LONG_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY__NAME = PROPERTY__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY__VALUE = PROPERTY_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Map Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY_FEATURE_COUNT = PROPERTY_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Map Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAP_PROPERTY_OPERATION_COUNT = PROPERTY_OPERATION_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY__VALUE = STRING__VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY__NAME = STRING_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>String Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY_FEATURE_COUNT = STRING_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>String Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_PROPERTY_OPERATION_COUNT = STRING_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringEntryImpl <em>String Entry</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1601,7 +1684,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringEntry()
 	 * @generated
 	 */
-	int STRING_ENTRY = 29;
+	int STRING_ENTRY = 31;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1647,7 +1730,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getIntegerEntry()
 	 * @generated
 	 */
-	int INTEGER_ENTRY = 30;
+	int INTEGER_ENTRY = 32;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1693,7 +1776,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getBooleanEntry()
 	 * @generated
 	 */
-	int BOOLEAN_ENTRY = 31;
+	int BOOLEAN_ENTRY = 33;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1739,7 +1822,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getGitMarker()
 	 * @generated
 	 */
-	int GIT_MARKER = 32;
+	int GIT_MARKER = 34;
 
 	/**
 	 * The feature id for the '<em><b>Location</b></em>' attribute.
@@ -1839,7 +1922,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumented()
 	 * @generated
 	 */
-	int DOCUMENTED = 33;
+	int DOCUMENTED = 35;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -1876,7 +1959,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getComposite()
 	 * @generated
 	 */
-	int COMPOSITE = 34;
+	int COMPOSITE = 36;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -2003,7 +2086,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 35;
+	int INSTANT = 37;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2013,7 +2096,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 36;
+	int DURATION = 38;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -2465,6 +2548,27 @@ public interface NcorePackage extends EPackage {
 	EReference getReference_Target();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ValueObject <em>Value Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Value Object</em>'.
+	 * @see org.nasdanika.ncore.ValueObject
+	 * @generated
+	 */
+	EClass getValueObject();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.ValueObject#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see org.nasdanika.ncore.ValueObject#getValue()
+	 * @see #getValueObject()
+	 * @generated
+	 */
+	EAttribute getValueObject_Value();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.String <em>String</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2473,17 +2577,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getString();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.String#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.String#getValue()
-	 * @see #getString()
-	 * @generated
-	 */
-	EAttribute getString_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.List <em>List</em>}'.
@@ -2538,17 +2631,6 @@ public interface NcorePackage extends EPackage {
 	EClass getInteger();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Integer#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.Integer#getValue()
-	 * @see #getInteger()
-	 * @generated
-	 */
-	EAttribute getInteger_Value();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Double <em>Double</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2557,17 +2639,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getDouble();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Double#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.Double#getValue()
-	 * @see #getDouble()
-	 * @generated
-	 */
-	EAttribute getDouble_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Date <em>Date</em>}'.
@@ -2580,17 +2651,6 @@ public interface NcorePackage extends EPackage {
 	EClass getDate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Date#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.Date#getValue()
-	 * @see #getDate()
-	 * @generated
-	 */
-	EAttribute getDate_Value();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Long <em>Long</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2601,17 +2661,6 @@ public interface NcorePackage extends EPackage {
 	EClass getLong();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Long#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.Long#getValue()
-	 * @see #getLong()
-	 * @generated
-	 */
-	EAttribute getLong_Value();
-
-	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Boolean <em>Boolean</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2620,17 +2669,6 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getBoolean();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Boolean#isValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see org.nasdanika.ncore.Boolean#isValue()
-	 * @see #getBoolean()
-	 * @generated
-	 */
-	EAttribute getBoolean_Value();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Property <em>Property</em>}'.
@@ -2652,6 +2690,16 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getProperty_Name();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.ValueObjectProperty <em>Value Object Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Value Object Property</em>'.
+	 * @see org.nasdanika.ncore.ValueObjectProperty
+	 * @generated
+	 */
+	EClass getValueObjectProperty();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.StringProperty <em>String Property</em>}'.
@@ -3393,6 +3441,24 @@ public interface NcorePackage extends EPackage {
 		EReference REFERENCE__TARGET = eINSTANCE.getReference_Target();
 
 		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.ValueObject <em>Value Object</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.ValueObject
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValueObject()
+		 * @generated
+		 */
+		EClass VALUE_OBJECT = eINSTANCE.getValueObject();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VALUE_OBJECT__VALUE = eINSTANCE.getValueObject_Value();
+
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StringImpl <em>String</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3401,14 +3467,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass STRING = eINSTANCE.getString();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute STRING__VALUE = eINSTANCE.getString_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ListImpl <em>List</em>}' class.
@@ -3457,14 +3515,6 @@ public interface NcorePackage extends EPackage {
 		EClass INTEGER = eINSTANCE.getInteger();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute INTEGER__VALUE = eINSTANCE.getInteger_Value();
-
-		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DoubleImpl <em>Double</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3473,14 +3523,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass DOUBLE = eINSTANCE.getDouble();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DOUBLE__VALUE = eINSTANCE.getDouble_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DateImpl <em>Date</em>}' class.
@@ -3493,14 +3535,6 @@ public interface NcorePackage extends EPackage {
 		EClass DATE = eINSTANCE.getDate();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute DATE__VALUE = eINSTANCE.getDate_Value();
-
-		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.LongImpl <em>Long</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3509,14 +3543,6 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass LONG = eINSTANCE.getLong();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute LONG__VALUE = eINSTANCE.getLong_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.BooleanImpl <em>Boolean</em>}' class.
@@ -3529,18 +3555,10 @@ public interface NcorePackage extends EPackage {
 		EClass BOOLEAN = eINSTANCE.getBoolean();
 
 		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * The meta object literal for the '{@link org.nasdanika.ncore.Property <em>Property</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BOOLEAN__VALUE = eINSTANCE.getBoolean_Value();
-
-		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.PropertyImpl <em>Property</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.PropertyImpl
+		 * @see org.nasdanika.ncore.Property
 		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getProperty()
 		 * @generated
 		 */
@@ -3553,6 +3571,16 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROPERTY__NAME = eINSTANCE.getProperty_Name();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.ValueObjectPropertyImpl <em>Value Object Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.ValueObjectPropertyImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getValueObjectProperty()
+		 * @generated
+		 */
+		EClass VALUE_OBJECT_PROPERTY = eINSTANCE.getValueObjectProperty();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StringPropertyImpl <em>String Property</em>}' class.

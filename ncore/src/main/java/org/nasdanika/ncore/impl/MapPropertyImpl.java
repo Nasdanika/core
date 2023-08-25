@@ -2,6 +2,7 @@
  */
 package org.nasdanika.ncore.impl;
 
+import java.lang.String;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -10,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.ncore.Map;
 import org.nasdanika.ncore.MapProperty;
@@ -24,12 +26,23 @@ import org.nasdanika.ncore.Property;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.nasdanika.ncore.impl.MapPropertyImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MapPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class MapPropertyImpl extends PropertyImpl implements MapProperty {
+public class MapPropertyImpl extends MinimalEObjectImpl.Container implements MapProperty {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -47,6 +60,36 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	protected EClass eStaticClass() {
 		return NcorePackage.Literals.MAP_PROPERTY;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return 0;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getName() {
+		return (String)eDynamicGet(NcorePackage.MAP_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		eDynamicSet(NcorePackage.MAP_PROPERTY__NAME, NcorePackage.Literals.PROPERTY__NAME, newName);
 	}
 
 	/**
@@ -82,6 +125,8 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case NcorePackage.MAP_PROPERTY__NAME:
+				return getName();
 			case NcorePackage.MAP_PROPERTY__VALUE:
 				return getValue();
 		}
@@ -97,6 +142,9 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case NcorePackage.MAP_PROPERTY__NAME:
+				setName((String)newValue);
+				return;
 			case NcorePackage.MAP_PROPERTY__VALUE:
 				getValue().clear();
 				getValue().addAll((Collection<? extends Property>)newValue);
@@ -113,6 +161,9 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MAP_PROPERTY__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case NcorePackage.MAP_PROPERTY__VALUE:
 				getValue().clear();
 				return;
@@ -128,6 +179,8 @@ public class MapPropertyImpl extends PropertyImpl implements MapProperty {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case NcorePackage.MAP_PROPERTY__NAME:
+				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case NcorePackage.MAP_PROPERTY__VALUE:
 				return !getValue().isEmpty();
 		}

@@ -24,16 +24,6 @@ import org.nasdanika.ncore.NcorePackage;
  */
 public class DateImpl extends MinimalEObjectImpl.Container implements Date {
 	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final java.util.Date VALUE_EDEFAULT = null;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -69,7 +59,7 @@ public class DateImpl extends MinimalEObjectImpl.Container implements Date {
 	 */
 	@Override
 	public java.util.Date getValue() {
-		return (java.util.Date)eDynamicGet(NcorePackage.DATE__VALUE, NcorePackage.Literals.DATE__VALUE, true, true);
+		return (java.util.Date)eDynamicGet(NcorePackage.DATE__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, true, true);
 	}
 
 	/**
@@ -79,7 +69,7 @@ public class DateImpl extends MinimalEObjectImpl.Container implements Date {
 	 */
 	@Override
 	public void setValue(java.util.Date newValue) {
-		eDynamicSet(NcorePackage.DATE__VALUE, NcorePackage.Literals.DATE__VALUE, newValue);
+		eDynamicSet(NcorePackage.DATE__VALUE, NcorePackage.Literals.VALUE_OBJECT__VALUE, newValue);
 	}
 
 	/**
@@ -120,7 +110,7 @@ public class DateImpl extends MinimalEObjectImpl.Container implements Date {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case NcorePackage.DATE__VALUE:
-				setValue(VALUE_EDEFAULT);
+				setValue((java.util.Date)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -135,7 +125,7 @@ public class DateImpl extends MinimalEObjectImpl.Container implements Date {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case NcorePackage.DATE__VALUE:
-				return VALUE_EDEFAULT == null ? getValue() != null : !VALUE_EDEFAULT.equals(getValue());
+				return getValue() != null;
 		}
 		return super.eIsSet(featureID);
 	}

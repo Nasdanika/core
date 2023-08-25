@@ -305,7 +305,7 @@
       <details key="documentation" value="Represents boolean."/>
     </eAnnotations>
     <eGenericSuperTypes eClassifier="#//ValueObject">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Double">
@@ -313,7 +313,7 @@
       <details key="documentation" value="Represents integer number."/>
     </eAnnotations>
     <eGenericSuperTypes eClassifier="#//ValueObject">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Date">
@@ -329,7 +329,7 @@
       <details key="documentation" value="Represents integer number."/>
     </eAnnotations>
     <eGenericSuperTypes eClassifier="#//ValueObject">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="List">
@@ -351,7 +351,7 @@
       <details key="documentation" value="Represents integer number."/>
     </eAnnotations>
     <eGenericSuperTypes eClassifier="#//ValueObject">
-      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Map">
@@ -369,7 +369,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" interface="true">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="Base class for keyed values."/>
     </eAnnotations>
@@ -379,20 +379,39 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="BooleanProperty" eSuperTypes="#//Property #//Boolean">
+  <eClassifiers xsi:type="ecore:EClass" name="ValueObjectProperty">
+    <eTypeParameters name="T"/>
+    <eGenericSuperTypes eClassifier="#//ValueObject">
+      <eTypeArguments eTypeParameter="#//ValueObjectProperty/T"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed boolean."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//Boolean"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DateProperty" eSuperTypes="#//Property #//Date">
+  <eClassifiers xsi:type="ecore:EClass" name="DateProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed integer."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//Date"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DoubleProperty" eSuperTypes="#//Property #//Double">
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed integer."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//Double"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EObjectProperty" eSuperTypes="#//Property">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -408,30 +427,42 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="IntegerProperty" eSuperTypes="#//Property #//Integer">
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed integer."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//Integer"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ListProperty" eSuperTypes="#//Property #//List">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed list."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LongProperty" eSuperTypes="#//Property #//Long">
+  <eClassifiers xsi:type="ecore:EClass" name="LongProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed integer."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//Long"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MapProperty" eSuperTypes="#//Property #//Map">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed map."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="StringProperty" eSuperTypes="#//Property #//String">
+  <eClassifiers xsi:type="ecore:EClass" name="StringProperty">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A named/keyed string."/>
     </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//String"/>
+    <eGenericSuperTypes eClassifier="#//ValueObjectProperty">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringEntry" instanceClassName="java.util.Map$Entry">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

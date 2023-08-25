@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.Integer;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,10 +16,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getIntegerProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.Integer org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.EIntegerObject&gt;"
  * @generated
  */
-public interface IntegerProperty extends Property, org.nasdanika.ncore.Integer {
+public interface IntegerProperty extends org.nasdanika.ncore.Integer, ValueObjectProperty<Integer> {
 
 	static IntegerProperty wrap(java.lang.String name, java.lang.Integer val) {
 		IntegerProperty ret = NcoreFactory.eINSTANCE.createIntegerProperty();

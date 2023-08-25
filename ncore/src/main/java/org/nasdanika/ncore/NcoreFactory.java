@@ -94,6 +94,15 @@ public interface NcoreFactory extends EFactory {
 	Map createMap();
 
 	/**
+	 * Returns a new object of class '<em>Value Object Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Value Object Property</em>'.
+	 * @generated
+	 */
+	<T> ValueObjectProperty<T> createValueObjectProperty();
+
+	/**
 	 * Returns a new object of class '<em>Integer</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

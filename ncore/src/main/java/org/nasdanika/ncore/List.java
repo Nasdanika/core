@@ -116,18 +116,8 @@ public interface List extends EObject {
 				ret.add(((List) e).toList());
 			} else if (e instanceof Map) {
 				ret.add(((Map) e).toMap());
-			} else if (e instanceof Boolean) {
-				ret.add(((Boolean) e).isValue());
-			} else if (e instanceof Date) {
-				ret.add(((Date) e).getValue());
-			} else if (e instanceof Double) {
-				ret.add(((Double) e).getValue());
-			} else if (e instanceof Integer) {
-				ret.add(((Integer) e).getValue());
-			} else if (e instanceof Long) {
-				ret.add(((Long) e).getValue());
-			} else if (e instanceof String) {
-				ret.add(((String) e).getValue());
+			} else if (e instanceof ValueObject) {
+				ret.add(((ValueObject<?>) e).getValue());
 			}
 		}
 		return ret;

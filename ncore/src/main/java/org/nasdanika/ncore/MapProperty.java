@@ -26,7 +26,7 @@ public interface MapProperty extends Property, Map {
 	static MapProperty wrap(java.lang.String name, java.util.Map<java.lang.String, ?> map) {
 		MapProperty ret = NcoreFactory.eINSTANCE.createMapProperty();
 		ret.setName(name);
-		777 - wrap, dobule, long, date
+//		777 - wrap, dobule, long, date
 		for (Entry<java.lang.String, ?> entry: map.entrySet()) {
 			java.lang.String key = entry.getKey();
 			Object value = entry.getValue();

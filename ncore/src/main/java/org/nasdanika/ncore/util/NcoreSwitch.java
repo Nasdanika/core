@@ -29,6 +29,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.ValueObject;
+import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.persistence.Marked;
 import org.nasdanika.persistence.Marker;
 
@@ -172,9 +174,44 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.VALUE_OBJECT: {
+				ValueObject<?> valueObject = (ValueObject<?>)theEObject;
+				T1 result = caseValueObject(valueObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.STRING: {
 				org.nasdanika.ncore.String string = (org.nasdanika.ncore.String)theEObject;
 				T1 result = caseString(string);
+				if (result == null) result = caseValueObject(string);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.BOOLEAN: {
+				org.nasdanika.ncore.Boolean boolean_ = (org.nasdanika.ncore.Boolean)theEObject;
+				T1 result = caseBoolean(boolean_);
+				if (result == null) result = caseValueObject(boolean_);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DOUBLE: {
+				org.nasdanika.ncore.Double double_ = (org.nasdanika.ncore.Double)theEObject;
+				T1 result = caseDouble(double_);
+				if (result == null) result = caseValueObject(double_);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DATE: {
+				Date date = (Date)theEObject;
+				T1 result = caseDate(date);
+				if (result == null) result = caseValueObject(date);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.INTEGER: {
+				org.nasdanika.ncore.Integer integer = (org.nasdanika.ncore.Integer)theEObject;
+				T1 result = caseInteger(integer);
+				if (result == null) result = caseValueObject(integer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -184,39 +221,16 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.MAP: {
-				Map map = (Map)theEObject;
-				T1 result = caseMap(map);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.INTEGER: {
-				org.nasdanika.ncore.Integer integer = (org.nasdanika.ncore.Integer)theEObject;
-				T1 result = caseInteger(integer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.DOUBLE: {
-				org.nasdanika.ncore.Double double_ = (org.nasdanika.ncore.Double)theEObject;
-				T1 result = caseDouble(double_);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.DATE: {
-				Date date = (Date)theEObject;
-				T1 result = caseDate(date);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case NcorePackage.LONG: {
 				org.nasdanika.ncore.Long long_ = (org.nasdanika.ncore.Long)theEObject;
 				T1 result = caseLong(long_);
+				if (result == null) result = caseValueObject(long_);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.BOOLEAN: {
-				org.nasdanika.ncore.Boolean boolean_ = (org.nasdanika.ncore.Boolean)theEObject;
-				T1 result = caseBoolean(boolean_);
+			case NcorePackage.MAP: {
+				Map map = (Map)theEObject;
+				T1 result = caseMap(map);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -226,51 +240,58 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.STRING_PROPERTY: {
-				StringProperty stringProperty = (StringProperty)theEObject;
-				T1 result = caseStringProperty(stringProperty);
-				if (result == null) result = caseProperty(stringProperty);
-				if (result == null) result = caseString(stringProperty);
+			case NcorePackage.VALUE_OBJECT_PROPERTY: {
+				ValueObjectProperty<?> valueObjectProperty = (ValueObjectProperty<?>)theEObject;
+				T1 result = caseValueObjectProperty(valueObjectProperty);
+				if (result == null) result = caseValueObject(valueObjectProperty);
+				if (result == null) result = caseProperty(valueObjectProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.INTEGER_PROPERTY: {
-				IntegerProperty integerProperty = (IntegerProperty)theEObject;
-				T1 result = caseIntegerProperty(integerProperty);
-				if (result == null) result = caseProperty(integerProperty);
-				if (result == null) result = caseInteger(integerProperty);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.DOUBLE_PROPERTY: {
-				DoubleProperty doubleProperty = (DoubleProperty)theEObject;
-				T1 result = caseDoubleProperty(doubleProperty);
-				if (result == null) result = caseProperty(doubleProperty);
-				if (result == null) result = caseDouble(doubleProperty);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case NcorePackage.LONG_PROPERTY: {
-				LongProperty longProperty = (LongProperty)theEObject;
-				T1 result = caseLongProperty(longProperty);
-				if (result == null) result = caseProperty(longProperty);
-				if (result == null) result = caseLong(longProperty);
+			case NcorePackage.BOOLEAN_PROPERTY: {
+				BooleanProperty booleanProperty = (BooleanProperty)theEObject;
+				T1 result = caseBooleanProperty(booleanProperty);
+				if (result == null) result = caseBoolean(booleanProperty);
+				if (result == null) result = caseValueObjectProperty(booleanProperty);
+				if (result == null) result = caseValueObject(booleanProperty);
+				if (result == null) result = caseProperty(booleanProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case NcorePackage.DATE_PROPERTY: {
 				DateProperty dateProperty = (DateProperty)theEObject;
 				T1 result = caseDateProperty(dateProperty);
-				if (result == null) result = caseProperty(dateProperty);
 				if (result == null) result = caseDate(dateProperty);
+				if (result == null) result = caseValueObjectProperty(dateProperty);
+				if (result == null) result = caseValueObject(dateProperty);
+				if (result == null) result = caseProperty(dateProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.MAP_PROPERTY: {
-				MapProperty mapProperty = (MapProperty)theEObject;
-				T1 result = caseMapProperty(mapProperty);
-				if (result == null) result = caseProperty(mapProperty);
-				if (result == null) result = caseMap(mapProperty);
+			case NcorePackage.DOUBLE_PROPERTY: {
+				DoubleProperty doubleProperty = (DoubleProperty)theEObject;
+				T1 result = caseDoubleProperty(doubleProperty);
+				if (result == null) result = caseDouble(doubleProperty);
+				if (result == null) result = caseValueObjectProperty(doubleProperty);
+				if (result == null) result = caseValueObject(doubleProperty);
+				if (result == null) result = caseProperty(doubleProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.EOBJECT_PROPERTY: {
+				EObjectProperty eObjectProperty = (EObjectProperty)theEObject;
+				T1 result = caseEObjectProperty(eObjectProperty);
+				if (result == null) result = caseProperty(eObjectProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.INTEGER_PROPERTY: {
+				IntegerProperty integerProperty = (IntegerProperty)theEObject;
+				T1 result = caseIntegerProperty(integerProperty);
+				if (result == null) result = caseInteger(integerProperty);
+				if (result == null) result = caseValueObjectProperty(integerProperty);
+				if (result == null) result = caseValueObject(integerProperty);
+				if (result == null) result = caseProperty(integerProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -282,18 +303,31 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.BOOLEAN_PROPERTY: {
-				BooleanProperty booleanProperty = (BooleanProperty)theEObject;
-				T1 result = caseBooleanProperty(booleanProperty);
-				if (result == null) result = caseProperty(booleanProperty);
-				if (result == null) result = caseBoolean(booleanProperty);
+			case NcorePackage.LONG_PROPERTY: {
+				LongProperty longProperty = (LongProperty)theEObject;
+				T1 result = caseLongProperty(longProperty);
+				if (result == null) result = caseLong(longProperty);
+				if (result == null) result = caseValueObjectProperty(longProperty);
+				if (result == null) result = caseValueObject(longProperty);
+				if (result == null) result = caseProperty(longProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.EOBJECT_PROPERTY: {
-				EObjectProperty eObjectProperty = (EObjectProperty)theEObject;
-				T1 result = caseEObjectProperty(eObjectProperty);
-				if (result == null) result = caseProperty(eObjectProperty);
+			case NcorePackage.MAP_PROPERTY: {
+				MapProperty mapProperty = (MapProperty)theEObject;
+				T1 result = caseMapProperty(mapProperty);
+				if (result == null) result = caseProperty(mapProperty);
+				if (result == null) result = caseMap(mapProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.STRING_PROPERTY: {
+				StringProperty stringProperty = (StringProperty)theEObject;
+				T1 result = caseStringProperty(stringProperty);
+				if (result == null) result = caseString(stringProperty);
+				if (result == null) result = caseValueObjectProperty(stringProperty);
+				if (result == null) result = caseValueObject(stringProperty);
+				if (result == null) result = caseProperty(stringProperty);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -511,6 +545,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Value Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Value Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseValueObject(ValueObject<T> object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>String</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -642,6 +691,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseProperty(Property object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Value Object Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Value Object Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public <T> T1 caseValueObjectProperty(ValueObjectProperty<T> object) {
 		return null;
 	}
 

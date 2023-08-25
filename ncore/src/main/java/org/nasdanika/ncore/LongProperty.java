@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.Long;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,10 +16,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getLongProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.Long org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.ELongObject&gt;"
  * @generated
  */
-public interface LongProperty extends Property, org.nasdanika.ncore.Long {
+public interface LongProperty extends org.nasdanika.ncore.Long, ValueObjectProperty<Long> {
 	
 	static LongProperty wrap(java.lang.String name, java.lang.Long val) {
 		LongProperty ret = NcoreFactory.eINSTANCE.createLongProperty();

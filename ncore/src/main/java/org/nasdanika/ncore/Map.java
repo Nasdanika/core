@@ -259,22 +259,17 @@ public interface Map extends EObject {
 	default java.util.Map<java.lang.String, ?> toMap() {
 		java.util.Map<java.lang.String, Object> ret = new LinkedHashMap<>();
 		for (EObject e: getValue()) {
-			if (e instanceof ListProperty) {
-				ret.add(((ListProperty) e).toList());
-			} else if (e instanceof MapProperty) {
-				ret.add(((MapProperty) e).toMap());
-			} else if (e instanceof BooleanProperty) {
-				ret.add(((Boolean) e).isValue());
-			} else if (e instanceof DateProperty) {
-				ret.add(((DateProperty) e).getValue());
-			} else if (e instanceof DoubleProperty) {
-				ret.add(((DoubleProperty) e).getValue());
-			} else if (e instanceof IntegerProperty) {
-				ret.add(((IntegerProperty) e).getValue());
-			} else if (e instanceof LongProperty) {
-				ret.add(((LongProperty) e).getValue());
-			} else if (e instanceof StringProperty) {
-				ret.add(((StringProperty) e).getValue());
+			if (e instanceof Property) {
+				java.lang.String name = ((Property) e).getName();
+				if (e instanceof ListProperty) {
+					ret.put(name, ((ListProperty) e).toList());
+				} else if (e instanceof MapProperty) {
+					ret.put(name, ((MapProperty) e).toMap());
+				} else if (e instanceof ValueObjectProperty) {
+					ret.put(name, ((ValueObjectProperty<?>) e).getValue());
+				} else {
+					throw new UnsupportedOperationException("Unsupported property type: " + e); 
+				}
 			}
 		}
 		return ret;

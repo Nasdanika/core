@@ -41,6 +41,8 @@ import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
+import org.nasdanika.ncore.ValueObject;
+import org.nasdanika.ncore.ValueObjectProperty;
 import org.nasdanika.ncore.util.NcoreValidator;
 
 /**
@@ -132,6 +134,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass valueObjectEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass stringEClass = null;
 
 	/**
@@ -189,6 +198,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass propertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass valueObjectPropertyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -806,8 +822,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getString() {
-		return stringEClass;
+	public EClass getValueObject() {
+		return valueObjectEClass;
 	}
 
 	/**
@@ -816,8 +832,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getString_Value() {
-		return (EAttribute)stringEClass.getEStructuralFeatures().get(0);
+	public EAttribute getValueObject_Value() {
+		return (EAttribute)valueObjectEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getString() {
+		return stringEClass;
 	}
 
 	/**
@@ -876,28 +902,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getInteger_Value() {
-		return (EAttribute)integerEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getDouble() {
 		return doubleEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getDouble_Value() {
-		return (EAttribute)doubleEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -916,16 +922,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDate_Value() {
-		return (EAttribute)dateEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getLong() {
 		return longEClass;
 	}
@@ -936,28 +932,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLong_Value() {
-		return (EAttribute)longEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getBoolean() {
 		return booleanEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getBoolean_Value() {
-		return (EAttribute)booleanEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -978,6 +954,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	@Override
 	public EAttribute getProperty_Name() {
 		return (EAttribute)propertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getValueObjectProperty() {
+		return valueObjectPropertyEClass;
 	}
 
 	/**
@@ -1382,51 +1368,50 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		referenceEClass = createEClass(REFERENCE);
 		createEReference(referenceEClass, REFERENCE__TARGET);
 
+		valueObjectEClass = createEClass(VALUE_OBJECT);
+		createEAttribute(valueObjectEClass, VALUE_OBJECT__VALUE);
+
 		stringEClass = createEClass(STRING);
-		createEAttribute(stringEClass, STRING__VALUE);
+
+		booleanEClass = createEClass(BOOLEAN);
+
+		doubleEClass = createEClass(DOUBLE);
+
+		dateEClass = createEClass(DATE);
+
+		integerEClass = createEClass(INTEGER);
 
 		listEClass = createEClass(LIST);
 		createEReference(listEClass, LIST__VALUE);
 
+		longEClass = createEClass(LONG);
+
 		mapEClass = createEClass(MAP);
 		createEReference(mapEClass, MAP__VALUE);
-
-		integerEClass = createEClass(INTEGER);
-		createEAttribute(integerEClass, INTEGER__VALUE);
-
-		doubleEClass = createEClass(DOUBLE);
-		createEAttribute(doubleEClass, DOUBLE__VALUE);
-
-		dateEClass = createEClass(DATE);
-		createEAttribute(dateEClass, DATE__VALUE);
-
-		longEClass = createEClass(LONG);
-		createEAttribute(longEClass, LONG__VALUE);
-
-		booleanEClass = createEClass(BOOLEAN);
-		createEAttribute(booleanEClass, BOOLEAN__VALUE);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__NAME);
 
-		stringPropertyEClass = createEClass(STRING_PROPERTY);
-
-		integerPropertyEClass = createEClass(INTEGER_PROPERTY);
-
-		doublePropertyEClass = createEClass(DOUBLE_PROPERTY);
-
-		longPropertyEClass = createEClass(LONG_PROPERTY);
-
-		datePropertyEClass = createEClass(DATE_PROPERTY);
-
-		mapPropertyEClass = createEClass(MAP_PROPERTY);
-
-		listPropertyEClass = createEClass(LIST_PROPERTY);
+		valueObjectPropertyEClass = createEClass(VALUE_OBJECT_PROPERTY);
 
 		booleanPropertyEClass = createEClass(BOOLEAN_PROPERTY);
 
+		datePropertyEClass = createEClass(DATE_PROPERTY);
+
+		doublePropertyEClass = createEClass(DOUBLE_PROPERTY);
+
 		eObjectPropertyEClass = createEClass(EOBJECT_PROPERTY);
 		createEReference(eObjectPropertyEClass, EOBJECT_PROPERTY__VALUE);
+
+		integerPropertyEClass = createEClass(INTEGER_PROPERTY);
+
+		listPropertyEClass = createEClass(LIST_PROPERTY);
+
+		longPropertyEClass = createEClass(LONG_PROPERTY);
+
+		mapPropertyEClass = createEClass(MAP_PROPERTY);
+
+		stringPropertyEClass = createEClass(STRING_PROPERTY);
 
 		stringEntryEClass = createEClass(STRING_ENTRY);
 		createEAttribute(stringEntryEClass, STRING_ENTRY__KEY);
@@ -1484,6 +1469,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		// Create type parameters
 		ETypeParameter referenceEClass_T = addETypeParameter(referenceEClass, "T");
+		ETypeParameter valueObjectEClass_T = addETypeParameter(valueObjectEClass, "T");
+		ETypeParameter valueObjectPropertyEClass_T = addETypeParameter(valueObjectPropertyEClass, "T");
 
 		// Set bounds for type parameters
 
@@ -1495,23 +1482,77 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		modelElementEClass.getESuperTypes().add(this.getMarked());
 		modelElementEClass.getESuperTypes().add(this.getAdaptable());
 		namedElementEClass.getESuperTypes().add(this.getModelElement());
-		stringPropertyEClass.getESuperTypes().add(this.getProperty());
-		stringPropertyEClass.getESuperTypes().add(this.getString());
-		integerPropertyEClass.getESuperTypes().add(this.getProperty());
-		integerPropertyEClass.getESuperTypes().add(this.getInteger());
-		doublePropertyEClass.getESuperTypes().add(this.getProperty());
-		doublePropertyEClass.getESuperTypes().add(this.getDouble());
-		longPropertyEClass.getESuperTypes().add(this.getProperty());
-		longPropertyEClass.getESuperTypes().add(this.getLong());
-		datePropertyEClass.getESuperTypes().add(this.getProperty());
-		datePropertyEClass.getESuperTypes().add(this.getDate());
-		mapPropertyEClass.getESuperTypes().add(this.getProperty());
-		mapPropertyEClass.getESuperTypes().add(this.getMap());
+		EGenericType g1 = createEGenericType(this.getValueObject());
+		EGenericType g2 = createEGenericType(ecorePackage.getEString());
+		g1.getETypeArguments().add(g2);
+		stringEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(ecorePackage.getEBooleanObject());
+		g1.getETypeArguments().add(g2);
+		booleanEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(ecorePackage.getEDoubleObject());
+		g1.getETypeArguments().add(g2);
+		doubleEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(ecorePackage.getEDate());
+		g1.getETypeArguments().add(g2);
+		dateEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(ecorePackage.getEIntegerObject());
+		g1.getETypeArguments().add(g2);
+		integerEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(ecorePackage.getELongObject());
+		g1.getETypeArguments().add(g2);
+		longEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObject());
+		g2 = createEGenericType(valueObjectPropertyEClass_T);
+		g1.getETypeArguments().add(g2);
+		valueObjectPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getProperty());
+		valueObjectPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getBoolean());
+		booleanPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getEBooleanObject());
+		g1.getETypeArguments().add(g2);
+		booleanPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getDate());
+		datePropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getEDate());
+		g1.getETypeArguments().add(g2);
+		datePropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getDouble());
+		doublePropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getEDoubleObject());
+		g1.getETypeArguments().add(g2);
+		doublePropertyEClass.getEGenericSuperTypes().add(g1);
+		eObjectPropertyEClass.getESuperTypes().add(this.getProperty());
+		g1 = createEGenericType(this.getInteger());
+		integerPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getEIntegerObject());
+		g1.getETypeArguments().add(g2);
+		integerPropertyEClass.getEGenericSuperTypes().add(g1);
 		listPropertyEClass.getESuperTypes().add(this.getProperty());
 		listPropertyEClass.getESuperTypes().add(this.getList());
-		booleanPropertyEClass.getESuperTypes().add(this.getProperty());
-		booleanPropertyEClass.getESuperTypes().add(this.getBoolean());
-		eObjectPropertyEClass.getESuperTypes().add(this.getProperty());
+		g1 = createEGenericType(this.getLong());
+		longPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getELongObject());
+		g1.getETypeArguments().add(g2);
+		longPropertyEClass.getEGenericSuperTypes().add(g1);
+		mapPropertyEClass.getESuperTypes().add(this.getProperty());
+		mapPropertyEClass.getESuperTypes().add(this.getMap());
+		g1 = createEGenericType(this.getString());
+		stringPropertyEClass.getEGenericSuperTypes().add(g1);
+		g1 = createEGenericType(this.getValueObjectProperty());
+		g2 = createEGenericType(ecorePackage.getEString());
+		g1.getETypeArguments().add(g2);
+		stringPropertyEClass.getEGenericSuperTypes().add(g1);
 		gitMarkerEClass.getESuperTypes().add(this.getMarker());
 		compositeEClass.getESuperTypes().add(this.getNamedElement());
 		compositeEClass.getESuperTypes().add(this.getDocumented());
@@ -1583,55 +1624,55 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getNamedElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, NamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(referenceEClass, Reference.class, "Reference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		EGenericType g1 = createEGenericType(referenceEClass_T);
+		g1 = createEGenericType(referenceEClass_T);
 		initEReference(getReference_Target(), g1, null, "target", null, 1, 1, Reference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(valueObjectEClass, ValueObject.class, "ValueObject", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(valueObjectEClass_T);
+		initEAttribute(getValueObject_Value(), g1, "value", null, 0, 1, ValueObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(stringEClass, org.nasdanika.ncore.String.class, "String", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getString_Value(), ecorePackage.getEString(), "value", null, 0, 1, org.nasdanika.ncore.String.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(booleanEClass, org.nasdanika.ncore.Boolean.class, "Boolean", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(doubleEClass, org.nasdanika.ncore.Double.class, "Double", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(dateEClass, Date.class, "Date", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(integerEClass, org.nasdanika.ncore.Integer.class, "Integer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(listEClass, List.class, "List", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getList_Value(), ecorePackage.getEObject(), null, "value", null, 0, -1, List.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(longEClass, org.nasdanika.ncore.Long.class, "Long", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(mapEClass, Map.class, "Map", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getMap_Value(), this.getProperty(), null, "value", null, 0, -1, Map.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getMap_Value().getEKeys().add(this.getProperty_Name());
 
-		initEClass(integerEClass, org.nasdanika.ncore.Integer.class, "Integer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getInteger_Value(), ecorePackage.getEInt(), "value", null, 0, 1, org.nasdanika.ncore.Integer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(doubleEClass, org.nasdanika.ncore.Double.class, "Double", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDouble_Value(), ecorePackage.getEDouble(), "value", null, 0, 1, org.nasdanika.ncore.Double.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(dateEClass, Date.class, "Date", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDate_Value(), ecorePackage.getEDate(), "value", null, 0, 1, Date.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(longEClass, org.nasdanika.ncore.Long.class, "Long", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLong_Value(), ecorePackage.getELong(), "value", null, 0, 1, org.nasdanika.ncore.Long.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(booleanEClass, org.nasdanika.ncore.Boolean.class, "Boolean", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getBoolean_Value(), ecorePackage.getEBoolean(), "value", null, 0, 1, org.nasdanika.ncore.Boolean.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(propertyEClass, Property.class, "Property", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Name(), ecorePackage.getEString(), "name", null, 1, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(stringPropertyEClass, StringProperty.class, "StringProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(integerPropertyEClass, IntegerProperty.class, "IntegerProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(doublePropertyEClass, DoubleProperty.class, "DoubleProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(longPropertyEClass, LongProperty.class, "LongProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(datePropertyEClass, DateProperty.class, "DateProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(mapPropertyEClass, MapProperty.class, "MapProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
-		initEClass(listPropertyEClass, ListProperty.class, "ListProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(valueObjectPropertyEClass, ValueObjectProperty.class, "ValueObjectProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(booleanPropertyEClass, BooleanProperty.class, "BooleanProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(datePropertyEClass, DateProperty.class, "DateProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(doublePropertyEClass, DoubleProperty.class, "DoubleProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
 		initEClass(eObjectPropertyEClass, EObjectProperty.class, "EObjectProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEObjectProperty_Value(), ecorePackage.getEObject(), null, "value", null, 1, 1, EObjectProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(integerPropertyEClass, IntegerProperty.class, "IntegerProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(listPropertyEClass, ListProperty.class, "ListProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(longPropertyEClass, LongProperty.class, "LongProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(mapPropertyEClass, MapProperty.class, "MapProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(stringPropertyEClass, StringProperty.class, "StringProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(stringEntryEClass, java.util.Map.Entry.class, "StringEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStringEntry_Key(), ecorePackage.getEString(), "key", null, 1, 1, java.util.Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1782,7 +1823,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "default-feature", "true"
 		   });
 		addAnnotation
-		  (getString_Value(),
+		  (getValueObject_Value(),
 		   source,
 		   new String[] {
 			   "default-feature", "true"
@@ -1799,36 +1840,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   new String[] {
 			   "reference-type", "map: MapProperty\nlist: ListProperty\nstring: StringProperty\ninteger: IntegerProperty",
 			   "value-feature", "value"
-		   });
-		addAnnotation
-		  (getInteger_Value(),
-		   source,
-		   new String[] {
-			   "default-feature", "true"
-		   });
-		addAnnotation
-		  (getDouble_Value(),
-		   source,
-		   new String[] {
-			   "default-feature", "true"
-		   });
-		addAnnotation
-		  (getDate_Value(),
-		   source,
-		   new String[] {
-			   "default-feature", "true"
-		   });
-		addAnnotation
-		  (getLong_Value(),
-		   source,
-		   new String[] {
-			   "default-feature", "true"
-		   });
-		addAnnotation
-		  (getBoolean_Value(),
-		   source,
-		   new String[] {
-			   "default-feature", "true"
 		   });
 		addAnnotation
 		  (getEObjectProperty_Value(),
@@ -2081,16 +2092,40 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Reference target."
 		   });
 		addAnnotation
+		  (getValueObject_Value(),
+		   source,
+		   new String[] {
+			   "documentation", "String value."
+		   });
+		addAnnotation
 		  (stringEClass,
 		   source,
 		   new String[] {
 			   "documentation", "Text/string."
 		   });
 		addAnnotation
-		  (getString_Value(),
+		  (booleanEClass,
 		   source,
 		   new String[] {
-			   "documentation", "String value."
+			   "documentation", "Represents boolean."
+		   });
+		addAnnotation
+		  (doubleEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents integer number."
+		   });
+		addAnnotation
+		  (dateEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents integer number."
+		   });
+		addAnnotation
+		  (integerEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents integer number."
 		   });
 		addAnnotation
 		  (listEClass,
@@ -2105,6 +2140,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "List elements."
 		   });
 		addAnnotation
+		  (longEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Represents integer number."
+		   });
+		addAnnotation
 		  (mapEClass,
 		   source,
 		   new String[] {
@@ -2115,66 +2156,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Map entries"
-		   });
-		addAnnotation
-		  (integerEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Represents integer number."
-		   });
-		addAnnotation
-		  (getInteger_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Value."
-		   });
-		addAnnotation
-		  (doubleEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Represents integer number."
-		   });
-		addAnnotation
-		  (getDouble_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Value."
-		   });
-		addAnnotation
-		  (dateEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Represents integer number."
-		   });
-		addAnnotation
-		  (getDate_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Value."
-		   });
-		addAnnotation
-		  (longEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Represents integer number."
-		   });
-		addAnnotation
-		  (getLong_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Value."
-		   });
-		addAnnotation
-		  (booleanEClass,
-		   source,
-		   new String[] {
-			   "documentation", "Represents boolean."
-		   });
-		addAnnotation
-		  (getBoolean_Value(),
-		   source,
-		   new String[] {
-			   "documentation", "Value."
 		   });
 		addAnnotation
 		  (propertyEClass,
@@ -2189,13 +2170,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Property name/key."
 		   });
 		addAnnotation
-		  (stringPropertyEClass,
+		  (booleanPropertyEClass,
 		   source,
 		   new String[] {
-			   "documentation", "A named/keyed string."
+			   "documentation", "A named/keyed boolean."
 		   });
 		addAnnotation
-		  (integerPropertyEClass,
+		  (datePropertyEClass,
 		   source,
 		   new String[] {
 			   "documentation", "A named/keyed integer."
@@ -2205,36 +2186,6 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "A named/keyed integer."
-		   });
-		addAnnotation
-		  (longPropertyEClass,
-		   source,
-		   new String[] {
-			   "documentation", "A named/keyed integer."
-		   });
-		addAnnotation
-		  (datePropertyEClass,
-		   source,
-		   new String[] {
-			   "documentation", "A named/keyed integer."
-		   });
-		addAnnotation
-		  (mapPropertyEClass,
-		   source,
-		   new String[] {
-			   "documentation", "A named/keyed map."
-		   });
-		addAnnotation
-		  (listPropertyEClass,
-		   source,
-		   new String[] {
-			   "documentation", "A named/keyed list."
-		   });
-		addAnnotation
-		  (booleanPropertyEClass,
-		   source,
-		   new String[] {
-			   "documentation", "A named/keyed boolean."
 		   });
 		addAnnotation
 		  (eObjectPropertyEClass,
@@ -2247,6 +2198,36 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Property value."
+		   });
+		addAnnotation
+		  (integerPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed integer."
+		   });
+		addAnnotation
+		  (listPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed list."
+		   });
+		addAnnotation
+		  (longPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed integer."
+		   });
+		addAnnotation
+		  (mapPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed map."
+		   });
+		addAnnotation
+		  (stringPropertyEClass,
+		   source,
+		   new String[] {
+			   "documentation", "A named/keyed string."
 		   });
 		addAnnotation
 		  (stringEntryEClass,

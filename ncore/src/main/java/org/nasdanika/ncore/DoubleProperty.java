@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.Double;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,10 +16,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getDoubleProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.Double org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.EDoubleObject&gt;"
  * @generated
  */
-public interface DoubleProperty extends Property, org.nasdanika.ncore.Double {
+public interface DoubleProperty extends org.nasdanika.ncore.Double, ValueObjectProperty<Double> {
 
 	static DoubleProperty wrap(java.lang.String name, java.lang.Double val) {
 		DoubleProperty ret = NcoreFactory.eINSTANCE.createDoubleProperty();

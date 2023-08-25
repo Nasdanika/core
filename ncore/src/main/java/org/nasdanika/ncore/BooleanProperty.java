@@ -2,6 +2,8 @@
  */
 package org.nasdanika.ncore;
 
+import java.lang.Boolean;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,10 +16,10 @@ package org.nasdanika.ncore;
  *
  *
  * @see org.nasdanika.ncore.NcorePackage#getBooleanProperty()
- * @model
+ * @model superTypes="org.nasdanika.ncore.Boolean org.nasdanika.ncore.ValueObjectProperty&lt;org.eclipse.emf.ecore.EBooleanObject&gt;"
  * @generated
  */
-public interface BooleanProperty extends Property, org.nasdanika.ncore.Boolean {
+public interface BooleanProperty extends org.nasdanika.ncore.Boolean, ValueObjectProperty<Boolean> {
 		
 	static BooleanProperty wrap(java.lang.String name, java.lang.Boolean val) {
 		BooleanProperty ret = NcoreFactory.eINSTANCE.createBooleanProperty();
