@@ -2,13 +2,16 @@ package org.nasdanika.diagram.plantuml.clazz;
 
 public class Association extends Relation {
 
-	public Association(DiagramElement source, DiagramElement target) {
+	private boolean biDirectional;
+
+	public Association(DiagramElement source, DiagramElement target, boolean biDirectional) {
 		super(source, target);
+		this.biDirectional = biDirectional;
 	}
 
 	@Override
 	protected String getType() {
-		return "-->";
+		return biDirectional ? "--" : "-->";
 	}
 
 }
