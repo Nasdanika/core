@@ -219,13 +219,22 @@ public interface NcorePackage extends EPackage {
 	int MARKER__COMMENT = IMARKER_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKER__DATE = IMARKER_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Marker</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 3;
+	int MARKER_FEATURE_COUNT = IMARKER_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Marker</em>' class.
@@ -1760,6 +1769,15 @@ public interface NcorePackage extends EPackage {
 	int GIT_MARKER__COMMENT = MARKER__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GIT_MARKER__DATE = MARKER__DATE;
+
+	/**
 	 * The feature id for the '<em><b>Path</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2102,6 +2120,17 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getMarker_Comment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.Marker#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see org.nasdanika.ncore.Marker#getDate()
+	 * @see #getMarker()
+	 * @generated
+	 */
+	EAttribute getMarker_Date();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Temporal <em>Temporal</em>}'.
@@ -3003,6 +3032,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MARKER__COMMENT = eINSTANCE.getMarker_Comment();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MARKER__DATE = eINSTANCE.getMarker_Date();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.TemporalImpl <em>Temporal</em>}' class.

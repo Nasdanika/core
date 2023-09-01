@@ -387,7 +387,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		if (mMarkers == null || mMarkers.isEmpty()) {
 			org.nasdanika.persistence.Marked pMarked = (org.nasdanika.persistence.Marked) EcoreUtil.getRegisteredAdapter(this, type);
 			if (pMarked != null) {
-				pMarkers = pMarked.getMarkers();
+				pMarkers = new ArrayList<>(pMarked.getMarkers());
 			}
 		} else {
 			pMarkers = mMarkers.stream().map(mMarker -> new org.nasdanika.persistence.MarkerImpl(mMarker.getLocation(), mMarker.getPosition())).toList();
@@ -473,7 +473,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		if (eObject.eIsProxy()) {
 			eObject = (E) EcoreUtil.resolve(eObject, this);
 			if (eObject.eIsProxy()) { // Not resolved.
-				List<? extends org.nasdanika.persistence.Marker> markers = null;
+				Collection<? extends org.nasdanika.persistence.Marker> markers = null;
 				if (eObject instanceof org.nasdanika.persistence.Marked) {
 					markers = ((org.nasdanika.persistence.Marked) eObject).getMarkers();
 				}

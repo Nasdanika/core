@@ -3,6 +3,7 @@
 package org.nasdanika.ncore;
 
 import java.lang.String;
+import java.util.Date;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.nasdanika.ncore.Marker#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getPosition <em>Position</em>}</li>
  *   <li>{@link org.nasdanika.ncore.Marker#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.Marker#getDate <em>Date</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.ncore.NcorePackage#getMarker()
@@ -102,5 +104,30 @@ public interface Marker extends EObject, org.nasdanika.persistence.Marker {
 	 * @generated
 	 */
 	void setComment(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * When this marker was created, source data timestamp 
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Date</em>' attribute.
+	 * @see #setDate(Date)
+	 * @see org.nasdanika.ncore.NcorePackage#getMarker_Date()
+	 * @model
+	 * @generated
+	 */
+	Date getDate();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.ncore.Marker#getDate <em>Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Date</em>' attribute.
+	 * @see #getDate()
+	 * @generated
+	 */
+	void setDate(Date value);
 
 } // Marker

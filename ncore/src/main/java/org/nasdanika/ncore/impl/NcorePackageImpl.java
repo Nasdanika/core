@@ -478,6 +478,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getMarker_Date() {
+		return (EAttribute)markerEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getTemporal() {
 		return temporalEClass;
 	}
@@ -1254,6 +1264,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(markerEClass, MARKER__LOCATION);
 		createEAttribute(markerEClass, MARKER__POSITION);
 		createEAttribute(markerEClass, MARKER__COMMENT);
+		createEAttribute(markerEClass, MARKER__DATE);
 
 		temporalEClass = createEClass(TEMPORAL);
 		createEAttribute(temporalEClass, TEMPORAL__INSTANT);
@@ -1489,6 +1500,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getMarker_Location(), ecorePackage.getEString(), "location", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Position(), ecorePackage.getEString(), "position", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarker_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMarker_Date(), ecorePackage.getEDate(), "date", null, 0, 1, Marker.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(temporalEClass, Temporal.class, "Temporal", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTemporal_Instant(), this.getInstant(), "instant", null, 0, 1, Temporal.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1802,6 +1814,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Optional marker comment providing additional information about the marker. E.g. for locations which do not support lines and colums it may provide position inside the resource identified by the location attribute, such as an XPath for XML documents or sheet name and a range for Excel documents."
+		   });
+		addAnnotation
+		  (getMarker_Date(),
+		   source,
+		   new String[] {
+			   "documentation", "When this marker was created, source data timestamp "
 		   });
 		addAnnotation
 		  (instantEDataType,

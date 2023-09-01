@@ -3,6 +3,7 @@
 package org.nasdanika.ncore.impl;
 
 import java.lang.String;
+import java.util.Date;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.nasdanika.ncore.Marker;
@@ -19,6 +20,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getLocation <em>Location</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.MarkerImpl#getDate <em>Date</em>}</li>
  * </ul>
  *
  * @generated
@@ -55,12 +57,23 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	protected static final String COMMENT_EDEFAULT = null;
 
 	/**
+	 * The default value of the '{@link #getDate() <em>Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see #getDate()
 	 * @generated
+	 * @ordered
+	 */
+	protected static final Date DATE_EDEFAULT = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
 	 */
 	protected MarkerImpl() {
 		super();
+		setDate(new Date());
 	}
 
 	/**
@@ -149,6 +162,26 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 	 * @generated
 	 */
 	@Override
+	public Date getDate() {
+		return (Date)eDynamicGet(NcorePackage.MARKER__DATE, NcorePackage.Literals.MARKER__DATE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDate(Date newDate) {
+		eDynamicSet(NcorePackage.MARKER__DATE, NcorePackage.Literals.MARKER__DATE, newDate);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case NcorePackage.MARKER__LOCATION:
@@ -157,6 +190,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return getPosition();
 			case NcorePackage.MARKER__COMMENT:
 				return getComment();
+			case NcorePackage.MARKER__DATE:
+				return getDate();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -177,6 +212,9 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return;
 			case NcorePackage.MARKER__COMMENT:
 				setComment((String)newValue);
+				return;
+			case NcorePackage.MARKER__DATE:
+				setDate((Date)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -199,6 +237,9 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 			case NcorePackage.MARKER__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case NcorePackage.MARKER__DATE:
+				setDate(DATE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -217,6 +258,8 @@ public class MarkerImpl extends MinimalEObjectImpl.Container implements Marker {
 				return POSITION_EDEFAULT == null ? getPosition() != null : !POSITION_EDEFAULT.equals(getPosition());
 			case NcorePackage.MARKER__COMMENT:
 				return COMMENT_EDEFAULT == null ? getComment() != null : !COMMENT_EDEFAULT.equals(getComment());
+			case NcorePackage.MARKER__DATE:
+				return DATE_EDEFAULT == null ? getDate() != null : !DATE_EDEFAULT.equals(getDate());
 		}
 		return super.eIsSet(featureID);
 	}
