@@ -300,7 +300,7 @@ public class Util {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, List<? extends Marker> markers) {
+	public static <T> ConsumerFactory<T> asConsumerFactory(Object obj, Collection<? extends Marker> markers) {
 		if (obj instanceof Collection) {
 			CollectionCompoundConsumerFactory<T> ret = new CollectionCompoundConsumerFactory<>("Consumer collection");
 			int idx = 0;
@@ -338,7 +338,7 @@ public class Util {
 	 * @param obj
 	 * @return
 	 */
-	public static CommandFactory asCommandFactory(Object obj, List<? extends Marker> markers) {
+	public static CommandFactory asCommandFactory(Object obj, Collection<? extends Marker> markers) {
 		if (obj instanceof Collection) {
 			CompoundCommandFactory ret = new CompoundCommandFactory("Command collection");
 			int idx = 0;

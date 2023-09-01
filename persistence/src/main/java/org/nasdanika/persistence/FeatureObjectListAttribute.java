@@ -1,6 +1,8 @@
 package org.nasdanika.persistence;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.eclipse.emf.common.util.URI;
@@ -28,20 +30,17 @@ public class FeatureObjectListAttribute<T extends FeatureObject> extends ListAtt
 		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.elementFactory = elementFactory;
 	}
-
-	/**
-	 * Creates element list.
-	 * @param loader
-	 * @param element
-	 * @param base
-	 * @param progressMonitor
-	 * @param marker
-	 * @return
-	 */
+	
 	@Override
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
+	protected T createElement(
+			ObjectLoader loader, 
+			Object element, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		T ret = elementFactory.get();
-		ret.load(loader, element, base, progressMonitor, markers);
+		ret.load(loader, element, base, resolver, markers, progressMonitor);
 		return ret;
 	}
 	

@@ -1,7 +1,8 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -27,7 +28,13 @@ public interface Feature<T> extends Marked {
 	 */
 	boolean isConstructor();
 
-	void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers);
+	void load(
+			ObjectLoader loader, 
+			Map<?,?> source, 
+			URI base, 
+			BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> resolver,
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor);
 	
 	/**
 	 * @return Feature description in Markdown.

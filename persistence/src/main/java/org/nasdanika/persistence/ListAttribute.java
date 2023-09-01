@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -27,17 +28,23 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public List<T> create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		if (config instanceof Collection) {
 			List<T> ret = new ArrayList<>();
 			int idx = 0;
 			for (Object element: (Collection<?>) config) {
-				ret.addAll(createElements(loader, element, base, progressMonitor, Util.getMarkers((Collection<?>) config, idx++)));
+				ret.addAll(createElements(loader, element, base, resolver, Util.getMarkers((Collection<?>) config, idx++), progressMonitor));
 			}
 			return ret;
 		}
 		
-		return createElements(loader, config, base, progressMonitor, markers);
+		return createElements(loader, config, base, resolver, markers, progressMonitor);
 	}
 	
 	/**
@@ -50,8 +57,14 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @param marker
 	 * @return
 	 */
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
-		return Collections.singletonList(createElement(loader, element, base, progressMonitor, markers)); 
+	protected List<T> createElements(
+			ObjectLoader loader, 
+			Object element, 
+			URI base, 
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers, 
+			ProgressMonitor progressMonitor) { 
+		return Collections.singletonList(createElement(loader, element, base, resolver, markers, progressMonitor)); 
 	}
 	
 
@@ -65,7 +78,13 @@ public class ListAttribute<T> extends Attribute<List<T>> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected T createElement(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
+	protected T createElement(
+			ObjectLoader loader, 
+			Object element, 
+			URI base, 
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers, 			
+			ProgressMonitor progressMonitor) { 
 		return (T) element; 
 	}
 	

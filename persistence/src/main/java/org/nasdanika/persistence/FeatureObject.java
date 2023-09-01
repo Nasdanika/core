@@ -1,11 +1,12 @@
 package org.nasdanika.persistence;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -17,10 +18,10 @@ import org.nasdanika.common.ProgressMonitor;
  */
 public class FeatureObject implements Marked, Loadable {
 	
-	private List<? extends Marker> markers = new ArrayList<>();
+	private Collection<? extends Marker> markers = new ArrayList<>();
 	
 	@Override
-	public List<? extends Marker> getMarkers() {
+	public Collection<? extends Marker> getMarkers() {
 		return markers;
 	}
 	
@@ -42,35 +43,32 @@ public class FeatureObject implements Marked, Loadable {
 		features.add(feature);
 		return feature;
 	}
-
-	/**
-	 * Loads object
-	 * @param loader
-	 * @param config
-	 * @param base
-	 * @param progressMonitor
-	 * @param marker
-	 * @return this object.
-	 */
+	
 	@Override
-	public void load(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public void load(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		this.markers = markers;			
 		Optional<Feature<?>> constructorFeatureOptional = features.stream().filter(Feature::isConstructor).findFirst();
 		if (constructorFeatureOptional.isPresent()) {
 			Feature<?> constructorFeature = constructorFeatureOptional.get();
-			constructorFeature.load(loader, Collections.singletonMap(constructorFeature.getKey(), config), base, progressMonitor, markers);			
+			constructorFeature.load(loader, Collections.singletonMap(constructorFeature.getKey(), config), base, resolver, markers, progressMonitor);			
 		} else if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;
 			Util.checkUnsupportedKeys(configMap, features.stream().map(Feature::getKey).toList());
 			for (Feature<?> feature: features) {
-				feature.load(loader, configMap, base, progressMonitor, markers);
+				feature.load(loader, configMap, base, resolver, markers, progressMonitor);
 			}
 		} else {
 			Optional<Feature<?>> defaultFeatureOptional = features.stream().filter(Feature::isDefault).findFirst();
 			if (defaultFeatureOptional.isPresent()) {				
 				Feature<?> defaultFeature = defaultFeatureOptional.get();
 				// Singleton map with a single entry default feature key -> config.
-				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, progressMonitor, markers);
+				defaultFeature.load(loader, Collections.singletonMap(defaultFeature.getKey(), config), base, resolver, markers, progressMonitor);
 			} else if (!Boolean.TRUE.equals(config)) {
 				throw new ConfigurationException(getClass().getName() + " configuration shall be a map, got " + config, markers);
 			}

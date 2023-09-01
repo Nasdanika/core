@@ -1,6 +1,7 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -29,8 +30,14 @@ public class FactoryFeature<T> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		return factory.create(loader, config, base, progressMonitor, markers);
+	public T create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		return factory.create(loader, config, base, resolver, markers, progressMonitor);
 	}
 
 }

@@ -1,7 +1,9 @@
 package org.nasdanika.persistence;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -25,8 +27,15 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		return (V) loader.load(value, base, progressMonitor);
+	protected V createValue(
+			ObjectLoader loader, 
+			K key, 
+			Object value, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		return (V) loader.load(value, base, resolver, progressMonitor);
 	}
 
 }

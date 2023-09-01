@@ -1,7 +1,9 @@
 package org.nasdanika.persistence;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -54,9 +56,15 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 	public List<? extends Marker> getMarkers() {
 		return markers;
 	}
-
+	
 	@Override
-	public void load(ObjectLoader loader, Map<?,?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public void load(
+			ObjectLoader loader, 
+			Map<?, ?> source, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		if (source.containsKey(getKey())) {
 			for (Object ek: exclusiveWith) {
 				if (source.containsKey(ek)) {
@@ -64,25 +72,22 @@ public class Attribute<T> implements Feature<T>, ObjectFactory<T> {
 				}
 			}
 			this.markers = Util.getMarkers(source, getKey());
-			value = create(loader, source.get(getKey()), base, progressMonitor, this.markers);						
+			value = create(loader, source.get(getKey()), base, resolver, this.markers, progressMonitor);						
 			loaded = true;
 		} else if (isRequired()) {
 			throw new ConfigurationException("Missing required feature: " + getKey(), markers);
 		}		
 	}	
 	
-	/**
-	 * This implementation casts config to the target type. It can be used where not special conversion is required, e.g. config is a String and feature type is String.
-	 * @param loader
-	 * @param config
-	 * @param base
-	 * @param progressMonitor
-	 * @param marker
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public T create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		return (T) config;
 	}
 

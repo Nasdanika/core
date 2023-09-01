@@ -1,7 +1,8 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -20,7 +21,7 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 		this.delegate = delegate;
 	}
 
-	public List<? extends Marker> getMarkers() {
+	public Collection<? extends Marker> getMarkers() {
 		return delegate.getMarkers();
 	}
 
@@ -35,9 +36,15 @@ public class AbstractFeatureDelegate<F extends Feature<?>> {
 	public boolean isLoaded() {
 		return delegate.isLoaded();
 	}
-
-	public void load(ObjectLoader loader, Map<?, ?> source, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		delegate.load(loader, source, base, progressMonitor, markers);		
+	
+	public void load(
+			ObjectLoader loader, 
+			Map<?, ?> source, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers, 			
+			ProgressMonitor progressMonitor) {
+		delegate.load(loader, source, base, resolver, markers, progressMonitor);		
 	}
 	
 	public boolean isDefault() {

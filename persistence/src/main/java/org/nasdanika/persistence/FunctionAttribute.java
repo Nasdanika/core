@@ -1,6 +1,7 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -30,7 +31,13 @@ public class FunctionAttribute<T> extends Attribute<T> {
 	}
 	
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public T create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		return function.apply(config);
 	}
 

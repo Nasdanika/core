@@ -1,9 +1,9 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface Marked {
 	
-	List<? extends Marker> getMarkers();
+	Collection<? extends Marker> getMarkers();
 	
 }

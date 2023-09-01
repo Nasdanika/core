@@ -1,6 +1,7 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -29,18 +30,15 @@ public class Choice<T> extends Attribute<T> {
 		this.selector = selector;
 	}
 	
-	/**
-	 * This implementation casts config to the target type. It can be used where not special conversion is required, e.g. config is a String and feature type is String.
-	 * @param loader
-	 * @param config
-	 * @param base
-	 * @param progressMonitor
-	 * @param marker
-	 * @return
-	 */
 	@Override
-	public T create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		return selector.apply(config).create(loader, config, base, progressMonitor, markers);
+	public T create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		return selector.apply(config).create(loader, config, base, resolver, markers, progressMonitor);
 	}
 	
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.emf.common.util.URI;
@@ -77,6 +78,8 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 	
 	protected abstract Context getContext();
 	
+	protected abstract BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> getResolver();
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void load(Map<?, ?> options) throws IOException {
@@ -101,7 +104,7 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 			URI base = specObj.has(BASE_KEY) ? URI.createURI(specObj.getString(BASE_KEY)) : null;
 			ObjectLoader objectLoader = getObjectLoader();
 			ProgressMonitor progressMonitor = getProgressMonitor();
-			Object obj = isYaml ? objectLoader.loadYaml(spec, base, progressMonitor) : objectLoader.loadJsonObject(spec, base, progressMonitor);
+			Object obj = isYaml ? objectLoader.loadYaml(spec, base, getResolver(), progressMonitor) : objectLoader.loadJsonObject(spec, base, getResolver(), progressMonitor);
 			
 			if (obj instanceof SupplierFactory) {
 				obj = ((SupplierFactory<Object>) obj).create(getContext()).call(progressMonitor, this::onDiagnostic);
@@ -139,11 +142,11 @@ public abstract class ObjectLoaderResource extends ResourceImpl {
 		try {
 			Object data;
 			if (isJsonArray()) {
-				 data = getObjectLoader().loadJsonArray(inputStream, getURI(), progressMonitor);				
+				 data = getObjectLoader().loadJsonArray(inputStream, getURI(), getResolver(), progressMonitor);				
 			} else if (isJsonObject()) {
-				data = getObjectLoader().loadJsonObject(inputStream, getURI(), progressMonitor);				
+				data = getObjectLoader().loadJsonObject(inputStream, getURI(), getResolver(), progressMonitor);				
 			} else {
-				data = getObjectLoader().loadYaml(inputStream, getURI(), progressMonitor);				
+				data = getObjectLoader().loadYaml(inputStream, getURI(), getResolver(), progressMonitor);				
 			}
 			
 			if (data instanceof Collection) {

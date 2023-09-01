@@ -1,6 +1,7 @@
 package org.nasdanika.persistence;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -24,8 +25,14 @@ public class Reference extends Attribute<Object> {
 	}
 	
 	@Override
-	public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		return loader.load(config, base, progressMonitor);
+	public Object create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		return loader.load(config, base, resolver, progressMonitor);
 	}
 
 }

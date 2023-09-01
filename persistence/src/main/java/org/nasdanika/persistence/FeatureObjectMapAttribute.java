@@ -1,7 +1,9 @@
 package org.nasdanika.persistence;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -14,7 +16,6 @@ import org.nasdanika.common.ProgressMonitor;
  * @param <V>
  */
 public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAttribute<K,V> {
-
 
 	private Function<K, V> valueFactory;
 
@@ -40,20 +41,18 @@ public class FeatureObjectMapAttribute<K, V extends FeatureObject> extends MapAt
 		super(key, isDefault, isConstructor, required, defaultValue, description, exclusiveWith);
 		this.valueFactory = valueFactory;
 	}
-
-	/**
-	 * Creates map value.
-	 * @param loader
-	 * @param element
-	 * @param base
-	 * @param progressMonitor
-	 * @param marker
-	 * @return
-	 */
+	
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) { 
+	protected V createValue(
+			ObjectLoader loader, 
+			K key, 
+			Object value, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		V ret = valueFactory.apply(key);
-		ret.load(loader, value, base, progressMonitor, markers);
+		ret.load(loader, value, base, resolver, markers, progressMonitor);
 		return ret;
 	}
 	

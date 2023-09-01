@@ -2,6 +2,7 @@ package org.nasdanika.persistence;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.URI;
@@ -62,6 +63,11 @@ public abstract class ObjectLoaderResourceFactory extends ResourceFactoryImpl {
 			protected Storable toStorable(EObject eObj) {
 				return ObjectLoaderResourceFactory.this.toStorable(this, eObj);
 			}
+
+			@Override
+			protected BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver() {
+				return ObjectLoaderResourceFactory.this.getResolver();
+			}
 			
 		};
 	}
@@ -82,9 +88,10 @@ public abstract class ObjectLoaderResourceFactory extends ResourceFactoryImpl {
 	protected Storable toStorable(Resource resource, EObject eObj) {
 		return (Storable) EcoreUtil.getRegisteredAdapter(eObj, Storable.class);
 	}
-	
-	
+		
 	protected abstract ObjectLoader getObjectLoader(Resource resource);
+	
+	protected abstract BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver();
 	
 	protected ProgressMonitor getProgressMonitor(Resource resource) {
 		return new NullProgressMonitor();

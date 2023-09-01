@@ -1,9 +1,10 @@
 package org.nasdanika.persistence;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.nasdanika.common.ProgressMonitor;
@@ -35,10 +36,24 @@ public class DispatchingLoader implements ObjectLoader {
 	}
 
 	@Override
-	public Object create(ObjectLoader loader, String type, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public Object create(
+			ObjectLoader loader, 
+			String type, 
+			Object config, 
+			URI base, 
+			BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> resolver,
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		for (Entry<String, ObjectLoader> re: registry.entrySet()) {
 			if (type.startsWith(re.getKey())) {
-				return re.getValue().create(loader, type.substring(re.getKey().length()), config, base, progressMonitor, markers);
+				return re.getValue().create(
+						loader, 
+						type.substring(re.getKey().length()), 
+						config, 
+						base,
+						resolver,
+						markers,
+						progressMonitor);
 			}			
 		}
 		
@@ -46,7 +61,32 @@ public class DispatchingLoader implements ObjectLoader {
 			throw new ConfigurationException("Unsupported type: " + type, markers);
 		}
 		
-		return chain.create(loader, type, config, base, progressMonitor, markers);
+		return chain.create(
+				loader, 
+				type, 
+				config, 
+				base, 
+				resolver,
+				markers,
+				progressMonitor);
+	}
+
+	@Override
+	public Object create(ObjectLoader loader, String type) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void load(
+			ObjectLoader loader, 
+			Object config, 
+			Object target, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object,ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		
+		throw new UnsupportedOperationException();		
 	}
 		
 }
