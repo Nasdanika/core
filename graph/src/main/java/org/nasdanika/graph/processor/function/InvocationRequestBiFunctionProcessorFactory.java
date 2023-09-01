@@ -56,7 +56,7 @@ public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunc
 	 * @param connectionProcessorConfig
 	 * @param parallel
 	 * @param infoProvider
-	 * @param stageConsumer
+	 * @param endpointWiringStageConsumer
 	 * @param progressMonitor
 	 * @return
 	 */
@@ -84,7 +84,7 @@ public abstract class InvocationRequestBiFunctionProcessorFactory extends BiFunc
 	 * @param nodeProcessorConfig
 	 * @param parallel
 	 * @param infoProvider
-	 * @param stageConsumer
+	 * @param endpointWiringStageConsumer
 	 * @param incomingEndpoints
 	 * @param outgoingEndpoints
 	 * @param progressMonitor

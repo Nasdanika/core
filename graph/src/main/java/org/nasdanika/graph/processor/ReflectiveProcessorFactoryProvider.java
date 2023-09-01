@@ -838,7 +838,7 @@ public class ReflectiveProcessorFactoryProvider<P, H, E> extends Reflector {
 		if (method.getParameterCount() != 4 ||
 				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
 				!method.getParameterTypes()[2].isAssignableFrom(BiConsumer.class) ||
-				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
+				!method.getParameterTypes()[3].isAssignableFrom(ProgressMonitor.class)) {
 			throw new IllegalArgumentException("Factory method shall have 4 parameters compatible with: "
 					+ "ProcessorConfig config, "
 					+ "boolean parallel, "

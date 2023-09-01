@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -443,11 +444,12 @@ public class TestDrawio {
 		
 		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 			
+			@Override
 			protected ProcessorInfo<Object> createProcessor(
 					ProcessorConfig config, 
 					boolean parallel, 
-					Function<org.nasdanika.graph.Element,CompletionStage<ProcessorInfo<Object>>> inforProvider,
-					Consumer<java.util.concurrent.CompletionStage<?>> stageConsumer, 
+					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> inforProvider,
+					Consumer<java.util.concurrent.CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
@@ -479,7 +481,7 @@ public class TestDrawio {
 					}
 				}
 
-				return super.createProcessor(config, parallel, inforProvider, stageConsumer, progressMonitor);
+				return super.createProcessor(config, parallel, inforProvider, endpointWiringStageConsumer, progressMonitor);
 			}
 		};
 		
@@ -551,11 +553,12 @@ public class TestDrawio {
 		
 		ProcessorFactory<Object> processorFactory = new ProcessorFactory<Object>() {
 			
+			@Override
 			protected ProcessorInfo<Object> createProcessor(
 					ProcessorConfig config, 
 					boolean parallel, 
-					Function<org.nasdanika.graph.Element,CompletionStage<ProcessorInfo<Object>>> inforProvider,
-					Consumer<java.util.concurrent.CompletionStage<?>> stageConsumer, 
+					BiConsumer<org.nasdanika.graph.Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> inforProvider,
+					Consumer<java.util.concurrent.CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
 				if (config instanceof NodeProcessorConfig) {
@@ -588,7 +591,7 @@ public class TestDrawio {
 				} else if (config instanceof ConnectionProcessorConfig) {
 					@SuppressWarnings("unchecked")
 					ConnectionProcessorConfig<Function<String, String>, Function<String, String>> connectionProcessorConfig = (ConnectionProcessorConfig<Function<String, String>, Function<String, String>>) config;
-					stageConsumer.accept(connectionProcessorConfig.getTargetEndpoint().thenAccept(targetEndpoint -> {
+					endpointWiringStageConsumer.accept(connectionProcessorConfig.getTargetEndpoint().thenAccept(targetEndpoint -> {
 						connectionProcessorConfig.setSourceHandler(new Function<String, String>() {
 							
 							@Override
@@ -599,7 +602,7 @@ public class TestDrawio {
 						});						
 					}));
 					
-					stageConsumer.accept(connectionProcessorConfig.getSourceEndpoint().thenAccept(sourceEndpoint -> {
+					endpointWiringStageConsumer.accept(connectionProcessorConfig.getSourceEndpoint().thenAccept(sourceEndpoint -> {
 						connectionProcessorConfig.setTargetHandler(new Function<String, String>() {
 							
 							@Override
@@ -612,7 +615,7 @@ public class TestDrawio {
 					
 				}
 
-				return super.createProcessor(config, parallel, inforProvider, stageConsumer, progressMonitor);
+				return super.createProcessor(config, parallel, inforProvider, endpointWiringStageConsumer, progressMonitor);
 			}
 		};
 		
@@ -766,8 +769,9 @@ public class TestDrawio {
 			protected ConnectionProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createConnectionProcessor(
 					ConnectionProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> connectionProcessorConfig,
 					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>>> infoProvider,
-					Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> infoProvider,
+					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+					ProgressMonitor progressMonitor) {
 
 				return new AsyncStatefulConnectionProcessor();
 			}
@@ -776,8 +780,8 @@ public class TestDrawio {
 			protected NodeProcessor<String, CompletionStage<String>, String, CompletionStage<String>> createNodeProcessor(
 					NodeProcessorConfig<BiFunction<String, ProgressMonitor, CompletionStage<String>>, BiFunction<String, ProgressMonitor, CompletionStage<String>>> nodeProcessorConfig,
 					boolean parallel,
-					Function<org.nasdanika.graph.Element, CompletionStage<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>>> processorInfo,
-					Consumer<CompletionStage<?>> stageConsumer,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<BiFunction<String, ProgressMonitor, CompletionStage<String>>>,ProgressMonitor>> processorInfo,
+					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> incomingEndpoints,
 					Map<org.nasdanika.graph.Connection, BiFunction<String, ProgressMonitor, CompletionStage<String>>> outgoingEndpoints,
 					ProgressMonitor progressMonitor) {

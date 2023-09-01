@@ -3,7 +3,7 @@ package org.nasdanika.drawio.tests;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
@@ -20,8 +20,7 @@ public class AliceBobProcessorFactory {
 	public AliceProcessor createAliceProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		return new AliceProcessor();
 	}	
@@ -30,8 +29,7 @@ public class AliceBobProcessorFactory {
 	public BobProcessor createBobProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		return new BobProcessor();
 	}
@@ -40,8 +38,7 @@ public class AliceBobProcessorFactory {
 	public BobHouseProcessor createBobHouseProcessor(
 			NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		return new BobHouseProcessor();
 	}
@@ -53,8 +50,7 @@ public class AliceBobProcessorFactory {
 		public Function<String,String> createLibraryProcessor(
 				NodeProcessorConfig<Function<String,String>, Function<String,String>> config,
 				boolean parallel, 
-				Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-				Consumer<CompletionStage<?>> stageConsumer,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 				ProgressMonitor progressMonitor) {
 			return question -> "Answer to " + question;
 		}
@@ -65,8 +61,7 @@ public class AliceBobProcessorFactory {
 	public AliceBobConnectionProcessor createAliceBobConnectionProcessor(
 			ConnectionProcessorConfig<Function<String,String>, Function<String,String>> config,
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor			) {
 		return new AliceBobConnectionProcessor();
 	}

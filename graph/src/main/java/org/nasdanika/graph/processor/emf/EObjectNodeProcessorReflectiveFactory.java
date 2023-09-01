@@ -86,7 +86,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 				!method.getParameterTypes()[0].isInstance(config) ||
 				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
 				!method.getParameterTypes()[2].isAssignableFrom(BiConsumer.class) ||
-				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
+				!method.getParameterTypes()[3].isAssignableFrom(ProgressMonitor.class)) {
 			throw new IllegalArgumentException("Factory method shall have 4 parameters compatible with: "
 					+ "NodeProcessorConfig config, "
 					+ "boolean parallel, "
