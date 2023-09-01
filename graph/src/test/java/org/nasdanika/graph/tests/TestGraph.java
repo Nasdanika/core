@@ -7,19 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 import org.nasdanika.common.NullProgressMonitor;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
-import org.nasdanika.graph.Element;
 import org.nasdanika.graph.Node;
 import org.nasdanika.graph.ObjectConnection;
 import org.nasdanika.graph.ObjectNode;
-import org.nasdanika.graph.processor.ProcessorConfig;
 
 /**
  * Tests Integer -> Graph
@@ -43,9 +40,8 @@ public class TestGraph {
 				protected ObjectNode<Integer> createElement(
 						Integer element, 
 						boolean parallel, 
-						Function<Integer,CompletionStage<ObjectNode<Integer>>> elementProvider, 
-						CompletionStage<Map<Integer, ObjectNode<Integer>>> registry,
-						Consumer<CompletionStage<?>> stageConsumer, 
+						BiConsumer<Integer,BiConsumer<ObjectNode<Integer>,ProgressMonitor>> elementProvider, 
+						Consumer<BiConsumer<Map<Integer, ObjectNode<Integer>>,ProgressMonitor>> registry,
 						ProgressMonitor progressMonitor) {
 					
 					ObjectNode<Integer> node = new ObjectNode<>(element);
@@ -54,16 +50,16 @@ public class TestGraph {
 //						int targetElement = i;
 						if (i < element) {
 //							System.out.println("\tCreating a > connection to " + i);
-							stageConsumer.accept(elementProvider.apply(i).thenAccept(target -> {							
+							elementProvider.accept(i, (target, pm) -> {							
 								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, false, ">");
 //								System.out.println("Created > connection from " + element + " to " + targetElement + ": " + connection);							
-							}));
+							});							
 						} else if (i > element) {
 //							System.out.println("\tCreating a < connection to " + i);
-							stageConsumer.accept(elementProvider.apply(i).thenAccept(target -> {
+							elementProvider.accept(i, (target, pm) -> {
 								ObjectConnection<String> connection = new ObjectConnection<String>(node, (Node) target, false,  "<");
 //								System.out.println("Created < connection from " + element + " to " + targetElement + ": " + connection);														
-							}));						
+							});
 						}
 					}
 					

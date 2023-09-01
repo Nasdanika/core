@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Element;
@@ -21,8 +21,8 @@ public class BiFunctionConnectionProcessorImpl implements ConnectionProcessor<Ob
 	public BiFunctionConnectionProcessorImpl(
 			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer) {
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endointWiringStageConsumer) {
 		
 		this.config = connectionProcessorConfig;		
 	}

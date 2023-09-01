@@ -26,7 +26,7 @@ public class NodeProcessor implements Supplier<Integer> {
 
 	public NodeProcessor(
 			NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, 
-			Consumer<CompletionStage<?>> stageConsumer, 
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			boolean passThrough) {
 		this.config = config;
 		this.passThrough = passThrough;
@@ -45,11 +45,11 @@ public class NodeProcessor implements Supplier<Integer> {
 		}
 		
 		for (Entry<Connection, CompletionStage<Function<Element, Element>>> ie: config.getIncomingEndpoints().entrySet()) {
-			stageConsumer.accept(ie.getValue().thenAccept(e -> incomingEndpoints.put(ie.getKey(), e)));
+			endpointWiringStageConsumer.accept(ie.getValue().thenAccept(e -> incomingEndpoints.put(ie.getKey(), e)));
 		}
 		
 		for (Entry<Connection, CompletionStage<Function<Element, Element>>> oe: config.getOutgoingEndpoints().entrySet()) {
-			stageConsumer.accept(oe.getValue().thenAccept(e -> outgoingEndpoints.put(oe.getKey(), e)));
+			endpointWiringStageConsumer.accept(oe.getValue().thenAccept(e -> outgoingEndpoints.put(oe.getKey(), e)));
 		}
 		
 	}

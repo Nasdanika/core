@@ -2,9 +2,8 @@ package org.nasdanika.graph.processor;
 
 import java.util.Map;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Transformer;
@@ -29,26 +28,23 @@ public abstract class ProcessorConfigFactory<H,E> {
 	private <T extends ProcessorConfigImpl> T wireConfig(
 			T config,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorConfig>> configProvider, 
-			CompletionStage<Map<Element, ProcessorConfig>> registryCS,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 
 		if (progressMonitor.isCancelled()) {
 			throw new CancellationException();
 		}
 
-		registryCS.thenAccept(config::setRegistry); // Not adding to stages - registryCS is completed after joining of other stages, would result in deadlock 
+		registryProvider.accept((registry, pm) -> config.setRegistry(registry));
 		
 		for (Element child: config.getElement().getChildren()) {
-			stageConsumer.accept(configProvider
-					.apply(child)
-					.thenAccept(cf -> {
-						if (cf != null) {
-							config.putChildConfig(child, cf);
-							((ProcessorConfigImpl) cf).setParentConfig(config);
-						}
-					}));			
+			configProvider.accept(child, (cf, pm) -> {
+				if (cf != null) {
+					config.putChildConfig(child, cf);
+					((ProcessorConfigImpl) cf).setParentConfig(config);
+				}				
+			});
 		}
 		
 		return config;
@@ -58,17 +54,15 @@ public abstract class ProcessorConfigFactory<H,E> {
 	public ProcessorConfig createElementConfig(
 			Element element,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorConfig>> configProvider, 
-			CompletionStage<Map<Element, ProcessorConfig>> registryCS,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 
 		return wireConfig(
 				new ProcessorConfigImpl(element),
 				parallel,
 				configProvider,
-				registryCS,
-				stageConsumer,
+				registryProvider,
 				progressMonitor);
 		
 	}
@@ -78,9 +72,8 @@ public abstract class ProcessorConfigFactory<H,E> {
 	public NodeProcessorConfig<H, E> createNodeConfig(
 			Node node,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorConfig>> configProvider, 
-			CompletionStage<Map<Element, ProcessorConfig>> registryCS,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 		
 		try (ProgressMonitor subMonitor =  progressMonitor.split("Creating node config", 1, node)) {
@@ -89,58 +82,55 @@ public abstract class ProcessorConfigFactory<H,E> {
 					new NodeProcessorConfigImpl<>(node),
 					parallel,
 					configProvider,
-					registryCS,
-					stageConsumer,
+					registryProvider,
 					progressMonitor);
 			
 			for (Connection incomingConnection: node.getIncomingConnections()) {
-				CompletionStage<Consumer<E>> incomingConnectionHandlerEndpointConsumerCompletionStage; 
-
 				if (isPassThrough(incomingConnection)) {
-					incomingConnectionHandlerEndpointConsumerCompletionStage = configProvider.apply(incomingConnection.getSource()).thenApply(sourceConfig -> {
-						return ep -> ((NodeProcessorConfigImpl<H,E>) sourceConfig).setOutgoingEndpoint(incomingConnection, ep);
-					});
+					configProvider.accept(incomingConnection.getSource(), (sourceConfig, pMonitor) -> {
+						configImpl.wireIncomingHandlerEndpoint(
+								incomingConnection, 
+								incomingConnectionHandler -> createEndpoint(
+										incomingConnection, 
+										incomingConnectionHandler, 
+										HandlerType.INCOMING), 
+								ep -> ((NodeProcessorConfigImpl<H,E>) sourceConfig).setOutgoingEndpoint(incomingConnection, ep));											
+					});					
 				} else {
-					incomingConnectionHandlerEndpointConsumerCompletionStage = configProvider
-							.apply(incomingConnection)
-							.thenApply(connectionConfig -> ((ConnectionProcessorConfigImpl<H,E>) connectionConfig)::setTargetEndpoint);
-					
+					configProvider.accept(incomingConnection, (connectionConfig, pMonitor) -> {
+						configImpl.wireIncomingHandlerEndpoint(
+								incomingConnection, 
+								incomingConnectionHandler -> createEndpoint(
+										incomingConnection, 
+										incomingConnectionHandler, 
+										HandlerType.INCOMING), 
+								((ConnectionProcessorConfigImpl<H,E>) connectionConfig)::setTargetEndpoint);											
+					});					
 				}
-				
-				stageConsumer.accept(incomingConnectionHandlerEndpointConsumerCompletionStage.thenAccept(incomingConnectionHandlerEndpointConsumer -> {
-					configImpl.wireIncomingHandlerEndpoint(
-							incomingConnection, 
-							incomingConnectionHandler -> createEndpoint(
-									incomingConnection, 
-									incomingConnectionHandler, 
-									HandlerType.INCOMING), 
-							incomingConnectionHandlerEndpointConsumer);											
-				}));
 			}
 			
 			for (Connection outgoingConnection: node.getOutgoingConnections()) {
-				CompletionStage<Consumer<E>> outgoingConnectionHandlerEndpointConsumerCompletionStage; 
-
 				if (isPassThrough(outgoingConnection)) {
-					outgoingConnectionHandlerEndpointConsumerCompletionStage = configProvider.apply(outgoingConnection.getTarget()).thenApply(targetConfig -> {
-						return ep -> ((NodeProcessorConfigImpl<H,E>) targetConfig).setIncomingEndpoint(outgoingConnection, ep);
-					});
+					configProvider.accept(outgoingConnection.getTarget(), (targetConfig, pMonitor) -> {
+						configImpl.wireOutgoingHandlerEndpoint(
+								outgoingConnection, 
+								outgoingConnectionHandler -> createEndpoint(
+										outgoingConnection, 
+										outgoingConnectionHandler, 
+										HandlerType.OUTGOING), 
+								ep -> ((NodeProcessorConfigImpl<H,E>) targetConfig).setIncomingEndpoint(outgoingConnection, ep));											
+					});					
 				} else {
-					outgoingConnectionHandlerEndpointConsumerCompletionStage = configProvider
-							.apply(outgoingConnection)
-							.thenApply(connectionConfig -> ((ConnectionProcessorConfigImpl<H,E>) connectionConfig)::setSourceEndpoint);
-					
+					configProvider.accept(outgoingConnection, (connectionConfig, pMonitor) -> {
+						configImpl.wireOutgoingHandlerEndpoint(
+								outgoingConnection, 
+								outgoingConnectionHandler -> createEndpoint(
+										outgoingConnection, 
+										outgoingConnectionHandler, 
+										HandlerType.OUTGOING), 
+								((ConnectionProcessorConfigImpl<H,E>) connectionConfig)::setSourceEndpoint);											
+					});					
 				}
-				
-				stageConsumer.accept(outgoingConnectionHandlerEndpointConsumerCompletionStage.thenAccept(outgoingConnectionHandlerEndpointConsumer -> {
-					configImpl.wireOutgoingHandlerEndpoint(
-							outgoingConnection, 
-							outgoingConnectionHandler -> createEndpoint(
-									outgoingConnection, 
-									outgoingConnectionHandler, 
-									HandlerType.OUTGOING), 
-							outgoingConnectionHandlerEndpointConsumer);											
-				}));
 			}
 			
 			subMonitor.worked(1, "Created node config", node, configImpl);			
@@ -161,9 +151,8 @@ public abstract class ProcessorConfigFactory<H,E> {
 	public ConnectionProcessorConfig<H, E> createConnectionConfig(
 			Connection connection,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorConfig>> configProvider, 
-			CompletionStage<Map<Element, ProcessorConfig>> registryCS,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element, BiConsumer<ProcessorConfig,ProgressMonitor>> configProvider, 
+			Consumer<BiConsumer<Map<Element, ProcessorConfig>,ProgressMonitor>> registryProvider,
 			ProgressMonitor progressMonitor) {
 		
 		if (isPassThrough(connection)) {
@@ -178,24 +167,23 @@ public abstract class ProcessorConfigFactory<H,E> {
 					new ConnectionProcessorConfigImpl<>(connection),
 					parallel,
 					configProvider,
-					registryCS,
-					stageConsumer,
+					registryProvider,
 					progressMonitor);
 			
 			if (source != null) {
-				stageConsumer.accept(configProvider.apply(source).thenAccept(sourceConfig -> {
+				configProvider.accept(source, (sourceConfig, pMonitor) -> {
 					@SuppressWarnings("unchecked")
 					Consumer<E> sourceHandlerEndpointConsumer = ep -> ((NodeProcessorConfigImpl<H, E>) sourceConfig).setOutgoingEndpoint(connection, ep); 
-					configImpl.wireSourceHandlerEndpoint(sourceHandler -> createEndpoint(connection, sourceHandler, HandlerType.SOURCE), sourceHandlerEndpointConsumer);
-				}));
+					configImpl.wireSourceHandlerEndpoint(sourceHandler -> createEndpoint(connection, sourceHandler, HandlerType.SOURCE), sourceHandlerEndpointConsumer);					
+				});
 			}
 			
 			if (target != null) {
-				stageConsumer.accept(configProvider.apply(target).thenAccept(targetConfig -> {
+				configProvider.accept(target, (targetConfig, pMonitor) -> {
 					@SuppressWarnings("unchecked")
 					Consumer<E> targetHandlerEndpointConsumer = ep -> ((NodeProcessorConfigImpl<H, E>) targetConfig).setIncomingEndpoint(connection, ep); 
 					configImpl.wireTargetHandlerEndpoint(targetHandler -> createEndpoint(connection, targetHandler, HandlerType.TARGET), targetHandlerEndpointConsumer);
-				}));
+				});
 			}
 			
 			subMonitor.worked(1, "Created connection config", connection, configImpl);			

@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,15 +33,15 @@ public abstract class ProcessorFactory<P> {
 	 * @param config Processor config
 	 * @param parallel If true, creation may be performed in parallel threads
 	 * @param infoProvider Provider of element info
-	 * @param stageConsumer Consumer of stages which might be completed after this method returns, e.g. wiring of dependencies. 
+	 * @param endpointWiringStageConsumer Consumer of endpoint wiring completion stages. It is used to collect wiring exceptions. 
 	 * @param progressMonitor
 	 * @return
 	 */
 	protected ProcessorInfo<P> createProcessor(
 			ProcessorConfig config, 
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<P>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 		
 		return ProcessorInfo.of(config, null);
@@ -62,16 +62,14 @@ public abstract class ProcessorFactory<P> {
 	}
 
 	/**
-	 * By default stages are not joined because some of them might be not completed by design. 
-	 * For example, a processor never wires a handler and as such an endpoint is never wired either. 
+	 * Joins stages
 	 * @param stages
 	 */
 	protected void join(List<CompletableFuture<?>> stages) {
-//		System.out.println(stages.size());
-//		stages
-//			.stream()
-//			.map(CompletionStage::toCompletableFuture)
-//			.map(CompletableFuture::join);
+		stages
+			.stream()
+			.map(CompletionStage::toCompletableFuture)
+			.map(CompletableFuture::join);
 	}
 		
 	public Map<Element, ProcessorInfo<P>> createProcessors(Collection<ProcessorConfig> configs, boolean parallel, ProgressMonitor progressMonitor) {
@@ -83,17 +81,20 @@ public abstract class ProcessorFactory<P> {
 			recordStream = recordStream.parallel();
 		}
 		List<CompletionStage<?>> stages = Collections.synchronizedList(new ArrayList<>());
-		Function<Element, CompletionStage<ProcessorInfo<P>>> processorProvider = e -> {
+		BiConsumer<Element, BiConsumer<ProcessorInfo<P>,ProgressMonitor>> processorProvider = (e, bc) -> {
 			ProcessorInfoCompletableFutureRecord<P> rec = processors.get(e);
-			return rec == null ? null : rec.processorInfoCompletableFuture();
+			if (rec != null) {
+				stages.add(rec.processorInfoCompletableFuture().thenAccept(pi -> bc.accept(pi, progressMonitor)));
+			}
 		};
-		recordStream.forEach(r -> r.processorInfoCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, stages::add, progressMonitor)));
+
+		List<CompletionStage<?>> endpointWiringStages = Collections.synchronizedList(new ArrayList<>());		
+		recordStream.forEach(r -> r.processorInfoCompletableFuture().complete(createProcessor(r.config(), parallel, processorProvider, endpointWiringStages::add, progressMonitor)));
 		join(stages.stream().map(CompletionStage::toCompletableFuture).filter(cf -> !cf.isDone()).collect(Collectors.toList()));
 		
 		// Collecting exceptions
-		List<Throwable> throwed = new ArrayList<>();		
-		stages
-			.stream()
+		List<Throwable> throwed = new ArrayList<>();
+		Stream.concat(stages.stream(), endpointWiringStages.stream())
 			.map(CompletionStage::toCompletableFuture)
 			.filter(CompletableFuture::isCompletedExceptionally)
 			.forEach(cf -> cf.handle((r,e) -> {

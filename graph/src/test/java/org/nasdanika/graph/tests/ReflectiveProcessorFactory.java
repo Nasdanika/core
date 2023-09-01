@@ -18,7 +18,7 @@ public class ReflectiveProcessorFactory {
 			NodeProcessorConfig<Function<Element,Element>,Function<Element,Element>> config, 
 			boolean parallel, 
 			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			ProgressMonitor progressMonitor) {
 
 		return null;

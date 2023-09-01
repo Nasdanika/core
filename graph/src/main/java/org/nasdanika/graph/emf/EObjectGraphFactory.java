@@ -6,9 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.EList;
@@ -34,16 +33,14 @@ public class EObjectGraphFactory {
 	public EObjectNode createEObjectNode(
 			EObject element,
 			boolean parallel,
-			Function<EObject, CompletionStage<Element>> elementProvider, 
-			CompletionStage<Map<EObject, Element>> registry,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, Element>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 
 		return new EObjectNode(
 				element, 
 				parallel, 
 				elementProvider, 
-				stageConsumer,
 				registry,
 				this,
 				progressMonitor);
@@ -109,15 +106,13 @@ public class EObjectGraphFactory {
 	 * @param eOperation
 	 * @param parallel
 	 * @param elementProvider
-	 * @param stageConsumer
 	 * @param progressMonitor
 	 */
 	public void createEOperationConnections(
 			EObjectNode source, 
 			EOperation eOperation, 
 			boolean parallel,
-			Function<EObject, CompletionStage<Element>> elementProvider, 
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider, 
 			ProgressMonitor progressMonitor) {
 		
 		Stream<EList<Object>> bindingsStream = parallel ? createBindings(source, eOperation).parallelStream() : createBindings(source, eOperation).stream();
@@ -129,7 +124,6 @@ public class EObjectGraphFactory {
 					arguments, 
 					parallel,
 					elementProvider,
-					stageConsumer,
 					progressMonitor));
 	}	
 	
@@ -164,8 +158,7 @@ public class EObjectGraphFactory {
 			EOperation operation, 
 			EList<Object> arguments, 
 			boolean parallel,
-			Function<EObject, CompletionStage<Element>> elementProvider, 
-			Consumer<CompletionStage<?>> stageConsumer,			
+			BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider, 
 			ProgressMonitor progressMonitor) {
 		try {
 			Object result = source.get().eInvoke(operation, arguments);			
@@ -188,8 +181,8 @@ public class EObjectGraphFactory {
 			}
 			
 			(parallel ? resultRecords.parallelStream() : resultRecords.stream())
-				.map(resultRecord -> {
-					return elementProvider.apply(resultRecord.value()).thenAccept(resultElement -> {
+				.forEach(resultRecord -> {
+					elementProvider.accept(resultRecord.value(), (resultElement, pm) -> {
 						createEOperationConnection(
 								source, 
 								(EObjectNode) resultElement, 
@@ -197,11 +190,9 @@ public class EObjectGraphFactory {
 								operation, 
 								arguments, 
 								resultRecord.index(), 
-								progressMonitor);													
+								pm);
 					});
-				})
-				.forEach(stageConsumer);;
-			
+				});			
 		} catch (InvocationTargetException e) {
 			throw new ExecutionException(e);
 		}

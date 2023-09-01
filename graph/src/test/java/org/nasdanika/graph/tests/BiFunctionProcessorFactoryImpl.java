@@ -2,9 +2,9 @@ package org.nasdanika.graph.tests;
 
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
@@ -26,18 +26,19 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 	protected ConnectionProcessor<Object, Object, Object, Object> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> connectionProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+			ProgressMonitor progressMonitor) {
 
-		return new BiFunctionConnectionProcessorImpl(connectionProcessorConfig, parallel, infoProvider, stageConsumer);
+		return new BiFunctionConnectionProcessorImpl(connectionProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer);
 	}
 
 	@Override
 	protected NodeProcessor<Object, Object, Object, Object> createNodeProcessor(
 			NodeProcessorConfig<BiFunction<Object, ProgressMonitor, Object>, BiFunction<Object, ProgressMonitor, Object>> nodeProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<Object, ProgressMonitor, Object>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> incomingEndpoints,
 			Map<Connection, BiFunction<Object, ProgressMonitor, Object>> outgoingEndpoints,
 			ProgressMonitor progressMonitor) {
@@ -46,7 +47,7 @@ public class BiFunctionProcessorFactoryImpl extends BiFunctionProcessorFactory<O
 			nodeProcessorConfig,
 			parallel,
 			infoProvider,
-			stageConsumer,
+			endpointWiringStageConsumer,
 			incomingEndpoints,
 			outgoingEndpoints,
 			passThrough);

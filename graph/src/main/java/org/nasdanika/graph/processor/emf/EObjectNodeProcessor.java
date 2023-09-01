@@ -16,8 +16,7 @@ import org.nasdanika.graph.emf.EObjectNode;
  * <pre>
 NodeProcessorConfig&lt;H,E&gt; config, 
 boolean parallel, 
-Function&lt;Element,CompletionStage&lt;ProcessorInfo&lt;Object&gt;&gt;&gt; infoProvider,
-Consumer&lt;CompletionStage&lt;?&gt;&gt; stageConsumer,
+BiConsumer&lt;Element,BiConsumer&lt;ProcessorInfo&lt;Object&gt;,ProgressMonitor&gt;&gt; infoProvider,
 ProgressMonitor progressMonitor
 </pre>
  * The annotated method may return an object or null. In the first case the returned object may be introspected to wire handlers and endpoints 

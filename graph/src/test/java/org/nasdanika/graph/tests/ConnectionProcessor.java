@@ -16,7 +16,9 @@ public class ConnectionProcessor {
 	private Function<Element, Element> sourceEndpoint;
 	private Function<Element, Element> targetEndpoint;
 
-	public ConnectionProcessor(ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, Consumer<CompletionStage<?>> stageConsumer) {
+	public ConnectionProcessor(
+			ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>> config, 
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer) {
 		config.setSourceHandler(e -> {
 			assertEquals(config.getElement().getSource() , e);
 			assertNotNull(targetEndpoint);
@@ -33,8 +35,8 @@ public class ConnectionProcessor {
 			return config.getElement();
 		});			
 		
-		stageConsumer.accept(config.getSourceEndpoint().thenAccept(se -> this.sourceEndpoint = se));
-		stageConsumer.accept(config.getTargetEndpoint().thenAccept(te -> {
+		endpointWiringStageConsumer.accept(config.getSourceEndpoint().thenAccept(se -> this.sourceEndpoint = se));
+		endpointWiringStageConsumer.accept(config.getTargetEndpoint().thenAccept(te -> {
 			this.targetEndpoint = te;
 //			throw new NasdanikaException("Vsyo ploho!");
 		}));		

@@ -2,9 +2,8 @@ package org.nasdanika.graph.emf;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -24,7 +23,6 @@ public class EObjectNode extends ObjectNode<EObject> implements PropertySource<S
 	 * @param element
 	 * @param parallel
 	 * @param elementProvider
-	 * @param stageConsumer
 	 * @param factory To delegate creation of connections
 	 * @param parallelAccept If true, created node uses parallel stream in accept()
 	 * @param progressMonitor
@@ -33,9 +31,8 @@ public class EObjectNode extends ObjectNode<EObject> implements PropertySource<S
 	public EObjectNode(
 			EObject value,
 			boolean parallel,
-			Function<EObject, CompletionStage<Element>> elementProvider, 
-			Consumer<CompletionStage<?>> stageConsumer,
-			CompletionStage<Map<EObject, Element>> registry,
+			BiConsumer<EObject, BiConsumer<Element, ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, Element>,ProgressMonitor>> registry,
 			EObjectGraphFactory factory,
 			ProgressMonitor progressMonitor) {
 		
@@ -49,27 +46,27 @@ public class EObjectNode extends ObjectNode<EObject> implements PropertySource<S
 					for (EObject element: (Collection<EObject>) val) {
 						int idx = counter++;
 						if (element != null) {
-							stageConsumer.accept(elementProvider.apply(element).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, idx, eReference, progressMonitor)));
+							elementProvider.accept(element, (targetNode, pm) -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, idx, eReference, pm));
 						}
 					}
 				} else {
-					stageConsumer.accept(elementProvider.apply((EObject) val).thenAccept(targetNode -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, -1, eReference, progressMonitor)));
+					elementProvider.accept((EObject) val, (targetNode, pm) -> factory.createEReferenceConnection(this, (EObjectNode) targetNode, -1, eReference, pm));
 				}
 			}
 		}
 	
 		for (EOperation eOperation: get().eClass().getEAllOperations()) {
-			factory.createEOperationConnections(this, eOperation, parallel, elementProvider, stageConsumer, progressMonitor);
+			factory.createEOperationConnections(this, eOperation, parallel, elementProvider, progressMonitor);
 		}		
 		
 		EClass eClass = value.eClass();
 		if (eClass != value) {
-			stageConsumer.accept(elementProvider.apply(eClass).thenAccept(targetNode -> factory.createEClassConnection(this, (EObjectNode) targetNode, progressMonitor)));
+			elementProvider.accept(eClass, (targetNode, pm) -> factory.createEClassConnection(this, (EObjectNode) targetNode, pm));
 		}
 		
 		EObject eContainer = value.eContainer();
 		if (eContainer != null) {
-			stageConsumer.accept(elementProvider.apply(eContainer).thenAccept(targetNode -> factory.createEContainerConnection(this, (EObjectNode) targetNode, progressMonitor)));
+			elementProvider.accept(eContainer, (targetNode, pm) -> factory.createEContainerConnection(this, (EObjectNode) targetNode, pm));
 		}
 
 	}

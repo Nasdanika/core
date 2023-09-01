@@ -4,9 +4,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.graph.Connection;
@@ -68,8 +68,8 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	protected ProcessorInfo<BiFunction<T, ProgressMonitor, U>> createProcessor(
 			ProcessorConfig config, 
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer, 
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 			ProgressMonitor progressMonitor) {
 		
 		if (config instanceof NodeProcessorConfig) {
@@ -78,15 +78,15 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints = new ConcurrentHashMap<>();
 			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor, W>>> incomingEndpointEntry: nodeProcessorConfig.getIncomingEndpoints().entrySet()) {
-				stageConsumer.accept(incomingEndpointEntry.getValue().thenAccept(endpoint -> incomingEndpoints.put(incomingEndpointEntry.getKey(), endpoint)));
+				endpointWiringStageConsumer.accept(incomingEndpointEntry.getValue().thenAccept(endpoint -> incomingEndpoints.put(incomingEndpointEntry.getKey(), endpoint)));
 			}
 						
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints = new ConcurrentHashMap<>();
 			for (Entry<Connection, CompletionStage<BiFunction<V,ProgressMonitor,W>>> outgoingEndpointEntry: nodeProcessorConfig.getOutgoingEndpoints().entrySet()) {
-				stageConsumer.accept(outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)));				
+				endpointWiringStageConsumer.accept(outgoingEndpointEntry.getValue().thenAccept(endpoint -> outgoingEndpoints.put(outgoingEndpointEntry.getKey(), endpoint)));				
 			}
 						
-			NodeProcessor<T, U, V, W> nodeProcessor = createNodeProcessor(nodeProcessorConfig, parallel, infoProvider, stageConsumer, incomingEndpoints, outgoingEndpoints, progressMonitor);			
+			NodeProcessor<T, U, V, W> nodeProcessor = createNodeProcessor(nodeProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, incomingEndpoints, outgoingEndpoints, progressMonitor);			
 			
 			for (Entry<Connection, Consumer<BiFunction<T,ProgressMonitor,U>>> incomingHandlerConsumerEntry: nodeProcessorConfig.getIncomingHandlerConsumers().entrySet()) {
 				incomingHandlerConsumerEntry.getValue().accept((t,pm) -> nodeProcessor.applyIncoming(incomingHandlerConsumerEntry.getKey(), t, pm));
@@ -102,15 +102,15 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 		if (config instanceof ConnectionProcessorConfig) {
 			@SuppressWarnings("unchecked")
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> connectionProcessorConfig = (ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>>) config;			
-			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, parallel, infoProvider, stageConsumer, progressMonitor);
+			ConnectionProcessor<T,U,V,W> connectionProcessor = createConnectionProcessor(connectionProcessorConfig, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
 			
-			stageConsumer.accept(connectionProcessorConfig
+			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getSourceEndpoint()
 				.thenAccept(endpoint -> {										
 					connectionProcessorConfig.setTargetHandler((t,pm) -> connectionProcessor.targetApply(t, pm, endpoint));
 				}));
 			
-			stageConsumer.accept(connectionProcessorConfig
+			endpointWiringStageConsumer.accept(connectionProcessorConfig
 				.getTargetEndpoint()
 				.thenAccept(endpoint -> {										
 					connectionProcessorConfig.setSourceHandler((t,pm) -> connectionProcessor.sourceApply(t, pm, endpoint));
@@ -119,7 +119,7 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 			return ProcessorInfo.of(connectionProcessorConfig, connectionProcessor);			
 		}
 		
-		return super.createProcessor(config, parallel, infoProvider, stageConsumer, progressMonitor);
+		return super.createProcessor(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
 	}
 	
 	/**
@@ -132,8 +132,8 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	protected abstract ConnectionProcessor<T,U,V,W> createConnectionProcessor(
 			ConnectionProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> connectionProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer, 			
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 			
 			ProgressMonitor progressMonitor);
 
 	/**
@@ -150,8 +150,8 @@ public abstract class BiFunctionProcessorFactory<T,U,V,W> extends ProcessorFacto
 	protected abstract NodeProcessor<T,U,V,W> createNodeProcessor(
 			NodeProcessorConfig<BiFunction<T,ProgressMonitor,U>, BiFunction<V,ProgressMonitor,W>> nodeProcessorConfig,
 			boolean parallel,
-			Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer, 			 
+			BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+			Consumer<CompletionStage<?>> endpointWiringStageConsumer, 			 
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> incomingEndpoints,
 			Map<Connection, BiFunction<V,ProgressMonitor,W>> outgoingEndpoints,			 
 			ProgressMonitor progressMonitor);

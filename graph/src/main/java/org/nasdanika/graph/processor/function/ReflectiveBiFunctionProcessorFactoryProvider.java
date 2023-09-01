@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Reflector;
@@ -104,8 +104,8 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 			protected ConnectionProcessor<T, U, V, W> createConnectionProcessor(
 					ConnectionProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> connectionProcessorConfig,
 					boolean parallel,
-					Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
-					Consumer<CompletionStage<?>> stageConsumer, 
+					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
 				Connection connection = connectionProcessorConfig.getElement();
@@ -125,7 +125,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 						connectionProcessorConfig,
 						parallel,
 						infoProvider,
-						stageConsumer,
+						endpointWiringStageConsumer,
 						progressMonitor); 						
 			}
 
@@ -134,8 +134,8 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 			protected NodeProcessor<T, U, V, W> createNodeProcessor(
 					NodeProcessorConfig<BiFunction<T, ProgressMonitor, U>, BiFunction<V, ProgressMonitor, W>> nodeProcessorConfig,
 					boolean parallel,
-					Function<Element, CompletionStage<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>>> infoProvider,
-					Consumer<CompletionStage<?>> stageConsumer,
+					BiConsumer<Element, BiConsumer<ProcessorInfo<BiFunction<T, ProgressMonitor, U>>,ProgressMonitor>> infoProvider,
+					Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> incomingEndpoints,
 					Map<Connection, BiFunction<V, ProgressMonitor, W>> outgoingEndpoints,
 					ProgressMonitor progressMonitor) {
@@ -157,7 +157,7 @@ public class ReflectiveBiFunctionProcessorFactoryProvider<T,U,V,W> extends Refle
 						nodeProcessorConfig,
 						parallel,
 						infoProvider,
-						stageConsumer,
+						endpointWiringStageConsumer,
 						incomingEndpoints, 
 						outgoingEndpoints, 
 						progressMonitor); 		

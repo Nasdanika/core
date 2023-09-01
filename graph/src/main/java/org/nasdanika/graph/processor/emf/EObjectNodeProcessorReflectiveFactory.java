@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -63,8 +61,7 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 	public Object createEObjectNodeProcessor(
 			NodeProcessorConfig<H,E> config, 
 			boolean parallel, 
-			Function<Element,CompletionStage<ProcessorInfo<Object>>> infoProvider,
-			Consumer<CompletionStage<?>> stageConsumer,
+			BiConsumer<Element,BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> infoProvider,
 			ProgressMonitor progressMonitor) {
 		EObject eObj = ((EObjectNode) config.getElement()).get();
 		
@@ -85,24 +82,22 @@ public class EObjectNodeProcessorReflectiveFactory<H,E> extends Reflector {
 		AnnotatedElementRecord factoryAnnotatedElementRecord = factoryMethodEntry.getAnnotatedElementRecord();			
 		Method method = (Method) factoryAnnotatedElementRecord.getAnnotatedElement();
 		
-		if (method.getParameterCount() != 5 ||
+		if (method.getParameterCount() != 4 ||
 				!method.getParameterTypes()[0].isInstance(config) ||
 				!method.getParameterTypes()[1].isAssignableFrom(boolean.class) ||
-				!method.getParameterTypes()[2].isAssignableFrom(Function.class) ||
-				!method.getParameterTypes()[3].isAssignableFrom(Consumer.class) ||
+				!method.getParameterTypes()[2].isAssignableFrom(BiConsumer.class) ||
 				!method.getParameterTypes()[4].isAssignableFrom(ProgressMonitor.class)) {
-			throw new IllegalArgumentException("Factory method shall have 5 parameters compatible with: "
+			throw new IllegalArgumentException("Factory method shall have 4 parameters compatible with: "
 					+ "NodeProcessorConfig config, "
 					+ "boolean parallel, "
-					+ "Function<Element, CompletionStage<ProcessorInfo<P>>> infoProvider, "
-					+ "Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor: " + method);
+					+ "BiConsumer<Element, BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider, "
+					+ "ProgressMonitor progressMonitor: " + method);
 		}
 		
 		return factoryAnnotatedElementRecord.invoke(
 				config,
 				parallel,
 				infoProvider,
-				stageConsumer,
 				progressMonitor); 
 	}
 	

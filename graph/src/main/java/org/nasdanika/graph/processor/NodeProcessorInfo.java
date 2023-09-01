@@ -2,8 +2,8 @@ package org.nasdanika.graph.processor;
 
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -21,8 +21,7 @@ public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements Node
 		NodeProcessorInfo<P,H,E> create(
 				NodeProcessorConfig<H,E> config, 
 				boolean parallel, 
-				Function<Element,CompletionStage<ProcessorInfo<P>>> infoProvider,
-				Consumer<CompletionStage<?>> stageConsumer,
+				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
 				Context context,
 				ProgressMonitor progressMonitor);
 		

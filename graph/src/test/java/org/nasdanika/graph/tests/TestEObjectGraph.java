@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletionStage;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -302,15 +303,16 @@ public class TestEObjectGraph {
 				protected ProcessorInfo<Object> createProcessor(
 						ProcessorConfig config, 
 						boolean parallel,
-						Function<Element, CompletionStage<ProcessorInfo<Object>>> processorInfoProvider,
-						Consumer<CompletionStage<?>> stageConsumer, ProgressMonitor progressMonitor) {
+						BiConsumer<Element, BiConsumer<ProcessorInfo<Object>,ProgressMonitor>> processorInfoProvider,
+						Consumer<CompletionStage<?>> endpoinWiringStageConsumer, 
+						ProgressMonitor progressMonitor) {
 					
 					if (config instanceof NodeProcessorConfig) {
-						return config.toInfo(new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer, passThrough));
+						return config.toInfo(new NodeProcessor((NodeProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, endpoinWiringStageConsumer, passThrough));
 					}
 					
 					if (config instanceof ConnectionProcessorConfig) {
-						return config.toInfo(new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, stageConsumer));
+						return config.toInfo(new ConnectionProcessor((ConnectionProcessorConfig<Function<Element,Element>, Function<Element,Element>>) config, endpoinWiringStageConsumer));
 					}
 					
 					throw new IllegalArgumentException("Neither node nor connection config: " + config);
