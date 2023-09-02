@@ -1,6 +1,7 @@
 package org.nasdanika.emf.persistence;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -140,7 +140,18 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 				}
 				return loadReference((String) element, base, resolver, markers, progressMonitor);
 			}
-			Object ret = isHomogeneous ? eObjectLoader.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
+			Object ret = isHomogeneous ? eObjectLoader.create(
+					loader, 
+					effectiveReferenceType(element), 
+					element, 
+					base,
+					resolver,
+					markers, 
+					progressMonitor, 
+					keyProvider,
+					null)
+				: 
+					loader.load(element, base, resolver, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
 				return Collections.singletonList(eObjectLoader.resolve((EObject) ret));
 			}
@@ -167,7 +178,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			String ref, 
 			URI base,
 			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
-			List<? extends Marker> markers, 
+			Collection<? extends Marker> markers, 
 			ProgressMonitor progressMonitor) {
 		
 		if (ref.startsWith(FILESET_SCHEME)) {
@@ -176,11 +187,25 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			Yaml yaml = new Yaml();
 			Object filesetSpec = yaml.load(spec);			
 			if (filesetSpec instanceof String) {				
-				return loadMatches(base, Collections.singleton((String) filesetSpec), null, base, markers, progressMonitor);
+				return loadMatches(
+						base, 
+						Collections.singleton((String) filesetSpec),
+						null, 
+						base,
+						resolver,
+						markers,
+						progressMonitor);
 			} 
 			
 			if (filesetSpec instanceof List) {
-				return loadMatches(base, (List<String>) filesetSpec, null, base, markers, progressMonitor);				
+				return loadMatches(
+						base, 
+						(List<String>) filesetSpec,
+						null,
+						base,
+						resolver,
+						markers,
+						progressMonitor);				
 			}
 			
 			if (filesetSpec instanceof Map) {
@@ -201,7 +226,14 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 						}
 						throw new ConfigurationException("Expected a string or an array of strings, got " + obj.getClass() + ": " + obj, markers);
 					};
-					return loadMatches(fsBaseURI, asCollection.apply(specMap.get(FILESET_INCLUDE_KEY)), asCollection.apply(specMap.get(FILESET_EXCLUDE_KEY)), base, markers, progressMonitor);				
+					return loadMatches(
+							fsBaseURI, 
+							asCollection.apply(specMap.get(FILESET_INCLUDE_KEY)), 
+							asCollection.apply(specMap.get(FILESET_EXCLUDE_KEY)),
+							base,
+							resolver,
+							markers, 
+							progressMonitor);				
 				} else if (fsBase != null) {
 					throw new ConfigurationException("FileSet base shall be a string: " + fsBase.getClass() + ": " + fsBase, markers);			
 				}
@@ -229,7 +261,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 				EObject proxy = eObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, markers, progressMonitor);
 				if (proxy != null) {
 					if (markers != null && !markers.isEmpty()) {
-						proxy.eAdapters().add(new MarkedAdapter(markers));
+						proxy.eAdapters().add(new MarkedAdapter(new ArrayList<>(markers)));
 					}
 					return Collections.singletonList(proxy);
 				}
@@ -246,7 +278,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			Collection<String> excludes, 
 			URI base,
 			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
-			List<? extends Marker> markers,
+			Collection<? extends Marker> markers,
 			ProgressMonitor progressMonitor) {
 		if (!fileSetBase.isFile()) {
 			throw new ConfigurationException("Base URI for a fileset is not a file URI: " + fileSetBase, markers);
@@ -256,7 +288,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 		if (baseDir.isFile()) {
 			baseDir = baseDir.getParentFile();
 		}
-		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, markers, progressMonitor)).flatMap(objs -> objs.stream()).toList();		
+		return match(baseDir, includes, excludes).stream().map(f -> loadReference(f.toURI().toString(), base, resolver, markers, progressMonitor)).flatMap(objs -> objs.stream()).toList();		
 	}
 	
 	private static Collection<File> match(File baseDir, Collection<String> includes, Collection<String> excludes) {
