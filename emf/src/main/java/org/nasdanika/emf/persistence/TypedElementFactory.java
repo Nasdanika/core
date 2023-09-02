@@ -53,7 +53,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	protected static final String FILESET_SCHEME = "fileset:";
 	public static final String FACTORY_SCHEME = "factory:";
 	
-	protected EObjectLoader resolver;
+	protected EObjectLoader eObjectLoader;
 	protected BiFunction<EClass,ENamedElement, String> keyProvider;
 	protected boolean isStrictContainment;
 	protected boolean referenceSupplierFactory;
@@ -76,7 +76,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	 * @param eClass
 	 * @param eTypedElement
 	 * @param elementKey Reference key for loading type from annotations. If null, defautls to eReference name. Used by EMap's.
-	 * @param resolver
+	 * @param eObjectLoader
 	 * @param referenceSupplierFactory
 	 * @param keyProvider
 	 */
@@ -84,14 +84,14 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			EClass eClass,
 			ETypedElement eTypedElement,
 			String elementKey,  
-			EObjectLoader resolver,
+			EObjectLoader eObjectLoader,
 			boolean referenceSupplierFactory,
 			BiFunction<EClass,ENamedElement,String> keyProvider) {
 		
 		this.eClass = eClass;
 		this.eTypedElement = eTypedElement;
 		this.elementKey = Util.isBlank(elementKey) ? eTypedElement.getName() : elementKey;
-		this.resolver = resolver;
+		this.eObjectLoader = eObjectLoader;
 		this.referenceSupplierFactory = referenceSupplierFactory;
 		this.keyProvider = keyProvider;
 		
@@ -100,7 +100,13 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	}
 	
 	@Override
-	public List<?> create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public List<?> create(
+			ObjectLoader loader, 
+			Object element, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		try {
 			// Strings are references if not strict containment.
 			if (element instanceof String && !isStrictContainment) {
@@ -124,7 +130,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	
 								@Override
 								public List<EObject> execute(ProgressMonitor progressMonitor) {
-									return loadReference(ref, base, markers, progressMonitor);
+									return loadReference(ref, base, resolver, markers, progressMonitor);
 								}
 								
 							};
@@ -132,11 +138,11 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 						
 					});
 				}
-				return loadReference((String) element, base, markers, progressMonitor);
+				return loadReference((String) element, base, resolver, markers, progressMonitor);
 			}
-			Object ret = isHomogeneous ? resolver.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
+			Object ret = isHomogeneous ? eObjectLoader.create(loader, effectiveReferenceType(element), element, base, progressMonitor, markers, keyProvider, null) : loader.load(element, base, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {
-				return Collections.singletonList(resolver.resolve((EObject) ret));
+				return Collections.singletonList(eObjectLoader.resolve((EObject) ret));
 			}
 			return Collections.singletonList(ret);
 		} catch (ConfigurationException e) {
@@ -160,6 +166,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	protected List<EObject> loadReference(
 			String ref, 
 			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
 			List<? extends Marker> markers, 
 			ProgressMonitor progressMonitor) {
 		
@@ -219,7 +226,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			EClass eReferenceType = effectiveReferenceType(ref);
 			if (!eReferenceType.isAbstract() && !resolveProxies) {
 				// Can create proxy, if possible, instead of loading object
-				EObject proxy = resolver.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, markers, progressMonitor);
+				EObject proxy = eObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, markers, progressMonitor);
 				if (proxy != null) {
 					if (markers != null && !markers.isEmpty()) {
 						proxy.eAdapters().add(new MarkedAdapter(markers));
@@ -227,7 +234,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 					return Collections.singletonList(proxy);
 				}
 			}
-			return Collections.singletonList(resolver.getResourceSet().getEObject(refURI, true));
+			return Collections.singletonList(eObjectLoader.getResourceSet().getEObject(refURI, true));
 		} finally {
 			ConfigurationException.popThreadMarker();
 		}	
@@ -238,6 +245,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			Collection<String> includes, 
 			Collection<String> excludes, 
 			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
 			List<? extends Marker> markers,
 			ProgressMonitor progressMonitor) {
 		if (!fileSetBase.isFile()) {
@@ -378,7 +386,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 			Map<String, Object> refTypeMap = (Map<String,Object>) typeSpec;
 			Object nsURI = refTypeMap.get("ns-uri");
 			if (nsURI instanceof String) {
-				ResourceSet resourceSet = resolver.getResourceSet();
+				ResourceSet resourceSet = eObjectLoader.getResourceSet();
 				Registry packageRegistry = resourceSet.getPackageRegistry();
 				ePackage = packageRegistry.getEPackage((String) nsURI); 
 				if (ePackage == null) {

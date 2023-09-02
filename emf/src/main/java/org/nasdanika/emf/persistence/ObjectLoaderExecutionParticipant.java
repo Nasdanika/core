@@ -1,6 +1,7 @@
 package org.nasdanika.emf.persistence;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EPackage;
@@ -77,7 +78,7 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 			
 			@Override
 			protected ObjectLoader getObjectLoader(Resource resource) {
-				return getObjectLLoader(resourceSet, resource, progressMonitor);
+				return ObjectLoaderExecutionParticipant.this.getObjectLLoader(resourceSet, resource, progressMonitor);
 			}
 			
 			@Override
@@ -89,9 +90,18 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 			protected ProgressMonitor getProgressMonitor(Resource resource) {
 				return progressMonitor;
 			}
+
+			@Override
+			protected BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver(Resource resource) {
+				return ObjectLoaderExecutionParticipant.this.getResolver(resourceSet, resource, progressMonitor);
+			}
 			
 		};
 	}
+	
+	protected BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver(ResourceSet resourceSet, Resource resource, ProgressMonitor progressMonitor) {
+		return null;
+	}	
 
 	protected ObjectLoader getObjectLLoader(ResourceSet resourceSet, Resource resource, ProgressMonitor progressMonitor) {
 		EObjectLoader eObjectLoader = new EObjectLoader(null, null, resourceSet);

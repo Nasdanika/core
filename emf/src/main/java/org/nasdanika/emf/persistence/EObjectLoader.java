@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
@@ -349,6 +350,25 @@ public class EObjectLoader extends DispatchingLoader {
 		}
 		
 		return super.create(loader, type, config, base, progressMonitor, markers);
+	}
+	
+	@Override
+	public Object create(ObjectLoader loader, String type) {
+		// TODO Auto-generated method stub
+		return super.create(loader, type);
+	}
+	
+	@Override
+	public void load(
+			ObjectLoader loader, 
+			Object config, 
+			Object target, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		// TODO Auto-generated method stub
+		super.load(loader, config, target, base, resolver, markers, progressMonitor);
 	}
 	
 	/**

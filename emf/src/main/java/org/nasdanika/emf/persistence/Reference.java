@@ -1,6 +1,8 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
@@ -53,8 +55,14 @@ public class Reference<T> extends Attribute<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public T create(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		List<?> result = referenceFactory.create(loader, element, base, progressMonitor, markers);
+	public T create(
+			ObjectLoader loader, 
+			Object element, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		List<?> result = referenceFactory.create(loader, element, base, resolver, markers, progressMonitor);
 		if (result == null || result.isEmpty()) {
 			return null;
 		}

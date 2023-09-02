@@ -1,8 +1,10 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
@@ -58,22 +60,35 @@ public class ParameterMap extends MapAttribute<String,Object> {
 	}
 	
 	@Override
-	public Map<String, Object> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public Map<String, Object> create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		// Single parameter unqualified 
 		if (parameterRecords.size() == 1) {
-			return super.create(loader, Map.of(parameterRecords.keySet().iterator().next(), config), base, progressMonitor, markers); 
+			return super.create(loader, Map.of(parameterRecords.keySet().iterator().next(), config), base, resolver, markers, progressMonitor); 
 		}
-		return super.create(loader, config, base, progressMonitor, markers);
+		return super.create(loader, config, base, resolver, markers, progressMonitor);
 	}
 	
 	@Override
-	protected Object createValue(ObjectLoader loader, String key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	protected Object createValue(
+			ObjectLoader loader, 
+			String key, 
+			Object value, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		ParameterRecord parameterRecord = parameterRecords.get(key);
 		if (parameterRecord == null) {
-			return super.createValue(loader, key, value, base, progressMonitor, markers);
+			return super.createValue(loader, key, value, base, resolver, markers, progressMonitor);
 		}
 		
-		List<?> result = parameterRecord.factory().create(loader, value, base, progressMonitor, markers);
+		List<?> result = parameterRecord.factory().create(loader, value, base, resolver, markers, progressMonitor);
 		if (result.size() == 0) {
 			return null;
 		}

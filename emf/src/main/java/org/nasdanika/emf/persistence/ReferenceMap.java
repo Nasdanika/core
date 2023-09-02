@@ -1,7 +1,9 @@
 package org.nasdanika.emf.persistence;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.EMap;
@@ -57,12 +59,19 @@ public class ReferenceMap<K,V> extends MapAttribute<K,V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected V createValue(ObjectLoader loader, K key, Object value, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	protected V createValue(
+			ObjectLoader loader, 
+			K key, 
+			Object value, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		if (valueFactory == null) {
-			return super.createValue(loader, key, value, base, progressMonitor, markers);
+			return super.createValue(loader, key, value, base, resolver, markers, progressMonitor);
 		}
 		
-		List<?> result = valueFactory.create(loader, value, base, progressMonitor, markers);
+		List<?> result = valueFactory.create(loader, value, base, resolver, markers, progressMonitor);
 		if (result.size() == 0) {
 			return null;
 		}

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -26,7 +26,7 @@ import org.nasdanika.persistence.Marker;
 
 public class ResourceSupplierFactoryAdapter extends AdapterImpl implements SupplierFactory<InputStream> {
 
-	private List<? extends Marker> markers;
+	private Collection<? extends Marker> markers;
 	
 	public ResourceSupplierFactoryAdapter(Resource resource) {
 		setTarget(resource);

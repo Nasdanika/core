@@ -1,9 +1,11 @@
 package org.nasdanika.emf.persistence;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.URI;
@@ -64,7 +66,13 @@ public class ReferenceList<T> extends ListAttribute<T> {
 	}
 	
 	@Override
-	public List<T> create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
+	public List<T> create(
+			ObjectLoader loader, 
+			Object config, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
 		if (config instanceof Map) {
 			if (!keys.isEmpty()) {
 				String valueFeature = EObjectLoader.getValueFeature(referenceFactory.getETypedElement());
@@ -72,7 +80,7 @@ public class ReferenceList<T> extends ListAttribute<T> {
 					// Converting entry set to a list of maps
 					String keyName = keys.get(0);
 					MarkedArrayList<Map<?,?>> entryList = new MarkedArrayList<>();
-					entryList.mark(markers);
+					entryList.mark(new ArrayList<>(markers));
 					for (Entry<?, ?> entry: ((Map<?,?>) config).entrySet()) {
 						Object value = entry.getValue();
 						List<? extends Marker> valueMarkers = null;
@@ -132,19 +140,25 @@ public class ReferenceList<T> extends ListAttribute<T> {
 						}
 						entryList.getElementMarkers().add(valueMarkers);
 					}
-					return super.create(loader, entryList, base, progressMonitor, markers);			
+					return super.create(loader, entryList, base, resolver, markers, progressMonitor);			
 				} 
 				
 				throw new UnsupportedOperationException("Multiple e-keys are not supported yet");
 			}
 		}
-		return super.create(loader, config, base, progressMonitor, markers);
+		return super.create(loader, config, base, resolver, markers, progressMonitor);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected List<T> createElements(ObjectLoader loader, Object element, URI base, ProgressMonitor progressMonitor, List<? extends Marker> markers) {
-		return (List<T>) referenceFactory.create(loader, element, base, progressMonitor, markers);
+	protected List<T> createElements(
+			ObjectLoader loader, 
+			Object element, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		return (List<T>) referenceFactory.create(loader, element, base, resolver, markers, progressMonitor);
 	}
 
 }

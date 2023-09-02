@@ -2,11 +2,13 @@ package org.nasdanika.emf.persistence;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import org.eclipse.emf.common.util.ECollections;
@@ -179,8 +181,14 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				org.nasdanika.persistence.Reference delegate = new org.nasdanika.persistence.Reference(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith) {
 					
 					@Override
-					public Object create(ObjectLoader loader, Object config, URI base, ProgressMonitor progressMonitor,	List<? extends Marker> markers) {
-						Object ret = super.create(loader, config, base, progressMonitor, markers);
+					public Object create(
+							ObjectLoader loader, 
+							Object config, 
+							URI base,
+							BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver,
+							Collection<? extends Marker> markers, 
+							ProgressMonitor progressMonitor) {
+						Object ret = super.create(loader, config, base, resolver, markers, progressMonitor);
 						if (base != null && !base.isRelative() && base.isHierarchical() && ret instanceof String && "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, EObjectLoader.IS_RESOLVE_URI))) {
 							return URI.createURI((String) ret).resolve(base).toString();
 						}
@@ -357,7 +365,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				if (ret == null) {
 					ret = instantiate(eClass);
 				}
-				List<? extends Marker> markers = getMarkers();
+				List<? extends Marker> markers = new ArrayList<>(getMarkers());
 				loader.mark(ret, markers, progressMonitor);
 				Map<ETypedElement, Object> loadedFeatures = new HashMap<>();
 				ETypedElement[] loadingFeature = { null };

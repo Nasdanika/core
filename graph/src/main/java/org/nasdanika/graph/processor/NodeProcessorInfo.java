@@ -22,6 +22,7 @@ public class NodeProcessorInfo<P, H, E> extends ProcessorInfo<P> implements Node
 				NodeProcessorConfig<H,E> config, 
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
 		

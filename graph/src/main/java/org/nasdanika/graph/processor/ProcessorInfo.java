@@ -2,7 +2,9 @@ package org.nasdanika.graph.processor;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -20,6 +22,7 @@ public class ProcessorInfo<P> implements ProcessorConfig {
 				ProcessorConfig config, 
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);		
 	}

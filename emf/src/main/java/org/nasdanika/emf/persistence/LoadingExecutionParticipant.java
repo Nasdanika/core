@@ -156,7 +156,7 @@ public abstract class LoadingExecutionParticipant implements ExecutionParticipan
 	 */
 	protected Diagnostic unresolvedProxyDiagnostic(EObject source, EReference containmentReference, EObject container) {
 		Marked marked = EObjectAdaptable.adaptTo(source, Marked.class);
-		List<? extends Marker> markers = marked == null ? null : marked.getMarkers();
+		Collection<? extends Marker> markers = marked == null ? null : marked.getMarkers();
 		if (markers == null || markers.isEmpty()) {
 			return new BasicDiagnostic(getUnresolvedProxyStatus(), "Unresolved proxy: " + source, source, containmentReference, container);
 		}

@@ -2,6 +2,7 @@ package org.nasdanika.graph.processor;
 
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.nasdanika.common.Context;
 import org.nasdanika.common.ProgressMonitor;
@@ -20,6 +21,7 @@ public class ConnectionProcessorInfo<P, H, E> extends ProcessorInfo<P> implement
 				ConnectionProcessorConfig<H,E> config, 
 				boolean parallel, 
 				BiConsumer<Element,BiConsumer<ProcessorInfo<P>,ProgressMonitor>> infoProvider,
+				Consumer<CompletionStage<?>> endpointWiringStageConsumer,
 				Context context,
 				ProgressMonitor progressMonitor);
 		

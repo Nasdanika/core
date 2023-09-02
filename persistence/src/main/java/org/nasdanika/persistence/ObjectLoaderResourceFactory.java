@@ -66,7 +66,7 @@ public abstract class ObjectLoaderResourceFactory extends ResourceFactoryImpl {
 
 			@Override
 			protected BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver() {
-				return ObjectLoaderResourceFactory.this.getResolver();
+				return ObjectLoaderResourceFactory.this.getResolver(this);
 			}
 			
 		};
@@ -91,7 +91,7 @@ public abstract class ObjectLoaderResourceFactory extends ResourceFactoryImpl {
 		
 	protected abstract ObjectLoader getObjectLoader(Resource resource);
 	
-	protected abstract BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver();
+	protected abstract BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> getResolver(Resource resource);
 	
 	protected ProgressMonitor getProgressMonitor(Resource resource) {
 		return new NullProgressMonitor();
