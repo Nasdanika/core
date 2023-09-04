@@ -731,8 +731,7 @@ public class EObjectLoader extends DispatchingLoader {
 		if (config instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<Object,Object> configMap = (Map<Object,Object>) config;
-			if (configMap.size() == 1 
-					&& configMap.containsKey(HREF_KEY)) {
+			if (configMap.size() == 1 && configMap.containsKey(HREF_KEY)) {
 				EObject eObject = eClass.getEPackage().getEFactoryInstance().create(eClass);
 				if (eObject instanceof MinimalEObjectImpl) {
 					Object href = configMap.get(HREF_KEY);					

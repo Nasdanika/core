@@ -167,7 +167,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 	}
 		
 	/**
-	 * Loads reference. Creates a proxy if reference type is not abstract and resolve proxies is true.
+	 * Loads reference. Creates a proxy if reference type is not abstract and resolve proxies is false.
 	 * @param ref
 	 * @param base
 	 * @param marker
