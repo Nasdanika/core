@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.core</groupId>
-	<version>2023.9.0</version>
+	<version>2023.9.1</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 	<name>Nasdanika Core Parent</name>
@@ -50,7 +50,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>4.0.0-M5</version>
+				<version>4.0.0-M9</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

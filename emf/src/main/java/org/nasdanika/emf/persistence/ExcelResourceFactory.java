@@ -53,11 +53,11 @@ public class ExcelResourceFactory extends ResourceFactoryImpl {
 	protected void loadSheet(Resource resource, Sheet sheet, FormulaEvaluator formulaEvaluator) {
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		while (rowIterator.hasNext()) {
-			loadRow(resource, rowIterator.next(), formulaEvaluator);
+			loadRow(resource, sheet, rowIterator.next(), formulaEvaluator);
 		}
 	};
 	
-	protected void loadRow(Resource resource, Row row, FormulaEvaluator formulaEvaluator) {
+	protected void loadRow(Resource resource, Sheet sheet, Row row, FormulaEvaluator formulaEvaluator) {
 		// NOP		
 	};
 	
