@@ -21,6 +21,7 @@ import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -289,6 +290,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass documentedEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass documentedNamedElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1178,6 +1186,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDocumentedNamedElement() {
+		return documentedNamedElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getComposite() {
 		return compositeEClass;
 	}
@@ -1364,6 +1382,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		documentedEClass = createEClass(DOCUMENTED);
 		createEReference(documentedEClass, DOCUMENTED__DOCUMENTATION);
 
+		documentedNamedElementEClass = createEClass(DOCUMENTED_NAMED_ELEMENT);
+
 		compositeEClass = createEClass(COMPOSITE);
 		createEAttribute(compositeEClass, COMPOSITE__ID);
 		createEReference(compositeEClass, COMPOSITE__CHILDREN);
@@ -1483,8 +1503,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		g1.getETypeArguments().add(g2);
 		stringPropertyEClass.getEGenericSuperTypes().add(g1);
 		gitMarkerEClass.getESuperTypes().add(this.getMarker());
-		compositeEClass.getESuperTypes().add(this.getNamedElement());
-		compositeEClass.getESuperTypes().add(this.getDocumented());
+		documentedNamedElementEClass.getESuperTypes().add(this.getNamedElement());
+		documentedNamedElementEClass.getESuperTypes().add(this.getDocumented());
+		compositeEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1617,6 +1638,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(documentedEClass, Documented.class, "Documented", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDocumented_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, Documented.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(documentedNamedElementEClass, DocumentedNamedElement.class, "DocumentedNamedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(compositeEClass, Composite.class, "Composite", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getComposite_Id(), ecorePackage.getEString(), "id", null, 0, 1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

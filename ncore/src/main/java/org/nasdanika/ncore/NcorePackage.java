@@ -1878,14 +1878,14 @@ public interface NcorePackage extends EPackage {
 	int DOCUMENTED_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.CompositeImpl <em>Composite</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DocumentedNamedElementImpl <em>Documented Named Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.CompositeImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getComposite()
+	 * @see org.nasdanika.ncore.impl.DocumentedNamedElementImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedElement()
 	 * @generated
 	 */
-	int COMPOSITE = 34;
+	int DOCUMENTED_NAMED_ELEMENT = 34;
 
 	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
@@ -1894,7 +1894,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__MARKERS = NAMED_ELEMENT__MARKERS;
+	int DOCUMENTED_NAMED_ELEMENT__MARKERS = NAMED_ELEMENT__MARKERS;
 
 	/**
 	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
@@ -1903,7 +1903,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__URIS = NAMED_ELEMENT__URIS;
+	int DOCUMENTED_NAMED_ELEMENT__URIS = NAMED_ELEMENT__URIS;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1912,7 +1912,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
+	int DOCUMENTED_NAMED_ELEMENT__DESCRIPTION = NAMED_ELEMENT__DESCRIPTION;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -1921,7 +1921,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__UUID = NAMED_ELEMENT__UUID;
+	int DOCUMENTED_NAMED_ELEMENT__UUID = NAMED_ELEMENT__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Label Prototype</b></em>' containment reference.
@@ -1930,7 +1930,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__LABEL_PROTOTYPE = NAMED_ELEMENT__LABEL_PROTOTYPE;
+	int DOCUMENTED_NAMED_ELEMENT__LABEL_PROTOTYPE = NAMED_ELEMENT__LABEL_PROTOTYPE;
 
 	/**
 	 * The feature id for the '<em><b>Representations</b></em>' map.
@@ -1939,7 +1939,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__REPRESENTATIONS = NAMED_ELEMENT__REPRESENTATIONS;
+	int DOCUMENTED_NAMED_ELEMENT__REPRESENTATIONS = NAMED_ELEMENT__REPRESENTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
@@ -1948,7 +1948,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__ANNOTATIONS = NAMED_ELEMENT__ANNOTATIONS;
+	int DOCUMENTED_NAMED_ELEMENT__ANNOTATIONS = NAMED_ELEMENT__ANNOTATIONS;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1957,7 +1957,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__NAME = NAMED_ELEMENT__NAME;
+	int DOCUMENTED_NAMED_ELEMENT__NAME = NAMED_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
@@ -1966,7 +1966,116 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__DOCUMENTATION = NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION = NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Documented Named Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Documented Named Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.CompositeImpl <em>Composite</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.CompositeImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getComposite()
+	 * @generated
+	 */
+	int COMPOSITE = 35;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__MARKERS = DOCUMENTED_NAMED_ELEMENT__MARKERS;
+
+	/**
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__URIS = DOCUMENTED_NAMED_ELEMENT__URIS;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__DESCRIPTION = DOCUMENTED_NAMED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__UUID = DOCUMENTED_NAMED_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Label Prototype</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__LABEL_PROTOTYPE = DOCUMENTED_NAMED_ELEMENT__LABEL_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__REPRESENTATIONS = DOCUMENTED_NAMED_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__ANNOTATIONS = DOCUMENTED_NAMED_ELEMENT__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__NAME = DOCUMENTED_NAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__DOCUMENTATION = DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1975,7 +2084,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__ID = NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int COMPOSITE__ID = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Children</b></em>' containment reference list.
@@ -1984,7 +2093,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE__CHILDREN = NAMED_ELEMENT_FEATURE_COUNT + 2;
+	int COMPOSITE__CHILDREN = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Composite</em>' class.
@@ -1993,7 +2102,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 3;
+	int COMPOSITE_FEATURE_COUNT = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Composite</em>' class.
@@ -2002,7 +2111,7 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMPOSITE_OPERATION_COUNT = NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int COMPOSITE_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
@@ -2012,7 +2121,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 35;
+	int INSTANT = 36;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2022,7 +2131,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 36;
+	int DURATION = 37;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -2860,6 +2969,16 @@ public interface NcorePackage extends EPackage {
 	EReference getDocumented_Documentation();
 
 	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.DocumentedNamedElement <em>Documented Named Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Documented Named Element</em>'.
+	 * @see org.nasdanika.ncore.DocumentedNamedElement
+	 * @generated
+	 */
+	EClass getDocumentedNamedElement();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.Composite <em>Composite</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3650,6 +3769,16 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference DOCUMENTED__DOCUMENTATION = eINSTANCE.getDocumented_Documentation();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DocumentedNamedElementImpl <em>Documented Named Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.DocumentedNamedElementImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedElement()
+		 * @generated
+		 */
+		EClass DOCUMENTED_NAMED_ELEMENT = eINSTANCE.getDocumentedNamedElement();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.CompositeImpl <em>Composite</em>}' class.

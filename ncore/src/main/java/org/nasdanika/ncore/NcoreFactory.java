@@ -238,6 +238,15 @@ public interface NcoreFactory extends EFactory {
 	GitMarker createGitMarker();
 
 	/**
+	 * Returns a new object of class '<em>Documented Named Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Documented Named Element</em>'.
+	 * @generated
+	 */
+	DocumentedNamedElement createDocumentedNamedElement();
+
+	/**
 	 * Returns a new object of class '<em>Composite</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

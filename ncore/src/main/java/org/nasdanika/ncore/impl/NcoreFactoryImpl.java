@@ -17,6 +17,7 @@ import org.nasdanika.ncore.BooleanProperty;
 import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
+import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -106,6 +107,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.STRING_PROPERTY: return createStringProperty();
 			case NcorePackage.STRING_ENTRY: return (EObject)createStringEntry();
 			case NcorePackage.GIT_MARKER: return createGitMarker();
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT: return createDocumentedNamedElement();
 			case NcorePackage.COMPOSITE: return createComposite();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -428,6 +430,17 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	public GitMarker createGitMarker() {
 		GitMarkerImpl gitMarker = new GitMarkerImpl();
 		return gitMarker;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DocumentedNamedElement createDocumentedNamedElement() {
+		DocumentedNamedElementImpl documentedNamedElement = new DocumentedNamedElementImpl();
+		return documentedNamedElement;
 	}
 
 	/**

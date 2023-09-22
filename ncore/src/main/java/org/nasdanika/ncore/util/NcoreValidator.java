@@ -20,6 +20,7 @@ import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -181,6 +182,8 @@ public class NcoreValidator extends EObjectValidator {
 				return validateGitMarker((GitMarker)value, diagnostics, context);
 			case NcorePackage.DOCUMENTED:
 				return validateDocumented((Documented)value, diagnostics, context);
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT:
+				return validateDocumentedNamedElement((DocumentedNamedElement)value, diagnostics, context);
 			case NcorePackage.COMPOSITE:
 				return validateComposite((Composite)value, diagnostics, context);
 			case NcorePackage.INSTANT:
@@ -601,6 +604,15 @@ public class NcoreValidator extends EObjectValidator {
 	 */
 	public boolean validateDocumented(Documented documented, DiagnosticChain diagnostics, Map<Object, Object> context) {
 		return validate_EveryDefaultConstraint(documented, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDocumentedNamedElement(DocumentedNamedElement documentedNamedElement, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(documentedNamedElement, diagnostics, context);
 	}
 
 	/**

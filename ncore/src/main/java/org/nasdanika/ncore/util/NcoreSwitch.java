@@ -12,6 +12,7 @@ import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
+import org.nasdanika.ncore.DocumentedNamedElement;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -351,9 +352,22 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT: {
+				DocumentedNamedElement documentedNamedElement = (DocumentedNamedElement)theEObject;
+				T1 result = caseDocumentedNamedElement(documentedNamedElement);
+				if (result == null) result = caseNamedElement(documentedNamedElement);
+				if (result == null) result = caseDocumented(documentedNamedElement);
+				if (result == null) result = caseModelElement(documentedNamedElement);
+				if (result == null) result = caseMarked(documentedNamedElement);
+				if (result == null) result = caseAdaptable(documentedNamedElement);
+				if (result == null) result = caseIMarked(documentedNamedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case NcorePackage.COMPOSITE: {
 				Composite composite = (Composite)theEObject;
 				T1 result = caseComposite(composite);
+				if (result == null) result = caseDocumentedNamedElement(composite);
 				if (result == null) result = caseNamedElement(composite);
 				if (result == null) result = caseDocumented(composite);
 				if (result == null) result = caseModelElement(composite);
@@ -874,6 +888,21 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseDocumented(Documented object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Documented Named Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Documented Named Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDocumentedNamedElement(DocumentedNamedElement object) {
 		return null;
 	}
 
