@@ -1860,13 +1860,22 @@ public interface NcorePackage extends EPackage {
 	int DOCUMENTED__DOCUMENTATION = 0;
 
 	/**
+	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED__CONTEXT_HELP = 1;
+
+	/**
 	 * The number of structural features of the '<em>Documented</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENTED_FEATURE_COUNT = 1;
+	int DOCUMENTED_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Documented</em>' class.
@@ -1969,13 +1978,22 @@ public interface NcorePackage extends EPackage {
 	int DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION = NAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP = NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Documented Named Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT = NAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Documented Named Element</em>' class.
@@ -2076,6 +2094,15 @@ public interface NcorePackage extends EPackage {
 	 * @ordered
 	 */
 	int COMPOSITE__DOCUMENTATION = DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMPOSITE__CONTEXT_HELP = DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -2969,6 +2996,17 @@ public interface NcorePackage extends EPackage {
 	EReference getDocumented_Documentation();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.nasdanika.ncore.Documented#getContextHelp <em>Context Help</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Context Help</em>'.
+	 * @see org.nasdanika.ncore.Documented#getContextHelp()
+	 * @see #getDocumented()
+	 * @generated
+	 */
+	EReference getDocumented_ContextHelp();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.ncore.DocumentedNamedElement <em>Documented Named Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3769,6 +3807,14 @@ public interface NcorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference DOCUMENTED__DOCUMENTATION = eINSTANCE.getDocumented_Documentation();
+
+		/**
+		 * The meta object literal for the '<em><b>Context Help</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DOCUMENTED__CONTEXT_HELP = eINSTANCE.getDocumented_ContextHelp();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DocumentedNamedElementImpl <em>Documented Named Element</em>}' class.

@@ -27,6 +27,7 @@ import org.nasdanika.ncore.NcorePackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.ncore.impl.DocumentedNamedElementImpl#getDocumentation <em>Documentation</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.DocumentedNamedElementImpl#getContextHelp <em>Context Help</em>}</li>
  * </ul>
  *
  * @generated
@@ -67,11 +68,24 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<EObject> getContextHelp() {
+		return (EList<EObject>)eDynamicGet(NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP, NcorePackage.Literals.DOCUMENTED__CONTEXT_HELP, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION:
 				return ((InternalEList<?>)getDocumentation()).basicRemove(otherEnd, msgs);
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP:
+				return ((InternalEList<?>)getContextHelp()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -86,6 +100,8 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 		switch (featureID) {
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION:
 				return getDocumentation();
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP:
+				return getContextHelp();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -103,6 +119,10 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 				getDocumentation().clear();
 				getDocumentation().addAll((Collection<? extends EObject>)newValue);
 				return;
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP:
+				getContextHelp().clear();
+				getContextHelp().addAll((Collection<? extends EObject>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -118,6 +138,9 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION:
 				getDocumentation().clear();
 				return;
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP:
+				getContextHelp().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -132,6 +155,8 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 		switch (featureID) {
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION:
 				return !getDocumentation().isEmpty();
+			case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP:
+				return !getContextHelp().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -146,6 +171,7 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 		if (baseClass == Documented.class) {
 			switch (derivedFeatureID) {
 				case NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION: return NcorePackage.DOCUMENTED__DOCUMENTATION;
+				case NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP: return NcorePackage.DOCUMENTED__CONTEXT_HELP;
 				default: return -1;
 			}
 		}
@@ -162,6 +188,7 @@ public class DocumentedNamedElementImpl extends NamedElementImpl implements Docu
 		if (baseClass == Documented.class) {
 			switch (baseFeatureID) {
 				case NcorePackage.DOCUMENTED__DOCUMENTATION: return NcorePackage.DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION;
+				case NcorePackage.DOCUMENTED__CONTEXT_HELP: return NcorePackage.DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP;
 				default: return -1;
 			}
 		}

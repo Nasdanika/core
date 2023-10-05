@@ -1186,6 +1186,16 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getDocumented_ContextHelp() {
+		return (EReference)documentedEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDocumentedNamedElement() {
 		return documentedNamedElementEClass;
 	}
@@ -1381,6 +1391,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		documentedEClass = createEClass(DOCUMENTED);
 		createEReference(documentedEClass, DOCUMENTED__DOCUMENTATION);
+		createEReference(documentedEClass, DOCUMENTED__CONTEXT_HELP);
 
 		documentedNamedElementEClass = createEClass(DOCUMENTED_NAMED_ELEMENT);
 
@@ -1638,6 +1649,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 
 		initEClass(documentedEClass, Documented.class, "Documented", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDocumented_Documentation(), ecorePackage.getEObject(), null, "documentation", null, 0, -1, Documented.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDocumented_ContextHelp(), ecorePackage.getEObject(), null, "contextHelp", null, 0, -1, Documented.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(documentedNamedElementEClass, DocumentedNamedElement.class, "DocumentedNamedElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -2245,6 +2257,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Element documentation."
+		   });
+		addAnnotation
+		  (getDocumented_ContextHelp(),
+		   source,
+		   new String[] {
+			   "documentation", "Context help. It may be different from documentation."
 		   });
 		addAnnotation
 		  (compositeEClass,
