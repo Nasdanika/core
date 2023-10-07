@@ -122,13 +122,13 @@ public class EObjectLoader extends DispatchingLoader {
 	 */
 	public static final String LOAD_KEYS = "load-keys";
 	
-	private ThreadLocal<java.util.function.Function<EClass, EObject>> threadConstructor = new ThreadLocal<java.util.function.Function<EClass,EObject>>();
+	private ThreadLocal<java.util.function.BiFunction<EClass, ProgressMonitor, EObject>> threadConstructor = new ThreadLocal<>();
 	
 	/**
 	 * Sets thread constructor for creation of 
 	 * @param constructor
 	 */
-	public void setThreadConstructor(java.util.function.Function<EClass, EObject> constructor) {
+	public void setThreadConstructor(java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {
 		threadConstructor.set(constructor);
 	}
 	
@@ -347,7 +347,7 @@ public class EObjectLoader extends DispatchingLoader {
 			ObjectLoader loader, 
 			String type, 
 			Object config, 
-			java.util.function.Function<EClass, EObject> constructor, 
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor, 
 			URI base, 
 			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
 			Collection<? extends Marker> markers, 
@@ -369,24 +369,30 @@ public class EObjectLoader extends DispatchingLoader {
 		return super.create(loader, type, config, base, resolver, markers, progressMonitor);
 	}
 	
-//	@Override
-//	public Object create(ObjectLoader loader, String type) {
-//		// TODO Auto-generated method stub
-//		return super.create(loader, type);
-//	}
-//	
-//	@Override
-//	public void load(
-//			ObjectLoader loader, 
-//			Object config, 
-//			Object target, 
-//			URI base,
-//			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
-//			Collection<? extends Marker> markers,
-//			ProgressMonitor progressMonitor) {
-//		// TODO Auto-generated method stub
-//		super.load(loader, config, target, base, resolver, markers, progressMonitor);
-//	}
+	/**
+	 * Loading is done by "creating" an object using a "constructor" which returns the target argument
+	 */
+	@Override
+	public void load(
+			ObjectLoader loader, 
+			Object config, 
+			Object target, 
+			URI base,
+			BiConsumer<Object, BiConsumer<Object, ProgressMonitor>> resolver, 
+			Collection<? extends Marker> markers,
+			ProgressMonitor progressMonitor) {
+		
+		create(
+				loader,
+				((EObject) target).eClass(),
+				config,
+				base,
+				resolver,
+				markers,
+				progressMonitor,
+				keyProvider,
+				(eClass, pm) -> (EObject) target);
+	}
 	
 	@Override
 	public Object create(
@@ -478,7 +484,7 @@ public class EObjectLoader extends DispatchingLoader {
 			Collection<? extends Marker> markers, 
 			ProgressMonitor progressMonitor, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
-			java.util.function.Function<EClass, EObject> constructor) {
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {
 		
 		// Nulls are nulls
 		if (config == null) {
@@ -716,7 +722,7 @@ public class EObjectLoader extends DispatchingLoader {
 	protected EObjectSupplierFactory createEObjectSupplierFactory(
 			EClass eClass,
 			BiFunction<EClass, ENamedElement, String> keyProvider,
-			java.util.function.Function<EClass, EObject> constructor) {		
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {		
 		return new EObjectSupplierFactory(this, eClass, keyProvider, constructor);
 	}
 

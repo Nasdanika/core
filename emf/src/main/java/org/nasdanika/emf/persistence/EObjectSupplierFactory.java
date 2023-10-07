@@ -50,7 +50,6 @@ import org.nasdanika.persistence.TypedSupplierFactoryAttribute;
 /**
  * Loads {@link EObject} {@link EStructuralFeature}s from configuration.
  * @author Pavel
- *
  */
 public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject> {
 	
@@ -59,7 +58,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 
 	private EClass eClass;
 		
-	private java.util.function.Function<EClass, EObject> constructor = this::instantiate;
+	private java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor = this::instantiate;
 
 	/**
 	 * 
@@ -72,7 +71,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			EClass eClass, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
-			java.util.function.Function<EClass, EObject> constructor) {
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {
 
 		this.loader = loader;
 		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
@@ -361,9 +360,9 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			@SuppressWarnings("unchecked")
 			@Override
 			public EObject execute(Map<Object, Object> data, ProgressMonitor progressMonitor) {
-				EObject ret = constructor.apply(eClass);
+				EObject ret = constructor.apply(eClass, progressMonitor);
 				if (ret == null) {
-					ret = instantiate(eClass);
+					ret = instantiate(eClass, progressMonitor);
 				}
 				List<? extends Marker> markers = new ArrayList<>(getMarkers());
 				loader.mark(ret, markers, progressMonitor);
@@ -489,7 +488,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 		};
 	}
 	
-	protected EObject instantiate(EClass eClazz) {
+	protected EObject instantiate(EClass eClazz, ProgressMonitor progressMonitor) {
 		return eClazz.getEPackage().getEFactoryInstance().create(eClazz);
 	}	
 
