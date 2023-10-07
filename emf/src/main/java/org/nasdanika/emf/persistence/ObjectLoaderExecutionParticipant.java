@@ -13,6 +13,7 @@ import org.nasdanika.drawio.emf.DrawioResourceFactory;
 import org.nasdanika.drawio.model.ModelFactory;
 import org.nasdanika.persistence.Marker;
 import org.nasdanika.persistence.ObjectLoader;
+import org.nasdanika.persistence.ObjectLoaderResource;
 import org.nasdanika.persistence.ObjectLoaderResourceFactory;
 
 /**
@@ -103,10 +104,17 @@ public abstract class ObjectLoaderExecutionParticipant extends LoadingExecutionP
 		return null;
 	}	
 
+	/**
+	 * Object loader used by {@link ObjectLoaderResourceFactory} and {@link ObjectLoaderResource}.
+	 * @param resourceSet
+	 * @param resource
+	 * @param progressMonitor
+	 * @return
+	 */
 	protected ObjectLoader getObjectLLoader(ResourceSet resourceSet, Resource resource, ProgressMonitor progressMonitor) {
-		EObjectLoader eObjectLoader = new EObjectLoader(null, null, resourceSet);
+		EObjectLoader eObjectLoader = new EObjectLoader(resourceSet);
 		eObjectLoader.setMarkerFactory(new GitMarkerFactory());
 		return eObjectLoader;
 	}
-
+	
 }
