@@ -95,13 +95,22 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENT__URI = NcorePackage.MARKED_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENT__SOURCE = NcorePackage.MARKED_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Document</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENT_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 2;
+	int DOCUMENT_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Document</em>' class.
@@ -160,13 +169,22 @@ public interface ModelPackage extends EPackage {
 	int PAGE__ID = NcorePackage.MARKED_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Links</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__LINKS = NcorePackage.MARKED_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Page</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 3;
+	int PAGE_FEATURE_COUNT = NcorePackage.MARKED_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of operations of the '<em>Page</em>' class.
@@ -1211,6 +1229,17 @@ public interface ModelPackage extends EPackage {
 	EAttribute getDocument_Uri();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.Document#getSource <em>Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Source</em>'.
+	 * @see org.nasdanika.drawio.model.Document#getSource()
+	 * @see #getDocument()
+	 * @generated
+	 */
+	EAttribute getDocument_Source();
+
+	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Page <em>Page</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1252,6 +1281,17 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPage_Id();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Links</em>'.
+	 * @see org.nasdanika.drawio.model.Page#getLinks()
+	 * @see #getPage()
+	 * @generated
+	 */
+	EReference getPage_Links();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.drawio.model.Model <em>Model</em>}'.
@@ -1676,6 +1716,13 @@ public interface ModelPackage extends EPackage {
 		 */
 		EAttribute DOCUMENT__URI = eINSTANCE.getDocument_Uri();
 		/**
+		 * The meta object literal for the '<em><b>Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DOCUMENT__SOURCE = eINSTANCE.getDocument_Source();
+		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.PageImpl <em>Page</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1705,6 +1752,13 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PAGE__ID = eINSTANCE.getPage_Id();
+		/**
+		 * The meta object literal for the '<em><b>Links</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PAGE__LINKS = eINSTANCE.getPage_Links();
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.drawio.model.impl.ModelImpl <em>Model</em>}' class.
 		 * <!-- begin-user-doc -->

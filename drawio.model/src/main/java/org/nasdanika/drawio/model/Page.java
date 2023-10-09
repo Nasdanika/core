@@ -2,6 +2,7 @@
  */
 package org.nasdanika.drawio.model;
 
+import org.eclipse.emf.common.util.EList;
 import org.nasdanika.ncore.Marked;
 
 /**
@@ -16,6 +17,7 @@ import org.nasdanika.ncore.Marked;
  *   <li>{@link org.nasdanika.drawio.model.Page#getModel <em>Model</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getId <em>Id</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.drawio.model.ModelPackage#getPage()
@@ -89,4 +91,21 @@ public interface Page extends Marked {
 	 * @generated
 	 */
 	void setId(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Links</b></em>' reference list.
+	 * The list contents are of type {@link org.nasdanika.drawio.model.ModelElement}.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.ModelElement#getLinkedPage <em>Linked Page</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Model elements linking to this page
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Links</em>' reference list.
+	 * @see org.nasdanika.drawio.model.ModelPackage#getPage_Links()
+	 * @see org.nasdanika.drawio.model.ModelElement#getLinkedPage
+	 * @model opposite="linkedPage"
+	 * @generated
+	 */
+	EList<ModelElement> getLinks();
 } // Page

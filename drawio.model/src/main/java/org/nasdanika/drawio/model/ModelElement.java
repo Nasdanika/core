@@ -112,12 +112,14 @@ public interface ModelElement extends Marked {
 
 	/**
 	 * Returns the value of the '<em><b>Linked Page</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Linked Page</em>' reference.
 	 * @see #setLinkedPage(Page)
 	 * @see org.nasdanika.drawio.model.ModelPackage#getModelElement_LinkedPage()
-	 * @model
+	 * @see org.nasdanika.drawio.model.Page#getLinks
+	 * @model opposite="links"
 	 * @generated
 	 */
 	Page getLinkedPage();

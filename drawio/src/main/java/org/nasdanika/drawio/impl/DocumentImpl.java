@@ -289,7 +289,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 	}
 
 	@Override
-	public org.nasdanika.drawio.model.Document toModelDocument(ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory) {	
+	public org.nasdanika.drawio.model.Document toModelDocument(ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory) throws IOException, TransformerException {	
 		Map<Element, CompletableFuture<EObject>> registry = new HashMap<>();		
 		Function<Element, CompletableFuture<EObject>> modelElementProvider = e -> registry.computeIfAbsent(e, f -> new CompletableFuture<EObject>());
 		org.nasdanika.drawio.model.Document ret = factory.createDocument();
@@ -317,6 +317,8 @@ public class DocumentImpl extends ElementImpl implements Document {
 		for (Marker marker: getMarkers()) {
 			ret.getMarkers().add(markerFactory.apply(marker));
 		}
+		
+		ret.setSource(save(true));
 		
 		return ret;
 	}

@@ -231,6 +231,16 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public NotificationChain basicSetLinkedPage(Page newLinkedPage, NotificationChain msgs) {
+		msgs = eDynamicInverseAdd((InternalEObject)newLinkedPage, ModelPackage.MODEL_ELEMENT__LINKED_PAGE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void setLinkedPage(Page newLinkedPage) {
 		eDynamicSet(ModelPackage.MODEL_ELEMENT__LINKED_PAGE, ModelPackage.Literals.MODEL_ELEMENT__LINKED_PAGE, newLinkedPage);
@@ -304,12 +314,31 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
+				Page linkedPage = basicGetLinkedPage();
+				if (linkedPage != null)
+					msgs = ((InternalEObject)linkedPage).eInverseRemove(this, ModelPackage.PAGE__LINKS, Page.class, msgs);
+				return basicSetLinkedPage((Page)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ModelPackage.MODEL_ELEMENT__MARKERS:
 				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
+			case ModelPackage.MODEL_ELEMENT__LINKED_PAGE:
+				return basicSetLinkedPage(null, msgs);
 			case ModelPackage.MODEL_ELEMENT__STYLE:
 				return ((InternalEList<?>)getStyle()).basicRemove(otherEnd, msgs);
 		}

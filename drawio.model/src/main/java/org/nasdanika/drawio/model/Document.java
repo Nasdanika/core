@@ -16,6 +16,7 @@ import org.nasdanika.ncore.Marked;
  * <ul>
  *   <li>{@link org.nasdanika.drawio.model.Document#getPages <em>Pages</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Document#getUri <em>Uri</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.Document#getSource <em>Source</em>}</li>
  * </ul>
  *
  * @see org.nasdanika.drawio.model.ModelPackage#getDocument()
@@ -57,4 +58,29 @@ public interface Document extends Marked {
 	 * @generated
 	 */
 	void setUri(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Source diagram document
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Source</em>' attribute.
+	 * @see #setSource(String)
+	 * @see org.nasdanika.drawio.model.ModelPackage#getDocument_Source()
+	 * @model
+	 * @generated
+	 */
+	String getSource();
+
+	/**
+	 * Sets the value of the '{@link org.nasdanika.drawio.model.Document#getSource <em>Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Source</em>' attribute.
+	 * @see #getSource()
+	 * @generated
+	 */
+	void setSource(String value);
 } // Document

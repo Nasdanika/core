@@ -28,6 +28,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.drawio.model.impl.DocumentImpl#getMarkers <em>Markers</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.DocumentImpl#getPages <em>Pages</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.DocumentImpl#getUri <em>Uri</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.impl.DocumentImpl#getSource <em>Source</em>}</li>
  * </ul>
  *
  * @generated
@@ -42,6 +43,16 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 	 * @ordered
 	 */
 	protected static final String URI_EDEFAULT = null;
+
+	/**
+	 * The default value of the '{@link #getSource() <em>Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SOURCE_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -120,6 +131,26 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 	 * @generated
 	 */
 	@Override
+	public String getSource() {
+		return (String)eDynamicGet(ModelPackage.DOCUMENT__SOURCE, ModelPackage.Literals.DOCUMENT__SOURCE, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSource(String newSource) {
+		eDynamicSet(ModelPackage.DOCUMENT__SOURCE, ModelPackage.Literals.DOCUMENT__SOURCE, newSource);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ModelPackage.DOCUMENT__MARKERS:
@@ -144,6 +175,8 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 				return getPages();
 			case ModelPackage.DOCUMENT__URI:
 				return getUri();
+			case ModelPackage.DOCUMENT__SOURCE:
+				return getSource();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -168,6 +201,9 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 			case ModelPackage.DOCUMENT__URI:
 				setUri((String)newValue);
 				return;
+			case ModelPackage.DOCUMENT__SOURCE:
+				setSource((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -189,6 +225,9 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 			case ModelPackage.DOCUMENT__URI:
 				setUri(URI_EDEFAULT);
 				return;
+			case ModelPackage.DOCUMENT__SOURCE:
+				setSource(SOURCE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -207,6 +246,8 @@ public class DocumentImpl extends MinimalEObjectImpl.Container implements Docume
 				return !getPages().isEmpty();
 			case ModelPackage.DOCUMENT__URI:
 				return URI_EDEFAULT == null ? getUri() != null : !URI_EDEFAULT.equals(getUri());
+			case ModelPackage.DOCUMENT__SOURCE:
+				return SOURCE_EDEFAULT == null ? getSource() != null : !SOURCE_EDEFAULT.equals(getSource());
 		}
 		return super.eIsSet(featureID);
 	}

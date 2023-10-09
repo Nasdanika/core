@@ -37,7 +37,7 @@ public class DrawioResource extends ResourceImpl {
 		try {
 			Document document = loadDocument(inputStream);
 			getContents().add(document.toModelDocument(getFactory(), getMarkerFactory()));
-		} catch (ParserConfigurationException | SAXException e) {
+		} catch (ParserConfigurationException | SAXException | TransformerException e) {
 			throw new NasdanikaException(e);
 		}
 	}

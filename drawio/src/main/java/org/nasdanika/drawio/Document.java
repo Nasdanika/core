@@ -102,7 +102,7 @@ public interface Document extends Element {
 	 * Creates a model document from this document using the default factory.
 	 * @return
 	 */
-	default org.nasdanika.drawio.model.Document toModelDocument() {
+	default org.nasdanika.drawio.model.Document toModelDocument() throws TransformerException, IOException {
 		return toModelDocument(org.nasdanika.drawio.model.ModelFactory.eINSTANCE, null);
 	}
 
@@ -112,7 +112,7 @@ public interface Document extends Element {
 	 * @param markerFactory Can be null
 	 * @return
 	 */
-	org.nasdanika.drawio.model.Document toModelDocument(org.nasdanika.drawio.model.ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory);
+	org.nasdanika.drawio.model.Document toModelDocument(org.nasdanika.drawio.model.ModelFactory factory, Function<org.nasdanika.persistence.Marker, org.nasdanika.ncore.Marker> markerFactory) throws TransformerException, IOException;
 	
 	/**
 	 * Loads a document from a model document.

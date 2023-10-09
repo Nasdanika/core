@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.nasdanika.drawio.model.Model;
+import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.ncore.Marker;
@@ -31,6 +32,7 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getModel <em>Model</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getLinks <em>Links</em>}</li>
  * </ul>
  *
  * @generated
@@ -171,6 +173,32 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public EList<ModelElement> getLinks() {
+		return (EList<ModelElement>)eDynamicGet(ModelPackage.PAGE__LINKS, ModelPackage.Literals.PAGE__LINKS, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ModelPackage.PAGE__LINKS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinks()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -178,6 +206,8 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 				return ((InternalEList<?>)getMarkers()).basicRemove(otherEnd, msgs);
 			case ModelPackage.PAGE__MODEL:
 				return basicSetModel(null, msgs);
+			case ModelPackage.PAGE__LINKS:
+				return ((InternalEList<?>)getLinks()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -198,6 +228,8 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 				return getName();
 			case ModelPackage.PAGE__ID:
 				return getId();
+			case ModelPackage.PAGE__LINKS:
+				return getLinks();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -224,6 +256,10 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 			case ModelPackage.PAGE__ID:
 				setId((String)newValue);
 				return;
+			case ModelPackage.PAGE__LINKS:
+				getLinks().clear();
+				getLinks().addAll((Collection<? extends ModelElement>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -248,6 +284,9 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 			case ModelPackage.PAGE__ID:
 				setId(ID_EDEFAULT);
 				return;
+			case ModelPackage.PAGE__LINKS:
+				getLinks().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -268,6 +307,8 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
 			case ModelPackage.PAGE__ID:
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
+			case ModelPackage.PAGE__LINKS:
+				return !getLinks().isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
