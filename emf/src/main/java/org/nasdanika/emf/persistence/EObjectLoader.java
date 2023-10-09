@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
+import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -382,7 +383,7 @@ public class EObjectLoader extends DispatchingLoader {
 			Collection<? extends Marker> markers,
 			ProgressMonitor progressMonitor) {
 		
-		create(
+		Object result = create(
 				loader,
 				((EObject) target).eClass(),
 				config,
@@ -392,6 +393,14 @@ public class EObjectLoader extends DispatchingLoader {
 				progressMonitor,
 				keyProvider,
 				(eClass, pm) -> (EObject) target);
+		
+		if (result instanceof SupplierFactory) {
+			((SupplierFactory<?>) result).create(getContext()).execute(progressMonitor);
+		}
+	}
+	
+	protected Context getContext() {
+		return Context.EMPTY_CONTEXT;
 	}
 	
 	@Override
