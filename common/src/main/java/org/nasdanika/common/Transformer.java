@@ -256,7 +256,11 @@ public class Transformer<S,T> extends Reflector {
 			return false;
 		}
 		
-		if (!elementFactoryAnnotation.type().isInstance(element)) {
+		Class<?> type = elementFactoryAnnotation.type();
+		if (type == Object.class) {
+			type = method.getParameterTypes()[0];
+		}
+		if (!type.isInstance(element)) {
 			return false;
 		}
 		
