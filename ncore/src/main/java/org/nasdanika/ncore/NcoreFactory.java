@@ -256,6 +256,15 @@ public interface NcoreFactory extends EFactory {
 	Composite createComposite();
 
 	/**
+	 * Returns a new object of class '<em>Documented Named Element With ID</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Documented Named Element With ID</em>'.
+	 * @generated
+	 */
+	DocumentedNamedElementWithID createDocumentedNamedElementWithID();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

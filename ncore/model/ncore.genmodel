@@ -127,5 +127,8 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//Composite/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ncore.ecore#//Composite/children"/>
     </genClasses>
+    <genClasses ecoreClass="ncore.ecore#//DocumentedNamedElementWithID">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ncore.ecore#//DocumentedNamedElementWithID/id"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

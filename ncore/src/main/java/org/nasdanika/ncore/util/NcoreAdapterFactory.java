@@ -15,6 +15,7 @@ import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
+import org.nasdanika.ncore.DocumentedNamedElementWithID;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -236,6 +237,10 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseComposite(Composite object) {
 				return createCompositeAdapter();
+			}
+			@Override
+			public Adapter caseDocumentedNamedElementWithID(DocumentedNamedElementWithID object) {
+				return createDocumentedNamedElementWithIDAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -758,6 +763,20 @@ public class NcoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCompositeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.nasdanika.ncore.DocumentedNamedElementWithID <em>Documented Named Element With ID</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.nasdanika.ncore.DocumentedNamedElementWithID
+	 * @generated
+	 */
+	public Adapter createDocumentedNamedElementWithIDAdapter() {
 		return null;
 	}
 

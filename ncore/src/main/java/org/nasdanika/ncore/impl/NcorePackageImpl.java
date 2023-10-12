@@ -22,6 +22,7 @@ import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
+import org.nasdanika.ncore.DocumentedNamedElementWithID;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -304,6 +305,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	private EClass compositeEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass documentedNamedElementWithIDEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1236,6 +1244,26 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getDocumentedNamedElementWithID() {
+		return documentedNamedElementWithIDEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDocumentedNamedElementWithID_Id() {
+		return (EAttribute)documentedNamedElementWithIDEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getInstant() {
 		return instantEDataType;
 	}
@@ -1399,6 +1427,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(compositeEClass, COMPOSITE__ID);
 		createEReference(compositeEClass, COMPOSITE__CHILDREN);
 
+		documentedNamedElementWithIDEClass = createEClass(DOCUMENTED_NAMED_ELEMENT_WITH_ID);
+		createEAttribute(documentedNamedElementWithIDEClass, DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID);
+
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
 		durationEDataType = createEDataType(DURATION);
@@ -1517,6 +1548,7 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		documentedNamedElementEClass.getESuperTypes().add(this.getNamedElement());
 		documentedNamedElementEClass.getESuperTypes().add(this.getDocumented());
 		compositeEClass.getESuperTypes().add(this.getDocumentedNamedElement());
+		documentedNamedElementWithIDEClass.getESuperTypes().add(this.getDocumentedNamedElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1657,6 +1689,9 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEAttribute(getComposite_Id(), ecorePackage.getEString(), "id", null, 0, 1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getComposite_Children(), this.getComposite(), null, "children", null, 0, -1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getComposite_Children().getEKeys().add(this.getComposite_Id());
+
+		initEClass(documentedNamedElementWithIDEClass, DocumentedNamedElementWithID.class, "DocumentedNamedElementWithID", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDocumentedNamedElementWithID_Id(), ecorePackage.getEString(), "id", null, 1, 1, DocumentedNamedElementWithID.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -2281,6 +2316,12 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		   source,
 		   new String[] {
 			   "documentation", "Composite\'s children."
+		   });
+		addAnnotation
+		  (getDocumentedNamedElementWithID_Id(),
+		   source,
+		   new String[] {
+			   "documentation", "Element ID used as eKey in containment references"
 		   });
 	}
 
