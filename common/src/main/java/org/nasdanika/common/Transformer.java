@@ -7,18 +7,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -26,7 +32,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * Creates objects from other object.
+ * Creates objects from other objects.
  * Uses reflection to match factory methods and delegate to them.
  * Can create target objects sequentially or in parallel. 
  * Objects yet to be created can be referenced by objects being created using {@link CompletionStage}s.
@@ -40,7 +46,7 @@ import java.util.stream.Collectors;
 public class Transformer<S,T> extends Reflector {
 	
 	/**
-	 * Annotation for a method creating a {@link Element} from an object
+	 * Annotation for a method creating a target object from the source object
 	 * TODO - method parameters
 	 * @author Pavel
 	 *
@@ -68,6 +74,53 @@ public class Transformer<S,T> extends Reflector {
 		 */
 		int priority() default 0;
 
+	}
+	
+	/**
+	 * Annotation for a method wiring target object to other objects. 
+	 * The method takes source object, target object (if not null), registry, pass number, and progress monitor.
+	 * It may return boolean value. If returned value is <code>false</code> then it means that wiring is not possible yet and
+	 * another pass through this phase wire methods is required. Passes stop when there are no more wires to process. If there are no 
+	 * changes during a pass (all wires returned false) then and exception is thrown. Registry map can be modified, e.g. by replacing values. 
+	 * If the registry map is modified wires are re-matched. 
+	 * @author Pavel
+	 *
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Wire {
+		
+		/**
+		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
+		 * which is evaluated in the context of the source element with target element as target variable (might be null). 
+		 * @return
+		 */
+		String value() default "";
+
+		/**
+		 * Matching by source type.
+		 * @return
+		 */
+		Class<?> sourceType() default Object.class; 
+
+		/**
+		 * Matching by target type. Use {@link Void} class to match <code>null</code> values.
+		 * @return
+		 */
+		Class<?> targetType() default Object.class; 
+		
+		/**
+		 * Wiring is done in phases.
+		 * @return
+		 */
+		int phase() default 0;
+		
+		/**
+		 * Wire priority within the phase
+		 * @return
+		 */
+		int priority() default 0;
+		
 	}
 
 	protected List<AnnotatedElementRecord> annotatedElementRecords = new ArrayList<>();
@@ -97,6 +150,50 @@ public class Transformer<S,T> extends Reflector {
 			stageRecord.stage().toCompletableFuture().join();
 		}
 	}
+	
+	/**
+	 * Helper class for invoking wire methods
+	 */
+	private class WireEntry implements Comparable<WireEntry> {
+		
+		private Map<S, T> entryReg;
+		private ProgressMonitor progressMonitor;
+
+		WireEntry(
+				S source, 
+				T target, 
+				AnnotatedElementRecord wire, 
+				Map<S,T> entryReg,
+				ProgressMonitor progressMonitor) {
+			super();
+			this.source = source;
+			this.target = target;
+			this.wire = wire;
+			this.entryReg = entryReg;
+			this.progressMonitor = progressMonitor;
+			this.priority = - wire.getAnnotation(Wire.class).priority();
+		}
+		
+		S source;
+		T target;
+		AnnotatedElementRecord wire;	
+		int pass;
+		int priority;
+		
+		boolean invoke() {
+			Object result = target == null ? wire.invoke(source, entryReg, pass, progressMonitor) : wire.invoke(source, target, entryReg, pass, progressMonitor);
+			++pass;
+			++priority;
+			return !Boolean.FALSE.equals(result);
+		}
+
+		@Override
+		public int compareTo(WireEntry o) {
+			int cmp = priority - o.priority; 
+			return cmp == 0 ? hashCode() - o.hashCode() : cmp;
+		}
+		
+	}; 
 	
 	/**
 	 * Creates target objects from source objects and returns a map of source object to target objects created from them and their related elements.
@@ -197,21 +294,89 @@ public class Transformer<S,T> extends Reflector {
 		
 		join(stages);
 		
-		Map<S, T> reg = registry
+		Map<S, T> reg = new LinkedHashMap<>();		
+		registry
 				.entrySet()
 				.stream()
-				.map(re -> {
-					T element = re.getValue().join();
-					return element == null ? null : Map.entry(re.getKey(), element);
-				})
-				.filter(Objects::nonNull)
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+				.map(re -> new AbstractMap.SimpleEntry<S, T>(re.getKey(), re.getValue().join()))
+				.forEach(e -> reg.put(e.getKey(), e.getValue()));
 		
 		registryFrozen.set(true);
 		registryCompletableFuture.complete(reg);
 		join(stages);
 		join(registryStages);
-		return reg;
+						
+		// Wiring
+		Map<S, T> wireReg = new LinkedHashMap<>(reg); // Modifiable registry - wires may replace mappings
+		
+		Map<Integer, List<AnnotatedElementRecord>> wires = annotatedElementRecords
+			.stream()
+			.filter(ar -> ar.getAnnotation(Wire.class) != null && ar.getAnnotatedElement() instanceof Method)
+			.sorted((a,b) -> b.getAnnotation(Wire.class).priority() - a.getAnnotation(Wire.class).priority())
+			.collect(Collectors.groupingBy(ar -> ar.getAnnotation(Wire.class).phase()));
+		
+		for (Map.Entry<Integer, List<AnnotatedElementRecord>> phaseEntry: new TreeMap<>(wires).entrySet()) {						
+			AtomicInteger changeCounter = new AtomicInteger(); // Counts modifications in passes
+			
+			// Wire entries to invoke
+			Queue<WireEntry> wireEntries = new PriorityQueue<>();
+			Map<S,T> phaseRegistry = new ChangeTrackingMap<S, T>(wireReg) {
+				
+				@Override
+				protected void onPut(S key, T oldValue, T newValue) {
+					onRemove(key, oldValue);
+					for (AnnotatedElementRecord ar: phaseEntry.getValue()) {
+						if (matchWireMethod(key, newValue, (Method) ar.getAnnotatedElement())) {
+							wireEntries.add(new WireEntry(
+									key, 
+									newValue, 
+									ar,
+									this,
+									progressMonitor));
+						}
+					}						
+				}
+				
+				@Override
+				protected void onRemove(S key, T value) {
+					wireEntries.removeIf(we -> Objects.equals(we.source, key));					
+					changeCounter.incrementAndGet();
+				}
+				
+			};
+			
+			// Populating with the initial permutations
+			for (Map.Entry<S, T> wireRegEntry: wireReg.entrySet()) {
+				for (AnnotatedElementRecord ar: phaseEntry.getValue()) {
+					S key = wireRegEntry.getKey();
+					T value = wireRegEntry.getValue();
+					if (matchWireMethod(key, value, (Method) ar.getAnnotatedElement())) {
+						wireEntries.add(new WireEntry(
+								key, 
+								value, 
+								ar,
+								phaseRegistry,
+								progressMonitor));
+					}
+				}
+			}
+			
+			// Invoking wire entries while there are entries and there are changes
+			while (!wireEntries.isEmpty()) {
+				int changeCount = changeCounter.get(); 
+				WireEntry we = wireEntries.poll();
+				if (we.invoke()) {
+					changeCounter.incrementAndGet();
+				} else {
+					wireEntries.add(we); // Adding back - returned false.
+				}
+				if (changeCount == changeCounter.get()) {
+					throw new IllegalStateException("No changes in a wiring pass, incomplete wires: " + wireEntries.size());
+				}
+			}
+		}		
+		
+		return wireReg;
 	}
 
 	/**
@@ -235,7 +400,7 @@ public class Transformer<S,T> extends Reflector {
 		// TODO - progress steps.
 		Optional<AnnotatedElementRecord> match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
 			.filter(aer -> aer.test(element) && aer.getAnnotatedElement() instanceof Method && matchFactoryMethod(element, (Method) aer.getAnnotatedElement()))
-			.sorted((a, b) -> compareProcessorMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
+			.sorted((a, b) -> compareFactoryMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
 			.findFirst();
 		
 		if (match.isEmpty()) {
@@ -267,7 +432,7 @@ public class Transformer<S,T> extends Reflector {
 		return matchPredicate(element, elementFactoryAnnotation.value());
 	}
 	
-	protected int compareProcessorMethods(Method a, Method b) {
+	protected int compareFactoryMethods(Method a, Method b) {
 		int priorityCmp = b.getAnnotation(Factory.class).priority() - a.getAnnotation(Factory.class).priority();
 		if (priorityCmp != 0) {
 			return priorityCmp;
@@ -298,6 +463,43 @@ public class Transformer<S,T> extends Reflector {
 		}		
 		
 		return a.getName().compareTo(b.getName());
+	}	
+	
+	protected boolean matchWireMethod(S source, T target, Method method) {
+		if (Modifier.isAbstract(method.getModifiers())) {
+			return false;
+		}
+		
+		Wire elementWireAnnotation = method.getAnnotation(Wire.class);
+		if (elementWireAnnotation == null) {
+			return false;
+		}
+		
+		Class<?>[] parameterTypes = method.getParameterTypes();
+
+		Class<?> sourceType = elementWireAnnotation.sourceType();
+		if (sourceType == Object.class) {
+			sourceType = parameterTypes[0];
+		}
+		if (!sourceType.isInstance(source)) {
+			return false;
+		}
+
+		Class<?> targetType = elementWireAnnotation.targetType();
+		if (target == null) {
+			if (targetType != Void.class) {
+				return false;
+			}
+		} else {
+			if (targetType == Object.class) {
+				targetType = parameterTypes[1];
+			}
+			if (!targetType.isInstance(target)) {
+				return false;
+			}
+		}
+		
+		return evaluatePredicate(source, elementWireAnnotation.value(), target == null ? null : Collections.singletonMap("target", target));
 	}	
 				
 }

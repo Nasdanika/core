@@ -244,15 +244,22 @@ public class Reflector {
 			return true;
 		}
 		
-		return evalCache.computeIfAbsent(obj, o -> new ConcurrentHashMap<>()).computeIfAbsent(expr, e -> evaluatePredicate(obj, e));
+		return evalCache.computeIfAbsent(obj, o -> new ConcurrentHashMap<>()).computeIfAbsent(expr, e -> evaluatePredicate(obj, e, null));
 	}
 	
 	protected Map<Object, Map<String,Boolean>> evalCache = new ConcurrentHashMap<>();
 
-	protected boolean evaluatePredicate(Object obj, String expr) {
+	protected boolean evaluatePredicate(Object obj, String expr, Map<String,Object> variables) {
+		if (Util.isBlank(expr)) {
+			return true;
+		}
+		
 		ExpressionParser parser = getExpressionParser();
 		Expression exp = parser.parseExpression(expr);
 		EvaluationContext evaluationContext = getEvaluationContext();
+		if (variables != null) {
+			variables.entrySet().forEach(ve -> evaluationContext.setVariable(ve.getKey(), ve.getValue()));
+		}
 		try {			
 			return evaluationContext == null ? exp.getValue(obj, Boolean.class) : exp.getValue(evaluationContext, obj, Boolean.class);
 		} catch (EvaluationException e) {
