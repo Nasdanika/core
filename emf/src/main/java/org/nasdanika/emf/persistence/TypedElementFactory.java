@@ -1,7 +1,6 @@
 package org.nasdanika.emf.persistence;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -256,17 +255,7 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 		ConfigurationException.pushThreadMarker(markers);
 		try {
 			EClass eReferenceType = effectiveReferenceType(ref);
-			if (!eReferenceType.isAbstract() && !resolveProxies) {
-				// Can create proxy, if possible, instead of loading object
-				EObject proxy = eObjectLoader.createProxy(eReferenceType, Collections.singletonMap(EObjectLoader.HREF_KEY, refURI), base, markers, progressMonitor);
-				if (proxy != null) {
-					if (markers != null && !markers.isEmpty()) {
-						proxy.eAdapters().add(new MarkedAdapter(new ArrayList<>(markers)));
-					}
-					return Collections.singletonList(proxy);
-				}
-			}
-			return Collections.singletonList(eObjectLoader.getResourceSet().getEObject(refURI, true));
+			return eObjectLoader.resolve(refURI, eReferenceType, base, markers, resolveProxies, progressMonitor);
 		} finally {
 			ConfigurationException.popThreadMarker();
 		}	

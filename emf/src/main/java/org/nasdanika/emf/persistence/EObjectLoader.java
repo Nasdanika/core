@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -29,7 +30,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.nasdanika.common.Context;
-import org.nasdanika.common.ExecutionParticipant;
 import org.nasdanika.common.FunctionFactory;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Supplier;
@@ -733,6 +733,38 @@ public class EObjectLoader extends DispatchingLoader {
 			BiFunction<EClass, ENamedElement, String> keyProvider,
 			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {		
 		return new EObjectSupplierFactory(this, eClass, keyProvider, constructor);
+	}
+	
+	/**
+	 * Resolves object reference. This implementation creates a proxy if the type is not abstract and resolveProxies is true.
+	 * Otherwise it retrieves the object from the resource set without regard to its type.
+	 * Override to customize resolution, e.g. modify the URI taking the loading context into account or load objects on demand from external systems. 
+	 * @param uri 
+	 * @param type
+	 * @param base
+	 * @param markers
+	 * @param resolveProxies True if client supports proxy resolution so this method may return a proxy object.
+	 * @param progressMonitor
+	 * @return
+	 */
+	public List<EObject> resolve(
+			URI uri, 
+			EClass type, 
+			URI base, 
+			Collection<? extends Marker> markers,
+			boolean resolveProxies,
+			ProgressMonitor progressMonitor) {
+		if (!type.isAbstract() && !resolveProxies) {
+			// Can create proxy, if possible, instead of loading object
+			EObject proxy = createProxy(type, Collections.singletonMap(EObjectLoader.HREF_KEY, uri), base, markers, progressMonitor);
+			if (proxy != null) {
+				if (markers != null && !markers.isEmpty()) {
+					proxy.eAdapters().add(new MarkedAdapter(new ArrayList<>(markers)));
+				}
+				return Collections.singletonList(proxy);
+			}
+		}
+		return Collections.singletonList(getResourceSet().getEObject(uri, true));
 	}
 
 	/**
