@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
@@ -91,6 +92,51 @@ public final class NcoreUtil {
 		}
 		return ret;
 	}
+	
+	public static int cmpDistance(EClass eClass, EClass a, EClass b) {
+		if (Objects.equals(a, b)) {
+			return 0;
+		}
+		if (a.isSuperTypeOf(b)) {
+			return 1;
+		}
+		if (b.isSuperTypeOf(a)) {
+			return -1;
+		}
+		if (eClass.equals(a)) {
+			return -1;
+		}
+		if (eClass.equals(b)) {
+			return 1;
+		}
+		return distance(eClass, a) - distance(eClass, b);
+	}
+	
+	/**
+	 * Minimal number of steps along the inheritance hierarchy to come from the subclass to superclass
+	 * @param sub
+	 * @param sup
+	 * @return
+	 */
+	public static int distance(EClass sub, EClass sup) {
+		if (sub.equals(sup)) {
+			return 0;
+		}
+		int ret = Integer.MAX_VALUE;
+		if (sup.isSuperTypeOf(sub)) {
+			for (EClass isup: sub.getESuperTypes()) {
+				if (isup.equals(sup)) {
+					return 1;
+				}
+				if (sup.isSuperTypeOf(isup)) {
+					ret = Math.min(ret, distance(isup, sup) + 1); 
+				}
+			}			
+		}
+		return ret;
+	}
+	
+	
 
 	/**
 	 * Finds objects referencing the argument object (target) via the specified reference.

@@ -15,6 +15,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.nasdanika.ncore.util.NcoreUtil;
 
 /**
  * Composed factory delegates to its child factories. It uses inheritance ordering to delegate -
@@ -103,45 +104,11 @@ public class ComposedAdapterFactory implements ComposeableAdapterFactory {
 	}
 	
 	protected int cmpDistance(EObject obj, EClass a, EClass b) {
-		if (a == b) {
-			return 0;
-		}
-		if (a.equals(b)) {
-			return 0;
-		}
-		if (a.isSuperTypeOf(b)) {
-			return 1;
-		}
-		if (b.isSuperTypeOf(a)) {
-			return -1;
-		}
 		if (obj == null) {
-			return 0; // Does not matter.
-		}
-		EClass eClass = obj.eClass();
-		if (eClass.equals(a)) {
-			return -1;
-		}
-		if (eClass.equals(b)) {
-			return 1;
-		}
-		return distance(eClass, a) - distance(eClass, b);
-	}
-	
-	protected int distance(EClass sub, EClass sup) {
-		if (sub.equals(sup)) {
 			return 0;
 		}
-		int ret = Integer.MAX_VALUE;
-		for (EClass isup: sub.getESuperTypes()) {
-			if (isup.equals(sup)) {
-				return 1;
-			}
-			if (sup.isSuperTypeOf(isup)) {
-				ret = Math.min(ret, distance(isup, sup)); 
-			}
-		}
-		return ret;
+		
+		return NcoreUtil.cmpDistance(obj.eClass(), a, b);
 	}
 		
 	private class AdapterFactoryEntry {
