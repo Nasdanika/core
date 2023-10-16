@@ -30,6 +30,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Creates objects from other objects.
@@ -398,17 +399,30 @@ public class Transformer<S,T> extends Reflector {
 			ProgressMonitor progressMonitor) {
 		
 		// TODO - progress steps.
-		Optional<AnnotatedElementRecord> match = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
-			.filter(aer -> aer.test(element) && aer.getAnnotatedElement() instanceof Method && matchFactoryMethod(element, (Method) aer.getAnnotatedElement()))
-			.sorted((a, b) -> compareFactoryMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()))
-			.findFirst();
+		Stream<AnnotatedElementRecord> matchStream = (parallel ? annotatedElementRecords.parallelStream() : annotatedElementRecords.stream())
+					.filter(aer -> aer.test(element) && aer.getAnnotatedElement() instanceof Method && matchFactoryMethod(element, (Method) aer.getAnnotatedElement()))
+					.sorted((a, b) -> compareFactoryMethods((Method) a.getAnnotatedElement(), (Method) b.getAnnotatedElement()));
 		
-		if (match.isEmpty()) {
-			return null;			
+		if (isMultiTransformer()) {
+			return (T) matchStream.map(mr -> mr.invoke(element, parallel, elementProvider, registry, progressMonitor)).toList();
 		}
 		
+		Optional<AnnotatedElementRecord> match = matchStream.findFirst();		
+		if (match.isEmpty()) {
+			return null;			
+		}		
 		AnnotatedElementRecord matchedRecord = match.get();
 		return (T) matchedRecord.invoke(element, parallel, elementProvider, registry, progressMonitor);
+	}
+	
+	/**
+	 * If this method returns true then all matched create methods are invoked and results are collected into a list. 
+	 * This can be used, for example, for inspection/diagnostic where multiple methods diagnose different aspects of the source object.
+	 * When true, <code>T</code> must be assignable from List.
+	 * @return
+	 */
+	protected boolean isMultiTransformer() {
+		return false;
 	}
 	
 	protected boolean matchFactoryMethod(S element, Method method) {
