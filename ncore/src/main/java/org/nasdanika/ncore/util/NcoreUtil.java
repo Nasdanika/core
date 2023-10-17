@@ -17,6 +17,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
@@ -110,6 +112,24 @@ public final class NcoreUtil {
 			return 1;
 		}
 		return distance(eClass, a) - distance(eClass, b);
+	}
+	
+	public static int cmpDistance(EClass eClass, EGenericType a, EGenericType b) {		
+		if (Objects.equals(a, b)) {
+			return 0;
+		}
+		EClassifier aClassifier = a.getEClassifier();
+		EClassifier bClassifier = b.getEClassifier();
+		if (aClassifier instanceof EClass) {
+			if (bClassifier instanceof EClass) {
+				return cmpDistance(eClass, (EClass) aClassifier, (EClass) bClassifier);
+			}
+			return -1;
+		} else if (bClassifier instanceof EClass) {
+			return 1;
+		}
+
+		return a.hashCode() - b.hashCode();
 	}
 	
 	/**
