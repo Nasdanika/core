@@ -24,7 +24,6 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -81,9 +80,10 @@ public class Transformer<S,T> extends Reflector {
 	 * Annotation for a method wiring target object to other objects. 
 	 * The method takes source object, target object (if not null), registry, pass number, and progress monitor.
 	 * It may return boolean value. If returned value is <code>false</code> then it means that wiring is not possible yet and
-	 * another pass through this phase wire methods is required. Passes stop when there are no more wires to process. If there are no 
-	 * changes during a pass (all wires returned false) then and exception is thrown. Registry map can be modified, e.g. by replacing values. 
+	 * another pass through this phase wire methods is required. 
+	 * Passes stop when there are no more wires to process. Registry map can be modified, e.g. by replacing values. 
 	 * If the registry map is modified wires are re-matched. 
+	 * An exception is thrown if the number of passes exceeds the value returned by <code>getMaxPasses()</code> method.
 	 * @author Pavel
 	 *
 	 */
@@ -185,6 +185,9 @@ public class Transformer<S,T> extends Reflector {
 			Object result = target == null ? wire.invoke(source, entryReg, pass, progressMonitor) : wire.invoke(source, target, entryReg, pass, progressMonitor);
 			++pass;
 			++priority;
+			if (pass > getMaxPasses()) {
+				throw new IllegalStateException("Maximum number of passes has been exceeded for " + wire.getAnnotatedElement());
+			}
 			return !Boolean.FALSE.equals(result);
 		}
 
@@ -195,6 +198,14 @@ public class Transformer<S,T> extends Reflector {
 		}
 		
 	}; 
+	
+	/**
+	 * Maximum number of passes per entry. If this number is exceeded then an exception is thrown.
+	 * @return
+	 */
+	protected int getMaxPasses() {
+		return 1000;
+	}
 	
 	/**
 	 * Creates target objects from source objects and returns a map of source object to target objects created from them and their related elements.
@@ -317,7 +328,6 @@ public class Transformer<S,T> extends Reflector {
 			.collect(Collectors.groupingBy(ar -> ar.getAnnotation(Wire.class).phase()));
 		
 		for (Map.Entry<Integer, List<AnnotatedElementRecord>> phaseEntry: new TreeMap<>(wires).entrySet()) {						
-			AtomicInteger changeCounter = new AtomicInteger(); // Counts modifications in passes
 			
 			// Wire entries to invoke
 			Queue<WireEntry> wireEntries = new PriorityQueue<>();
@@ -341,7 +351,6 @@ public class Transformer<S,T> extends Reflector {
 				@Override
 				protected void onRemove(S key, T value) {
 					wireEntries.removeIf(we -> Objects.equals(we.source, key));					
-					changeCounter.incrementAndGet();
 				}
 				
 			};
@@ -364,15 +373,9 @@ public class Transformer<S,T> extends Reflector {
 			
 			// Invoking wire entries while there are entries and there are changes
 			while (!wireEntries.isEmpty()) {
-				int changeCount = changeCounter.get(); 
 				WireEntry we = wireEntries.poll();
-				if (we.invoke()) {
-					changeCounter.incrementAndGet();
-				} else {
+				if (!we.invoke()) {
 					wireEntries.add(we); // Adding back - returned false.
-				}
-				if (changeCount == changeCounter.get()) {
-					throw new IllegalStateException("No changes in a wiring pass, incomplete wires: " + wireEntries.size());
 				}
 			}
 		}		
