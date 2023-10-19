@@ -262,8 +262,11 @@ public class TestEObjectGraph {
 		Map<Element, ProcessorConfig> configs = processorConfigTransformer.transform(graphResult.registry().values(), parallel, progressMonitor);
 		System.out.println("Configs: " + configs.size());
 			
-		assertEquals(configs.size(), passThrough ? graphResult.nodes() : graphResult.nodes() + graphResult.connections());
-		return new ConfigResult(graphResult, configs.values());
+		List<ProcessorConfig> configValuesNonNull = configs.values().stream().filter(Objects::nonNull).toList();
+		assertEquals(
+				configValuesNonNull.size(), 
+				passThrough ? graphResult.nodes() : graphResult.nodes() + graphResult.connections());
+		return new ConfigResult(graphResult, configValuesNonNull);
 	}
 		
 	@Test

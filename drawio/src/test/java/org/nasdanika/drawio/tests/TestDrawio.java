@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletionStage;
@@ -485,7 +486,14 @@ public class TestDrawio {
 			}
 		};
 		
-		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(configs.values(), false, progressMonitor);
+		Map<org.nasdanika.graph.Element, ProcessorInfo<Object>> processors = processorFactory.createProcessors(
+				configs
+					.values()
+					.stream()
+					.filter(Objects::nonNull)
+					.toList(), 
+				false, 
+				progressMonitor);
 		
 		for (Entry<org.nasdanika.graph.Connection, CompletionStage<Function<String, String>>> outgoingEndpointCompletionStageEntry: aliceProcessorConfig.getOutgoingEndpoints().entrySet()) {
 			outgoingEndpointCompletionStageEntry.getValue().thenAccept(outgoingEndpoint -> {
