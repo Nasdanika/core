@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="ecore://nasdanika.org/core/gaph/model" nsPrefix="org.nasdanika.graph.model">
+  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Graph">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id">
+      <eGenericType eTypeParameter="#//Graph/E"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionTarget" eSuperTypes="#//GraphElement">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingConnections" upperBound="-1"
+        eOpposite="#//Connection/target">
+      <eGenericType eTypeParameter="#//ConnectionTarget/C"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//ConnectionTarget">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eOpposite="#//ConnectionTarget/incomingConnections">
+      <eGenericType eTypeParameter="#//Connection/T"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionSource" eSuperTypes="#//GraphElement">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingConnections" upperBound="-1"
+        containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id">
+      <eGenericType eTypeParameter="#//ConnectionSource/C"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//ConnectionSource">
+      <eTypeArguments eTypeParameter="#//Node/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//ConnectionTarget">
+      <eTypeArguments eTypeParameter="#//Node/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+</ecore:EPackage>

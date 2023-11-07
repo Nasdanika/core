@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.nasdanika.graph.model;singleton:=true
+Automatic-Module-Name: org.nasdanika.graph.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: org.nasdanika.graph.model,
+ org.nasdanika.graph.model.impl,
+ org.nasdanika.graph.model.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport,
+ org.nasdanika.ncore;visibility:=reexport
+Bundle-ActivationPolicy: lazy

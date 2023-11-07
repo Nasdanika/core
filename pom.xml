@@ -187,6 +187,7 @@
 		<module>persistence</module>
 		<module>resources</module>
 		<module>graph</module>
+		<module>graph.model</module>
 		<!-- <module>graph.processor.emf</module> -->
 		<module>ncore</module>
 		<module>ncore.gen</module>
