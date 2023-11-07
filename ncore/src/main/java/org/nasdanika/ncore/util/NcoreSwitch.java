@@ -13,7 +13,7 @@ import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
-import org.nasdanika.ncore.DocumentedNamedElementWithID;
+import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -29,6 +29,7 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.ValueObject;
@@ -378,16 +379,23 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID: {
-				DocumentedNamedElementWithID documentedNamedElementWithID = (DocumentedNamedElementWithID)theEObject;
-				T1 result = caseDocumentedNamedElementWithID(documentedNamedElementWithID);
-				if (result == null) result = caseDocumentedNamedElement(documentedNamedElementWithID);
-				if (result == null) result = caseNamedElement(documentedNamedElementWithID);
-				if (result == null) result = caseDocumented(documentedNamedElementWithID);
-				if (result == null) result = caseModelElement(documentedNamedElementWithID);
-				if (result == null) result = caseMarked(documentedNamedElementWithID);
-				if (result == null) result = caseAdaptable(documentedNamedElementWithID);
-				if (result == null) result = caseIMarked(documentedNamedElementWithID);
+			case NcorePackage.STRING_IDENTITY: {
+				StringIdentity stringIdentity = (StringIdentity)theEObject;
+				T1 result = caseStringIdentity(stringIdentity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY: {
+				DocumentedNamedStringIdentity documentedNamedStringIdentity = (DocumentedNamedStringIdentity)theEObject;
+				T1 result = caseDocumentedNamedStringIdentity(documentedNamedStringIdentity);
+				if (result == null) result = caseDocumentedNamedElement(documentedNamedStringIdentity);
+				if (result == null) result = caseStringIdentity(documentedNamedStringIdentity);
+				if (result == null) result = caseNamedElement(documentedNamedStringIdentity);
+				if (result == null) result = caseDocumented(documentedNamedStringIdentity);
+				if (result == null) result = caseModelElement(documentedNamedStringIdentity);
+				if (result == null) result = caseMarked(documentedNamedStringIdentity);
+				if (result == null) result = caseAdaptable(documentedNamedStringIdentity);
+				if (result == null) result = caseIMarked(documentedNamedStringIdentity);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -936,17 +944,32 @@ public class NcoreSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Documented Named Element With ID</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>String Identity</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Documented Named Element With ID</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>String Identity</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T1 caseDocumentedNamedElementWithID(DocumentedNamedElementWithID object) {
+	public T1 caseStringIdentity(StringIdentity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Documented Named String Identity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Documented Named String Identity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseDocumentedNamedStringIdentity(DocumentedNamedStringIdentity object) {
 		return null;
 	}
 

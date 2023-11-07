@@ -5,6 +5,7 @@ package org.nasdanika.drawio.model;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +17,6 @@ import org.nasdanika.ncore.Marked;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getProperties <em>Properties</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.ModelElement#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLabel <em>Label</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLink <em>Link</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.ModelElement#getLinkedPage <em>Linked Page</em>}</li>
@@ -30,7 +30,7 @@ import org.nasdanika.ncore.Marked;
  * @model abstract="true"
  * @generated
  */
-public interface ModelElement extends Marked {
+public interface ModelElement extends Marked, StringIdentity {
 	/**
 	 * Returns the value of the '<em><b>Properties</b></em>' map.
 	 * The key is of type {@link java.lang.String},
@@ -43,28 +43,6 @@ public interface ModelElement extends Marked {
 	 * @generated
 	 */
 	EMap<String, String> getProperties();
-
-	/**
-	 * Returns the value of the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Id</em>' attribute.
-	 * @see #setId(String)
-	 * @see org.nasdanika.drawio.model.ModelPackage#getModelElement_Id()
-	 * @model id="true" required="true"
-	 * @generated
-	 */
-	String getId();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.drawio.model.ModelElement#getId <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Id</em>' attribute.
-	 * @see #getId()
-	 * @generated
-	 */
-	void setId(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Label</b></em>' attribute.

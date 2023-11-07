@@ -2141,104 +2141,14 @@ public interface NcorePackage extends EPackage {
 	int COMPOSITE_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DocumentedNamedElementWithIDImpl <em>Documented Named Element With ID</em>}' class.
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.StringIdentityImpl <em>String Identity</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.nasdanika.ncore.impl.DocumentedNamedElementWithIDImpl
-	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedElementWithID()
+	 * @see org.nasdanika.ncore.impl.StringIdentityImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringIdentity()
 	 * @generated
 	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID = 36;
-
-	/**
-	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__MARKERS = DOCUMENTED_NAMED_ELEMENT__MARKERS;
-
-	/**
-	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__URIS = DOCUMENTED_NAMED_ELEMENT__URIS;
-
-	/**
-	 * The feature id for the '<em><b>Description</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__DESCRIPTION = DOCUMENTED_NAMED_ELEMENT__DESCRIPTION;
-
-	/**
-	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__UUID = DOCUMENTED_NAMED_ELEMENT__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Label Prototype</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__LABEL_PROTOTYPE = DOCUMENTED_NAMED_ELEMENT__LABEL_PROTOTYPE;
-
-	/**
-	 * The feature id for the '<em><b>Representations</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__REPRESENTATIONS = DOCUMENTED_NAMED_ELEMENT__REPRESENTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__ANNOTATIONS = DOCUMENTED_NAMED_ELEMENT__ANNOTATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__NAME = DOCUMENTED_NAMED_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__DOCUMENTATION = DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION;
-
-	/**
-	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__CONTEXT_HELP = DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP;
+	int STRING_IDENTITY = 36;
 
 	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -2247,25 +2157,152 @@ public interface NcorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 0;
+	int STRING_IDENTITY__ID = 0;
 
 	/**
-	 * The number of structural features of the '<em>Documented Named Element With ID</em>' class.
+	 * The number of structural features of the '<em>String Identity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID_FEATURE_COUNT = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 1;
+	int STRING_IDENTITY_FEATURE_COUNT = 1;
 
 	/**
-	 * The number of operations of the '<em>Documented Named Element With ID</em>' class.
+	 * The number of operations of the '<em>String Identity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DOCUMENTED_NAMED_ELEMENT_WITH_ID_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
+	int STRING_IDENTITY_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link org.nasdanika.ncore.impl.DocumentedNamedStringIdentityImpl <em>Documented Named String Identity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.nasdanika.ncore.impl.DocumentedNamedStringIdentityImpl
+	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedStringIdentity()
+	 * @generated
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY = 37;
+
+	/**
+	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__MARKERS = DOCUMENTED_NAMED_ELEMENT__MARKERS;
+
+	/**
+	 * The feature id for the '<em><b>Uris</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__URIS = DOCUMENTED_NAMED_ELEMENT__URIS;
+
+	/**
+	 * The feature id for the '<em><b>Description</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__DESCRIPTION = DOCUMENTED_NAMED_ELEMENT__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__UUID = DOCUMENTED_NAMED_ELEMENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Label Prototype</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__LABEL_PROTOTYPE = DOCUMENTED_NAMED_ELEMENT__LABEL_PROTOTYPE;
+
+	/**
+	 * The feature id for the '<em><b>Representations</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__REPRESENTATIONS = DOCUMENTED_NAMED_ELEMENT__REPRESENTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Annotations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__ANNOTATIONS = DOCUMENTED_NAMED_ELEMENT__ANNOTATIONS;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__NAME = DOCUMENTED_NAMED_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__DOCUMENTATION = DOCUMENTED_NAMED_ELEMENT__DOCUMENTATION;
+
+	/**
+	 * The feature id for the '<em><b>Context Help</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__CONTEXT_HELP = DOCUMENTED_NAMED_ELEMENT__CONTEXT_HELP;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY__ID = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Documented Named String Identity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY_FEATURE_COUNT = DOCUMENTED_NAMED_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of operations of the '<em>Documented Named String Identity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_STRING_IDENTITY_OPERATION_COUNT = DOCUMENTED_NAMED_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '<em>Instant</em>' data type.
@@ -2275,7 +2312,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getInstant()
 	 * @generated
 	 */
-	int INSTANT = 37;
+	int INSTANT = 38;
 
 	/**
 	 * The meta object id for the '<em>Duration</em>' data type.
@@ -2285,7 +2322,7 @@ public interface NcorePackage extends EPackage {
 	 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDuration()
 	 * @generated
 	 */
-	int DURATION = 38;
+	int DURATION = 39;
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.common.Adaptable <em>Adaptable</em>}'.
@@ -3176,25 +3213,35 @@ public interface NcorePackage extends EPackage {
 	EReference getComposite_Children();
 
 	/**
-	 * Returns the meta object for class '{@link org.nasdanika.ncore.DocumentedNamedElementWithID <em>Documented Named Element With ID</em>}'.
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.StringIdentity <em>String Identity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Documented Named Element With ID</em>'.
-	 * @see org.nasdanika.ncore.DocumentedNamedElementWithID
+	 * @return the meta object for class '<em>String Identity</em>'.
+	 * @see org.nasdanika.ncore.StringIdentity
 	 * @generated
 	 */
-	EClass getDocumentedNamedElementWithID();
+	EClass getStringIdentity();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.DocumentedNamedElementWithID#getId <em>Id</em>}'.
+	 * Returns the meta object for the attribute '{@link org.nasdanika.ncore.StringIdentity#getId <em>Id</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see org.nasdanika.ncore.DocumentedNamedElementWithID#getId()
-	 * @see #getDocumentedNamedElementWithID()
+	 * @see org.nasdanika.ncore.StringIdentity#getId()
+	 * @see #getStringIdentity()
 	 * @generated
 	 */
-	EAttribute getDocumentedNamedElementWithID_Id();
+	EAttribute getStringIdentity_Id();
+
+	/**
+	 * Returns the meta object for class '{@link org.nasdanika.ncore.DocumentedNamedStringIdentity <em>Documented Named String Identity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Documented Named String Identity</em>'.
+	 * @see org.nasdanika.ncore.DocumentedNamedStringIdentity
+	 * @generated
+	 */
+	EClass getDocumentedNamedStringIdentity();
 
 	/**
 	 * Returns the meta object for data type '{@link java.time.Instant <em>Instant</em>}'.
@@ -4001,14 +4048,14 @@ public interface NcorePackage extends EPackage {
 		EReference COMPOSITE__CHILDREN = eINSTANCE.getComposite_Children();
 
 		/**
-		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DocumentedNamedElementWithIDImpl <em>Documented Named Element With ID</em>}' class.
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.StringIdentityImpl <em>String Identity</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.nasdanika.ncore.impl.DocumentedNamedElementWithIDImpl
-		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedElementWithID()
+		 * @see org.nasdanika.ncore.impl.StringIdentityImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getStringIdentity()
 		 * @generated
 		 */
-		EClass DOCUMENTED_NAMED_ELEMENT_WITH_ID = eINSTANCE.getDocumentedNamedElementWithID();
+		EClass STRING_IDENTITY = eINSTANCE.getStringIdentity();
 
 		/**
 		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
@@ -4016,7 +4063,17 @@ public interface NcorePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID = eINSTANCE.getDocumentedNamedElementWithID_Id();
+		EAttribute STRING_IDENTITY__ID = eINSTANCE.getStringIdentity_Id();
+
+		/**
+		 * The meta object literal for the '{@link org.nasdanika.ncore.impl.DocumentedNamedStringIdentityImpl <em>Documented Named String Identity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.nasdanika.ncore.impl.DocumentedNamedStringIdentityImpl
+		 * @see org.nasdanika.ncore.impl.NcorePackageImpl#getDocumentedNamedStringIdentity()
+		 * @generated
+		 */
+		EClass DOCUMENTED_NAMED_STRING_IDENTITY = eINSTANCE.getDocumentedNamedStringIdentity();
 
 		/**
 		 * The meta object literal for the '<em>Instant</em>' data type.

@@ -6,23 +6,25 @@ import java.lang.String;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.nasdanika.ncore.DocumentedNamedElementWithID;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Documented Named Element With ID</b></em>'.
+ * An implementation of the model object '<em><b>String Identity</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.nasdanika.ncore.impl.DocumentedNamedElementWithIDImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.nasdanika.ncore.impl.StringIdentityImpl#getId <em>Id</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl implements DocumentedNamedElementWithID {
+public abstract class StringIdentityImpl extends MinimalEObjectImpl.Container implements StringIdentity {
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -38,7 +40,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected DocumentedNamedElementWithIDImpl() {
+	protected StringIdentityImpl() {
 		super();
 	}
 
@@ -49,7 +51,17 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return NcorePackage.Literals.DOCUMENTED_NAMED_ELEMENT_WITH_ID;
+		return NcorePackage.Literals.STRING_IDENTITY;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected int eStaticFeatureCount() {
+		return 0;
 	}
 
 	/**
@@ -59,7 +71,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	 */
 	@Override
 	public String getId() {
-		return (String)eDynamicGet(NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID, NcorePackage.Literals.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID, true, true);
+		return (String)eDynamicGet(NcorePackage.STRING_IDENTITY__ID, NcorePackage.Literals.STRING_IDENTITY__ID, true, true);
 	}
 
 	/**
@@ -69,7 +81,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	 */
 	@Override
 	public void setId(String newId) {
-		eDynamicSet(NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID, NcorePackage.Literals.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID, newId);
+		eDynamicSet(NcorePackage.STRING_IDENTITY__ID, NcorePackage.Literals.STRING_IDENTITY__ID, newId);
 	}
 
 	/**
@@ -80,7 +92,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID:
+			case NcorePackage.STRING_IDENTITY__ID:
 				return getId();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -94,7 +106,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID:
+			case NcorePackage.STRING_IDENTITY__ID:
 				setId((String)newValue);
 				return;
 		}
@@ -109,7 +121,7 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID:
+			case NcorePackage.STRING_IDENTITY__ID:
 				setId(ID_EDEFAULT);
 				return;
 		}
@@ -124,10 +136,10 @@ public class DocumentedNamedElementWithIDImpl extends DocumentedNamedElementImpl
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID:
+			case NcorePackage.STRING_IDENTITY__ID:
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 		}
 		return super.eIsSet(featureID);
 	}
 
-} //DocumentedNamedElementWithIDImpl
+} //StringIdentityImpl

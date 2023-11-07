@@ -23,6 +23,7 @@ import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -33,8 +34,8 @@ import org.nasdanika.ncore.NcorePackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getMarkers <em>Markers</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getId <em>Id</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLink <em>Link</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.ModelElementImpl#getLinkedPage <em>Linked Page</em>}</li>
@@ -154,7 +155,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 */
 	@Override
 	public String getId() {
-		return (String)eDynamicGet(ModelPackage.MODEL_ELEMENT__ID, ModelPackage.Literals.MODEL_ELEMENT__ID, true, true);
+		return (String)eDynamicGet(ModelPackage.MODEL_ELEMENT__ID, NcorePackage.Literals.STRING_IDENTITY__ID, true, true);
 	}
 
 	/**
@@ -164,7 +165,7 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 	 */
 	@Override
 	public void setId(String newId) {
-		eDynamicSet(ModelPackage.MODEL_ELEMENT__ID, ModelPackage.Literals.MODEL_ELEMENT__ID, newId);
+		eDynamicSet(ModelPackage.MODEL_ELEMENT__ID, NcorePackage.Literals.STRING_IDENTITY__ID, newId);
 	}
 
 	/**
@@ -355,11 +356,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case ModelPackage.MODEL_ELEMENT__MARKERS:
 				return getMarkers();
+			case ModelPackage.MODEL_ELEMENT__ID:
+				return getId();
 			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
 				if (coreType) return getProperties();
 				else return getProperties().map();
-			case ModelPackage.MODEL_ELEMENT__ID:
-				return getId();
 			case ModelPackage.MODEL_ELEMENT__LABEL:
 				return getLabel();
 			case ModelPackage.MODEL_ELEMENT__LINK:
@@ -393,11 +394,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				getMarkers().clear();
 				getMarkers().addAll((Collection<? extends Marker>)newValue);
 				return;
-			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
-				((EStructuralFeature.Setting)getProperties()).set(newValue);
-				return;
 			case ModelPackage.MODEL_ELEMENT__ID:
 				setId((String)newValue);
+				return;
+			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
+				((EStructuralFeature.Setting)getProperties()).set(newValue);
 				return;
 			case ModelPackage.MODEL_ELEMENT__LABEL:
 				setLabel((String)newValue);
@@ -436,11 +437,11 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 			case ModelPackage.MODEL_ELEMENT__MARKERS:
 				getMarkers().clear();
 				return;
-			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
-				getProperties().clear();
-				return;
 			case ModelPackage.MODEL_ELEMENT__ID:
 				setId(ID_EDEFAULT);
+				return;
+			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
+				getProperties().clear();
 				return;
 			case ModelPackage.MODEL_ELEMENT__LABEL:
 				setLabel(LABEL_EDEFAULT);
@@ -477,10 +478,10 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 		switch (featureID) {
 			case ModelPackage.MODEL_ELEMENT__MARKERS:
 				return !getMarkers().isEmpty();
-			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
-				return !getProperties().isEmpty();
 			case ModelPackage.MODEL_ELEMENT__ID:
 				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
+			case ModelPackage.MODEL_ELEMENT__PROPERTIES:
+				return !getProperties().isEmpty();
 			case ModelPackage.MODEL_ELEMENT__LABEL:
 				return LABEL_EDEFAULT == null ? getLabel() != null : !LABEL_EDEFAULT.equals(getLabel());
 			case ModelPackage.MODEL_ELEMENT__LINK:
@@ -497,6 +498,38 @@ public abstract class ModelElementImpl extends MinimalEObjectImpl.Container impl
 				return isVisible() != VISIBLE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == StringIdentity.class) {
+			switch (derivedFeatureID) {
+				case ModelPackage.MODEL_ELEMENT__ID: return NcorePackage.STRING_IDENTITY__ID;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == StringIdentity.class) {
+			switch (baseFeatureID) {
+				case NcorePackage.STRING_IDENTITY__ID: return ModelPackage.MODEL_ELEMENT__ID;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //ModelElementImpl

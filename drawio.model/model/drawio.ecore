@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="ecore://nasdanika.org/core/drawio/model" nsPrefix="org.nasdanika.drawio.model">
   <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
     <eStructuralFeatures xsi:type="ecore:EReference" name="pages" upperBound="-1"
-        eType="#//Page" containment="true"/>
+        eType="#//Page" containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -11,12 +11,10 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//Model"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
         eType="#//ModelElement" eOpposite="#//ModelElement/linkedPage">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -28,12 +26,10 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="root" lowerBound="1" eType="#//Root"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//Marked ../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
         eType="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//StringEntry"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        iD="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="link" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="linkedPage" eType="#//Page"
@@ -47,11 +43,11 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Root" eSuperTypes="#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
-        eType="#//Layer" containment="true"/>
+        eType="#//Layer" containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Layer" eSuperTypes="#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
-        eType="#//LayerElement" containment="true"/>
+        eType="#//LayerElement" containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LayerElement" eSuperTypes="#//ModelElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="geometry" eType="#//Geometry"

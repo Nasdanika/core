@@ -19,6 +19,7 @@ import org.nasdanika.drawio.model.ModelPackage;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.ncore.Marker;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,24 +30,15 @@ import org.nasdanika.ncore.NcorePackage;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getMarkers <em>Markers</em>}</li>
+ *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getModel <em>Model</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.impl.PageImpl#getLinks <em>Links</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class PageImpl extends MinimalEObjectImpl.Container implements Page {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
 	/**
 	 * The default value of the '{@link #getId() <em>Id</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -56,6 +48,15 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 	 * @ordered
 	 */
 	protected static final String ID_EDEFAULT = null;
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -155,7 +156,7 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 	 */
 	@Override
 	public String getId() {
-		return (String)eDynamicGet(ModelPackage.PAGE__ID, ModelPackage.Literals.PAGE__ID, true, true);
+		return (String)eDynamicGet(ModelPackage.PAGE__ID, NcorePackage.Literals.STRING_IDENTITY__ID, true, true);
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 	 */
 	@Override
 	public void setId(String newId) {
-		eDynamicSet(ModelPackage.PAGE__ID, ModelPackage.Literals.PAGE__ID, newId);
+		eDynamicSet(ModelPackage.PAGE__ID, NcorePackage.Literals.STRING_IDENTITY__ID, newId);
 	}
 
 	/**
@@ -222,12 +223,12 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 		switch (featureID) {
 			case ModelPackage.PAGE__MARKERS:
 				return getMarkers();
+			case ModelPackage.PAGE__ID:
+				return getId();
 			case ModelPackage.PAGE__MODEL:
 				return getModel();
 			case ModelPackage.PAGE__NAME:
 				return getName();
-			case ModelPackage.PAGE__ID:
-				return getId();
 			case ModelPackage.PAGE__LINKS:
 				return getLinks();
 		}
@@ -247,14 +248,14 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 				getMarkers().clear();
 				getMarkers().addAll((Collection<? extends Marker>)newValue);
 				return;
+			case ModelPackage.PAGE__ID:
+				setId((String)newValue);
+				return;
 			case ModelPackage.PAGE__MODEL:
 				setModel((Model)newValue);
 				return;
 			case ModelPackage.PAGE__NAME:
 				setName((String)newValue);
-				return;
-			case ModelPackage.PAGE__ID:
-				setId((String)newValue);
 				return;
 			case ModelPackage.PAGE__LINKS:
 				getLinks().clear();
@@ -275,14 +276,14 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 			case ModelPackage.PAGE__MARKERS:
 				getMarkers().clear();
 				return;
+			case ModelPackage.PAGE__ID:
+				setId(ID_EDEFAULT);
+				return;
 			case ModelPackage.PAGE__MODEL:
 				setModel((Model)null);
 				return;
 			case ModelPackage.PAGE__NAME:
 				setName(NAME_EDEFAULT);
-				return;
-			case ModelPackage.PAGE__ID:
-				setId(ID_EDEFAULT);
 				return;
 			case ModelPackage.PAGE__LINKS:
 				getLinks().clear();
@@ -301,16 +302,48 @@ public class PageImpl extends MinimalEObjectImpl.Container implements Page {
 		switch (featureID) {
 			case ModelPackage.PAGE__MARKERS:
 				return !getMarkers().isEmpty();
+			case ModelPackage.PAGE__ID:
+				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 			case ModelPackage.PAGE__MODEL:
 				return getModel() != null;
 			case ModelPackage.PAGE__NAME:
 				return NAME_EDEFAULT == null ? getName() != null : !NAME_EDEFAULT.equals(getName());
-			case ModelPackage.PAGE__ID:
-				return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
 			case ModelPackage.PAGE__LINKS:
 				return !getLinks().isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == StringIdentity.class) {
+			switch (derivedFeatureID) {
+				case ModelPackage.PAGE__ID: return NcorePackage.STRING_IDENTITY__ID;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == StringIdentity.class) {
+			switch (baseFeatureID) {
+				case NcorePackage.STRING_IDENTITY__ID: return ModelPackage.PAGE__ID;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 } //PageImpl

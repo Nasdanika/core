@@ -29,7 +29,7 @@ public interface Root extends ModelElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Layers</em>' containment reference list.
 	 * @see org.nasdanika.drawio.model.ModelPackage#getRoot_Layers()
-	 * @model containment="true"
+	 * @model containment="true" keys="id"
 	 * @generated
 	 */
 	EList<Layer> getLayers();

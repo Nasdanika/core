@@ -553,11 +553,15 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedElementWithID" eSuperTypes="#//DocumentedNamedElement">
+  <eClassifiers xsi:type="ecore:EClass" name="StringIdentity" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base for classes which are unquely identified by a string in their containment reference"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="Element ID used as eKey in containment references"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedStringIdentity" eSuperTypes="#//DocumentedNamedElement #//StringIdentity"/>
 </ecore:EPackage>

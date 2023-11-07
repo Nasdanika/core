@@ -17,7 +17,6 @@
     <genClasses ecoreClass="drawio.ecore#//Page">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/model"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//Page/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//Page/id"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//Page/links"/>
     </genClasses>
     <genClasses ecoreClass="drawio.ecore#//Model">
@@ -25,7 +24,6 @@
     </genClasses>
     <genClasses image="false" ecoreClass="drawio.ecore#//ModelElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/properties"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/label"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute drawio.ecore#//ModelElement/link"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference drawio.ecore#//ModelElement/linkedPage"/>

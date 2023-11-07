@@ -4,6 +4,7 @@ package org.nasdanika.drawio.model;
 
 import org.eclipse.emf.common.util.EList;
 import org.nasdanika.ncore.Marked;
+import org.nasdanika.ncore.StringIdentity;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,7 +17,6 @@ import org.nasdanika.ncore.Marked;
  * <ul>
  *   <li>{@link org.nasdanika.drawio.model.Page#getModel <em>Model</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getName <em>Name</em>}</li>
- *   <li>{@link org.nasdanika.drawio.model.Page#getId <em>Id</em>}</li>
  *   <li>{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}</li>
  * </ul>
  *
@@ -24,7 +24,7 @@ import org.nasdanika.ncore.Marked;
  * @model
  * @generated
  */
-public interface Page extends Marked {
+public interface Page extends Marked, StringIdentity {
 
 	/**
 	 * Returns the value of the '<em><b>Model</b></em>' containment reference.
@@ -69,28 +69,6 @@ public interface Page extends Marked {
 	 * @generated
 	 */
 	void setName(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Id</em>' attribute.
-	 * @see #setId(String)
-	 * @see org.nasdanika.drawio.model.ModelPackage#getPage_Id()
-	 * @model id="true" required="true"
-	 * @generated
-	 */
-	String getId();
-
-	/**
-	 * Sets the value of the '{@link org.nasdanika.drawio.model.Page#getId <em>Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Id</em>' attribute.
-	 * @see #getId()
-	 * @generated
-	 */
-	void setId(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Links</b></em>' reference list.

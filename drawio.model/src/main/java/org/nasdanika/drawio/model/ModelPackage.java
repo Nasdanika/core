@@ -142,13 +142,22 @@ public interface ModelPackage extends EPackage {
 	int PAGE__MARKERS = NcorePackage.MARKED__MARKERS;
 
 	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PAGE__ID = NcorePackage.MARKED_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__MODEL = NcorePackage.MARKED_FEATURE_COUNT + 0;
+	int PAGE__MODEL = NcorePackage.MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -157,16 +166,7 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PAGE__NAME = NcorePackage.MARKED_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PAGE__ID = NcorePackage.MARKED_FEATURE_COUNT + 2;
+	int PAGE__NAME = NcorePackage.MARKED_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Links</b></em>' reference list.
@@ -261,22 +261,22 @@ public interface ModelPackage extends EPackage {
 	int MODEL_ELEMENT__MARKERS = NcorePackage.MARKED__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT__PROPERTIES = NcorePackage.MARKED_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__ID = NcorePackage.MARKED_FEATURE_COUNT + 1;
+	int MODEL_ELEMENT__ID = NcorePackage.MARKED_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__PROPERTIES = NcorePackage.MARKED_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -379,15 +379,6 @@ public interface ModelPackage extends EPackage {
 	int ROOT__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ROOT__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -395,6 +386,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROOT__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROOT__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -506,15 +506,6 @@ public interface ModelPackage extends EPackage {
 	int LAYER__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LAYER__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -522,6 +513,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int LAYER__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -633,15 +633,6 @@ public interface ModelPackage extends EPackage {
 	int LAYER_ELEMENT__MARKERS = MODEL_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LAYER_ELEMENT__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -649,6 +640,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int LAYER_ELEMENT__ID = MODEL_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LAYER_ELEMENT__PROPERTIES = MODEL_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -760,15 +760,6 @@ public interface ModelPackage extends EPackage {
 	int NODE__MARKERS = LAYER__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NODE__PROPERTIES = LAYER__PROPERTIES;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -776,6 +767,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int NODE__ID = LAYER__ID;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NODE__PROPERTIES = LAYER__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -914,15 +914,6 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION__MARKERS = LAYER_ELEMENT__MARKERS;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' map.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION__PROPERTIES = LAYER_ELEMENT__PROPERTIES;
-
-	/**
 	 * The feature id for the '<em><b>Id</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -930,6 +921,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONNECTION__ID = LAYER_ELEMENT__ID;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' map.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__PROPERTIES = LAYER_ELEMENT__PROPERTIES;
 
 	/**
 	 * The feature id for the '<em><b>Label</b></em>' attribute.
@@ -1272,17 +1272,6 @@ public interface ModelPackage extends EPackage {
 	EAttribute getPage_Name();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.Page#getId <em>Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see org.nasdanika.drawio.model.Page#getId()
-	 * @see #getPage()
-	 * @generated
-	 */
-	EAttribute getPage_Id();
-
-	/**
 	 * Returns the meta object for the reference list '{@link org.nasdanika.drawio.model.Page#getLinks <em>Links</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1334,17 +1323,6 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getModelElement_Properties();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.ModelElement#getId <em>Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Id</em>'.
-	 * @see org.nasdanika.drawio.model.ModelElement#getId()
-	 * @see #getModelElement()
-	 * @generated
-	 */
-	EAttribute getModelElement_Id();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.nasdanika.drawio.model.ModelElement#getLabel <em>Label</em>}'.
@@ -1746,13 +1724,6 @@ public interface ModelPackage extends EPackage {
 		 */
 		EAttribute PAGE__NAME = eINSTANCE.getPage_Name();
 		/**
-		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PAGE__ID = eINSTANCE.getPage_Id();
-		/**
 		 * The meta object literal for the '<em><b>Links</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1791,13 +1762,6 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference MODEL_ELEMENT__PROPERTIES = eINSTANCE.getModelElement_Properties();
-		/**
-		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MODEL_ELEMENT__ID = eINSTANCE.getModelElement_Id();
 		/**
 		 * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->

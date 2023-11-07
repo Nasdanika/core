@@ -21,7 +21,7 @@ import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
-import org.nasdanika.ncore.DocumentedNamedElementWithID;
+import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -36,6 +36,7 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.ValueObject;
@@ -187,8 +188,10 @@ public class NcoreValidator extends EObjectValidator {
 				return validateDocumentedNamedElement((DocumentedNamedElement)value, diagnostics, context);
 			case NcorePackage.COMPOSITE:
 				return validateComposite((Composite)value, diagnostics, context);
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID:
-				return validateDocumentedNamedElementWithID((DocumentedNamedElementWithID)value, diagnostics, context);
+			case NcorePackage.STRING_IDENTITY:
+				return validateStringIdentity((StringIdentity)value, diagnostics, context);
+			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY:
+				return validateDocumentedNamedStringIdentity((DocumentedNamedStringIdentity)value, diagnostics, context);
 			case NcorePackage.INSTANT:
 				return validateInstant((Instant)value, diagnostics, context);
 			case NcorePackage.DURATION:
@@ -632,8 +635,17 @@ public class NcoreValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean validateDocumentedNamedElementWithID(DocumentedNamedElementWithID documentedNamedElementWithID, DiagnosticChain diagnostics, Map<Object, Object> context) {
-		return validate_EveryDefaultConstraint(documentedNamedElementWithID, diagnostics, context);
+	public boolean validateStringIdentity(StringIdentity stringIdentity, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(stringIdentity, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateDocumentedNamedStringIdentity(DocumentedNamedStringIdentity documentedNamedStringIdentity, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(documentedNamedStringIdentity, diagnostics, context);
 	}
 
 	/**

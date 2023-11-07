@@ -29,7 +29,7 @@ public interface Layer extends ModelElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Elements</em>' containment reference list.
 	 * @see org.nasdanika.drawio.model.ModelPackage#getLayer_Elements()
-	 * @model containment="true"
+	 * @model containment="true" keys="id"
 	 * @generated
 	 */
 	EList<LayerElement> getElements();

@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.nasdanika.drawio.model.*;
+import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.persistence.Marked;
 
 /**
@@ -79,6 +80,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				Page page = (Page)theEObject;
 				T result = casePage(page);
 				if (result == null) result = caseMarked(page);
+				if (result == null) result = caseStringIdentity(page);
 				if (result == null) result = caseIMarked(page);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -95,6 +97,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				ModelElement modelElement = (ModelElement)theEObject;
 				T result = caseModelElement(modelElement);
 				if (result == null) result = caseMarked(modelElement);
+				if (result == null) result = caseStringIdentity(modelElement);
 				if (result == null) result = caseIMarked(modelElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -104,6 +107,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				T result = caseRoot(root);
 				if (result == null) result = caseModelElement(root);
 				if (result == null) result = caseMarked(root);
+				if (result == null) result = caseStringIdentity(root);
 				if (result == null) result = caseIMarked(root);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -113,6 +117,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				T result = caseLayer(layer);
 				if (result == null) result = caseModelElement(layer);
 				if (result == null) result = caseMarked(layer);
+				if (result == null) result = caseStringIdentity(layer);
 				if (result == null) result = caseIMarked(layer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -122,6 +127,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				T result = caseLayerElement(layerElement);
 				if (result == null) result = caseModelElement(layerElement);
 				if (result == null) result = caseMarked(layerElement);
+				if (result == null) result = caseStringIdentity(layerElement);
 				if (result == null) result = caseIMarked(layerElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -133,6 +139,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLayerElement(node);
 				if (result == null) result = caseModelElement(node);
 				if (result == null) result = caseMarked(node);
+				if (result == null) result = caseStringIdentity(node);
 				if (result == null) result = caseIMarked(node);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -143,6 +150,7 @@ public class ModelSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLayerElement(connection);
 				if (result == null) result = caseModelElement(connection);
 				if (result == null) result = caseMarked(connection);
+				if (result == null) result = caseStringIdentity(connection);
 				if (result == null) result = caseIMarked(connection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -356,6 +364,21 @@ public class ModelSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseMarked(org.nasdanika.ncore.Marked object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>String Identity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>String Identity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStringIdentity(StringIdentity object) {
 		return null;
 	}
 

@@ -18,7 +18,7 @@ import org.nasdanika.ncore.Composite;
 import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.DocumentedNamedElement;
-import org.nasdanika.ncore.DocumentedNamedElementWithID;
+import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -110,7 +110,7 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 			case NcorePackage.GIT_MARKER: return createGitMarker();
 			case NcorePackage.DOCUMENTED_NAMED_ELEMENT: return createDocumentedNamedElement();
 			case NcorePackage.COMPOSITE: return createComposite();
-			case NcorePackage.DOCUMENTED_NAMED_ELEMENT_WITH_ID: return createDocumentedNamedElementWithID();
+			case NcorePackage.DOCUMENTED_NAMED_STRING_IDENTITY: return createDocumentedNamedStringIdentity();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -462,9 +462,9 @@ public class NcoreFactoryImpl extends EFactoryImpl implements NcoreFactory {
 	 * @generated
 	 */
 	@Override
-	public DocumentedNamedElementWithID createDocumentedNamedElementWithID() {
-		DocumentedNamedElementWithIDImpl documentedNamedElementWithID = new DocumentedNamedElementWithIDImpl();
-		return documentedNamedElementWithID;
+	public DocumentedNamedStringIdentity createDocumentedNamedStringIdentity() {
+		DocumentedNamedStringIdentityImpl documentedNamedStringIdentity = new DocumentedNamedStringIdentityImpl();
+		return documentedNamedStringIdentity;
 	}
 
 	/**

@@ -240,18 +240,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getPage_Id() {
-		return (EAttribute)pageEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getPage_Links() {
-		return (EReference)pageEClass.getEStructuralFeatures().get(3);
+		return (EReference)pageEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -300,7 +290,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getModelElement_Id() {
+	public EAttribute getModelElement_Label() {
 		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -310,7 +300,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getModelElement_Label() {
+	public EAttribute getModelElement_Link() {
 		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -320,18 +310,8 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getModelElement_Link() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getModelElement_LinkedPage() {
-		return (EReference)modelElementEClass.getEStructuralFeatures().get(4);
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -341,7 +321,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 */
 	@Override
 	public EReference getModelElement_Style() {
-		return (EReference)modelElementEClass.getEStructuralFeatures().get(5);
+		return (EReference)modelElementEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -351,7 +331,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 */
 	@Override
 	public EAttribute getModelElement_Tags() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -361,7 +341,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 */
 	@Override
 	public EAttribute getModelElement_Tooltip() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -371,7 +351,7 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 */
 	@Override
 	public EAttribute getModelElement_Visible() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -641,7 +621,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		pageEClass = createEClass(PAGE);
 		createEReference(pageEClass, PAGE__MODEL);
 		createEAttribute(pageEClass, PAGE__NAME);
-		createEAttribute(pageEClass, PAGE__ID);
 		createEReference(pageEClass, PAGE__LINKS);
 
 		modelEClass = createEClass(MODEL);
@@ -649,7 +628,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEReference(modelElementEClass, MODEL_ELEMENT__PROPERTIES);
-		createEAttribute(modelElementEClass, MODEL_ELEMENT__ID);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__LABEL);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__LINK);
 		createEReference(modelElementEClass, MODEL_ELEMENT__LINKED_PAGE);
@@ -722,8 +700,10 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		// Add supertypes to classes
 		documentEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		pageEClass.getESuperTypes().add(theNcorePackage.getMarked());
+		pageEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
 		modelEClass.getESuperTypes().add(theNcorePackage.getMarked());
 		modelElementEClass.getESuperTypes().add(theNcorePackage.getMarked());
+		modelElementEClass.getESuperTypes().add(theNcorePackage.getStringIdentity());
 		rootEClass.getESuperTypes().add(this.getModelElement());
 		layerEClass.getESuperTypes().add(this.getModelElement());
 		layerElementEClass.getESuperTypes().add(this.getModelElement());
@@ -735,13 +715,13 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		// Initialize classes, features, and operations; add parameters
 		initEClass(documentEClass, Document.class, "Document", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDocument_Pages(), this.getPage(), null, "pages", null, 0, -1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getDocument_Pages().getEKeys().add(theNcorePackage.getStringIdentity_Id());
 		initEAttribute(getDocument_Uri(), ecorePackage.getEString(), "uri", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDocument_Source(), ecorePackage.getEString(), "source", null, 0, 1, Document.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(pageEClass, Page.class, "Page", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPage_Model(), this.getModel(), null, "model", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPage_Name(), ecorePackage.getEString(), "name", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getPage_Id(), ecorePackage.getEString(), "id", null, 1, 1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPage_Links(), this.getModelElement(), this.getModelElement_LinkedPage(), "links", null, 0, -1, Page.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelEClass, Model.class, "Model", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -749,7 +729,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getModelElement_Properties(), theNcorePackage.getStringEntry(), null, "properties", null, 0, -1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getModelElement_Id(), ecorePackage.getEString(), "id", null, 1, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Label(), ecorePackage.getEString(), "label", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getModelElement_Link(), ecorePackage.getEString(), "link", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getModelElement_LinkedPage(), this.getPage(), this.getPage_Links(), "linkedPage", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -760,9 +739,11 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		initEClass(rootEClass, Root.class, "Root", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRoot_Layers(), this.getLayer(), null, "layers", null, 0, -1, Root.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getRoot_Layers().getEKeys().add(theNcorePackage.getStringIdentity_Id());
 
 		initEClass(layerEClass, Layer.class, "Layer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLayer_Elements(), this.getLayerElement(), null, "elements", null, 0, -1, Layer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		getLayer_Elements().getEKeys().add(theNcorePackage.getStringIdentity_Id());
 
 		initEClass(layerElementEClass, LayerElement.class, "LayerElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getLayerElement_Geometry(), this.getGeometry(), null, "geometry", null, 0, 1, LayerElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

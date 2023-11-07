@@ -32,7 +32,7 @@ public interface Document extends Marked {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pages</em>' containment reference list.
 	 * @see org.nasdanika.drawio.model.ModelPackage#getDocument_Pages()
-	 * @model containment="true"
+	 * @model containment="true" keys="id"
 	 * @generated
 	 */
 	EList<Page> getPages();

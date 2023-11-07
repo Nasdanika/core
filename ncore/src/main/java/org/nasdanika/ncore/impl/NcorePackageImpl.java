@@ -22,7 +22,7 @@ import org.nasdanika.ncore.Date;
 import org.nasdanika.ncore.DateProperty;
 import org.nasdanika.ncore.Documented;
 import org.nasdanika.ncore.DocumentedNamedElement;
-import org.nasdanika.ncore.DocumentedNamedElementWithID;
+import org.nasdanika.ncore.DocumentedNamedStringIdentity;
 import org.nasdanika.ncore.DoubleProperty;
 import org.nasdanika.ncore.EObjectProperty;
 import org.nasdanika.ncore.GitMarker;
@@ -41,6 +41,7 @@ import org.nasdanika.ncore.NcorePackage;
 import org.nasdanika.ncore.Period;
 import org.nasdanika.ncore.Property;
 import org.nasdanika.ncore.Reference;
+import org.nasdanika.ncore.StringIdentity;
 import org.nasdanika.ncore.StringProperty;
 import org.nasdanika.ncore.Temporal;
 import org.nasdanika.ncore.ValueObject;
@@ -311,7 +312,14 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass documentedNamedElementWithIDEClass = null;
+	private EClass stringIdentityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass documentedNamedStringIdentityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1244,8 +1252,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getDocumentedNamedElementWithID() {
-		return documentedNamedElementWithIDEClass;
+	public EClass getStringIdentity() {
+		return stringIdentityEClass;
 	}
 
 	/**
@@ -1254,8 +1262,18 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getDocumentedNamedElementWithID_Id() {
-		return (EAttribute)documentedNamedElementWithIDEClass.getEStructuralFeatures().get(0);
+	public EAttribute getStringIdentity_Id() {
+		return (EAttribute)stringIdentityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getDocumentedNamedStringIdentity() {
+		return documentedNamedStringIdentityEClass;
 	}
 
 	/**
@@ -1427,8 +1445,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		createEAttribute(compositeEClass, COMPOSITE__ID);
 		createEReference(compositeEClass, COMPOSITE__CHILDREN);
 
-		documentedNamedElementWithIDEClass = createEClass(DOCUMENTED_NAMED_ELEMENT_WITH_ID);
-		createEAttribute(documentedNamedElementWithIDEClass, DOCUMENTED_NAMED_ELEMENT_WITH_ID__ID);
+		stringIdentityEClass = createEClass(STRING_IDENTITY);
+		createEAttribute(stringIdentityEClass, STRING_IDENTITY__ID);
+
+		documentedNamedStringIdentityEClass = createEClass(DOCUMENTED_NAMED_STRING_IDENTITY);
 
 		// Create data types
 		instantEDataType = createEDataType(INSTANT);
@@ -1548,7 +1568,8 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		documentedNamedElementEClass.getESuperTypes().add(this.getNamedElement());
 		documentedNamedElementEClass.getESuperTypes().add(this.getDocumented());
 		compositeEClass.getESuperTypes().add(this.getDocumentedNamedElement());
-		documentedNamedElementWithIDEClass.getESuperTypes().add(this.getDocumentedNamedElement());
+		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getDocumentedNamedElement());
+		documentedNamedStringIdentityEClass.getESuperTypes().add(this.getStringIdentity());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(adaptableEClass, Adaptable.class, "Adaptable", IS_ABSTRACT, IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
@@ -1690,8 +1711,10 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 		initEReference(getComposite_Children(), this.getComposite(), null, "children", null, 0, -1, Composite.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		getComposite_Children().getEKeys().add(this.getComposite_Id());
 
-		initEClass(documentedNamedElementWithIDEClass, DocumentedNamedElementWithID.class, "DocumentedNamedElementWithID", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getDocumentedNamedElementWithID_Id(), ecorePackage.getEString(), "id", null, 1, 1, DocumentedNamedElementWithID.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(stringIdentityEClass, StringIdentity.class, "StringIdentity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getStringIdentity_Id(), ecorePackage.getEString(), "id", null, 1, 1, StringIdentity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(documentedNamedStringIdentityEClass, DocumentedNamedStringIdentity.class, "DocumentedNamedStringIdentity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize data types
 		initEDataType(instantEDataType, Instant.class, "Instant", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -2318,7 +2341,13 @@ public class NcorePackageImpl extends EPackageImpl implements NcorePackage {
 			   "documentation", "Composite\'s children."
 		   });
 		addAnnotation
-		  (getDocumentedNamedElementWithID_Id(),
+		  (stringIdentityEClass,
+		   source,
+		   new String[] {
+			   "documentation", "Base for classes which are unquely identified by a string in their containment reference"
+		   });
+		addAnnotation
+		  (getStringIdentity_Id(),
 		   source,
 		   new String[] {
 			   "documentation", "Element ID used as eKey in containment references"
