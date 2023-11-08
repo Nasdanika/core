@@ -14,9 +14,16 @@
       <genTypeParameters ecoreTypeParameter="graph.ecore#//Graph/E"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference graph.ecore#//Graph/elements"/>
     </genClasses>
+    <genClasses ecoreClass="graph.ecore#//SubGraph">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//SubGraph/E"/>
+    </genClasses>
     <genClasses ecoreClass="graph.ecore#//ConnectionTarget">
       <genTypeParameters ecoreTypeParameter="graph.ecore#//ConnectionTarget/C"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference graph.ecore#//ConnectionTarget/incomingConnections"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//CompositeConnectionTarget">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeConnectionTarget/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeConnectionTarget/C"/>
     </genClasses>
     <genClasses ecoreClass="graph.ecore#//Connection">
       <genTypeParameters ecoreTypeParameter="graph.ecore#//Connection/T"/>
@@ -26,8 +33,56 @@
       <genTypeParameters ecoreTypeParameter="graph.ecore#//ConnectionSource/C"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference graph.ecore#//ConnectionSource/outgoingConnections"/>
     </genClasses>
+    <genClasses ecoreClass="graph.ecore#//CompositeConnectionSource">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeConnectionSource/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeConnectionSource/C"/>
+    </genClasses>
     <genClasses ecoreClass="graph.ecore#//Node">
       <genTypeParameters ecoreTypeParameter="graph.ecore#//Node/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//CompositeNode">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeNode/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//CompositeNode/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//Tunnel">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//Tunnel/T"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//Tunnel/C"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference graph.ecore#//Tunnel/connections"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedGraphElement"/>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedGraph">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedGraph/E"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedSubGraph">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedSubGraph/E"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedConnectionTarget">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedConnectionTarget/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedCompositeConnectionTarget">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeConnectionTarget/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeConnectionTarget/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedConnection">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedConnection/T"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedConnectionSource">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedConnectionSource/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedCompositeConnectionSource">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeConnectionSource/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeConnectionSource/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedNode">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedNode/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedCompositeNode">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeNode/E"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedCompositeNode/C"/>
+    </genClasses>
+    <genClasses ecoreClass="graph.ecore#//DocumentedNamedTunnel">
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedTunnel/T"/>
+      <genTypeParameters ecoreTypeParameter="graph.ecore#//DocumentedNamedTunnel/C"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

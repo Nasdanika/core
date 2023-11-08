@@ -11,6 +11,15 @@
       <eGenericType eTypeParameter="#//Graph/E"/>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubGraph">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//GraphElement"/>
+    <eGenericSuperTypes eClassifier="#//Graph">
+      <eTypeArguments eTypeParameter="#//SubGraph/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionTarget" eSuperTypes="#//GraphElement">
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
@@ -21,6 +30,22 @@
         eOpposite="#//Connection/target">
       <eGenericType eTypeParameter="#//ConnectionTarget/C"/>
     </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeConnectionTarget">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//SubGraph">
+      <eTypeArguments eTypeParameter="#//CompositeConnectionTarget/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//ConnectionTarget">
+      <eTypeArguments eTypeParameter="#//CompositeConnectionTarget/C"/>
+    </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
     <eTypeParameters name="T">
@@ -44,6 +69,22 @@
       <eGenericType eTypeParameter="#//ConnectionSource/C"/>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeConnectionSource">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//SubGraph">
+      <eTypeArguments eTypeParameter="#//CompositeConnectionSource/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//ConnectionSource">
+      <eTypeArguments eTypeParameter="#//CompositeConnectionSource/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Node">
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
@@ -55,6 +96,177 @@
     </eGenericSuperTypes>
     <eGenericSuperTypes eClassifier="#//ConnectionTarget">
       <eTypeArguments eTypeParameter="#//Node/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeNode">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//SubGraph">
+      <eTypeArguments eTypeParameter="#//CompositeNode/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//Node">
+      <eTypeArguments eTypeParameter="#//CompositeNode/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tunnel">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//ConnectionTarget">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1">
+      <eGenericType eTypeParameter="#//Tunnel/C"/>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//Connection">
+      <eTypeArguments eTypeParameter="#//Tunnel/T"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedGraphElement" eSuperTypes="#//GraphElement ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedStringIdentity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedGraph">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//Graph">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedGraph/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedSubGraph">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedGraphElement"/>
+    <eGenericSuperTypes eClassifier="#//SubGraph">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedSubGraph/E"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnectionTarget">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//ConnectionTarget">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedConnectionTarget/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedGraphElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeConnectionTarget">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedSubGraph">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeConnectionTarget/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedConnectionTarget">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeConnectionTarget/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnection">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//ConnectionTarget">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//Connection">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedConnection/T"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedStringIdentity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnectionSource">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedGraphElement"/>
+    <eGenericSuperTypes eClassifier="#//ConnectionSource">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedConnectionSource/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeConnectionSource">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedSubGraph">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeConnectionSource/E"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//CompositeConnectionSource">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeConnectionSource/E"/>
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeConnectionSource/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedNode">
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//Node">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedNode/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedConnectionSource">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedNode/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedConnectionTarget">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedNode/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeNode">
+    <eTypeParameters name="E">
+      <eBounds eClassifier="#//GraphElement"/>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//CompositeNode">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeNode/E"/>
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeNode/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedNode">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedCompositeNode/C"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedTunnel">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//ConnectionTarget">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eTypeParameters name="C">
+      <eBounds eClassifier="#//Connection">
+        <eTypeArguments/>
+      </eBounds>
+    </eTypeParameters>
+    <eGenericSuperTypes eClassifier="#//Tunnel">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedTunnel/T"/>
+      <eTypeArguments eTypeParameter="#//DocumentedNamedTunnel/C"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//DocumentedNamedConnection">
+      <eTypeArguments eTypeParameter="#//DocumentedNamedTunnel/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
 </ecore:EPackage>
