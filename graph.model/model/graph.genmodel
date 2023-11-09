@@ -28,6 +28,7 @@
     <genClasses ecoreClass="graph.ecore#//Connection">
       <genTypeParameters ecoreTypeParameter="graph.ecore#//Connection/T"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference graph.ecore#//Connection/target"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute graph.ecore#//Connection/bidirectional"/>
     </genClasses>
     <genClasses ecoreClass="graph.ecore#//ConnectionSource">
       <genTypeParameters ecoreTypeParameter="graph.ecore#//ConnectionSource/C"/>

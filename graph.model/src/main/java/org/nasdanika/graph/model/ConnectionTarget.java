@@ -9,6 +9,10 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Connection Target</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A graph element which can have incoming connections
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -26,6 +30,9 @@ public interface ConnectionTarget<C extends Connection<?>> extends GraphElement 
 	 * It is bidirectional and its opposite is '{@link org.nasdanika.graph.model.Connection#getTarget <em>Target</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Incoming connections
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Incoming Connections</em>' reference list.
 	 * @see org.nasdanika.graph.model.ModelPackage#getConnectionTarget_IncomingConnections()
 	 * @see org.nasdanika.graph.model.Connection#getTarget

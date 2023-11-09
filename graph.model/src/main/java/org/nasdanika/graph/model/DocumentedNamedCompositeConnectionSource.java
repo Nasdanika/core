@@ -8,6 +8,10 @@ package org.nasdanika.graph.model;
  * A representation of the model object '<em><b>Documented Named Composite Connection Source</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Composite connection source with a name and documentation
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedCompositeConnectionSource()
  * @model

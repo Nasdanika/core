@@ -2,6 +2,7 @@
  */
 package org.nasdanika.graph.model;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -20,6 +21,9 @@ import org.nasdanika.ncore.NcorePackage;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ * <!-- begin-model-doc -->
+ * Base classes for graph-like models such as process/flow and architecture models
+ * <!-- end-model-doc -->
  * @see org.nasdanika.graph.model.ModelFactory
  * @model kind="package"
  * @generated
@@ -307,13 +311,22 @@ public interface ModelPackage extends EPackage {
 	int CONNECTION__TARGET = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Bidirectional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION__BIDIRECTIONAL = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 1;
+	int CONNECTION_FEATURE_COUNT = NcorePackage.STRING_IDENTITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Connection</em>' class.
@@ -572,6 +585,15 @@ public interface ModelPackage extends EPackage {
 	 * @ordered
 	 */
 	int TUNNEL__TARGET = CONNECTION__TARGET;
+
+	/**
+	 * The feature id for the '<em><b>Bidirectional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TUNNEL__BIDIRECTIONAL = CONNECTION__BIDIRECTIONAL;
 
 	/**
 	 * The feature id for the '<em><b>Connections</b></em>' reference list.
@@ -1301,6 +1323,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_CONNECTION__TARGET = CONNECTION__TARGET;
 
 	/**
+	 * The feature id for the '<em><b>Bidirectional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_CONNECTION__BIDIRECTIONAL = CONNECTION__BIDIRECTIONAL;
+
+	/**
 	 * The feature id for the '<em><b>Markers</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2017,6 +2048,15 @@ public interface ModelPackage extends EPackage {
 	int DOCUMENTED_NAMED_TUNNEL__TARGET = TUNNEL__TARGET;
 
 	/**
+	 * The feature id for the '<em><b>Bidirectional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DOCUMENTED_NAMED_TUNNEL__BIDIRECTIONAL = TUNNEL__BIDIRECTIONAL;
+
+	/**
 	 * The feature id for the '<em><b>Connections</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2226,6 +2266,17 @@ public interface ModelPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getConnection_Target();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.nasdanika.graph.model.Connection#isBidirectional <em>Bidirectional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Bidirectional</em>'.
+	 * @see org.nasdanika.graph.model.Connection#isBidirectional()
+	 * @see #getConnection()
+	 * @generated
+	 */
+	EAttribute getConnection_Bidirectional();
 
 	/**
 	 * Returns the meta object for class '{@link org.nasdanika.graph.model.ConnectionSource <em>Connection Source</em>}'.
@@ -2515,6 +2566,14 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONNECTION__TARGET = eINSTANCE.getConnection_Target();
+
+		/**
+		 * The meta object literal for the '<em><b>Bidirectional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONNECTION__BIDIRECTIONAL = eINSTANCE.getConnection_Bidirectional();
 
 		/**
 		 * The meta object literal for the '{@link org.nasdanika.graph.model.impl.ConnectionSourceImpl <em>Connection Source</em>}' class.

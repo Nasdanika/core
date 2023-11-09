@@ -8,6 +8,10 @@ package org.nasdanika.graph.model;
  * A representation of the model object '<em><b>Documented Named Sub Graph</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Sub-graph element with a name and documentation
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedSubGraph()
  * @model

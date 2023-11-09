@@ -9,6 +9,10 @@ import org.nasdanika.ncore.DocumentedNamedElement;
  * A representation of the model object '<em><b>Documented Named Graph</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * Graph with a name and documentation
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.nasdanika.graph.model.ModelPackage#getDocumentedNamedGraph()
  * @model

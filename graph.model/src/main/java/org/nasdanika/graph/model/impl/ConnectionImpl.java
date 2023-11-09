@@ -22,11 +22,22 @@ import org.nasdanika.ncore.impl.StringIdentityImpl;
  * </p>
  * <ul>
  *   <li>{@link org.nasdanika.graph.model.impl.ConnectionImpl#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.nasdanika.graph.model.impl.ConnectionImpl#isBidirectional <em>Bidirectional</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentityImpl implements Connection<T> {
+	/**
+	 * The default value of the '{@link #isBidirectional() <em>Bidirectional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isBidirectional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean BIDIRECTIONAL_EDEFAULT = false;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -91,6 +102,26 @@ public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public boolean isBidirectional() {
+		return (Boolean)eDynamicGet(ModelPackage.CONNECTION__BIDIRECTIONAL, ModelPackage.Literals.CONNECTION__BIDIRECTIONAL, true, true);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setBidirectional(boolean newBidirectional) {
+		eDynamicSet(ModelPackage.CONNECTION__BIDIRECTIONAL, ModelPackage.Literals.CONNECTION__BIDIRECTIONAL, newBidirectional);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -129,6 +160,8 @@ public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentit
 			case ModelPackage.CONNECTION__TARGET:
 				if (resolve) return getTarget();
 				return basicGetTarget();
+			case ModelPackage.CONNECTION__BIDIRECTIONAL:
+				return isBidirectional();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -145,6 +178,9 @@ public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentit
 			case ModelPackage.CONNECTION__TARGET:
 				setTarget((T)newValue);
 				return;
+			case ModelPackage.CONNECTION__BIDIRECTIONAL:
+				setBidirectional((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -160,6 +196,9 @@ public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentit
 			case ModelPackage.CONNECTION__TARGET:
 				setTarget((T)null);
 				return;
+			case ModelPackage.CONNECTION__BIDIRECTIONAL:
+				setBidirectional(BIDIRECTIONAL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -174,6 +213,8 @@ public class ConnectionImpl<T extends ConnectionTarget<?>> extends StringIdentit
 		switch (featureID) {
 			case ModelPackage.CONNECTION__TARGET:
 				return basicGetTarget() != null;
+			case ModelPackage.CONNECTION__BIDIRECTIONAL:
+				return isBidirectional() != BIDIRECTIONAL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}

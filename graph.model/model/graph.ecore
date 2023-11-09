@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="ecore://nasdanika.org/core/gaph/model" nsPrefix="org.nasdanika.graph.model">
-  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity"/>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Base classes for graph-like models such as process/flow and architecture models"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Graph element uniquely identified in the containing graph by a string identifier. This allows to implement graph inheritance - deriving a graph from another graph by removing, adding and replacing graph elements similar to how inheritance works in object-oriented languages."/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Graph">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Graph is a container of graph elements uniquely identified by a string identifier. This allows to implement graph inheritance - deriving a graph from another graph by removing, adding and replacing graph elements similar to how inheritance works in object-oriented languages."/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
         containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Graph elements uniquely identified by a string identifier. This allows to implement graph inheritance - deriving a graph from another graph by removing, adding and replacing graph elements similar to how inheritance works in object-oriented languages."/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//Graph/E"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubGraph">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A graph element which is also a graph, i.e. it may contain other graph elements. "/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -21,6 +37,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionTarget" eSuperTypes="#//GraphElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A graph element which can have incoming connections"/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -28,10 +47,16 @@
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="incomingConnections" upperBound="-1"
         eOpposite="#//Connection/target">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Incoming connections"/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//ConnectionTarget/C"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeConnectionTarget">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection target which is also as sub-graph, i.e. it may contain other graph elements"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -48,6 +73,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connections are contained by their source and uniquiely identified in the source by a string id. This allows to implement connection inheritance behaviors such as overriding (replacing), adding, or removing."/>
+    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//ConnectionTarget">
         <eTypeArguments/>
@@ -55,10 +83,21 @@
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
         eOpposite="#//ConnectionTarget/incomingConnections">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connection target"/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//Connection/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bidirectional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Indicates that the connection is bidirectional"/>
+      </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionSource" eSuperTypes="#//GraphElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Source of connections uniquely identified by string ids. It provides support for graph inheritance - replacing (overriding), adding, or removing connections"/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -66,10 +105,16 @@
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingConnections" upperBound="-1"
         containment="true" eKeys="../../org.nasdanika.ncore/model/ncore.ecore#//StringIdentity/id">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Outgoing connections uniquely identified by a string to support graph inheritance"/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//ConnectionSource/C"/>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeConnectionSource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection source which is also a sub-graph. I.e. it may contain other graph elements."/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -86,6 +131,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Node is both connection source and target. I.e. it may have both incoming and outgoing connections."/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -99,6 +147,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CompositeNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Node which is also a sub-graph. I.e. it may contain other graph elements."/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -115,6 +166,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Tunnel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Tunnel is a connection which logically groups other connections. For example, two composite nodes may have a tunnel connection which groups connections between their child elements. A real life example is a VPN tunnel between two networks."/>
+    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//ConnectionTarget">
         <eTypeArguments/>
@@ -126,14 +180,24 @@
       </eBounds>
     </eTypeParameters>
     <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connections in this tunnel"/>
+      </eAnnotations>
       <eGenericType eTypeParameter="#//Tunnel/C"/>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="#//Connection">
       <eTypeArguments eTypeParameter="#//Tunnel/T"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedGraphElement" eSuperTypes="#//GraphElement ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedStringIdentity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedGraphElement" eSuperTypes="#//GraphElement ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedStringIdentity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Graph element with a name and documentation"/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedGraph">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Graph with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -143,6 +207,9 @@
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedSubGraph">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Sub-graph element with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -152,6 +219,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnectionTarget">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection target with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -163,6 +233,9 @@
     <eGenericSuperTypes eClassifier="#//DocumentedNamedGraphElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeConnectionTarget">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Composite connection target with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -179,6 +252,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnection">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//ConnectionTarget">
         <eTypeArguments/>
@@ -190,6 +266,9 @@
     <eGenericSuperTypes eClassifier="ecore:EClass ../../org.nasdanika.ncore/model/ncore.ecore#//DocumentedNamedStringIdentity"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedConnectionSource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Connection source with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -201,6 +280,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeConnectionSource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Composite connection source with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -218,6 +300,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Node with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="C">
       <eBounds eClassifier="#//Connection">
         <eTypeArguments/>
@@ -234,6 +319,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedCompositeNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Composite node with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="E">
       <eBounds eClassifier="#//GraphElement"/>
     </eTypeParameters>
@@ -251,6 +339,9 @@
     </eGenericSuperTypes>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DocumentedNamedTunnel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Tunnel with a name and documentation"/>
+    </eAnnotations>
     <eTypeParameters name="T">
       <eBounds eClassifier="#//ConnectionTarget">
         <eTypeArguments/>
