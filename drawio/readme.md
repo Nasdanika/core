@@ -178,3 +178,90 @@ This section lists some possible applications of Drawio Java API and semantic ma
 * High Level Design -> Low Level Design -> Implementation. Define High Level Design in diagrams. Then generate a web site with documentation for Low Level Design. Then use semantic mapping or executable diagrams approach to either generate code from diagrams or execute diagrams directly.
 * Documentation/books/video courses - create a mind map, generate a site from it, add documentation to diagram elements.
 * Reporting - create a diagram of your system/business/effort, generate a documentation site. Enrich diagrams with status - implementation status for systems being built pulled from issue tracker(s), system health status pulled from monitoring systems.
+
+## Semantic mapping
+
+This section explains how to map a Drawio Ecore model loaded from a Drawio diagram to a semantic model describing a particular problem domain. For example, a model describing [architecture of a (software) system](https://architecture.models.nasdanika.org/).
+This approach to establishing a correspondence between diagram elements and domain model elements is the opposite to the "traditional" approach where domain model elements are mapped to graphical representations. 
+
+This approach can be useful in the following situations:
+
+* A large body of pre-existing Drawio diagrams needs to be mapped to a semantic model because the expressiveness of the diagrams along is not sufficient - diagram elements need to be associated with additional information.
+* Constrained environment: Drawio is available to users/modelers (as a Confluence or VS Code plug-in, desktop or web applications), but introduction of a new tool is problematic.
+* Rich behavior is desired in generated HTML documentation. Drawio diagrams can be embedded into web pages and provide behavior such as selection of layers or filtering by tags, but other tools might provide just images with image maps at best.
+* Users/modelers may be familiar with Drawio already and modelers would need to learn mapping properties, which can be done gradually. Modeling and mapping activities may be separated - and SME may create a diagram and then it can be mapped to the domain model by a different person. Introduction of a new tool will require both modelers and users (consumers) become familiar with the notation.
+* The problem domain is not yet well defined or mapping to multiple problem domains.
+
+Diagram elements can be mapped Ecore EObjects, references, attributes, and operations as explained below. 
+For the purposes of mapping ``Page``, ``Model`` and ``Root`` are considered as a single source (representation) element with ``name`` and ``id`` taken from the page and the rest from the root. 
+Elements with a linked page are treated as elements containing page elements in addition to any elements they contain on their page. 
+If the linked page has an element with ``page-element`` property set to ``true`` then the source element is logically "merged" with the page element instead of the page/model/root.
+
+### EObject
+
+A diagram element can be mapped to a semantic element in the following ways:
+
+* Create a new element
+* Reference an element created as part of mapping
+* Reference a pre-existing element (look-up)
+
+For connections - incoming-reference/position, source, target, outgoing
+
+For nodes - parent reference, child reference
+
+### EReference
+
+#### Contained element (path, greediness - priority)
+
+parent / child references
+
+#### Connection - reference name, position
+
+source / target references
+
+
+### EAttribute
+
+* Contained element with value
+* Connection target with value
+
+### EOperation
+
+TODO - invoke EOperation with target / contained as an argument, additional arguments
+
+### Feature Mapping
+
+Properties:
+
+* ``page-element``
+* ``feature-mapping``
+    * ``container``
+        * ``self``
+        * ``argument``
+    * ``contents``
+        * ``self``
+        * ``argument``    
+
+Feature mapping properties:
+
+* ``path`` - number of list - true or expressions
+* ``condition`` 
+* ``expression``
+* ``greedy`` - for containment references - true, false, or ``no-children`` (default)
+
+
+Example:
+
+"Cluster" contains "Server"
+
+|                 | ``container`` | ``contents``
+| --------------- | ----------------- | -------------
+| ``self``      | Defined at the container level (Cluster). Container (Cluster) features to inject the contents (Server) to, e.g. ``members`` | Defined at the contents level (Server). Contents (Server) features to inject the container (Cluster) to
+| ``argument`` | Defined at the contents level (Server). Container argument (Cluster) features to inject the context object (Server) to | Defined at the container level (Cluster). Contents argument (Server) features to inject the context object (Cluster) to
+
+
+
+
+Factory is created from containment mapper and non-containment mapper
+
+Transform / wire, content mapper, reflective content mapper, code snippets 
