@@ -60,7 +60,7 @@
 	<dependencies>	
 		<dependency>
 		    <groupId>org.nasdanika.core</groupId>
-		    <artifactId>ncore</artifactId>
+		    <artifactId>drawio-model</artifactId>
 		    <version>${project.version}</version>
 		</dependency> 		
 	</dependencies>

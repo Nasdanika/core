@@ -234,19 +234,32 @@ TODO - invoke EOperation with target / contained as an argument, additional argu
 Properties:
 
 * ``page-element``
-* ``feature-mapping``
+* ``semantic-id``
+* ``type``
+* ``ref-id``
+* ``base-uri``
+* ``spec``
+* ``spec-ref``
+* ``doc-format`` - defaults to markdown
+* ``documentation``
+* ``doc-ref``
+* ``feature-map``
     * ``container``
         * ``self``
         * ``argument``
     * ``contents``
         * ``self``
         * ``argument``    
+* ``feature-map-ref``
+
+Self feature setters take precedence
 
 Feature mapping properties:
 
 * ``path`` - number of list - true or expressions
 * ``condition`` 
 * ``expression``
+* ``position`` 
 * ``greedy`` - for containment references - true, false, or ``no-children`` (default)
 
 
