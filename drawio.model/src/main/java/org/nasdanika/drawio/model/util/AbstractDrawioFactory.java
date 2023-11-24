@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.ContentMapper;
+import org.nasdanika.common.FeatureMapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Document;
@@ -34,7 +34,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param page
 	 * @return
 	 */
-	protected boolean isTopLevelPage(Page page) {
+	public boolean isTopLevelPage(Page page) {
 		return page.getLinks().isEmpty();
 	}
 	
@@ -127,23 +127,17 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	}
 	
 	// ---
-	
-	protected ContentMapper<EObject, EObject> containmentContentMapper;
-	protected ContentMapper<EObject, EObject> nonContainmentContentMapper;
-	
+
 	/**
-	 *  
-	 * @param containmentContentMapper Used in wiring phase 0 to map/wire containment references
-	 * @param nonContainmentContentMapper Used in wiring phase 1 to map/wire non-containment references
-	 * TODO - connection mapper
+	 * Override to return content mappers for different phases and passes
+	 * @param phase
+	 * @param pass
+	 * @return
 	 */
-	protected AbstractDrawioFactory(
-			ContentMapper<EObject,EObject> containmentContentMapper,
-			ContentMapper<EObject,EObject> nonContainmentContentMapper) {
-		this.containmentContentMapper = containmentContentMapper;
-		this.nonContainmentContentMapper = nonContainmentContentMapper;
+	protected FeatureMapper<EObject, EObject> getFeatureMapper(int phase, int pass) {
+		return null;
 	}
-		
+	
 	/**
 	 * Creates a document element from {@link Document}
 	 * @param document
@@ -308,8 +302,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		if (containmentContentMapper != null) {
-			containmentContentMapper.wire(document, registry, progressMonitor);
+		FeatureMapper<EObject,EObject> contentMapper = getFeatureMapper(0, pass);
+		if (contentMapper != null) {
+			contentMapper.wire(document, registry, progressMonitor);
 		}
 	}
 	
@@ -331,8 +326,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		if (containmentContentMapper != null) {
-			containmentContentMapper.wire(drawioModelElement, registry, progressMonitor);
+		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(0, pass);
+		if (featureMapper != null) {
+			featureMapper.wire(drawioModelElement, registry, progressMonitor);
 		}
 				
 		Page linkedPage = drawioModelElement.getLinkedPage();
@@ -354,7 +350,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		return "page-element";
 	}
 	
-	protected boolean isPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement) {		
+	public boolean isPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement) {		
 		String pageElementProperty = getPageElementProperty();
 		if (Util.isBlank(pageElementProperty)) {
 			return false;
@@ -382,8 +378,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		if (nonContainmentContentMapper != null) {
-			nonContainmentContentMapper.wire(document, registry, progressMonitor);
+		FeatureMapper<EObject,EObject> featuretMapper = getFeatureMapper(1, pass);
+		if (featuretMapper != null) {
+			featuretMapper.wire(document, registry, progressMonitor);
 		}
 	}
 	
@@ -394,9 +391,10 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			Map<EObject, EObject> registry,
 			int pass,
 			ProgressMonitor progressMonitor) {
-				
-		if (nonContainmentContentMapper != null) {
-			nonContainmentContentMapper.wire(drawioModelElement, registry, progressMonitor);
+						
+		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(1, pass);
+		if (featureMapper != null) {
+			featureMapper.wire(drawioModelElement, registry, progressMonitor);
 		}
 	}
 	
@@ -444,5 +442,26 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		registry.put(modelElement, refTarget); // Resolved refId triggers a new wave of wiring
 		return true;
 	}
+	
+	/**
+	 * Feature maps null semantic elements, which is needed for connections as they might be pass-through.
+	 * @param modelElement
+	 * @param registry
+	 * @param pass
+	 * @param progressMonitor
+	 */
+	@org.nasdanika.common.Transformer.Wire(targetType = Void.class, phase = 2)
+	public boolean featurMapNulls(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			Map<EObject, EObject> registry,
+			int pass,
+			ProgressMonitor progressMonitor) {
+		
+		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(0, pass);
+		if (featureMapper != null) {
+			featureMapper.wire(modelElement, registry, progressMonitor);
+		}		
+		return true;
+	}	
 	
 }

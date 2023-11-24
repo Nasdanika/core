@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.nasdanika.common.ContentMapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
@@ -26,12 +25,6 @@ import org.nasdanika.ncore.NcorePackage;
  * @param <E>
  */
 public class GraphDrawioFactory<G extends Graph<E>, E extends GraphElement> extends AbstractDrawioFactory<G, E> {
-
-	public GraphDrawioFactory(
-			ContentMapper<EObject, EObject> containmentContentMapper,
-			ContentMapper<EObject, EObject> nonContainmentContentMapper) {
-		super(containmentContentMapper, nonContainmentContentMapper);
-	}
 
 	/**
 	 * Returns a map with graph and ncore entries.
