@@ -254,6 +254,14 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		}
 		if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 			((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation("model-element-id", elementId);
+			
+			if (isPageElement(modelElement)) {
+				for (EObject eContainer = modelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
+					if (eContainer instanceof Page) {
+						((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation("page-id", ((Page) eContainer).getId());						
+					}
+				}
+			}						
 		}
 		
 		String label = modelElement.getLabel();

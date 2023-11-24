@@ -49,26 +49,25 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 						Map<EObject, EObject> registry, 
 						ProgressMonitor progressMonitor) {
 					
-					if (eObj instanceof Graph) {
+					if (eObj instanceof Graph && sourcePath != null) {
 						@SuppressWarnings("unchecked")
 						Graph<GraphElement> graph = (Graph<GraphElement>) eObj;
-						EObject sourceChild = sourcePath.getLast();	
-						if (sourceChild instanceof Page 
-								&& isTopLevelPage((Page) sourceChild)
+						if (argument instanceof Page 
+								&& isTopLevelPage((Page) argument)
 								&& feature.getEType().isInstance(argumentValue)
 								&& !graph.getElements().contains(argumentValue)) {
 							
 							graph.getElements().add((GraphElement) argumentValue);
 						} 
 						
-						if (sourceChild instanceof ModelElement 
-								&& isPageElement((ModelElement) sourceChild)
+						if (argument instanceof ModelElement 
+								&& isPageElement((ModelElement) argument)
 								&& feature.getEType().isInstance(argumentValue)
 								&& !graph.getElements().contains(argumentValue)) {
 										
 							graph.getElements().add((GraphElement) argumentValue);
 						}
-					}					
+					}
 					
 					return true;
 				}
