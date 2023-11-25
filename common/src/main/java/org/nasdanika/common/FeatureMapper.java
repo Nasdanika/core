@@ -26,23 +26,21 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @param <S>
  * @param <T>
  */
-public abstract class FeatureMapper<S extends EObject, T extends EObject> {
+public abstract class FeatureMapper<S extends EObject, T extends EObject> implements Mapper<S,T> {
+
+	private Mapper<S, T> chain;
+
+	protected FeatureMapper() {}
 	
-	/**
-	 * Wires all elements in the registry
-	 * @param registry
-	 * @param progressMonitor
-	 */
-	public void wire(Map<S,T> registry, ProgressMonitor progressMonitor) {
-		for (S key: registry.keySet()) {
-			wire(key, registry, progressMonitor);
-		}
+	protected FeatureMapper(Mapper<S,T> chain) {
+		this.chain = chain;
 	}
 	
 	protected boolean isPassThrough(S connection, T connectionValue) {
 		return connectionValue == null;
 	}
 	
+	@Override
 	public void wire(S source, Map<S,T> registry, ProgressMonitor progressMonitor) {
 		T value = registry.get(source);
 		HashSet<EObject> tracker = new HashSet<>();			
@@ -114,7 +112,11 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> {
 						registry,
 						progressMonitor);
 			}
-		}		
+		}	
+		
+		if (chain != null) {
+			chain.wire(connectionSource, registry, progressMonitor);
+		}
 	}
 	
 	protected void wireConnection(S source, T target, Map<S,T> registry, ProgressMonitor progressMonitor) {

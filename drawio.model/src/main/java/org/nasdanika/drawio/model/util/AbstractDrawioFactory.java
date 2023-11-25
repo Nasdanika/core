@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.nasdanika.common.FeatureMapper;
+import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Document;
@@ -134,7 +134,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param pass
 	 * @return
 	 */
-	protected FeatureMapper<EObject, EObject> getFeatureMapper(int phase, int pass) {
+	protected Mapper<EObject, EObject> getMapper(int phase, int pass) {
 		return null;
 	}
 	
@@ -310,9 +310,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		FeatureMapper<EObject,EObject> contentMapper = getFeatureMapper(0, pass);
-		if (contentMapper != null) {
-			contentMapper.wire(document, registry, progressMonitor);
+		Mapper<EObject,EObject> mapper = getMapper(0, pass);
+		if (mapper != null) {
+			mapper.wire(document, registry, progressMonitor);
 		}
 	}
 	
@@ -334,9 +334,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(0, pass);
-		if (featureMapper != null) {
-			featureMapper.wire(drawioModelElement, registry, progressMonitor);
+		Mapper<EObject,EObject> mapper = getMapper(0, pass);
+		if (mapper != null) {
+			mapper.wire(drawioModelElement, registry, progressMonitor);
 		}
 				
 		Page linkedPage = drawioModelElement.getLinkedPage();
@@ -386,9 +386,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		FeatureMapper<EObject,EObject> featuretMapper = getFeatureMapper(1, pass);
-		if (featuretMapper != null) {
-			featuretMapper.wire(document, registry, progressMonitor);
+		Mapper<EObject,EObject> mapper = getMapper(1, pass);
+		if (mapper != null) {
+			mapper.wire(document, registry, progressMonitor);
 		}
 	}
 	
@@ -400,9 +400,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 						
-		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(1, pass);
-		if (featureMapper != null) {
-			featureMapper.wire(drawioModelElement, registry, progressMonitor);
+		Mapper<EObject,EObject> mapper = getMapper(1, pass);
+		if (mapper != null) {
+			mapper.wire(drawioModelElement, registry, progressMonitor);
 		}
 	}
 	
@@ -465,9 +465,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			int pass,
 			ProgressMonitor progressMonitor) {
 		
-		FeatureMapper<EObject,EObject> featureMapper = getFeatureMapper(0, pass);
-		if (featureMapper != null) {
-			featureMapper.wire(modelElement, registry, progressMonitor);
+		Mapper<EObject,EObject> mapper = getMapper(0, pass);
+		if (mapper != null) {
+			mapper.wire(modelElement, registry, progressMonitor);
 		}		
 		return true;
 	}	
