@@ -14,18 +14,18 @@ import org.nasdanika.persistence.Marker;
  * @param <S>
  * @param <T>
  */
-public class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
+public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
 	
-	protected String getNamespacePrefix() {
+	protected String getPropertyNamespace() {
 		return "";
 	}
 	
 	protected String getFeatureMapConfigPropertyName() {
-		return getNamespacePrefix() + "feature-map";
+		return getPropertyNamespace() + "feature-map";
 	}
 	
 	protected String getFeatureMapConfigRefPropertyName() {
-		return getNamespacePrefix() + "feature-map-ref";
+		return getPropertyNamespace() + "feature-map-ref";
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class PropertySetterFeatureMapper<S extends EObject, T extends EObject> e
 	}
 	
 	@Override
-	protected void throwConfigurationException(EObject context, String message, Throwable cause) {
+	protected void throwConfigurationException(String message, Throwable cause, EObject context) {
 		if (cause == null) {
 			if (context instanceof Marker) {
 				throw new ConfigurationException(message, (Marker) context);			

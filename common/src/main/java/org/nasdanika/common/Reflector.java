@@ -28,6 +28,7 @@ import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * Base class for classes doing reflective introspection and wiring/injection
@@ -269,7 +270,7 @@ public class Reflector {
 	}
 	
 	protected EvaluationContext getEvaluationContext() {
-		return null;
+		return new StandardEvaluationContext();
 	}
 	
 	protected ThreadLocal<SpelExpressionParser> expressionParserThreadLocal = new ThreadLocal<>() {

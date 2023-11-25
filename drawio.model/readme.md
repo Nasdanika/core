@@ -4,6 +4,7 @@
 Properties:
 
 * ``page-element`` - for wiring and for linking of pages to semantic elements
+* ``top-level-page`` - overrides the default behavior
 * ``semantic-id``
 * ``type``
 * ``ref-id``
@@ -35,10 +36,8 @@ Feature mapping properties:
 * ``expression``
 * ``position`` 
 * ``type`` - type of the object into which the value is injected. Shall use the same type resolution as the factory, make factory methods public and add setFactory() to content mapper or something like this.
-* ``value-type`` - type of value
+* ``argument-type`` - type of value
 * ``greedy`` - for containment references - true, false, or ``no-children`` (default)
-* ``phase`` default 0 
-* ``pass`` default 0
 
 
 Example:

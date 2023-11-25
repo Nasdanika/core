@@ -1,6 +1,7 @@
 package org.nasdanika.drawio.model.util;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -19,6 +20,8 @@ import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.ncore.Marker;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.Marked;
 
 /**
  * Base class for classes which map/transform Drawio model to a specific semantic model. For example, architecture model or flow/process model.
@@ -29,12 +32,28 @@ import org.nasdanika.ncore.Marker;
  */
 public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject> {
 	
+	public String getPropertyNamespace() {
+		return "";
+	}
+	
+	protected String getTopLevelPageProperty() {
+		return getPropertyNamespace() + "top-level-page";
+	}		
+	
 	/**
 	 * Indicates a top level page which shall be a child of document element
 	 * @param page
 	 * @return
 	 */
 	public boolean isTopLevelPage(Page page) {
+		String topLevelPageProperty = getTopLevelPageProperty();
+		if (!Util.isBlank(topLevelPageProperty)) {
+			String topLevelPage = page.getModel().getRoot().getProperties().get(topLevelPageProperty);
+			if (!Util.isBlank(topLevelPage)) {
+				return "true".equals(topLevelPage.trim());
+			}
+		}
+
 		return page.getLinks().isEmpty();
 	}
 	
@@ -44,7 +63,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	protected String getTypeProperty() {
-		return "type";
+		return getPropertyNamespace() + "type";
 	}	
 		
 	/**
@@ -53,7 +72,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 */
 	protected abstract Map<String,EPackage> getEPackages();
 		
-	protected EClassifier getType(String type) {
+	public EClassifier getType(String type, Marked source) {
 		if (Util.isBlank(type)) {
 			return null;
 		}
@@ -65,7 +84,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 					String eClassifierName = typeURI.fragment().substring(2);
 					EClassifier eClassifier = ePackage.getEClassifier(eClassifierName);
 					if (eClassifier == null) {
-						throw new IllegalArgumentException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI); 				
+						throw new ConfigurationException("EClassifier " + eClassifierName + " not found in EPackage: " + ePackageNsURI, source); 				
 					}
 					return eClassifier;
 				}
@@ -79,12 +98,13 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				.values()
 				.stream()
 				.map(ep -> ep.getEClassifier(type))
+				.filter(Objects::nonNull)
 				.findFirst();
 			
 			if (typeOpt.isPresent()) {
 				return typeOpt.get();
 			}
-			throw new IllegalArgumentException("Unknown type: " + type); 				
+			throw new ConfigurationException("Unknown type: " + type, source); 				
 		}
 		
 		Optional<EClassifier> typeOpt = getEPackages()
@@ -93,12 +113,13 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				.filter(pe -> pe.getKey().equals(type.substring(0,dotIdx)))
 				.map(Map.Entry::getValue)
 				.map(ep -> ep.getEClassifier(type.substring(dotIdx + 1)))
+				.filter(Objects::nonNull)
 				.findFirst();
 			
-			if (typeOpt.isPresent()) {
-				return typeOpt.get();
-			}
-			throw new IllegalArgumentException("Unknown type: " + type); 				
+		if (typeOpt.isPresent()) {
+			return typeOpt.get();
+		}
+		throw new ConfigurationException("Unknown type: " + type, source); 				
 	}
 	
 	/**
@@ -107,8 +128,8 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @param kind
 	 * @return
 	 */
-	protected EObject create(String type) {
-		EClassifier classifier = getType(type);
+	protected EObject create(String type, Marked source) {
+		EClassifier classifier = getType(type, source);
 		if (classifier instanceof EClass) {
 			return create((EClass) classifier);
 		}
@@ -187,15 +208,15 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	protected String getSemanticIdProperty() {
-		return "semantic-id";
+		return getPropertyNamespace() + "semantic-id";
 	}	
 	
 	protected String getDocumentationProperty() {
-		return "documentation";
+		return getPropertyNamespace() + "documentation";
 	}	
 		
 	protected String getDocumentationRefProperty() {
-		return "documentation-ref";
+		return getPropertyNamespace() + "documentation-ref";
 	}	
 	
 	/**
@@ -226,7 +247,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		}
 		
 		@SuppressWarnings("unchecked")
-		S semanticElement = (S) create(type.trim());
+		S semanticElement = (S) create(type.trim(), modelElement);
 		if (semanticElement instanceof org.nasdanika.ncore.Marked) {
 			for (Marker marker: modelElement.getMarkers()) {
 				((org.nasdanika.ncore.Marked) semanticElement).getMarkers().add(EcoreUtil.copy(marker));
@@ -355,7 +376,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	}
 	
 	protected String getPageElementProperty() {
-		return "page-element";
+		return getPropertyNamespace() + "page-element";
 	}
 	
 	public boolean isPageElement(org.nasdanika.drawio.model.ModelElement drawioModelElement) {		

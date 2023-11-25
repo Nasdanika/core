@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @param <S>
  * @param <T>
  */
-public class ReflectiveContentMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> {
+public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> {
 	
 	/**
 	 * Annotation for feature wiring methods. 
@@ -567,7 +567,7 @@ public class ReflectiveContentMapper<S extends EObject, T extends EObject> exten
 	
 	protected Dispatcher dispatcher;
 	
-	public ReflectiveContentMapper(Object... targets) {
+	public ReflectiveFeatureMapper(Object... targets) {
 		dispatcher = new Dispatcher(targets);
 	}
 

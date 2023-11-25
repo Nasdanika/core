@@ -9,6 +9,7 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.Page;
+import org.nasdanika.drawio.model.Root;
 import org.nasdanika.drawio.model.util.PropertySetterFeatureMapper;
 import org.nasdanika.graph.model.Graph;
 import org.nasdanika.graph.model.GraphElement;
@@ -52,12 +53,17 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 					if (eObj instanceof Graph && sourcePath != null) {
 						@SuppressWarnings("unchecked")
 						Graph<GraphElement> graph = (Graph<GraphElement>) eObj;
-						if (argument instanceof Page 
-								&& isTopLevelPage((Page) argument)
-								&& feature.getEType().isInstance(argumentValue)
-								&& !graph.getElements().contains(argumentValue)) {
-							
-							graph.getElements().add((GraphElement) argumentValue);
+						if (argument instanceof Page && isTopLevelPage((Page) argument)) {
+							Page page = (Page) argument;
+							if (argumentValue == null) {
+								Root root = page.getModel().getRoot();
+								EObject rootValue = registry.get(root);
+								if (feature.getEType().isInstance(rootValue) && !graph.getElements().contains(rootValue)) {
+									graph.getElements().add((GraphElement) rootValue);
+								}
+							} else if (feature.getEType().isInstance(argumentValue) && !graph.getElements().contains(argumentValue)) {
+								graph.getElements().add((GraphElement) argumentValue);
+							}
 						} 
 						
 						if (argument instanceof ModelElement 
