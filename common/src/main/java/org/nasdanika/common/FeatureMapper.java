@@ -51,7 +51,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			wireContents(path, pathMapper, tracker);
 		}
 		
-		List<EStructuralFeature> connectionValueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
+		List<EStructuralFeature> valueFeatures = value == null ? Collections.emptyList() : value.eClass().getEAllStructuralFeatures();		
 		
 		S connectionSource = getConnectionSource(source);
 		T connectionSourceValue = connectionSource == null ? null : registry.get(connectionSource);		
@@ -89,13 +89,20 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 					progressMonitor);
 		}
 		
-		// Connection features		
-		for (EStructuralFeature connectionValueFeature: connectionValueFeatures) {
+		// Own features		
+		for (EStructuralFeature valueFeature: valueFeatures) {
+			wireFeature(
+					source, 
+					value, 
+					valueFeature, 
+					registry, 
+					progressMonitor);			
+			
 			if (connectionSource != null) {
 				wireConnectionStartFeature(
 						source,
 						value,
-						connectionValueFeature,
+						valueFeature,
 						connectionSource,
 						connectionSourceValue,
 						registry,
@@ -106,7 +113,7 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 				wireConnectionEndFeature(
 						source,
 						value,
-						connectionValueFeature,
+						valueFeature,
 						connectionTarget,
 						connectionTargetValue,
 						registry,
@@ -206,6 +213,16 @@ public abstract class FeatureMapper<S extends EObject, T extends EObject> implem
 			return result;
 		};
 	}
+	
+	/**
+	 * Possibly wires a {@link EStructuralFeature} of the connection semantic element or connection target semantic element to the semantic element of connection source.
+	 */
+	protected abstract void wireFeature(
+		S source,
+		T value,
+		EStructuralFeature valueFeature,
+		Map<S, T> registry,
+		ProgressMonitor progressMonitor);	
 			
 	/**
 	 * Possibly wires a {@link EStructuralFeature} of the container's semantic target to the contentsTarget.

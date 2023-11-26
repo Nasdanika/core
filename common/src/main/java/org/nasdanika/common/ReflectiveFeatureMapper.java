@@ -21,10 +21,51 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @param <T>
  */
 public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> extends FeatureMapper<S, T> {
+
+	/**
+	 * Annotation for feature wiring methods. 
+	 * Methods shall have the same parameters as {@link FeatureMapper}.wireFeature().
+	 * Methods are matched by annotation xxxType() values and by method parameter types.   
+	 */
+	@Retention(RUNTIME)
+	@Target(METHOD)
+	public @interface Feature {
+		
+		/**
+		 * Feature id
+		 */
+		int value();
+		
+		/**
+		 * If not blank, the value shall be a <a href="https://docs.spring.io/spring-framework/reference/core/expressions.html">Spring boolean expression</a>
+		 * which is evaluated in the context of the source element with other method arguments as variables 
+		 * @return
+		 */
+		String condition() default "";
+
+		/**
+		 * Matching by source type.
+		 * @return
+		 */
+		Class<?> type() default Object.class; 
+
+		/**
+		 * Matching by value (target) type. 
+		 * @return
+		 */
+		Class<?> valueType() default Object.class;
+		
+		/**
+		 * Wire priority within the phase
+		 * @return
+		 */
+		int priority() default 0;
+		
+	}	
 	
 	/**
 	 * Annotation for feature wiring methods. 
-	 * Methods shall have the same parameters as {@link FeatureMapper}.wireParentFeature().
+	 * Methods shall have the same parameters as {@link FeatureMapper}.wireContainerFeature().
 	 * Methods are matched by annotation xxxType() values and by method parameter types.   
 	 */
 	@Retention(RUNTIME)
@@ -77,7 +118,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 	
 	/**
 	 * Annotation for feature wiring methods. 
-	 * Methods shall have the same parameters as {@link FeatureMapper}.wireChildFeature().
+	 * Methods shall have the same parameters as {@link FeatureMapper}.wireContentsFeature().
 	 * Methods are matched by annotation xxxType() values and by method parameter types.   
 	 */
 	@Retention(RUNTIME)
@@ -342,6 +383,7 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 	
 	protected class Dispatcher extends Reflector {
 
+		protected List<AnnotatedElementRecord> featureWires = new ArrayList<>();
 		protected List<AnnotatedElementRecord> containerFeatureWires = new ArrayList<>();
 		protected List<AnnotatedElementRecord> contentsFeatureWires = new ArrayList<>();
 		protected List<AnnotatedElementRecord> connectionSourceFeatureWires = new ArrayList<>();
@@ -351,6 +393,11 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 		
 		public Dispatcher(Object[] targets) {
 			for (Object target: targets) {
+				getAnnotatedElementRecords(target)
+				.filter(ar -> ar.getAnnotation(Feature.class) != null && ar.getAnnotatedElement() instanceof Method)
+				.sorted((a,b) -> b.getAnnotation(Feature.class).priority() - a.getAnnotation(Feature.class).priority())
+				.forEach(featureWires::add);
+			
 				getAnnotatedElementRecords(target)
 					.filter(ar -> ar.getAnnotation(ContainerFeature.class) != null && ar.getAnnotatedElement() instanceof Method)
 					.sorted((a,b) -> b.getAnnotation(ContainerFeature.class).priority() - a.getAnnotation(ContainerFeature.class).priority())
@@ -382,6 +429,29 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 					.forEach(contentsFeatureWires::add);
 			}
 		}
+		
+		protected void wireFeature(
+				S source, 
+				T value, 
+				EStructuralFeature valueFeature, 
+				Map<S, T> registry,
+				ProgressMonitor progressMonitor) {
+			
+			for (AnnotatedElementRecord ar: featureWires) {
+				Feature rWire = ar.getAnnotation(Feature.class);
+				Class<?>[] parameterTypes = ((Method) ar.getAnnotatedElement()).getParameterTypes();
+				if (rWire.type().isInstance(source) && parameterTypes[0].isInstance(source)
+						&& (rWire.valueType() == Void.class ? value == null : rWire.valueType().isInstance(value) && parameterTypes[1].isInstance(value))
+						&& rWire.value() == valueFeature.getFeatureID()) {
+					
+					Map<String, Object> variables = new HashMap<>();
+					variables.put("registry", registry);
+					if (evaluatePredicate(source, rWire.condition(), variables)) {
+						ar.invoke(source, value, registry, progressMonitor);
+					}					
+				}				
+			}						
+		}	
 		
 		protected boolean wireContentsFeature(
 				S contents, 
@@ -580,6 +650,22 @@ public class ReflectiveFeatureMapper<S extends EObject, T extends EObject> exten
 	protected S getConnectionTarget(S connection) {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	protected void wireFeature(
+			S source, 
+			T value, 
+			EStructuralFeature valueFeature, 
+			Map<S, T> registry,
+			ProgressMonitor progressMonitor) {
+		
+		dispatcher.wireFeature(
+				source, 
+				value, 
+				valueFeature, 
+				registry, 
+				progressMonitor);
+	}	
 
 	@Override
 	protected boolean wireContainerFeature(

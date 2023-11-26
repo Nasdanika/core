@@ -72,6 +72,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	protected abstract EClassifier getType(String type, EObject context);	
 	
 	protected enum ConfigType { 
+		self,
 		container, 
 		contents, 
 		/**
@@ -208,7 +209,8 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 						&& matchType(eObj, config, context)
 						&& matchArgumentType(argumentValue, config, context)
 						&& matchPath(config, sourcePath, registry, context)) {
-					Object featureValue = eval(config, argument, argumentValue, sourcePath, registry, context);
+					Class<?> featureType = feature.getEType().getInstanceClass();
+					Object featureValue = eval(config, argument, argumentValue, sourcePath, registry, featureType, context);
 					if (featureValue != null) {
 						boolean shallSet = true;
 						
@@ -271,7 +273,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 			
 	protected boolean matchPath(Object config, LinkedList<EObject> path, Map<S, T> registry, EObject context) {
-		if (config == Boolean.TRUE) {
+		if (config == Boolean.TRUE || config instanceof String) {
 			return true;
 		}
 		
@@ -313,7 +315,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 		
 	protected boolean matchType(EObject eObj, Object config, EObject context) {
-		if (config == Boolean.TRUE) {
+		if (config == Boolean.TRUE || config instanceof String) {
 			return true;
 		}
 		
@@ -334,7 +336,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 	
 	protected boolean matchArgumentType(Object argument, Object config, EObject context) {
-		if (config == Boolean.TRUE) {
+		if (config == Boolean.TRUE || config instanceof String) {
 			return true;
 		}
 		
@@ -353,7 +355,6 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
 		return true;
 	}
-
 	
 	protected boolean matchCondition(
 			Object config, 
@@ -363,7 +364,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			LinkedList<EObject> sourcePath,
 			Map<S, T> registry,
 			EObject context) {
-		if (config == Boolean.TRUE) {
+		if (config == Boolean.TRUE || config instanceof String) {
 			return true;
 		}
 	
@@ -450,28 +451,33 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			T argumentValue,
 			LinkedList<EObject> sourcePath,
 			Map<S, T> registry,
+			Class<?> type,
 			EObject context) {
 		if (config == Boolean.TRUE) {
 			return argumentValue;
 		}
-		
+		Object expression;
 		if (config instanceof Map) {
 			Map<?,?> configMap = (Map<?,?>) config;
-			Object expression = configMap.get(EXPRESSION_KEY);
+			expression = configMap.get(EXPRESSION_KEY);
 			if (expression == null) {
 				return argumentValue;
 			}
-			if (expression instanceof String) {
-				Map<String,Object> variables = new LinkedHashMap<>();
-				variables.put("value", argumentValue);
-				variables.put("path", sourcePath);
-				variables.put("registry", registry);
-				return evaluate(argument, (String) expression, variables, Object.class, context);
-			}
-			throwConfigurationException("Unsupported expression type: " + expression.getClass() + " " + expression, null, context);
+		} else if (config instanceof String) {
+			expression = config;
+		} else {
+			throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+			return null;
 		}
 		
-		throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
+		if (expression instanceof String) {
+			Map<String,Object> variables = new LinkedHashMap<>();
+			variables.put("value", argumentValue);
+			variables.put("path", sourcePath);
+			variables.put("registry", registry);
+			return evaluate(argument, (String) expression, variables, type, context);
+		}
+		throwConfigurationException("Unsupported expression type: " + expression.getClass() + " " + expression, null, context);
 		return null;
 	}
 	
@@ -517,6 +523,22 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			ConfigSubType configSubType, 
 			EStructuralFeature feature) {
 		return getFeatureSetter(source, configType, configSubType, feature.getName());
+	}
+	
+	@Override
+	protected void wireFeature(
+			S source, 
+			T value, 
+			EStructuralFeature valueFeature, 
+			Map<S, T> registry,
+			ProgressMonitor progressMonitor) {
+
+		// Own (self) feature mapping
+		Setter<S,T> featureSetter = getFeatureSetter(source, ConfigType.self, null, valueFeature);
+		
+		if (featureSetter != null) {
+			featureSetter.setFeature(value, valueFeature, source, null, null, registry, progressMonitor);
+		}
 	}
 	
 	@Override
