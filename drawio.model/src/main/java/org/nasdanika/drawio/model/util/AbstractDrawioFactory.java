@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.jsoup.Jsoup;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
@@ -287,7 +288,8 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		
 		String label = modelElement.getLabel();
 		if (!Util.isBlank(label) && semanticElement instanceof org.nasdanika.ncore.NamedElement) {
-			((org.nasdanika.ncore.NamedElement) semanticElement).setName(label);
+			String labelText = Jsoup.parse(label).text();
+			((org.nasdanika.ncore.NamedElement) semanticElement).setName(labelText);
 		}
 		String tooltip = modelElement.getTooltip();
 		if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
