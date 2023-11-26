@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
@@ -273,7 +274,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 			
 	protected boolean matchPath(Object config, LinkedList<EObject> path, Map<S, T> registry, EObject context) {
-		if (config == Boolean.TRUE || config instanceof String) {
+		if (config == Boolean.TRUE) {
 			return true;
 		}
 		
@@ -315,7 +316,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 		
 	protected boolean matchType(EObject eObj, Object config, EObject context) {
-		if (config == Boolean.TRUE || config instanceof String) {
+		if (config == Boolean.TRUE) {
 			return true;
 		}
 		
@@ -336,7 +337,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 	}
 	
 	protected boolean matchArgumentType(Object argument, Object config, EObject context) {
-		if (config == Boolean.TRUE || config instanceof String) {
+		if (config == Boolean.TRUE) {
 			return true;
 		}
 		
@@ -364,7 +365,7 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			LinkedList<EObject> sourcePath,
 			Map<S, T> registry,
 			EObject context) {
-		if (config == Boolean.TRUE || config instanceof String) {
+		if (config == Boolean.TRUE) {
 			return true;
 		}
 	
@@ -463,22 +464,20 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			if (expression == null) {
 				return argumentValue;
 			}
+			if (!(expression instanceof String)) {
+				return expression;
+			}			
 		} else if (config instanceof String) {
 			expression = config;
 		} else {
-			throwConfigurationException("Unsupported config type: " + config.getClass() + " " + config, null, context);
-			return null;
+			return config; // Number, date, ...
 		}
 		
-		if (expression instanceof String) {
-			Map<String,Object> variables = new LinkedHashMap<>();
-			variables.put("value", argumentValue);
-			variables.put("path", sourcePath);
-			variables.put("registry", registry);
-			return evaluate(argument, (String) expression, variables, type, context);
-		}
-		throwConfigurationException("Unsupported expression type: " + expression.getClass() + " " + expression, null, context);
-		return null;
+		Map<String,Object> variables = new LinkedHashMap<>();
+		variables.put("value", argumentValue);
+		variables.put("path", sourcePath);
+		variables.put("registry", registry);
+		return evaluate(argument, (String) expression, variables, type, context);
 	}
 	
 	protected Greedy getGreedy(Object config, EObject context) {
@@ -506,6 +505,14 @@ public abstract class SetterFeatureMapper<S extends EObject, T extends EObject> 
 			ConfigType configType, 
 			ConfigSubType configSubType) {
 		Object config = getFeatureMapConfig(source, configType, configSubType);
+		if (configType == ConfigType.self && config instanceof Map) {
+			// Converting to maps with expression key
+			config = ((Map<?,?>) config)
+				.entrySet()
+				.stream()
+				.map(e -> Map.entry(e.getKey(), Collections.singletonMap(EXPRESSION_KEY, e.getValue())))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		}
 		return loadFeatureSetters(source, config);		
 	}	
 	
