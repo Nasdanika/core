@@ -2,6 +2,7 @@ package org.nasdanika.graph.model.util;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -31,7 +32,8 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 			EObject source, 
 			ConfigType configType, 
 			ConfigSubType configSubType,
-			EStructuralFeature feature) {
+			EStructuralFeature feature,
+			BiConsumer<String, EObject> featureNameValidator) {
 		
 		if (configType == ConfigType.container  
 				&& configSubType == ConfigSubType.self
@@ -80,7 +82,7 @@ public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFea
 			};
 		}
 		
-		return super.getFeatureSetter(source, configType, configSubType, feature);
+		return super.getFeatureSetter(source, configType, configSubType, feature, featureNameValidator);
 	}
 	
 }
