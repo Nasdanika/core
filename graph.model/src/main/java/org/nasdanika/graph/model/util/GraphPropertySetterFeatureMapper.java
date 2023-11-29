@@ -6,6 +6,8 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.nasdanika.common.FeatureMapper;
+import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.drawio.model.Document;
 import org.nasdanika.drawio.model.ModelElement;
@@ -18,6 +20,20 @@ import org.nasdanika.graph.model.ModelPackage;
 
 public abstract class GraphPropertySetterFeatureMapper extends PropertySetterFeatureMapper<EObject, EObject> {
 	
+	protected GraphPropertySetterFeatureMapper() {
+		super();
+	}
+
+	protected GraphPropertySetterFeatureMapper(Mapper<EObject, EObject> chain) {
+		super(chain);
+	}
+
+	protected GraphPropertySetterFeatureMapper(
+			Mapper<EObject, EObject> chain,
+			FeatureMapper<EObject, EObject> defaulFeaturetMapper) {
+		super(chain, defaulFeaturetMapper);
+	}
+
 	/**
 	 * Indicates a top level page which shall be a child of document element
 	 * @param page

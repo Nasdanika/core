@@ -1,6 +1,8 @@
 package org.nasdanika.drawio.model.util;
 
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.FeatureMapper;
+import org.nasdanika.common.Mapper;
 import org.nasdanika.common.SetterFeatureMapper;
 import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Connection;
@@ -16,6 +18,18 @@ import org.nasdanika.persistence.Marker;
  */
 public abstract class PropertySetterFeatureMapper<S extends EObject, T extends EObject> extends SetterFeatureMapper<S, T> {
 	
+	protected PropertySetterFeatureMapper() {
+		super();
+	}
+
+	protected PropertySetterFeatureMapper(Mapper<S, T> chain) {
+		super(chain);
+	}
+
+	protected PropertySetterFeatureMapper(Mapper<S, T> chain, FeatureMapper<S, T> defaulFeaturetMapper) {
+		super(chain, defaulFeaturetMapper);
+	}
+
 	protected String getPropertyNamespace() {
 		return "";
 	}
