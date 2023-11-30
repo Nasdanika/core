@@ -17,7 +17,9 @@ import org.jsoup.Jsoup;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
+import org.nasdanika.drawio.model.Connection;
 import org.nasdanika.drawio.model.Document;
+import org.nasdanika.drawio.model.Node;
 import org.nasdanika.drawio.model.Page;
 import org.nasdanika.drawio.model.Root;
 import org.nasdanika.ncore.Marker;
@@ -205,7 +207,9 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			ProgressMonitor progressMonitor);
 	
 	/**
-	 * Semantic ID is used instead of the Drawio element ID if provided. E.g. "my-process" instead of "HP_1aCX3hRniy5izKEYK"  
+	 * Semantic ID is used instead of the Drawio element ID if provided. E.g. "my-process" instead of "HP_1aCX3hRniy5izKEYK"
+	 * While it is possible to edit Drawio element ID's, it shall be done with care to avoid introduction of duplicate ID's. 
+	 * Semantic ID's shall be unique within their containment collection.   
 	 * @return
 	 */
 	protected String getSemanticIdProperty() {
@@ -216,8 +220,14 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		return getPropertyNamespace() + "documentation";
 	}	
 		
-	protected String getDocumentationRefProperty() {
-		return getPropertyNamespace() + "documentation-ref";
+	protected String getDocRefProperty() {
+		return getPropertyNamespace() + "doc-ref";
+	}	
+	
+	protected enum DocumentationFormat { markdown, text, html }
+	
+	protected String getDocFormatProperty() {
+		return getPropertyNamespace() + "doc-format"; 
 	}	
 	
 	/**
@@ -237,12 +247,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
 			ProgressMonitor progressMonitor) {
 	
-		String typeProperty = getTypeProperty();
-		if (Util.isBlank(typeProperty)) {
-			return null;
-		}
-		
-		String type = modelElement.getProperties().get(typeProperty);
+		String type = getTypeName(modelElement);
 		if (Util.isBlank(type)) {
 			return null;
 		}
@@ -295,22 +300,147 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		if (!Util.isBlank(tooltip) && semanticElement instanceof org.nasdanika.ncore.ModelElement) {
 			((org.nasdanika.ncore.ModelElement) semanticElement).setDescription(tooltip);
 		}
-
+				
 		if (semanticElement instanceof org.nasdanika.ncore.Documented) {
-//			String documentation = null;			
-//			String documentationProperty = getDocumentationProperty();
-//			if (!Util.isBlank(documentationProperty)) {
-//				documentation = modelElement.getProperties().get(documentationProperty);
-//			}
-//			
-//			// TODO - doc ref, different formats - text, markdown
-//		
-//			if (!Util.isBlank(documentation)) {
-//				((org.nasdanika.ncore.Documented) semanticElement).getDocumentation(documentation);
-//			}
+			URI baseUri = getBaseURI(modelElement);
+			org.nasdanika.ncore.Documented documented = (org.nasdanika.ncore.Documented) semanticElement;
+			String docProperty = getDocumentationProperty();
+			if (!Util.isBlank(docProperty)) {
+				String doc = modelElement.getProperties().get(docProperty);
+				if (!Util.isBlank(doc)) {
+					DocumentationFormat docFormat = DocumentationFormat.markdown;
+					String docFormatProperty = getDocFormatProperty();
+					if (!Util.isBlank(docFormatProperty)) {
+						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						if (!Util.isBlank(docFormatStr)) {
+							docFormat = DocumentationFormat.valueOf(docFormatStr);						
+						}					
+					}
+					switch (docFormat) {
+					case html:
+						documented.getDocumentation().add(createHtmlDoc(doc, baseUri, progressMonitor));
+						break;
+					case markdown:
+						documented.getDocumentation().add(createMarkdownDoc(doc, baseUri, progressMonitor));
+						break;
+					case text:
+						documented.getDocumentation().add(createTextDoc(doc, baseUri, progressMonitor));
+						break;
+					default:
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);
+					
+					}
+				}
+			}
+			String docRefProperty = getDocRefProperty();
+			if (!Util.isBlank(docRefProperty)) {
+				String docRefStr = modelElement.getProperties().get(docRefProperty);
+				if (!Util.isBlank(docRefStr)) {					
+					DocumentationFormat docFormat = null;
+					if (docRefStr.toLowerCase().endsWith(".html") || docRefStr.toLowerCase().endsWith(".htm")) {
+						docFormat = DocumentationFormat.html;
+					} else if (docRefStr.toLowerCase().endsWith(".txt")) {
+						docFormat = DocumentationFormat.text;
+					} else {					
+						docFormat = DocumentationFormat.markdown; // Default
+					}
+					String docFormatProperty = getDocFormatProperty();
+					if (!Util.isBlank(docFormatProperty)) {
+						String docFormatStr = modelElement.getProperties().get(docFormatProperty);
+						if (!Util.isBlank(docFormatStr)) {
+							docFormat = DocumentationFormat.valueOf(docFormatStr);						
+						}					
+					}
+					URI docRefURI = URI.createURI(docRefStr);
+					if (baseUri != null && !baseUri.isRelative()) {
+						docRefURI = docRefURI.resolve(baseUri);
+					}
+					switch (docFormat) {
+					case html:
+						documented.getDocumentation().add(createHtmlDoc(docRefURI, progressMonitor));
+						break;
+					case markdown:
+						documented.getDocumentation().add(createMarkdownDoc(docRefURI, progressMonitor));
+						break;
+					case text:
+						documented.getDocumentation().add(createTextDoc(docRefURI, progressMonitor));
+						break;
+					default:
+						throw new ConfigurationException("Unsupported documentation format: " + docFormat, modelElement instanceof Marked ? (Marked) modelElement : null);					
+					}
+				}
+			}
 		}		
 		
 		return semanticElement;
+	}
+	
+	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createMarkdownDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createHtmlDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createTextDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	protected abstract EObject createMarkdownDoc(URI docRef, ProgressMonitor progressMonitor);
+	
+	/**
+	 * Property for setting base {@link URI} for an element relative to its containers for resolving resource URI's 
+	 * such as doc-ref, feature-map-ref, spec-ref.
+	 * @return
+	 */
+	protected String getBaseURIProperty() {
+		return getPropertyNamespace() + "base-uri";
+	}		
+	
+	protected URI getBaseURI(org.nasdanika.drawio.model.ModelElement modelElement) {
+		EObject logicalParent; 
+		
+		if (modelElement instanceof Connection) {
+			Connection connection = (Connection) modelElement;
+			Node cSource = connection.getSource();
+			logicalParent = cSource == null ? connection.eContainer() : cSource;
+		} else {		
+			logicalParent = modelElement.eContainer();
+		}
+		URI logicalParentBaseURI;
+		if (logicalParent instanceof org.nasdanika.drawio.model.ModelElement) {
+			logicalParentBaseURI = getBaseURI((org.nasdanika.drawio.model.ModelElement) logicalParent);
+		} else {
+			logicalParentBaseURI = modelElement.eResource().getURI();
+		}
+		String baseURIProperty = getBaseURIProperty();
+		if (Util.isBlank(baseURIProperty)) {
+			return logicalParentBaseURI;
+		}
+		
+		String baseURIStr = modelElement.getProperties().get(baseURIProperty);
+		if (Util.isBlank(baseURIStr)) {
+			return logicalParentBaseURI;
+		}
+		
+		URI baseURI = URI.createURI(baseURIStr);
+		return logicalParentBaseURI == null || logicalParentBaseURI.isRelative() ? baseURI : baseURI.resolve(logicalParentBaseURI);		
+	}
+	
+
+	/**
+	 * Returns semantic element type name. This implementation gets it from type property.
+	 * Override to customize. E.g. read <code>c4Type</code> property and map c4 type names such as "Software System" to model types.
+	 * Mapping of type names can also be done by overriding <code>getType</code> method
+	 * @param modelElement
+	 * @return
+	 */
+	protected String getTypeName(org.nasdanika.drawio.model.ModelElement modelElement) {
+		String typeProperty = getTypeProperty();
+		if (Util.isBlank(typeProperty)) {
+			return null;
+		}
+		
+		return modelElement.getProperties().get(typeProperty);
 	}
 	
 	// === Wiring ===
