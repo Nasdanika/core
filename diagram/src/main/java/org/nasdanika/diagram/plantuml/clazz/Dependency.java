@@ -8,7 +8,7 @@ public class Dependency extends Relation {
 
 	@Override
 	protected String getType() {
-		return "..>"; // TODO: Line style -[xxx]-> or use inline style - easier?
+		return "." + getDecorator() + ".>"; 
 	}
 
 }

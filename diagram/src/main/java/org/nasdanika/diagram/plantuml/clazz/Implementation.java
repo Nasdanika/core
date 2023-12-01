@@ -4,11 +4,12 @@ public class Implementation extends Relation {
 
 	public Implementation(DiagramElement source, DiagramElement target) {
 		super(source, target);
+		setDirection(Direction.up);
 	}
 
 	@Override
 	protected String getType() {
-		return ".u.|>";
+		return "." + getDecorator() + ".|>";
 	}
 
 }

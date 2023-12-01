@@ -11,7 +11,7 @@ public class Composition extends Relation {
 
 	@Override
 	protected String getType() {
-		return biDirectional ? "*--" : "*-->";
+		return biDirectional ? "*-" + getDecorator() + "-" : "*-" + getDecorator() + "->";
 	}
 
 }

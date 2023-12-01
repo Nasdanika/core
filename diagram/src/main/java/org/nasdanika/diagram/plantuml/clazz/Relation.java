@@ -9,8 +9,39 @@ import org.nasdanika.graph.SimpleConnection;
 
 public abstract class Relation extends SimpleConnection {
 	
+	public enum Direction { up, down, left, right }
+	
+	public enum Style { plain, dotted, dashed }
+	
+	private Direction direction;
+	private Style style;
+	private List<String> colors = new ArrayList<>();
+	private int thickness = 1;
+	
 	public Relation(DiagramElement source, DiagramElement target) {
 		super(source, target, false);
+	}
+
+	public Direction getDirection() {
+		return direction;
+	}
+	public void setDirection(Direction direction) {
+		this.direction = direction;
+	}
+	public Style getStyle() {
+		return style;
+	}
+	public void setStyle(Style style) {
+		this.style = style;
+	}
+	public int getThickness() {
+		return thickness;
+	}
+	public void setThickness(int thickness) {
+		this.thickness = thickness;
+	}
+	public List<String> getColors() {
+		return colors;
 	}
 
 	private String tooltip;
@@ -101,5 +132,38 @@ public abstract class Relation extends SimpleConnection {
 		
 		return ret.toString();
 	}	
+		
+	protected String getDecorator() {
+		StringBuilder sb = new StringBuilder();
+		for (String color: colors) {
+			if (!sb.isEmpty()) {
+				sb.append(";");
+			}
+			sb.append("#").append(color);
+		}
+		
+		if (style != null) {
+			if (!sb.isEmpty()) {
+				sb.append(",");
+			}
+			sb.append(style.name());			
+		}
+		if (thickness != 1) {
+			if (!sb.isEmpty()) {
+				sb.append(",");
+			}
+			sb.append("thickness=").append(thickness);						
+		}
+		
+		if (direction == null) {
+			return sb.isEmpty() ? sb.toString() : "[" + sb + "]";
+		}
+		
+		if (sb.isEmpty()) {			
+			return direction.name();
+		}
+		
+		return "[" +sb + "]" + direction.name();
+	}
 
 }

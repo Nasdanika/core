@@ -11,7 +11,7 @@ public class Aggregation extends Relation {
 
 	@Override
 	protected String getType() {
-		return biDirectional ? "o--" : "o-->";
+		return biDirectional ? "o-" + getDecorator() + "-" : "o-" + getDecorator() + "->";
 	}
 
 }
