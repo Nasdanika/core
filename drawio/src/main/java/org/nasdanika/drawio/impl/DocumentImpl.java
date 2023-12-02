@@ -318,7 +318,7 @@ public class DocumentImpl extends ElementImpl implements Document {
 			ret.getMarkers().add(markerFactory.apply(marker));
 		}
 		
-		ret.setSource(save(true));
+		ret.setSource(toDataURI(true).toString());
 		
 		return ret;
 	}
