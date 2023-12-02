@@ -1,5 +1,7 @@
 package org.nasdanika.drawio.model.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,6 +38,10 @@ import org.nasdanika.persistence.Marked;
  */
 public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject> {
 	
+	public static final String PAGE_ID_ANNOTATION = "page-id";
+	public static final String TOP_LEVEL_PAGES_ANNOTATION = "top-level-pages";
+	public static final String DRAWIO_REPRESENTATION = "drawio";
+
 	public String getPropertyNamespace() {
 		return "";
 	}
@@ -183,13 +189,39 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		D documentElement = createDocumentElement(document, elementProvider, registry, progressMonitor);
 		String source = document.getSource();
 		if (!Util.isBlank(source) && documentElement instanceof org.nasdanika.ncore.ModelElement) {
-			((org.nasdanika.ncore.ModelElement) documentElement).getRepresentations().put("drawio", source);
+			org.nasdanika.ncore.ModelElement documentModelElement = (org.nasdanika.ncore.ModelElement) documentElement;
+			documentModelElement.getRepresentations().put(DRAWIO_REPRESENTATION, source);
+			Collection<String> topLevelPages = new ArrayList<>();
+			for (Page page: document.getPages()) {
+				if (isTopLevelPage(page)) {
+					topLevelPages.add(page.getId());
+				}
+			}
+			if (!topLevelPages.isEmpty()) {
+				documentModelElement.setAnnotation(TOP_LEVEL_PAGES_ANNOTATION, topLevelPages);
+			}
 		}
 		if (documentElement instanceof org.nasdanika.ncore.Marked) {
 			for (Marker marker: document.getMarkers()) {
-				((org.nasdanika.ncore.ModelElement) documentElement).getMarkers().add(EcoreUtil.copy(marker));
+				((org.nasdanika.ncore.Marked) documentElement).getMarkers().add(EcoreUtil.copy(marker));
 			}
 		}
+		
+		return configureDocumentElement(
+				document,
+				documentElement,
+				elementProvider,
+				registry,
+				progressMonitor);
+	}
+	
+	protected D configureDocumentElement(
+			org.nasdanika.drawio.model.Document document,
+			D documentElement,
+			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {
+		
 		return documentElement;
 	}
 	
@@ -268,7 +300,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 				((org.nasdanika.ncore.NamedElement) semanticElement).setName(page.getName());
 			}
 			if (semanticElement instanceof org.nasdanika.ncore.ModelElement) {
-				((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation("page-id", page.getId());
+				((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ID_ANNOTATION, page.getId());
 			}
 		}
 		
@@ -286,7 +318,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			if (isPageElement(modelElement)) {
 				for (EObject eContainer = modelElement.eContainer(); eContainer != null; eContainer = eContainer.eContainer()) {
 					if (eContainer instanceof Page) {
-						((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation("page-id", ((Page) eContainer).getId());						
+						((org.nasdanika.ncore.ModelElement) semanticElement).setAnnotation(PAGE_ID_ANNOTATION, ((Page) eContainer).getId());						
 					}
 				}
 			}						
@@ -390,8 +422,7 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		
 		return semanticElement;
 	}
-	
-	
+		
 	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
 	
 	protected abstract EObject createTextDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
