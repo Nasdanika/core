@@ -1,11 +1,6 @@
 package org.nasdanika.graph.model.util;
 
-
-import org.nasdanika.exec.content.ContentFactory;
-import org.nasdanika.exec.content.Interpolator;
-import org.nasdanika.exec.content.Markdown;
-import org.nasdanika.exec.content.Resource;
-import org.nasdanika.exec.content.Text;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,24 +9,35 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.nasdanika.common.ProgressMonitor;
+import org.nasdanika.common.Util;
 import org.nasdanika.drawio.model.Document;
+import org.nasdanika.drawio.model.ModelElement;
 import org.nasdanika.drawio.model.util.AbstractDrawioFactory;
+import org.nasdanika.emf.persistence.EObjectLoader;
+import org.nasdanika.exec.content.ContentFactory;
+import org.nasdanika.exec.content.Interpolator;
+import org.nasdanika.exec.content.Markdown;
+import org.nasdanika.exec.content.Resource;
+import org.nasdanika.exec.content.Text;
 import org.nasdanika.graph.model.DocumentedNamedGraph;
 import org.nasdanika.graph.model.Graph;
 import org.nasdanika.graph.model.GraphElement;
 import org.nasdanika.graph.model.ModelFactory;
 import org.nasdanika.graph.model.ModelPackage;
 import org.nasdanika.ncore.NcorePackage;
+import org.nasdanika.persistence.ConfigurationException;
+import org.nasdanika.persistence.ObjectLoader;
 
 /**
  * Factory for mapping drawio model to graph model
  * @param <G>
  * @param <E>
  */
-public class GraphDrawioFactory<G extends Graph<E>, E extends GraphElement> extends AbstractDrawioFactory<G, E> {
+public class GraphDrawioFactory<G extends Graph<?>, E extends EObject> extends AbstractDrawioFactory<G, E> {
 
 	/**
 	 * Returns a map with graph and ncore entries.
@@ -80,14 +86,14 @@ public class GraphDrawioFactory<G extends Graph<E>, E extends GraphElement> exte
 	}
 	
 	@SuppressWarnings("unchecked")
-	private E find(Graph<E> graph, String[] path, int offset) {
+	private E find(Graph<?> graph, String[] path, int offset) {
 		for (GraphElement graphElement: graph.getElements()) {
 			if (path[offset].equals(graphElement.getId())) {
 				if (offset == path.length - 1) {
 					return (E) graphElement;
 				}
 				if (graphElement instanceof Graph) {
-					return find((Graph<E>) graphElement, path, offset + 1);
+					return find((Graph<?>) graphElement, path, offset + 1);
 				}
 				throw new IllegalArgumentException("Element not found at path " + Arrays.toString(path) + " " + graphElement + " is not an instance of Graph at offset " + offset);				
 			}
@@ -149,5 +155,74 @@ public class GraphDrawioFactory<G extends Graph<E>, E extends GraphElement> exte
 		ret.setStyle(true);
 		return ret;
 	}
-
+	
+	protected String getSpecPropertyName() {
+		return getPropertyNamespace() + "spec";
+	}
+	
+	protected String getSpecRefPropertyName() {
+		return getPropertyNamespace() + "spec-ref";
+	}
+	
+	@Override
+	protected E configureSemanticElement(
+			ModelElement modelElement, 
+			E semanticElement,
+			BiConsumer<EObject, BiConsumer<EObject, ProgressMonitor>> elementProvider,
+			Consumer<BiConsumer<Map<EObject, EObject>, ProgressMonitor>> registry, 
+			ProgressMonitor progressMonitor) {
+		
+		EObjectLoader eObjectLoader = new EObjectLoader((ObjectLoader) null) {
+		
+			@Override
+			public ResolutionResult resolveEClass(String type) {
+				EClass eClass = (EClass) GraphDrawioFactory.this.getType(type, modelElement);
+				return new ResolutionResult(eClass, null);
+			}
+			
+		};
+		
+		URI baseURI = getBaseURI(modelElement);		
+		String spn = getSpecPropertyName();
+		if (!Util.isBlank(spn)) {
+			String specStr = modelElement.getProperties().get(spn);
+			if (!Util.isBlank(specStr)) {
+				eObjectLoader.loadYaml(
+						specStr, 
+						semanticElement, 
+						baseURI, 
+						null, 
+						modelElement.getMarkers(), 
+						progressMonitor);
+			}			
+		}
+		
+		String srpn = getSpecRefPropertyName();
+		if (!Util.isBlank(srpn)) {
+			String ref = modelElement.getProperties().get(srpn);
+			if (!Util.isBlank(ref)) {
+				URI refURI = URI.createURI(ref);
+				if (baseURI != null && !baseURI.isRelative()) {
+					refURI = refURI.resolve(baseURI);
+				}				
+				try {
+					eObjectLoader.loadYaml(
+							new URL(refURI.toString()),
+							semanticElement, 
+							null, 
+							progressMonitor);
+				} catch (Exception e) {
+					throw new ConfigurationException("Error loading spec from " + refURI, e, modelElement);
+				}
+			}
+		}
+		
+		return super.configureSemanticElement(
+				modelElement,
+				semanticElement,
+				elementProvider,
+				registry,
+				progressMonitor);
+	}
+	
 }

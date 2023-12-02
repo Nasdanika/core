@@ -46,7 +46,7 @@ public interface ObjectLoader {
 	
 	/**
 	 * Creates an object of requested type with a given config. This implementation calls create(loader, type) and then load(loader, config, target, base, resolver, markers, progressMonitor)
-	 * @param loader ObjectLoader for creating object parts. This factory or parent/root loader for chained loaders.
+	 * @param loader ObjectLoader for creating object parts. This loader or parent/root loader for chained loaders.
 	 * @param type Object type
 	 * @param config Configuration to load the object from
 	 * @param base Base URI for resolving references.

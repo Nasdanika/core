@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.jsoup.Jsoup;
+import org.nasdanika.common.Context;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.common.Util;
@@ -372,8 +373,24 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 			}
 		}		
 		
+		return configureSemanticElement(
+				modelElement,
+				semanticElement,
+				elementProvider,
+				registry,
+				progressMonitor);
+	}
+	
+	protected S configureSemanticElement(
+			org.nasdanika.drawio.model.ModelElement modelElement,
+			S semanticElement,
+			BiConsumer<EObject, BiConsumer<EObject,ProgressMonitor>> elementProvider, 
+			Consumer<BiConsumer<Map<EObject, EObject>,ProgressMonitor>> registry,
+			ProgressMonitor progressMonitor) {
+		
 		return semanticElement;
 	}
+	
 	
 	protected abstract EObject createHtmlDoc(String doc, URI baseUri, ProgressMonitor progressMonitor);
 	
@@ -393,10 +410,10 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 	 * @return
 	 */
 	protected String getBaseURIProperty() {
-		return getPropertyNamespace() + "base-uri";
+		return getPropertyNamespace() + Context.BASE_URI_PROPERTY;
 	}		
 	
-	protected URI getBaseURI(org.nasdanika.drawio.model.ModelElement modelElement) {
+	public URI getBaseURI(org.nasdanika.drawio.model.ModelElement modelElement) {
 		EObject logicalParent; 
 		
 		if (modelElement instanceof Connection) {
@@ -426,7 +443,6 @@ public abstract class AbstractDrawioFactory<D extends EObject, S extends EObject
 		return logicalParentBaseURI == null || logicalParentBaseURI.isRelative() ? baseURI : baseURI.resolve(logicalParentBaseURI);		
 	}
 	
-
 	/**
 	 * Returns semantic element type name. This implementation gets it from type property.
 	 * Override to customize. E.g. read <code>c4Type</code> property and map c4 type names such as "Software System" to model types.

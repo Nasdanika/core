@@ -275,9 +275,13 @@ public class EObjectLoader extends DispatchingLoader {
 	}
 
 	private ResourceSet resourceSet;
+	
+	public EObjectLoader(ObjectLoader chain) {
+		super(chain);
+	}
 
 	public EObjectLoader(ObjectLoader chain, BiFunction<EClass,ENamedElement,String> keyProvider, EPackage... ePackages) {
-		super(chain);
+		this(chain);
 		this.keyProvider = keyProvider == null ? LOAD_KEY_PROVIDER : keyProvider;
 		if (ePackages.length > 0) {
 			Map<String,EPackageEntry> registry = new LinkedHashMap<>();
@@ -364,7 +368,8 @@ public class EObjectLoader extends DispatchingLoader {
 					markers, 
 					progressMonitor, 
 					result.keyProvider(), 
-					constructor);
+					constructor, 
+					true);
 		}
 		
 		return super.create(loader, type, config, base, resolver, markers, progressMonitor);
@@ -392,7 +397,8 @@ public class EObjectLoader extends DispatchingLoader {
 				markers,
 				progressMonitor,
 				keyProvider,
-				(eClass, pm) -> (EObject) target);
+				(eClass, pm) -> (EObject) target,
+				false);
 		
 		if (result instanceof SupplierFactory) {
 			((SupplierFactory<?>) result).create(getContext()).execute(progressMonitor);
@@ -493,7 +499,8 @@ public class EObjectLoader extends DispatchingLoader {
 			Collection<? extends Marker> markers, 
 			ProgressMonitor progressMonitor, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
-			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor, 
+			boolean enforceRequired) {
 		
 		// Nulls are nulls
 		if (config == null) {
@@ -542,7 +549,7 @@ public class EObjectLoader extends DispatchingLoader {
 				}									
 			};
 		}							
-		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider, constructor);
+		EObjectSupplierFactory eObjectSupplierFactory = createEObjectSupplierFactory(eClass, keyProvider, constructor, enforceRequired);
 		eObjectSupplierFactory.load(loader, config, base, resolver, markers, progressMonitor);
 		FunctionFactory<EObject, EObject> configureFactory = ctx -> new org.nasdanika.common.Function<EObject, EObject>() {
 
@@ -731,8 +738,9 @@ public class EObjectLoader extends DispatchingLoader {
 	protected EObjectSupplierFactory createEObjectSupplierFactory(
 			EClass eClass,
 			BiFunction<EClass, ENamedElement, String> keyProvider,
-			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {		
-		return new EObjectSupplierFactory(this, eClass, keyProvider, constructor);
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor, 
+			boolean enforceRequired) {		
+		return new EObjectSupplierFactory(this, eClass, keyProvider, constructor, enforceRequired);
 	}
 	
 	/**

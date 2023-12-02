@@ -148,7 +148,8 @@ public class TypedElementFactory implements ObjectFactory<List<?>> {
 					markers, 
 					progressMonitor, 
 					keyProvider,
-					null)
+					null,
+					true)
 				: 
 					loader.load(element, base, resolver, progressMonitor);
 			if (resolveProxies && ret instanceof EObject && ((EObject) ret).eIsProxy()) {

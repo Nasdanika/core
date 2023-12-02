@@ -71,7 +71,8 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			EClass eClass, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
-			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor) {
+			java.util.function.BiFunction<EClass, ProgressMonitor, EObject> constructor,
+			boolean enforceRequired) {
 
 		this.loader = loader;
 		this.eClass = eClass;	// TODO - handling prototype - if there is an annotation - chain - may need to handle @ super?
@@ -87,7 +88,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 				continue;
 			}
 			featureMap.put(featureKey, feature);
-			addFeature(wrapFeature(featureKey, feature, loader, keyProvider));
+			addFeature(wrapFeature(featureKey, feature, loader, keyProvider, enforceRequired));
 		}
 
 		Map<String, EOperation> opMap = new LinkedHashMap<>();
@@ -144,9 +145,17 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			String featureKey, 
 			EStructuralFeature feature, 
 			EObjectLoader loader, 
-			BiFunction<EClass,ENamedElement,String> keyProvider) {
+			BiFunction<EClass,ENamedElement,String> keyProvider,
+			boolean enforceRequired) {
 		
-		return wrapTypedElement(featureKey, feature, loader, keyProvider, EObjectLoader.isDefaultFeature(eClass, feature), EObjectLoader.isConstructorFeature(eClass, feature));
+		return wrapTypedElement(
+				featureKey, 
+				feature, 
+				loader, 
+				keyProvider, 
+				EObjectLoader.isDefaultFeature(eClass, feature), 
+				EObjectLoader.isConstructorFeature(eClass, feature),
+				enforceRequired);
 	}
 
 	/**
@@ -163,21 +172,37 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			EObjectLoader loader, 
 			BiFunction<EClass,ENamedElement,String> keyProvider,
 			boolean isDefault,
-			boolean isConstructor) {
+			boolean isConstructor, 
+			boolean enforceRequired) {
 		
 		Object[] exclusiveWith = EObjectLoader.getExclusiveWith(eClass, feature, keyProvider);
 		
 		EModelElementDocumentation documentation = EmfUtil.getDocumentation(feature);
 		if (feature instanceof EAttribute) {
 			if (feature.isMany()) {
-				return new ListSupplierFactoryAttribute<>(new org.nasdanika.persistence.ReferenceList<>(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), true);
+				return new ListSupplierFactoryAttribute<>(new org.nasdanika.persistence.ReferenceList<>(
+						featureKey, 
+						isDefault, 
+						isConstructor, 
+						enforceRequired && feature.isRequired(), 
+						null, 
+						documentation == null ? null : documentation.documentation(), 
+						exclusiveWith),
+					true);
 			}
 			
 			EClassifier featureType = feature.getEType();
 			Class<?> featureClass = featureType.getInstanceClass();
 			boolean interpolate = "true".equals(NcoreUtil.getNasdanikaAnnotationDetail(feature, "interpolate", "true"));
 			if (String.class == featureClass) {
-				org.nasdanika.persistence.Reference delegate = new org.nasdanika.persistence.Reference(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith) {
+				org.nasdanika.persistence.Reference delegate = new org.nasdanika.persistence.Reference(
+						featureKey, 
+						isDefault, 
+						isConstructor, 
+						enforceRequired && feature.isRequired(), 
+						null, 
+						documentation == null ? null : documentation.documentation(), 
+						exclusiveWith) {
 					
 					@Override
 					public Object create(
@@ -199,12 +224,29 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			
 			if (featureClass.isEnum()) {
-				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate);
+				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(
+						featureKey, 
+						isDefault, 
+						isConstructor, 
+						enforceRequired && feature.isRequired(), 
+						null, 
+						documentation == null ? null : documentation.documentation(), 
+						exclusiveWith), 
+					interpolate);
 				return new EnumSupplierFactoryAttribute(stringAttribute, featureClass, null);
 			}
 			
 			if (EClass.class == featureClass) {
-				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate);
+				StringSupplierFactoryAttribute stringAttribute = new StringSupplierFactoryAttribute(new org.nasdanika.persistence.Reference(
+						featureKey, 
+						isDefault, 
+						isConstructor, 
+						enforceRequired && feature.isRequired(), 
+						null, 
+						documentation == null ? null : documentation.documentation(), 
+						exclusiveWith), 
+					interpolate);
+				
 				FunctionFactory<String,EClass> functionFactory = new FunctionFactory<String, EClass>() {
 
 					@Override
@@ -238,7 +280,16 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 			}
 			
 			Function converter = null; // TODO: From annotations for, say, dates - parse pattern - SimpleDateFormat?
-			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.persistence.Reference(featureKey, isDefault, isConstructor, feature.isRequired(), null, documentation == null ? null : documentation.documentation(), exclusiveWith), interpolate, converter);			
+			return new TypedSupplierFactoryAttribute(featureClass, new org.nasdanika.persistence.Reference(
+					featureKey, 
+					isDefault, 
+					isConstructor, 
+					enforceRequired && feature.isRequired(), 
+					null, 
+					documentation == null ? null : documentation.documentation(), 
+					exclusiveWith), 
+				interpolate, 
+				converter);			
 		}
 		
 		if (feature instanceof EReference) {
@@ -250,7 +301,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 							featureKey, 
 							isDefault, 
 							isConstructor,
-							feature.isRequired(), 
+							enforceRequired && feature.isRequired(), 
 							null, 
 							documentation == null ? null : documentation.documentation(),
 							eClass,
@@ -264,7 +315,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 						featureKey, 
 						isDefault, 
 						isConstructor,
-						feature.isRequired(), 
+						enforceRequired && feature.isRequired(), 
 						null, 
 						documentation == null ? null : documentation.documentation(),
 						eClass,
@@ -279,7 +330,7 @@ public class EObjectSupplierFactory extends SupplierFactoryFeatureObject<EObject
 					featureKey, 
 					isDefault, 
 					isConstructor,
-					feature.isRequired(), 
+					enforceRequired && feature.isRequired(), 
 					null, 
 					documentation == null ? null : documentation.documentation(),
 					eClass,

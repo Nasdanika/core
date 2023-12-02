@@ -1,6 +1,11 @@
 package org.nasdanika.drawio.model.util;
 
+import java.io.IOException;
+import java.io.Reader;
+
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.nasdanika.common.DefaultConverter;
 import org.nasdanika.common.FeatureMapper;
 import org.nasdanika.common.Mapper;
 import org.nasdanika.common.SetterFeatureMapper;
@@ -46,14 +51,34 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 	protected String getFeatureMapConfigStr(EObject source) {
 		if (source instanceof ModelElement) {
 			String fmcpn = getFeatureMapConfigPropertyName();
+			ModelElement modelElement = (ModelElement) source;
 			if (!Util.isBlank(fmcpn)) {
-				return ((ModelElement) source).getProperties().get(fmcpn);
+				return modelElement.getProperties().get(fmcpn);
 			}
 			
-			// TODO - config ref
+			String fmcrpn = getFeatureMapConfigRefPropertyName();
+			if (!Util.isBlank(fmcrpn)) {
+				String ref = modelElement.getProperties().get(fmcrpn);
+				if (!Util.isBlank(ref)) {
+					URI refURI = URI.createURI(ref);
+					URI baseURI = getBaseURI(modelElement);
+					if (baseURI != null && !baseURI.isRelative()) {
+						refURI = refURI.resolve(baseURI);
+					}
+					try {
+						DefaultConverter converter = DefaultConverter.INSTANCE;
+						Reader reader = converter.toReader(refURI);
+						return converter.toString(reader);
+					} catch (IOException e) {
+						throwConfigurationException("Error loading feature map from " + refURI, e, source);
+					}
+				}
+			}
 		}
 		return null;
 	}
+	
+	protected abstract URI getBaseURI(ModelElement source);
 	
 	@Override
 	protected void throwConfigurationException(String message, Throwable cause, EObject context) {
@@ -76,8 +101,7 @@ public abstract class PropertySetterFeatureMapper<S extends EObject, T extends E
 			}
 			
 			throw new ConfigurationException(cause);
-		}
-		
+		}		
 		
 		if (context instanceof Marker) {
 			throw new ConfigurationException(message, cause, (Marker) context);			
